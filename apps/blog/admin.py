@@ -1,5 +1,4 @@
 from django.contrib import admin
-from admin_actions.admin import ActionsModelAdmin
 from django.contrib.admin import DateFieldListFilter
 
 from .models import (
@@ -11,7 +10,7 @@ from .models import (
 )
 
 @admin.register(Attachment)
-class AttachmentAdmin(ActionsModelAdmin):
+class AttachmentAdmin(admin.ModelAdmin):
     list_display = (
         'pk', 'file_type'
     )
@@ -22,9 +21,9 @@ class AttachmentAdmin(ActionsModelAdmin):
     list_filter = ('file_type', )
 
 @admin.register(Post)
-class PostAdmin(ActionsModelAdmin):
+class PostAdmin(admin.ModelAdmin):
     list_display = (
-        'pk', 'user__username', 'name', 'price_to_watch', 'publication_date'
+        'pk', 'user', 'name', 'price_to_watch', 'publication_date'
     )
     list_display_links = [
         'pk',
@@ -37,13 +36,13 @@ class PostAdmin(ActionsModelAdmin):
     )
 
 @admin.register(PostAction)
-class PostActionAdmin(ActionsModelAdmin):
+class PostActionAdmin(admin.ModelAdmin):
     list_display = (
-        'pk', 'user__username', 'post__name', 'like', 'comment', 'donation_amount'
+        'pk', 'user', 'post', 'like', 'comment', 'donation_amount'
     )
     list_display_links = [
         'pk',
-        'user__username'
+        'user'
     ]
     search_fields = ['user__username', 'post__name']
     ordering = '-pk',
@@ -53,13 +52,13 @@ class PostActionAdmin(ActionsModelAdmin):
 
 
 @admin.register(Story)
-class StoryAdmin(ActionsModelAdmin):
+class StoryAdmin(admin.ModelAdmin):
     list_display = (
-        'pk', 'user__username', 'archived', 'publication_date'
+        'pk', 'user', 'archived', 'publication_date'
     )
     list_display_links = [
         'pk',
-        'user__username'
+        'user'
     ]
     search_fields = ['user__username',]
     ordering = '-pk',
@@ -69,13 +68,13 @@ class StoryAdmin(ActionsModelAdmin):
     )
 
 @admin.register(WatchedStories)
-class WatchedStoriesAction(ActionsModelAdmin):
+class WatchedStoriesAction(admin.ModelAdmin):
     list_display = (
-        'pk', 'source__user__username', 'target__user__username', 'like', 'watched', 'times_wathced'
+        'pk', 'source', 'target', 'like', 'watched', 'times_wathced'
     )
     list_display_links = [
         'pk',
-        'source__user__username'
+        'source'
     ]
     search_fields = ['source__user__username', 'target__user__username']
     ordering = '-pk',

@@ -2,6 +2,7 @@ from django.db import models
 from apps.users.models import User
 from unixtimestampfield.fields import UnixTimeStampField
 from apps.blog.models import Attachment
+from django.db.models.signals import post_save
 
 class Room(models.Model):
     creator = models.ForeignKey(
@@ -54,3 +55,20 @@ class UserMessage(models.Model):
         
     def __str__(self):
         return f"{self.message}-{self.user}"
+
+def create_message(sender, instance, created, **kwargs):
+    if created:
+        room = instance.room
+        users = []
+        users.append(room.creator)
+        for user in room.invited.all():
+            users.append(user)
+        for user in users:
+            if user.pk != instance.user.pk:
+                UserMessage.objects.create(
+                    message=instance,
+                    user=user,
+                    readed=False
+                ).save()
+
+post_save.connect(create_message, sender=Chat)

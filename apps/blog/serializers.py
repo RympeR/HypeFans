@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.utils import TimestampField
+from core.utils.customFields import TimestampField
 from .models import (
     Attachment,
     Post,
@@ -8,7 +8,7 @@ from .models import (
     WatchedStories,
 )
 from apps.users.serializers import UserGetSerializer
-
+from django.db.models import Count
 
 class AttachmentSerializer(serializers.ModelSerializer):
 
@@ -18,9 +18,10 @@ class AttachmentSerializer(serializers.ModelSerializer):
 
 
 class PostGetSerializer(serializers.ModelSerializer):
-
+    
+    favourites = UserGetSerializer(many=True)
     user = UserGetSerializer()
-    files = Attachment(many=True)
+    files = AttachmentSerializer(many=True)
     time_to_archive = TimestampField(required=False)
     publication_date = TimestampField(required=False)
 
@@ -37,6 +38,33 @@ class PostCreationSerializer(serializers.ModelSerializer):
         model = Post
         exclude = 'publication_date',
 
+#TODO-----Implement claculating info about post
+class PostGetShortSerializers(serializers.ModelSerializer):
+
+    likes_amount = serializers.SerializerMethodField()
+    comments_amount = serializers.SerializerMethodField()
+    favourites_amount = serializers.SerializerMethodField()
+    
+    def get_likes_amount(self, obj: Post):
+        return 1
+
+    def get_comments_amount(self, obj: Post):
+        return 1
+
+    def get_favourites_amount(self, obj: Post):
+        return 1
+
+    class Meta:
+        model = Post
+        fields = (
+            'pk',
+            'name',
+            'price_to_watch',
+            'reply_link',
+            'likes_amount',
+            'comments_amount',
+            'favourites_amount',
+        )
 
 class PostActionGetSerializer(serializers.ModelSerializer):
 
@@ -70,7 +98,7 @@ class StoryGetSerializer(serializers.ModelSerializer):
 class StoryCreationSerializer(serializers.ModelSerializer):
 
     time_to_archive = TimestampField(required=False)
-    
+
     class Meta:
         model = Story
         exclude = 'publication_date',

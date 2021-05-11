@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.utils import TimestampField
+from core.utils.customFields import TimestampField
 from .models import (
     Room,
     Chat,

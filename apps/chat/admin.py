@@ -1,5 +1,4 @@
 from django.contrib import admin
-from admin_actions.admin import ActionsModelAdmin
 from django.contrib.admin import DateFieldListFilter
 
 from .models import (
@@ -9,11 +8,11 @@ from .models import (
 )
 
 @admin.register(Room)
-class RoomAdmin(ActionsModelAdmin):
+class RoomAdmin(admin.ModelAdmin):
     list_display = (
         'pk', 'creator', 'date'
     )
-    search_fields = 'creator__username'
+    search_fields = 'creator__username',
     ordering = '-date',
     list_filter = (
             ('date', DateFieldListFilter),
@@ -21,11 +20,11 @@ class RoomAdmin(ActionsModelAdmin):
 
 
 @admin.register(Chat)
-class ChatAdmin(ActionsModelAdmin):
+class ChatAdmin(admin.ModelAdmin):
     list_display = (
         'pk', 'room', 'user', 'date'
     )
-    search_fields = 'user__username'
+    search_fields = 'user__username',
     ordering = '-date',
     list_filter = (
             ('date', DateFieldListFilter),
@@ -33,11 +32,11 @@ class ChatAdmin(ActionsModelAdmin):
 
 
 @admin.register(UserMessage)
-class ChatAdmin(ActionsModelAdmin):
+class UserMessageAdmin(admin.ModelAdmin):
     list_display = (
         'pk', 'message', 'user'
     )
-    search_fields = 'user__username'
+    search_fields = 'user__username',
     ordering = '-pk',
     list_filter = 'readed',
 

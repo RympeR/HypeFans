@@ -1,5 +1,4 @@
 from django.contrib import admin
-from admin_actions.admin import ActionsModelAdmin
 from django.contrib.admin import DateFieldListFilter
 
 from .models import (
@@ -10,7 +9,7 @@ from .models import (
 )
 
 @admin.register(User)
-class UserAdmin(ActionsModelAdmin):
+class UserAdmin(admin.ModelAdmin):
     list_display = [
         'email', 'username', 'first_name', 'validated_user'
     ]
@@ -26,9 +25,9 @@ class UserAdmin(ActionsModelAdmin):
     ordering = '-pk',
 
 @admin.register(Card)
-class CardAdmin(ActionsModelAdmin):
+class CardAdmin(admin.ModelAdmin):
     list_display = [
-        'user__username', 'number', 'creator'
+        'user', 'number', 'creator'
     ]
     list_display_links = []
     list_filter = [
@@ -39,9 +38,9 @@ class CardAdmin(ActionsModelAdmin):
     ]
 
 @admin.register(Donation)
-class DonationAdmin(ActionsModelAdmin):
+class DonationAdmin(admin.ModelAdmin):
     list_display = [
-        'sender__username', 'reciever__username', 'amount', 'datetime' 
+        'sender', 'reciever', 'amount', 'datetime' 
     ]
     list_display_links = []
     list_filter = [
@@ -50,9 +49,9 @@ class DonationAdmin(ActionsModelAdmin):
     search_fields = ['sender__username', 'reciever__username']
 
 @admin.register(Payment)
-class PaymentAdmin(ActionsModelAdmin):
+class PaymentAdmin(admin.ModelAdmin):
     list_display = [
-        'card__sender__username', 'datetime', 'amount'
+        'card', 'datetime', 'amount'
     ]
     search_fields = ['card__sender__username']
     list_filter = [

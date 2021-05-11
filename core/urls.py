@@ -6,10 +6,9 @@ from core import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('rest_framework.urls')),
-    # path('api/info/', include('apps.info.urls')),
+    path('api/chat/', include('apps.chat.urls')),
     path('api/user/', include('apps.users.urls')),
     path('api/blog/', include('apps.blog.urls')),
-    # path('api/chat/', include('chat.urls')),
     path('silk/', include('silk.urls', namespace='silk')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),

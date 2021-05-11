@@ -1,4 +1,3 @@
-from core.settings import MIDDLEWARE
 from django.db import models
 from apps.users.models import User
 from unixtimestampfield.fields import UnixTimeStampField
@@ -46,7 +45,8 @@ class Post(models.Model):
     files = models.ManyToManyField(Attachment, verbose_name='Вложения')
     publication_date = UnixTimeStampField(
         verbose_name='Дата+время создания', auto_now_add=True)
-
+    favourites = models.ManyToManyField(User, verbose_name='Пост в избранных', related_name='user_favourites')
+    
     class Meta:
         verbose_name = 'Публикация'
         verbose_name_plural = 'Публикации'
@@ -133,3 +133,13 @@ class WatchedStories(models.Model):
 
     def __str__(self):
         return f"{self.pk}-{self.source}"
+
+# class Notification(models.Model):
+#     TYPES = (
+#         ('c', 'comment'),
+#         ('l', 'like'),
+#         ('s', 'subscription'),
+#         ('d', 'donation'),
+#     )
+#     type=models.CharField('Тип уведомления', max_length=1, choices=TYPES)
+#     datetime = UnixTimeStampField(auto_now_add=True)
