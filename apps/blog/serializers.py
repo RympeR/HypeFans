@@ -34,6 +34,10 @@ class PostCreationSerializer(serializers.ModelSerializer):
 
     time_to_archive = TimestampField(required=False)
 
+    def validate(self, attrs):
+        request = self.context.get('request')
+        attrs['user'] = request.user
+        return attrs
     class Meta:
         model = Post
         exclude = 'publication_date',
@@ -59,6 +63,7 @@ class PostGetShortSerializers(serializers.ModelSerializer):
         fields = (
             'pk',
             'name',
+            'enabled_comments',
             'price_to_watch',
             'reply_link',
             'likes_amount',
@@ -99,6 +104,11 @@ class StoryCreationSerializer(serializers.ModelSerializer):
 
     time_to_archive = TimestampField(required=False)
 
+    def validate(self, attrs):
+        request = self.context.get('request')
+        attrs['user'] = request.user
+        return attrs
+
     class Meta:
         model = Story
         exclude = 'publication_date',
@@ -115,6 +125,11 @@ class WatchedStoriesGetSerializer(serializers.ModelSerializer):
 
 
 class WatchedStoriesCreationSerializer(serializers.ModelSerializer):
+
+    def validate(self, attrs):
+        request = self.context.get('request')
+        attrs['target'] = request.user
+        return attrs
 
     class Meta:
         model = WatchedStories

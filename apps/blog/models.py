@@ -46,6 +46,7 @@ class Post(models.Model):
     publication_date = UnixTimeStampField(
         verbose_name='Дата+время создания', auto_now_add=True)
     favourites = models.ManyToManyField(User, verbose_name='Пост в избранных', related_name='user_favourites')
+    enabled_comments = models.BooleanField(verbose_name='Комментарии включены', default=True)
     
     class Meta:
         verbose_name = 'Публикация'

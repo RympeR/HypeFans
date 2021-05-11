@@ -56,9 +56,6 @@ class PostPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     serializer_class = PostCreationSerializer
     permission_classes = (permissions.IsAuthenticated, )
 
-    def put(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
 
 class PostActionListCreateAPI(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated, )
@@ -72,6 +69,15 @@ class PostActionRetrieveAPI(generics.RetrieveAPIView):
     queryset = PostAction.objects.all()
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = PostActionGetSerializer
+
+    def get_object(self, request, pk):
+        user = request.user
+        post = Post.objects.get(pk=pk)
+
+        return PostAction.objects.get(
+            user=user,
+            post=post
+        )
 
 
 class PostActionCreateAPI(generics.CreateAPIView):
@@ -87,6 +93,15 @@ class PostActionAPI(generics.RetrieveUpdateDestroyAPIView):
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = PostActionCreationSerializer
 
+    def get_object(self, request, pk):
+        user = request.user
+        post = Post.objects.get(pk=pk)
+
+        return PostAction.objects.get(
+            user=user,
+            post=post
+        )
+
 
 class PostActionPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     queryset = PostAction.objects.all()
@@ -95,6 +110,15 @@ class PostActionPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
+
+    def get_object(self, request, pk):
+        user = request.user
+        post = Post.objects.get(pk=pk)
+
+        return PostAction.objects.get(
+            user=user,
+            post=post
+        )
 
 
 class StoryListCreateAPI(generics.ListCreateAPIView):
@@ -131,6 +155,15 @@ class WatchedStoriesRetrieveAPI(generics.RetrieveAPIView):
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = WatchedStoriesGetSerializer
 
+    def get_object(self, request, pk):
+        user = request.user
+        target = Story.objects.get(pk=pk)
+
+        return WatchedStories.objects.get(
+            source=user,
+            target=target
+        )
+
 
 class WatchedStoriesCreateAPI(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticated, )
@@ -145,11 +178,29 @@ class WatchedStoriesAPI(generics.RetrieveUpdateDestroyAPIView):
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = WatchedStoriesCreationSerializer
 
+    def get_object(self, request, pk):
+        user = request.user
+        target = Story.objects.get(pk=pk)
+
+        return WatchedStories.objects.get(
+            source=user,
+            target=target
+        )
+
 
 class WatchedStoriesPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     queryset = WatchedStories.objects.all()
     serializer_class = WatchedStoriesCreationSerializer
     permission_classes = (permissions.IsAuthenticated, )
+
+    def get_object(self, request, pk):
+        user = request.user
+        target = Story.objects.get(pk=pk)
+
+        return WatchedStories.objects.get(
+            source=user,
+            target=target
+        )
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)

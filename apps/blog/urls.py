@@ -1,6 +1,46 @@
 from django.urls import path
-from .views import *
+from .views import (
+    AttachmentCreateAPI,
+    AttachmentAPI,
+    PostListCreateAPI,
+    PostRetrieveAPI,
+    PostCreateAPI,
+    PostAPI,
+    PostPartialUpdateAPI,
+    PostActionListCreateAPI,
+    PostActionRetrieveAPI,
+    PostActionCreateAPI,
+    PostActionAPI,
+    PostActionPartialUpdateAPI,
+    StoryListCreateAPI,
+    StoryCreateAPI,
+    StoryAPI,
+    WatchedStoriesListCreateAPI,
+    WatchedStoriesRetrieveAPI,
+    WatchedStoriesCreateAPI,
+    WatchedStoriesAPI,
+    WatchedStoriesPartialUpdateAPI
+)
 
 urlpatterns = [
-
+    path('create-attachment/', AttachmentCreateAPI.as_vew()),
+    path('attachment/<int:pk>', AttachmentAPI.as_vew()),
+    path('get-post-list/', PostListCreateAPI.as_vew()),
+    path('get-post/<int:pk>', PostRetrieveAPI.as_vew()),
+    path('create-post/', PostCreateAPI.as_vew()),
+    path('update-delete-post/<int:pk>', PostAPI.as_vew()),
+    path('partial-update-post/<int:pk>', PostPartialUpdateAPI.as_vew()),
+    path('get-post-action-list/', PostActionListCreateAPI.as_vew()),
+    path('get-post-action/<int:pk>', PostActionRetrieveAPI.as_vew()),
+    path('create-post-action/', PostActionCreateAPI.as_vew()),
+    path('update-delete-post-action/<int:pk>', PostActionAPI.as_vew()),
+    path('partial-update-post-action/<int:pk>', PostActionPartialUpdateAPI.as_vew()),
+    path('get-story-list/', StoryListCreateAPI.as_vew()),
+    path('create-story/', StoryCreateAPI.as_vew()),
+    path('update-delete-story/<int:pk>', StoryAPI.as_vew()),
+    path('get-story-action-list/', WatchedStoriesListCreateAPI.as_vew()),
+    path('get-story-action/<int:pk>', WatchedStoriesRetrieveAPI.as_vew()),
+    path('create-story-action/', WatchedStoriesCreateAPI.as_vew()),
+    path('update-delete-story-action/<int:pk>', WatchedStoriesAPI.as_vew()),
+    path('partial-update-story-action/<int:pk>', WatchedStoriesPartialUpdateAPI.as_vew()),
 ]
