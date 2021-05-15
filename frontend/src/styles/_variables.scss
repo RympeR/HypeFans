@@ -1,0 +1,30 @@
+$default-font-size: 14px;
+
+$body-bg-color: #f8f3f3;
+
+$time: (
+  slow: 0.5s,
+  normal: 0.35s,
+  fast: 0.15s
+);
+
+$font-weight: (
+  normal: 400,
+  medium: 500,
+  semibold: 600,
+  bold: 700
+);
+
+$font-size: (
+  s: 14px,
+  m: 18px,
+  l: 24px
+);
+
+$media: (
+  xs: 576px,
+  s: 768px,
+  m: 1024px,
+  l: 1280px,
+  xl: 1440px
+);
