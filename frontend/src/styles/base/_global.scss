@@ -9,9 +9,12 @@
 }
 
 body {
-  background: $body-bg-color;
+  background: $body-bg-color_desktop;
 
   font-family: 'Factor A', sans-serif;
+  @media (max-width: 768px) {
+    background: $body-bg-color_mobile;
+  }
 }
 
 input,
@@ -27,4 +30,10 @@ a:visited {
   outline: none;
   border: none;
   text-decoration: none;
+}
+
+.container {
+  width: 90%;
+  max-width: 1092px;
+  margin: 0 auto;
 }

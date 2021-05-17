@@ -1,0 +1,27 @@
+.post-list {
+  max-width: 636px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.post {
+  &:nth-of-type(n + 2) {
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  padding: 24px;
+  background: #fff;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 24px;
+    &-left {
+      display: flex;
+      align-items: center;
+    }
+    &-right {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
