@@ -100,6 +100,14 @@ class StoryGetSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class StoryShortSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = Story
+        fields = ( 'publication_date', 'reply_link', 'story')
+
+
 class StoryCreationSerializer(serializers.ModelSerializer):
 
     time_to_archive = TimestampField(required=False)
@@ -134,3 +142,15 @@ class WatchedStoriesCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = WatchedStories
         fields = '__all__',
+
+class CommentRetrieveSerializer(serializers.ModelSerializer):
+    post = PostGetShortSerializers()
+    class Meta:
+        model = PostAction
+        fields = ('post', 'comment', 'datetime')
+
+class LikeRetrieveSerializer(serializers.ModelSerializer):
+    post = PostGetShortSerializers()
+    class Meta:
+        model = PostAction
+        fields = ('like', 'comment', 'datetime')

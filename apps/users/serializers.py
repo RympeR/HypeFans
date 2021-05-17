@@ -3,6 +3,7 @@ from core.utils.customFields import TimestampField
 from django.db.models import Count
 from apps.blog.models import Post
 
+
 from .models import (
     User,
     Card,
@@ -130,3 +131,16 @@ class PendingUserGetSerializer(serializers.ModelSerializer):
         model = PendingUser
         fields = '__all__'
 
+
+# class ActionSerializer(serializers.Serializer):
+
+#     target = UserShortRetrieveSeriliazer(required=False)
+
+
+
+# class RetrieveNotificationsSerializer(serializers.Serializer):
+
+#     user = serializers.IntegerField()
+#     time = serializers.BigIntegerField()
+#     action = ActionSerializer(required=False)
+#     type = serializers.CharField()

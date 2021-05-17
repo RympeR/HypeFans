@@ -59,3 +59,13 @@ class UserMessageCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserMessage
         fields = '__all__'
+
+class ChatMessagesSerializer(serializers.Serializer):
+
+    room_id = serializers.IntegerField()
+    message_id = serializers.IntegerField()
+
+class RetrieveChatsSerializer(serializers.Serializer):
+
+    limit = serializers.IntegerField()
+    offset = serializers.IntegerField()

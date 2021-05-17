@@ -13,7 +13,7 @@ def api_accepted_202(obj:dict = {}):
         status=status.HTTP_202_ACCEPTED
     )
 
-def api_created_226(obj:dict = {}):
+def api_used_226(obj:dict = {}):
     return Response(
         obj,
         status=status.HTTP_226_IM_USED
