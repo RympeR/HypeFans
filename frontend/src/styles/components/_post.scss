@@ -9,6 +9,9 @@
   }
   padding: 24px;
   background: #fff;
+  @media (max-width: map-get($map: $media, $key: s)) {
+    padding: 24px 0;
+  }
 
   &__top {
     display: flex;

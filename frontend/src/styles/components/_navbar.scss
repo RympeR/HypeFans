@@ -27,24 +27,32 @@
   }
 
   &__icon {
-    width: 40px;
-    height: 40px;
-    stroke: #808080;
-    stroke-width: 4px;
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+    path {
+      stroke: #808080;
+      stroke-width: 4px;
+      stroke-opacity: 100%;
+    }
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+      path {
+        stroke: black;
+        stroke-width: 2px;
+        stroke-opacity: 80%;
+      }
+    }
 
     &_active {
       path {
         stroke: #fb5734;
-        stroke-opacity: 100%;
       }
-    }
-
-    @media (max-width: map-get($map: $media, $key: s)) {
-      width: 24px;
-      height: 24px;
-      stroke: black;
-      stroke-width: 2px;
-      stroke-opacity: 80%;
     }
   }
 }

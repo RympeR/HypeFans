@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { langData } from '../assets/text/';
 import '../styles/app.scss';
 import { Main, Navbar } from './layout';
 import AddPost from './pages/AddPost';
@@ -7,8 +8,9 @@ import Home from './pages/Home';
 import Messages from './pages/Messages';
 import Notifications from './pages/Notifications';
 import Profile from './pages/Profile';
+import { LangContext } from './utils/LangContext';
 const App = () => {
-  // const [lang, setLang] = useState<any>(langData.EN);
+  const [currentLang, setCurrentLang] = useState<any>(langData.EN);
   // const langSwitch = (e: MouseEvent<HTMLButtonElement>) => {
   //   setLang(langData[e.currentTarget.name as LANGS]);
   // };
@@ -17,13 +19,15 @@ const App = () => {
       <BrowserRouter>
         <Navbar />
         <Main>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/notifications" component={Notifications} />
-            <Route exact path="/add" component={AddPost} />
-            <Route exact path="/messages" component={Messages} />
-            <Route exact path="/profile" component={Profile} />
-          </Switch>
+          <LangContext.Provider value={currentLang}>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/notifications" component={Notifications} />
+              <Route exact path="/add" component={AddPost} />
+              <Route exact path="/messages" component={Messages} />
+              <Route exact path="/profile" component={Profile} />
+            </Switch>
+          </LangContext.Provider>
         </Main>
       </BrowserRouter>
       {/* <button onClick={langSwitch} name={LANGS.EN}>
