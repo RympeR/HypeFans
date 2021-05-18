@@ -28,8 +28,8 @@ class UserRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserGetSerializer
 
-    def get_object(self, request):
-        return request.user
+    def get_object(self):
+        return self.request.user
 
 
 class UserCreateAPI(generics.CreateAPIView):
@@ -41,8 +41,8 @@ class UserAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreationSerializer
 
-    def get_object(self, request):
-        return request.user
+    def get_object(self):
+        return self.request.user
 
 class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     queryset = User.objects.all()
@@ -176,6 +176,6 @@ class PendingUserCreateAPI(generics.CreateAPIView):
     queryset = PendingUser.objects.all()
     serializer_class = PendingUserCreationSerializer
 
-    def get_object(self, request):
-        return request.user
+    def get_object(self):
+        return self.request.user
 

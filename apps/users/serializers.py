@@ -2,7 +2,7 @@ from rest_framework import serializers
 from core.utils.customFields import TimestampField
 from django.db.models import Count
 from apps.blog.models import Post
-
+from django_countries.serializer_fields import CountryField
 
 from .models import (
     User,
@@ -28,7 +28,7 @@ class UserCreationSerializer(serializers.ModelSerializer):
         fields = 'email', 'username', 'password'
 
 class UserGetSerializer(serializers.ModelSerializer):
-    
+    location = CountryField(country_dict=True)
     class Meta:
         model = User
         fields = (
