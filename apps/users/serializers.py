@@ -71,7 +71,7 @@ class CardCreationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Card
-        exclude = 'datetime', 
+        fields = '__all__'
 
 class CardGetSerializer(serializers.ModelSerializer):
 

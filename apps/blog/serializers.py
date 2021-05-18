@@ -85,7 +85,7 @@ class PostActionCreationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostAction
-        fields = '__all__',
+        fields = '__all__'
 
 
 class StoryGetSerializer(serializers.ModelSerializer):
@@ -141,7 +141,7 @@ class WatchedStoriesCreationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WatchedStories
-        fields = '__all__',
+        fields = '__all__'
 
 class CommentRetrieveSerializer(serializers.ModelSerializer):
     post = PostGetShortSerializers()
