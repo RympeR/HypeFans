@@ -12,7 +12,7 @@
     0px 22.3363px 17.869px rgba(250, 178, 139, 0.0417275), 0px 12.5216px 10.0172px rgba(250, 178, 139, 0.035),
     0px 6.6501px 5.32008px rgba(250, 178, 139, 0.0282725), 0px 2.76726px 2.21381px rgba(250, 178, 139, 0.0196802);
 
-  z-index: 10;
+  z-index: 5;
   @media (max-width: map-get($map: $media, $key: s)) {
     top: unset;
     bottom: 0;
@@ -25,6 +25,9 @@
   &__inner {
     display: flex;
     justify-content: space-between;
+    width: 90%;
+    max-width: 1092px;
+    margin: 0 auto;
   }
 
   &__icon {

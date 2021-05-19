@@ -35,7 +35,7 @@ const Post = () => {
         http://hypefans.com/tonybellew
       </p>
       <button className="post__read-more-btn">{chosenLang.readmore}</button>
-      <UserBanner />
+      <UserBanner aside={false} />
       <img className="post__img" src={postImg} alt="picture" />
       <div className="post__bottom">
         <div className="post__actions">

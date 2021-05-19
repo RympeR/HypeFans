@@ -1,0 +1,48 @@
+.aside {
+  position: fixed;
+  right: 100px;
+  top: 122px;
+  width: 100%;
+  max-width: 376px;
+  // background: #f8f1f0;
+  z-index: 5;
+
+  &__title {
+    font-size: map-get($map: $font-size, $key: m);
+    color: $text-color;
+    margin: 0 0 24px;
+  }
+  &__slider-slide {
+    padding: 0 10px;
+  }
+  &__slider-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    transition: all map-get($map: $time, $key: normal);
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      width: 5px;
+      height: 5px;
+    }
+  }
+
+  @media (max-width: map-get($map: $media, $key: l)) {
+    position: static;
+    max-width: unset;
+    width: 100% !important;
+    padding: 16px;
+  }
+}
+.slick-active {
+  .aside__slider-dot {
+    width: 12px;
+    height: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    @media (max-width: map-get($map: $media, $key: s)) {
+      width: 6px;
+      height: 6px;
+    }
+  }
+}

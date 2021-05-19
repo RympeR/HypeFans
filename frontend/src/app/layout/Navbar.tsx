@@ -22,48 +22,46 @@ const Navbar = () => {
 
   return (
     <nav className="nav">
-      <div className="container">
-        <div className="nav__inner">
-          <a
-            className={`nav__icon ${pathname === NAV_LINKS.HOME ? 'nav__icon_active' : ''}`}
-            href="/"
-            id={NAV_LINKS.HOME}
-          >
-            <HomeIcon />
-          </a>
+      <div className="nav__inner">
+        <a
+          className={`nav__icon ${pathname === NAV_LINKS.HOME ? 'nav__icon_active' : ''}`}
+          href="/"
+          id={NAV_LINKS.HOME}
+        >
+          <HomeIcon />
+        </a>
 
-          <a
-            className={`nav__icon ${pathname === NAV_LINKS.NOTIFICATIONS ? 'nav__icon_active' : ''}`}
-            href="/notifications"
-            id={NAV_LINKS.NOTIFICATIONS}
-          >
-            <NoteficationIcon />
-          </a>
+        <a
+          className={`nav__icon ${pathname === NAV_LINKS.NOTIFICATIONS ? 'nav__icon_active' : ''}`}
+          href="/notifications"
+          id={NAV_LINKS.NOTIFICATIONS}
+        >
+          <NoteficationIcon />
+        </a>
 
-          <a
-            className={`nav__icon ${pathname === NAV_LINKS.ADD ? 'nav__icon_active' : ''}`}
-            href="/add"
-            id={NAV_LINKS.ADD}
-          >
-            <AddIcon />
-          </a>
+        <a
+          className={`nav__icon ${pathname === NAV_LINKS.ADD ? 'nav__icon_active' : ''}`}
+          href="/add"
+          id={NAV_LINKS.ADD}
+        >
+          <AddIcon />
+        </a>
 
-          <a
-            className={`nav__icon ${pathname === NAV_LINKS.MESSAGES ? 'nav__icon_active' : ''}`}
-            href="/messages"
-            id={NAV_LINKS.MESSAGES}
-          >
-            <MessageIcon />
-          </a>
+        <a
+          className={`nav__icon ${pathname === NAV_LINKS.MESSAGES ? 'nav__icon_active' : ''}`}
+          href="/messages"
+          id={NAV_LINKS.MESSAGES}
+        >
+          <MessageIcon />
+        </a>
 
-          <a
-            className={`nav__icon ${pathname === NAV_LINKS.PROFILE ? 'nav__icon_active' : ''}`}
-            href="/profile"
-            id={NAV_LINKS.PROFILE}
-          >
-            <UserIcon />
-          </a>
-        </div>
+        <a
+          className={`nav__icon ${pathname === NAV_LINKS.PROFILE ? 'nav__icon_active' : ''}`}
+          href="/profile"
+          id={NAV_LINKS.PROFILE}
+        >
+          <UserIcon />
+        </a>
       </div>
     </nav>
   );

@@ -2,6 +2,10 @@
   max-width: 636px;
   border-radius: 16px;
   overflow: hidden;
+  @media (max-width: map-get($map: $media, $key: l)) {
+    // margin: 0 auto;
+    max-width: unset;
+  }
 }
 
 .post {
@@ -12,7 +16,7 @@
   background: #fff;
 
   @media (max-width: map-get($map: $media, $key: s)) {
-    padding: 24px 0;
+    padding: 24px;
   }
 
   &__top {

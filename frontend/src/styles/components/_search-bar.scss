@@ -6,7 +6,7 @@
   background: #fff;
 
   @media (max-width: map-get($map: $media, $key: s)) {
-    padding: 0;
+    padding: 24px 16px 0 24px;
   }
 
   &__left {

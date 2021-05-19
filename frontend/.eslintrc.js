@@ -46,7 +46,8 @@ module.exports = {
           }
         ]
       }
-    ]
+    ],
+    'react/display-name': DISABLED
   },
   settings: {
     react: {

@@ -5,12 +5,13 @@ import SearchBar from '../components/SearchBar';
 const Home = () => {
   return (
     <>
-      <div className="post-list">
+      <div className="post-list" id="postlist">
         <SearchBar />
+        <Post />
+        <Aside />
         <Post />
         <Post />
       </div>
-      <Aside />
     </>
   );
 };
