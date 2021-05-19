@@ -3,12 +3,14 @@
   border-radius: 16px;
   overflow: hidden;
 }
+
 .post {
   &:nth-of-type(n + 2) {
     border-top: 1px solid rgba(0, 0, 0, 0.2);
   }
   padding: 24px;
   background: #fff;
+
   @media (max-width: map-get($map: $media, $key: s)) {
     padding: 24px 0;
   }
@@ -17,7 +19,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 0 24px;
     &-left {
       display: flex;
       align-items: center;
@@ -26,5 +27,141 @@
       display: flex;
       align-items: center;
     }
+  }
+
+  &__logo {
+    display: inline-block;
+    margin: 0 12px 0 0;
+    width: 70px;
+    height: 70px;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      width: 50px;
+      height: 50px;
+      margin: 0 8px 0 0;
+    }
+  }
+  &__brand {
+    font-size: map-get($map: $font-size, $key: l);
+    color: $text-color;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      font-size: map-get($map: $font-size, $key: s);
+    }
+  }
+  &__brand-profile {
+    display: inline-block;
+    font-size: map-get($map: $font-size, $key: m);
+    color: $text-color;
+    opacity: 70%;
+    margin: 4px 0 0;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      font-size: map-get($map: $font-size, $key: s);
+    }
+  }
+
+  &__time {
+    margin: 0 18px 0 0;
+    opacity: 60%;
+    color: $text-color;
+    font-size: map-get($map: $font-size, $key: s);
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      font-size: 12px;
+    }
+  }
+
+  &__caption {
+    font-size: map-get($map: $font-size, $key: s);
+    line-height: 150%;
+    margin: 24px 0 0;
+    color: $text-color;
+    @media (max-width: map-get($map: $media, $key: s)) {
+      margin: 16px 0 0;
+    }
+  }
+  &__read-more-btn {
+    display: none;
+    color: $orange;
+    font-size: map-get($map: $font-size, $key: s);
+    line-height: 150%;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      display: block;
+    }
+  }
+
+  &__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-position: center;
+    object-fit: cover;
+    margin: 16px 0 0;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      margin: 8px 0 0;
+    }
+  }
+  &__bottom {
+    margin: 16px 0 0;
+    @media (max-width: map-get($map: $media, $key: s)) {
+      margin: 8px 0 0;
+    }
+  }
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &-left {
+      display: flex;
+      align-items: center;
+    }
+  }
+  &__action-icon {
+    width: 34px;
+    height: 34px;
+    path {
+      stroke-width: 2.2px;
+
+      @media (max-width: map-get($map: $media, $key: s)) {
+        stroke-width: 1.6px;
+      }
+
+      @media (max-width: map-get($map: $media, $key: s)) {
+        width: 24px;
+        height: 24px;
+      }
+    }
+    &:nth-of-type(2) {
+      margin: 0 8px;
+    }
+  }
+  &__donate-btn {
+    font-weight: 700;
+    font-size: map-get($map: $font-size, $key: m);
+    color: $text-color;
+    opacity: 60%;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      font-size: map-get($map: $font-size, $key: s);
+    }
+  }
+  &__like-amount {
+    font-size: map-get($map: $font-size, $key: s);
+    margin: 16px 0 0;
+    color: $text-color;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      margin: 12px 0 0;
+    }
+  }
+  &__comment-amount {
+    font-size: map-get($map: $font-size, $key: s);
+    margin: 8px 0 0;
+    color: $text-color;
+    opacity: 60%;
   }
 }

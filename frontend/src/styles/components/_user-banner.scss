@@ -1,0 +1,58 @@
+.user-banner {
+  position: relative;
+  display: block;
+  padding: 25px 35px;
+  background-position: center;
+  background-size: cover;
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    background: rgba(255, 255, 255, 0.68);
+    backdrop-filter: blur(8px);
+    padding: 0 32px 0 0;
+    border-radius: 32px;
+  }
+  &__avatar {
+    display: block;
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    object-position: center;
+    border: 1.6px solid #fff;
+    border-radius: 50%;
+    margin: 0 8px 0 0;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      width: 60px;
+      height: 60px;
+    }
+  }
+  &__name {
+    font-size: map-get($map: $font-size, $key: s);
+    color: $text-color;
+  }
+  &__nickname {
+    font-size: map-get($map: $font-size, $key: s);
+    color: $text-color;
+    opacity: 70%;
+    margin: 4px 0 0 0;
+  }
+  &__status {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    padding: 2px 11px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 21px;
+    background: #fb5734;
+    color: #fff;
+    border-radius: 16px;
+  }
+
+  @media (max-width: map-get($map: $media, $key: s)) {
+    padding: 16px;
+  }
+}

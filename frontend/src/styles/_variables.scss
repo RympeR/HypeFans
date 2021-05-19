@@ -2,6 +2,8 @@ $default-font-size: 14px;
 
 $body-bg-color_desktop: #f8f3f3;
 $body-bg-color_mobile: #fff;
+$orange: #fb5734;
+$text-color: #000;
 
 $time: (
   slow: 0.5s,
@@ -18,8 +20,9 @@ $font-weight: (
 
 $font-size: (
   s: 14px,
-  m: 18px,
-  l: 24px
+  m: 16px,
+  l: 18px,
+  xl: 24px
 );
 
 $media: (

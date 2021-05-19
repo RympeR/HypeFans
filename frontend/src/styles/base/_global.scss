@@ -19,20 +19,21 @@ body {
 
 input,
 button,
-a,
-input:focus,
-input:active,
-button:focus,
-button:active,
-a:focus,
-a:active,
-a:visited {
-  outline: none;
+textarea {
   border: none;
-  text-decoration: none;
-}
-button {
   background: none;
+  &:active,
+  &:focus {
+    outline: none;
+  }
+}
+
+a {
+  text-decoration: none;
+  &:active,
+  &:focus {
+    outline: none;
+  }
 }
 
 .container {

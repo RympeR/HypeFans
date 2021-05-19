@@ -1,14 +1,13 @@
 /*** Not Inject ***/
 @import './variables';
 
-// /* Import Base */
+/* Import Base */
 @import './base/global';
 @import './base/fonts';
 
-// /* Import Components */
+/* Import Components */
 @import './components/navbar';
 @import './components/main';
 @import './components/post';
-
-// /* Import Pages */
-@import './pages/home';
+@import './components/search-bar';
+@import './components/user-banner';
