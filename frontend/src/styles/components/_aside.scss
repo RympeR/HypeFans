@@ -12,21 +12,6 @@
     color: $text-color;
     margin: 0 0 24px;
   }
-  &__slider-slide {
-    padding: 0 10px;
-  }
-  &__slider-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.2);
-    transition: all map-get($map: $time, $key: normal);
-
-    @media (max-width: map-get($map: $media, $key: s)) {
-      width: 5px;
-      height: 5px;
-    }
-  }
 
   @media (max-width: map-get($map: $media, $key: l)) {
     position: static;
@@ -35,14 +20,27 @@
     padding: 16px;
   }
 }
-.slick-active {
-  .aside__slider-dot {
-    width: 12px;
-    height: 12px;
-    background: rgba(0, 0, 0, 0.7);
-    @media (max-width: map-get($map: $media, $key: s)) {
-      width: 6px;
-      height: 6px;
-    }
+
+.swiper-container {
+  padding: 0 0 20px !important;
+}
+
+.swiper-pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.swiper-pagination-bullet {
+  width: 10px !important;
+  height: 10px !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  opacity: unset !important;
+  transition: all map-get($map: $time, $key: normal);
+  &-active {
+    background: rgba(0, 0, 0, 0.7) !important;
+  }
+  @media (max-width: map-get($map: $media, $key: s)) {
+    width: 5px !important;
+    height: 5px !important;
   }
 }

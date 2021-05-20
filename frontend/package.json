@@ -28,7 +28,8 @@
     "react-i18next": "^11.8.7",
     "react-router-dom": "^5.2.0",
     "react-slick": "^0.28.1",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "swiper": "^6.6.2"
   },
   "devDependencies": {
     "@craco/craco": "^6.1.1",

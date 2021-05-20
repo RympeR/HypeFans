@@ -18,3 +18,25 @@ export const timeAgo = (createdAt: Date) => {
   const duration = currentDate.getTime() - createdAt.getTime();
   return timeParser(duration);
 };
+
+// Returns computed width of fixed aside block
+export const getComputedWidth = (marginLeft = 47) => {
+  const main = document.getElementById('main');
+  const postList = document.getElementById('postlist');
+  const postListWidth = +window.getComputedStyle(postList!).width.match(/\d+(?:\.\d+)?/g)!;
+
+  const mainWidth = +window.getComputedStyle(main!).width.match(/\d+(?:\.\d+)?/g)!;
+  const width = mainWidth - postListWidth - marginLeft;
+  return width;
+};
+
+// Returns computed left position of fixed aside block
+export const getComputedLeftPosition = (marginLeft = 47) => {
+  const main = document.getElementById('main');
+  const postList = document.getElementById('postlist');
+  const mainMarginLeft = +window.getComputedStyle(main!).marginLeft.match(/\d+(?:\.\d+)?/g)!;
+
+  const postListWidth = +window.getComputedStyle(postList!).width.match(/\d+(?:\.\d+)?/g)!;
+  const leftPosition = postListWidth + mainMarginLeft + marginLeft;
+  return leftPosition;
+};
