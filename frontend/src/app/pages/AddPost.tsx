@@ -1,7 +1,12 @@
 import React from 'react';
+import Upload from '../components/Upload';
 
 const AddPost = () => {
-  return <div>AddPost</div>;
+  return (
+    <>
+      <Upload />
+    </>
+  );
 };
 
 export default AddPost;

@@ -9,14 +9,13 @@
 }
 
 .post {
-  &:nth-of-type(n + 2) {
-    border-top: 1px solid rgba(0, 0, 0, 0.2);
-  }
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
   padding: 24px;
   background: #fff;
 
   @media (max-width: map-get($map: $media, $key: s)) {
-    padding: 24px;
+    padding: 24px 16px;
   }
 
   &__top {
@@ -56,8 +55,7 @@
   &__brand-profile {
     display: inline-block;
     font-size: map-get($map: $font-size, $key: m);
-    color: $text-color;
-    opacity: 70%;
+    color: rgba(0, 0, 0, 0.7);
     margin: 4px 0 0;
 
     @media (max-width: map-get($map: $media, $key: s)) {
@@ -67,8 +65,7 @@
 
   &__time {
     margin: 0 18px 0 0;
-    opacity: 60%;
-    color: $text-color;
+    color: rgba(0, 0, 0, 0.6);
     font-size: map-get($map: $font-size, $key: s);
 
     @media (max-width: map-get($map: $media, $key: s)) {
@@ -147,8 +144,7 @@
   &__donate-btn {
     font-weight: 700;
     font-size: map-get($map: $font-size, $key: m);
-    color: $text-color;
-    opacity: 60%;
+    color: rgba(0, 0, 0, 0.6);
 
     @media (max-width: map-get($map: $media, $key: s)) {
       font-size: map-get($map: $font-size, $key: s);
@@ -166,7 +162,6 @@
   &__comment-amount {
     font-size: map-get($map: $font-size, $key: s);
     margin: 8px 0 0;
-    color: $text-color;
-    opacity: 60%;
+    color: rgba(0, 0, 0, 0.6);
   }
 }

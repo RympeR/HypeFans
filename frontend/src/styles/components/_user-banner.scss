@@ -35,8 +35,8 @@
   }
   &__nickname {
     font-size: map-get($map: $font-size, $key: s);
-    color: $text-color;
-    opacity: 70%;
+    color: rgba(0, 0, 0, 0.7);
+
     margin: 4px 0 0 0;
   }
   &__status {

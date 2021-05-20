@@ -2,11 +2,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px;
+  padding: 24px 24px 0px 24px;
   background: #fff;
 
   @media (max-width: map-get($map: $media, $key: s)) {
-    padding: 24px 16px 0 24px;
+    padding: 24px 16px 0 16px;
   }
 
   &__left {

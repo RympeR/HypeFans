@@ -12,6 +12,10 @@ body {
   background: $body-bg-color_desktop;
 
   font-family: 'Factor A', sans-serif;
+
+  @media (max-width: map-get($map: $media, $key: s)) {
+    background: $body-bg-color_mobile;
+  }
 }
 
 input,
