@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, useContext, useRef, useState } from 'react';
+import React, { ChangeEvent, FormEvent, MouseEvent, useContext, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
 import { ReactComponent as AttachIcon } from '../../assets/images/attach.svg';
@@ -7,19 +7,33 @@ import { LangContext } from '../utils/LangContext';
 
 const Upload = () => {
   const chosenLang = useContext(LangContext);
+
   const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
+
   const inputFileRef = useRef(null);
+
   const history = useHistory();
+
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setUploadedFiles([...uploadedFiles, URL.createObjectURL(e.target.files[0])]);
-    console.log(e.target.files[0]);
+    const lastIndex = e.target.files.length - 1;
+
+    setUploadedFiles([...uploadedFiles, URL.createObjectURL(e.target.files[lastIndex])]);
   };
+
   const deleteImg = (e: MouseEvent<HTMLOrSVGElement>, index: number) => {
     setUploadedFiles([...uploadedFiles.filter((file: any, i: number) => i !== index)]);
-    // inputFileRef.current.value = [...uploadedFiles];
   };
+
+  const submitHandler = (e: FormEvent) => {
+    e.preventDefault();
+
+    inputFileRef.current.value = '';
+
+    setUploadedFiles([]);
+  };
+
   return (
-    <form className="upload">
+    <form className="upload" onSubmit={submitHandler}>
       <div className="upload__top">
         <BackIcon onClick={() => history.push('/')} />
         <h2 className="upload__title">{chosenLang.newPost}</h2>
@@ -38,16 +52,19 @@ const Upload = () => {
         <label className="upload__file-input-label" htmlFor="file-input">
           <AttachIcon className="upload__attach-icon" />
         </label>
-        <input className="upload__file-input" id="file-input" ref={inputFileRef} type="file" onChange={changeHandler} />
+        <input
+          className="upload__file-input"
+          id="file-input"
+          ref={inputFileRef}
+          type="file"
+          onChange={changeHandler}
+          multiple
+        />
       </div>
       <div className="upload__bottom">
         <button
-          className="upload__submit-btn"
+          className={uploadedFiles.length ? 'upload__submit-btn upload__submit-btn_active' : 'upload__submit-btn'}
           type="submit"
-          style={{
-            background: uploadedFiles.length ? '#FB5734' : '#BBBBBB',
-            color: uploadedFiles.length ? '#fff' : 'rgba(0,0,0,0.5)'
-          }}
         >
           {chosenLang.public}
         </button>

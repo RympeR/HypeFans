@@ -27,12 +27,13 @@
   }
   &__img-list {
     display: flex;
+    margin: 0 0 22px;
   }
   &__img-wrapper {
     position: relative;
     width: 130px;
     height: 130px;
-    &:nth-of-type(2) {
+    &:nth-of-type(n + 2) {
       margin: 0 0 0 16px;
     }
   }
@@ -80,8 +81,16 @@
     color: rgba(0, 0, 0, 0.5);
     cursor: pointer;
 
+    &_active {
+      background: $orange;
+      color: #fff;
+    }
     @media (max-width: map-get($map: $media, $key: xs)) {
       width: 100%;
     }
+  }
+
+  @media (max-width: map-get($map: $media, $key: s)) {
+    padding: 0 0 85px;
   }
 }

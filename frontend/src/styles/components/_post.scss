@@ -1,6 +1,6 @@
 .post-list {
   max-width: 636px;
-  border-radius: 16px;
+  border-radius: 0 0 16px 16px;
   overflow: hidden;
   @media (max-width: map-get($map: $media, $key: l)) {
     // margin: 0 auto;
@@ -73,23 +73,28 @@
     }
   }
 
+  &__menu-dots {
+    cursor: pointer;
+  }
+
   &__caption {
     font-size: map-get($map: $font-size, $key: s);
     line-height: 150%;
-    margin: 24px 0 0;
+    margin: 24px 0 16px;
     color: $text-color;
     @media (max-width: map-get($map: $media, $key: s)) {
-      margin: 16px 0 0;
+      margin: 16px 0 8px;
     }
   }
   &__read-more-btn {
-    display: none;
+    display: block;
     color: $orange;
     font-size: map-get($map: $font-size, $key: s);
     line-height: 150%;
+    margin: 0 0 16px;
 
-    @media (max-width: map-get($map: $media, $key: s)) {
-      display: block;
+    &_hidden {
+      display: none;
     }
   }
 
@@ -145,6 +150,7 @@
     font-weight: 700;
     font-size: map-get($map: $font-size, $key: m);
     color: rgba(0, 0, 0, 0.6);
+    cursor: pointer;
 
     @media (max-width: map-get($map: $media, $key: s)) {
       font-size: map-get($map: $font-size, $key: s);

@@ -1,0 +1,50 @@
+.stories {
+  max-width: 636px;
+  background: #fff;
+  padding: 24px 0 0 24px;
+  border-radius: 16px 16px 0 0;
+
+  &__story-wrapper {
+    margin: 0 24px 0 0;
+    cursor: pointer;
+  }
+  &__user-avatar {
+    width: 83px;
+    height: 83px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+    border: 2px solid #fff;
+  }
+  &__user-nick {
+    margin: 12px 0 0 0;
+  }
+
+  .swiper-slide {
+    width: fit-content !important;
+  }
+  &__modal {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 6;
+
+    &_active {
+      display: flex;
+    }
+  }
+  &__close-modal {
+    position: absolute;
+    right: 40px;
+    top: 40px;
+    font-size: 60px;
+    color: #fff;
+    cursor: pointer;
+  }
+}

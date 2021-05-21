@@ -4,6 +4,7 @@
 /* Import Base */
 @import './base/global';
 @import './base/fonts';
+@import './base/states';
 
 /* Import Components */
 @import './components/navbar';
@@ -13,3 +14,4 @@
 @import './components/user-banner';
 @import './components/aside';
 @import './components/upload';
+@import './components/stories';
