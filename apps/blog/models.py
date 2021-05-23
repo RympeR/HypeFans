@@ -2,23 +2,19 @@ from django.db import models
 from apps.users.models import User
 from unixtimestampfield.fields import UnixTimeStampField
 
-# Create your models here.
-
-ATTACHMENT_TYPE = (
-    ('file', 'file'),
-    ('music', 'music'),
-    ('photo', 'photo'),
-    ('video', 'video'),
-)
-
 
 class Attachment(models.Model):
+    class AtachmentChoices(models.IntegerChoices):
+        FILE = 1, 'file'
+        MUSIC = 2, 'music'
+        PHOTO = 3, 'photo'
+        VIDEO = 4, 'video'
+
     _file = models.FileField(verbose_name='Файл', upload_to='post_file')
-    file_type = models.CharField(
+    file_type = models.IntegerField(
         verbose_name='Тип файла',
-        choices=ATTACHMENT_TYPE,
-        default='file',
-        max_length=5
+        choices=AtachmentChoices.choices,
+        default=1
     )
 
     class Meta:
@@ -154,3 +150,10 @@ class WatchedStories(models.Model):
 #     )
 #     type=models.CharField('Тип уведомления', max_length=1, choices=TYPES)
 #     datetime = UnixTimeStampField(auto_now_add=True)
+
+
+def create_post(sender: Post, instance: Post, created: bool, **kwargs):
+    if created:
+        user = instance.user
+        user.post_amount += 1
+        user.save()

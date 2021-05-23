@@ -144,7 +144,6 @@ class Subscription(models.Model):
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
 
-
 class Card(models.Model):
     user = models.ForeignKey(User, related_name='user_card', on_delete=models.CASCADE,)
     number = models.BigIntegerField(verbose_name='Номер карты')
@@ -187,7 +186,7 @@ class Payment(models.Model):
 class PendingUser(models.Model):
     user= models.ForeignKey(User, verbose_name='Ожидающие верификации', on_delete=models.CASCADE)
     photo = models.ImageField(verbose_name='Документы', upload_to='docs/')
-    verified = models.BooleanField(verbose_name='Верифицирован', default=False)
+    verified = models.BooleanField(verbose_name='Верифицирован', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Пользователь на верификацию'

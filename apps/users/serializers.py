@@ -12,6 +12,7 @@ from .models import (
     PendingUser
 )
 
+
 class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -21,14 +22,17 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             'avatar',
         )
 
+
 class UserCreationSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = User
         fields = 'email', 'username', 'password'
 
+
 class UserGetSerializer(serializers.ModelSerializer):
     location = CountryField(country_dict=True)
+
     class Meta:
         model = User
         fields = (
@@ -57,21 +61,15 @@ class UserGetSerializer(serializers.ModelSerializer):
             'validated_user',
             'credit_amount',
             'earned_credits_amount',
-            # 'fans_amount',
-            # 'posts_amount',
         )
-    
-    # def get_fans_amount(self, obj:User):
-    #     return obj.objects.annotate(num_folows=Count('my_subscribes'))
-        
-    # def get_posts_amount(self, obj:User):
-    #     ...
+
 
 class CardCreationSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Card
         fields = '__all__'
+
 
 class CardGetSerializer(serializers.ModelSerializer):
 
@@ -87,14 +85,14 @@ class DonationCreationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Donation
-        exclude = 'datetime', 
+        exclude = 'datetime',
 
 
 class DonationGetSerializer(serializers.ModelSerializer):
 
     sender = UserGetSerializer()
     reciever = UserGetSerializer()
-    
+
     class Meta:
         model = Donation
         fields = '__all__'
@@ -104,14 +102,14 @@ class PaymentCreationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payment
-        exclude = 'datetime', 
+        exclude = 'datetime',
 
 
 class PaymentGetSerializer(serializers.ModelSerializer):
 
     card = DonationGetSerializer()
     datetime = TimestampField()
-    
+
     class Meta:
         model = Payment
         fields = '__all__'
@@ -127,6 +125,7 @@ class PendingUserCreationSerializer(serializers.ModelSerializer):
 class PendingUserGetSerializer(serializers.ModelSerializer):
 
     user = UserGetSerializer()
+
     class Meta:
         model = PendingUser
         fields = '__all__'
@@ -135,7 +134,6 @@ class PendingUserGetSerializer(serializers.ModelSerializer):
 # class ActionSerializer(serializers.Serializer):
 
 #     target = UserShortRetrieveSeriliazer(required=False)
-
 
 
 # class RetrieveNotificationsSerializer(serializers.Serializer):
