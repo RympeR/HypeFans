@@ -4,7 +4,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 import requests
-from .serializers import ChatCreateSerializer, UserMessageCreationSerializer
+from .serializers import ChatCreationSerializer, UserMessageCreationSerializer
 from .models import Chat, UserMessage
 
 
@@ -38,7 +38,7 @@ class ChatConsumer(WebsocketConsumer):
             'user': user,
             'text': message
         }
-        chat = ChatCreateSerializer(data=payload)
+        chat = ChatCreationSerializer(data=payload)
         if chat.is_valid():
             chat.save()
         else:
