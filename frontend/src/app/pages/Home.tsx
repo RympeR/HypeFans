@@ -1,8 +1,8 @@
 import React from 'react';
-import Aside from '../components/Aside';
-import Post from '../components/Post';
-import SearchBar from '../components/SearchBar';
-import StoryBlock from '../components/StoryBlock';
+import Aside from '../components/home/Aside';
+import Post from '../components/home/Post';
+import SearchBar from '../components/home/SearchBar';
+import StoryBlock from '../components/home/StoryBlock';
 const Home = () => {
   return (
     <>

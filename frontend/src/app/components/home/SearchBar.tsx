@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import ava1 from '../../assets/images/ava1.png';
-import { ReactComponent as Search } from '../../assets/images/search.svg';
-import { LangContext } from '../utils/LangContext';
+import ava1 from '../../../assets/images/ava1.png';
+import { ReactComponent as SearchIcon } from '../../../assets/images/search.svg';
+import { LangContext } from '../../utils/LangContext';
 const SearchBar = () => {
   const chosenLang = useContext(LangContext);
 
@@ -12,7 +12,7 @@ const SearchBar = () => {
         <input className="search-bar__input" type="text" placeholder={chosenLang.urThought} />
       </div>
       <button className="search-bar__btn" type="submit">
-        <Search />
+        <SearchIcon />
       </button>
     </form>
   );

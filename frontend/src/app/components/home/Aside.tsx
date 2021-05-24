@@ -3,8 +3,8 @@ import 'swiper/components/pagination/pagination.scss';
 import SwiperCore, { Autoplay, Pagination } from 'swiper/core';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.scss';
-import { getComputedLeftPosition, getComputedWidth } from '../utils/helpers';
-import { LangContext } from '../utils/LangContext';
+import { LangContext } from '../../utils/LangContext';
+import { getComputedLeftPosition, getComputedWidth } from '../../utils/utilities';
 import UserBanner from './UserBanner';
 SwiperCore.use([Pagination, Autoplay]);
 

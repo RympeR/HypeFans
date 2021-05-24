@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ReactComponent as MenuDots } from '../../assets/images/3dots.svg';
-import { ReactComponent as SaveIcon } from '../../assets/images/bookmark.svg';
-import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
-import { ReactComponent as Logo } from '../../assets/images/logo.svg';
-import { ReactComponent as CommentIcon } from '../../assets/images/message-circle.svg';
-import postImg from '../../assets/images/post-image.jpg';
-import { LangContext } from '../utils/LangContext';
+import { ReactComponent as MenuDots } from '../../../assets/images/3dots.svg';
+import { ReactComponent as SaveIcon } from '../../../assets/images/bookmark.svg';
+import { ReactComponent as LikeIcon } from '../../../assets/images/heart.svg';
+import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
+import { ReactComponent as CommentIcon } from '../../../assets/images/message-circle.svg';
+import postImg from '../../../assets/images/post-image.jpg';
+import { LangContext } from '../../utils/LangContext';
 import UserBanner from './UserBanner';
 const Post = () => {
   const chosenLang = useContext(LangContext);
@@ -58,7 +58,7 @@ const Post = () => {
         {chosenLang.readmore}
       </button>
 
-      <UserBanner aside={false} />
+      <UserBanner />
 
       <img className="post__img" src={postImg} alt="picture" />
 

@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import userAvatar from '../../assets/images/ava2.png';
-import profileLinkBg from '../../assets/images/profile-link-bg.jpg';
-import { LangContext } from '../utils/LangContext';
+import userAvatar from '../../../assets/images/ava2.png';
+import profileLinkBg from '../../../assets/images/profile-link-bg.jpg';
+import { LangContext } from '../../utils/LangContext';
 
-const UserBanner = ({ aside }: { aside: boolean }) => {
+const UserBanner = ({ aside }: { aside?: boolean }) => {
   const chosenLang = useContext(LangContext);
 
   return (

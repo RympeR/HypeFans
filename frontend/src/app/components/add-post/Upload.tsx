@@ -1,9 +1,9 @@
 import React, { ChangeEvent, FormEvent, MouseEvent, useContext, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
-import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
-import { ReactComponent as AttachIcon } from '../../assets/images/attach.svg';
-import { ReactComponent as CloseIcon } from '../../assets/images/x-circle.svg';
-import { LangContext } from '../utils/LangContext';
+import { ReactComponent as BackIcon } from '../../../assets/images/arrow-left.svg';
+import { ReactComponent as AttachIcon } from '../../../assets/images/attach.svg';
+import { ReactComponent as CloseIcon } from '../../../assets/images/x-circle.svg';
+import { LangContext } from '../../utils/LangContext';
 
 const Upload = () => {
   const chosenLang = useContext(LangContext);
@@ -26,7 +26,6 @@ const Upload = () => {
 
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
-
     inputFileRef.current.value = '';
 
     setUploadedFiles([]);

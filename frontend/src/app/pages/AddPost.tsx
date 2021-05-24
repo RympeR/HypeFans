@@ -1,5 +1,5 @@
 import React from 'react';
-import Upload from '../components/Upload';
+import Upload from '../components/add-post/Upload';
 
 const AddPost = () => {
   return (

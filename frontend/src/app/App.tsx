@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { langData } from '../assets/text/';
+import * as langData from '../assets/text/index.json';
 import '../styles/app.scss';
 import { Main, Navbar } from './layout';
 import AddPost from './pages/AddPost';
+import Chat from './pages/Chat';
 import Home from './pages/Home';
-import Messages from './pages/Messages';
 import Notifications from './pages/Notifications';
 import Profile from './pages/Profile';
 import { LangContext } from './utils/LangContext';
+
 const App = () => {
+  // const LangData = LangDataJSON.parse()
   const [currentLang, setCurrentLang] = useState<any>(langData.EN);
   // const langSwitch = (e: MouseEvent<HTMLButtonElement>) => {
   //   setLang(langData[e.currentTarget.name as LANGS]);
@@ -21,11 +23,11 @@ const App = () => {
         <Main>
           <LangContext.Provider value={currentLang}>
             <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/notifications" component={Notifications} />
-              <Route exact path="/add" component={AddPost} />
-              <Route exact path="/messages" component={Messages} />
-              <Route exact path="/profile" component={Profile} />
+              <Route exact path={`/`} component={Home} />
+              <Route path="/notifications" component={Notifications} />
+              <Route path="/add" component={AddPost} />
+              <Route path="/chat" component={Chat} />
+              <Route path="/profile" component={Profile} />
             </Switch>
           </LangContext.Provider>
         </Main>

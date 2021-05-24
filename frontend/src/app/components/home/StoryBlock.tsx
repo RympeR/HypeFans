@@ -3,9 +3,9 @@ import Stories from 'react-insta-stories';
 import { Story } from 'react-insta-stories/dist/interfaces';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.scss';
-import ava1 from '../../assets/images/ava1.png';
-import desire from '../../assets/images/desire.png';
-import rebeccaAvatar from '../../assets/images/rebecca.png';
+import ava1 from '../../../assets/images/ava1.png';
+import desire from '../../../assets/images/desire.png';
+import rebeccaAvatar from '../../../assets/images/rebecca.png';
 
 //Example Data
 const fetchedStories = [
@@ -32,8 +32,6 @@ const fetchedStories = [
 const STORY_DURATION = 2500;
 
 const StoryBlock = () => {
-  const [isStoryModalOpen, setIsStoryModalOpen] = useState<boolean>(false);
-
   const [currentIndexOfStory, setCurrentIndexOfStory] = useState<number | null>(null);
 
   const formatedStories: Story[] = fetchedStories.map((story) => {
@@ -63,14 +61,27 @@ const StoryBlock = () => {
               <div className="stories__story-wrapper" onClick={() => toggleStoryModal(index)}>
                 <img className="stories__user-avatar" src={story.header.profileImage} alt="story" />
 
-                <p className="stories__user-nick">{story.header.heading}</p>
+                <p className="stories__user-login">{story.header.heading}</p>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
       <div className={currentIndexOfStory !== null ? 'stories__modal stories__modal_active' : 'stories__modal'}>
-        <Stories stories={stories} currentIndex={currentIndexOfStory} onAllStoriesEnd={() => toggleStoryModal(null)} />
+        <Stories
+          stories={stories}
+          currentIndex={currentIndexOfStory}
+          onAllStoriesEnd={() => toggleStoryModal(null)}
+          storyStyles={{
+            width: '100%',
+            maxWidth: '',
+            margin: '',
+            height: '100%',
+            maxHeight: '',
+            objectFit: 'cover',
+            objectPosition: 'center'
+          }}
+        />
 
         <button className="stories__close-modal" onClick={() => toggleStoryModal(null)}>
           &times;
