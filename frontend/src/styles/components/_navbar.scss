@@ -1,0 +1,62 @@
+.nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  box-shadow: 0px 100px 80px rgba(250, 178, 139, 0.07), 0px 41.7776px 33.4221px rgba(250, 178, 139, 0.0503198),
+    0px 22.3363px 17.869px rgba(250, 178, 139, 0.0417275), 0px 12.5216px 10.0172px rgba(250, 178, 139, 0.035),
+    0px 6.6501px 5.32008px rgba(250, 178, 139, 0.0282725), 0px 2.76726px 2.21381px rgba(250, 178, 139, 0.0196802);
+
+  z-index: 5;
+  @media (max-width: map-get($map: $media, $key: s)) {
+    top: unset;
+    bottom: 0;
+    height: 83px;
+    background: #f8f1f0;
+    border-radius: 24px 24px 0px 0px;
+    box-shadow: unset;
+  }
+
+  &__inner {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 1092px;
+    margin: 0 auto;
+  }
+
+  &__icon {
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+    path {
+      stroke: #808080;
+      stroke-width: 4px;
+      stroke-opacity: 100%;
+    }
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+      path {
+        stroke: black;
+        stroke-width: 2px;
+        stroke-opacity: 80%;
+      }
+    }
+
+    &_active {
+      path {
+        stroke: #fb5734;
+      }
+    }
+  }
+}

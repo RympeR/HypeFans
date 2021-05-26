@@ -1,0 +1,9 @@
+.main {
+  padding: 122px 0 0;
+  width: 90%;
+  max-width: 1092px;
+  margin: 0 auto;
+  @media (max-width: map-get($map: $media, $key: s)) {
+    width: 100%;
+  }
+}
