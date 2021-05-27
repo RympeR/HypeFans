@@ -11,7 +11,7 @@ from rest_framework.mixins import UpdateModelMixin
 from django.shortcuts import get_object_or_404
 
 
-class RoomListCreateAPI(generics.ListCreateAPIView):
+class RoomListCreateAPI(generics.ListAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomGetSerializer
 
@@ -31,9 +31,6 @@ class RoomAPI(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = RoomCreationSerializer
 
 
-class MessageListCreateAPI(generics.ListCreateAPIView):
-    queryset = Chat.objects.all()
-    serializer_class = ChatGetSerializer
 
 
 class MessageCreateAPI(generics.CreateAPIView):
