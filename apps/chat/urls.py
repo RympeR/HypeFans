@@ -4,7 +4,7 @@ from .views import (
     RoomCreateAPI,
     RoomRetrieveAPI,
     RoomAPI,
-    MessageListCreateAPI,
+    
     MessageCreateAPI,
     MessageRetrieveAPI,
     MessageAPI,
