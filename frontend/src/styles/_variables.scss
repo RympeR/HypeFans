@@ -1,16 +1,24 @@
-$default-font-size: 14px;
-
+//Main Colors
 $body-bg-color_desktop: #f8f3f3;
-$body-bg-color_mobile: #fff;
-$orange: #fb5734;
-$text-color: #000;
 
+$body-bg-color_mobile: #fff;
+
+$orange: #fb5734;
+
+//Text
+$black: #000;
+$lightblack: rgba(0, 0, 0, 0.7);
+$grey: rgba(0, 0, 0, 0.6);
+$lightgrey: rgba(0, 0, 0, 0.5);
+
+//Time
 $time: (
   slow: 0.5s,
   normal: 0.35s,
   fast: 0.15s
 );
 
+//Font Weight
 $font-weight: (
   normal: 400,
   medium: 500,
@@ -18,6 +26,7 @@ $font-weight: (
   bold: 700
 );
 
+//Font Size
 $font-size: (
   s: 14px,
   m: 16px,
@@ -25,6 +34,7 @@ $font-size: (
   xl: 24px
 );
 
+//Media
 $media: (
   xs: 576px,
   s: 768px,

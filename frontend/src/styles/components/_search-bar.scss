@@ -37,8 +37,7 @@
     padding: 12px 16px;
     font-size: map-get($map: $font-size, $key: m);
     &::placeholder {
-      // font-size: map-get($map: $font-size, $key: m);
-      color: $text-color;
+      color: $black;
     }
     @media (max-width: map-get($map: $media, $key: s)) {
       background: #fff;

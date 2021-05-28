@@ -3,10 +3,10 @@ import { useHistory } from 'react-router';
 import { ReactComponent as BackIcon } from '../../../assets/images/arrow-left.svg';
 import { ReactComponent as AttachIcon } from '../../../assets/images/attach.svg';
 import { ReactComponent as CloseIcon } from '../../../assets/images/x-circle.svg';
-import { LangContext } from '../../utils/LangContext';
+import { LangContext } from '../../utils/LangProvider';
 
 const Upload = () => {
-  const chosenLang = useContext(LangContext);
+  const { currentLang } = useContext(LangContext);
 
   const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
 
@@ -24,7 +24,7 @@ const Upload = () => {
     setUploadedFiles([...uploadedFiles.filter((file: any, i: number) => i !== index)]);
   };
 
-  const submitHandler = (e: FormEvent) => {
+  const uploadSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
     inputFileRef.current.value = '';
 
@@ -32,13 +32,13 @@ const Upload = () => {
   };
 
   return (
-    <form className="upload" onSubmit={submitHandler}>
+    <form className="upload" onSubmit={uploadSubmitHandler}>
       <div className="upload__top">
         <BackIcon onClick={() => history.push('/')} />
-        <h2 className="upload__title">{chosenLang.newPost}</h2>
+        <h2 className="upload__title">{currentLang.newPost}</h2>
       </div>
       <div className="upload__mid">
-        <textarea className="upload__textarea" placeholder={chosenLang.shareMind}></textarea>
+        <textarea className="upload__textarea" placeholder={currentLang.shareMind}></textarea>
 
         <div className="upload__img-list">
           {uploadedFiles?.map((file: string, index: number) => (
@@ -65,7 +65,7 @@ const Upload = () => {
           className={uploadedFiles.length ? 'upload__submit-btn upload__submit-btn_active' : 'upload__submit-btn'}
           type="submit"
         >
-          {chosenLang.public}
+          {currentLang.public}
         </button>
       </div>
     </form>

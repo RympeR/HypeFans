@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 import userAvatar from '../../../assets/images/ava2.png';
 import profileLinkBg from '../../../assets/images/profile-link-bg.jpg';
-import { LangContext } from '../../utils/LangContext';
+import { LangContext } from '../../utils/LangProvider';
 
 const UserBanner = ({ aside }: { aside?: boolean }) => {
-  const chosenLang = useContext(LangContext);
+  const { currentLang } = useContext(LangContext);
 
   return (
     <a
-      className="user-banner"
+      className={`user-banner ${aside ? 'user-banner_aside' : ''}`}
       href="#"
-      style={{ backgroundImage: `url(${profileLinkBg})`, borderRadius: `${aside ? '8px' : ''}`, margin: '0 0 16px' }}
+      style={{ backgroundImage: `url(${profileLinkBg})` }}
     >
       <div className="user-banner__profile">
         <img className="user-banner__avatar" src={userAvatar} alt="avatar" />
@@ -19,7 +19,7 @@ const UserBanner = ({ aside }: { aside?: boolean }) => {
           <p className="user-banner__nickname">@tonybellew</p>
         </div>
       </div>
-      <div className="user-banner__status">{chosenLang.free}</div>
+      <div className="user-banner__status">{currentLang.free}</div>
     </a>
   );
 };
