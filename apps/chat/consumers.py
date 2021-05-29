@@ -6,7 +6,8 @@ from asgiref.sync import async_to_sync
 import requests
 from .serializers import ChatCreationSerializer, UserMessageCreationSerializer
 from .models import Chat, UserMessage
-
+import logging
+logger = logging.getLogger('django')
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -42,7 +43,7 @@ class ChatConsumer(WebsocketConsumer):
         if chat.is_valid():
             chat.save()
         else:
-            print('not valid')
+            logger.warning('not valid')
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
@@ -55,7 +56,6 @@ class ChatConsumer(WebsocketConsumer):
         )
 
     def chat_message(self, event):
-        print(event)
         message = event['message']
         room = event['room']
         user = event['user']
@@ -71,7 +71,8 @@ class ChatConsumer(WebsocketConsumer):
                 for attachment in attachments:
                     if hasattr(attachment.file, 'url'):
                         path_file = attachment.file.url
-                        file_url = 'http://127.0.0.1:8000/{path}'.format(
+                        # file_url = 'http://127.0.0.1:8000/{path}'.format(
+                        file_url = 'http://hype-fans.com/{path}'.format(
                             path=path_file)
                         attachments_info.append(
                             {
@@ -83,8 +84,8 @@ class ChatConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({
             "room": room,
             "user": user,  # User.objects.get(pk=user).token,
-            'message': message,
-            'file': attachments_info
+            "message": message,
+            "file": attachments_info
         }))
 
 
