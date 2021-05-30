@@ -47,7 +47,8 @@ class Post(models.Model):
         User, verbose_name='Пост в избранных', related_name='user_favourites')
     enabled_comments = models.BooleanField(
         verbose_name='Комментарии включены', default=True)
-
+    attachments = models.ManyToManyField(Attachment, verbose_name='Вложения поста', related_name='blog_posts')
+ 
     class Meta:
         verbose_name = 'Публикация'
         verbose_name_plural = 'Публикации'

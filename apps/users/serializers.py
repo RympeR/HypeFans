@@ -73,7 +73,6 @@ class CardCreationSerializer(serializers.ModelSerializer):
 
 class CardGetSerializer(serializers.ModelSerializer):
 
-    user = UserGetSerializer()
     datetime = TimestampField()
 
     class Meta:
@@ -107,7 +106,7 @@ class PaymentCreationSerializer(serializers.ModelSerializer):
 
 class PaymentGetSerializer(serializers.ModelSerializer):
 
-    card = DonationGetSerializer()
+    card = CardGetSerializer()
     datetime = TimestampField()
 
     class Meta:
