@@ -19,11 +19,6 @@ from .models import *
 from .serializers import *
 
 
-class UserListCreateAPI(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserGetSerializer
-
-
 class UserRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserGetSerializer
@@ -115,11 +110,6 @@ class UserPostDonation(GenericAPIView):
         )
 
 
-class CardListCreateAPI(generics.ListCreateAPIView):
-    queryset = Card.objects.all()
-    serializer_class = CardGetSerializer
-
-
 class CardRetrieveAPI(generics.RetrieveAPIView):
     queryset = Card.objects.all()
     serializer_class = CardGetSerializer
@@ -143,11 +133,6 @@ class CardPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
         return self.partial_update(request, *args, **kwargs)
 
 
-class DonationListCreateAPI(generics.ListCreateAPIView):
-    queryset = Donation.objects.all()
-    serializer_class = DonationGetSerializer
-
-
 class DonationRetrieveAPI(generics.RetrieveAPIView):
     queryset = Donation.objects.all()
     serializer_class = DonationGetSerializer
@@ -156,11 +141,6 @@ class DonationRetrieveAPI(generics.RetrieveAPIView):
 class DonationCreateAPI(generics.CreateAPIView):
     queryset = Donation.objects.all()
     serializer_class = DonationCreationSerializer
-
-
-class PaymentListCreateAPI(generics.ListCreateAPIView):
-    queryset = Payment.objects.all()
-    serializer_class = PaymentGetSerializer
 
 
 class PaymentRetrieveAPI(generics.RetrieveAPIView):
