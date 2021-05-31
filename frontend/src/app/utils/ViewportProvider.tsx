@@ -2,13 +2,13 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 
 const ViewportContext = createContext(null);
 
-interface windowDimensions {
+interface IWindowDimensions {
   width: number;
   height: number;
 }
 
 export const ViewportProvider = ({ children }: { children: ReactNode }) => {
-  const [windowDimensions, setWindowDimensions] = useState<windowDimensions | null>({
+  const [windowDimensions, setWindowDimensions] = useState<IWindowDimensions | null>({
     width: window.innerWidth,
     height: window.innerHeight
   });
@@ -26,6 +26,6 @@ export const ViewportProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useViewport = () => {
-  const windowDimensions = useContext(ViewportContext);
+  const windowDimensions: IWindowDimensions = useContext(ViewportContext);
   return windowDimensions;
 };

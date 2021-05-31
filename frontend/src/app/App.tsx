@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import '../styles/app.scss';
 import { Main, Navbar } from './layout';
 import AddPost from './pages/AddPost';
+import Auth from './pages/auth/Auth';
 import Chat from './pages/Chat';
 import Home from './pages/Home';
 import Notifications from './pages/Notifications';
@@ -14,20 +15,22 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
-        <Navbar />
-        <Main>
-          <ViewportProvider>
-            <LangProvider>
-              <Switch>
-                <Route exact path={`/`} component={Home} />
+        <ViewportProvider>
+          <LangProvider>
+            <Navbar />
+            <Switch>
+              <Route exact path="/" component={Auth} />
+              <Route exact path="/signup" component={Auth} />
+              <Main>
+                <Route path="/home" component={Home} />
                 <Route path="/notifications" component={Notifications} />
                 <Route path="/add" component={AddPost} />
                 <Route path="/chat" component={Chat} />
                 <Route path="/profile" component={Profile} />
-              </Switch>
-            </LangProvider>
-          </ViewportProvider>
-        </Main>
+              </Main>
+            </Switch>
+          </LangProvider>
+        </ViewportProvider>
       </BrowserRouter>
       {/* <button onClick={langSwitch} name={LANGS.EN}>
         EN

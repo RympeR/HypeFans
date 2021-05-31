@@ -1,9 +1,20 @@
 export enum NAV_LINKS {
-  HOME = '',
+  SIGNIN = '',
+  SIGNUP = 'signup',
+  HOME = 'home',
   NOTIFICATIONS = 'notifications',
   ADD = 'add',
   CHAT = 'chat',
   PROFILE = 'profile'
+}
+
+//Responsive breakpoints
+export enum BREAKPOINTS {
+  XS = 576,
+  S = 768,
+  M = 1024,
+  L = 1280,
+  XL = 1440
 }
 //Duration of every story in Story Block
 export const STORY_DURATION = 2500;

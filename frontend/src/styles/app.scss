@@ -1,10 +1,9 @@
-/*** Not Inject ***/
+/*Import Variables*/
 @import './variables';
 
 /* Import Base */
 @import './base/global';
 @import './base/fonts';
-@import './base/states';
 
 /* Import Components */
 @import './components/navbar';
@@ -15,3 +14,4 @@
 @import './components/aside';
 @import './components/upload';
 @import './components/stories';
+@import './components/auth';

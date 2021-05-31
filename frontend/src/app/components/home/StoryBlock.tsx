@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Stories from 'react-insta-stories';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.scss';
-import { showVisibleText, STORY_DURATION, STORY_USERNAME_LENGTH } from '~/app/utils/utilities';
+import { BREAKPOINTS, showVisibleText, STORY_DURATION, STORY_USERNAME_LENGTH } from '~/app/utils/utilities';
 import { useViewport } from '~/app/utils/ViewportProvider';
 import ava1 from '../../../assets/images/ava1.png';
 import desire from '../../../assets/images/desire.png';
@@ -95,8 +95,8 @@ const StoryBlock = () => {
           currentIndex={currentIndexOfStory}
           onAllStoriesEnd={() => toggleStoryModal(null)}
           defaultInterval={STORY_DURATION}
-          width={windowDimensions.width >= 768 ? 360 : windowDimensions.width}
-          height={windowDimensions.width >= 768 ? 640 : windowDimensions.height * 0.95}
+          width={windowDimensions.width >= BREAKPOINTS.S ? 360 : windowDimensions.width}
+          height={windowDimensions.width >= BREAKPOINTS.S ? 640 : windowDimensions.height * 0.95}
         />
 
         <button className="stories__close-modal" onClick={() => toggleStoryModal(null)}>
