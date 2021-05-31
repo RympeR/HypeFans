@@ -27,13 +27,15 @@ module.exports = {
     '@typescript-eslint/interface-name-prefix': DISABLED,
     '@typescript-eslint/no-empty-interface': DISABLED,
     '@typescript-eslint/no-var-requires': DISABLED,
+    'prettier/prettier': WARNING,
+    'react/react-in-jsx-scope': WARNING,
     'react/prop-types': DISABLED,
     'react/prop': DISABLED,
     'no-unused-expressions': DISABLED,
     '@typescript-eslint/explicit-function-return-type': DISABLED,
     '@typescript-eslint/explicit-module-boundary-types': DISABLED,
     '@typescript-eslint/explicit-member-accessibility': [
-      ERROR,
+      WARNING,
       { accessibility: 'explicit', overrides: { constructors: 'no-public' } }
     ],
     'no-restricted-imports': [

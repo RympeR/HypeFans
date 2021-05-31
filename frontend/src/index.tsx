@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'reflect-metadata';
-import App from './app/App';
+import TestProfileApi from './api/user/profile/testProfileApi';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<TestProfileApi />, document.getElementById('root'));
+// ReactDOM.render(<App />, document.getElementById('root'));

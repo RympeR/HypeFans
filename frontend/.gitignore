@@ -1,12 +1,17 @@
 # Temporary folders and files
 .test/
 npm-debug.log
+.vscode/
 
 # Distribution folders
 dist/
 
 # Packages folders
 node_modules/
+
+#Changed for debug
+index.tsx
+launch.json
 
 
 build/
