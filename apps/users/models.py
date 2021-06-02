@@ -196,7 +196,7 @@ class PendingUser(models.Model):
         return f"{self.pk}-{self.card}"
 
 class UserOnline(models.Model):
-    user = models.CharField(max_length=255, verbose_name='Юзернейм пользователя', blank=True)
+    user = models.CharField(primary_key=True, max_length=255, verbose_name='Юзернейм пользователя', blank=True)
     last_action = UnixTimeStampField(auto_now=True)
 
     class Meta:

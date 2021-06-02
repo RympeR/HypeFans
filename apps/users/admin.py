@@ -7,9 +7,20 @@ from .models import (
     Donation,
     Payment,
     Subscription,
+    UserOnline,
     PendingUser
 )
 
+
+@admin.register(UserOnline)
+class UserOnlineAdmin(admin.ModelAdmin):
+    list_display = [
+        'user', 'last_action',
+    ]
+    search_fields = [
+        'user'
+    ]
+    ordering = '-last_action',
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -24,6 +35,24 @@ class UserAdmin(admin.ModelAdmin):
     ]
     search_fields = [
         'email', 'username', 'first_name',
+    ]
+    ordering = '-pk',
+
+
+@admin.register(Subscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = [
+        'pk','source', 'target', 'start_date', 'end_date'
+    ]
+    list_display_links = [
+        'pk'
+    ]
+    list_filter = (
+            ('start_date', DateFieldListFilter),
+            ('end_date', DateFieldListFilter),
+    )
+    search_fields = [
+        'source__username', 'end_date__username',
     ]
     ordering = '-pk',
 
