@@ -38,7 +38,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
     background_photo = serializers.ImageField(required=False)
     username = serializers.CharField(required=False)
     first_name = serializers.CharField(required=False)
-    bio = serializers.TextField(required=False)
+    bio = serializers.CharField(required=False)
     birthday_date = serializers.FloatField(required=False)
     post_amount = serializers.IntegerField(required=False)
     fans_amount = serializers.IntegerField(required=False)
