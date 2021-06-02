@@ -177,7 +177,7 @@ class PendingUserCreationSerializer(serializers.ModelSerializer):
 
 
 class PendingUserGetSerializer(serializers.ModelSerializer):
-
+    
     user = UserShortRetrieveSeriliazer()
 
     class Meta:
