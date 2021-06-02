@@ -128,7 +128,6 @@ class CardCreationSerializer(serializers.ModelSerializer):
 
 class CardGetSerializer(serializers.ModelSerializer):
 
-    datetime = TimestampField()
     user = UserShortRetrieveSeriliazer()
 
     class Meta:
