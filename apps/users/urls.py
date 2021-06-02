@@ -14,7 +14,11 @@ from .views import (
     DonationCreateAPI,
     PaymentRetrieveAPI,
     PaymentCreateAPI,
-    PendingUserCreateAPI
+    PendingUserCreateAPI,
+    UserOnlineRetrieveAPI,
+    UserOnlineCreateAPI,
+    UserOnlineUpdateAPI,
+    UserCardListAPI,
 )
 
 urlpatterns = [
@@ -34,4 +38,8 @@ urlpatterns = [
     path('get-payment/<int:pk>', PaymentRetrieveAPI.as_view()),
     path('create-payment/', PaymentCreateAPI.as_view()),
     path('validate-user/', PendingUserCreateAPI.as_view()),
+    path('online-user-retrieve/', UserOnlineRetrieveAPI.as_view()),
+    path('online-user-create/', UserOnlineCreateAPI.as_view()),
+    path('online-user-update/', UserOnlineUpdateAPI.as_view()),
+    path('user-cards-list/', UserCardListAPI.as_view()),
 ]

@@ -9,6 +9,7 @@ from .models import (
     Card,
     Donation,
     Payment,
+    UserOnline,
     PendingUser
 )
 
@@ -29,6 +30,60 @@ class UserCreationSerializer(serializers.ModelSerializer):
         model = User
         fields = 'email', 'username', 'password'
 
+
+class UserPartialSerializer(serializers.ModelSerializer):
+    location = CountryField(country_dict=True, required=False)
+    email = serializers.EmailField(required=False)
+    avatar = serializers.ImageField(required=False)
+    background_photo = serializers.ImageField(required=False)
+    username = serializers.CharField(required=False)
+    first_name = serializers.CharField(required=False)
+    bio = serializers.CharField(required=False)
+    birthday_date = serializers.FloatField(required=False)
+    post_amount = serializers.IntegerField(required=False)
+    fans_amount = serializers.IntegerField(required=False)
+    repheral_link = serializers.CharField(required=False)
+    repheral_users = serializers.PrimaryKeyRelatedField(queryset = User.objects.all(), required=False)
+    blocked_users = serializers.PrimaryKeyRelatedField(queryset = User.objects.all(), required=False)
+    email_notifications = serializers.BooleanField(required=False)
+    push_notifications = serializers.BooleanField(required=False)
+    hide_online = serializers.BooleanField(required=False)
+    allow_comments = serializers.BooleanField(required=False)
+    show_post_amount = serializers.BooleanField(required=False)
+    show_fans_amount = serializers.BooleanField(required=False)
+    show_watermark = serializers.BooleanField(required=False)
+    validated_email = serializers.BooleanField(required=False)
+    validated_user = serializers.BooleanField(required=False)
+    credit_amount = serializers.IntegerField(required=False)
+    earned_credits_amount = serializers.IntegerField(required=False)
+    class Meta:
+        model = User
+        fields = (
+            'email',
+            'avatar',
+            'background_photo',
+            'username',
+            'first_name',
+            'bio',
+            'birthday_date',
+            'location',
+            'post_amount',
+            'fans_amount',
+            'repheral_link',
+            'repheral_users',
+            'blocked_users',
+            'email_notifications',
+            'push_notifications',
+            'hide_online',
+            'allow_comments',
+            'show_post_amount',
+            'show_fans_amount',
+            'show_watermark',
+            'validated_email',
+            'validated_user',
+            'credit_amount',
+            'earned_credits_amount',
+        )
 
 class UserGetSerializer(serializers.ModelSerializer):
     location = CountryField(country_dict=True)
@@ -74,6 +129,7 @@ class CardCreationSerializer(serializers.ModelSerializer):
 class CardGetSerializer(serializers.ModelSerializer):
 
     datetime = TimestampField()
+    user = UserShortRetrieveSeriliazer()
 
     class Meta:
         model = Card
@@ -89,8 +145,8 @@ class DonationCreationSerializer(serializers.ModelSerializer):
 
 class DonationGetSerializer(serializers.ModelSerializer):
 
-    sender = UserGetSerializer()
-    reciever = UserGetSerializer()
+    sender = UserShortRetrieveSeriliazer()
+    reciever = UserShortRetrieveSeriliazer()
 
     class Meta:
         model = Donation
@@ -123,12 +179,26 @@ class PendingUserCreationSerializer(serializers.ModelSerializer):
 
 class PendingUserGetSerializer(serializers.ModelSerializer):
 
-    user = UserGetSerializer()
+    user = UserShortRetrieveSeriliazer()
 
     class Meta:
         model = PendingUser
         fields = '__all__'
 
+
+class UserOnlineGetSerializer(serializers.ModelSerializer):
+
+    last_action = TimestampField()
+
+    class Meta:
+        model = UserOnline
+        fields = '__all__'
+
+class UserOnlineCreationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserOnline
+        fields = 'user', 
 
 # class ActionSerializer(serializers.Serializer):
 

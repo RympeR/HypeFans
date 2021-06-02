@@ -195,6 +195,17 @@ class PendingUser(models.Model):
     def __str__(self):
         return f"{self.pk}-{self.card}"
 
+class UserOnline(models.Model):
+    user = models.CharField(max_length=255, verbose_name='Юзернейм пользователя', blank=True)
+    last_action = UnixTimeStampField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Последнее действие пользователя'
+        verbose_name_plural = 'Последние действия пользователей'
+
+    def __str__(self):
+        return f"{self.user}-{self.last_action}"
+
 
 def update_verification(sender: PendingUser, instance: PendingUser, created: bool, **kwargs):
     if not created:
