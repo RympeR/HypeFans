@@ -78,6 +78,9 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     queryset = User.objects.all()
     serializer_class = UserPartialSerializer
 
+    def get_object(self):
+        return self.request.user
+        
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
