@@ -39,7 +39,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=False)
     first_name = serializers.CharField(required=False)
     bio = serializers.CharField(required=False)
-    birthday_date = serializers.FloatField(required=False)
+    birthday_date = serializers.DateTimeField(required=False)
     post_amount = serializers.IntegerField(required=False)
     fans_amount = serializers.IntegerField(required=False)
     repheral_link = serializers.CharField(required=False)
