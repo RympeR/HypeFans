@@ -80,7 +80,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
 
     def get_object(self):
         return self.request.user
-        
+
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
@@ -121,7 +121,7 @@ class UserSubscription(GenericAPIView):
 # TODO-----Implement donate to different types of action
 
 
-class UserPostDonation(GenericAPIView):
+class UserPostDonation(generics.CreateAPIView):
     queryset = Donation.objects.all()
     serializer_class = DonationCreationSerializer
 
@@ -210,3 +210,33 @@ class UserOnlineCreateAPI(generics.CreateAPIView):
 class UserOnlineUpdateAPI(generics.UpdateAPIView):
     queryset = UserOnline.objects.all()
     serializer_class = UserOnlineCreationSerializer
+
+class DonationPayedUserRetrieveAPI(generics.ListAPIView):
+    queryset = Donation.objects.all()
+    serializer_class = DonationGetSerializer
+
+    def get_queryset(self):
+        reciever = self.request.user
+        return Donation.objects.filter(
+            reciever=reciever
+        ).order_by('-datetime')
+
+class DonationPayedUserToRetrieveAPI(generics.ListAPIView):
+    queryset = Donation.objects.all()
+    serializer_class = DonationGetSerializer
+
+    def get_queryset(self):
+        sender = self.request.user
+        return Donation.objects.filter(
+            sender=sender
+        ).order_by('-datetime')
+
+class PaymentUserHistoryRetrieveAPI(generics.ListAPIView):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentGetSerializer
+
+    def get_queryset(self):
+        sender = self.request.user
+        return Payment.objects.filter(
+            card__user=sender
+        ).order_by('-datetime')
