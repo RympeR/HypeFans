@@ -1,64 +1,82 @@
 import Api from './api';
-import { UserGet } from './types';
+import { CardGet, DonationGet, PaymentGet, UserGet } from './types';
 export default class Profile {
   private api: Api;
   private userID: number;
-  private dataProfile: UserGet;
+  public dataProfile: UserGet;
+  public cards: Array<CardGet>;
+  public payments: Array<PaymentGet>;
+  public donationsSended: Array<DonationGet>;
+  public donationsRecieved: Array<DonationGet>;
+
   private token: string;
   constructor() {
     this.token = localStorage.token;
     this.api = new Api(this.token || null);
     this.userID = 0;
   }
+
+  private setToken(token: string): void {
+    if (token) {
+      localStorage.token = token;
+      this.api = new Api(token);
+    } else {
+      localStorage.removeItem('token');
+      this.api = new Api();
+    }
+  }
+
   public async login(login: string, password: string) {
     const result = await this.api.login(login, password);
-    localStorage.token = result;
-    this.api = new Api(result);
+    this.setToken(result);
     return result;
   }
 
-  async logout() {
+  public async logout() {
     const result = await this.api.logout();
-    localStorage.removeItem('token');
-    this.api = new Api();
+    this.setToken('');
     return result;
   }
   public async register(email: string, username: string, password: string) {
     const result = await this.api.register(email, username, password);
-    // console.log(result);
-    // .then((data) => console.log(data))
-    // .catch((error) => console.error(error));
   }
 
-  public async deleteUser(id: number) {
-    await this.api.deleteUser(id);
+  public async deleteUser() {
+    await this.api.deleteUser();
+    this.setToken('');
   }
 
-  public async createCard(number: number, date_year: string, cvc: string, creator: boolean) {
+  public async createCard(number: string, date_year: string, cvc: string, creator: boolean) {
+    await this.api.createCard(number, date_year, cvc, creator, this.dataProfile.pk);
+  }
+
+  public async getCardsList() {
+    this.cards = await this.api.getCardsList();
+  }
+
+  public async createPayment(amount: number, card: CardGet) {
+    return await this.api.createPayment(amount, card.id);
+  }
+
+  public async getPayments() {
+    this.payments = await this.api.getPayments();
+  }
+
+  public async createDonation(amount: number, userReciever: UserGet) {
+    return await this.api.createDonation(amount, this.dataProfile.pk, userReciever.pk);
+  }
+
+  public async getDonationSended() {
     await this.api
-      .createCard(number, date_year, cvc, creator, this.userID)
-      .then((data) => console.log(data))
+      .getDonations(true)
+      .then((data) => (this.donationsSended = data))
       .catch((error) => console.error(error));
   }
 
-  public async createPayment(amount: number, cardID: number) {
+  public async getDonationReceived() {
     await this.api
-      .createPayment(amount, cardID)
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
-  }
-
-  public async getDonation(id: number) {
-    await this.api
-      .getDonation(id)
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
-  }
-
-  public async getPayment(id: number) {
-    await this.api
-      .getPayment(id)
-      .then((data) => console.log(data))
+      .getDonations(false)
+      .then((data) => (this.donationsRecieved = data))
       .catch((error) => console.error(error));
   }
 
@@ -69,9 +87,9 @@ export default class Profile {
   }
 
   //details of current profile
-  public async deleteCard(id: number) {
+  public async deleteCard(card: CardGet) {
     await this.api
-      .deleteCard(id)
+      .deleteCard(card.id)
       .then((data) => console.log(data))
       .catch((error) => console.error(error));
   }
@@ -80,10 +98,7 @@ export default class Profile {
     await this.api.userUpdate(this.dataProfile.email, this.dataProfile.username, password, data);
   }
 
-  public async validate(verified: boolean) {
-    await this.api
-      .userValidate(verified, this.userID)
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
+  public async validate(user: UserGet, filePhoto: any) {
+    return await this.api.userValidate(user.pk, filePhoto);
   }
 }

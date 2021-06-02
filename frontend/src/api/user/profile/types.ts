@@ -104,14 +104,11 @@ export class PendingUserCreation {
   @JsonProperty() user: number;
 }
 
-//sample
-// @Serializable()
-// export class Settings {
-//     @JsonProperty() exchange_deposit_address: string;
-//     @JsonProperty(DECIMAL_PROPERTY) unichain_price: number;
-//     @JsonProperty(DECIMAL_PROPERTY) xfarm_price: number;
-//     @JsonProperty() usdt_deposit_address: string;
-//     @JsonProperty() stake_deposit_address: string;
-//     @JsonProperty(DECIMAL_PROPERTY) erc20_withdraw_commission: number;
-//     @JsonProperty(DECIMAL_PROPERTY) trc20_withdraw_commission: number;
-// }
+export class CardCreation {
+  @JsonProperty() id: number;
+  @JsonProperty() number: string;
+  @JsonProperty() date_year: string;
+  @JsonProperty() cvc: string;
+  @JsonProperty() creator: boolean;
+  @JsonProperty() user: number;
+}
