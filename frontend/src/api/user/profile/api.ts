@@ -18,11 +18,14 @@ export default class ProfileApi {
   }
 
   public async register(email: string, username: string, password: string) {
-    await this.elAxios.post('/user/create-user/', {
+    const result = await this.elAxios.post('/user/create-user/', {
       email,
       username,
       password
     });
+    if (result.status !== 201) {
+      throw 'Registration error!';
+    }
   }
 
   public async login(email: string, password: string) {
@@ -30,13 +33,15 @@ export default class ProfileApi {
       email,
       password
     });
+    if (res.status !== 200) throw res;
     const profile: TokenVerify = res.data; // deserialize(res.data, TokenVerify);
     this.token = profile.auth_token;
     return this.token;
   }
 
   public async logout() {
-    await this.elAxios.post('/auth/token/logout/');
+    const result = await this.elAxios.post('/auth/token/logout/');
+    if (result.status !== 204) throw result;
   }
 
   public async setPassword(new_password: string, current_password: string) {
@@ -56,12 +61,18 @@ export default class ProfileApi {
   //details user's profile (authorised)
   public async getProfile() {
     const res = await this.elAxios.get('user/get-user/');
+    if (res.status !== 200) {
+      throw 'Error!';
+    }
     const result: UserGet = res.data;
     return result;
   }
 
   public async deleteUser() {
-    return await this.elAxios.delete(`user/update-delete-user/`);
+    const result = await this.elAxios.delete(`user/update-delete-user/`);
+    if (result.status !== 204) {
+      throw `Cann't delete!`;
+    }
   }
 
   public async userValidate(userID: number, photo: any) {
@@ -70,11 +81,6 @@ export default class ProfileApi {
       photo: photo
     });
     return res.data;
-  }
-
-  //get donation details
-  public async deleteCard(id: number) {
-    return await this.elAxios.delete(`user/update-delete-card/${id}`);
   }
 
   public async userUpdate(email: string, username: string, password: string, data: any) {
@@ -86,7 +92,18 @@ export default class ProfileApi {
     for (const key in data) {
       dataSend[key] = data[key];
     }
-    return await this.elAxios.put(`user/partial-update-user/`, dataSend);
+    const result = await this.elAxios.put(`user/partial-update-user/`, dataSend);
+    if (result.status !== 200) {
+      throw 'Error!';
+    }
+    return result;
+  }
+
+  public async deleteCard(id: number) {
+    const res = await this.elAxios.delete(`user/update-delete-card/${id}`);
+    if (res.status !== 204) {
+      throw 'Can not delete the card!';
+    }
   }
 
   //work with card and payments
@@ -98,11 +115,18 @@ export default class ProfileApi {
       creator,
       user: userID
     });
+
+    if (res.status !== 201) {
+      throw 'Can not create a new card';
+    }
     return res;
   }
 
   public async getCardsList() {
     const res = await this.elAxios.get('user/user-cards-list/');
+    if (res.status !== 200) {
+      throw 'Can not create a new card';
+    }
     const result: Array<CardGet> = res.data.results;
     return result;
   }
@@ -112,22 +136,35 @@ export default class ProfileApi {
       amount,
       card: cardID
     });
+    if (res.status !== 201) {
+      throw 'Can not create a new payment';
+    }
     return res;
   }
 
   public async getPayments() {
     const res = await this.elAxios.get('/user/user-payment-history/');
+    if (res.status !== 200) {
+      throw `Cann't get payments`;
+    }
     return res.data.results;
   }
 
   public async createDonation(amount: number, sender: number, reciever: number) {
-    return await this.elAxios.post(`user/create-donation/`, { amount, sender, reciever });
+    const res = await this.elAxios.post(`user/create-donation/`, { amount, sender, reciever });
+    if (res.status !== 201) {
+      throw 'Can not create a new payment';
+    }
+    return res;
   }
 
   //sended = true, else recieved
   public async getDonations(sended: boolean) {
     const query = sended ? '/user/user-donation-sended/' : '/user/user-donation-recieved/';
     const res = await this.elAxios.get(query);
+    if (res.status !== 200) {
+      throw 'Can not get donations';
+    }
     return res.data.results;
   }
 }

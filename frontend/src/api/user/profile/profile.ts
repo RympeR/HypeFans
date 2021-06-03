@@ -33,11 +33,14 @@ export default class Profile {
   }
 
   public async logout() {
-    const result = await this.api.logout();
-    this.setToken('');
-    return result;
+    if (localStorage.token) {
+      this.setToken('');
+      const result = await this.api.logout();
+      return result;
+    } else throw 'Unregistred';
   }
   public async register(email: string, username: string, password: string) {
+    this.setToken('');
     const result = await this.api.register(email, username, password);
   }
 

@@ -24,8 +24,8 @@ const TestProfileApi = () => {
   //   password: 'qweasd'
   // };
   const userData = {
-    login: 'test000001',
-    email: 'test000001@test.com',
+    login: 'test000003',
+    email: 'test000003@test.com',
     password: 'qweasd'
   };
 
@@ -41,10 +41,16 @@ const TestProfileApi = () => {
   const login = () => {
     console.log('Login');
 
-    profile.login(userData.email, userData.password).then((result) => {
-      console.log(result);
-      console.log('SUCCESS');
-    });
+    profile
+      .login(userData.email, userData.password)
+      .then((result) => {
+        console.log(result);
+        console.log('SUCCESS');
+      })
+      .catch((error) => {
+        console.error(error);
+        console.error('FALED');
+      });
   };
 
   const logout = () => {
