@@ -25,11 +25,11 @@ import s from './styles/style'
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
-  let [screen, getScreen] = React.useState(false)
+  let [screen, getScreen] = React.useState(false);//false =  main page; true = regpage/authpage
   let [color, getColor] = React.useState(true)
   let [lang, getLang] = React.useState(1)
 
-
+  console.log("App.js -> screen "+screen);
   // ------ settings ---------------------------------
   AsyncStorage.getItem('color', (err, result) => {
     switch (result) {

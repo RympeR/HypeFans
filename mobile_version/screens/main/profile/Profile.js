@@ -39,7 +39,8 @@ import BlogSettings from './BlogSettings'
 export default function Screen(props) {
 
   let lang = props.lang
-  let navigation = props.navigation
+  let navigation = props.navigation;
+  let apiProfile = props.apiProfile;
 
   let [bio, setBio] = React.useState(false)
   let [drawer, setDrawer] = React.useState(false)
@@ -141,6 +142,7 @@ export default function Screen(props) {
 
   // ----------------------------------------------------------------------
 
+  console.log("profile\profile.ks token"+apiProfile.token);
 
 
   return (
@@ -151,6 +153,7 @@ export default function Screen(props) {
         style={[s.animHeader, s.mb40, s.pabsolute, s.backColor,
         { height: headerScrollHeight }]}
       >
+        {/* main image */}
         <View style={[s.backgroundImage, s.pabsolute]}>
           <Animated.Image
             style={[s.backgroundImage, { height: backgroundImageH, opacity: backgroundImageOpacity }]}
@@ -168,16 +171,19 @@ export default function Screen(props) {
             }]}
             source={user.ava}
           />
-
+          
+          {/* fans , posts */}
           <Animated.View style={[s.countBar, s.flexRow, s.h50, s.mt15, { opacity: backgroundImageOpacity }]}>
             <Text style={[s.text14, s.factor, s.textWhite, s.mh15]}>{'2 posts'}</Text>
             <Text style={[s.text14, s.factor, s.textWhite]}>{'365 fans'}</Text>
           </Animated.View>
 
+          {/* submenu ... top-left -> setDrawer */}
           <TouchableOpacity style={[s.btn50, s.center, s.mt15]}
             activeOpacity={0.6}
             onPress={() => setDrawer(true)}
           >
+            
             <Animated.View style={[s.pabsolute, { opacity: backgroundImageOpacity }]}>
               <SvgUri width="20" height="20"
                 source={require('../../../assets/images/3dotsW.svg')} />
@@ -190,7 +196,7 @@ export default function Screen(props) {
         </View>
 
 
-
+        {/* main image, round image, name, @name  */}
         <View style={[s.animatedView, s.flex1]}>
           <Animated.View style={[s.avaWrap, s.center, { top: avaTop, opacity: storyOpacity }]}>
             {true ? <ProfileGradient opac={storyOpacity} style={[s.pabsolute]} /> : null}
@@ -222,7 +228,9 @@ export default function Screen(props) {
           //opacity: storyOpacity,
           //height: 
         }]}>
+
           <Text numberOfLines={1} style={[s.hobby, s.text14, s.factor, s.textBlack, s.mh15]}>{'Modeling | Travel | Skin | Daily Routines...'}</Text>
+
 
           <TouchableOpacity style={[s.h25, s.jCenter, s.mb15]}
             activeOpacity={0.6}
@@ -263,6 +271,9 @@ export default function Screen(props) {
               }</Text>
               : null
           }
+
+
+          {/* button edit profile */}
 
           <TouchableOpacity style={[s.orangeBtn, s.center]}
             activeOpacity={0.9}
@@ -413,7 +424,7 @@ export default function Screen(props) {
 
 
 
-
+     {/* modal menu ... top-left */}
       <RnModal
         style={{ margin: 0 }}
         coverScreen={false}
@@ -425,6 +436,7 @@ export default function Screen(props) {
         swipeDirection={'right'}
         onSwipeComplete={() => setDrawer(false)}
       >
+        {/* Drawer.js component */}
         <Drawer
           lang={lang}
           onBack={() => setDrawer(false)}
