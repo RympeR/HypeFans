@@ -30,7 +30,7 @@ export default function App(props) {
   let [lang, getLang] = React.useState(1)
 
   console.log("App.js -> screen "+screen);
-  // ------ settings ---------------------------------
+   // ------ settings ---------------------------------
   AsyncStorage.getItem('color', (err, result) => {
     switch (result) {
       case 'true': getColor(true)
