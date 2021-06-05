@@ -24,6 +24,7 @@ export default class ApiProfile {
       AsyncStorage.setItem('token',token);
       console.log("settoken"+token);
       this.api = new Api(token);
+      this.token = token;
     } else {
       AsyncStorage.removeItem('token')
       this.api = new Api();
@@ -102,8 +103,8 @@ export default class ApiProfile {
       .catch((error) => console.error(error));
   }
 
-  public async updateUser(password: string, data: any) {
-    await this.api.userUpdate(this.dataProfile.email, this.dataProfile.username, password, data);
+  public async updateUser(data: any) {
+    return await this.api.userUpdate(this.dataProfile.email, this.dataProfile.username, data);
   }
 
   public async validate(user: UserGet, filePhoto: any) {

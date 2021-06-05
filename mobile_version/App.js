@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Ionicons } from '@expo/vector-icons';
-
+import ApiProfile from './components/api/user/profile/ApiProfile.ts';
 
 //import * as ImagePicker from 'expo-image-picker';
 //import * as Permissions from 'expo-permissions';
@@ -22,33 +22,48 @@ import MainScreen from './screens/main/MainScreen';
 
 import s from './styles/style'
 
+import ApiProfileContext from './apiProfileContext.tsx';
+
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
-  let [screen, getScreen] = React.useState(false);//false =  main page; true = regpage/authpage
-  let [color, getColor] = React.useState(true)
-  let [lang, getLang] = React.useState(1)
+  // let [screen, setScreen] = React.useState(false);//false =  main page; true = regpage/authpage
+  let [color, setColor] = React.useState(true)
+  let [lang, setLang] = React.useState(1)
 
-  console.log("App.js -> screen "+screen);
-   // ------ settings ---------------------------------
+  const [auth, setAuth] = useState(false);// null by default , when get token from storage and get user's profile - set true, if error = false
+  const [apiProfile, setApiProfile] = useState(new ApiProfile());// link to class-driver user's profile
+
+  useEffect(() => {
+    AsyncStorage.getItem('token').then(result => {
+      apiProfile.setToken(result);
+      apiProfile.getProfile().then(() => {
+        setAuth(true)      
+      })
+
+    }).catch(setAuth(false));
+
+  }, [])
+
+  // ------ settings ---------------------------------
   AsyncStorage.getItem('color', (err, result) => {
     switch (result) {
-      case 'true': getColor(true)
+      case 'true': setColor(true)
         break
-      case 'false': getColor(false)
+      case 'false': setColor(false)
         break
-      default: getColor(true)
+      default: setColor(true)
     }
   })
   AsyncStorage.getItem('lang', (err, result) => {
     switch (result) {
-      case '0': getLang(0)
+      case '0': setLang(0)
         break
-      case '1': getLang(1) //rus
+      case '1': setLang(1) //rus
         break
-      case '2': getLang(2)
+      case '2': setLang(2)
         break
-      default: getLang(1)
+      default: setLang(1)
     }
   })
   // --------------------------------------------------
@@ -66,46 +81,52 @@ export default function App(props) {
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
-      <AppLoading
-        startAsync={loadResourcesAsync}
-        onError={handleLoadingError}
-        onFinish={() => handleFinishLoading(setLoadingComplete, getColor)}
-      />
+      <ApiProfileContext.Provider value={apiProfile}>
+
+        <AppLoading
+          startAsync={loadResourcesAsync}
+          onError={handleLoadingError}
+          onFinish={() => handleFinishLoading(setLoadingComplete, setColor)}
+        />
+      </ApiProfileContext.Provider>
+
     );
   } else {
     return (
-      <View style={s.container}>
+      <ApiProfileContext.Provider value={apiProfile}>
+        <View style={s.container}>
 
-        {/* status bar margin */}
-        {/* <View style={[s.marginStatusBar, {
+          {/* status bar margin */}
+          {/* <View style={[s.marginStatusBar, {
           //backgroundColor: '#fff'
         }]} /> */}
 
-        {
-          screen
-            ? <StartScreen
-              lang={lang}
-              onLangChange={(langId) => {
-                AsyncStorage.setItem('lang', String(langId), () => getLang(langId))
-              }}
-              onMainScreen={() => getScreen(false)}
-            />
-            :
-            <MainScreen
-              lang={lang}
-              onLangChange={(langId) => {
-                AsyncStorage.setItem('lang', String(langId), () => getLang(langId))
-              }}
-              onExit={() => getScreen(true)}
-            />
-        }
-        <StatusBar hidden={false}
-          barStyle="dark-content"
-          translucent={true}
-          backgroundColor={'transparent'}
+          {
+            !auth
+              ? <StartScreen
+                lang={lang}
+                onLangChange={(langId) => {
+                  AsyncStorage.setItem('lang', String(langId), () => setLang(langId))
+                }}
+                onMainScreen={() => setAuth(true)}
+              />
+              :
+              <MainScreen
+                lang={lang}
+                onLangChange={(langId) => {
+                  AsyncStorage.setItem('lang', String(langId), () => setLang(langId))
+                }}
+                onExit={() => setAuth(false)}
+              />
+          }
+          <StatusBar hidden={false}
+            barStyle="dark-content"
+            translucent={true}
+            backgroundColor={'transparent'}
           //backgroundColor={'#fff'}
-        />
-      </View>
+          />
+        </View>
+      </ApiProfileContext.Provider>
     );
   }
 }

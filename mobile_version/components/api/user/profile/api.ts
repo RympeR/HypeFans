@@ -87,20 +87,31 @@ export default class ProfileApi {
     return res.data;
   }
 
-  public async userUpdate(email: string, username: string, password: string, data: any) {
-    const dataSend: any = {
-      email,
-      username,
-      password
-    };
+  public async userUpdate(email: string, username: string, data: any) {
+
+    const formData = new FormData();
+
     for (const key in data) {
-      dataSend[key] = data[key];
+      formData.append(key, data[key]);
     }
-    const result = await this.elAxios.put(`user/partial-update-user/`, dataSend);
+
+    formData.append('email', email);
+    formData.append('username', username);
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data; '
+      }
+    };
+    console.log("FormData");
+    console.log(formData);
+    const result = await this.elAxios.put(`user/partial-update-user/`, formData, config);
+    console.log(result);
     if (result.status !== 200) {
       throw 'Error!';
     }
     return result;
+
   }
 
   public async deleteCard(id: number) {
