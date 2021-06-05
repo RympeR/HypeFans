@@ -147,6 +147,16 @@ $form-width: 636;
     }
   }
 
+  &__input-error {
+    font-size: map-get($map: $font-size, $key: s);
+    margin: 16px 0 0;
+    color: $error-color;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      margin: 8px 0 0;
+    }
+  }
+
   &__submit-btn {
     display: block;
     width: fit-content;
@@ -202,6 +212,7 @@ $form-width: 636;
   }
 
   @media (max-width: map-get($map: $media, $key: s)) {
+    display: block;
     background: #fff;
     height: unset;
   }

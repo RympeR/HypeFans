@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useLocation } from 'react-router';
-import { getLastUrlItem } from '~/app/utils/utilities';
+import { getLastUrlPoint } from '~/app/utils/utilities';
 
 interface NavLinkProps {
   children: ReactNode;
@@ -10,7 +10,7 @@ interface NavLinkProps {
 const NavLink = ({ children, toPath }: NavLinkProps) => {
   const location = useLocation();
 
-  const lastUrl = getLastUrlItem(location.pathname);
+  const lastUrl = getLastUrlPoint(location.pathname);
   return (
     <a className={`nav__icon ${lastUrl === toPath ? 'nav__icon_active' : ''}`} href={`/${toPath}`} id={toPath}>
       {children}

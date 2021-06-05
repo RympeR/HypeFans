@@ -1,3 +1,5 @@
+import * as yup from 'yup';
+
 export enum NAV_LINKS {
   SIGNIN = '',
   SIGNUP = 'signup',
@@ -26,9 +28,13 @@ export const STORY_USERNAME_LENGTH = 7;
 export const LENTGH_OF_VISIBLE_CAPTION = 100;
 
 //  Get last endpoint of provided URL
-export const getLastUrlItem = (url: string) => {
+export const getLastUrlPoint = (url: string) => {
   return url.substring(url.lastIndexOf('/') + 1);
 };
+
+//Password pattern for SIGNIN or SIGNUP
+// export const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+export const PASSWORD_PATTERN = /[A-Z]+[a-z]+[0-9]/;
 
 // Parse provided time in ms to conventional format
 export const timeParser = (time: number) => {
@@ -90,4 +96,22 @@ export const getComputedLeftPosition = async (marginLeft = 47) => {
 export const showVisibleText = (text: string, lengthOfVisibleText: number) => {
   if (text.length === lengthOfVisibleText) return text;
   return `${text.slice(0, lengthOfVisibleText)}...`;
+};
+
+//Return validation scheme depending on provided auth method
+export const getAuthScheme = (currentLang: any, currentUrl: string) => {
+  const lastUrlPoint = getLastUrlPoint(currentUrl);
+
+  if (lastUrlPoint === NAV_LINKS.SIGNUP) {
+    return yup.object().shape({
+      username: yup.string().min(4, currentLang.nameWarn),
+      email: yup.string().email(currentLang.emailWarn),
+      password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
+    });
+  }
+
+  return yup.object().shape({
+    username: yup.string().min(4, currentLang.nameWarn),
+    password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
+  });
 };
