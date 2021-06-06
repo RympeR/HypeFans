@@ -19,13 +19,6 @@ export class TokenVerify {
 }
 
 @Serializable()
-export class ShortUser{
-  @JsonProperty() pk: number;
-  @JsonProperty() username: string;
-  @JsonProperty() avatar: string;
-}
-
-@Serializable()
 export class UserCreation {
   @JsonProperty() email: string;
   @JsonProperty() username: string;

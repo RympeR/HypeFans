@@ -541,4 +541,3 @@ export default function Screen(props) {
     </View >
   );
 }
-8

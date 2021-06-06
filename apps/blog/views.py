@@ -1,29 +1,35 @@
+from datetime import datetime, timedelta
+
 from django.http import request
 from rest_framework import generics, permissions, renderers
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import *
-from .serializers import *
-from apps.users.serializers import UserShortRetrieveSeriliazer
-from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
-from datetime import timedelta, datetime
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from apps.users.serializers import UserShortRetrieveSeriliazer
+
+from .models import *
+from .serializers import *
 
 
-class AttachmentCreateAPI(generics.ListCreateAPIView):
+class AttachmentCreateAPI(generics.CreateAPIView):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
 
 
-class AttachmentAPI(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Attachment.objects.all()
-    serializer_class = AttachmentSerializer
-
-
-class PostListCreateAPI(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
+class PostListAPI(generics.GenericAPIView):
     serializer_class = PostGetSerializer
+
+    def get(self, request, username):
+        limit = request.GET.get('limit', 20)
+        offset = request.GET.get('offset', 0)
+        qs = Post.objects.filter(
+            user=User.objects.get(username=username)
+        )[offset:offset+limit]
+        data = [self.get_serializer(instance=post) for post in qs]
+        return Response(data)
 
 
 class PostRetrieveAPI(generics.RetrieveAPIView):
@@ -36,89 +42,55 @@ class PostCreateAPI(generics.CreateAPIView):
     serializer_class = PostCreationSerializer
 
 
-class PostAPI(generics.RetrieveUpdateDestroyAPIView):
+class PostDeleteAPI(generics.DestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostCreationSerializer
 
 
 class PostPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     queryset = Post.objects.all()
-    serializer_class = PostCreationSerializer
+    serializer_class = PostUpdateSerializer
 
-
-class PostActionListCreateAPI(generics.ListCreateAPIView):
-    queryset = PostAction.objects.all()
+class PostActionListAPI(generics.GenericAPIView):
     serializer_class = PostActionGetSerializer
 
-
-class PostActionRetrieveAPI(generics.RetrieveAPIView):
-    queryset = PostAction.objects.all()
-    serializer_class = PostActionGetSerializer
-
-    def get_object(self, request, pk):
-        user = request.user
-        post = Post.objects.get(pk=pk)
-
-        return PostAction.objects.get(
-            user=user,
-            post=post
-        )
-
+    def get(self, request, pk):
+        limit = request.GET.get('limit', 20)
+        offset = request.GET.get('offset', 0)
+        qs = PostAction.objects.filter(
+            post=Post.objects.get(pk=pk)
+        )[offset:offset+limit]
+        data = [self.get_serializer(instance=post) for post in qs]
+        return Response(data)
 
 class PostActionCreateAPI(generics.CreateAPIView):
     queryset = PostAction.objects.all()
     serializer_class = PostActionCreationSerializer
 
-
-class PostActionAPI(generics.RetrieveUpdateDestroyAPIView):
+class PostActionDeleteAPI(generics.DestroyAPIView):
     queryset = PostAction.objects.all()
     serializer_class = PostActionCreationSerializer
 
-    def get_object(self, request, pk):
-        user = request.user
-        post = Post.objects.get(pk=pk)
 
-        return PostAction.objects.get(
-            user=user,
-            post=post
-        )
-
-
-class PostActionPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
-    queryset = PostAction.objects.all()
-    serializer_class = PostActionCreationSerializer
-
-    def put(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    def get_object(self, request, pk):
-        user = request.user
-        post = Post.objects.get(pk=pk)
-
-        return PostAction.objects.get(
-            user=user,
-            post=post
-        )
-
-
-class StoryListCreateAPI(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
+class StoryListAPI(generics.ListAPIView):
+    queryset = Story.objects.all()
     serializer_class = StoryGetSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Story.objects.filter(
+            user__in=user.my_subscribes.all()
+        )
 
 
 class StoryCreateAPI(generics.CreateAPIView):
-    queryset = Post.objects.all()
+    queryset = Story.objects.all()
     serializer_class = StoryCreationSerializer
 
 
 class StoryAPI(generics.RetrieveDestroyAPIView):
-    queryset = Post.objects.all()
+    queryset = Story.objects.all()
     serializer_class = StoryGetSerializer
-
-
-class WatchedStoriesListCreateAPI(generics.ListCreateAPIView):
-    queryset = WatchedStories.objects.all()
-    serializer_class = WatchedStoriesGetSerializer
 
 
 class WatchedStoriesRetrieveAPI(generics.RetrieveAPIView):
@@ -138,37 +110,6 @@ class WatchedStoriesRetrieveAPI(generics.RetrieveAPIView):
 class WatchedStoriesCreateAPI(generics.CreateAPIView):
     queryset = WatchedStories.objects.all()
     serializer_class = WatchedStoriesCreationSerializer
-
-
-class WatchedStoriesAPI(generics.RetrieveUpdateDestroyAPIView):
-    queryset = WatchedStories.objects.all()
-    serializer_class = WatchedStoriesCreationSerializer
-
-    def get_object(self, request, pk):
-        user = request.user
-        target = Story.objects.get(pk=pk)
-
-        return WatchedStories.objects.get(
-            source=user,
-            target=target
-        )
-
-
-class WatchedStoriesPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
-    queryset = WatchedStories.objects.all()
-    serializer_class = WatchedStoriesCreationSerializer
-
-    def get_object(self, request, pk):
-        user = request.user
-        target = Story.objects.get(pk=pk)
-
-        return WatchedStories.objects.get(
-            source=user,
-            target=target
-        )
-
-    def put(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
 
 
 class UserNotifications(GenericAPIView):
@@ -240,7 +181,9 @@ class UserNotifications(GenericAPIView):
 
 
 class MainUserPage(GenericAPIView):
-
+    
+    serializer_class = MainPageSerializer
+    
     def get(self, request):
         user = request.user
         datetime = request.GET.get('datetime', 0)
@@ -249,7 +192,7 @@ class MainUserPage(GenericAPIView):
         results = []
         if datetime == 0:
             for user_sub in user.my_subscribes.all():
-                for post in user_sub.user_action_post.all().order_by['-datetime']:
+                for post in user_sub.user_post.all().order_by('-publication_date'):
                     user_data = UserShortRetrieveSeriliazer(
                         instance=user_sub).data
                     post_data = PostGetShortSerializers(instance=post).data
@@ -258,11 +201,10 @@ class MainUserPage(GenericAPIView):
                     res_dict['post'] = post_data
                     results.append(res_dict)
                     return Response(
-                        sorted(results[offset:limit+offset],
-                               key=lambda post: post['post']['datetime'])[::-1]
+                        results[offset:limit+offset]
                     )
         for user_sub in user.my_subscribes.all():
-            for post in user_sub.user_action_post.filter(datetime__lte=datetime):
+            for post in user_sub.user_action_post.filter(datetime__lte=datetime).order_by('-publication_date'):
                 user_data = UserShortRetrieveSeriliazer(
                     instance=user_sub).data
                 post_data = PostGetShortSerializers(instance=post).data
@@ -271,12 +213,13 @@ class MainUserPage(GenericAPIView):
                 res_dict['post'] = post_data
                 results.append(res_dict)
         return Response(
-            sorted(results[offset:limit+offset],
-                   key=lambda post: post['post']['datetime'])[::-1]
+            results[offset:limit+offset]
         )
 
 
 class SubStories(GenericAPIView):
+
+    serializer_class = SubStoriesSerializer
 
     def get(self, request):
         user = request.user

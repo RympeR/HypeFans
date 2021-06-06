@@ -45,8 +45,8 @@ export default class ApiProfile {
     } else throw 'Unregistred';
   }
   public async register(email: string, username: string, password: string) {
+    this.setToken('');
     const result = await this.api.register(email, username, password);
-    this.setToken(result.data);
   }
 
   public async deleteUser() {
@@ -115,8 +115,10 @@ export default class ApiProfile {
   }
   public validatePassword(param: string): boolean{
     return (param.length>2);
+ 
   }
   public validateEmail(param: string): boolean{
     return (param.length>2);
+
   }
 }

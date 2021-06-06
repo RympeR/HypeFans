@@ -1,52 +1,47 @@
 from django.urls import path
 from .views import (
     AttachmentCreateAPI,
-    AttachmentAPI,
-    PostListCreateAPI,
+    PostListAPI,
     PostRetrieveAPI,
     PostCreateAPI,
-    PostAPI,
+    PostDeleteAPI,
     PostPartialUpdateAPI,
-    PostActionListCreateAPI,
-    PostActionRetrieveAPI,
+    PostActionListAPI,
+    PostActionDeleteAPI,
     PostActionCreateAPI,
-    PostActionAPI,
-    PostActionPartialUpdateAPI,
-    StoryListCreateAPI,
+    StoryListAPI,
     StoryCreateAPI,
     StoryAPI,
-    WatchedStoriesListCreateAPI,
     WatchedStoriesRetrieveAPI,
     WatchedStoriesCreateAPI,
-    WatchedStoriesAPI,
-    WatchedStoriesPartialUpdateAPI
+    MainUserPage,
+    SubStories,
+    UserNotifications
 )
 
 urlpatterns = [
-    path('create-attachment/', AttachmentCreateAPI.as_view()),
-    path('attachment/<int:pk>', AttachmentAPI.as_view()),
-    path('get-post-list/', PostListCreateAPI.as_view()),
+    path('get-post-list/<str:username>', PostListAPI.as_view()),
     path('get-post/<int:pk>', PostRetrieveAPI.as_view()),
     path('create-post/', PostCreateAPI.as_view()),
-    path('update-post/<int:pk>', PostAPI.as_view()),
-    path('delete-post/<int:pk>', PostAPI.as_view()),
+    path('delete-post/<int:pk>', PostDeleteAPI.as_view()),
     path('partial-update-post/<int:pk>', PostPartialUpdateAPI.as_view()),
-    path('get-post-action-list/', PostActionListCreateAPI.as_view()),
-    path('get-post-action/<int:pk>', PostActionRetrieveAPI.as_view()),
+    
+    path('create-attachment/', AttachmentCreateAPI.as_view()),
+    
     path('create-post-action/', PostActionCreateAPI.as_view()),
-    path('update-post-action/<int:pk>', PostActionAPI.as_view()),
-    path('delete-post-action/<int:pk>', PostActionAPI.as_view()),
-    path('partial-update-post-action/<int:pk>',
-         PostActionPartialUpdateAPI.as_view()),
-    path('get-story-list/', StoryListCreateAPI.as_view()),
+    path('get-post-action-list/<int:pk>', PostActionListAPI.as_view()),
+    path('delete-post-action/', PostActionDeleteAPI.as_view()),
+    
+    path('get-story-list/', StoryListAPI.as_view()),
     path('create-story/', StoryCreateAPI.as_view()),
-    path('update-story/<int:pk>', StoryAPI.as_view()),
+
     path('delete-story/<int:pk>', StoryAPI.as_view()),
-    path('get-story-action-list/', WatchedStoriesListCreateAPI.as_view()),
+
     path('get-story-action/<int:pk>', WatchedStoriesRetrieveAPI.as_view()),
+    
     path('create-story-action/', WatchedStoriesCreateAPI.as_view()),
-    path('update-story-action/<int:pk>', WatchedStoriesAPI.as_view()),
-    path('delete-story-action/<int:pk>', WatchedStoriesAPI.as_view()),
-    path('partial-update-story-action/<int:pk>',
-         WatchedStoriesPartialUpdateAPI.as_view()),
+
+    path('get-main-page/', MainUserPage.as_view()),
+    path('get-user-stories/', SubStories.as_view()),
+    path('get-notifications/', UserNotifications.as_view()),
 ]
