@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Profile from '../../components/api/user/profile/ApiProfile';
+
 import {
   Image,
   Platform,
@@ -11,6 +13,7 @@ import {
   KeyboardAvoidingView,
   View,
   Dimensions,
+  Alert,
 } from 'react-native';
 
 const { width, height } = Dimensions.get("screen")
@@ -28,15 +31,47 @@ import RnModal from 'react-native-modal';
 
 export default function Screen(props) {
 
+
   let lang = props.lang
 
   let [secure, toogleVisible] = React.useState(true)
-  let [incorrect, setIncorrect] = React.useState(false)
-  let [incorrect2, setIncorrect2] = React.useState(false)
-  let [incorrect3, setIncorrect3] = React.useState(false)
+  let [incorrectEmail, setIncorrectEmail] = React.useState(false)
+  let [incorrectPassword, setIncorrectPassword] = React.useState(false)
+  let [incorrectLogin, setIncorrectLogin] = React.useState(false)
 
+  const [email, setEmail] = React.useState('');
+  const [login, setLogin] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+
+  const profile = new Profile();
+
+  const validateRegister = () => {
+    if (!email.includes("@") || !email.includes("."))
+      setIncorrectEmail(true);
+    else setIncorrectEmail(false);
+
+    if (password.length < 3)
+      setIncorrectPassword(true);
+    else setIncorrectPassword(false);
+    if (login.length < 3)
+      setIncorrectLogin(true);
+    else setIncorrectPassword(false);
+
+    profile.register(email, login, password).then(()=>{
+      Alert.alert("Успешно","Успешная регистрация");
+
+      props.onMainScreen()
+
+    }
+    ).catch((err) => { 
+      Alert.alert("Ошибка","Ошибка при регистрации");
+      // setIncorrectEmail(true); 
+    });
+  }
 
   return (
+    
     <View style={[s.container]}>
 
       <View style={[s.topBar, s.flexRow, s.spaceBtw, s.aCenter, s.statBarMargin]}>
@@ -82,21 +117,23 @@ export default function Screen(props) {
 
           <Text style={[s.text14, s.factor, s.mt25, s.textBlack, s.mh15]}>{text[lang].email}</Text>
           <View style={[s.inputBlock, s.mt15, s.mh15, s.flexRow, s.spaceBtw, s.alignCenter,
-          { borderColor: incorrect ? '#f52424' : '#aaa' }
+          { borderColor: incorrectEmail ? '#f52424' : '#aaa' }
           ]}>
             <TextInput
               //autoFocus={true}
               keyboardType={'email-address'}
               secureTextEntry={secure}
               style={[s.input, s.text14, s.factor, s.flex1, s.h46, s.mh15,
-              incorrect ? s.textRed : s.textBlack]}
+              incorrectEmail ? s.textRed : s.textBlack]}
               placeholder={text[lang].emailDescr}
               placeholderTextColor={'#aaa'}
+              onChangeText={setEmail}
+              value={email}
             //onFocus={() => setFocus(true)}
             //onBlur={() => setFocus(false)}
             />
           </View>
-          {incorrect
+          {incorrectEmail
             ? <Text style={[s.text14, s.factor, s.mt5, s.textRed, s.mh15]}>{text[lang].email}</Text>
             : null
           }
@@ -104,16 +141,18 @@ export default function Screen(props) {
 
           <Text style={[s.text14, s.factor, s.mt25, s.textBlack, s.mh15]}>{text[lang].pass}</Text>
           <View style={[s.inputBlock, s.mt15, s.mh15, s.flexRow, s.spaceBtw, s.alignCenter,
-          { borderColor: incorrect2 ? '#f52424' : '#aaa' }
+          { borderColor: incorrectPassword ? '#f52424' : '#aaa' }
           ]}>
             <TextInput
               //autoFocus={true}
               //keyboardType={'phone-pad'}
               secureTextEntry={secure}
               style={[s.input, s.text14, s.factor, s.flex1, s.h46, s.mh15,
-              incorrect2 ? s.textRed : s.textBlack]}
+                incorrectPassword ? s.textRed : s.textBlack]}
               placeholder={text[lang].passDescr}
               placeholderTextColor={'#aaa'}
+              onChangeText={setPassword}
+              value={password}
               //onFocus={() => setFocus(true)}
               //onBlur={() => setFocus(false)}
               //onEndEditing={() => props.onMainScreen()}
@@ -130,29 +169,31 @@ export default function Screen(props) {
                 } />
             </TouchableOpacity>
           </View>
-          {incorrect2
+          {incorrectPassword
             ? <Text style={[s.text14, s.factor, s.mt5, s.textRed, s.mh15]}>{text[lang].passWarn}</Text>
             : null
           }
 
           <Text style={[s.text14, s.factor, s.mt25, s.textBlack, s.mh15]}>{text[lang].name}</Text>
           <View style={[s.inputBlock, s.mt15, s.mh15, s.flexRow, s.spaceBtw, s.alignCenter,
-          { borderColor: incorrect2 ? '#f52424' : '#aaa' }
+          { borderColor: incorrectPassword ? '#f52424' : '#aaa' }
           ]}>
             <TextInput
               //autoFocus={true}
               keyboardType={'email-address'}
               secureTextEntry={secure}
               style={[s.input, s.text14, s.factor, s.flex1, s.h46, s.mh15,
-              incorrect2 ? s.textRed : s.textBlack]}
+                incorrectPassword ? s.textRed : s.textBlack]}
               placeholder={text[lang].nameDescr}
               placeholderTextColor={'#aaa'}
+              onChangeText={setLogin}
+              value={login}
               //onFocus={() => setFocus(true)}
               //onBlur={() => setFocus(false)}
-              onEndEditing={() => props.onMainScreen()}
+              // onEndEditing={() => props.onMainScreen()}
             />
           </View>
-          {incorrect2
+          {incorrectPassword
             ? <Text style={[s.text14, s.factor, s.mt5, s.textRed, s.mh15]}>{text[lang].name}</Text>
             : null
           }
@@ -196,7 +237,7 @@ export default function Screen(props) {
               ?
               <TouchableOpacity style={[s.orangeBtn, s.center, s.mt40]}
                 activeOpacity={0.9}
-                onPress={() => props.onMainScreen()}
+                onPress={()=> validateRegister() }
               >
                 <Text style={[s.text18, s.factorBold]}>{text[lang].regBtn}</Text>
               </TouchableOpacity>

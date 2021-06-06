@@ -52,17 +52,17 @@ class User(AbstractUser):
     repheral_users = models.ManyToManyField(
         'self',
         verbose_name='Реферальные пользователи',
-        related_name='referal_users'
+        related_name='referal_users', blank=True
     )
     blocked_users = models.ManyToManyField(
         'self',
         verbose_name='Заблокированные пользователи',
-        related_name='blocked_users'
+        related_name='blocked_users', blank=True
     )
     my_subscribes = models.ManyToManyField(
         'self',
         verbose_name='Мои подписки',
-        related_name='my_subscribes'
+        related_name='my_subscribes', blank=True
     )
     email_notifications = models.BooleanField(
         'Уведомления по почте', default=False)
