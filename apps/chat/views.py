@@ -161,7 +161,7 @@ class GetDialogs(GenericAPIView):
         for room_obj in result:
             user_obj = room_obj['message'].user if room_obj['message'] and hasattr(room_obj['message'], 'user') else None
             message_obj = room_obj['message'] if room_obj['message'] else None
-            attachment = True if message_obj.attachment.all().exists() else False
+            attachment = True if message_obj and message_obj.attachment.all().exists() else False
 
             filtered_results.append(
                 {
@@ -173,7 +173,7 @@ class GetDialogs(GenericAPIView):
                             'time': message_obj.date.timestamp(),
                             'text': message_obj.text,
                             'attachment': attachment,
-                        },
+                        } if message_obj else None,
                     }
                 }
             )
