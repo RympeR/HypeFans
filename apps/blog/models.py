@@ -141,17 +141,6 @@ class WatchedStories(models.Model):
     def __str__(self):
         return f"{self.pk}-{self.source}"
 
-# class Notification(models.Model):
-#     TYPES = (
-#         ('c', 'comment'),
-#         ('l', 'like'),
-#         ('s', 'subscription'),
-#         ('d', 'donation'),
-#     )
-#     type=models.CharField('Тип уведомления', max_length=1, choices=TYPES)
-#     datetime = UnixTimeStampField(auto_now_add=True)
-
-
 def create_post(sender: Post, instance: Post, created: bool, **kwargs):
     if created:
         user = instance.user

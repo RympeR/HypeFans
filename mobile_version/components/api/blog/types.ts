@@ -9,6 +9,12 @@ const DATETIME_PROPERTY = {
 const DECIMAL_PROPERTY = { afterDeserialize: (val: string) => parseFloat(val) };
 
 @Serializable()
+export class ShortAttachment {
+	@JsonProperty() file_url: string;
+	@JsonProperty() file_type: number;
+}
+
+@Serializable()
 export class Attachment {
 	@JsonProperty() id: number;
 	@JsonProperty() _file: string;

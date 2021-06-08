@@ -71,8 +71,8 @@ class ChatConsumer(WebsocketConsumer):
                 for attachment in attachments:
                     if hasattr(attachment.file, 'url'):
                         path_file = attachment.file.url
-                        # file_url = 'http://127.0.0.1:8000/{path}'.format(
-                        file_url = 'http://hype-fans.com/{path}'.format(
+                        file_url = 'https://hype-fans.com/{path}'.format(
+                        # file_url = 'http://hype-fans.com/{path}'.format(
                             path=path_file)
                         attachments_info.append(
                             {

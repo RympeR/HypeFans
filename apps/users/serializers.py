@@ -15,6 +15,19 @@ from .models import (
 
 
 class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
+
+    avatar = serializers.SerializerMethodField()
+
+    def get_avatar(self, user: User):
+        if user.avatar and hasattr(user.avatar, 'url'):
+            path_file = user.avatar.url
+            request = self.context.get('request')
+            host = request.get_host()
+            file_url = 'http://{domain}{path}'.format(
+                domain=host, path=path_file)
+            return file_url
+        return None
+
     class Meta:
         model = User
         fields = (
@@ -43,8 +56,10 @@ class UserPartialSerializer(serializers.ModelSerializer):
     post_amount = serializers.IntegerField(required=False)
     fans_amount = serializers.IntegerField(required=False)
     repheral_link = serializers.CharField(required=False)
-    repheral_users = serializers.PrimaryKeyRelatedField(queryset = User.objects.all(), required=False, many=True)
-    blocked_users = serializers.PrimaryKeyRelatedField(queryset = User.objects.all(), required=False, many=True)
+    repheral_users = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), required=False, many=True)
+    blocked_users = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), required=False, many=True)
     email_notifications = serializers.BooleanField(required=False)
     push_notifications = serializers.BooleanField(required=False)
     hide_online = serializers.BooleanField(required=False)
@@ -56,6 +71,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
     validated_user = serializers.BooleanField(required=False)
     credit_amount = serializers.IntegerField(required=False)
     earned_credits_amount = serializers.IntegerField(required=False)
+
     class Meta:
         model = User
         fields = (
@@ -84,6 +100,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'credit_amount',
             'earned_credits_amount',
         )
+
 
 class UserGetSerializer(serializers.ModelSerializer):
     location = CountryField(country_dict=True)
@@ -177,7 +194,7 @@ class PendingUserCreationSerializer(serializers.ModelSerializer):
 
 
 class PendingUserGetSerializer(serializers.ModelSerializer):
-    
+
     user = UserShortRetrieveSeriliazer()
 
     class Meta:
@@ -193,11 +210,12 @@ class UserOnlineGetSerializer(serializers.ModelSerializer):
         model = UserOnline
         fields = '__all__'
 
+
 class UserOnlineCreationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserOnline
-        fields = 'user', 
+        fields = 'user',
 
 # class ActionSerializer(serializers.Serializer):
 

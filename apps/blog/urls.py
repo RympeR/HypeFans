@@ -25,20 +25,20 @@ urlpatterns = [
     path('create-post/', PostCreateAPI.as_view()),
     path('delete-post/<int:pk>', PostDeleteAPI.as_view()),
     path('partial-update-post/<int:pk>', PostPartialUpdateAPI.as_view()),
-    
+
     path('create-attachment/', AttachmentCreateAPI.as_view()),
-    
+
     path('create-post-action/', PostActionCreateAPI.as_view()),
     path('get-post-action-list/<int:pk>', PostActionListAPI.as_view()),
     path('delete-post-action/', PostActionDeleteAPI.as_view()),
-    
+
     path('get-story-list/', StoryListAPI.as_view()),
     path('create-story/', StoryCreateAPI.as_view()),
 
     path('delete-story/<int:pk>', StoryAPI.as_view()),
 
     path('get-story-action/<int:pk>', WatchedStoriesRetrieveAPI.as_view()),
-    
+
     path('create-story-action/', WatchedStoriesCreateAPI.as_view()),
 
     path('get-main-page/', MainUserPage.as_view()),

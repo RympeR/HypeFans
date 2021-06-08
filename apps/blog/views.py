@@ -41,6 +41,9 @@ class PostCreateAPI(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostCreationSerializer
 
+    def get_serializer_context(self):
+        return {'request': self.request}
+
 
 class PostDeleteAPI(generics.DestroyAPIView):
     queryset = Post.objects.all()
@@ -50,6 +53,10 @@ class PostDeleteAPI(generics.DestroyAPIView):
 class PostPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     queryset = Post.objects.all()
     serializer_class = PostUpdateSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
 
 class PostActionListAPI(generics.GenericAPIView):
     serializer_class = PostActionGetSerializer
@@ -63,9 +70,11 @@ class PostActionListAPI(generics.GenericAPIView):
         data = [self.get_serializer(instance=post) for post in qs]
         return Response(data)
 
+
 class PostActionCreateAPI(generics.CreateAPIView):
     queryset = PostAction.objects.all()
     serializer_class = PostActionCreationSerializer
+
 
 class PostActionDeleteAPI(generics.DestroyAPIView):
     queryset = PostAction.objects.all()
@@ -86,6 +95,9 @@ class StoryListAPI(generics.ListAPIView):
 class StoryCreateAPI(generics.CreateAPIView):
     queryset = Story.objects.all()
     serializer_class = StoryCreationSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 class StoryAPI(generics.RetrieveDestroyAPIView):
@@ -110,6 +122,9 @@ class WatchedStoriesRetrieveAPI(generics.RetrieveAPIView):
 class WatchedStoriesCreateAPI(generics.CreateAPIView):
     queryset = WatchedStories.objects.all()
     serializer_class = WatchedStoriesCreationSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 class UserNotifications(GenericAPIView):
@@ -181,9 +196,9 @@ class UserNotifications(GenericAPIView):
 
 
 class MainUserPage(GenericAPIView):
-    
+
     serializer_class = MainPageSerializer
-    
+
     def get(self, request):
         user = request.user
         datetime = request.GET.get('datetime', 0)
