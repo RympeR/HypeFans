@@ -159,15 +159,15 @@ class GetDialogs(GenericAPIView):
 
         filtered_results = []
         for room_obj in result:
-            user_obj = room_obj['message'].user
-            message_obj = room_obj['message']
+            user_obj = room_obj['message'].user if room_obj['message'] and hasattr(room_obj['message'], 'user') else None
+            message_obj = room_obj['message'] if room_obj['message'] else None
             attachment = True if message_obj.attachment.all().exists() else False
 
             filtered_results.append(
                 {
                     "room": {
                         "id": room_obj['room'].id,
-                        "user": UserShortRetrieveSeriliazer(instance=user_obj, context={'request': request}).data,
+                        "user": UserShortRetrieveSeriliazer(instance=user_obj, context={'request': request}).data if user_obj else room_obj['room'].creator,
                         "message": {
                             'id': message_obj.id,
                             'time': message_obj.date.timestamp(),
