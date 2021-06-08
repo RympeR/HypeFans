@@ -9,16 +9,10 @@ from core.utils.default_responses import (
 )
 from django.http import request
 from django.shortcuts import get_object_or_404
-from django.utils import timezone
-from rest_framework import generics, permissions, renderers
+from rest_framework import generics, permissions
 from rest_framework.authtoken.models import Token
-from rest_framework.generics import GenericAPIView, ListAPIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
-from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
-from apps.blog.serializers import PostActionGetSerializer
 
 from .models import *
 from .serializers import *
@@ -31,6 +25,7 @@ class UserRetrieveAPI(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+
 class UserCardListAPI(generics.ListAPIView):
     serializer_class = CardGetSerializer
 
@@ -42,7 +37,7 @@ class UserCardListAPI(generics.ListAPIView):
 
 
 class UserCreateAPI(generics.GenericAPIView):
-    permission_classes = permissions.AllowAny, 
+    permission_classes = permissions.AllowAny,
     serializer_class = UserCreationSerializer
 
     def post(self, request):
@@ -50,21 +45,22 @@ class UserCreateAPI(generics.GenericAPIView):
             user = User.objects.create(
                 email=request.data['email'],
                 username=request.data['username'],
-            ) 
+            )
             user.set_password(request.data['password'])
             user.save()
             token, created = Token.objects.get_or_create(user=user)
             return api_created_201(
-                    {
-                        "auth_token": str(token)
-                    }
-                )
+                {
+                    "auth_token": str(token)
+                }
+            )
         except Exception as e:
             return api_block_by_policy_451(
                 {
                     "info": "already exists"
                 }
             )
+
 
 class UserAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
@@ -207,9 +203,11 @@ class UserOnlineCreateAPI(generics.CreateAPIView):
     queryset = UserOnline.objects.all()
     serializer_class = UserOnlineCreationSerializer
 
+
 class UserOnlineUpdateAPI(generics.UpdateAPIView):
     queryset = UserOnline.objects.all()
     serializer_class = UserOnlineCreationSerializer
+
 
 class DonationPayedUserRetrieveAPI(generics.ListAPIView):
     queryset = Donation.objects.all()
@@ -221,6 +219,7 @@ class DonationPayedUserRetrieveAPI(generics.ListAPIView):
             reciever=reciever
         ).order_by('-datetime')
 
+
 class DonationPayedUserToRetrieveAPI(generics.ListAPIView):
     queryset = Donation.objects.all()
     serializer_class = DonationGetSerializer
@@ -230,6 +229,7 @@ class DonationPayedUserToRetrieveAPI(generics.ListAPIView):
         return Donation.objects.filter(
             sender=sender
         ).order_by('-datetime')
+
 
 class PaymentUserHistoryRetrieveAPI(generics.ListAPIView):
     queryset = Payment.objects.all()

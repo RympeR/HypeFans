@@ -27,7 +27,7 @@ class Chat(models.Model):
                              related_name='user_sender', on_delete=models.CASCADE)
     text = models.TextField("Message", max_length=500, null=True, blank=True)
     attachment = models.ManyToManyField(
-        Attachment, related_name='chat_attachment')
+        Attachment, related_name='chat_attachment', blank=True)
     date = UnixTimeStampField(
         "Send datetime", auto_now_add=True, null=True, blank=True)
 

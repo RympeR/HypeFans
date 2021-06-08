@@ -5,14 +5,15 @@ from .models import (
     Chat,
     UserMessage
 )
+from apps.users.models import User
 from apps.blog.serializers import AttachmentSerializer
-from apps.users.serializers import UserGetSerializer
+from apps.users.serializers import UserShortRetrieveSeriliazer
 
 
 class RoomGetSerializer(serializers.ModelSerializer):
 
-    creator = UserGetSerializer()
-    invited = UserGetSerializer(many=True)
+    creator = UserShortRetrieveSeriliazer()
+    invited = UserShortRetrieveSeriliazer(many=True)
     date = TimestampField(required=False)
 
     class Meta:
@@ -21,15 +22,34 @@ class RoomGetSerializer(serializers.ModelSerializer):
 
 
 class RoomCreationSerializer(serializers.ModelSerializer):
+    creator = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
 
     class Meta:
         model = Room
         exclude = 'date',
 
+    def validate(self, attrs):
+        request = self.context.get('request')
+        attrs['creator'] = request.user
+        return attrs
+
+
+class RoomUpdateSerializer(serializers.ModelSerializer):
+    creator = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+    invited = serializers.PrimaryKeyRelatedField(
+        required=False, many=True, queryset=User.objects.all())
+
+    class Meta:
+        model = Room
+        exclude = 'date',
+
+
 class ChatGetSerializer(serializers.ModelSerializer):
-    
+
     room = RoomGetSerializer()
-    user = UserGetSerializer()
+    user = UserShortRetrieveSeriliazer()
     attachment = AttachmentSerializer(many=True)
     date = TimestampField(required=False)
 
@@ -44,9 +64,15 @@ class ChatCreationSerializer(serializers.ModelSerializer):
         model = Chat
         exclude = 'date',
 
+    def validate(self, attrs):
+        request = self.context.get('request')
+        attrs['user'] = request.user
+        return attrs
+
+
 class UserMessageGetSerializer(serializers.ModelSerializer):
 
-    user = UserGetSerializer()
+    user = UserShortRetrieveSeriliazer()
     message = ChatGetSerializer()
 
     class Meta:
@@ -60,12 +86,24 @@ class UserMessageCreationSerializer(serializers.ModelSerializer):
         model = UserMessage
         fields = '__all__'
 
+
 class ChatMessagesSerializer(serializers.Serializer):
 
     room_id = serializers.IntegerField()
     message_id = serializers.IntegerField()
 
+
 class RetrieveChatsSerializer(serializers.Serializer):
 
-    limit = serializers.IntegerField()
-    offset = serializers.IntegerField()
+    limit = serializers.IntegerField(required=False)
+    offset = serializers.IntegerField(required=False)
+
+
+class RoomInviteUserSerializer(serializers.ModelSerializer):
+
+    invited = serializers.PrimaryKeyRelatedField(
+        required=True, many=True, queryset=User.objects.all())
+
+    class Meta:
+        model = Room
+        fields = 'invited',

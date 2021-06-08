@@ -11,12 +11,13 @@ from .models import Attachment, Post, PostAction, Story, WatchedStories
 class AttachmentSerializer(serializers.ModelSerializer):
 
     _file = serializers.SerializerMethodField()
-    
+
     def get__file(self, attachment: Attachment):
         path_file = attachment._file.url
-        file_url = 'http://{domain}{path}'.format(
-            domain='127.0.0.1:8000', path=path_file)
+        file_url = 'https://{domain}{path}'.format(
+            domain='hype-fans.com', path=path_file)
         return file_url
+
     class Meta:
         model = Attachment
         fields = '__all__'
@@ -114,7 +115,6 @@ class PostGetShortSerializers(serializers.ModelSerializer):
 
     def get_favourites_amount(self, obj: Post):
         return 1
-
 
     class Meta:
         model = Post
