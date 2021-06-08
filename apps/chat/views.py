@@ -167,7 +167,7 @@ class GetDialogs(GenericAPIView):
                 {
                     "room": {
                         "id": room_obj['room'].id,
-                        "user": UserShortRetrieveSeriliazer(instance=user_obj, context={'request': request}).data if user_obj else room_obj['room'].creator,
+                        "user": UserShortRetrieveSeriliazer(instance=user_obj, context={'request': request}).data if user_obj else UserShortRetrieveSeriliazer(instance=room_obj['room'].creator, context={'request': request}).data,
                         "message": {
                             'id': message_obj.id,
                             'time': message_obj.date.timestamp(),
