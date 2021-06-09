@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Image,
   ImageBackground,
@@ -66,9 +66,9 @@ import SvgUri from "expo-svg-uri"
 //import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import ApiProfileContext from '../../../apiProfileContext';
 
-import ApiProfile from '../../../components/api/user/profile/ApiProfile';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 //const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -79,27 +79,9 @@ export default function Screen(props) {
   let lang = props.lang
   let navigation = props.navigation
   let route = props.data && props.data.route || null
-  const [auth, setAuth] = useState(null);// null by default , when get token from storage and get user's profile - set true, if error = false
   let [search, setSearch] = React.useState(false)
-  
-  const apiProfile = new ApiProfile(); 
-  
-  useEffect(()=>{
-    AsyncStorage.getItem('token').then(result => {
-      apiProfile.setToken(result);
-      apiProfile.getProfile().then(()=> setAuth(true))
-      
-    }).catch(setAuth(false));
-  
-  },[])
+  const apiProfile = useContext(ApiProfileContext);
 
-  useEffect(()=> console.log('auth:'+auth));
-  useEffect(()=> console.log('token:'+apiProfile.token));
-  
-
-  
-  
-  
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -111,7 +93,6 @@ export default function Screen(props) {
 
         <Stack.Screen name="Profile">
           {(nprops) => <Profile  {...nprops}
-            apiProfile={apiProfile}
             lang={lang}
             onExit={() => props.onExit()}
           />}

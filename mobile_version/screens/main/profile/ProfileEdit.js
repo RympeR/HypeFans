@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import {
   Animated,
   Image,
@@ -14,6 +14,7 @@ import {
   Keyboard,
   View,
   Dimensions,
+  Alert,
 } from 'react-native';
 
 const { width, height } = Dimensions.get("screen")
@@ -34,6 +35,10 @@ import * as ImagePicker from 'expo-image-picker';
 
 import BlogModal from '../blog/BlogModal'
 import UserSettings from './UserSettings'
+import ApiProfileContext from '../../../apiProfileContext';
+import InputGeneric from '../../../components/generic/InputGeneric';
+import ArrowLink from '../../../components/generic/ArrowLink';
+
 
 export default function Screen(props) {
 
@@ -46,6 +51,8 @@ export default function Screen(props) {
   let [photoImg, setPhotoImg] = useState(null)
   let [incorrect, setIncorrect] = React.useState(false)
   let [acceptable, setAcceptable] = React.useState(false)
+
+  const apiProfile = useContext(ApiProfileContext);
 
   // Hide navBar on keyboard open --------------------------------------------
   useEffect(() => {
@@ -101,6 +108,15 @@ export default function Screen(props) {
     if (!result.cancelled) {
       setPhotoImg(result.uri);
     }
+
+    //saving
+    // data.append('background_photo', result);
+    result = await apiProfile.updateUser({background_photo: result});
+    console.log("result update ");
+    console.log(result);
+    // .then(()=> Alert.alert("Фото","Фото фона обновлено!")).catch(()=>Alert.alert("Ошибка","фото не обновлено"));
+    await apiProfile.getProfile();
+    // console.log(apiProfile.dataProfile);
   };
 
   // Animation ----------------------------------------------------------
@@ -164,6 +180,7 @@ export default function Screen(props) {
         style={[s.animHeader, s.mb40, s.pabsolute, s.backColor,
         { height: headerScrollHeight }]}
       >
+        {/* top background image */}
         <View style={[s.backgroundImage, s.pabsolute]}>
           <Animated.Image
             style={[s.backgroundImage, { height: backgroundImageH, opacity: backgroundImageOpacity }]}
@@ -173,6 +190,7 @@ export default function Screen(props) {
                 : user.photo
             }
           />
+          {/* change main photo */}
           <TouchableOpacity style={[s.btn50, s.center, s.pabsolute, { left: (width - 50) / 2, top: 70 }]}
             activeOpacity={0.8}
             onPress={pickPhoto}
@@ -182,6 +200,7 @@ export default function Screen(props) {
           </TouchableOpacity>
         </View>
 
+        {/* top buttons' bar */}
         <View style={[s.topBar, s.flexRow, s.spaceBtw, s.aCenter, s.statBarMargin, s.mb15]}>
 
           <Animated.Image
@@ -197,6 +216,7 @@ export default function Screen(props) {
             }
           />
 
+          {/* top button back */}
           <TouchableOpacity style={[s.btn50, s.center, s.mt25]}
             activeOpacity={0.8}
             onPress={() => navigation.goBack()}
@@ -210,7 +230,7 @@ export default function Screen(props) {
                 source={require('../../../assets/images/back.svg')} />
             </Animated.View>
           </TouchableOpacity>
-
+          {/* ??? */}
           <TouchableOpacity style={[s.btn50, s.center, s.mt15]}
             activeOpacity={0.6}
           //onPress={() => setUserSettings(true)}
@@ -219,7 +239,7 @@ export default function Screen(props) {
         </View>
 
 
-
+        {/* round photo */}
         <View style={[s.animatedView, s.flex1]}>
           <Animated.View style={[s.avaWrap, s.center, { top: avaTop, opacity: storyOpacity }]}>
             <Animated.Image
@@ -264,127 +284,26 @@ export default function Screen(props) {
           scrollEventThrottle={16}
         >
 
+          {/*  profile's fields --> */}
+
           <View style={[{
             paddingTop: H_MAX_HEIGHT
           }]}>
+            <InputGeneric label={text[lang].name} incorrect={incorrect} onChange={(val) => apiProfile.updateUser({ first_name: val })} />
+            <InputGeneric label={text[lang].nick} incorrect={incorrect}
+              onChange={(val) => apiProfile.updateUser({ username: val })}
+              fixTextInput="@"
+              validator={apiProfile.validateLogin}
+            />
 
-            <Text style={[s.text14, s.factor, s.textBlack, s.mh15, s.mt15]}>{text[lang].name}</Text>
-            <View style={[s.inputBlock, s.mt15, s.mh15, s.flexRow, s.spaceBtw, s.alignCenter,
-            { borderColor: false ? '#f52424' : '#aaa' }
-            ]}>
-              <TextInput
-                keyboardType={'default'}
-                style={[s.input, s.text14, s.factor, s.flex1, s.h46, s.mh15,
-                incorrect ? s.textRed : s.textBlack]}
-                placeholder={text[lang].name}
-                placeholderTextColor={'#aaa'}
-              />
-            </View>
-
-            <Text style={[s.text14, s.factor, s.textBlack, s.mh15, s.mt15]}>{text[lang].nick}</Text>
-            <View style={[s.inputBlock, s.mt15, s.mh15, s.flexRow, s.spaceBtw, s.alignCenter,
-            { borderColor: incorrect ? '#f52424' : '#aaa' }
-            ]}>
-              <Text style={[s.text14, s.factor, s.textBlack, s.ml15,]}>{'@'}</Text>
-              <TextInput
-                keyboardType={'email-address'}
-                style={[s.input, s.text14, s.factor, s.flex1, s.h46,
-                incorrect ? s.textRed : s.textBlack]}
-                placeholder={text[lang].nick}
-                placeholderTextColor={'#aaa'}
-                //onFocus={() => setFocus(true)}
-                //onBlur={() => setFocus(false)}
-                onChangeText={(txt) => txt.length > 0 ? setAcceptable(true) : setAcceptable(false)}
-              />
-              {
-                acceptable
-                  ?
-                  <View style={[s.mh15]}>
-                    <SvgUri width="16" height="16"
-                      source={require('../../../assets/images/check.svg')} />
-                  </View>
-                  : null
-              }
-            </View>
-
-            <Text style={[s.text14, s.factor, s.textBlack, s.mh15, s.mt15]}>{text[lang].bio}</Text>
-            <View style={[s.inputBlock, s.mt15, s.mh15, s.flexRow, s.spaceBtw, { height: 120 },
-            { borderColor: false ? '#f52424' : '#aaa' }
-            ]}>
-              <TextInput
-                multiline={true}
-                textAlignVertical={'top'}
-                style={[s.text14, s.factor, s.textLine21, s.flex1, s.mh15, s.mt10, s.mb10,
-                incorrect ? s.textRed : s.textBlack]}
-                placeholder={text[lang].bio}
-                placeholderTextColor={'#aaa'}
-              />
-            </View>
-
-            <Text style={[s.text14, s.factor, s.textBlack, s.mh15, s.mt15]}>{text[lang].geo}</Text>
-            <View style={[s.inputBlock, s.mt15, s.mh15, s.flexRow, s.spaceBtw, s.alignCenter,
-            { borderColor: false ? '#f52424' : '#aaa' }
-            ]}>
-              <TextInput
-                keyboardType={'default'}
-                style={[s.input, s.text14, s.factor, s.flex1, s.h46, s.mh15,
-                incorrect ? s.textRed : s.textBlack]}
-                placeholder={text[lang].geoPlc}
-                placeholderTextColor={'#aaa'}
-              />
-            </View>
-
-            <Text style={[s.text14, s.factor, s.textBlack, s.mh15, s.mt15]}>{text[lang].site}</Text>
-            <View style={[s.inputBlock, s.mt15, s.mh15, s.flexRow, s.spaceBtw, s.alignCenter,
-            { borderColor: false ? '#f52424' : '#aaa' }
-            ]}>
-              <TextInput
-                keyboardType={'default'}
-                style={[s.input, s.text14, s.factor, s.flex1, s.h46, s.mh15,
-                incorrect ? s.textRed : s.textBlack]}
-                placeholder={text[lang].sitePlh}
-                placeholderTextColor={'#aaa'}
-              />
-            </View>
-
+            <InputGeneric label={text[lang].bio} incorrect={incorrect} onChange={(val) => apiProfile.updateUser({ bio: val })} multiline />
+            <InputGeneric label={text[lang].geo} incorrect={incorrect} onChange={(val) => apiProfile.updateUser({ location: val })} />
+            <InputGeneric label={text[lang].site} placeholder={text[lang].sitePlh} incorrect={incorrect} onChange={()=>Alert.alert("Куда ж его записать-то?","?????????????????")} />
             <View style={[s.pinkLine, s.mt15]} />
 
-            <TouchableOpacity style={[s.h53, s.aCenter, s.flexRow, s.spaceBtw, s.ml15]}
-              activeOpacity={0.8}
-              onPress={() => navigation.navigate('MessageCost')}
-            >
-              <Text style={[s.text18, s.factor, s.textBlack]}>{text[lang].msgCost}</Text>
-              <View style={[s.mh15]}>
-                <SvgUri width="16" height="16"
-                  source={require('../../../assets/images/forward.svg')} />
-              </View>
-            </TouchableOpacity>
-            <View style={[s.greyLine, s.mh15]} />
-
-            <TouchableOpacity style={[s.h53, s.aCenter, s.flexRow, s.spaceBtw, s.ml15]}
-              activeOpacity={0.8}
-              onPress={() => navigation.navigate('SubscribeCost')}
-            >
-              <Text style={[s.text18, s.factor, s.textBlack]}>{text[lang].price}</Text>
-              <View style={[s.mh15]}>
-                <SvgUri width="16" height="16"
-                  source={require('../../../assets/images/forward.svg')} />
-              </View>
-            </TouchableOpacity>
-            <View style={[s.greyLine, s.mh15]} />
-
-            <TouchableOpacity style={[s.h53, s.aCenter, s.flexRow, s.spaceBtw, s.ml15]}
-              activeOpacity={0.8}
-              onPress={() => navigation.navigate('ForFuns')}
-            >
-              <Text style={[s.text18, s.factor, s.textBlack]}>{text[lang].forFun}</Text>
-              <View style={[s.mh15]}>
-                <SvgUri width="16" height="16"
-                  source={require('../../../assets/images/forward.svg')} />
-              </View>
-            </TouchableOpacity>
-
-
+            <ArrowLink label={text[lang].msgCost} onPress={() => navigation.navigate('MessageCost')} />
+            <ArrowLink label={text[lang].price} onPress={() => navigation.navigate('SubscribeCost')} />
+            <ArrowLink label={text[lang].forFun} onPress={() => navigation.navigate('ForFuns')} />
 
             <View style={{ height: 60 }} />
           </View>
