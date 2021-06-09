@@ -161,6 +161,7 @@ class PostGetShortSerializers(serializers.ModelSerializer):
         fields = (
             'pk',
             'name',
+            'description',
             'enabled_comments',
             'price_to_watch',
             'publication_date',

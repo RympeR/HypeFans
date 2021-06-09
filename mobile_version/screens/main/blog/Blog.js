@@ -50,27 +50,27 @@ export default function Screen(props) {
   let [item, setItem] = React.useState(0)
 
 
-  let group = { nick: '@hypefans', ava: require('../../../assets/images/ava5.png'), name: 'HypeFans' }
+  let group = { username: '@hypefans', avatar: require('../../../assets/images/ava5.png'), first_name: 'HypeFans' }
   let posts = [
     {
-      group: group, author: users[0], time: '20 мин назад', text: 'Перчатки сняты, поскольку чемпион по боксу @TonyBellew присоединился к нам на HypeFans 🥊 Он предлагает возможность присоединиться, поскольку чемпион по боксу @TonyBellew присоединился к нам на HypeFans 🥊 Он предлагает возможность присоединиться.',
-      liks: 88, comments: 21, video: require('../../../assets/images/preview1.png'),
+      group: group, author: users[0], publication_date: '20 мин назад', text: 'Перчатки сняты, поскольку чемпион по боксу @TonyBellew присоединился к нам на HypeFans 🥊 Он предлагает возможность присоединиться, поскольку чемпион по боксу @TonyBellew присоединился к нам на HypeFans 🥊 Он предлагает возможность присоединиться.',
+      likes_amount: 88, comments_amount: 21, video: require('../../../assets/images/preview1.png'),
     },
     {
-      group: group, author: users[1], time: '5 часов назад', text: 'Присоединяйтесь к @desiree, когда она готовит один из своих любимых рецептов - вкусное куриное адобо! Подключайтесь к новым сериям когда она готовит один из своих любимых рецептов - вкусное куриное адобо!',
-      liks: 160, comments: 56, video: require('../../../assets/images/preview2.png'),
+      group: group, author: users[1], publication_date: '5 часов назад', text: 'Присоединяйтесь к @desiree, когда она готовит один из своих любимых рецептов - вкусное куриное адобо! Подключайтесь к новым сериям когда она готовит один из своих любимых рецептов - вкусное куриное адобо!',
+      likes_amount: 160, comments_amount: 56, video: require('../../../assets/images/preview2.png'),
     },
     {
-      group: group, author: users[2], time: '12 часов назад', text: 'Prepare for takeoff as @rebecca_aviatrix is flying you to higher altitudes on HypeFans ✈️ The pilot is taking you on her aviation journey where you can. Prepare for takeoff as @rebecca_aviatrix is flying you to higher altitudes on HypeFans ✈️ The pilot is taking you on her aviation journey where you can.',
-      liks: 74, comments: 36, video: require('../../../assets/images/preview3.png'),
+      group: group, author: users[2], publication_date: '12 часов назад', text: 'Prepare for takeoff as @rebecca_aviatrix is flying you to higher altitudes on HypeFans ✈️ The pilot is taking you on her aviation journey where you can. Prepare for takeoff as @rebecca_aviatrix is flying you to higher altitudes on HypeFans ✈️ The pilot is taking you on her aviation journey where you can.',
+      likes_amount: 74, comments_amount: 36, video: require('../../../assets/images/preview3.png'),
     },
     {
-      group: group, author: users[6], time: 'Вчера', text: 'Flip into action with pro skateboarder @officialdanimal 🤘 He’s here to wow you with his craziest skills and teach you how to freestyle it',
-      liks: 154, comments: 98, video: require('../../../assets/images/preview4.png'),
+      group: group, author: users[6], publication_date: 'Вчера', text: 'Flip into action with pro skateboarder @officialdanimal 🤘 He’s here to wow you with his craziest skills and teach you how to freestyle it',
+      likes_amount: 154, comments_amount: 98, video: require('../../../assets/images/preview4.png'),
     },
     {
-      group: group, author: users[7], time: 'Март, 21', text: 'Ya’ll ain’t ready for this! It’s @rampage_jackson 👊💥 It’s going to be a knockout as the former champ is inviting you to the Rampage show',
-      liks: 140, comments: 70, video: require('../../../assets/images/preview5.png'),
+      group: group, author: users[7], publication_date: 'Март, 21', text: 'Ya’ll ain’t ready for this! It’s @rampage_jackson 👊💥 It’s going to be a knockout as the former champ is inviting you to the Rampage show',
+      likes_amount: 140, comments_amount: 70, video: require('../../../assets/images/preview5.png'),
     },
   ]
 
@@ -107,11 +107,11 @@ export default function Screen(props) {
               <View style={[s.autorView, s.flexRow, s.aCenter, s.ml30]}>
                 <Image
                   style={[s.image50r, s.mr10]}
-                  source={user.ava}
+                  source={user.avatar}
                 />
                 <View style={[]}>
-                  <Text numberOfLines={1} style={[s.text14, s.factorBold, s.textBlack, s.mt3]}>{user.name}</Text>
-                  <Text numberOfLines={1} style={[s.text14, s.factor, s.textGrey2, s.mt3]}>{user.nick}</Text>
+                  <Text numberOfLines={1} style={[s.text14, s.factorBold, s.textBlack, s.mt3]}>{user.first_name}</Text>
+                  <Text numberOfLines={1} style={[s.text14, s.factor, s.textGrey2, s.mt3]}>{user.username}</Text>
                 </View>
               </View>
               <View style={[s.flex1]} />
@@ -245,7 +245,7 @@ export default function Screen(props) {
         {/* --- Stories ---  */}
 
         <ScrollView style={[s.flexRow, s.mt15]} horizontal={true} showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity style={[s.ava, s.center, s.mr5, s.ml10]}
+          <TouchableOpacity style={[s.avatar, s.center, s.mr5, s.ml10]}
             activeOpacity={0.8}
             onPress={() => navigation.navigate('Story')}
           >
@@ -266,7 +266,7 @@ export default function Screen(props) {
             users.map((user, index) => {
               return (
                 <TouchableOpacity key={index}
-                  style={[s.ava, s.center, s.mr5]}
+                  style={[s.avatar, s.center, s.mr5]}
                   activeOpacity={0.8}
                   onPress={() => navigation.navigate('StoryViewer')}
                 >
@@ -276,10 +276,10 @@ export default function Screen(props) {
 
                     <Image
                       style={[s.image60rw]}
-                      source={user.ava}
+                      source={user.avatar}
                     />
                   </View>
-                  <Text numberOfLines={1} style={[s.text14, s.factor, s.textBlack, s.mt3]}>{user.nick}</Text>
+                  <Text numberOfLines={1} style={[s.text14, s.factor, s.textBlack, s.mt3]}>{user.username}</Text>
                 </TouchableOpacity>
 
               )
@@ -313,7 +313,7 @@ export default function Screen(props) {
 
             let [full, setFull] = React.useState(false)
             let [like, setLike] = React.useState(false)
-            let [likeCount, setLikeCount] = React.useState(post.liks)
+            let [likeCount, setLikeCount] = React.useState(post.likes_amount)
             let [lines, setLines] = React.useState(null)
 
             const [show, setShow] = React.useState(false);
@@ -328,16 +328,16 @@ export default function Screen(props) {
                   <View style={[s.flexRow, s.aCenter]}>
                     <Image
                       style={[s.image50r, s.mr10]}
-                      source={group.ava}
+                      source={group.avatar}
                     />
                     <View style={[]}>
-                      <Text style={[s.text14, s.factorBold, s.textBlack, s.mt3]}>{group.name}</Text>
-                      <Text style={[s.text14, s.factor, s.textGrey2, s.mt3]}>{group.nick}</Text>
+                      <Text style={[s.text14, s.factorBold, s.textBlack, s.mt3]}>{group.first_name}</Text>
+                      <Text style={[s.text14, s.factor, s.textGrey2, s.mt3]}>{group.username}</Text>
                     </View>
                   </View>
 
                   <View style={[s.flexRow, s.aCenter]}>
-                    <Text style={[s.text14, s.factor, s.textGrey2]}>{post.time}</Text>
+                    <Text style={[s.text14, s.factor, s.textGrey2]}>{post.publication_date}</Text>
                     <TouchableOpacity style={[s.btn40, s.center]}
                       activeOpacity={0.8}
                       onPress={(post) => {
@@ -385,11 +385,11 @@ export default function Screen(props) {
                       <View style={[s.autorView, s.flexRow, s.aCenter, s.mh15]}>
                         <Image
                           style={[s.image50r, s.mr10]}
-                          source={post.author.ava}
+                          source={post.author.avatar}
                         />
                         <View style={[]}>
-                          <Text numberOfLines={1} style={[s.text14, s.factorBold, s.textBlack]}>{post.author.name}</Text>
-                          <Text numberOfLines={1} style={[s.text14, s.factor, s.textGrey2, s.mt3]}>{post.author.nick}</Text>
+                          <Text numberOfLines={1} style={[s.text14, s.factorBold, s.textBlack]}>{post.author.first_name}</Text>
+                          <Text numberOfLines={1} style={[s.text14, s.factor, s.textGrey2, s.mt3]}>{post.author.username}</Text>
                         </View>
                       </View>
                       <View style={[s.flex1]} />
@@ -487,7 +487,7 @@ export default function Screen(props) {
                 //onPress={() => setSearch(!search)}
                 >
                   <Text style={[s.text14, s.factor, s.textGrey2, s.mh15,]}>
-                    {text[lang].watch + post.comments + text[lang].comments1}
+                    {text[lang].watch + post.comments_amount + text[lang].comments1}
                   </Text>
                 </TouchableOpacity>
 
