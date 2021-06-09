@@ -15,7 +15,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-
+GLOBAL = require('../globals');
 const { width, height } = Dimensions.get("screen")
 
 import s from '../../styles/style'
@@ -49,6 +49,7 @@ export default function Screen(props) {
     if (!incorrectPassword || !incorrectLogin) {
       profile.login(login, pass).then(() => {
         Alert.alert("Авторизация", "Авторизация прошла успешно!");
+        GLOBAL.profile = profile;
         props.onMainScreen();
 
       }).catch((error) => {

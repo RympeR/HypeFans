@@ -23,6 +23,7 @@ import text from '../../../assets/text/text'
 import TopGradient from '../../../components/TopGradient'
 import ProfileGradient from '../../../components/ProfileGradient'
 
+
 let platform = Platform.OS === 'ios' ? true : false
 let longIos = height / width > 2 && Platform.OS === 'ios'
 
@@ -55,15 +56,15 @@ export default function Screen(props) {
   let posts = [
     {
       group: group, time: '12 часов назад', text: 'Сделайте 5-минутный перерыв на растяжку со мной, пока я демонстрирую некоторые базовые движения для гибкости и расслабления, пока я демонстрирую некоторые базовые движения для гибкости и расслабления',
-      liks: 74, comments: 36, video: require('../../../assets/images/preview6.png'),
+      likes: 74, comments: 36, video: require('../../../assets/images/preview6.png'),
     },
     {
       group: group, time: 'Вчера', text: 'Flip into action with pro skateboarder @officialdanimal 🤘 He’s here to wow you with his craziest skills and teach you how to freestyle it',
-      liks: 154, comments: 98, video: require('../../../assets/images/preview4.png'),
+      likes: 154, comments: 98, video: require('../../../assets/images/preview4.png'),
     },
     {
       group: group, time: 'Март, 21', text: 'Ya’ll ain’t ready for this! It’s @rampage_jackson 👊💥 It’s going to be a knockout as the former champ is inviting you to the Rampage show',
-      liks: 140, comments: 70, video: require('../../../assets/images/preview5.png'),
+      likes: 140, comments: 70, video: require('../../../assets/images/preview5.png'),
     },
   ]
 
@@ -379,7 +380,7 @@ export default function Screen(props) {
 
               let [full, setFull] = React.useState(false)
               let [like, setLike] = React.useState(false)
-              let [likeCount, setLikeCount] = React.useState(post.liks)
+              let [likeCount, setLikeCount] = React.useState(post.likes)
               let [lines, setLines] = React.useState(null)
 
               const [show, setShow] = React.useState(false);
@@ -507,7 +508,7 @@ export default function Screen(props) {
                     </TouchableOpacity>
                   </View>
 
-                  <Text style={[s.text14, s.factor, s.textBlack, s.mh15]}>{likeCount + text[lang].liks1}</Text>
+                  <Text style={[s.text14, s.factor, s.textBlack, s.mh15]}>{likeCount + text[lang].likes1}</Text>
 
                   <TouchableOpacity style={[s.h25, s.jCenter, s.mb25]}
                     activeOpacity={0.8}

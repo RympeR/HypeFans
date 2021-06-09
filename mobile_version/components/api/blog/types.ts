@@ -39,6 +39,9 @@ export class ShortPost {
 	@JsonProperty() likes_amount: number;
 	@JsonProperty() comments_amount: number;
 	@JsonProperty() favourites_amount: number;
+	@JsonProperty() attachments: Attachment[];
+	@JsonProperty() payed: boolean;
+	
 }
 
 @Serializable()

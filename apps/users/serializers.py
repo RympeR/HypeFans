@@ -60,6 +60,7 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             'pk',
             'username',
             'avatar',
+            'first_name',
         )
 
 

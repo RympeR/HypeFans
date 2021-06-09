@@ -24,7 +24,7 @@ let longIos = height / width > 2 && Platform.OS === 'ios'
 
 
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
 
   testLine: {
     height: 1,

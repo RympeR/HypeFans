@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import {
   Animated,
   Image,
@@ -35,13 +35,20 @@ import Drawer from './Drawer'
 import ExitModal from './ExitModal'
 import BlogSettings from './BlogSettings'
 
+import ApiProfileContext from '../../../apiProfileContext';
+
+
 
 export default function Screen(props) {
 
   let lang = props.lang
   let navigation = props.navigation;
-  let apiProfile = props.apiProfile;
+  const apiProfile = useContext(ApiProfileContext);
 
+  // console.log("profile.js -> apiProfile.dataProfile");
+  // console.log(apiProfile.dataProfile);
+  // console.log("profile.js -> apiProfile");
+  // console.log(apiProfile);
   let [bio, setBio] = React.useState(false)
   let [drawer, setDrawer] = React.useState(false)
   let [exitModal, setExitModal] = React.useState(false)
