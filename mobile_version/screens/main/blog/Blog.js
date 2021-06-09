@@ -26,8 +26,8 @@ import TopGradient from '../../../components/TopGradient'
 import AvaGradient from '../../../components/AvaGradient'
 
 import BlogModal from './BlogModal'
-
-
+import GLOBAL from '../../../globals.js'
+import ApiBlog from '../../../components/api/blog/ApiBlog';
 let platform = Platform.OS === 'ios' ? true : false
 
 import SvgUri from "expo-svg-uri"
@@ -41,8 +41,9 @@ export default function Screen(props) {
   let users = props.users
   let navigation = props.navigation
 
-
-
+  let profile = GLOBAL.profile;
+  let blog = ApiBlog(profile);
+  let posts = blog.mainPageGet();
   let [search, setSearch] = React.useState(false)
   let [blogModal, setBlogModal] = React.useState(false)
   let [post, setPost] = React.useState(null)
