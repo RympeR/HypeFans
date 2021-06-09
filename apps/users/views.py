@@ -1,18 +1,17 @@
 from datetime import datetime, timedelta
 
-from core.utils.default_responses import (
-    api_created_201,
-    api_accepted_202,
-    api_block_by_policy_451,
-    api_not_implemented_501,
-    api_payment_required_402
-)
+from core.utils.default_responses import (api_accepted_202,
+                                          api_block_by_policy_451,
+                                          api_created_201,
+                                          api_not_implemented_501,
+                                          api_payment_required_402)
 from django.http import request
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
+from rest_framework.response import Response
 
 from .models import *
 from .serializers import *
@@ -80,6 +79,21 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
+class CreateSubscriptioAPI(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = SubscriptionCreateSerializer
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except AssertionError:
+            return api_block_by_policy_451({"status": "not enought credits"})
+        instance = self.perform_create(serializer)
+        return Response(serializer.data)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 class UserSubscription(GenericAPIView):
     queryset = User.objects.all()
@@ -114,34 +128,6 @@ class UserSubscription(GenericAPIView):
             }
         )
 
-# TODO-----Implement donate to different types of action
-
-
-class UserPostDonation(generics.CreateAPIView):
-    queryset = Donation.objects.all()
-    serializer_class = DonationCreationSerializer
-
-    # def post(self, request, pk):
-    #     return api_not_implemented_501()
-    #     user = request.user
-    #     donate_target = get_object_or_404(Post, pk=pk)
-    #     if user.credit_amount > donate_target.price_to_watch:
-    #         user.my_subscribes.add(subscribe_target)
-    #         subscribe_target.fans_amount += 1
-    #         subscribe_target.save()
-    #         user.save()
-    #         return api_accepted_202(
-    #             {
-    #                 "subscriber": user.pk,
-    #                 "subscribed": subscribe_target.pk
-    #             }
-    #         )
-    #     return api_payment_required_402(
-    #         {
-    #             "need_to_pay":  subscribe_target.subscribtion_price - user.credit_amount
-    #         }
-    #     )
-
 
 class CardRetrieveAPI(generics.RetrieveAPIView):
     queryset = Card.objects.all()
@@ -152,6 +138,8 @@ class CardCreateAPI(generics.CreateAPIView):
     queryset = Card.objects.all()
     serializer_class = CardCreationSerializer
 
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 class CardAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Card.objects.all()
@@ -175,6 +163,8 @@ class DonationCreateAPI(generics.CreateAPIView):
     queryset = Donation.objects.all()
     serializer_class = DonationCreationSerializer
 
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 class PaymentRetrieveAPI(generics.RetrieveAPIView):
     queryset = Payment.objects.all()
@@ -185,6 +175,8 @@ class PaymentCreateAPI(generics.CreateAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentCreationSerializer
 
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 class PendingUserCreateAPI(generics.CreateAPIView):
     queryset = PendingUser.objects.all()
@@ -203,6 +195,8 @@ class UserOnlineCreateAPI(generics.CreateAPIView):
     queryset = UserOnline.objects.all()
     serializer_class = UserOnlineCreationSerializer
 
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 class UserOnlineUpdateAPI(generics.UpdateAPIView):
     queryset = UserOnline.objects.all()

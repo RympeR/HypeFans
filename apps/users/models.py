@@ -138,11 +138,14 @@ class Subscription(models.Model):
     end_date = UnixTimeStampField('Время конца подписки')
     
     def __str__(self):
-        return self.source, '-', self.target
+        return f'{self.source}-{self.target}'
 
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
+
+
+    
 
 class Card(models.Model):
     user = models.ForeignKey(User, related_name='user_card', on_delete=models.CASCADE,)

@@ -5,7 +5,6 @@ from .views import (
     UserAPI,
     UserPartialUpdateAPI,
     UserSubscription,
-    UserPostDonation,
     CardRetrieveAPI,
     CardCreateAPI,
     CardAPI,
@@ -21,6 +20,7 @@ from .views import (
     UserCardListAPI,
     DonationPayedUserRetrieveAPI,
     DonationPayedUserToRetrieveAPI,
+    CreateSubscriptioAPI,
     PaymentUserHistoryRetrieveAPI,
 )
 
@@ -30,10 +30,9 @@ urlpatterns = [
     path('update-delete-user/', UserAPI.as_view()),
     path('partial-update-user/', UserPartialUpdateAPI.as_view()),
     path('user-subscription/<int:pk>', UserSubscription.as_view()),
-    #TODO -- to update
-    # path('create-donation/', UserPostDonation.as_view()),
     path('get-card/<int:pk>', CardRetrieveAPI.as_view()),
     path('create-card/', CardCreateAPI.as_view()),
+    path('create-subscription/', CreateSubscriptioAPI.as_view()),
     path('update-delete-card/<int:pk>', CardAPI.as_view()),
     path('partial-update-card/', CardPartialUpdateAPI.as_view()),
     path('get-donation/<int:pk>', DonationRetrieveAPI.as_view()),
@@ -48,6 +47,4 @@ urlpatterns = [
     path('user-donation-recieved/', DonationPayedUserRetrieveAPI.as_view()),
     path('user-donation-sended/', DonationPayedUserToRetrieveAPI.as_view()),
     path('user-payment-history/', PaymentUserHistoryRetrieveAPI.as_view()),
-
-
 ]
