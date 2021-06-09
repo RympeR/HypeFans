@@ -1,22 +1,39 @@
 from datetime import datetime, timedelta
+from django.db.models.expressions import Exists
 
-from django.http import request
 from rest_framework import generics, permissions, renderers
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
-from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from apps.users.serializers import UserShortRetrieveSeriliazer
-
+from apps.users.models import Subscription, User
+from core.utils.default_responses import api_block_by_policy_451
 from .models import *
 from .serializers import *
+from rest_framework import status
 
 
 class AttachmentCreateAPI(generics.CreateAPIView):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
+
+
+class PostBoughtCreateAPI(generics.CreateAPIView):
+    queryset = PostBought.objects.all()
+    serializer_class = PostBoughtCreateSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except AssertionError:
+            return api_block_by_policy_451({"status": "not enought credits"})
+        instance = self.perform_create(serializer)
+        return Response(serializer.data)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 class PostListAPI(generics.GenericAPIView):
@@ -75,6 +92,18 @@ class PostActionCreateAPI(generics.CreateAPIView):
     queryset = PostAction.objects.all()
     serializer_class = PostActionCreationSerializer
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except AssertionError:
+            return api_block_by_policy_451({"status": "not enought credits"})
+        instance = self.perform_create(serializer)
+        instance_serializer = self.get_serializer(instance=instance)
+        return Response(serializer.data)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 class PostActionDeleteAPI(generics.DestroyAPIView):
     queryset = PostAction.objects.all()
@@ -201,25 +230,35 @@ class MainUserPage(GenericAPIView):
 
     def get(self, request):
         user = request.user
-        datetime = request.GET.get('datetime', 0)
+        data_compare = request.GET.get('datetime', 0)
         limit = request.GET.get('limit', 50)
         offset = request.GET.get('offset', 0)
         results = []
-        if datetime == 0:
+        if data_compare == 0:
             for user_sub in user.my_subscribes.all():
-                for post in user_sub.user_post.all().order_by('-publication_date'):
+                for post in user_sub.user_post.filter(archived=False).order_by('-publication_date'):
                     user_data = UserShortRetrieveSeriliazer(
                         instance=user_sub).data
                     post_data = PostGetShortSerializers(instance=post).data
                     res_dict = {}
                     res_dict['user'] = user_data
                     res_dict['post'] = post_data
+                    if post.access_level == 1:
+                        res_dict['post']['payed'] = (
+                            True if PostBought.objects.filter(
+                                post=post, user=user).exists() else False
+                        )
+                    else:
+                        res_dict['post']['payed'] = (
+                            True if Subscription.objects.filter(
+                                target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
+                        )
                     results.append(res_dict)
                     return Response(
                         results[offset:limit+offset]
                     )
         for user_sub in user.my_subscribes.all():
-            for post in user_sub.user_action_post.filter(datetime__lte=datetime).order_by('-publication_date'):
+            for post in user_sub.user_action_post.filter(archived=False, datetime__lte=data_compare).order_by('-publication_date'):
                 user_data = UserShortRetrieveSeriliazer(
                     instance=user_sub).data
                 post_data = PostGetShortSerializers(instance=post).data
@@ -261,3 +300,5 @@ class SubStories(GenericAPIView):
             sorted(results[offset:limit+offset],
                    key=lambda story: story['stories']['datetime'])[::-1]
         )
+
+# class MarkFavourite

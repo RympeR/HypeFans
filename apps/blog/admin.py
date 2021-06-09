@@ -7,7 +7,17 @@ from .models import (
     PostAction,
     Story,
     WatchedStories,
+    PostBought,
 )
+
+
+@admin.register(PostBought)
+class PostBoughtAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'user', 'post', 'amount'
+    )
+    search_fields = ['user__username', 'post__title']
+
 
 @admin.register(Attachment)
 class AttachmentAdmin(admin.ModelAdmin):
@@ -19,6 +29,7 @@ class AttachmentAdmin(admin.ModelAdmin):
     ]
     ordering = '-pk',
     list_filter = ('file_type', )
+
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -32,8 +43,9 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['user__username', 'name']
     ordering = '-pk',
     list_filter = (
-            ('publication_date', DateFieldListFilter),
+        ('publication_date', DateFieldListFilter),
     )
+
 
 @admin.register(PostAction)
 class PostActionAdmin(admin.ModelAdmin):
@@ -60,12 +72,13 @@ class StoryAdmin(admin.ModelAdmin):
         'pk',
         'user'
     ]
-    search_fields = ['user__username',]
+    search_fields = ['user__username', ]
     ordering = '-pk',
     list_filter = (
-            ('publication_date', DateFieldListFilter),
-            'archived'
+        ('publication_date', DateFieldListFilter),
+        'archived'
     )
+
 
 @admin.register(WatchedStories)
 class WatchedStoriesAction(admin.ModelAdmin):
@@ -81,4 +94,3 @@ class WatchedStoriesAction(admin.ModelAdmin):
     list_filter = (
         'like',
     )
-

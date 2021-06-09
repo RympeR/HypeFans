@@ -63,7 +63,7 @@ class ChatCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
         exclude = 'date',
-
+    
     def validate(self, attrs):
         request = self.context.get('request')
         attrs['user'] = request.user
@@ -81,7 +81,7 @@ class UserMessageGetSerializer(serializers.ModelSerializer):
 
 
 class UserMessageCreationSerializer(serializers.ModelSerializer):
-
+    
     class Meta:
         model = UserMessage
         fields = '__all__'

@@ -66,10 +66,15 @@ class GetChatMessages(GenericAPIView):
 
     def post(self, request):
         room = get_object_or_404(Room, pk=request.data['room_id'])
-        objects = Chat.objects.filter(
-            room=room,
-            pk__lte=request.data['message_id']
-        ).order_by('-date')[:15]
+        if request.data.get('message_id'):
+            objects = Chat.objects.filter(
+                room=room,
+                pk__lte=request.data['message_id']
+            ).order_by('-date')[:15]
+        else:
+            objects = Chat.objects.filter(
+                room=room
+            ).order_by('-date')[:15]
         results = []
         domain = request.get_host()
 

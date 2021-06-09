@@ -1,11 +1,48 @@
 from core.utils.customFields import TimestampField
-from django.db.models import Count
+from django.db.models import Count, Q
 from rest_framework import serializers
 
 from apps.users.models import User
 from apps.users.serializers import UserShortRetrieveSeriliazer
 
-from .models import Attachment, Post, PostAction, Story, WatchedStories
+from .models import (
+    Attachment,
+    Post,
+    PostAction,
+    Story,
+    WatchedStories,
+    PostBought
+)
+
+
+class PostActionCreationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PostAction
+        fields = '__all__'
+
+    def validate(self, attrs):
+        request = self.context.get('request')
+        user = request.user
+        attrs['user'] = user
+        if attrs['donation_amount'] == 0:
+            return attrs
+        if user.credit_amount >= attrs['donation_amount'] > 0:
+            user.credit_amount -= attrs['donation_amount']
+            attrs['post'].user.earned_credits_amount += attrs['donation_amount']
+            user.save()
+            attrs['post'].user.save()
+            user.save()
+            return attrs
+        raise serializers.ValidationError
+
+
+class PostActionShortSerializer(serializers.ModelSerializer):
+    datetime = TimestampField()
+
+    class Meta:
+        model = PostAction
+        fields = '__all__'
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
@@ -27,27 +64,28 @@ class PostGetSerializer(serializers.ModelSerializer):
 
     favourites = UserShortRetrieveSeriliazer(many=True)
     user = UserShortRetrieveSeriliazer()
-    files = AttachmentSerializer(many=True)
-    time_to_archive = TimestampField(required=False)
     publication_date = TimestampField(required=False)
-
+    comments = serializers.SerializerMethodField()
     likes_amount = serializers.SerializerMethodField()
     comments_amount = serializers.SerializerMethodField()
     favourites_amount = serializers.SerializerMethodField()
     attachments = AttachmentSerializer(many=True)
 
     def get_likes_amount(self, obj: Post):
-        return 1
+        return obj.user_postaction.filter(like=True).aggregate(Count('pk'))['pk__count']
 
     def get_comments_amount(self, obj: Post):
-        return 1
+        return obj.user_postaction.filter(~Q(comment__isnull=True) & ~Q(comment='')).aggregate(Count('pk'))['pk__count']
 
     def get_favourites_amount(self, obj: Post):
-        return 1
+        return obj.favourites.all().aggregate(Count('pk'))['pk__count']
+
+    def get_comments(self, obj: Post):
+        return [PostActionShortSerializer(instance=post).data for post in obj.user_postaction.filter(~Q(comment__isnull=True) & ~Q(comment=''))]
 
     class Meta:
         model = Post
-        fields = '__all__'
+        exclude = 'time_to_archive',
 
 
 class PostUpdateSerializer(serializers.ModelSerializer):
@@ -97,8 +135,6 @@ class PostCreationSerializer(serializers.ModelSerializer):
         model = Post
         exclude = 'publication_date',
 
-# TODO-----Implement claculating info about post
-
 
 class PostGetShortSerializers(serializers.ModelSerializer):
 
@@ -106,15 +142,19 @@ class PostGetShortSerializers(serializers.ModelSerializer):
     comments_amount = serializers.SerializerMethodField()
     favourites_amount = serializers.SerializerMethodField()
     attachments = AttachmentSerializer(many=True)
+    likes_amount = serializers.SerializerMethodField()
+    comments_amount = serializers.SerializerMethodField()
+    favourites_amount = serializers.SerializerMethodField()
+    publication_date = TimestampField(required=False)
 
     def get_likes_amount(self, obj: Post):
-        return 1
+        return obj.user_postaction.filter(like=True).aggregate(Count('pk'))['pk__count']
 
     def get_comments_amount(self, obj: Post):
-        return 1
+        return obj.user_postaction.filter(~Q(comment__isnull=True)).aggregate(Count('pk'))['pk__count']
 
     def get_favourites_amount(self, obj: Post):
-        return 1
+        return obj.favourites.all().aggregate(Count('pk'))['pk__count']
 
     class Meta:
         model = Post
@@ -136,13 +176,6 @@ class PostActionGetSerializer(serializers.ModelSerializer):
 
     user = UserShortRetrieveSeriliazer()
     post = PostGetSerializer()
-
-    class Meta:
-        model = PostAction
-        fields = '__all__'
-
-
-class PostActionCreationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostAction
@@ -228,3 +261,26 @@ class MainPageSerializer(serializers.Serializer):
 class SubStoriesSerializer(serializers.Serializer):
     user = UserShortRetrieveSeriliazer(required=True)
     stories = StoryShortSerializer(required=True, many=True)
+
+
+class PostBoughtCreateSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+    amount = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = PostBought
+        fields = '__all__'
+
+    def validate(self, attrs):
+        request = self.context.get('request')
+        user = request.user
+        attrs['user'] = user
+        attrs['amount'] = attrs['post'].price_to_watch
+        if user.credit_amount >= attrs['post'].price_to_watch:
+            user.credit_amount -= attrs['post'].price_to_watch
+            attrs['post'].user.earned_credits_amount += attrs['post'].price_to_watch
+            attrs['post'].user.save()
+            user.save()
+            return attrs
+        raise serializers.ValidationError

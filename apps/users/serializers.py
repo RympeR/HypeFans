@@ -3,15 +3,41 @@ from core.utils.customFields import TimestampField
 from django.db.models import Count
 from apps.blog.models import Post
 from django_countries.serializer_fields import CountryField
-
+from datetime import datetime, timedelta
 from .models import (
     User,
     Card,
     Donation,
     Payment,
     UserOnline,
+    Subscription,
     PendingUser
 )
+
+
+class SubscriptionCreateSerializer(serializers.ModelSerializer):
+
+    end_date = TimestampField(required=False)
+    source = serializers.PrimaryKeyRelatedField(required=False, queryset=User.objects.all())
+    class Meta:
+        model = Subscription
+        fields = '__all__'
+
+    def validate(self, attrs):
+        request = self.context.get('request')
+        user = request.user
+        now = datetime.now()
+        attrs['source'] = user
+        attrs['start_date'] = now
+        attrs['end_date'] = (now + timedelta(days=user.subscribtion_duration)).timestamp()
+
+        if user.credit_amount >= attrs['target'].subscribtion_price:
+            user.credit_amount -= attrs['target'].subscribtion_price
+            attrs['target'].earned_credits_amount += attrs['target'].subscribtion_price
+            user.save()
+            attrs['target'].save()
+            return attrs
+        raise serializers.ValidationError
 
 
 class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
@@ -216,15 +242,3 @@ class UserOnlineCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserOnline
         fields = 'user',
-
-# class ActionSerializer(serializers.Serializer):
-
-#     target = UserShortRetrieveSeriliazer(required=False)
-
-
-# class RetrieveNotificationsSerializer(serializers.Serializer):
-
-#     user = serializers.IntegerField()
-#     time = serializers.BigIntegerField()
-#     action = ActionSerializer(required=False)
-#     type = serializers.CharField()
