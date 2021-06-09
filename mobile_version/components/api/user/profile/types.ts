@@ -23,6 +23,7 @@ export class ShortUser{
   @JsonProperty() pk: number;
   @JsonProperty() username: string;
   @JsonProperty() avatar: string;
+  @JsonProperty() first_name: string;
 }
 
 @Serializable()
