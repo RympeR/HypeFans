@@ -37,15 +37,39 @@ class PostBoughtCreateAPI(generics.CreateAPIView):
 
 
 class PostListAPI(generics.GenericAPIView):
-    serializer_class = PostGetSerializer
+    serializer_class = PostGetShortSerializers  
 
     def get(self, request, username):
         limit = request.GET.get('limit', 20)
         offset = request.GET.get('offset', 0)
+        page_user = User.objects.get(username=username)
+        user = request.user
         qs = Post.objects.filter(
-            user=User.objects.get(username=username)
+            user=page_user
         )[offset:offset+limit]
-        data = [self.get_serializer(instance=post) for post in qs]
+        data = [{'post':self.get_serializer(instance=post).data} for post in qs]
+        if user != page_user:
+            for ind, post in enumerate(qs):
+                user_data = UserShortRetrieveSeriliazer(
+                    instance=page_user).data
+                data[ind]['user'] = user_data
+                if post.access_level == 1:
+                    data[ind]['payed'] = (
+                        True if PostBought.objects.filter(
+                            post=post, user=user).exists() else False
+                    )
+                else:
+                    
+                    data[ind]['payed'] = (
+                        True if Subscription.objects.filter(
+                            target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
+                    )
+            return Response(data)
+        for ind, post in enumerate(data):
+            user_data = UserShortRetrieveSeriliazer(
+                    instance=page_user).data
+            data[ind]['user'] = user_data
+            data[ind]['payed'] = True
         return Response(data)
 
 
@@ -104,6 +128,7 @@ class PostActionCreateAPI(generics.CreateAPIView):
 
     def get_serializer_context(self):
         return {'request': self.request}
+
 
 class PostActionDeleteAPI(generics.DestroyAPIView):
     queryset = PostAction.objects.all()
