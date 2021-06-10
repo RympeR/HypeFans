@@ -155,6 +155,7 @@ class UserGetSerializer(serializers.ModelSerializer):
             'bio',
             'birthday_date',
             'location',
+            'subscribtion_price',
             'post_amount',
             'fans_amount',
             'repheral_link',

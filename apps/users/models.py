@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 import datetime
 from django.db.models.signals import post_save
 
+
 class User(AbstractUser):
     email = models.EmailField(
         'E-mail',
@@ -40,8 +41,12 @@ class User(AbstractUser):
     birthday_date = UnixTimeStampField(
         verbose_name='День рождения', null=True, blank=True)
     location = CountryField(null=True, blank=True)
-    subscribtion_price = models.IntegerField(verbose_name='Цена подписки', default=0)
-    subscribtion_duration = models.IntegerField(verbose_name='Длина подписки в днях', default=7)
+    subscribtion_price = models.IntegerField(
+        verbose_name='Цена подписки', default=0)
+    message_price = models.IntegerField(
+        verbose_name='Цена сообщений', default=0)
+    subscribtion_duration = models.IntegerField(
+        verbose_name='Длина подписки в днях', default=7)
     post_amount = models.IntegerField(
         verbose_name='Кол-во постов', default=0, blank=True, null=True)
     fans_amount = models.IntegerField(
@@ -89,8 +94,6 @@ class User(AbstractUser):
     earned_credits_amount = models.IntegerField(
         verbose_name='Заработано', default=0)
 
-
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
         'username'
@@ -131,12 +134,15 @@ class User(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
+
 class Subscription(models.Model):
-    source = models.ForeignKey(User, verbose_name='Кто подписался', related_name='source_user_subscribe', on_delete=models.CASCADE)
-    target = models.ForeignKey(User, verbose_name='На кого подписался', related_name='target_user_subscribe', on_delete=models.CASCADE)
+    source = models.ForeignKey(User, verbose_name='Кто подписался',
+                               related_name='source_user_subscribe', on_delete=models.CASCADE)
+    target = models.ForeignKey(User, verbose_name='На кого подписался',
+                               related_name='target_user_subscribe', on_delete=models.CASCADE)
     start_date = UnixTimeStampField('Время подписки', auto_now_add=True)
     end_date = UnixTimeStampField('Время конца подписки')
-    
+
     def __str__(self):
         return f'{self.source}-{self.target}'
 
@@ -145,14 +151,14 @@ class Subscription(models.Model):
         verbose_name_plural = 'Подписки'
 
 
-    
-
 class Card(models.Model):
-    user = models.ForeignKey(User, related_name='user_card', on_delete=models.CASCADE,)
+    user = models.ForeignKey(
+        User, related_name='user_card', on_delete=models.CASCADE,)
     number = models.BigIntegerField(verbose_name='Номер карты')
     date_year = models.CharField(verbose_name='Месяц/год', max_length=5)
     cvc = models.CharField(verbose_name='CVC', max_length=3)
-    creator = models.BooleanField(verbose_name='Карта создателя', default=False)
+    creator = models.BooleanField(
+        verbose_name='Карта создателя', default=False)
 
     class Meta:
         verbose_name = 'Карта'
@@ -161,9 +167,12 @@ class Card(models.Model):
     def __str__(self):
         return f"{self.pk}-{self.user}"
 
+
 class Donation(models.Model):
-    sender = models.ForeignKey(User, related_name='paid_user', on_delete=models.DO_NOTHING)
-    reciever = models.ForeignKey(User, related_name='recieved_user', on_delete=models.DO_NOTHING)
+    sender = models.ForeignKey(
+        User, related_name='paid_user', on_delete=models.DO_NOTHING)
+    reciever = models.ForeignKey(
+        User, related_name='recieved_user', on_delete=models.DO_NOTHING)
     datetime = UnixTimeStampField('Время оплаты', auto_now_add=True)
     amount = models.FloatField(verbose_name='Сумма', null=True, default=0)
 
@@ -174,8 +183,10 @@ class Donation(models.Model):
     def __str__(self):
         return f"{self.pk}-{self.sender}"
 
+
 class Payment(models.Model):
-    card = models.ForeignKey(Card, verbose_name='Карта пополнения', related_name='card_payment', on_delete=models.DO_NOTHING)
+    card = models.ForeignKey(Card, verbose_name='Карта пополнения',
+                             related_name='card_payment', on_delete=models.DO_NOTHING)
     datetime = UnixTimeStampField(verbose_name='Время пополнения')
     amount = models.FloatField(verbose_name='Сумма пополнения')
 
@@ -186,10 +197,13 @@ class Payment(models.Model):
     def __str__(self):
         return f"{self.pk}-{self.card}"
 
+
 class PendingUser(models.Model):
-    user= models.ForeignKey(User, verbose_name='Ожидающие верификации', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, verbose_name='Ожидающие верификации', on_delete=models.CASCADE)
     photo = models.ImageField(verbose_name='Документы', upload_to='docs/')
-    verified = models.BooleanField(verbose_name='Верифицирован', null=True, blank=True)
+    verified = models.BooleanField(
+        verbose_name='Верифицирован', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Пользователь на верификацию'
@@ -198,8 +212,10 @@ class PendingUser(models.Model):
     def __str__(self):
         return f"{self.pk}-{self.card}"
 
+
 class UserOnline(models.Model):
-    user = models.CharField(primary_key=True, max_length=255, verbose_name='Юзернейм пользователя', blank=True)
+    user = models.CharField(primary_key=True, max_length=255,
+                            verbose_name='Юзернейм пользователя', blank=True)
     last_action = UnixTimeStampField(auto_now=True)
 
     class Meta:
@@ -215,5 +231,6 @@ def update_verification(sender: PendingUser, instance: PendingUser, created: boo
         if instance.verified:
             instance.user.verified = True
         instance.user.save()
+
 
 post_save.connect(update_verification, sender=PendingUser)

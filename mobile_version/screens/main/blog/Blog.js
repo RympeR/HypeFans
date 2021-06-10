@@ -43,18 +43,28 @@ export default function Screen(props) {
   let navigation = props.navigation
 
   let profile = GLOBAL.profile;
-  let blog = ApiBlog(profile);
-  let posts = blog.mainPageGet();
+  console.log(profile.token)
+  let blog = new ApiBlog(profile.token);
+  let posts = [];
+  let group = { username: '@hypefans', avatar: require('../../../assets/images/ava5.png'), first_name: 'HypeFans' }
+  blog.mainPageGet().then(
+    (result)=>{
+      console.log(result.data);
+      posts=result.data;
+      for (let index = 0; index < posts.length; index++) {
+        posts[index].group = { username: '@hypefans', avatar: require('../../../assets/images/ava5.png'), first_name: 'HypeFans' }
+      }
+      console.log(posts)
+    }
+    );
+  console.log('---------posts-------------')
+  console.log(posts)
   let [search, setSearch] = React.useState(false)
   let [blogModal, setBlogModal] = React.useState(false)
   let [post, setPost] = React.useState(null)
   let [item, setItem] = React.useState(0)
 
-  for (let index = 0; index < post.length; index++) {
-    post[index].group = { username: '@hypefans', avatar: require('../../../assets/images/ava5.png'), first_name: 'HypeFans' }
-  }
-
-  // let group = { username: '@hypefans', avatar: require('../../../assets/images/ava5.png'), first_name: 'HypeFans' }
+  
   // let posts = [
   //   {
   //     group: group, author: users[0], publication_date: '20 мин назад', description: 'Перчатки сняты, поскольку чемпион по боксу @TonyBellew присоединился к нам на HypeFans 🥊 Он предлагает возможность присоединиться, поскольку чемпион по боксу @TonyBellew присоединился к нам на HypeFans 🥊 Он предлагает возможность присоединиться.',
@@ -105,7 +115,7 @@ export default function Screen(props) {
           >
 
             <Image style={[s.photoViewAlso, s.pabsolute]}
-              source={user.photo} />
+              source={user.background_photo} />
 
             <View style={[s.flexRow]}>
               <View style={[s.autorView, s.flexRow, s.aCenter, s.ml30]}>
@@ -383,7 +393,7 @@ export default function Screen(props) {
                   onPress={() => { navigation.navigate('UserPage', { user: post.author }) }}
                 >
                   <ImageBackground style={[s.photoView, s.jCenter, s.mt15]}
-                    source={post.author.photo} >
+                    source={post.author.background_photo} >
 
                     <View style={[s.flexRow]}>
                       <View style={[s.autorView, s.flexRow, s.aCenter, s.mh15]}>
