@@ -11,6 +11,7 @@ export default class ProfileApi {
   constructor(token: string | null = null) {
     this.elAxios = axios.create({
       baseURL: 'https://hype-fans.com/',
+      // baseURL: "http://127.0.0.1:8000/",
       headers: {
         authorization: token ? `Token ${token}` : null
       },

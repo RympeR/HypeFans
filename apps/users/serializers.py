@@ -43,7 +43,7 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
 class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
 
     avatar = serializers.SerializerMethodField()
-
+    background_photo = serializers.SerializerMethodField()
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
@@ -52,7 +52,17 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             file_url = 'http://{domain}{path}'.format(
                 domain=host, path=path_file)
             return file_url
-        return None
+        return ''
+
+    def get_background_photo(self, user: User):
+        if user.background_photo and hasattr(user.background_photo, 'url'):
+            path_file = user.background_photo.url
+            request = self.context.get('request')
+            host = request.get_host()
+            file_url = 'http://{domain}{path}'.format(
+                domain=host, path=path_file)
+            return file_url
+        return ''
 
     class Meta:
         model = User
@@ -61,6 +71,7 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             'username',
             'avatar',
             'first_name',
+            'background_photo',
         )
 
 

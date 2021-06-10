@@ -39,14 +39,14 @@ export default function MainScreen(props) {
   let lang = props.lang
 
   let users = [
-    { nick: '@tonybellew', ava: require('../../assets/images/ava2.jpg'), name: 'Tony Bellew', photo: require('../../assets/images/photo1.png') },
-    { nick: '@desiree', ava: require('../../assets/images/ava3.png'), name: 'Desi', photo: require('../../assets/images/photo2.png') },
-    { nick: '@rebecca_aviatrix', ava: require('../../assets/images/ava4.png'), name: 'Rebecca_aviatrix', photo: require('../../assets/images/photo3.png') },
-    { nick: '@tiffany', ava: require('../../assets/images/ava6.png'), name: 'Tiffany 🍸', photo: require('../../assets/images/phototf.png') },
-    { nick: '@rubydaycooking', ava: require('../../assets/images/ava5a.png'), name: 'Ruby Day Cooking', photo: require('../../assets/images/photord.png') },
-    { nick: '@djdeelz', ava: require('../../assets/images/ava7.png'), name: 'DjDeelz', photo: require('../../assets/images/photo7.png') },
-    { nick: '@officialdanimal', ava: require('../../assets/images/ava8.png'), name: 'DANIMAL', photo: require('../../assets/images/photo4.png') },
-    { nick: '@rampage_jackson', ava: require('../../assets/images/ava9.png'), name: 'Rampage Jackson', photo: require('../../assets/images/photo5.png') },
+    { username: '@tonybellew', avatar: require('../../assets/images/ava2.jpg'), first_name: 'Tony Bellew', background_photo: require('../../assets/images/photo1.png') },
+    { username: '@desiree', avatar: require('../../assets/images/ava3.png'), first_name: 'Desi', background_photo: require('../../assets/images/photo2.png') },
+    { username: '@rebecca_aviatrix', avatar: require('../../assets/images/ava4.png'), first_name: 'Rebecca_aviatrix', background_photo: require('../../assets/images/photo3.png') },
+    { username: '@tiffany', avatar: require('../../assets/images/ava6.png'), first_name: 'Tiffany 🍸', background_photo: require('../../assets/images/phototf.png') },
+    { username: '@rubydaycooking', avatar: require('../../assets/images/ava5a.png'), first_name: 'Ruby Day Cooking', background_photo: require('../../assets/images/photord.png') },
+    { username: '@djdeelz', avatar: require('../../assets/images/ava7.png'), first_name: 'DjDeelz', background_photo: require('../../assets/images/photo7.png') },
+    { username: '@officialdanimal', avatar: require('../../assets/images/ava8.png'), first_name: 'DANIMAL', background_photo: require('../../assets/images/photo4.png') },
+    { username: '@rampage_jackson', avatar: require('../../assets/images/ava9.png'), first_name: 'Rampage Jackson', background_photo: require('../../assets/images/photo5.png') },
   ]
 
   let [tab, setTab] = React.useState(true)
