@@ -72,6 +72,8 @@ class PostListAPI(generics.GenericAPIView):
             data[ind]['payed'] = True
         return Response(data)
 
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 class PostRetrieveAPI(generics.RetrieveAPIView):
     queryset = Post.objects.all()
@@ -295,6 +297,8 @@ class MainUserPage(GenericAPIView):
             results[offset:limit+offset]
         )
 
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 class SubStories(GenericAPIView):
 
