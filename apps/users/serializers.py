@@ -130,6 +130,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'blocked_users',
             'email_notifications',
             'subscribtion_price',
+            'message_price',
             'push_notifications',
             'hide_online',
             'allow_comments',
