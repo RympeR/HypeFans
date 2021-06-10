@@ -93,6 +93,8 @@ class UserPartialSerializer(serializers.ModelSerializer):
     birthday_date = serializers.DateTimeField(required=False)
     post_amount = serializers.IntegerField(required=False)
     fans_amount = serializers.IntegerField(required=False)
+    subscribtion_price = serializers.IntegerField(required=False)
+    message_price = serializers.IntegerField(required=False)
     repheral_link = serializers.CharField(required=False)
     repheral_users = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), required=False, many=True)
@@ -156,6 +158,7 @@ class UserGetSerializer(serializers.ModelSerializer):
             'birthday_date',
             'location',
             'subscribtion_price',
+            'message_price',
             'post_amount',
             'fans_amount',
             'repheral_link',
