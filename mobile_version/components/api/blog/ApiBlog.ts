@@ -19,8 +19,8 @@ export default class ApiBlog {
 	public main_page: Array<MainPage>;
 	public user_posts: ShortPost[];
 
-	constructor(user: ApiProfile) {
-		this.api = new Api(user.token || null);
+	constructor(token: string) {
+		this.api = new Api(token || null);
 	}
 
 	private setToken(token: string): void {
