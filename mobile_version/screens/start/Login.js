@@ -15,7 +15,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-GLOBAL = require('../globals');
+GLOBAL = require('../../globals');
 const { width, height } = Dimensions.get("screen")
 
 import s from '../../styles/style'

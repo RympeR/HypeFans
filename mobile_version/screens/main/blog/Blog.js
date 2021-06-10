@@ -34,6 +34,7 @@ import SvgUri from "expo-svg-uri"
 import RnModal from 'react-native-modal';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { Video, AVPlaybackStatus } from 'expo-av';
+import { map } from 'lodash';
 
 export default function Screen(props) {
 
@@ -49,30 +50,33 @@ export default function Screen(props) {
   let [post, setPost] = React.useState(null)
   let [item, setItem] = React.useState(0)
 
+  for (let index = 0; index < post.length; index++) {
+    post[index].group = { username: '@hypefans', avatar: require('../../../assets/images/ava5.png'), first_name: 'HypeFans' }
+  }
 
-  let group = { username: '@hypefans', avatar: require('../../../assets/images/ava5.png'), first_name: 'HypeFans' }
-  let posts = [
-    {
-      group: group, author: users[0], publication_date: '20 мин назад', text: 'Перчатки сняты, поскольку чемпион по боксу @TonyBellew присоединился к нам на HypeFans 🥊 Он предлагает возможность присоединиться, поскольку чемпион по боксу @TonyBellew присоединился к нам на HypeFans 🥊 Он предлагает возможность присоединиться.',
-      likes_amount: 88, comments_amount: 21, video: require('../../../assets/images/preview1.png'),
-    },
-    {
-      group: group, author: users[1], publication_date: '5 часов назад', text: 'Присоединяйтесь к @desiree, когда она готовит один из своих любимых рецептов - вкусное куриное адобо! Подключайтесь к новым сериям когда она готовит один из своих любимых рецептов - вкусное куриное адобо!',
-      likes_amount: 160, comments_amount: 56, video: require('../../../assets/images/preview2.png'),
-    },
-    {
-      group: group, author: users[2], publication_date: '12 часов назад', text: 'Prepare for takeoff as @rebecca_aviatrix is flying you to higher altitudes on HypeFans ✈️ The pilot is taking you on her aviation journey where you can. Prepare for takeoff as @rebecca_aviatrix is flying you to higher altitudes on HypeFans ✈️ The pilot is taking you on her aviation journey where you can.',
-      likes_amount: 74, comments_amount: 36, video: require('../../../assets/images/preview3.png'),
-    },
-    {
-      group: group, author: users[6], publication_date: 'Вчера', text: 'Flip into action with pro skateboarder @officialdanimal 🤘 He’s here to wow you with his craziest skills and teach you how to freestyle it',
-      likes_amount: 154, comments_amount: 98, video: require('../../../assets/images/preview4.png'),
-    },
-    {
-      group: group, author: users[7], publication_date: 'Март, 21', text: 'Ya’ll ain’t ready for this! It’s @rampage_jackson 👊💥 It’s going to be a knockout as the former champ is inviting you to the Rampage show',
-      likes_amount: 140, comments_amount: 70, video: require('../../../assets/images/preview5.png'),
-    },
-  ]
+  // let group = { username: '@hypefans', avatar: require('../../../assets/images/ava5.png'), first_name: 'HypeFans' }
+  // let posts = [
+  //   {
+  //     group: group, author: users[0], publication_date: '20 мин назад', description: 'Перчатки сняты, поскольку чемпион по боксу @TonyBellew присоединился к нам на HypeFans 🥊 Он предлагает возможность присоединиться, поскольку чемпион по боксу @TonyBellew присоединился к нам на HypeFans 🥊 Он предлагает возможность присоединиться.',
+  //     likes_amount: 88, comments_amount: 21, video: require('../../../assets/images/preview1.png'),
+  //   },
+  //   {
+  //     group: group, author: users[1], publication_date: '5 часов назад', description: 'Присоединяйтесь к @desiree, когда она готовит один из своих любимых рецептов - вкусное куриное адобо! Подключайтесь к новым сериям когда она готовит один из своих любимых рецептов - вкусное куриное адобо!',
+  //     likes_amount: 160, comments_amount: 56, video: require('../../../assets/images/preview2.png'),
+  //   },
+  //   {
+  //     group: group, author: users[2], publication_date: '12 часов назад', description: 'Prepare for takeoff as @rebecca_aviatrix is flying you to higher altitudes on HypeFans ✈️ The pilot is taking you on her aviation journey where you can. Prepare for takeoff as @rebecca_aviatrix is flying you to higher altitudes on HypeFans ✈️ The pilot is taking you on her aviation journey where you can.',
+  //     likes_amount: 74, comments_amount: 36, video: require('../../../assets/images/preview3.png'),
+  //   },
+  //   {
+  //     group: group, author: users[6], publication_date: 'Вчера', description: 'Flip into action with pro skateboarder @officialdanimal 🤘 He’s here to wow you with his craziest skills and teach you how to freestyle it',
+  //     likes_amount: 154, comments_amount: 98, video: require('../../../assets/images/preview4.png'),
+  //   },
+  //   {
+  //     group: group, author: users[7], publication_date: 'Март, 21', description: 'Ya’ll ain’t ready for this! It’s @rampage_jackson 👊💥 It’s going to be a knockout as the former champ is inviting you to the Rampage show',
+  //     likes_amount: 140, comments_amount: 70, video: require('../../../assets/images/preview5.png'),
+  //   },
+  // ]
 
   // Carousel data
   let cData = []
@@ -359,7 +363,7 @@ export default function Screen(props) {
                     onTextLayout={({ nativeEvent: { lines } }) => {
                       setLines(lines.length)
                     }}
-                  >{post.text}</Text>
+                  >{post.description}</Text>
                   {
                     full
                       ?
