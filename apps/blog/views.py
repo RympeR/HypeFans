@@ -54,13 +54,13 @@ class PostListAPI(generics.GenericAPIView):
                     instance=page_user, context={'request': request}).data
                 data[ind]['user'] = user_data
                 if post.access_level == 1:
-                    data[ind]['payed'] = (
+                    data[ind]['post']['payed'] = (
                         True if PostBought.objects.filter(
                             post=post, user=user).exists() else False
                     )
                 else:
                     
-                    data[ind]['payed'] = (
+                    data[ind]['post']['payed'] = (
                         True if Subscription.objects.filter(
                             target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                     )
@@ -69,7 +69,7 @@ class PostListAPI(generics.GenericAPIView):
             user_data = UserShortRetrieveSeriliazer(
                     instance=page_user, context={'request': request}).data
             data[ind]['user'] = user_data
-            data[ind]['payed'] = True
+            data[ind]['post']['payed'] = True
         return Response(data)
 
     def get_serializer_context(self):
