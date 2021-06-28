@@ -1,10 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ISignUpData from '~/app/types/ISignUpData';
 import { LangContext } from '~/app/utils/LangProvider';
-import { getAuthScheme, getLastUrlPoint, NAV_LINKS } from '~/app/utils/utilities';
+import { getAuthScheme, NAV_LINKS } from '~/app/utils/utilities';
 import { ReactComponent as Facebook } from '../../../assets/images/facebook.svg';
 import { ReactComponent as Google } from '../../../assets/images/google.svg';
 import { ReactComponent as Instagram } from '../../../assets/images/instagram.svg';
@@ -15,12 +15,10 @@ const initialValues: ISignUpData = {
   password: ''
 };
 
-const SignUpForm = () => {
+const SignUpForm = ({ action }: { action: string }) => {
   const { currentLang } = useContext(LangContext);
 
-  const { pathname } = useLocation();
-
-  const signUpScheme = getAuthScheme(currentLang, getLastUrlPoint(pathname));
+  const signUpScheme = getAuthScheme(currentLang, action);
 
   const {
     register,

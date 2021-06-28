@@ -5,19 +5,37 @@
   border-radius: 16px 16px 0 0;
 
   &__story-thumbnail {
+    position: relative;
     margin: 0 0 0 24px;
+    // padding: 2px 0 0;
     cursor: pointer;
 
     @media (max-width: map-get($map: $media, $key: s)) {
       margin: 0 0 0 16px;
     }
   }
+
+  &__outline {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 91px;
+    height: 91px;
+
+    &_watched {
+      circle {
+        stroke: rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+
   &__avatar-wrapper {
     width: 83px;
     height: 83px;
     border-radius: 50%;
     overflow: hidden;
   }
+
   &__user-avatar {
     display: block;
     width: 100%;
@@ -38,7 +56,7 @@
   }
 
   &__modal {
-    display: none;
+    display: flex;
     position: fixed;
     left: 0;
     top: 0;
@@ -46,20 +64,53 @@
     height: 100%;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 6;
+    background: #1a1a1a;
 
-    &_active {
-      display: flex;
-    }
+    z-index: 6;
   }
 
-  &__story-content-img {
+  &__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
   }
+
+  &__send-message {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 21px 32px;
+    z-index: 1000;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      padding: 34px 16px;
+    }
+  }
+
+  &__text-input {
+    display: inline-block;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 32px;
+    padding: 17px 24px;
+    border: 1px solid #ffffff;
+    font-size: map-get($map: $font-size, $key: s);
+    color: rgba(255, 255, 255, 0.7);
+
+    &::placeholder {
+      font-size: map-get($map: $font-size, $key: s);
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  &__send-btn {
+    cursor: pointer;
+  }
+
   &__close-modal {
     position: absolute;
     right: 40px;
@@ -76,5 +127,9 @@
 
   @media (max-width: map-get($map: $media, $key: l)) {
     max-width: unset;
+  }
+
+  .swiper-slide {
+    padding: 4px 0 0;
   }
 }

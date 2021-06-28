@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ISignInData from '~/app/types/ISignInData';
 import { LangContext } from '~/app/utils/LangProvider';
 import { getAuthScheme, NAV_LINKS } from '~/app/utils/utilities';
@@ -14,12 +14,10 @@ const initialValues: ISignInData = {
   password: ''
 };
 
-const SignInForm = () => {
+const SignInForm = ({ action }: { action: string }) => {
   const { currentLang } = useContext(LangContext);
 
-  const { pathname } = useLocation();
-
-  const signInScheme = getAuthScheme(currentLang, pathname);
+  const signInScheme = getAuthScheme(currentLang, action);
 
   const {
     register,

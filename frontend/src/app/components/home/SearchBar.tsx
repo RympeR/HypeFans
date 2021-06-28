@@ -1,19 +1,21 @@
-import React, { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import React, { FormEvent, useContext } from 'react';
+import { useTextInput } from '~/app/utils/useTextInput';
 import ava1 from '../../../assets/images/ava1.png';
 import { ReactComponent as SearchIcon } from '../../../assets/images/search.svg';
 import { LangContext } from '../../utils/LangProvider';
 const SearchBar = () => {
   const { currentLang } = useContext(LangContext);
 
-  const [searchInput, setSearchInput] = useState<string>('');
+  const { value, onChangeHandler, clearInput } = useTextInput('');
 
   const searchSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
-    setSearchInput('');
-  };
+    //
+    //API request
+    //
 
-  const searchInputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
+    //Finally
+    clearInput();
   };
 
   return (
@@ -24,8 +26,8 @@ const SearchBar = () => {
           className="search-bar__input"
           type="text"
           placeholder={currentLang.urThought}
-          value={searchInput}
-          onChange={searchInputChangeHandler}
+          value={value}
+          onChange={onChangeHandler}
         />
       </div>
       <button className="search-bar__btn" type="submit">

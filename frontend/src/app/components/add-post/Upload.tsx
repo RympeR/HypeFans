@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FormEvent, MouseEvent, useContext, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
+import { useTextInput } from '~/app/utils/useTextInput';
 import { BREAKPOINTS, NAV_LINKS } from '~/app/utils/utilities';
 import { useViewport } from '~/app/utils/ViewportProvider';
 import { ReactComponent as BackIconMobile } from '../../../assets/images/arrow-left-mobile.svg';
@@ -13,7 +14,7 @@ const Upload = () => {
 
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
 
-  const [textValue, setTextValue] = useState('');
+  const { value, onChangeHandler, clearInput } = useTextInput('');
 
   const inputFileRef = useRef(null);
 
@@ -27,22 +28,19 @@ const Upload = () => {
     setUploadedFiles([...uploadedFiles, URL.createObjectURL(e.target.files[lastIndex])]);
   };
 
-  const onTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setTextValue(e.target.value);
-  };
-
   const deleteImg = (e: MouseEvent<HTMLOrSVGElement>, index: number) => {
     setUploadedFiles([...uploadedFiles.filter((file: any, i: number) => i !== index)]);
   };
 
   const uploadSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
+    //
+    //API request
+    //
 
     //Finally
     inputFileRef.current.value = '';
-
-    setTextValue('');
-
+    clearInput();
     setUploadedFiles([]);
   };
 
@@ -72,8 +70,8 @@ const Upload = () => {
         <textarea
           className="upload__textarea"
           placeholder={currentLang.shareMind}
-          value={textValue}
-          onChange={onTextChange}
+          value={value}
+          onChange={onChangeHandler}
         ></textarea>
 
         <div className="upload__img-list">
@@ -100,7 +98,7 @@ const Upload = () => {
       <div className="upload__bottom">
         <button
           className={
-            uploadedFiles.length || textValue ? 'upload__submit-btn upload__submit-btn_active' : 'upload__submit-btn'
+            uploadedFiles.length || value ? 'upload__submit-btn upload__submit-btn_active' : 'upload__submit-btn'
           }
           type="submit"
         >

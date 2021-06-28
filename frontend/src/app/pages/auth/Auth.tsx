@@ -14,7 +14,7 @@ const Auth = () => {
           <Logo className="auth__logo" />
           <h1 className="auth__logo-title">HypeFans</h1>
         </div>
-        {pathname === `/${NAV_LINKS.SIGNUP}` ? <SignUpForm /> : <SignInForm />}
+        {pathname === `/${NAV_LINKS.SIGNUP}` ? <SignUpForm action="signup" /> : <SignInForm action="signin" />}
       </div>
     </div>
   );

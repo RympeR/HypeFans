@@ -99,10 +99,8 @@ export const showVisibleText = (text: string, lengthOfVisibleText: number) => {
 };
 
 //Return validation scheme depending on provided auth method
-export const getAuthScheme = (currentLang: any, currentUrl: string) => {
-  const lastUrlPoint = getLastUrlPoint(currentUrl);
-
-  if (lastUrlPoint === NAV_LINKS.SIGNUP) {
+export const getAuthScheme = (currentLang: any, action: string) => {
+  if (action === 'signup') {
     return yup.object().shape({
       username: yup.string().min(4, currentLang.nameWarn),
       email: yup.string().email(currentLang.emailWarn),
@@ -114,4 +112,20 @@ export const getAuthScheme = (currentLang: any, currentUrl: string) => {
     username: yup.string().min(4, currentLang.nameWarn),
     password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
   });
+};
+
+//Debugging styles
+export const debugStyles = {
+  primary: 'color:lightblue;font-weight:bold',
+  secondary: 'color:orange;font-weight:bold'
+};
+
+//Find index in array by providing id of element
+export const findIndexById = (arr: any[], id: string) => {
+  return arr.findIndex((item) => item.id === id);
+};
+
+//Checks if story is watched
+export const isStoryWatched = (id: string) => {
+  return localStorage.getItem(`${id}`) === 'watched';
 };
