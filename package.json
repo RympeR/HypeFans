@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "axios": "^0.21.1",
+    "luxon": "^1.27.0",
+    "typescript-json-serializer": "^3.3.0"
+  }
+}
