@@ -1,30 +1,62 @@
 .stories {
   max-width: 636px;
   background: #fff;
-  padding: 24px 0 0 24px;
+  padding: 24px 0 0;
   border-radius: 16px 16px 0 0;
 
-  &__story-wrapper {
-    margin: 0 24px 0 0;
+  &__story-thumbnail {
+    position: relative;
+    margin: 0 0 0 24px;
+    // padding: 2px 0 0;
     cursor: pointer;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      margin: 0 0 0 16px;
+    }
   }
-  &__user-avatar {
+
+  &__outline {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 91px;
+    height: 91px;
+
+    &_watched {
+      circle {
+        stroke: rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+
+  &__avatar-wrapper {
     width: 83px;
     height: 83px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  &__user-avatar {
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: center;
-    border-radius: 50%;
-    border: 2px solid #fff;
   }
+
   &__user-login {
-    margin: 12px 0 0 0;
+    margin: 12px 0 0;
+    @media (max-width: map-get($map: $media, $key: s)) {
+      margin: 8px 0 0;
+    }
   }
 
   .swiper-slide {
     width: fit-content !important;
   }
+
   &__modal {
-    display: none;
+    display: flex;
     position: fixed;
     left: 0;
     top: 0;
@@ -32,23 +64,53 @@
     height: 100%;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.6);
+    background: #1a1a1a;
+
     z-index: 6;
+  }
 
-    // div {
-    //   div {
-    //     // display: block !important;
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
 
-    //     // div {
-    //     //   height: 100% !important;
-    //     // }
-    //   }
-    // }
+  &__send-message {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 21px 32px;
+    z-index: 1000;
 
-    &_active {
-      display: flex;
+    @media (max-width: map-get($map: $media, $key: s)) {
+      padding: 34px 16px;
     }
   }
+
+  &__text-input {
+    display: inline-block;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 32px;
+    padding: 17px 24px;
+    border: 1px solid #ffffff;
+    font-size: map-get($map: $font-size, $key: s);
+    color: rgba(255, 255, 255, 0.7);
+
+    &::placeholder {
+      font-size: map-get($map: $font-size, $key: s);
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  &__send-btn {
+    cursor: pointer;
+  }
+
   &__close-modal {
     position: absolute;
     right: 40px;
@@ -56,9 +118,18 @@
     font-size: 60px;
     color: #fff;
     cursor: pointer;
+    z-index: 1000;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      font-size: 40px;
+    }
   }
 
   @media (max-width: map-get($map: $media, $key: l)) {
     max-width: unset;
+  }
+
+  .swiper-slide {
+    padding: 4px 0 0;
   }
 }

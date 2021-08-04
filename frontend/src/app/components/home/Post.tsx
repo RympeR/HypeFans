@@ -1,17 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { LENTGH_OF_VISIBLE_CAPTION, showVisibleText } from '~/app/utils/utilities';
 import { ReactComponent as MenuDots } from '../../../assets/images/3dots.svg';
 import { ReactComponent as SaveIcon } from '../../../assets/images/bookmark.svg';
 import { ReactComponent as LikeIcon } from '../../../assets/images/heart.svg';
 import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
 import { ReactComponent as CommentIcon } from '../../../assets/images/message-circle.svg';
 import postImg from '../../../assets/images/post-image.jpg';
-import { LangContext } from '../../utils/LangContext';
+import { LangContext } from '../../utils/LangProvider';
 import UserBanner from './UserBanner';
 const Post = () => {
-  const chosenLang = useContext(LangContext);
+  const { currentLang } = useContext(LangContext);
 
-  const [wholeCaption, setWholeCaption] = useState<boolean>(true);
+  const [isWholeTextShowed, setIsWholeTextShowed] = useState<boolean>(true);
 
+  //Example Caption
   const caption = `
   Сняли перчатки, поскольку чемпион по боксу @TonyBellew присоединился к нам на HypeFans 🥊 Он предлагает
   возможность присоединиться к нему за пределами ринга. Вы можете отследить невиданные ранее кадры фитнеса и
@@ -19,11 +21,9 @@ const Post = () => {
   http://hypefans.com/tonybellew
   `;
 
-  const LENTGH_OF_VISIBLE_TEXT = 100;
-
   useEffect(() => {
     if (window.innerWidth <= 768) {
-      setWholeCaption(false);
+      setIsWholeTextShowed(false);
     }
   }, [window.innerWidth]);
 
@@ -43,19 +43,23 @@ const Post = () => {
         </div>
         <div className="post__top-right">
           <p className="post__time">
-            50 {chosenLang.timeAgo.minutes} {chosenLang.timeAgo.ago}
+            50 {currentLang.timeAgo.minutes} {currentLang.timeAgo.ago}
           </p>
 
-          <MenuDots className="post__menu-dots" />
+          <button className="post__menu-dots">
+            <MenuDots />
+          </button>
         </div>
       </div>
-      <p className="post__caption">{wholeCaption ? caption : caption.slice(0, LENTGH_OF_VISIBLE_TEXT) + '...'}</p>
+      <p className="post__caption">
+        {isWholeTextShowed ? caption : showVisibleText(caption, LENTGH_OF_VISIBLE_CAPTION)}
+      </p>
 
       <button
-        className={wholeCaption ? 'post__read-more-btn post__read-more-btn_hidden' : 'post__read-more-btn'}
-        onClick={() => setWholeCaption(true)}
+        className={isWholeTextShowed ? 'post__read-more-btn post__read-more-btn_hidden' : 'post__read-more-btn'}
+        onClick={() => setIsWholeTextShowed(true)}
       >
-        {chosenLang.readmore}
+        {currentLang.readmore}
       </button>
 
       <UserBanner />
@@ -65,19 +69,25 @@ const Post = () => {
       <div className="post__bottom">
         <div className="post__actions">
           <div className="post__actions-left">
-            <LikeIcon className="post__action-icon" />
+            <button className="post__action-btn">
+              <LikeIcon className="post__action-icon" />
+            </button>
 
-            <CommentIcon className="post__action-icon" />
+            <button className="post__action-btn">
+              <CommentIcon className="post__action-icon" />
+            </button>
 
-            <button className="post__donate-btn">{chosenLang.donut}</button>
+            <button className="post__donate-btn">{currentLang.donut}</button>
           </div>
-          <SaveIcon className="post__action-icon" />
+          <button className="post__action-btn">
+            <SaveIcon className="post__action-icon" />
+          </button>
         </div>
 
-        <p className="post__like-amount">154 {chosenLang.liks1}</p>
+        <p className="post__like-amount">154 {currentLang.liks1}</p>
 
         <p className="post__comment-amount">
-          {chosenLang.watch} 71 {chosenLang.comments1}
+          {currentLang.watch} 71 {currentLang.comments1}
         </p>
       </div>
     </article>

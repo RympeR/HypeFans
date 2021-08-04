@@ -3,7 +3,6 @@
   border-radius: 0 0 16px 16px;
   overflow: hidden;
   @media (max-width: map-get($map: $media, $key: l)) {
-    // margin: 0 auto;
     max-width: unset;
   }
 }
@@ -26,6 +25,7 @@
       display: flex;
       align-items: center;
     }
+
     &-right {
       display: flex;
       align-items: center;
@@ -46,16 +46,17 @@
   }
   &__brand {
     font-size: map-get($map: $font-size, $key: l);
-    color: $text-color;
+    color: $black;
 
     @media (max-width: map-get($map: $media, $key: s)) {
       font-size: map-get($map: $font-size, $key: s);
     }
   }
+
   &__brand-profile {
     display: inline-block;
     font-size: map-get($map: $font-size, $key: m);
-    color: rgba(0, 0, 0, 0.7);
+    color: $lightblack;
     margin: 4px 0 0;
 
     @media (max-width: map-get($map: $media, $key: s)) {
@@ -65,7 +66,7 @@
 
   &__time {
     margin: 0 18px 0 0;
-    color: rgba(0, 0, 0, 0.6);
+    color: $grey;
     font-size: map-get($map: $font-size, $key: s);
 
     @media (max-width: map-get($map: $media, $key: s)) {
@@ -81,11 +82,12 @@
     font-size: map-get($map: $font-size, $key: s);
     line-height: 150%;
     margin: 24px 0 16px;
-    color: $text-color;
+    color: $black;
     @media (max-width: map-get($map: $media, $key: s)) {
       margin: 16px 0 8px;
     }
   }
+
   &__read-more-btn {
     display: block;
     color: $orange;
@@ -110,12 +112,14 @@
       margin: 8px 0 0;
     }
   }
+
   &__bottom {
     margin: 16px 0 0;
     @media (max-width: map-get($map: $media, $key: s)) {
       margin: 8px 0 0;
     }
   }
+
   &__actions {
     display: flex;
     justify-content: space-between;
@@ -126,6 +130,13 @@
       align-items: center;
     }
   }
+
+  &__action-btn {
+    &:nth-of-type(2) {
+      margin: 0 8px;
+    }
+  }
+
   &__action-icon {
     width: 34px;
     height: 34px;
@@ -136,38 +147,38 @@
       @media (max-width: map-get($map: $media, $key: s)) {
         stroke-width: 1.6px;
       }
-
-      @media (max-width: map-get($map: $media, $key: s)) {
-        width: 24px;
-        height: 24px;
-      }
     }
-    &:nth-of-type(2) {
-      margin: 0 8px;
+
+    @media (max-width: map-get($map: $media, $key: s)) {
+      width: 24px;
+      height: 24px;
     }
   }
+
   &__donate-btn {
     font-weight: 700;
     font-size: map-get($map: $font-size, $key: m);
-    color: rgba(0, 0, 0, 0.6);
+    color: $grey;
     cursor: pointer;
 
     @media (max-width: map-get($map: $media, $key: s)) {
       font-size: map-get($map: $font-size, $key: s);
     }
   }
+
   &__like-amount {
     font-size: map-get($map: $font-size, $key: s);
     margin: 16px 0 0;
-    color: $text-color;
+    color: $black;
 
     @media (max-width: map-get($map: $media, $key: s)) {
       margin: 12px 0 0;
     }
   }
+
   &__comment-amount {
     font-size: map-get($map: $font-size, $key: s);
     margin: 8px 0 0;
-    color: rgba(0, 0, 0, 0.6);
+    color: $grey;
   }
 }

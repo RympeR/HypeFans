@@ -2,14 +2,13 @@
   position: fixed;
   right: 100px;
   top: 122px;
-  width: 100%;
   max-width: 376px;
   // background: #f8f1f0;
   z-index: 5;
 
   &__title {
     font-size: map-get($map: $font-size, $key: m);
-    color: $text-color;
+    color: $black;
     margin: 0 0 24px;
   }
 

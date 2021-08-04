@@ -3,32 +3,35 @@ import 'swiper/components/pagination/pagination.scss';
 import SwiperCore, { Autoplay, Pagination } from 'swiper/core';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.scss';
-import { LangContext } from '../../utils/LangContext';
-import { getComputedLeftPosition, getComputedWidth } from '../../utils/utilities';
+import { LangContext } from '../../utils/LangProvider';
+import { getComputedLeftPosition } from '../../utils/utilities';
 import UserBanner from './UserBanner';
 SwiperCore.use([Pagination, Autoplay]);
 
 const Aside = () => {
-  const chosenLang = useContext(LangContext);
+  const { currentLang } = useContext(LangContext);
 
   const [leftFixedPosition, setLeftFixedPosition] = useState<number>(0);
 
-  const [fixedWidth, setFixedWidth] = useState<number>(0);
-
-  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
-
-  window.addEventListener('resize', () => {
-    setWindowWidth(window.innerWidth);
-  });
+  const handleWindowResize = async () => {
+    const leftPosition = (await getComputedLeftPosition(47)) as number;
+    setLeftFixedPosition(leftPosition);
+  };
 
   useEffect(() => {
-    setLeftFixedPosition(getComputedLeftPosition(47));
-    setFixedWidth(getComputedWidth(47));
-  }, [windowWidth]);
+    const asyncHandle = async () => {
+      await handleWindowResize();
+      window.addEventListener('resize', handleWindowResize);
+    };
+
+    asyncHandle();
+
+    return () => window.removeEventListener('resize', handleWindowResize);
+  }, []);
 
   return (
-    <aside className="aside" style={{ left: leftFixedPosition, width: fixedWidth }}>
-      <p className="aside__title">{chosenLang.also}</p>
+    <aside className="aside" style={{ left: leftFixedPosition }}>
+      <p className="aside__title">{currentLang.also}</p>
 
       <Swiper pagination={true} spaceBetween={20} loop={true} autoplay={{ delay: 2000, disableOnInteraction: false }}>
         <SwiperSlide>

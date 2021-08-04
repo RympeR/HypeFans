@@ -2,7 +2,7 @@ import React from 'react';
 import Aside from '../components/home/Aside';
 import Post from '../components/home/Post';
 import SearchBar from '../components/home/SearchBar';
-import StoryBlock from '../components/home/StoryBlock';
+import StoryBlock from '../components/home/stories/StoryBlock';
 const Home = () => {
   return (
     <>
