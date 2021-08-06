@@ -1,0 +1,213 @@
+.notifications {
+  display: flex;
+  justify-content: space-between;
+
+  &__headingText {
+    //styleName: заголовки;
+    font-family: Factor A;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 26px;
+    letter-spacing: 0px;
+    text-align: left;
+  }
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $white;
+    border-top-left-radius: 16px;
+    padding: 23px 32px;
+    margin-bottom: 12px;
+    min-width: 350px;
+  }
+  &__settings {
+    margin-left: 24px;
+  }
+  &__back {
+    margin-right: 24px;
+  }
+  &__toggle-button {
+    position: relative;
+    display: inline-block;
+    width: 61px;
+    height: 31px;
+    margin: 0;
+    vertical-align: top;
+    background: #ffffff;
+    border: 1px solid #bbc1e1;
+    border-radius: 30px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    transition: 1s;
+    &:after {
+      content: '';
+      display: inline-block;
+      position: absolute;
+      top: 1.5px;
+      left: 1.5px;
+      width: 27px;
+      height: 27px;
+      background-color: #ff6644;
+      border-radius: 50%;
+
+      transform: translateX(0);
+    }
+    &:checked:after {
+      transform: translateX(calc(100% + 3px));
+      background-color: $white;
+    }
+    &:checked {
+      background: linear-gradient(125.88deg, #ff6644 -2.1%, #ff485c 100.96%, #ff1a6c 127.3%);
+    }
+  }
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    background-color: $white;
+    min-width: 350px;
+    min-height: 100vh;
+    border-bottom-left-radius: 16px;
+  }
+  &__listBlock {
+    display: flex;
+    padding: 24px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__listText {
+    font-family: Factor A;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0px;
+    text-align: left;
+    padding: 0px 24px;
+  }
+  &__longList {
+    display: flex;
+    padding: 16px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__sidebar a {
+    color: $black;
+  }
+  &__main a {
+    color: $black;
+  }
+  &__sidebarItem {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  &__sidebarItem p {
+    font-family: Factor A;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: left;
+  }
+
+  &__mainWrapper {
+    width: 100%;
+    margin-left: 12px;
+    min-height: 100vh;
+  }
+  &__mainHeader {
+    margin-bottom: 12px;
+    background-color: $white;
+    border-top-right-radius: 16px;
+  }
+
+  &__mainHeader p {
+    font-family: Factor A;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 26px;
+    letter-spacing: 0px;
+    text-align: left;
+    padding: 32px;
+  }
+
+  &__main {
+    background-color: $white;
+    padding-bottom: 26px;
+    border-bottom-right-radius: 16px;
+    min-height: 100vh;
+  }
+  &__mainItem {
+    padding: 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__userPhoto {
+    border-radius: 100%;
+    width: 80px;
+    height: 80px;
+  }
+  &__userInfo {
+    display: flex;
+  }
+  &__userInfo div {
+    margin-left: 8px;
+  }
+  &__userInfo h2 {
+    font-family: Factor A;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: left;
+    margin-top: 5px;
+  }
+  &__userInfo h3 {
+    font-family: Factor A;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: left;
+    margin-top: 5px;
+  }
+
+  &__userInfo h4 {
+    font-family: Factor A;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 15px;
+    letter-spacing: 0px;
+    text-align: left;
+    margin-top: 5px;
+  }
+
+  &__userInfo p {
+    font-family: Factor A;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 13px;
+    letter-spacing: 0px;
+    text-align: left;
+    margin-top: 5px;
+  }
+
+  &__postPhoto {
+    width: 90px;
+    height: 90px;
+    border-radius: 4px;
+  }
+}

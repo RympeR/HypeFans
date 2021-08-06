@@ -32,6 +32,10 @@ export const getLastUrlPoint = (url: string) => {
   return url.substring(url.lastIndexOf('/') + 1);
 };
 
+export const getMainUrlPoint = (url: string) => {
+  return url.split('/')[1];
+};
+
 //Password pattern for SIGNIN or SIGNUP
 // export const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 export const PASSWORD_PATTERN = /[A-Z]+[a-z]+[0-9]/;
