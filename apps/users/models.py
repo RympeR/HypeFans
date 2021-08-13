@@ -173,7 +173,7 @@ class Donation(models.Model):
         User, related_name='paid_user', on_delete=models.DO_NOTHING)
     reciever = models.ForeignKey(
         User, related_name='recieved_user', on_delete=models.DO_NOTHING)
-    date_time = UnixTimeStampField('Время оплаты', auto_now_add=True)
+    datetime = UnixTimeStampField('Время оплаты', auto_now_add=True)
     amount = models.FloatField(verbose_name='Сумма', null=True, default=0)
 
     class Meta:

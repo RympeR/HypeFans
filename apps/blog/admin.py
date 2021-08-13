@@ -83,7 +83,7 @@ class StoryAdmin(admin.ModelAdmin):
 @admin.register(WatchedStories)
 class WatchedStoriesAction(admin.ModelAdmin):
     list_display = (
-        'pk', 'source', 'target', 'like', 'watched', 'times_wathced'
+        'pk', 'source', 'target', 'like', 'watched', 'times_watched'
     )
     list_display_links = [
         'pk',
