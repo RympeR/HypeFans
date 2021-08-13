@@ -134,7 +134,7 @@ class WatchedStories(models.Model):
     )
     like = models.BooleanField('Лайкнул', default=False)
     watched = models.BooleanField('Просмотрел', default=True)
-    times_wathced = models.IntegerField(
+    times_watched = models.IntegerField(
         verbose_name='Сколько раз посмотрел', default=0)
     datetime = UnixTimeStampField(
         "Время действия", auto_now_add=True, null=True, blank=True)
