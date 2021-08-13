@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import CurrencyInput from 'react-currency-input-field';
 import 'react-phone-input-2/lib/style.css';
 import { Link, Route, useHistory } from 'react-router-dom';
 import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
@@ -264,6 +265,45 @@ const Notifications = () => {
         </div>
       );
     };
+    const PricesSettings = () => {
+      return (
+        <div className="notifications__main">
+          <Link to="/notifications/settings/prices/messages">
+            <NotificationSidebarItem text="Цена сообщения" />
+          </Link>
+          <Link to="/notifications/settings/prices/subscribes">
+            <NotificationSidebarItem text="Цена подписки" />
+          </Link>
+          <Link to="/notifications/settings/prices/fans">
+            <NotificationSidebarItem text="Для фанатов" />
+          </Link>
+        </div>
+      );
+    };
+    const MessagesPrice = () => {
+      return (
+        <div className="notifications__main">
+          <div className="notifications__pricesHeader">
+            <p>Пользователь сможет общаться с вами, только заплатив определенную сумму.</p>
+            <div className="notifications__free">
+              <h2>Бесплатно</h2>
+              <input type="checkbox" className="notifications__toggle-button"></input>
+            </div>
+          </div>
+          <div style={{ borderTop: '1px solid rgba(0, 0, 0, 0.2)' }}>
+            <p className="notifications__priceText">Цена за 1 месяц</p>
+            <CurrencyInput
+              className="notifications__input"
+              prefix="$"
+              name="input-name"
+              placeholder="$ Введите сумму..."
+              decimalsLimit={2}
+              onValueChange={(value, name) => console.log(value, name)}
+            />
+          </div>
+        </div>
+      );
+    };
     const DefaultMain = () => {
       return (
         <div className="notifications__main">
@@ -308,6 +348,7 @@ const Notifications = () => {
           <Route path="/notifications/settings/account/delete" render={() => <Text text="Удалить аккаунт" />} exact />
           <Route path="/notifications/settings/account/email" render={() => <Text text="Изменить Email" />} exact />
           <Route path="/notifications/settings/account/password" render={() => <Text text="Изменить пароль" />} exact />
+          <Route path="/notifications/settings/prices/messages" render={() => <Text text="Цена сообщения" />} exact />
           <Route path="/notifications/settings/account/nickname" render={() => <Text text="Изменить ник" />} exact />
           {/* Заголовок(конец)*/}
         </div>
@@ -320,6 +361,8 @@ const Notifications = () => {
         <Route path="/notifications/settings/confidentiality" component={ConfidentialitySettings} exact />
         <Route path="/notifications/settings/notifications/page" component={PageSettingsNotifications} exact />
         <Route path="/notifications" component={DefaultMain} exact />
+        <Route path="/notifications/settings/prices/messages" component={MessagesPrice} exact />
+        <Route path="/notifications/settings/prices" component={PricesSettings} exact />
         <Route path="/notifications/settings/account/password" component={PasswordSettings} exact />
         <Route path="/notifications/settings/account/phone" component={PhoneSettings} exact />
         <Route path="/notifications/settings/account/delete" component={DeleteAccount} exact />
