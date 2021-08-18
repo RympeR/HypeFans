@@ -23,7 +23,7 @@ export const blogAPI = {
     return instance
       .post<createPostActionRT>('/blog/create-post-action/', { like, comment, donation_amount, user, post })
       .then((response) => {
-        return response;
+        return response.data;
       });
   },
   createPostBought({ user, amount, post }: createPostBoughtRT) {

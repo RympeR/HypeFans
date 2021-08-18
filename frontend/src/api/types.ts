@@ -174,7 +174,7 @@ export type createPostActionRT = {
   donation_amount: number | null;
   user: number;
   post: number;
-  date_time: string | null | undefined;
+  date_time: null | undefined | string;
 };
 export type createPostBoughtRT = {
   id: number | null;
