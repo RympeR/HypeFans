@@ -1,3 +1,5 @@
+from apps.blog.models import PostBought
+from apps.blog.serializers import PostGetShortSerializers
 from datetime import datetime, timedelta
 
 from core.utils.default_responses import (api_accepted_202,
@@ -28,11 +30,34 @@ class UserRetrieveAPI(generics.RetrieveAPIView):
 class UserProfileRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserGetSerializer
-    permission_classes = permissions.AllowAny,
 
     def retrieve(self, request, username):
         user = User.objects.get(username=username)
-        return api_accepted_202(self.serializer_class(instance=user, context={'request': request}).data)
+        data_compare = request.GET.get('datetime', 0)
+        limit = request.GET.get('limit', 50)
+        offset = request.GET.get('offset', 0)
+        results = []
+        if data_compare == 0:
+            for post in user.user_post.filter(archived=False).order_by('-publication_date'):
+                post_data = PostGetShortSerializers(
+                    instance=post, context={'request': request}).data
+                res_dict = {}
+                res_dict['post'] = post_data
+                if post.access_level == 1:
+                    res_dict['post']['payed'] = (
+                        True if PostBought.objects.filter(
+                            post=post, user=user).exists() else False
+                    )
+                else:
+                    res_dict['post']['payed'] = (
+                        True if Subscription.objects.filter(
+                            target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
+                    )
+                results.append(res_dict)
+        return api_accepted_202({
+            **self.serializer_class(instance=user, context={'request': request}).data,
+            **{'posts': results[offset:limit+offset]}
+            })
 
     def get_serializer_context(self):
         return {'request': self.request}
@@ -46,6 +71,14 @@ class UserCardListAPI(generics.ListAPIView):
         return Card.objects.filter(
             user=user
         )
+
+
+class UserSettingsRetrieveAPI(generics.RetrieveAPIView):
+    serializer_class = SettingsSerializer
+    queryset = User.objects.all()
+
+    def get_object(self):
+        return self.request.user
 
 
 class UserCreateAPI(generics.GenericAPIView):

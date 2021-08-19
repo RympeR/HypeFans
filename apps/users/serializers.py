@@ -18,7 +18,9 @@ from .models import (
 class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
     end_date = TimestampField(required=False)
-    source = serializers.PrimaryKeyRelatedField(required=False, queryset=User.objects.all())
+    source = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+
     class Meta:
         model = Subscription
         fields = '__all__'
@@ -29,7 +31,8 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
         now = datetime.now()
         attrs['source'] = user
         attrs['start_date'] = now
-        attrs['end_date'] = (now + timedelta(days=user.subscribtion_duration)).timestamp()
+        attrs['end_date'] = (
+            now + timedelta(days=user.subscribtion_duration)).timestamp()
 
         if user.credit_amount >= attrs['target'].subscribtion_price:
             user.credit_amount -= attrs['target'].subscribtion_price
@@ -44,6 +47,7 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
 
     avatar = serializers.SerializerMethodField()
     background_photo = serializers.SerializerMethodField()
+
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
@@ -144,12 +148,36 @@ class UserPartialSerializer(serializers.ModelSerializer):
         )
 
 
+class SettingsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+            'pk',
+            'email_notifications',
+            'push_notifications',
+            'hide_online',
+            'allow_comments',
+            'show_post_amount',
+            'show_fans_amount',
+            'show_watermark',
+            'validated_email',
+            'validated_user',
+            'credit_amount',
+            'earned_credits_amount',
+        )
+
+
+class CustomProfileSerializer(serializers.ModelSerializer):
+    ...
+
+
 class UserGetSerializer(serializers.ModelSerializer):
     location = CountryField(country_dict=True)
     birthday_date = serializers.DateTimeField(required=False)
     avatar = serializers.SerializerMethodField()
     background_photo = serializers.SerializerMethodField()
-    
+
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
@@ -189,17 +217,6 @@ class UserGetSerializer(serializers.ModelSerializer):
             'repheral_link',
             'repheral_users',
             'blocked_users',
-            'email_notifications',
-            'push_notifications',
-            'hide_online',
-            'allow_comments',
-            'show_post_amount',
-            'show_fans_amount',
-            'show_watermark',
-            'validated_email',
-            'validated_user',
-            'credit_amount',
-            'earned_credits_amount',
         )
 
 

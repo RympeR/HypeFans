@@ -23,10 +23,12 @@ from .views import (
     CreateSubscriptioAPI,
     PaymentUserHistoryRetrieveAPI,
     UserProfileRetrieveAPI,
+    UserSettingsRetrieveAPI,
 )
 
 urlpatterns = [
     path('get-user/', UserRetrieveAPI.as_view()),
+    path('get-settings/', UserSettingsRetrieveAPI.as_view()),
     path('get-profile/<str:username>', UserProfileRetrieveAPI.as_view()),
     path('create-user/', UserCreateAPI.as_view()),
     path('update-delete-user/', UserAPI.as_view()),
