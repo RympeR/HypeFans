@@ -158,7 +158,7 @@ class StoryCreateAPI(generics.CreateAPIView):
         return {'request': self.request}
 
 
-class StoryAPI(generics.RetrieveDestroyAPIView):
+class StoryAPI(generics.DestroyAPIView):
     queryset = Story.objects.all()
     serializer_class = StoryGetSerializer
 

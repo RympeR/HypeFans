@@ -25,6 +25,19 @@ class UserRetrieveAPI(generics.RetrieveAPIView):
         return self.request.user
 
 
+class UserProfileRetrieveAPI(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserGetSerializer
+    permission_classes = permissions.AllowAny,
+
+    def retrieve(self, request, username):
+        user = User.objects.get(username=username)
+        return api_accepted_202(self.serializer_class(instance=user, context={'request': request}).data)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+
 class UserCardListAPI(generics.ListAPIView):
     serializer_class = CardGetSerializer
 
@@ -79,10 +92,11 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
+
 class CreateSubscriptioAPI(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = SubscriptionCreateSerializer
-    
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         try:
@@ -94,6 +108,7 @@ class CreateSubscriptioAPI(generics.CreateAPIView):
 
     def get_serializer_context(self):
         return {'request': self.request}
+
 
 class UserSubscription(GenericAPIView):
     queryset = User.objects.all()
@@ -141,6 +156,7 @@ class CardCreateAPI(generics.CreateAPIView):
     def get_serializer_context(self):
         return {'request': self.request}
 
+
 class CardAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Card.objects.all()
     serializer_class = CardCreationSerializer
@@ -166,6 +182,7 @@ class DonationCreateAPI(generics.CreateAPIView):
     def get_serializer_context(self):
         return {'request': self.request}
 
+
 class PaymentRetrieveAPI(generics.RetrieveAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentGetSerializer
@@ -177,6 +194,7 @@ class PaymentCreateAPI(generics.CreateAPIView):
 
     def get_serializer_context(self):
         return {'request': self.request}
+
 
 class PendingUserCreateAPI(generics.CreateAPIView):
     queryset = PendingUser.objects.all()
@@ -197,6 +215,7 @@ class UserOnlineCreateAPI(generics.CreateAPIView):
 
     def get_serializer_context(self):
         return {'request': self.request}
+
 
 class UserOnlineUpdateAPI(generics.UpdateAPIView):
     queryset = UserOnline.objects.all()
