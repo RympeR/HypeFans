@@ -55,7 +55,9 @@ const SignUpForm = ({ action }: { action: string }) => {
       <input type="password" className="auth__input" placeholder={currentLang.passDescr} {...register('password')} />
       <p className="auth__input-error">{errors.password?.message}</p>
 
-      <button className="auth__submit-btn">{currentLang.next}</button>
+      <button className="auth__submit-btn" onClick={() => onSubmit}>
+        {currentLang.next}
+      </button>
 
       <p className="auth__through">{currentLang.regThrough}</p>
 

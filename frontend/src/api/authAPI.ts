@@ -32,7 +32,7 @@ export const authAPI = {
   },
   login(email: string, password: string) {
     return instance
-      .post<{ auth_token: number }>('/auth/token/login/', {
+      .post('/auth/token/login/', {
         email,
         password
       })

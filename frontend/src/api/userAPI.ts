@@ -97,8 +97,8 @@ export const userAPI = {
       return response.data;
     });
   },
-  getUser() {
-    return instance.get<getUserRT>(`user/get-user/`).then((response) => {
+  getUser({ user }: userStringType) {
+    return instance.get<getUserRT>(`user/get-profile/${user}`).then((response) => {
       return response.data;
     });
   },

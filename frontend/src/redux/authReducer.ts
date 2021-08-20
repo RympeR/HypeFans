@@ -1,6 +1,8 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { authAPI } from '~/api/authAPI';
+import { userStringType } from './../api/types';
+import { userAPI } from './../api/userAPI';
 import { InferActionsTypes, RootState } from './redux';
 
 const initialState = {
@@ -16,7 +18,7 @@ const initialState = {
   message_price: null as number | null,
   post_amount: null as number | null,
   fans_amount: null as number | null,
-  repheral_link: null as number | null,
+  repheral_link: null as string | null,
   repheral_users: [] as Array<number>,
   blocked_users: [] as Array<number>,
   email_notifications: false,
@@ -64,7 +66,7 @@ const actions = {
     message_price: number | null,
     post_amount: number | null,
     fans_amount: number | null,
-    repheral_link: number | null,
+    repheral_link: string | null,
     repheral_user: Array<number>,
     blocked_user: Array<number>,
     email_notifications: boolean,
@@ -121,9 +123,10 @@ const actions = {
   }
 };
 
-export const getAuthUserData = (): Thunk => async (dispatch) => {
-  const meData = await authAPI.meGet();
-  if (meData.status) {
+export const getAuthUserData = ({ user }: userStringType): Thunk => async (dispatch) => {
+  const meData = await userAPI.getUser({ user });
+  debugger;
+  if (meData) {
     const {
       pk,
       email,
@@ -138,8 +141,8 @@ export const getAuthUserData = (): Thunk => async (dispatch) => {
       post_amount,
       fans_amount,
       repheral_link,
-      repheral_user,
-      blocked_user,
+      repheral_users,
+      blocked_users,
       email_notifications,
       push_notifications,
       hide_online,
@@ -151,7 +154,7 @@ export const getAuthUserData = (): Thunk => async (dispatch) => {
       validated_user,
       credit_amount,
       earned_credits_amount
-    } = meData.data;
+    } = meData;
     dispatch(
       actions.setAuthUserData(
         pk,
@@ -167,8 +170,8 @@ export const getAuthUserData = (): Thunk => async (dispatch) => {
         post_amount,
         fans_amount,
         repheral_link,
-        repheral_user,
-        blocked_user,
+        repheral_users,
+        blocked_users,
         email_notifications,
         push_notifications,
         hide_online,
@@ -183,19 +186,10 @@ export const getAuthUserData = (): Thunk => async (dispatch) => {
         true
       )
     );
+    debugger;
     dispatch(actions.isAuth());
   }
 };
-
-// export const login = (email: string, password: string, rememberMe: boolean): Thunk => async (dispatch) => {
-//   const response = await authAPI.login(email, password, rememberMe);
-//   if (response.data.resultCode === 0) {
-//     dispatch(getAuthUserData());
-//   } else if (response.data.resultCode !== 0) {
-//     const message = response.data.messages.length > 0 ? response.data.messages[0] : 'Some error';
-//     dispatch(stopSubmit('login', { _error: message }));
-//   }
-// };
 
 export const logout = (): Thunk => async (dispatch) => {
   const response = await authAPI.logout();
@@ -231,7 +225,13 @@ export const logout = (): Thunk => async (dispatch) => {
         false
       )
     );
-    dispatch(getAuthUserData());
+  }
+};
+
+export const login = ({ email, password }: { email: string; password: string }): Thunk => async (dispatch) => {
+  const response = await authAPI.login(email, password);
+  if (response) {
+    dispatch(getAuthUserData({ user: 'root' }));
   }
 };
 

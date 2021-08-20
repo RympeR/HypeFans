@@ -74,7 +74,6 @@ const authReducer = (state = initialState, action: AllActionsType): InitialState
 };
 const actions = {
   setMainPageData: (posts: any, recomendations: any, stories: any) => {
-    debugger;
     return {
       type: 'SET_MAIN_PAGE_DATA',
       payload: { posts, recomendations, stories }

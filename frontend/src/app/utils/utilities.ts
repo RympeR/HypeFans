@@ -108,13 +108,15 @@ export const getAuthScheme = (currentLang: any, action: string) => {
     return yup.object().shape({
       username: yup.string().min(4, currentLang.nameWarn),
       email: yup.string().email(currentLang.emailWarn),
-      password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
+      password: yup.string()
+      // password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
     });
   }
 
   return yup.object().shape({
     username: yup.string().min(4, currentLang.nameWarn),
-    password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
+    // password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
+    password: yup.string()
   });
 };
 

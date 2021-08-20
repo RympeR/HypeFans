@@ -63,7 +63,7 @@ export const getPayment = ({ id }: idType): Thunk => async (dispatch) => {
 };
 
 export const getUser = (): Thunk => async (dispatch) => {
-  await userAPI.getUser();
+  await userAPI.getUser({ user: 'root' });
 };
 
 export const onlineUserCreate = ({ user }: userStringType): Thunk => async (dispatch) => {
