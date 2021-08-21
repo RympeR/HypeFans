@@ -289,7 +289,7 @@ class MainUserPage(GenericAPIView):
                         results[offset:limit+offset]
                     )
         for user_sub in user.my_subscribes.all():
-            for post in user_sub.user_action_post.filter(post__archived=False, datetime__lte=data_compare).order_by('-publication_date'):
+            for post in user_sub.user_action_post.filter(post__archived=False, datetime__lte=data_compare).order_by('-post__publication_date'):
                 user_data = UserShortRetrieveSeriliazer(
                     instance=user_sub, context={'request': request}).data
                 post_data = PostGetShortSerializers(instance=post, context={'request': request}).data
