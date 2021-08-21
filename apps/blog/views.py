@@ -37,7 +37,7 @@ class PostBoughtCreateAPI(generics.CreateAPIView):
 
 
 class PostListAPI(generics.GenericAPIView):
-    serializer_class = PostGetShortSerializers  
+    serializer_class = PostGetShortSerializers
 
     def get(self, request, username):
         limit = request.GET.get('limit', 20)
@@ -47,7 +47,8 @@ class PostListAPI(generics.GenericAPIView):
         qs = Post.objects.filter(
             user=page_user
         )[offset:offset+limit]
-        data = [{'post':self.get_serializer(instance=post, context={'request': request}).data} for post in qs]
+        data = [{'post': self.get_serializer(
+            instance=post, context={'request': request}).data} for post in qs]
         if user != page_user:
             for ind, post in enumerate(qs):
                 user_data = UserShortRetrieveSeriliazer(
@@ -59,7 +60,7 @@ class PostListAPI(generics.GenericAPIView):
                             post=post, user=user).exists() else False
                     )
                 else:
-                    
+
                     data[ind]['post']['payed'] = (
                         True if Subscription.objects.filter(
                             target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
@@ -67,13 +68,14 @@ class PostListAPI(generics.GenericAPIView):
             return Response(data)
         for ind, post in enumerate(data):
             user_data = UserShortRetrieveSeriliazer(
-                    instance=page_user, context={'request': request}).data
+                instance=page_user, context={'request': request}).data
             data[ind]['user'] = user_data
             data[ind]['post']['payed'] = True
         return Response(data)
 
     def get_serializer_context(self):
         return {'request': self.request}
+
 
 class PostRetrieveAPI(generics.RetrieveAPIView):
     queryset = Post.objects.all()
@@ -110,7 +112,8 @@ class PostActionListAPI(generics.GenericAPIView):
         qs = PostAction.objects.filter(
             post=Post.objects.get(pk=pk)
         )[offset:offset+limit]
-        data = [self.get_serializer(instance=post, context={'request': request}) for post in qs]
+        data = [self.get_serializer(instance=post, context={
+                                    'request': request}) for post in qs]
         return Response(data)
 
 
@@ -125,7 +128,8 @@ class PostActionCreateAPI(generics.CreateAPIView):
         except AssertionError:
             return api_block_by_policy_451({"status": "not enought credits"})
         instance = self.perform_create(serializer)
-        instance_serializer = self.get_serializer(instance=instance, context={'request': request})
+        instance_serializer = self.get_serializer(
+            instance=instance, context={'request': request})
         return Response(serializer.data)
 
     def get_serializer_context(self):
@@ -138,6 +142,7 @@ class PostActionDeleteAPI(generics.DestroyAPIView):
 
     def get_serializer_context(self):
         return {'request': self.request}
+
 
 class StoryListAPI(generics.ListAPIView):
     queryset = Story.objects.all()
@@ -164,6 +169,7 @@ class StoryAPI(generics.DestroyAPIView):
 
     def get_serializer_context(self):
         return {'request': self.request}
+
 
 class WatchedStoriesRetrieveAPI(generics.RetrieveAPIView):
     queryset = WatchedStories.objects.all()
@@ -203,8 +209,10 @@ class UserNotifications(GenericAPIView):
             user=user,
         ).order_by('-datetime'):
             res_dict = {}
-            user_data = UserShortRetrieveSeriliazer(instance=comment.user, context={'request': request}).data
-            post_data = CommentRetrieveSerializer(instance=comment, context={'request': request}).data
+            user_data = UserShortRetrieveSeriliazer(
+                instance=comment.user, context={'request': request}).data
+            post_data = CommentRetrieveSerializer(
+                instance=comment, context={'request': request}).data
             res_dict['user'] = user_data
             res_dict['post'] = post_data
             res_dict['type'] = 'comment'
@@ -214,8 +222,10 @@ class UserNotifications(GenericAPIView):
             like=True
         ):
             res_dict = {}
-            user_data = UserShortRetrieveSeriliazer(instance=like.user, context={'request': request}).data
-            post_data = LikeRetrieveSerializer(instance=like,context={'request': request}).data
+            user_data = UserShortRetrieveSeriliazer(
+                instance=like.user, context={'request': request}).data
+            post_data = LikeRetrieveSerializer(
+                instance=like, context={'request': request}).data
             res_dict['user'] = user_data
             res_dict['post'] = post_data
             res_dict['type'] = 'like'
@@ -258,20 +268,28 @@ class UserNotifications(GenericAPIView):
 class MainUserPage(GenericAPIView):
 
     serializer_class = MainPageSerializer
-    queryset=Post.objects.all()
+    queryset = Post.objects.all()
 
     def get(self, request):
         user = request.user
         data_compare = request.GET.get('datetime', 0)
         limit = request.GET.get('limit', 50)
         offset = request.GET.get('offset', 0)
-        results = []
+        results = {
+            'reccomendations': [],
+            'posts': []
+        }
+        qs = User.objects.all().order_by('-fans_amount')[:10]
+        if qs.exists():
+            results['reccomendations'].append(
+                UserShortRetrieveSeriliazer(instance=qs, many=True, context={'request': request}).data)
         if data_compare == 0:
             for user_sub in user.my_subscribes.all():
                 for post in user_sub.user_post.filter(archived=False).order_by('-publication_date'):
                     user_data = UserShortRetrieveSeriliazer(
                         instance=user_sub, context={'request': request}).data
-                    post_data = PostGetShortSerializers(instance=post, context={'request': request}).data
+                    post_data = PostGetShortSerializers(
+                        instance=post, context={'request': request}).data
                     res_dict = {}
                     res_dict['user'] = user_data
                     res_dict['post'] = post_data
@@ -285,25 +303,33 @@ class MainUserPage(GenericAPIView):
                             True if Subscription.objects.filter(
                                 target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                         )
-                    results.append(res_dict)
+                    results['posts'].append(res_dict)
                     return Response(
-                        results[offset:limit+offset]
+                        {
+                            'reccomendations': results['reccomendations'],
+                            'posts': results['posts'][offset:limit+offset]
+                        }
                     )
         for user_sub in user.my_subscribes.all():
             for post in user_sub.user_action_post.filter(post__archived=False, datetime__lte=data_compare).order_by('-post__publication_date'):
                 user_data = UserShortRetrieveSeriliazer(
                     instance=user_sub, context={'request': request}).data
-                post_data = PostGetShortSerializers(instance=post, context={'request': request}).data
+                post_data = PostGetShortSerializers(
+                    instance=post, context={'request': request}).data
                 res_dict = {}
                 res_dict['user'] = user_data
                 res_dict['post'] = post_data
-                results.append(res_dict)
+                results['posts'].append(res_dict)
         return Response(
-            results[offset:limit+offset]
+            {
+                'reccomendations': results['reccomendations'],
+                'posts': results['posts'][offset:limit+offset]
+            }
         )
 
     def get_serializer_context(self):
         return {'request': self.request}
+
 
 class SubStories(GenericAPIView):
 
