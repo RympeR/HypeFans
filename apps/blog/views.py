@@ -279,7 +279,7 @@ class MainUserPage(GenericAPIView):
             'recommendations': [],
             'posts': []
         }
-        qs = User.objects.all().order_by('-fans_amount')[:10]
+        qs = User.objects.all().order_by('-fans_amount')[:9]
         if qs.exists():
             results['recommendations'].append(
                 UserShortRetrieveSeriliazer(instance=qs, many=True, context={'request': request}).data)
