@@ -276,12 +276,12 @@ class MainUserPage(GenericAPIView):
         limit = request.GET.get('limit', 50)
         offset = request.GET.get('offset', 0)
         results = {
-            'reccomendations': [],
+            'recommendations': [],
             'posts': []
         }
         qs = User.objects.all().order_by('-fans_amount')[:10]
         if qs.exists():
-            results['reccomendations'].append(
+            results['recommendations'].append(
                 UserShortRetrieveSeriliazer(instance=qs, many=True, context={'request': request}).data)
         if data_compare == 0:
             for user_sub in user.my_subscribes.all():
@@ -306,7 +306,7 @@ class MainUserPage(GenericAPIView):
                     results['posts'].append(res_dict)
                     return Response(
                         {
-                            'reccomendations': results['reccomendations'],
+                            'recommendations': results['recommendations'],
                             'posts': results['posts'][offset:limit+offset]
                         }
                     )
@@ -322,7 +322,7 @@ class MainUserPage(GenericAPIView):
                 results['posts'].append(res_dict)
         return Response(
             {
-                'reccomendations': results['reccomendations'],
+                'recommendations': results['recommendations'],
                 'posts': results['posts'][offset:limit+offset]
             }
         )
