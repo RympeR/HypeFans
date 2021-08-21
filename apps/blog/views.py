@@ -258,6 +258,7 @@ class UserNotifications(GenericAPIView):
 class MainUserPage(GenericAPIView):
 
     serializer_class = MainPageSerializer
+    queryset=Post.objects.all()
 
     def get(self, request):
         user = request.user
