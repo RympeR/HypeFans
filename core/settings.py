@@ -89,7 +89,12 @@ CHANNEL_LAYERS = {
 }
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/django_cache',
+    }
+}
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
