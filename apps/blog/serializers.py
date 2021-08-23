@@ -196,10 +196,10 @@ class StoryGetSerializer(serializers.ModelSerializer):
 
 
 class StoryShortSerializer(serializers.ModelSerializer):
-
+    user = UserShortRetrieveSeriliazer()
     class Meta:
         model = Story
-        fields = ('publication_date', 'reply_link', 'story')
+        fields = ('user', 'publication_date', 'reply_link', 'story')
 
 
 class StoryCreationSerializer(serializers.ModelSerializer):

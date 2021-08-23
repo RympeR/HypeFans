@@ -76,6 +76,7 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             'avatar',
             'first_name',
             'background_photo',
+            'subscribtion_price',
             'subscribtion_duration'
         )
 

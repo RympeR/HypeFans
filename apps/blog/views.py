@@ -277,7 +277,8 @@ class MainUserPage(GenericAPIView):
         offset = request.GET.get('offset', 0)
         results = {
             'recommendations': [],
-            'posts': []
+            'posts': [],
+            'stories': []
         }
         qs = User.objects.all().order_by('-fans_amount')[:9]
         if qs.exists():
@@ -304,14 +305,25 @@ class MainUserPage(GenericAPIView):
                                 target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                         )
                     results['posts'].append(res_dict)
-                    return Response(
-                        {
-                            'recommendations': results['recommendations'],
-                            'posts': results['posts'][offset:limit+offset]
-                        }
-                    )
+                for story in user_sub.user_story.filter(archived=False, publication_date__lte=data_compare).order_by('-publication_date'):
+                    user_data = UserShortRetrieveSeriliazer(
+                        instance=user_sub, context={'request': request}).data
+                    post_data = StoryShortSerializer(
+                        instance=story, context={'request': request}).data
+                    res_dict = {}
+                    res_dict['user'] = user_data
+                    res_dict['post'] = post_data
+                    results['posts'].append(res_dict)
+
+                return Response(
+                    {
+                        'recommendations': results['recommendations'],
+                        'posts': results['posts'][offset:limit+offset],
+                        'stoires': []
+                    }
+                )
         for user_sub in user.my_subscribes.all():
-            for post in user_sub.user_action_post.filter(post__archived=False, datetime__lte=data_compare).order_by('-post__publication_date'):
+            for post in user_sub.user_post.filter(archived=False, publication_date__lte=data_compare).order_by('-publication_date'):
                 user_data = UserShortRetrieveSeriliazer(
                     instance=user_sub, context={'request': request}).data
                 post_data = PostGetShortSerializers(
@@ -320,10 +332,22 @@ class MainUserPage(GenericAPIView):
                 res_dict['user'] = user_data
                 res_dict['post'] = post_data
                 results['posts'].append(res_dict)
+
+            for story in user_sub.user_story.filter(archived=False, publication_date__lte=data_compare).order_by('-publication_date'):
+                user_data = UserShortRetrieveSeriliazer(
+                    instance=user_sub, context={'request': request}).data
+                post_data = StoryShortSerializer(
+                    instance=story, context={'request': request}).data
+                res_dict = {}
+                res_dict['user'] = user_data
+                res_dict['post'] = post_data
+                results['posts'].append(res_dict)
+
         return Response(
             {
                 'recommendations': results['recommendations'],
-                'posts': results['posts'][offset:limit+offset]
+                'posts': results['posts'][offset:limit+offset],
+                'stoires': []
             }
         )
 
