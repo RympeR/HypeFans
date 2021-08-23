@@ -318,13 +318,13 @@ class MainUserPage(GenericAPIView):
                     res_dict['post'] = post_data
                     results['posts'].append(res_dict)
 
-                return Response(
-                    {
-                        'recommendations': results['recommendations'],
-                        'posts': results['posts'][offset:limit+offset],
-                        'stoires': []
-                    }
-                )
+            return Response(
+                {
+                    'recommendations': results['recommendations'],
+                    'posts': results['posts'][offset:limit+offset],
+                    'stoires': []
+                }
+            )
         for user_sub in user.my_subscribes.all():
             for post in user_sub.user_post.filter(archived=False, publication_date__lte=data_compare).order_by('-publication_date'):
                 user_data = UserShortRetrieveSeriliazer(
