@@ -1,17 +1,18 @@
+import logging
 from datetime import datetime, timedelta
-from django.db.models.expressions import Exists
 
-from rest_framework import generics, permissions, renderers
+from core.utils.default_responses import api_block_by_policy_451
+from django.db.models.expressions import Exists
+from rest_framework import generics, permissions, renderers, status
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 
-from apps.users.serializers import UserShortRetrieveSeriliazer
 from apps.users.models import Subscription, User
-from core.utils.default_responses import api_block_by_policy_451
+from apps.users.serializers import UserShortRetrieveSeriliazer
+
 from .models import *
 from .serializers import *
-from rest_framework import status
 
 
 class AttachmentCreateAPI(generics.CreateAPIView):
@@ -286,7 +287,9 @@ class MainUserPage(GenericAPIView):
                 UserShortRetrieveSeriliazer(instance=qs, many=True, context={'request': request}).data)
         if data_compare == 0:
             for user_sub in user.my_subscribes.all():
+                logging.warning(f'user subs main page -> {user_sub}')
                 for post in user_sub.user_post.filter(archived=False).order_by('-publication_date'):
+                    logging.warning(f'user subs POST main page -> {post}')
                     user_data = UserShortRetrieveSeriliazer(
                         instance=user_sub, context={'request': request}).data
                     post_data = PostGetShortSerializers(
