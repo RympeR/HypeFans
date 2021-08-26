@@ -1,5 +1,8 @@
+import Cookies from 'js-cookie';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { getUserData } from '~/redux/authReducer';
 import '../styles/app.scss';
 import { Main, Navbar } from './layout';
 import AddPost from './pages/AddPost';
@@ -12,6 +15,10 @@ import { LangProvider } from './utils/LangProvider';
 import { ViewportProvider } from './utils/ViewportProvider';
 
 const App = () => {
+  const dispatch = useDispatch();
+  if (Cookies.get('token') !== null) {
+    dispatch(getUserData());
+  }
   return (
     <>
       <BrowserRouter>

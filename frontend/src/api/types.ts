@@ -212,8 +212,7 @@ export type deleteStoryRT = {
   archived: boolean | null;
 };
 export type getMainPageRT = {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: Array<{ user: getUserRT; post: PostType }>;
+  posts: Array<PostType> | null;
+  stories: Array<unknown>;
+  recommendations: Array<any>;
 };

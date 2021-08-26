@@ -1,12 +1,22 @@
 import axios from 'axios';
-
-export let token: string | null;
+import Cookies from 'js-cookie';
 
 export const instance = axios.create({
   baseURL: 'https://hype-fans.com/',
-  headers: {
-    authorization: token ? `token ${token}` : null
-  },
   xsrfCookieName: 'csrftoken',
   xsrfHeaderName: 'x-csrftoken'
 });
+
+export const setAuthToken = (token: string) => {
+  if (token) {
+    instance.defaults.headers.common['authorization'] = `token ${token}`;
+  }
+};
+
+(function () {
+  if (Cookies.get('token') === null) {
+    axios.defaults.headers.common.Authorization = null;
+  } else {
+    setAuthToken(Cookies.get('token'));
+  }
+})();

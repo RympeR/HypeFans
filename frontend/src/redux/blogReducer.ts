@@ -14,41 +14,41 @@ import { InferActionsTypes, RootState } from './redux';
 const initialState = {
   posts: [
     {
-      id: null as number | null,
-      favourites: [
-        {
-          pk: null as number | null,
-          username: null as string | null,
-          avatar: null as string | null,
-          first_name: null as string | null,
-          background_photo: null as string | null
-        }
-      ],
-      user: [
-        {
-          pk: null as number | null,
-          username: null as string | null,
-          avatar: null as string | null,
-          first_name: null as string | null,
-          background_photo: null as string | null
-        }
-      ],
-      publication_date: null as string | null,
-      comments: null as string | null,
-      likes_amount: null as string | null,
-      comments_amount: null as string | null,
-      favourites_amount: null as string | null,
-      attachments: [{ id: null as number | null, _file: null as string | null, file_type: null as number | null }],
-      reply_link: null as string | null,
-      name: null as string,
-      description: null as string | null,
-      price_to_watch: null as number | null,
-      enabled_comments: false,
-      access_level: null as number | null,
-      archived: false
+      user: {
+        pk: null as number | null,
+        username: null as string | null,
+        avatar: null as string | null,
+        first_name: null as string | null,
+        background_photo: null as string | null
+      },
+      post: {
+        pk: null as number | null,
+        favourites: [
+          {
+            pk: null as number | null,
+            username: null as string | null,
+            avatar: null as string | null,
+            first_name: null as string | null,
+            background_photo: null as string | null
+          }
+        ],
+        publication_date: null as string | null,
+        comments: null as string | null,
+        likes_amount: null as string | null,
+        comments_amount: null as string | null,
+        favourites_amount: null as string | null,
+        attachments: [{ id: null as number | null, _file: null as string | null, file_type: null as number | null }],
+        reply_link: null as string | null,
+        name: null as string,
+        description: null as string | null,
+        price_to_watch: null as number | null,
+        enabled_comments: false,
+        access_level: null as number | null,
+        archived: false
+      }
     }
   ],
-  recomendations: [
+  recommendations: [
     {
       pk: null as number | null,
       username: null as string | null,
@@ -58,7 +58,8 @@ const initialState = {
       subscription_price: null as number | null
     }
   ],
-  stories: [{}]
+  stories: [{}],
+  isLoading: false
 };
 
 const authReducer = (state = initialState, action: AllActionsType): InitialStateType => {
@@ -68,27 +69,50 @@ const authReducer = (state = initialState, action: AllActionsType): InitialState
         ...state,
         ...action.payload
       };
+    case 'IS_LOADING':
+      return {
+        ...state,
+        isLoading: true
+      };
+    case 'ISNT_LOADING':
+      return {
+        ...state,
+        isLoading: false
+      };
     default:
       return state;
   }
 };
 const actions = {
-  setMainPageData: (posts: any, recomendations: any, stories: any) => {
+  setMainPageData: (posts: any, recommendations: any, stories: any) => {
     return {
       type: 'SET_MAIN_PAGE_DATA',
-      payload: { posts, recomendations, stories }
+      payload: { posts, recommendations, stories }
+    } as const;
+  },
+  isLoading: () => {
+    return {
+      type: 'IS_LOADING'
+    } as const;
+  },
+  isntLoading: () => {
+    return {
+      type: 'ISNT_LOADING'
     } as const;
   }
 };
 
 export const getMainPageData = (): Thunk => async (dispatch) => {
+  dispatch(actions.isLoading());
   const mainPageData = await blogAPI.getMainPage({ limit: 10, offset: 10 });
   if (mainPageData.data) {
-    const posts = mainPageData.data.results.map((item) => item.post);
-    const recomendations = mainPageData.data.results.map((item) => item.user);
+    const posts = mainPageData.data.posts;
+    const recommendations = mainPageData.data.recommendations[0];
     const stories = [{}];
-    dispatch(actions.setMainPageData(posts, recomendations, stories));
+    dispatch(actions.setMainPageData(posts, recommendations, stories));
+    dispatch(actions.isntLoading());
   }
+  dispatch(actions.isntLoading());
 };
 
 export const createPostAction = ({ like, comment, donation_amount, user, post }: createPostActionRT): Thunk => async (

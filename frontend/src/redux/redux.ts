@@ -1,9 +1,11 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import authReducer from './authReducer';
+import blogReducer from './blogReducer';
 
 const reducers = combineReducers({
-  auth: authReducer
+  auth: authReducer,
+  blog: blogReducer
 });
 
 type rootReducer = typeof reducers;

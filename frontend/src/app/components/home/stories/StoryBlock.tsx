@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.scss';
 import IStory from '~/app/types/IStory';
@@ -110,9 +111,11 @@ const StoryBlock = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-        {isModalOpened ? (
-          <StoryModal stories={stories} currentIdOfStory={currentIdOfStory} setIsModalOpened={setIsModalOpened} />
-        ) : null}
+        <Modal show={isModalOpened} onHide={() => setIsModalOpened(false)} centered fullscreen={true}>
+          <Modal.Body className="notifications__modal">
+            <StoryModal stories={stories} currentIdOfStory={currentIdOfStory} setIsModalOpened={setIsModalOpened} />
+          </Modal.Body>
+        </Modal>
       </div>
     </>
   );

@@ -1,4 +1,5 @@
-import { instance } from './api';
+import Cookies from 'js-cookie';
+import { instance, setAuthToken } from './api';
 
 export let token: number | null;
 export const authAPI = {
@@ -40,8 +41,9 @@ export const authAPI = {
         if (response.status !== 200) {
           console.log('login error');
         }
-        token = response.data.auth_token;
-        return token;
+        setAuthToken(response.data.auth_token);
+        Cookies.set('token', response.data.auth_token);
+        return response.data.auth_token;
       });
   },
   logout() {

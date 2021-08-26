@@ -125,7 +125,6 @@ const actions = {
 
 export const getAuthUserData = ({ user }: userStringType): Thunk => async (dispatch) => {
   const meData = await userAPI.getUser({ user });
-  debugger;
   if (meData) {
     const {
       pk,
@@ -186,7 +185,6 @@ export const getAuthUserData = ({ user }: userStringType): Thunk => async (dispa
         true
       )
     );
-    debugger;
     dispatch(actions.isAuth());
   }
 };
@@ -233,6 +231,10 @@ export const login = ({ email, password }: { email: string; password: string }):
   if (response) {
     dispatch(getAuthUserData({ user: 'root' }));
   }
+};
+
+export const getUserData = (): Thunk => async (dispatch) => {
+  dispatch(getAuthUserData({ user: 'root' }));
 };
 
 //  Types
