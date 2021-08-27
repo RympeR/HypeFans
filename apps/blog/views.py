@@ -66,7 +66,21 @@ class PostListAPI(generics.GenericAPIView):
                         True if Subscription.objects.filter(
                             target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                     )
-            return Response(data)
+                postActionQuerySet = PostAction.objects.filter(post=post, user=user)
+                if postActionQuerySet.exists():
+                    for action in postActionQuerySet:
+                        if action.like:
+                            data['post']['liked'] = True
+                            break
+                    else:
+                        data['post']['liked'] = False
+                else:
+                    data['post']['liked'] = False
+                if user in post.favourites:
+                    data['post']['favourite'] = True
+                else:
+                    data['post']['favourite'] = False
+                        
         for ind, post in enumerate(data):
             user_data = UserShortRetrieveSeriliazer(
                 instance=page_user, context={'request': request}).data
@@ -307,6 +321,21 @@ class MainUserPage(GenericAPIView):
                             True if Subscription.objects.filter(
                                 target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                         )
+                    postActionQuerySet = PostAction.objects.filter(post=post, user=user)
+                    if postActionQuerySet.exists():
+                        for action in postActionQuerySet:
+                            if action.like:
+                                res_dict['post']['liked'] = True
+                                break
+                        else:
+                            res_dict['post']['liked'] = False
+                    else:
+                        res_dict['post']['liked'] = False
+                    if user in post.favourites:
+                        res_dict['post']['favourite'] = True
+                    else:
+                        res_dict['post']['favourite'] = False
+
                     results['posts'].append(res_dict)
                 for story in user_sub.user_story.filter(archived=False, publication_date__lte=data_compare).order_by('-publication_date'):
                     user_data = UserShortRetrieveSeriliazer(
