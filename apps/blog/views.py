@@ -76,7 +76,7 @@ class PostListAPI(generics.GenericAPIView):
                         data['post']['liked'] = False
                 else:
                     data['post']['liked'] = False
-                if user in post.favourites:
+                if user in post.favourites.all():
                     data['post']['favourite'] = True
                 else:
                     data['post']['favourite'] = False
@@ -331,7 +331,7 @@ class MainUserPage(GenericAPIView):
                             res_dict['post']['liked'] = False
                     else:
                         res_dict['post']['liked'] = False
-                    if user in post.favourites:
+                    if user in post.favourites.all():
                         res_dict['post']['favourite'] = True
                     else:
                         res_dict['post']['favourite'] = False
