@@ -263,7 +263,7 @@ class UserNotifications(GenericAPIView):
                 instance=subscription.source, context={'request': request}).data
             res_dict = {}
             subscription_data = {
-                'amount': subscription.amount,
+                'amount': user.subscribtion_price,
                 'start_date': subscription.start_date,
                 'end_date': subscription.end_date
             }
