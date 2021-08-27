@@ -277,7 +277,6 @@ class UserNotifications(GenericAPIView):
             *donations_result,
             *subscriptions_result,
         ]
-        result = list(set(result))
         return Response(result[offset:offset+limit])
 
 
