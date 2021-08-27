@@ -222,7 +222,7 @@ class UserNotifications(GenericAPIView):
         for comment in PostAction.objects.filter(
             comment__isnull=False,
             user=user,
-        ).order_by('-datetime'):
+        ).order_by('-datetime').distinct():
             res_dict = {}
             user_data = UserShortRetrieveSeriliazer(
                 instance=comment.user, context={'request': request}).data
@@ -235,7 +235,7 @@ class UserNotifications(GenericAPIView):
         for like in PostAction.objects.filter(
             user=user,
             like=True
-        ):
+        ).distinct():
             res_dict = {}
             user_data = UserShortRetrieveSeriliazer(
                 instance=like.user, context={'request': request}).data
@@ -245,7 +245,7 @@ class UserNotifications(GenericAPIView):
             res_dict['post'] = post_data
             res_dict['type'] = 'like'
             likes_result.append(res_dict)
-        for donation in user.recieved_user.all().order_by('-datetime'):
+        for donation in user.recieved_user.all().order_by('-datetime').distinct():
             user_data = UserShortRetrieveSeriliazer(
                 instance=donation.sender, context={'request': request}).data
             res_dict = {}
@@ -258,7 +258,7 @@ class UserNotifications(GenericAPIView):
             res_dict['type'] = 'donation'
             donations_result.append(res_dict)
 
-        for subscription in user.target_user_subscribe.all().order_by('-start_date'):
+        for subscription in user.target_user_subscribe.all().order_by('-start_date').distinct():
             user_data = UserShortRetrieveSeriliazer(
                 instance=subscription.source, context={'request': request}).data
             res_dict = {}
