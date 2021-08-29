@@ -251,7 +251,7 @@ class LikeRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostAction
-        fields = ('like', 'comment', 'datetime')
+        fields = ('post', 'like', 'comment', 'datetime')
 
 
 class MainPageSerializer(serializers.Serializer):

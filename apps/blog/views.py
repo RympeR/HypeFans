@@ -66,7 +66,21 @@ class PostListAPI(generics.GenericAPIView):
                         True if Subscription.objects.filter(
                             target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                     )
-            return Response(data)
+                postActionQuerySet = PostAction.objects.filter(post=post, user=user)
+                if postActionQuerySet.exists():
+                    for action in postActionQuerySet:
+                        if action.like:
+                            data['post']['liked'] = True
+                            break
+                    else:
+                        data['post']['liked'] = False
+                else:
+                    data['post']['liked'] = False
+                if user in post.favourites.all():
+                    data['post']['favourite'] = True
+                else:
+                    data['post']['favourite'] = False
+                        
         for ind, post in enumerate(data):
             user_data = UserShortRetrieveSeriliazer(
                 instance=page_user, context={'request': request}).data
@@ -208,7 +222,7 @@ class UserNotifications(GenericAPIView):
         for comment in PostAction.objects.filter(
             comment__isnull=False,
             user=user,
-        ).order_by('-datetime'):
+        ).order_by('-datetime').distinct():
             res_dict = {}
             user_data = UserShortRetrieveSeriliazer(
                 instance=comment.user, context={'request': request}).data
@@ -221,7 +235,7 @@ class UserNotifications(GenericAPIView):
         for like in PostAction.objects.filter(
             user=user,
             like=True
-        ):
+        ).distinct():
             res_dict = {}
             user_data = UserShortRetrieveSeriliazer(
                 instance=like.user, context={'request': request}).data
@@ -231,7 +245,7 @@ class UserNotifications(GenericAPIView):
             res_dict['post'] = post_data
             res_dict['type'] = 'like'
             likes_result.append(res_dict)
-        for donation in user.recieved_user.all().order_by('-datetime'):
+        for donation in user.recieved_user.all().order_by('-datetime').distinct():
             user_data = UserShortRetrieveSeriliazer(
                 instance=donation.sender, context={'request': request}).data
             res_dict = {}
@@ -244,12 +258,12 @@ class UserNotifications(GenericAPIView):
             res_dict['type'] = 'donation'
             donations_result.append(res_dict)
 
-        for subscription in user.target_user_subscribe.all().order_by('-start_date'):
+        for subscription in user.target_user_subscribe.all().order_by('-start_date').distinct():
             user_data = UserShortRetrieveSeriliazer(
                 instance=subscription.source, context={'request': request}).data
             res_dict = {}
             subscription_data = {
-                'amount': subscription.amount,
+                'amount': user.subscribtion_price,
                 'start_date': subscription.start_date,
                 'end_date': subscription.end_date
             }
@@ -307,6 +321,21 @@ class MainUserPage(GenericAPIView):
                             True if Subscription.objects.filter(
                                 target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                         )
+                    postActionQuerySet = PostAction.objects.filter(post=post, user=user)
+                    if postActionQuerySet.exists():
+                        for action in postActionQuerySet:
+                            if action.like:
+                                res_dict['post']['liked'] = True
+                                break
+                        else:
+                            res_dict['post']['liked'] = False
+                    else:
+                        res_dict['post']['liked'] = False
+                    if user in post.favourites.all():
+                        res_dict['post']['favourite'] = True
+                    else:
+                        res_dict['post']['favourite'] = False
+
                     results['posts'].append(res_dict)
                 for story in user_sub.user_story.filter(archived=False, publication_date__lte=data_compare).order_by('-publication_date'):
                     user_data = UserShortRetrieveSeriliazer(
