@@ -255,7 +255,7 @@ class UserNotifications(GenericAPIView):
             }
             res_dict['user'] = user_data
             res_dict['subscription'] = subscription_data
-            res_dict['type'] = 'subsrciption'
+            res_dict['type'] = 'subscription'
             subscriptions_result.append(res_dict)
         result = [
             *comments_result,
