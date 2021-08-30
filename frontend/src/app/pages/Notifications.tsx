@@ -377,7 +377,9 @@ const Notifications = () => {
               return <Notification key={`notification ${i}`} item={item} />;
             })
           ) : (
-            <div style={{ padding: '15px' }}>Нет уведомлений</div>
+            <div style={{ fontSize: '25px', fontWeight: 'bold', textAlign: 'center', marginTop: '70px' }}>
+              Нет уведомлений
+            </div>
           )}
         </div>
       );
