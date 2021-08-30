@@ -62,7 +62,7 @@ const initialState = {
   isLoading: false
 };
 
-const authReducer = (state = initialState, action: AllActionsType): InitialStateType => {
+const blogReducer = (state = initialState, action: AllActionsType): InitialStateType => {
   switch (action.type) {
     case 'SET_MAIN_PAGE_DATA':
       return {
@@ -238,4 +238,4 @@ export type InitialStateType = typeof initialState;
 
 type Thunk = ThunkAction<Promise<void>, RootState, unknown, AllActionsType>;
 
-export default authReducer;
+export default blogReducer;

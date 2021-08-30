@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import CurrencyInput from 'react-currency-input-field';
 import 'react-phone-input-2/lib/style.css';
@@ -6,7 +6,10 @@ import { Link, Route, useHistory } from 'react-router-dom';
 import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
 import { ReactComponent as SettingsIcon } from '../../assets/images/settings.svg';
 import { Notification } from './notifications/Notification';
-import { NotificationSidebarItem } from './notifications/NotificationSidebarItem';
+import { NotificationSidebarFilterItem, NotificationSidebarItem } from './notifications/NotificationSidebarItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '~/redux/redux';
+import { getNotifications } from '~/redux/notificationsReducer';
 
 type NotificationsPropsType = {
   settingsVisible: boolean;
@@ -14,8 +17,21 @@ type NotificationsPropsType = {
 };
 
 const Notifications = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
+  const notifications = useSelector((state: RootState) => state.notifications.notifications);
   const [settingsVisible, setSettingsVisible] = useState<boolean>(false);
+  const isLoading = useSelector((state: RootState) => state.notifications.isLoading);
+  const [filteredNotifications, setFilteredNotifications] = useState(notifications);
+  useEffect(() => {
+    dispatch(getNotifications());
+  }, []);
+  useEffect(() => {
+    setFilteredNotifications(notifications);
+  }, [notifications]);
+  if (isLoading) {
+    return <div>Загрузка...</div>;
+  }
   const Text = ({ text }: { text: string }) => {
     return <p>{text}</p>;
   };
@@ -26,10 +42,47 @@ const Notifications = () => {
     const DefaultSidebar = () => {
       return (
         <div className="notifications__sidebar">
-          <NotificationSidebarItem text="Все" />
-          <NotificationSidebarItem text="Комментарии" />
-          <NotificationSidebarItem text="Лайки" />
-          <NotificationSidebarItem text="Подписки" />
+          <NotificationSidebarFilterItem text="Все" filter={() => setFilteredNotifications(notifications)} />
+          <NotificationSidebarFilterItem
+            text="Комментарии"
+            filter={() =>
+              setFilteredNotifications(
+                notifications.filter((item) => {
+                  return item.type === 'comment';
+                })
+              )
+            }
+          />
+          <NotificationSidebarFilterItem
+            text="Лайки"
+            filter={() =>
+              setFilteredNotifications(
+                notifications.filter((item) => {
+                  return item.type === 'like';
+                })
+              )
+            }
+          />
+          <NotificationSidebarFilterItem
+            text="Подписки"
+            filter={() =>
+              setFilteredNotifications(
+                notifications.filter((item) => {
+                  return item.type === 'subsrciption';
+                })
+              )
+            }
+          />
+          <NotificationSidebarFilterItem
+            text="Донаты"
+            filter={() =>
+              setFilteredNotifications(
+                notifications.filter((item) => {
+                  return item.type === 'donation';
+                })
+              )
+            }
+          />
         </div>
       );
     };
@@ -78,7 +131,13 @@ const Notifications = () => {
       </div>
     );
   };
-  const NotificationsMain = ({ settingsVisible }: { settingsVisible: boolean }) => {
+  const NotificationsMain = ({
+    settingsVisible,
+    setFilteredNotifications
+  }: {
+    settingsVisible: boolean;
+    setFilteredNotifications: any;
+  }) => {
     const PushSettingsNotifications = () => {
       return (
         <div className="notifications__main">
@@ -307,10 +366,13 @@ const Notifications = () => {
     const DefaultMain = () => {
       return (
         <div className="notifications__main">
-          <Notification />
-          <Notification />
-          <Notification />
-          <Notification />
+          {filteredNotifications.length > 0 ? (
+            filteredNotifications.map((item, i) => {
+              return <Notification key={`notification ${i}`} item={item} />;
+            })
+          ) : (
+            <div>Нет уведомлений</div>
+          )}
         </div>
       );
     };
@@ -376,7 +438,7 @@ const Notifications = () => {
     <div className="notifications">
       {/* Сайдбар и блок с информацией */}
       <NotificationsSidebar settingsVisible={settingsVisible} setSettingsVisible={setSettingsVisible} />
-      <NotificationsMain settingsVisible={settingsVisible} />
+      <NotificationsMain settingsVisible={settingsVisible} setFilteredNotifications={setFilteredNotifications} />
     </div>
   );
 };
