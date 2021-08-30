@@ -8,7 +8,6 @@ export const instance = axios.create({
 });
 
 export const setAuthToken = (token: string) => {
-  debugger;
   if (token) {
     instance.defaults.headers.common['authorization'] = `token ${token}`;
   }

@@ -30,7 +30,6 @@ const SignUpForm = ({ action }: { action: string }) => {
   });
 
   const onSubmit = (data: ISignUpData) => {
-    console.log(data);
     reset(initialValues);
   };
 

@@ -9,12 +9,3 @@ export const NotificationSidebarItem = ({ text }: { text: string }) => {
     </div>
   );
 };
-
-export const NotificationSidebarFilterItem = ({ text, filter }: { text: string; filter: () => void | null }) => {
-  return (
-    <div className="notifications__sidebarItem" onClick={() => filter()}>
-      <p>{text}</p>
-      <ArrowRightIcon />
-    </div>
-  );
-};

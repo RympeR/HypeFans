@@ -10,6 +10,7 @@ import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
 import { ReactComponent as CommentIcon } from '../../../assets/images/message-circle.svg';
 import { LangContext } from '../../utils/LangProvider';
 import UserBanner from './UserBanner';
+
 const Post = ({
   post
 }: {
@@ -24,7 +25,6 @@ const Post = ({
     };
   };
 }) => {
-  debugger;
   const user_id = useSelector((state: RootState) => state.auth.pk);
   const { currentLang } = useContext(LangContext);
 

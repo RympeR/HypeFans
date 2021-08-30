@@ -1,7 +1,6 @@
 import React from 'react';
 
 export const Notification = ({ item }: any) => {
-  console.log(item);
   const getTitle = (type: string) => {
     switch (type) {
       case 'like':
@@ -10,7 +9,7 @@ export const Notification = ({ item }: any) => {
         return 'Оставил(а) комментарий';
       case 'donation':
         return `Задонатил(а) ${item.donation.amount} $`;
-      case 'subsrciption':
+      case 'subscription':
         return (
           <>
             подписался(лась) на ваш <br></br>профиль!
@@ -29,8 +28,11 @@ export const Notification = ({ item }: any) => {
           <p>2 часа назад</p>
         </div>
       </div>
-      {item.type !== 'donation' && item.type !== 'subsrciption' ? (
+      {item.type !== 'donation' && item.type !== 'subscription' ? (
         <img src={item?.post?.post?.attachments[0]?._file} alt="postPhoto" className="notifications__postPhoto"></img>
+      ) : null}
+      {item.type === 'subscription' ? (
+        <div className="notifications__donationAmount">{item.subscription.amount} месяца</div>
       ) : null}
     </div>
   );

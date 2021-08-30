@@ -251,6 +251,7 @@
     border-radius: 100%;
     width: 80px;
     height: 80px;
+    border: 2px solid grey;
   }
 
   &__userInfo {
@@ -349,6 +350,7 @@
     width: 90px;
     height: 90px;
     border-radius: 4px;
+    border: 2px solid grey;
   }
 
   &__modal {
@@ -374,4 +376,13 @@
     letter-spacing: 0px;
     text-align: center;
   }
+
+  &__donationAmount {
+    border-radius: 32px;
+    background-color: #FB5734;
+    color: #fff;
+    padding: 5px;
+    margin-bottom: 50px;
+  }
 }
+

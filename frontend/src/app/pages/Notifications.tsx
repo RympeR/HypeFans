@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import CurrencyInput from 'react-currency-input-field';
 import 'react-phone-input-2/lib/style.css';
-import { Link, Route, useHistory } from 'react-router-dom';
+import { Link, Route, useHistory, useLocation } from 'react-router-dom';
 import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
 import { ReactComponent as SettingsIcon } from '../../assets/images/settings.svg';
 import { Notification } from './notifications/Notification';
-import { NotificationSidebarFilterItem, NotificationSidebarItem } from './notifications/NotificationSidebarItem';
+import { NotificationSidebarItem } from './notifications/NotificationSidebarItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '~/redux/redux';
 import { getNotifications } from '~/redux/notificationsReducer';
@@ -19,16 +19,14 @@ type NotificationsPropsType = {
 const Notifications = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { pathname } = useLocation();
+  console.log(pathname);
   const notifications = useSelector((state: RootState) => state.notifications.notifications);
   const [settingsVisible, setSettingsVisible] = useState<boolean>(false);
   const isLoading = useSelector((state: RootState) => state.notifications.isLoading);
-  const [filteredNotifications, setFilteredNotifications] = useState(notifications);
   useEffect(() => {
     dispatch(getNotifications());
   }, []);
-  useEffect(() => {
-    setFilteredNotifications(notifications);
-  }, [notifications]);
   if (isLoading) {
     return <div>Загрузка...</div>;
   }
@@ -37,71 +35,73 @@ const Notifications = () => {
   };
 
   const NotificationsSidebar = ({ settingsVisible, setSettingsVisible }: NotificationsPropsType) => {
+    const selectedColor = '#edebeb';
     const SettingsButton = () => <SettingsIcon />;
     const BackButton = () => <BackIcon onClick={history.goBack} />;
     const DefaultSidebar = () => {
       return (
         <div className="notifications__sidebar">
-          <NotificationSidebarFilterItem text="Все" filter={() => setFilteredNotifications(notifications)} />
-          <NotificationSidebarFilterItem
-            text="Комментарии"
-            filter={() =>
-              setFilteredNotifications(
-                notifications.filter((item) => {
-                  return item.type === 'comment';
-                })
-              )
-            }
-          />
-          <NotificationSidebarFilterItem
-            text="Лайки"
-            filter={() =>
-              setFilteredNotifications(
-                notifications.filter((item) => {
-                  return item.type === 'like';
-                })
-              )
-            }
-          />
-          <NotificationSidebarFilterItem
-            text="Подписки"
-            filter={() =>
-              setFilteredNotifications(
-                notifications.filter((item) => {
-                  return item.type === 'subsrciption';
-                })
-              )
-            }
-          />
-          <NotificationSidebarFilterItem
-            text="Донаты"
-            filter={() =>
-              setFilteredNotifications(
-                notifications.filter((item) => {
-                  return item.type === 'donation';
-                })
-              )
-            }
-          />
+          <Link to="/notifications" style={pathname === '/notifications' ? { background: selectedColor } : {}}>
+            <NotificationSidebarItem text="Все" />
+          </Link>
+          <Link
+            to="/notifications/comments"
+            style={pathname === '/notifications/comments' ? { background: selectedColor } : {}}
+          >
+            <NotificationSidebarItem text="Комментарии" />
+          </Link>
+          <Link
+            to="/notifications/likes"
+            style={pathname === '/notifications/likes' ? { background: selectedColor } : {}}
+          >
+            <NotificationSidebarItem text="Лайки" />
+          </Link>
+          <Link
+            to="/notifications/subscriptions"
+            style={pathname === '/notifications/subscriptions' ? { background: selectedColor } : {}}
+          >
+            <NotificationSidebarItem text="Подписки" />
+          </Link>
+          <Link
+            to="/notifications/donations"
+            style={pathname === '/notifications/donations' ? { background: selectedColor } : {}}
+          >
+            <NotificationSidebarItem text="Донаты" />
+          </Link>
         </div>
       );
     };
     const SettingsSidebar = () => {
       return (
         <div className="notifications__sidebar">
-          <Link to="/notifications/settings/profile">
+          <Link
+            to="/notifications/settings/profile"
+            style={pathname === '/notifications/settings/profile' ? { background: selectedColor } : {}}
+          >
             <NotificationSidebarItem text="Профиль" />
           </Link>
-          <Link to="/notifications/settings/account">
+          <Link
+            to="/notifications/settings/account"
+            style={pathname === '/notifications/settings/account' ? { background: selectedColor } : {}}
+          >
             <NotificationSidebarItem text="Аккаунт" />
           </Link>
-          <Link to="/notifications/settings/confidentiality">
+          <Link
+            to="/notifications/settings/confidentiality"
+            style={pathname === '/notifications/settings/confidentiality' ? { background: selectedColor } : {}}
+          >
             <NotificationSidebarItem text="Конфеденциальность" />
           </Link>
-          <Link to="/notifications/settings/prices">
+          <Link
+            to="/notifications/settings/prices"
+            style={pathname === '/notifications/settings/prices' ? { background: selectedColor } : {}}
+          >
             <NotificationSidebarItem text="Цены" />
           </Link>
-          <Link to="/notifications/settings/notifications">
+          <Link
+            to="/notifications/settings/notifications"
+            style={pathname === '/notifications/settings/notifications' ? { background: selectedColor } : {}}
+          >
             <NotificationSidebarItem text="Уведомления" />
           </Link>
         </div>
@@ -117,27 +117,33 @@ const Notifications = () => {
 
           <p className="notifications__headingText">
             <Route path="/notifications" render={() => <Text text="Уведомления" />} exact />
+            <Route path="/notifications/subscriptions" render={() => <Text text="Уведомления" />} exact />
+            <Route path="/notifications/likes" render={() => <Text text="Уведомления" />} exact />
+            <Route path="/notifications/comments" render={() => <Text text="Уведомления" />} exact />
+            <Route path="/notifications/donations" render={() => <Text text="Уведомления" />} exact />
             <Route path="/notifications/settings" render={() => <Text text="Настройки" />} />
           </p>
           <div className="notifications__settings">
             <Link to="/notifications/settings/notifications">
               <Route path="/notifications" component={SettingsButton} exact />
+              <Route path="/notifications/subscriptions" component={SettingsButton} exact />
+              <Route path="/notifications/likes" component={SettingsButton} exact />
+              <Route path="/notifications/comments" component={SettingsButton} exact />
+              <Route path="/notifications/donations" component={SettingsButton} exact />
             </Link>
           </div>
         </div>
         {/* Кнопки в сайдбаре в зависимости от роута */}
         <Route path="/notifications/" component={DefaultSidebar} exact />
+        <Route path="/notifications/comments" component={DefaultSidebar} exact />
+        <Route path="/notifications/subscriptions" component={DefaultSidebar} exact />
+        <Route path="/notifications/likes" component={DefaultSidebar} exact />
+        <Route path="/notifications/donations" component={DefaultSidebar} exact />
         <Route path="/notifications/settings" component={SettingsSidebar} />
       </div>
     );
   };
-  const NotificationsMain = ({
-    settingsVisible,
-    setFilteredNotifications
-  }: {
-    settingsVisible: boolean;
-    setFilteredNotifications: any;
-  }) => {
+  const NotificationsMain = () => {
     const PushSettingsNotifications = () => {
       return (
         <div className="notifications__main">
@@ -363,15 +369,15 @@ const Notifications = () => {
         </div>
       );
     };
-    const DefaultMain = () => {
+    const DefaultMain = ({ notifications }: { notifications: Array<any> }) => {
       return (
         <div className="notifications__main">
-          {filteredNotifications.length > 0 ? (
-            filteredNotifications.map((item, i) => {
+          {notifications.length > 0 ? (
+            notifications.map((item, i) => {
               return <Notification key={`notification ${i}`} item={item} />;
             })
           ) : (
-            <div>Нет уведомлений</div>
+            <div style={{ padding: '15px' }}>Нет уведомлений</div>
           )}
         </div>
       );
@@ -380,7 +386,11 @@ const Notifications = () => {
       <div className="notifications__mainWrapper">
         <div className="notifications__mainHeader">
           {/* Заголовок*/}
-          <Route path="/notifications" render={() => <Text text="Уведомления" />} exact />
+          <Route path="/notifications" render={() => <Text text="Все" />} exact />
+          <Route path="/notifications/donations" render={() => <Text text="Донаты" />} exact />
+          <Route path="/notifications/subscriptions" render={() => <Text text="Подписки" />} exact />
+          <Route path="/notifications/likes" render={() => <Text text="Лайки" />} exact />
+          <Route path="/notifications/comments" render={() => <Text text="Комментарии" />} exact />
           <Route path="/notifications/settings/profile" render={() => <Text text="Профиль" />} exact />
           <Route path="/notifications/settings/account" render={() => <Text text="Аккаунт" />} exact />
           <Route
@@ -422,7 +432,27 @@ const Notifications = () => {
         <Route path="/notifications/settings/account/nickname" component={NicknameSettings} exact />
         <Route path="/notifications/settings/confidentiality" component={ConfidentialitySettings} exact />
         <Route path="/notifications/settings/notifications/page" component={PageSettingsNotifications} exact />
-        <Route path="/notifications" component={DefaultMain} exact />
+        <Route path="/notifications" render={() => <DefaultMain notifications={notifications} />} exact />
+        <Route
+          path="/notifications/subscriptions"
+          render={() => <DefaultMain notifications={notifications.filter((item) => item.type === 'subscription')} />}
+          exact
+        />
+        <Route
+          path="/notifications/likes"
+          render={() => <DefaultMain notifications={notifications.filter((item) => item.type === 'like')} />}
+          exact
+        />
+        <Route
+          path="/notifications/comments"
+          render={() => <DefaultMain notifications={notifications.filter((item) => item.type === 'comment')} />}
+          exact
+        />
+        <Route
+          path="/notifications/donations"
+          render={() => <DefaultMain notifications={notifications.filter((item) => item.type === 'donation')} />}
+          exact
+        />
         <Route path="/notifications/settings/prices/messages" component={MessagesPrice} exact />
         <Route path="/notifications/settings/prices" component={PricesSettings} exact />
         <Route path="/notifications/settings/account/password" component={PasswordSettings} exact />
@@ -438,7 +468,7 @@ const Notifications = () => {
     <div className="notifications">
       {/* Сайдбар и блок с информацией */}
       <NotificationsSidebar settingsVisible={settingsVisible} setSettingsVisible={setSettingsVisible} />
-      <NotificationsMain settingsVisible={settingsVisible} setFilteredNotifications={setFilteredNotifications} />
+      <NotificationsMain />
     </div>
   );
 };
