@@ -24,6 +24,7 @@
     "axios": "^0.21.1",
     "bootstrap": "5.0.2",
     "cookies": "^0.8.0",
+    "formik": "^2.2.9",
     "i18next": "^19.8.9",
     "inversify-hooks": "^2.1.6",
     "joi": "^17.4.0",

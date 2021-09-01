@@ -11,6 +11,7 @@ import Chat from './pages/Chat';
 import Home from './pages/Home';
 import Notifications from './pages/Notifications';
 import Profile from './pages/Profile';
+import { Settings } from './pages/settings/Settings';
 import { LangProvider } from './utils/LangProvider';
 import { ViewportProvider } from './utils/ViewportProvider';
 
@@ -34,6 +35,7 @@ const App = () => {
                 <Route path="/add" component={AddPost} />
                 <Route path="/chat" component={Chat} />
                 <Route path="/profile" component={Profile} />
+                <Route path="/settings" component={Settings} />
               </Main>
             </Switch>
           </LangProvider>

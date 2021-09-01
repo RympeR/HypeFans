@@ -74,7 +74,7 @@ const Post = ({
 
       <UserBanner profile={post.user} />
 
-      <img className="post__img" src={post.post.attachments[0]._file} alt="picture" />
+      <img className="post__img" src={post.post.attachments[0]._file} alt="postImg" />
 
       <div className="post__bottom">
         <div className="post__actions">

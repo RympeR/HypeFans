@@ -48,6 +48,8 @@ export type createSubscriptionRT = {
   target: number;
 };
 
+export type settingsValType = { values: any; submit: () => void };
+
 export type createUserT = {
   id: number | string | null | undefined;
   email: string | null;
