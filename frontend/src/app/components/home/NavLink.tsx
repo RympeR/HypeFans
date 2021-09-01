@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useLocation } from 'react-router';
-import { getLastUrlPoint } from '~/app/utils/utilities';
+import { Link } from 'react-router-dom';
+import { getMainUrlPoint } from '~/app/utils/utilities';
 
 interface NavLinkProps {
   children: ReactNode;
@@ -10,11 +11,11 @@ interface NavLinkProps {
 const NavLink = ({ children, toPath }: NavLinkProps) => {
   const location = useLocation();
 
-  const lastUrl = getLastUrlPoint(location.pathname);
+  const lastUrl = getMainUrlPoint(location.pathname);
   return (
-    <a className={`nav__icon ${lastUrl === toPath ? 'nav__icon_active' : ''}`} href={`/${toPath}`} id={toPath}>
+    <Link className={`nav__icon ${lastUrl === toPath ? 'nav__icon_active' : ''}`} to={`/${toPath}`} id={toPath}>
       {children}
-    </a>
+    </Link>
   );
 };
 

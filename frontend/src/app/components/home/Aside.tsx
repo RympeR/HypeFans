@@ -8,7 +8,7 @@ import { getComputedLeftPosition } from '../../utils/utilities';
 import UserBanner from './UserBanner';
 SwiperCore.use([Pagination, Autoplay]);
 
-const Aside = () => {
+const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
   const { currentLang } = useContext(LangContext);
 
   const [leftFixedPosition, setLeftFixedPosition] = useState<number>(0);
@@ -29,34 +29,30 @@ const Aside = () => {
     return () => window.removeEventListener('resize', handleWindowResize);
   }, []);
 
+  if (recommendations.length < 5) {
+    return null;
+  }
+
+  const sliced_array = [];
+
+  for (let i = 0; i < recommendations.length; i += 3) {
+    sliced_array.push(recommendations.slice(i, i + 3));
+  }
+
   return (
     <aside className="aside" style={{ left: leftFixedPosition }}>
       <p className="aside__title">{currentLang.also}</p>
 
       <Swiper pagination={true} spaceBetween={20} loop={true} autoplay={{ delay: 2000, disableOnInteraction: false }}>
-        <SwiperSlide>
-          <UserBanner aside />
-
-          <UserBanner aside />
-
-          <UserBanner aside />
-        </SwiperSlide>
-
-        <SwiperSlide>
-          <UserBanner aside />
-
-          <UserBanner aside />
-
-          <UserBanner aside />
-        </SwiperSlide>
-
-        <SwiperSlide>
-          <UserBanner aside />
-
-          <UserBanner aside />
-
-          <UserBanner aside />
-        </SwiperSlide>
+        {sliced_array.map((item, index) => {
+          return (
+            <SwiperSlide key={`${index} slideMain`}>
+              {item.map((slide, i) => {
+                return <UserBanner aside key={`${index + i} slideItem`} profile={slide} />;
+              })}
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </aside>
   );

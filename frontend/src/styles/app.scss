@@ -1,3 +1,6 @@
+/* Import bootstrap */
+@import '~bootstrap/scss/bootstrap';
+
 /*Import Variables*/
 @import './variables';
 
@@ -12,6 +15,7 @@
 @import './components/search-bar';
 @import './components/user-banner';
 @import './components/aside';
+@import './components/notifications';
 @import './components/upload';
 @import './components/stories';
 @import './components/auth';

@@ -1,25 +1,35 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { LENTGH_OF_VISIBLE_CAPTION, showVisibleText } from '~/app/utils/utilities';
+import { createPostAction } from '~/redux/blogReducer';
+import { RootState } from '~/redux/redux';
 import { ReactComponent as MenuDots } from '../../../assets/images/3dots.svg';
 import { ReactComponent as SaveIcon } from '../../../assets/images/bookmark.svg';
 import { ReactComponent as LikeIcon } from '../../../assets/images/heart.svg';
 import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
 import { ReactComponent as CommentIcon } from '../../../assets/images/message-circle.svg';
-import postImg from '../../../assets/images/post-image.jpg';
 import { LangContext } from '../../utils/LangProvider';
 import UserBanner from './UserBanner';
-const Post = () => {
+
+const Post = ({
+  post
+}: {
+  post: {
+    user: unknown;
+    post: {
+      description: string | null;
+      likes_amount: string | null;
+      comments_amount: string | null;
+      attachments: Array<{ id: number; file_type: number; _file: string }>;
+      pk: number;
+    };
+  };
+}) => {
+  const user_id = useSelector((state: RootState) => state.auth.pk);
   const { currentLang } = useContext(LangContext);
 
   const [isWholeTextShowed, setIsWholeTextShowed] = useState<boolean>(true);
-
-  //Example Caption
-  const caption = `
-  Сняли перчатки, поскольку чемпион по боксу @TonyBellew присоединился к нам на HypeFans 🥊 Он предлагает
-  возможность присоединиться к нему за пределами ринга. Вы можете отследить невиданные ранее кадры фитнеса и
-  тренировок, а также взглянуть на его образ жизни. Так что дайте ему лучший шанс на:
-  http://hypefans.com/tonybellew
-  `;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (window.innerWidth <= 768) {
@@ -52,7 +62,7 @@ const Post = () => {
         </div>
       </div>
       <p className="post__caption">
-        {isWholeTextShowed ? caption : showVisibleText(caption, LENTGH_OF_VISIBLE_CAPTION)}
+        {isWholeTextShowed ? post.post.description : showVisibleText(post.post.description, LENTGH_OF_VISIBLE_CAPTION)}
       </p>
 
       <button
@@ -62,14 +72,28 @@ const Post = () => {
         {currentLang.readmore}
       </button>
 
-      <UserBanner />
+      <UserBanner profile={post.user} />
 
-      <img className="post__img" src={postImg} alt="picture" />
+      <img className="post__img" src={post.post.attachments[0]._file} alt="picture" />
 
       <div className="post__bottom">
         <div className="post__actions">
           <div className="post__actions-left">
-            <button className="post__action-btn">
+            <button
+              className="post__action-btn"
+              onClick={() =>
+                dispatch(
+                  createPostAction({
+                    like: true,
+                    comment: null,
+                    donation_amount: 0,
+                    user: user_id,
+                    date_time: null,
+                    post: post.post.pk
+                  })
+                )
+              }
+            >
               <LikeIcon className="post__action-icon" />
             </button>
 
@@ -84,10 +108,12 @@ const Post = () => {
           </button>
         </div>
 
-        <p className="post__like-amount">154 {currentLang.liks1}</p>
+        <p className="post__like-amount">
+          {post.post.likes_amount} {currentLang.liks1}
+        </p>
 
         <p className="post__comment-amount">
-          {currentLang.watch} 71 {currentLang.comments1}
+          {currentLang.watch} {post.post.comments_amount} {currentLang.comments1}
         </p>
       </div>
     </article>

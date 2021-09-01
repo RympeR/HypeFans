@@ -32,6 +32,10 @@ export const getLastUrlPoint = (url: string) => {
   return url.substring(url.lastIndexOf('/') + 1);
 };
 
+export const getMainUrlPoint = (url: string) => {
+  return url.split('/')[1];
+};
+
 //Password pattern for SIGNIN or SIGNUP
 // export const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 export const PASSWORD_PATTERN = /[A-Z]+[a-z]+[0-9]/;
@@ -104,13 +108,15 @@ export const getAuthScheme = (currentLang: any, action: string) => {
     return yup.object().shape({
       username: yup.string().min(4, currentLang.nameWarn),
       email: yup.string().email(currentLang.emailWarn),
-      password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
+      password: yup.string()
+      // password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
     });
   }
 
   return yup.object().shape({
     username: yup.string().min(4, currentLang.nameWarn),
-    password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
+    // password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
+    password: yup.string()
   });
 };
 
