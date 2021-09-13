@@ -233,6 +233,17 @@ class UserGetSerializer(serializers.ModelSerializer):
             'repheral_link',
             'repheral_users',
             'blocked_users',
+            'email_notifications',
+            'push_notifications',
+            'hide_online',
+            'allow_comments',
+            'show_post_amount',
+            'show_fans_amount',
+            'show_watermark',
+            'validated_email',
+            'validated_user',
+            'credit_amount',
+            'earned_credits_amount',
             'is_online',
         )
 
