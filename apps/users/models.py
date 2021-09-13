@@ -99,6 +99,11 @@ class User(AbstractUser):
         'username'
     ]
 
+    def is_online(self):
+        if not self.hide_online:
+            return True
+        return False
+
     @staticmethod
     def _create_user(password, email, **extra_fields):
         if not email:

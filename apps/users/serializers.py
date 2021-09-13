@@ -77,6 +77,7 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             'first_name',
             'background_photo',
             'subscribtion_price',
+            'is_online',
             'subscribtion_duration'
         )
 
@@ -147,6 +148,18 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'validated_user',
             'credit_amount',
             'earned_credits_amount',
+            'email_notifications',
+            'push_notifications',
+            'hide_online',
+            'allow_comments',
+            'show_post_amount',
+            'show_fans_amount',
+            'show_watermark',
+            'validated_email',
+            'validated_user',
+            'credit_amount',
+            'earned_credits_amount',
+            'is_online'
         )
 
 
@@ -167,6 +180,7 @@ class SettingsSerializer(serializers.ModelSerializer):
             'validated_user',
             'credit_amount',
             'earned_credits_amount',
+            'is_online',
         )
 
 
@@ -219,6 +233,7 @@ class UserGetSerializer(serializers.ModelSerializer):
             'repheral_link',
             'repheral_users',
             'blocked_users',
+            'is_online',
         )
 
 
