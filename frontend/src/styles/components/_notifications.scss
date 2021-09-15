@@ -106,7 +106,7 @@
     flex-direction: column;
     background-color: $white;
     min-width: 350px;
-    min-height: 100vh;
+    min-height: 80vh;
     border-bottom-left-radius: 16px;
   }
 
@@ -144,7 +144,7 @@
   }
 
   &__main {
-    height: 100vh;
+    height: 80vh;
     overflow: auto;
   }
 
@@ -180,6 +180,39 @@
     width: 94%;
     height: 50px;
     background: #fb5734;
+    border-radius: 8px;
+    margin: 32px 24px;
+    font-family: Factor A;
+    font-size: 18px;
+    transition: 0.5s;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: center;
+    color: $white;
+  }
+  &__settingBtn :disabled {
+    width: 94%;
+    height: 50px;
+    background: #fcdfd9;
+    border-radius: 8px;
+    margin: 32px 24px;
+    font-family: Factor A;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: center;
+    color: $white;
+    transition: 0.5s;
+  }
+  &__settingBtn[disabled] {
+    width: 94%;
+    height: 50px;
+    background: #f3bcb0;
+    transition: 0.5s;
     border-radius: 8px;
     margin: 32px 24px;
     font-family: Factor A;
@@ -236,7 +269,7 @@
     background-color: $white;
     padding-bottom: 26px;
     border-bottom-right-radius: 16px;
-    min-height: 100vh;
+    min-height: 80vh;
   }
 
   &__mainItem {
@@ -379,10 +412,9 @@
 
   &__donationAmount {
     border-radius: 32px;
-    background-color: #FB5734;
+    background-color: #fb5734;
     color: #fff;
     padding: 5px;
     margin-bottom: 50px;
   }
 }
-

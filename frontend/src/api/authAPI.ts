@@ -70,12 +70,12 @@ export const authAPI = {
     });
   },
   meGet() {
-    return instance.get('auth/users/me/').then((response) => {
+    return instance.get<{ username: 'string'; id: number; email: number }>('auth/users/me/').then((response) => {
       return response;
     });
   },
-  meUpdate(username: string) {
-    return instance.post('auth/users/me/', { username }).then((response) => {
+  meUpdate(data: any) {
+    return instance.put('user/partial-update-user/', data).then((response) => {
       return response;
     });
   },
@@ -99,8 +99,8 @@ export const authAPI = {
       return response;
     });
   },
-  resetEmailConfirm(new_email: string) {
-    return instance.post('/auth/users/reset_email_confirm/', { new_email }).then((response) => {
+  resetEmailConfirm({ new_email, uid }: { new_email: string; uid: number }) {
+    return instance.post('/auth/users/reset_email_confirm/', { new_email, uid }).then((response) => {
       return response;
     });
   },

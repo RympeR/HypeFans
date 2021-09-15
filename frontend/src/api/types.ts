@@ -48,7 +48,12 @@ export type createSubscriptionRT = {
   target: number;
 };
 
-export type settingsValType = { values: any; submit: () => void };
+export type settingsValType = {
+  isDisabled: boolean;
+  values: any;
+  submit: () => void;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+};
 
 export type createUserT = {
   id: number | string | null | undefined;
@@ -90,6 +95,7 @@ export type getPaymentRT = {
   amount: number;
 };
 export type getUserRT = {
+  subscribtion_price: number | null;
   pk: number | null;
   email: string | null;
   avatar: string | null;

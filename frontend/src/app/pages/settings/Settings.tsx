@@ -3,10 +3,13 @@ import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import CurrencyInput from 'react-currency-input-field';
 import 'react-phone-input-2/lib/style.css';
-import { useSelector } from 'react-redux';
+import Recaptcha from 'react-recaptcha';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, Route, useHistory, useLocation } from 'react-router-dom';
 import { settingsValType } from '~/api/types';
+import { changeSettings } from '~/redux/authReducer';
 import { RootState } from '~/redux/redux';
+import { updateEmailConfirm } from '~/redux/userAPI';
 import { ReactComponent as BackIcon } from '../../../assets/images/arrow-left.svg';
 import { NotificationSidebarItem } from '../notifications/NotificationSidebarItem';
 
@@ -15,6 +18,7 @@ export const Settings = () => {
   const { pathname } = useLocation();
   const settings = useSelector((state: RootState) => state.auth);
   const isLoading = useSelector((state: RootState) => state.notifications.isLoading);
+  const isDisabled = useSelector((state: RootState) => state.auth.isSettingsDisabled);
   if (isLoading) {
     return <div>Загрузка...</div>;
   }
@@ -71,12 +75,23 @@ export const Settings = () => {
     );
   };
   const NotificationsMain = () => {
-    const PushSettingsNotifications = ({ values, submit }: settingsValType) => {
+    const dispatch = useDispatch();
+    const PushSettingsNotifications = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
       return (
         <div className="notifications__main">
           <div className="notifications__listBlock">
             <p>Push-уведомления</p>
-            <input type="checkbox" className="notifications__toggle-button" onChange={() => submit()}></input>
+            <input
+              type="checkbox"
+              className="notifications__toggle-button"
+              name="push_notifications"
+              checked={values.push_notifications}
+              disabled={isDisabled}
+              onChange={(val) => {
+                setFieldValue('push_notifications', val.target.checked);
+                return submit();
+              }}
+            ></input>
           </div>
           <p className="notifications__listText">
             Получайте push-уведомления, чтобы узнать, что происходит, когда вы не находитесь на HypeFans. Вы можете
@@ -116,10 +131,43 @@ export const Settings = () => {
         </div>
       );
     };
-    const DeleteAccount = () => {
-      return <div className="notifications__main">fdfd</div>;
+    const DeleteAccount = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
+      const [deleteShow, setDeleteShow] = useState(false);
+      const [isRobot, setIsRobot] = useState(true);
+      return (
+        <div className="notifications__main">
+          <div className="notifications__listBlock">
+            <p>Подтверждение</p>
+          </div>
+          <div className="notifications__listBlock">
+            <Recaptcha
+              sitekey="6Lep7U8cAAAAABG9Qppk743EBuVmeXxml7F4Umr3"
+              size="normal"
+              onChange={() => setIsRobot(false)}
+            />
+          </div>
+          <h2 style={{ fontSize: '18px', textAlign: 'center' }}>Аккаунт будет удален</h2>
+          <h2 style={{ fontSize: '18px', textAlign: 'center' }}>безвозвратно!</h2>
+          <button className="notifications__settingBtn" onClick={() => setDeleteShow(true)} disabled={isRobot}>
+            Удалить
+          </button>
+          <Modal show={deleteShow} onHide={() => setDeleteShow(false)} centered>
+            <Modal.Body className="notifications__modal">
+              <h2 style={{ marginBottom: '0px' }}>Вы уверены, что хотите</h2>
+              <h2> удалить аккаунт?</h2>
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
+                <h3 onClick={() => setDeleteShow(false)} style={{ color: '#FB5734' }}>
+                  Отмена
+                </h3>
+                <div style={{ width: '20px' }}></div>
+                <h3 onClick={() => setDeleteShow(false)}>Продолжить</h3>
+              </div>
+            </Modal.Body>
+          </Modal>
+        </div>
+      );
     };
-    const SessionsInfo = ({ values, submit }: settingsValType) => {
+    const SessionsInfo = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
       return (
         <div className="notifications__sessions notifications__main">
           <h3>MIUI Browser 12.9, Android 9, Xiaomi MI 9 SE</h3>
@@ -128,18 +176,27 @@ export const Settings = () => {
         </div>
       );
     };
-    const NicknameSettings = ({ values, submit }: settingsValType) => {
+    const NicknameSettings = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
+      const username = useSelector((state: RootState) => state.auth.username);
       return (
         <div className="notifications__main">
           <p style={{ padding: '16px 24px' }}>Ник</p>
-          <input className="notifications__input"></input>
-          <button className="notifications__settingBtn" onClick={() => submit()}>
+          <input
+            className="notifications__input"
+            value={values.username}
+            onChange={(val) => setFieldValue('username', val.target.value)}
+          ></input>
+          <button
+            className="notifications__settingBtn"
+            onClick={() => submit()}
+            disabled={username === values.username ? true : false}
+          >
             Сохранить
           </button>
         </div>
       );
     };
-    const PasswordSettings = ({ values, submit }: settingsValType) => {
+    const PasswordSettings = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
       return (
         <div className="notifications__main">
           <p style={{ padding: '16px 24px' }}>Новый пароль</p>
@@ -154,24 +211,35 @@ export const Settings = () => {
       );
     };
 
-    const PhoneSettings = ({ values, submit }: settingsValType) => {
+    const PhoneSettings = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
       return (
         <div className="notifications__main">
           <p style={{ padding: '16px 24px' }}>Номер телефона</p>
         </div>
       );
     };
-    const EmailSettings = ({ values, submit }: settingsValType) => {
+    const EmailSettings = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
       const [emailModalShow, setEmailModalShow] = useState(false);
+      const email = useSelector((state: RootState) => state.auth.email);
+      const uid = useSelector((state: RootState) => state.auth.pk);
+      const changeEmail = () => {
+        dispatch(updateEmailConfirm(values.email, uid));
+        setEmailModalShow(true);
+      };
       return (
         <div className="notifications__main">
           <p style={{ padding: '16px 24px' }}>Email</p>
-          <input className="notifications__input"></input>
+          <input
+            className="notifications__input"
+            value={values.email}
+            onChange={(val) => setFieldValue('email', val.target.value)}
+          ></input>
           <button
             className="notifications__settingBtn"
             onClick={() => {
-              setEmailModalShow(true);
+              changeEmail();
             }}
+            disabled={email === values.email ? true : false}
           >
             Изменить Email
           </button>
@@ -186,34 +254,70 @@ export const Settings = () => {
         </div>
       );
     };
-    const ConfidentialitySettings = ({ values, submit }: settingsValType) => {
+    const ConfidentialitySettings = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
       return (
         <div className="notifications__main">
           <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
             <p>Показывать статус активности </p>
-            <input type="checkbox" className="notifications__toggle-button" onChange={() => submit()}></input>
+            <input
+              type="checkbox"
+              className="notifications__toggle-button"
+              name="hide_online"
+              checked={values.hide_online}
+              disabled={isDisabled}
+              onChange={(val) => {
+                setFieldValue('hide_online', val.target.checked);
+                return submit();
+              }}
+            ></input>
           </div>
           <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
             <p>Показывать количество подписчиков</p>
-            <input type="checkbox" className="notifications__toggle-button" onChange={() => submit()}></input>
+            <input
+              type="checkbox"
+              className="notifications__toggle-button"
+              name="show_fans_amount"
+              checked={values.show_fans_amount}
+              disabled={isDisabled}
+              onChange={(val) => {
+                setFieldValue('show_fans_amount', val.target.checked);
+                return submit();
+              }}
+            ></input>
           </div>
           <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
             <p>Показывать количество постов </p>
-            <input type="checkbox" className="notifications__toggle-button" onChange={() => submit()}></input>
-          </div>
-          <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
-            <p>Заблокированные аккаунты </p>
-            <input type="checkbox" className="notifications__toggle-button" onChange={() => submit()}></input>
+            <input
+              type="checkbox"
+              className="notifications__toggle-button"
+              name="show_post_amount"
+              checked={values.show_post_amount}
+              disabled={isDisabled}
+              onChange={(val) => {
+                setFieldValue('show_post_amount', val.target.checked);
+                return submit();
+              }}
+            ></input>
           </div>
         </div>
       );
     };
-    const EmailSettingsNotifications = ({ values, submit }: settingsValType) => {
+    const EmailSettingsNotifications = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
       return (
         <div className="notifications__main">
           <div className="notifications__listBlock">
             <p>Уведомления электронной почты </p>
-            <input type="checkbox" className="notifications__toggle-button" onChange={() => submit()}></input>
+            <input
+              type="checkbox"
+              name="email_notifications"
+              className="notifications__toggle-button"
+              checked={values.email_notifications}
+              disabled={isDisabled}
+              onChange={(val) => {
+                setFieldValue('email_notifications', val.target.checked);
+                return submit();
+              }}
+            ></input>
           </div>
           <p className="notifications__listText">
             Получайте электронные письма, чтобы узнать, что происходит, когда вы не находитесь на HypeFans. Вы можете
@@ -222,12 +326,22 @@ export const Settings = () => {
         </div>
       );
     };
-    const PageSettingsNotifications = ({ values, submit }: settingsValType) => {
+    const PageSettingsNotifications = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
       return (
         <div className="notifications__main">
           <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
             <p>Новые комментарии </p>
-            <input type="checkbox" className="notifications__toggle-button" onChange={() => submit()}></input>
+            <input
+              type="checkbox"
+              name="email_notifications"
+              className="notifications__toggle-button"
+              checked={values.email_notifications}
+              disabled={isDisabled}
+              onChange={(val) => {
+                setFieldValue('email_notifications', val.target.checked);
+                return submit();
+              }}
+            ></input>
           </div>
           <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
             <p>Новые лайки </p>
@@ -274,14 +388,28 @@ export const Settings = () => {
         </div>
       );
     };
-    const MessagesPrice = ({ values, submit }: settingsValType) => {
+    const MessagesPrice = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
       return (
         <div className="notifications__main">
           <div className="notifications__pricesHeader">
             <p>Пользователь сможет общаться с вами, только заплатив определенную сумму.</p>
             <div className="notifications__free">
               <h2>Бесплатно</h2>
-              <input type="checkbox" className="notifications__toggle-button" onChange={() => submit()}></input>
+              <input
+                type="checkbox"
+                className="notifications__toggle-button"
+                name="message_price"
+                checked={values.message_price === 0}
+                disabled={isDisabled}
+                onChange={(val) => {
+                  if (val.target.checked) {
+                    setFieldValue('message_price', 0);
+                  } else {
+                    setFieldValue('message_price', 1);
+                  }
+                  return submit();
+                }}
+              ></input>
             </div>
           </div>
           <div style={{ borderTop: '1px solid rgba(0, 0, 0, 0.2)' }}>
@@ -289,11 +417,78 @@ export const Settings = () => {
             <CurrencyInput
               className="notifications__input"
               prefix="$"
-              name="input-name"
+              name="message_price"
+              value={values.message_price}
               placeholder="$ Введите сумму..."
               decimalsLimit={2}
-              onValueChange={(value, name) => console.log(value, name)}
+              disabled={values.message_price === 0}
+              onValueChange={(value, name) => setFieldValue(name, value)}
+              onBlur={() => submit()}
             />
+          </div>
+        </div>
+      );
+    };
+    const SubscriptionPrice = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
+      return (
+        <div className="notifications__main">
+          <div className="notifications__pricesHeader">
+            <div className="notifications__free" style={{ marginTop: '0px' }}>
+              <h2>Бесплатно</h2>
+              <input
+                type="checkbox"
+                className="notifications__toggle-button"
+                name="subscription_price"
+                checked={values.subscription_price === 0}
+                disabled={isDisabled}
+                onChange={(val) => {
+                  if (val.target.checked) {
+                    setFieldValue('subscription_price', 0);
+                  } else {
+                    setFieldValue('subscription_price', 1);
+                  }
+                  return submit();
+                }}
+              ></input>
+            </div>
+          </div>
+          <div style={{ borderTop: '1px solid rgba(0, 0, 0, 0.2)' }}>
+            <p className="notifications__priceText">Цена за 1 месяц</p>
+            <CurrencyInput
+              className="notifications__input"
+              prefix="$"
+              name="subscription_price"
+              value={values.subscription_price}
+              placeholder="$ Введите сумму..."
+              decimalsLimit={2}
+              disabled={values.subscription_price === 0}
+              onValueChange={(value, name) => setFieldValue(name, value)}
+              onBlur={() => submit()}
+            />
+          </div>
+        </div>
+      );
+    };
+    const ForFans = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
+      return (
+        <div className="notifications__main">
+          <div className="notifications__pricesHeader">
+            <div className="notifications__free" style={{ marginTop: '0px' }}>
+              <h2>1 месяц беспланой подписки</h2>
+              <input type="checkbox" className="notifications__toggle-button" onChange={() => submit()}></input>
+            </div>
+            <p className="notifications__priceText" style={{ marginLeft: '0px', marginBottom: '0px' }}>
+              Ваши фанаты смогут делиться ссылкой вашего профиля и за каждого
+            </p>
+            <p
+              className="notifications__priceText"
+              style={{ marginLeft: '0px', marginTop: '0px', marginBottom: '0px' }}
+            >
+              нового подписчика, который подписался по этой ссылке, фанаты будут
+            </p>
+            <p className="notifications__priceText" style={{ marginLeft: '0px', marginTop: '0px' }}>
+              получать месяц бесплатной подписки на 1 месяц.
+            </p>
           </div>
         </div>
       );
@@ -312,75 +507,194 @@ export const Settings = () => {
           <Route path="/settings/notifications/page" render={() => <Text text="Уведомления на сайте" />} exact />
           <Route path="/settings/notifications" render={() => <Text text="Уведомления" />} exact />
           <Route path="/settings/prices" render={() => <Text text="Цены" />} exact />
-          <Route path="/settings/account/delete" render={() => <Text text="Удалить аккаунт" />} exact />
+          <Route path="/settings/notifications/account/delete" render={() => <Text text="Удалить аккаунт" />} exact />
           <Route path="/settings/account/email" render={() => <Text text="Изменить Email" />} exact />
           <Route path="/settings/account/password" render={() => <Text text="Изменить пароль" />} exact />
           <Route path="/settings/prices/messages" render={() => <Text text="Цена сообщения" />} exact />
+          <Route path="/settings/prices/subscribes" render={() => <Text text="Цена подписки" />} exact />
+          <Route path="/settings/prices/fans" render={() => <Text text="Для фанатов" />} exact />
           <Route path="/settings/account/nickname" render={() => <Text text="Изменить ник" />} exact />
           {/* Заголовок(конец)*/}
         </div>
         {/* Главное тело в зависимости от роута*/}
         <Formik
           initialValues={settings}
-          onSubmit={(val) => {
-            return console.log(val);
+          onSubmit={(obj) => {
+            dispatch(changeSettings(obj));
           }}
         >
-          {({ values, handleSubmit }) => {
+          {({ values, handleSubmit, setFieldValue }) => {
             return (
               <>
                 <Route path="/settings/notifications" render={() => <SettingsNotifications />} exact />
                 <Route
                   path="/settings/notifications/push"
-                  render={() => <PushSettingsNotifications values={values} submit={handleSubmit} />}
+                  render={() => (
+                    <PushSettingsNotifications
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
+                  exact
+                />
+                <Route
+                  path="/settings/prices/fans"
+                  render={() => (
+                    <ForFans
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
                   exact
                 />
                 <Route
                   path="/settings/notifications/email"
-                  render={() => <EmailSettingsNotifications values={values} submit={handleSubmit} />}
+                  render={() => (
+                    <EmailSettingsNotifications
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
                   exact
                 />
                 <Route path="/settings/account" render={() => <AccountSettings />} exact />
                 <Route
                   path="/settings/account/nickname"
-                  render={() => <NicknameSettings values={values} submit={handleSubmit} />}
+                  render={() => (
+                    <NicknameSettings
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
                   exact
                 />
                 <Route
                   path="/settings/confidentiality"
-                  render={() => <ConfidentialitySettings values={values} submit={handleSubmit} />}
+                  render={() => (
+                    <ConfidentialitySettings
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
                   exact
                 />
                 <Route
                   path="/settings/notifications/page"
-                  render={() => <PageSettingsNotifications values={values} submit={handleSubmit} />}
+                  render={() => (
+                    <PageSettingsNotifications
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
                   exact
                 />
                 <Route
                   path="/settings/prices/messages"
-                  render={() => <MessagesPrice values={values} submit={handleSubmit} />}
+                  render={() => (
+                    <MessagesPrice
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
+                  exact
+                />
+                <Route
+                  path="/settings/prices/subscribes"
+                  render={() => (
+                    <SubscriptionPrice
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
+                  exact
+                />
+                <Route
+                  path="/settings/notifications/account/delete"
+                  render={() => (
+                    <DeleteAccount
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
                   exact
                 />
                 <Route path="/settings/prices" render={() => <PricesSettings />} exact />
                 <Route
                   path="/settings/account/password"
-                  render={() => <PasswordSettings values={values} submit={handleSubmit} />}
+                  render={() => (
+                    <PasswordSettings
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
                   exact
                 />
                 <Route
                   path="/settings/account/phone"
-                  render={() => <PhoneSettings values={values} submit={handleSubmit} />}
+                  render={() => (
+                    <PhoneSettings
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
                   exact
                 />
-                <Route path="/settings/account/delete" render={() => <DeleteAccount />} exact />
+                <Route
+                  path="/settings/account/delete"
+                  render={() => (
+                    <DeleteAccount
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
+                  exact
+                />
                 <Route
                   path="/settings/account/sessions"
-                  render={() => <SessionsInfo values={values} submit={handleSubmit} />}
+                  render={() => (
+                    <SessionsInfo
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
                   exact
                 />
                 <Route
                   path="/settings/account/email"
-                  render={() => <EmailSettings values={values} submit={handleSubmit} />}
+                  render={() => (
+                    <EmailSettings
+                      isDisabled={isDisabled}
+                      values={values}
+                      submit={handleSubmit}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
                   exact
                 />
               </>

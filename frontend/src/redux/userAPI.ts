@@ -1,5 +1,6 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
+import { authAPI } from '~/api/authAPI';
 import {
   CardType,
   createCardRT,
@@ -28,6 +29,10 @@ const actions = {
       type: 'AUTHORIZED'
     } as const;
   }
+};
+
+export const updateEmailConfirm = (new_email: string, uid: number): Thunk => async (dispatch) => {
+  await authAPI.resetEmailConfirm({ new_email, uid });
 };
 
 export const createCard = ({ number, date_year, cvc, creator, user }: CardType): Thunk => async (dispatch) => {
@@ -63,7 +68,8 @@ export const getPayment = ({ id }: idType): Thunk => async (dispatch) => {
 };
 
 export const getUser = (): Thunk => async (dispatch) => {
-  await userAPI.getUser({ user: 'root' });
+  const data = await authAPI.meGet();
+  await userAPI.getUser({ user: data.data.username });
 };
 
 export const onlineUserCreate = ({ user }: userStringType): Thunk => async (dispatch) => {
@@ -145,6 +151,10 @@ export const userSubscriptionUpdate = (): Thunk => async (dispatch) => {
 };
 
 export const userValidateUser = (user: number, verified: boolean): Thunk => async (dispatch) => {
+  await userAPI.userValidateUser(user, verified);
+};
+
+export const changePassword = (user: number, verified: boolean): Thunk => async (dispatch) => {
   await userAPI.userValidateUser(user, verified);
 };
 

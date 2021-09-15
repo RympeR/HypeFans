@@ -1,0 +1,148 @@
+.chat {
+  display: flex;
+  flex-direction: column;
+  &__header {
+    background-color: $white;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    height: 88px;
+    display: flex;
+    align-items: center;
+    padding: 0px 32px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    justify-content: space-between;
+  }
+  &__header_title {
+    font-family: Factor A;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 26px;
+    letter-spacing: 0px;
+    text-align: left;
+    margin-left: 24px;
+  }
+  &__row {
+    display: flex;
+    align-items: center;
+  }
+  &__main {
+    background-color: $white;
+    display: flex;
+    margin-bottom: 20px;
+  }
+  &__sidebar {
+    background-color: $white;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    width: 37.5%;
+    overflow-y: scroll;
+    height: 87vh;
+  }
+  &__sidebarItem {
+    display: flex;
+    padding: 15.5px 24px;
+    margin-right: 14px;
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 100%;
+    }
+    h2 {
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 20px;
+      display: flex;
+      align-items: center;
+      color: #000000;
+      margin-left: 8px;
+    }
+    p {
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 15px;
+      display: flex;
+      align-items: center;
+      color: rgba(0, 0, 0, 0.6);
+      margin-left: 8px;
+    }
+  }
+  &__p {
+    font-family: Factor A;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 13px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 50px;
+  }
+  &__dialogsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    height: 92px;
+    width: 100%;
+  }
+  &__dialogsMain {
+    display: flex;
+    flex-direction: column;
+    width: 62.5%;
+  }
+  &__dialog {
+    height: 67vh;
+  }
+  &__input {
+    background: #e5e5e5;
+    height: 126px;
+  }
+  &__text {
+    padding: 16px 32px;
+    display: flex;
+    button {
+      width: 50px;
+      height: 50px;
+    }
+    input {
+      width: 100%;
+    }
+  }
+}
+
+.message-wrap {
+  list-style: none;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column-reverse;
+  min-height: 88%;
+  max-height: 88%;
+  border: 1px solid #cccccc;
+  text-align: right;
+  padding: 10px;
+  overflow-y: scroll;
+}
+.message-wrap li {
+  padding: 5px;
+  width: 100%;
+  margin: 15px 0;
+  padding: 0;
+  position: relative;
+}
+.message-wrap li .text-wrapp {
+  position: absolute;
+  border: 1px solid $black;
+  width: 70%;
+  height: 100%;
+  background: $green;
+}
+.message-wrap li:nth-child(even) .text-wrapp {
+  right: 0;
+  background: $blue;
+}

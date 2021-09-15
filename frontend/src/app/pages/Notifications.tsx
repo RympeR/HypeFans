@@ -80,11 +80,7 @@ const Notifications = () => {
           </div>
         </div>
         {/* Кнопки в сайдбаре в зависимости от роута */}
-        <Route path="/notifications/" component={DefaultSidebar} exact />
-        <Route path="/notifications/comments" component={DefaultSidebar} exact />
-        <Route path="/notifications/subscriptions" component={DefaultSidebar} exact />
-        <Route path="/notifications/likes" component={DefaultSidebar} exact />
-        <Route path="/notifications/donations" component={DefaultSidebar} exact />
+        <Route path="/notifications/" component={DefaultSidebar} />
       </div>
     );
   };

@@ -102,6 +102,14 @@ const actions = {
   }
 };
 
+export const isLoading = (): Thunk => async (dispatch) => {
+  dispatch(actions.isLoading());
+};
+
+export const isntLoading = (): Thunk => async (dispatch) => {
+  dispatch(actions.isntLoading());
+};
+
 export const getMainPageData = (): Thunk => async (dispatch) => {
   dispatch(actions.isLoading());
   const mainPageData = await blogAPI.getMainPage({ limit: 10, offset: 10 });
