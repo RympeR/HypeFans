@@ -430,6 +430,7 @@ export const Settings = () => {
       );
     };
     const SubscriptionPrice = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
+      debugger;
       return (
         <div className="notifications__main">
           <div className="notifications__pricesHeader">
@@ -438,14 +439,14 @@ export const Settings = () => {
               <input
                 type="checkbox"
                 className="notifications__toggle-button"
-                name="subscription_price"
-                checked={values.subscription_price === 0}
+                name="subscribtion_price"
+                checked={values.subscribtion_price === 0}
                 disabled={isDisabled}
                 onChange={(val) => {
                   if (val.target.checked) {
-                    setFieldValue('subscription_price', 0);
+                    setFieldValue('subscribtion_price', 0);
                   } else {
-                    setFieldValue('subscription_price', 1);
+                    setFieldValue('subscribtion_price', 1);
                   }
                   return submit();
                 }}
@@ -457,11 +458,11 @@ export const Settings = () => {
             <CurrencyInput
               className="notifications__input"
               prefix="$"
-              name="subscription_price"
-              value={values.subscription_price}
+              name="subscribtion_price"
+              value={values.subscribtion_price}
               placeholder="$ Введите сумму..."
               decimalsLimit={2}
-              disabled={values.subscription_price === 0}
+              disabled={values.subscribtion_price === 0}
               onValueChange={(value, name) => setFieldValue(name, value)}
               onBlur={() => submit()}
             />
