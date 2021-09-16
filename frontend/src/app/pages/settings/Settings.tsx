@@ -33,9 +33,6 @@ export const Settings = () => {
     const SettingsSidebar = () => {
       return (
         <div className="notifications__sidebar">
-          <Link to="/settings/profile" style={pathname === '/settings/profile' ? { background: selectedColor } : {}}>
-            <NotificationSidebarItem text="Профиль" />
-          </Link>
           <Link to="/settings/account" style={pathname === '/settings/account' ? { background: selectedColor } : {}}>
             <NotificationSidebarItem text="Аккаунт" />
           </Link>
@@ -498,7 +495,6 @@ export const Settings = () => {
       <div className="notifications__mainWrapper">
         <div className="notifications__mainHeader">
           {/* Заголовок*/}
-          <Route path="/settings/profile" render={() => <Text text="Профиль" />} exact />
           <Route path="/settings/account" render={() => <Text text="Аккаунт" />} exact />
           <Route path="/settings/confidentiality" render={() => <Text text="Конфеденциальность" />} exact />
           <Route path="/settings/account/sessions" render={() => <Text text="Сеансы входа" />} exact />
