@@ -1,5 +1,7 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
+import { RootState } from '~/redux/redux';
 import { ReactComponent as AddIcon } from '../../assets/images/add.svg';
 import { ReactComponent as BellIcon } from '../../assets/images/bell.svg';
 import { ReactComponent as HomeIcon } from '../../assets/images/home.svg';
@@ -10,6 +12,8 @@ import { NAV_LINKS } from '../utils/utilities';
 
 const Navbar = () => {
   const { pathname } = useLocation();
+
+  const nick = useSelector((state: RootState) => state.auth.username);
 
   if (pathname === `/${NAV_LINKS.SIGNIN}` || pathname === `/${NAV_LINKS.SIGNUP}`) {
     return null;
@@ -34,7 +38,7 @@ const Navbar = () => {
           <ChatIcon />
         </NavLink>
 
-        <NavLink toPath={NAV_LINKS.PROFILE}>
+        <NavLink toPath={`${NAV_LINKS.PROFILE}/${nick}`}>
           <ProfileIcon />
         </NavLink>
       </div>

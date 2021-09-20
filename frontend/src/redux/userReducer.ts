@@ -12,13 +12,49 @@ import {
   SubscriptionType,
   userStringType
 } from '~/api/types';
-import { userAPI } from './../api/userAPI';
+import { userAPI } from '../api/userAPI';
+import { isLoading, isntLoading } from './blogReducer';
 import { InferActionsTypes, RootState } from './redux';
 
-const initialState = {};
+const initialState = {
+  subscribtion_price: null as number | null,
+  pk: null as number | null,
+  email: null as string | null,
+  avatar: null as string | null,
+  background_photo: null as string | null,
+  username: null as string | null,
+  first_name: null as string | null,
+  bio: null as string | null,
+  birthday_date: null as string | null,
+  location: null as string,
+  subscription_price: null as number | null,
+  message_price: null as number | null,
+  post_amount: null as number | null,
+  fans_amount: null as number | null,
+  repheral_link: null as string | null,
+  repheral_users: [] as Array<number>,
+  blocked_users: [] as Array<number>,
+  email_notifications: false,
+  push_notifications: false,
+  hide_online: false,
+  allow_comments: false,
+  show_post_amount: false,
+  show_fans_amount: false,
+  show_watermark: false,
+  validated_email: false,
+  validated_user: false,
+  credit_amount: null as number | null,
+  earned_credits_amount: null as number | null,
+  posts: [] as Array<any>
+};
 
 const authReducer = (state = initialState, action: AllActionsType): InitialStateType => {
   switch (action.type) {
+    case 'SET_PROFILE_DATA':
+      return {
+        ...state,
+        ...action.payload
+      };
     default:
       return state;
   }
@@ -27,6 +63,72 @@ const actions = {
   isAuth: () => {
     return {
       type: 'AUTHORIZED'
+    } as const;
+  },
+  setProfileData: (
+    subscribtion_price: number | null,
+    pk: number | null,
+    email: string | null,
+    avatar: string | null,
+    background_photo: string | null,
+    username: string | null,
+    first_name: string | null,
+    bio: string | null,
+    birthday_date: string | null,
+    location: string,
+    subscription_price: number | null,
+    message_price: number | null,
+    post_amount: number | null,
+    fans_amount: number | null,
+    repheral_link: string | null,
+    repheral_users: Array<number>,
+    blocked_users: Array<number>,
+    email_notifications: boolean,
+    push_notifications: boolean,
+    hide_online: boolean,
+    allow_comments: boolean,
+    show_post_amount: boolean,
+    show_fans_amount: boolean,
+    show_watermark: boolean,
+    validated_email: boolean,
+    validated_user: boolean,
+    credit_amount: number | null,
+    earned_credits_amount: number | null,
+    posts: Array<any>
+  ) => {
+    return {
+      type: 'SET_PROFILE_DATA',
+      payload: {
+        subscribtion_price,
+        pk,
+        email,
+        avatar,
+        background_photo,
+        username,
+        first_name,
+        bio,
+        birthday_date,
+        location,
+        subscription_price,
+        message_price,
+        post_amount,
+        fans_amount,
+        repheral_link,
+        repheral_users,
+        blocked_users,
+        email_notifications,
+        push_notifications,
+        hide_online,
+        allow_comments,
+        show_post_amount,
+        show_fans_amount,
+        show_watermark,
+        validated_email,
+        validated_user,
+        credit_amount,
+        earned_credits_amount,
+        posts
+      }
     } as const;
   }
 };
@@ -67,9 +169,76 @@ export const getPayment = ({ id }: idType): Thunk => async (dispatch) => {
   await userAPI.getPayment({ id });
 };
 
-export const getUser = (): Thunk => async (dispatch) => {
-  const data = await authAPI.meGet();
-  await userAPI.getUser({ user: data.data.username });
+export const getUser = ({ username }: { username: string }): Thunk => async (dispatch) => {
+  dispatch(isLoading());
+  const data = await userAPI.getUser({ user: username });
+  if (data) {
+    const {
+      subscribtion_price,
+      pk,
+      email,
+      avatar,
+      background_photo,
+      username,
+      first_name,
+      bio,
+      birthday_date,
+      location,
+      subscription_price,
+      message_price,
+      post_amount,
+      fans_amount,
+      repheral_link,
+      repheral_users,
+      blocked_users,
+      email_notifications,
+      push_notifications,
+      hide_online,
+      allow_comments,
+      show_post_amount,
+      show_fans_amount,
+      show_watermark,
+      validated_email,
+      validated_user,
+      credit_amount,
+      earned_credits_amount,
+      posts
+    } = data;
+    dispatch(
+      actions.setProfileData(
+        subscribtion_price,
+        pk,
+        email,
+        avatar,
+        background_photo,
+        username,
+        first_name,
+        bio,
+        birthday_date,
+        location,
+        subscription_price,
+        message_price,
+        post_amount,
+        fans_amount,
+        repheral_link,
+        repheral_users,
+        blocked_users,
+        email_notifications,
+        push_notifications,
+        hide_online,
+        allow_comments,
+        show_post_amount,
+        show_fans_amount,
+        show_watermark,
+        validated_email,
+        validated_user,
+        credit_amount,
+        earned_credits_amount,
+        posts
+      )
+    );
+  }
+  dispatch(isntLoading());
 };
 
 export const onlineUserCreate = ({ user }: userStringType): Thunk => async (dispatch) => {

@@ -1,13 +1,15 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import notificationsReducer from '~/redux/notificationsReducer';
 import authReducer from './authReducer';
 import blogReducer from './blogReducer';
-import notificationsReducer from '~/redux/notificationsReducer';
+import userReducer from './userReducer';
 
 const reducers = combineReducers({
   auth: authReducer,
   blog: blogReducer,
-  notifications: notificationsReducer
+  notifications: notificationsReducer,
+  user: userReducer
 });
 
 type rootReducer = typeof reducers;

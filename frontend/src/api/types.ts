@@ -123,6 +123,7 @@ export type getUserRT = {
   validated_user: boolean | null;
   credit_amount: number | null;
   earned_credits_amount: number | null;
+  posts: Array<any>;
 };
 
 export type userStringType = {

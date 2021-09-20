@@ -9,7 +9,7 @@ import { Link, Route, useHistory, useLocation } from 'react-router-dom';
 import { settingsValType } from '~/api/types';
 import { changeSettings } from '~/redux/authReducer';
 import { RootState } from '~/redux/redux';
-import { updateEmailConfirm } from '~/redux/userAPI';
+import { updateEmailConfirm } from '~/redux/userReducer';
 import { ReactComponent as BackIcon } from '../../../assets/images/arrow-left.svg';
 import { NotificationSidebarItem } from '../notifications/NotificationSidebarItem';
 
@@ -427,7 +427,6 @@ export const Settings = () => {
       );
     };
     const SubscriptionPrice = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
-      debugger;
       return (
         <div className="notifications__main">
           <div className="notifications__pricesHeader">
