@@ -28,6 +28,8 @@ const Profile = () => {
     return <div>Загрузка...</div>;
   }
 
+  console.log(profile.avatar);
+
   return (
     <div className="profile">
       <div
@@ -42,7 +44,14 @@ const Profile = () => {
           <BackButton style={{ width: '35px', height: '35px' }} />
           <MenuDotsWhite style={{ width: '25px', height: '25px' }} />
         </div>
-        <img src={profile.avatar} alt="profile_photo" />
+        <img
+          src={
+            profile.avatar !== ''
+              ? profile.avatar
+              : 'https://i.pinimg.com/originals/f5/27/41/f52741fb62bf1d821948a49204406bdc.jpg'
+          }
+          alt="profile_photo"
+        />
         <h3 className="profile__name">{profile.first_name}</h3>
         <h4 className="profile__nickname"> {`@${nick}`}</h4>
         <h5 className="profile__info">
@@ -77,7 +86,14 @@ const Profile = () => {
                     <div className="profile__postInfo">
                       <div className="profile__postUserInfo">
                         <div style={{ display: 'flex' }}>
-                          <img src={profile.avatar} alt="profile_photoPost"></img>
+                          <img
+                            src={
+                              profile.avatar !== ''
+                                ? profile.avatar
+                                : 'https://i.pinimg.com/originals/f5/27/41/f52741fb62bf1d821948a49204406bdc.jpg'
+                            }
+                            alt="profile_photoPost"
+                          ></img>
                           <div>
                             <h3 className="profile__name" style={{ margin: '5px 8px', marginBottom: '0px' }}>
                               {profile.first_name}

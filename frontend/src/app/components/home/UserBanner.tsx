@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import userAvatar from '../../../assets/images/ava2.png';
 import profileLinkBg from '../../../assets/images/profile-link-bg.jpg';
 import { LangContext } from '../../utils/LangProvider';
@@ -15,11 +16,13 @@ const UserBanner = ({ aside, profile }: { aside?: boolean; profile: any }) => {
       }}
     >
       <div className="user-banner__profile">
-        <img
-          className="user-banner__avatar"
-          src={profile?.avatar?.length > 1 ? profile.avatar : userAvatar}
-          alt="avatar"
-        />
+        <Link to={`/profile/${profile?.username}`}>
+          <img
+            className="user-banner__avatar"
+            src={profile?.avatar?.length > 1 ? profile.avatar : userAvatar}
+            alt="avatar"
+          />
+        </Link>
         <div>
           <p className="user-banner__name">{profile?.first_name}</p>
           <p className="user-banner__nickname">@{profile?.username}</p>

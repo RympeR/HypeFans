@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const Notification = ({ item }: any) => {
   const getTitle = (type: string) => {
@@ -20,7 +21,9 @@ export const Notification = ({ item }: any) => {
   return (
     <div className="notifications__mainItem">
       <div className="notifications__userInfo">
-        <img src={item.user.avatar} alt="userPhoto" className="notifications__userPhoto"></img>
+        <Link to={`/profile/${item.user.username}`}>
+          <img src={item.user.avatar} alt="userPhoto" className="notifications__userPhoto"></img>
+        </Link>
         <div>
           <h2>{item.user.first_name}</h2>
           <h3>@{item.user.username}</h3>
