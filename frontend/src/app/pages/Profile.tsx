@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { RootState } from '~/redux/redux';
 import { getUser } from '~/redux/userReducer';
 import { ReactComponent as MenuDots } from '../../assets/images/3dots.svg';
@@ -9,9 +9,11 @@ import { ReactComponent as BackButton } from '../../assets/images/arrow-leftWhit
 import { ReactComponent as SaveIcon } from '../../assets/images/bookmark.svg';
 import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
 import { ReactComponent as CommentIcon } from '../../assets/images/message-circle.svg';
+import { Preloader } from '../utils/Preloader';
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const profile = useSelector((state: RootState) => state.user);
   console.log(profile);
@@ -25,10 +27,8 @@ const Profile = () => {
   }, [nick]);
 
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return <Preloader />;
   }
-
-  console.log(profile.avatar);
 
   return (
     <div className="profile">
@@ -41,7 +41,7 @@ const Profile = () => {
         className="profile__header"
       >
         <div className="profile__headerButtons">
-          <BackButton style={{ width: '35px', height: '35px' }} />
+          <BackButton style={{ width: '35px', height: '35px' }} onClick={history.goBack} />
           <MenuDotsWhite style={{ width: '25px', height: '25px' }} />
         </div>
         <img

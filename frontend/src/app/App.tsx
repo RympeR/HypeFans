@@ -17,7 +17,7 @@ import { ViewportProvider } from './utils/ViewportProvider';
 
 const App = () => {
   const dispatch = useDispatch();
-  if (Cookies.get('token') !== null) {
+  if (Cookies.get('token') !== undefined && Cookies.get('token') !== null) {
     dispatch(getUserData());
   }
   return (

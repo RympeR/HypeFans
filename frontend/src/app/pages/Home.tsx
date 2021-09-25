@@ -6,6 +6,8 @@ import Aside from '../components/home/Aside';
 import Post from '../components/home/Post';
 import SearchBar from '../components/home/SearchBar';
 import StoryBlock from '../components/home/stories/StoryBlock';
+import { Preloader } from '../utils/Preloader';
+
 const Home = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -19,7 +21,7 @@ const Home = () => {
   return (
     <>
       {isLoading ? (
-        'Загрузка'
+        <Preloader />
       ) : (
         <>
           <StoryBlock />

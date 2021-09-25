@@ -17,11 +17,7 @@ export const Settings = () => {
   const history = useHistory();
   const { pathname } = useLocation();
   const settings = useSelector((state: RootState) => state.auth);
-  const isLoading = useSelector((state: RootState) => state.notifications.isLoading);
   const isDisabled = useSelector((state: RootState) => state.auth.isSettingsDisabled);
-  if (isLoading) {
-    return <div>Загрузка...</div>;
-  }
   const Text = ({ text }: { text: string }) => {
     return <p>{text}</p>;
   };

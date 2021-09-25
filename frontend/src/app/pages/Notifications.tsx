@@ -6,6 +6,7 @@ import { getNotifications } from '~/redux/notificationsReducer';
 import { RootState } from '~/redux/redux';
 import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
 import { ReactComponent as SettingsIcon } from '../../assets/images/settings.svg';
+import { Preloader } from '../utils/Preloader';
 import { Notification } from './notifications/Notification';
 import { NotificationSidebarItem } from './notifications/NotificationSidebarItem';
 
@@ -19,7 +20,7 @@ const Notifications = () => {
     dispatch(getNotifications());
   }, []);
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return <Preloader />;
   }
   const Text = ({ text }: { text: string }) => {
     return <p>{text}</p>;
