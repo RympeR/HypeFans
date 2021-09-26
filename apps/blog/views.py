@@ -54,7 +54,10 @@ class PostListAPI(generics.GenericAPIView):
             for ind, post in enumerate(qs):
                 user_data = UserShortRetrieveSeriliazer(
                     instance=page_user, context={'request': request}).data
+                post_data = PostGetShortSerializers(
+                    instance=post, context={'request': request}).data
                 data[ind]['user'] = user_data
+                data[ind]['post'] = post_data
                 if post.access_level == 1:
                     data[ind]['post']['payed'] = (
                         True if PostBought.objects.filter(
@@ -66,21 +69,25 @@ class PostListAPI(generics.GenericAPIView):
                         True if Subscription.objects.filter(
                             target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                     )
-                postActionQuerySet = PostAction.objects.filter(post=post, user=user)
+                postActionQuerySet = PostAction.objects.filter(
+                    post=post, user=user)
                 if postActionQuerySet.exists():
                     for action in postActionQuerySet:
                         if action.like:
                             data['post']['liked'] = True
+                            data['post']['like_id'] = action.pk
                             break
                     else:
                         data['post']['liked'] = False
+                        data['post']['like_id'] = None
                 else:
                     data['post']['liked'] = False
+                    data['post']['like_id'] = None
                 if user in post.favourites.all():
                     data['post']['favourite'] = True
                 else:
                     data['post']['favourite'] = False
-                        
+
         for ind, post in enumerate(data):
             user_data = UserShortRetrieveSeriliazer(
                 instance=page_user, context={'request': request}).data
@@ -321,16 +328,20 @@ class MainUserPage(GenericAPIView):
                             True if Subscription.objects.filter(
                                 target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                         )
-                    postActionQuerySet = PostAction.objects.filter(post=post, user=user)
+                    postActionQuerySet = PostAction.objects.filter(
+                        post=post, user=user)
                     if postActionQuerySet.exists():
                         for action in postActionQuerySet:
                             if action.like:
                                 res_dict['post']['liked'] = True
+                                res_dict['post']['like_id'] = action.pk
                                 break
                         else:
                             res_dict['post']['liked'] = False
+                            res_dict['post']['like_id'] = None
                     else:
                         res_dict['post']['liked'] = False
+                        res_dict['post']['like_id'] = None
                     if user in post.favourites.all():
                         res_dict['post']['favourite'] = True
                     else:
@@ -417,4 +428,76 @@ class SubStories(GenericAPIView):
                    key=lambda story: story['stories']['datetime'])[::-1]
         )
 
-# class MarkFavourite
+
+class MarkFavourite(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated, )
+    serializer_class = UserFavouritesSerializer
+
+    def put(self, request):
+        data = request.data
+        user = request.user
+        if self.serializer_class(data=data).is_valid():
+            post = Post.objects.get(pk=data['post_id'])
+            if data['favourite']:
+                post.favourites.add(user)
+                return Response(data)
+            post.favourites.remove(user)
+            return Response(data)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+
+class GetFavouritePosts(generics.GenericAPIView):
+    serializer_class = PostGetShortSerializers
+
+    def get(self, request):
+        limit = request.GET.get('limit', 20)
+        offset = request.GET.get('offset', 0)
+        user = request.user
+        qs = user.user_favourites.all()[offset:offset+limit]
+        data = [{'post': self.get_serializer(
+            instance=post, context={'request': request}).data} for post in qs]
+        for ind, post in enumerate(qs):
+            user_data = UserShortRetrieveSeriliazer(
+                instance=post.user, context={'request': request}).data
+            post_data = PostGetShortSerializers(
+                instance=post, context={'request': request}).data
+            data[ind]['user'] = user_data
+            data[ind]['post'] = post_data
+            if post.access_level == 1:
+                data[ind]['post']['payed'] = (
+                    True if PostBought.objects.filter(
+                        post=post, user=user).exists() else False
+                )
+            else:
+
+                data[ind]['post']['payed'] = (
+                    True if Subscription.objects.filter(
+                        target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
+                )
+            postActionQuerySet = PostAction.objects.filter(
+                post=post, user=user)
+            if postActionQuerySet.exists():
+                for action in postActionQuerySet:
+                    if action.like:
+                        data['post']['liked'] = True
+                        data['post']['like_id'] = action.pk
+                        break
+                else:
+                    data['post']['liked'] = False
+                    data['post']['like_id'] = None
+            else:
+                data['post']['liked'] = False
+                data['post']['like_id'] = None
+            if user in post.favourites.all():
+                data['post']['favourite'] = True
+            else:
+                data['post']['favourite'] = False
+
+        for ind, post in enumerate(data):
+            user_data = UserShortRetrieveSeriliazer(
+                instance=post.user, context={'request': request}).data
+            data[ind]['user'] = user_data
+            data[ind]['post']['payed'] = True
+        return Response(data)

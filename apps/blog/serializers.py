@@ -15,6 +15,11 @@ from .models import (
 )
 
 
+class UserFavouritesSerializer(serializers.Serializer):
+    favourite = serializers.BooleanField()
+    post_id = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
+
+
 class PostActionCreationSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -197,6 +202,7 @@ class StoryGetSerializer(serializers.ModelSerializer):
 
 class StoryShortSerializer(serializers.ModelSerializer):
     user = UserShortRetrieveSeriliazer()
+
     class Meta:
         model = Story
         fields = ('user', 'publication_date', 'reply_link', 'story')

@@ -15,7 +15,9 @@ from .views import (
     WatchedStoriesCreateAPI,
     MainUserPage,
     SubStories,
-    UserNotifications
+    UserNotifications,
+    GetFavouritePosts,
+    MarkFavourite,
 )
 
 urlpatterns = [
@@ -27,6 +29,8 @@ urlpatterns = [
     path('create-post/', PostCreateAPI.as_view()),
     path('create-attachment/', AttachmentCreateAPI.as_view()),
     path('create-story/', StoryCreateAPI.as_view()),
+    path('mark-favourite/', MarkFavourite.as_view()),
+    path('get-favourite-posts/', GetFavouritePosts.as_view()),
     path('create-post-action/', PostActionCreateAPI.as_view()),
     path('delete-post-action/<int:pk>', PostActionDeleteAPI.as_view()),
     path('delete-story/<int:pk>', StoryAPI.as_view()),
