@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LENTGH_OF_VISIBLE_CAPTION, showVisibleText } from '~/app/utils/utilities';
-import { createPostAction } from '~/redux/blogReducer';
+import { createPostAction, deletePostAction } from '~/redux/blogReducer';
 import { RootState } from '~/redux/redux';
 import { ReactComponent as MenuDots } from '../../../assets/images/3dots.svg';
 import { ReactComponent as SaveIcon } from '../../../assets/images/bookmark.svg';
@@ -18,10 +18,14 @@ const Post = ({
     user: unknown;
     post: {
       description: string | null;
-      likes_amount: string | null;
+      likes_amount: any;
       comments_amount: string | null;
       attachments: Array<{ id: number; file_type: number; _file: string }>;
       pk: number;
+      liked: boolean;
+      archived: boolean;
+      like_id: number;
+      favourite: boolean;
     };
   };
 }) => {
@@ -81,20 +85,23 @@ const Post = ({
           <div className="post__actions-left">
             <button
               className="post__action-btn"
-              onClick={() =>
-                dispatch(
-                  createPostAction({
-                    like: true,
-                    comment: null,
-                    donation_amount: 0,
-                    user: user_id,
-                    date_time: null,
-                    post: post.post.pk
-                  })
-                )
-              }
+              onClick={() => {
+                post.post.liked
+                  ? dispatch(deletePostAction({ id: post.post.like_id, post_id: post.post.pk }))
+                  : dispatch(
+                      createPostAction({
+                        like: true,
+                        comment: null,
+                        donation_amount: 0,
+                        user: user_id,
+                        date_time: null,
+                        post: post.post.pk,
+                        id: null
+                      })
+                    );
+              }}
             >
-              <LikeIcon className="post__action-icon" />
+              <LikeIcon className="post__action-icon" fill={post.post.liked ? 'red' : 'none'} />
             </button>
 
             <button className="post__action-btn">

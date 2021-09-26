@@ -34,7 +34,7 @@ const initialState = {
         ],
         publication_date: null as string | null,
         comments: null as string | null,
-        likes_amount: null as string | null,
+        likes_amount: null as any,
         comments_amount: null as string | null,
         favourites_amount: null as string | null,
         attachments: [{ id: null as number | null, _file: null as string | null, file_type: null as number | null }],
@@ -44,7 +44,10 @@ const initialState = {
         price_to_watch: null as number | null,
         enabled_comments: false,
         access_level: null as number | null,
-        archived: false
+        archived: false,
+        like_id: null as number | null,
+        liked: false,
+        favourite: false
       }
     }
   ],
@@ -79,6 +82,28 @@ const blogReducer = (state = initialState, action: AllActionsType): InitialState
         ...state,
         isLoading: false
       };
+    case 'SET_POST_DATA':
+      return {
+        ...state,
+        posts: state.posts.map((item) => {
+          if (item.post.pk === action.payload.post_id && action.payload.liked === false) {
+            return {
+              ...item,
+              post: { ...item.post, liked: false, likes_amount: Number(item.post.likes_amount) - 1 }
+            };
+          } else if (item.post.pk === action.payload.post_id && action.payload.liked) {
+            return {
+              ...item,
+              post: {
+                ...item.post,
+                liked: true,
+                likes_amount: Number(item.post.likes_amount) + 1,
+                like_id: action.payload.id
+              }
+            };
+          } else return item;
+        })
+      };
     default:
       return state;
   }
@@ -99,6 +124,12 @@ const actions = {
     return {
       type: 'ISNT_LOADING'
     } as const;
+  },
+  setPostData: (post_id: number, liked: boolean, id: number | null) => {
+    return {
+      type: 'SET_POST_DATA',
+      payload: { post_id, liked, id }
+    };
   }
 };
 
@@ -123,10 +154,23 @@ export const getMainPageData = (): Thunk => async (dispatch) => {
   dispatch(actions.isntLoading());
 };
 
+export const setPostData = ({ post_id, like }: { post_id: number; like: boolean }): Thunk => async (dispatch) => {
+  dispatch(actions.isntLoading());
+};
+
 export const createPostAction = ({ like, comment, donation_amount, user, post }: createPostActionRT): Thunk => async (
   dispatch
 ) => {
-  await blogAPI.createPostAction({ like, comment, donation_amount, user, post, date_time: null });
+  const data = await blogAPI.createPostAction({
+    like,
+    comment,
+    donation_amount,
+    user,
+    post,
+    date_time: null,
+    id: null
+  });
+  dispatch(actions.setPostData(post, true, data.id));
 };
 
 export const createPostBought = ({ user, amount, post }: createPostBoughtRT): Thunk => async (dispatch) => {
@@ -177,10 +221,11 @@ export const createStory = ({ time_to_archive, reply_link, archived, user }: cre
   });
 };
 
-export const deletePostAction = ({ id }: idType): Thunk => async (dispatch) => {
+export const deletePostAction = ({ id, post_id }: { id: number; post_id: number }): Thunk => async (dispatch) => {
   await blogAPI.deletePostAction({
     id
   });
+  dispatch(actions.setPostData(post_id, false, null));
 };
 
 export const deletePost = ({ id }: idType): Thunk => async (dispatch) => {

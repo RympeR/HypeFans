@@ -184,6 +184,7 @@ export type createPostActionRT = {
   user: number;
   post: number;
   date_time: null | undefined | string;
+  id: number | null;
 };
 export type createPostBoughtRT = {
   id: number | null;
