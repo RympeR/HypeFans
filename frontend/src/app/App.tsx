@@ -8,6 +8,7 @@ import { Main, Navbar } from './layout';
 import AddPost from './pages/AddPost';
 import Auth from './pages/auth/Auth';
 import Chat from './pages/Chat';
+import { Favourites } from './pages/favourites/Favourites';
 import Home from './pages/Home';
 import Notifications from './pages/Notifications';
 import Profile from './pages/Profile';
@@ -36,6 +37,7 @@ const App = () => {
                 <Route path="/chat" component={Chat} />
                 <Route path="/profile" component={Profile} />
                 <Route path="/settings" component={Settings} />
+                <Route path="/favourites" component={Favourites} />
               </Main>
             </Switch>
           </LangProvider>

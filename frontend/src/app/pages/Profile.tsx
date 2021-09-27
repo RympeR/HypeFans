@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
+import { Link } from 'react-router-dom';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 import { createPostAction, deletePostAction } from '~/redux/blogReducer';
 import { RootState } from '~/redux/redux';
 import { getUser } from '~/redux/userReducer';
@@ -43,7 +46,13 @@ const Profile = () => {
       >
         <div className="profile__headerButtons">
           <BackButton style={{ width: '35px', height: '35px' }} onClick={history.goBack} />
-          <MenuDotsWhite style={{ width: '25px', height: '25px' }} />
+          <Popup trigger={<MenuDotsWhite style={{ width: '25px', height: '25px' }} />} position="bottom right">
+            <div style={{ padding: '5px' }}>
+              <Link to="/favourites">
+                <button>Избранные</button>
+              </Link>
+            </div>
+          </Popup>
         </div>
         <img
           src={

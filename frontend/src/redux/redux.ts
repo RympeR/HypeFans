@@ -3,13 +3,15 @@ import thunkMiddleware from 'redux-thunk';
 import notificationsReducer from '~/redux/notificationsReducer';
 import authReducer from './authReducer';
 import blogReducer from './blogReducer';
+import favouritesReducer from './favouritesReducer';
 import userReducer from './userReducer';
 
 const reducers = combineReducers({
   auth: authReducer,
   blog: blogReducer,
   notifications: notificationsReducer,
-  user: userReducer
+  user: userReducer,
+  favourites: favouritesReducer
 });
 
 type rootReducer = typeof reducers;

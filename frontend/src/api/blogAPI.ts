@@ -84,6 +84,11 @@ export const blogAPI = {
       return response;
     });
   },
+  getFavourites({ limit = 10, offset = 10 }: { limit: number; offset: number }) {
+    return instance.get('/blog/get-favourite-posts/').then((response) => {
+      return response;
+    });
+  },
   getNotifications({ limit = 10, offset = 10 }: { limit: number; offset: number }) {
     return instance.get(`/blog/get-notifications/`).then((response) => {
       return response;
