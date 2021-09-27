@@ -100,24 +100,14 @@ export const blogAPI = {
     });
   },
   getPostList({ username }: { username: string }) {
-    return instance
-      .get(
-        `
-    ​/blog​/get-post-list​/${username}`
-      )
-      .then((response) => {
-        return response;
-      });
+    return instance.get(`/blog​/get-post-list​/${username}`).then((response) => {
+      return response;
+    });
   },
   getPost({ id }: idType) {
-    return instance
-      .get(
-        `
-        /blog/get-post/${id}`
-      )
-      .then((response) => {
-        return response;
-      });
+    return instance.get(`/blog/get-post/${id}`).then((response) => {
+      return response;
+    });
   },
   getStoryAction({ id }: idType) {
     return instance

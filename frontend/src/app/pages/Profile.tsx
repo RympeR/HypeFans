@@ -90,7 +90,6 @@ const Profile = () => {
         <div className="profile__posts">
           {profile.posts.length > 0 ? (
             profile.posts.map((item, index) => {
-              debugger;
               return (
                 <div className="profile__post" key={`${index}_post`}>
                   <div className="profile__postHeader">
