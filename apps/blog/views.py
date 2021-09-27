@@ -39,6 +39,7 @@ class PostBoughtCreateAPI(generics.CreateAPIView):
 
 class PostListAPI(generics.GenericAPIView):
     serializer_class = PostGetShortSerializers
+    queryset = Post.objects.all()
 
     def get(self, request, username):
         limit = request.GET.get('limit', 20)
@@ -74,19 +75,19 @@ class PostListAPI(generics.GenericAPIView):
                 if postActionQuerySet.exists():
                     for action in postActionQuerySet:
                         if action.like:
-                            data['post']['liked'] = True
-                            data['post']['like_id'] = action.pk
+                            data[ind]['post']['liked'] = True
+                            data[ind]['post']['like_id'] = action.pk
                             break
                     else:
-                        data['post']['liked'] = False
-                        data['post']['like_id'] = None
+                        data[ind]['post']['liked'] = False
+                        data[ind]['post']['like_id'] = None
                 else:
-                    data['post']['liked'] = False
-                    data['post']['like_id'] = None
+                    data[ind]['post']['liked'] = False
+                    data[ind]['post']['like_id'] = None
                 if user in post.favourites.all():
-                    data['post']['favourite'] = True
+                    data[ind]['post']['favourite'] = True
                 else:
-                    data['post']['favourite'] = False
+                    data[ind]['post']['favourite'] = False
 
         for ind, post in enumerate(data):
             user_data = UserShortRetrieveSeriliazer(
@@ -450,6 +451,7 @@ class MarkFavourite(generics.GenericAPIView):
 
 class GetFavouritePosts(generics.GenericAPIView):
     serializer_class = PostGetShortSerializers
+    queryset = Post.objects.all()
 
     def get(self, request):
         limit = request.GET.get('limit', 20)
