@@ -12,6 +12,11 @@ import {
 } from './types';
 
 export const blogAPI = {
+  setFavorite(post_id: number, favourite: boolean) {
+    return instance.put('/blog/mark-favourite/', { post_id: post_id, favourite: favourite }).then((res) => {
+      return res;
+    });
+  },
   createAttachment(file_type: number) {
     return instance
       .post<createAttachmentRT>('/blog/create-attachment/', { file_type })

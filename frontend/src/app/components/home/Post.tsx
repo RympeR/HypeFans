@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LENTGH_OF_VISIBLE_CAPTION, showVisibleText } from '~/app/utils/utilities';
-import { createPostAction, deletePostAction } from '~/redux/blogReducer';
+import { createPostAction, deletePostAction, setFavorite } from '~/redux/blogReducer';
 import { RootState } from '~/redux/redux';
 import { ReactComponent as MenuDots } from '../../../assets/images/3dots.svg';
 import { ReactComponent as SaveIcon } from '../../../assets/images/bookmark.svg';
@@ -110,8 +110,13 @@ const Post = ({
 
             <button className="post__donate-btn">{currentLang.donut}</button>
           </div>
-          <button className="post__action-btn">
-            <SaveIcon className="post__action-icon" />
+          <button
+            className="post__action-btn"
+            onClick={() => {
+              return dispatch(setFavorite(post.post.pk, !post.post.favourite));
+            }}
+          >
+            <SaveIcon className="post__action-icon" fill={post.post.favourite ? 'black' : 'none'} />
           </button>
         </div>
 

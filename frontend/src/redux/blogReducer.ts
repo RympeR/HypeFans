@@ -86,7 +86,12 @@ const blogReducer = (state = initialState, action: AllActionsType): InitialState
       return {
         ...state,
         posts: state.posts.map((item) => {
-          if (item.post.pk === action.payload.post_id && action.payload.liked === false) {
+          if (item.post.pk === action.payload.post_id && action.payload.favourite !== null) {
+            return {
+              ...item,
+              post: { ...item.post, favourite: action.payload.favourite }
+            };
+          } else if (item.post.pk === action.payload.post_id && action.payload.liked === false) {
             return {
               ...item,
               post: { ...item.post, liked: false, likes_amount: Number(item.post.likes_amount) - 1 }
@@ -125,10 +130,10 @@ const actions = {
       type: 'ISNT_LOADING'
     } as const;
   },
-  setPostData: (post_id: number, liked: boolean, id: number | null) => {
+  setPostData: (post_id: number, liked: boolean | null, id: number | null, favourite: boolean | null) => {
     return {
       type: 'SET_POST_DATA',
-      payload: { post_id, liked, id }
+      payload: { post_id, liked, id, favourite }
     };
   }
 };
@@ -154,8 +159,9 @@ export const getMainPageData = (): Thunk => async (dispatch) => {
   dispatch(actions.isntLoading());
 };
 
-export const setPostData = ({ post_id, like }: { post_id: number; like: boolean }): Thunk => async (dispatch) => {
-  dispatch(actions.isntLoading());
+export const setFavorite = (postId: number, favourite: boolean): Thunk => async (dispatch) => {
+  const data = await blogAPI.setFavorite(postId, favourite);
+  dispatch(actions.setPostData(data.data.post_id, null, null, data.data.favourite));
 };
 
 export const createPostAction = ({ like, comment, donation_amount, user, post }: createPostActionRT): Thunk => async (
@@ -170,7 +176,7 @@ export const createPostAction = ({ like, comment, donation_amount, user, post }:
     date_time: null,
     id: null
   });
-  dispatch(actions.setPostData(post, true, data.id));
+  dispatch(actions.setPostData(post, true, data.id, null));
 };
 
 export const createPostBought = ({ user, amount, post }: createPostBoughtRT): Thunk => async (dispatch) => {
@@ -225,7 +231,7 @@ export const deletePostAction = ({ id, post_id }: { id: number; post_id: number 
   await blogAPI.deletePostAction({
     id
   });
-  dispatch(actions.setPostData(post_id, false, null));
+  dispatch(actions.setPostData(post_id, false, null, null));
 };
 
 export const deletePost = ({ id }: idType): Thunk => async (dispatch) => {
