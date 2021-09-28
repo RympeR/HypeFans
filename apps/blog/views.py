@@ -497,7 +497,7 @@ class GetFavouritePosts(generics.GenericAPIView):
             else:
                 data[ind]['post']['favourite'] = False
 
-        for ind, post in enumerate(data):
+        for ind, post in enumerate(qs):
             user_data = UserShortRetrieveSeriliazer(
                 instance=post.user, context={'request': request}).data
             data[ind]['user'] = user_data
