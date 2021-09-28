@@ -18,8 +18,6 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
   const post = useSelector((state: RootState) => state.blog.post);
   const isLoading = useSelector((state: RootState) => state.blog.isPostLoading);
 
-  debugger;
-
   if (isLoading) {
     return <div>Загрузка...</div>;
   }
