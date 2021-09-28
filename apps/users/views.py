@@ -1,4 +1,4 @@
-from apps.blog.models import PostBought
+from apps.blog.models import PostAction, PostBought
 from apps.blog.serializers import PostGetShortSerializers
 from datetime import datetime, timedelta
 
@@ -53,11 +53,29 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
                         True if Subscription.objects.filter(
                             target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                     )
+                postActionQuerySet = PostAction.objects.filter(
+                    post=post, user=request.user)
+                if postActionQuerySet.exists():
+                    for action in postActionQuerySet:
+                        if action.like:
+                            res_dict['post']['liked'] = True
+                            res_dict['post']['like_id'] = action.pk
+                            break
+                    else:
+                        res_dict['post']['liked'] = False
+                        res_dict['post']['like_id'] = None
+                else:
+                    res_dict['post']['liked'] = False
+                    res_dict['post']['like_id'] = None
+                if request.user in post.favourites.all():
+                    res_dict['post']['favourite'] = True
+                else:
+                    res_dict['post']['favourite'] = False
                 results.append(res_dict)
         return api_accepted_202({
             **self.serializer_class(instance=user, context={'request': request}).data,
             **{'posts': results[offset:limit+offset]}
-            })
+        })
 
     def get_serializer_context(self):
         return {'request': self.request}
