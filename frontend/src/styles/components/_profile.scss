@@ -99,11 +99,16 @@
     color: #000000;
   }
   &__postMain {
-    img {
-      width: 100%;
-      margin-top: 25px;
-    }
     border-bottom: 1px solid $grey;
+  }
+  &__postIMG {
+    display: flex;
+    justify-content: center;
+    img {
+      max-width: 100%;
+      margin-top: 25px;
+      max-height: 600px;
+    }
   }
   &__headerButtons {
     width: 100%;

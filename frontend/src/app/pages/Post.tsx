@@ -1,6 +1,7 @@
 import { default as React, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import 'reactjs-popup/dist/index.css';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { createPostAction, deletePostAction, getPost } from '~/redux/blogReducer';
 import { RootState } from '~/redux/redux';
 import { ReactComponent as MenuDots } from '../../assets/images/3dots.svg';
@@ -58,7 +59,23 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
           </div>
         </div>
         <div className="profile__postMain">
-          <img src={post?.attachments[0]._file}></img>
+          {post?.attachments.length > 1 ? (
+            <div className="profile__postIMG">
+              <Swiper pagination={true} spaceBetween={20} loop={true} slidesPerView={1}>
+                {post.attachments.map((item: any, index: number) => {
+                  return (
+                    <SwiperSlide key={`${index} slideMain`}>
+                      <img src={item._file} alt="postIMG" className="profile"></img>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            </div>
+          ) : (
+            <div className="profile__postIMG">
+              <img src={post?.attachments[0]._file} alt="postIMG"></img>
+            </div>
+          )}
           <div className="post__bottom" style={{ margin: '24px 24px' }}>
             <div className="post__actions">
               <div className="post__actions-left">

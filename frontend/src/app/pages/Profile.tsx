@@ -4,6 +4,7 @@ import { useHistory, useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { RootState } from '~/redux/redux';
 import { createPostAction, deletePostAction, getUser, setFavorite } from '~/redux/userReducer';
 import { ReactComponent as MenuDots } from '../../assets/images/3dots.svg';
@@ -123,7 +124,23 @@ const Profile = () => {
                     </div>
                   </div>
                   <div className="profile__postMain">
-                    <img src={item.post.attachments[0]._file}></img>
+                    {item.post?.attachments.length > 1 ? (
+                      <div className="profile__postIMG">
+                        <Swiper pagination={true} spaceBetween={20} loop={true} slidesPerView={1}>
+                          {item.post.attachments.map((item: any, index: number) => {
+                            return (
+                              <SwiperSlide key={`${index} slideMain`}>
+                                <img src={item._file} alt="postIMG" className="profile"></img>
+                              </SwiperSlide>
+                            );
+                          })}
+                        </Swiper>
+                      </div>
+                    ) : (
+                      <div className="profile__postIMG">
+                        <img src={item?.post.attachments[0]._file} alt="postIMG"></img>
+                      </div>
+                    )}
                     <div className="post__bottom" style={{ margin: '24px 24px' }}>
                       <div className="post__actions">
                         <div className="post__actions-left">

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { LENTGH_OF_VISIBLE_CAPTION, showVisibleText } from '~/app/utils/utilities';
 import { createPostAction, deletePostAction, setFavorite } from '~/redux/blogReducer';
 import { RootState } from '~/redux/redux';
@@ -78,7 +79,23 @@ const Post = ({
 
       <UserBanner profile={post.user} />
 
-      <img className="post__img" src={post.post.attachments[0]._file} alt="postImg" />
+      {post.post?.attachments.length > 1 ? (
+        <div className="profile__postIMG">
+          <Swiper pagination={true} spaceBetween={20} loop={true} slidesPerView={1}>
+            {post.post.attachments.map((item: any, index: number) => {
+              return (
+                <SwiperSlide key={`${index} slideMain`}>
+                  <img src={item._file} alt="postIMG" className="profile"></img>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        </div>
+      ) : (
+        <div className="profile__postIMG">
+          <img src={post?.post.attachments[0]._file} alt="postIMG"></img>
+        </div>
+      )}
 
       <div className="post__bottom">
         <div className="post__actions">
