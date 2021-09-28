@@ -483,15 +483,15 @@ class GetFavouritePosts(generics.GenericAPIView):
             if postActionQuerySet.exists():
                 for action in postActionQuerySet:
                     if action.like:
-                        data['post']['liked'] = True
-                        data['post']['like_id'] = action.pk
+                        data[ind]['post']['liked'] = True
+                        data[ind]['post']['like_id'] = action.pk
                         break
                 else:
-                    data['post']['liked'] = False
-                    data['post']['like_id'] = None
+                    data[ind]['post']['liked'] = False
+                    data[ind]['post']['like_id'] = None
             else:
-                data['post']['liked'] = False
-                data['post']['like_id'] = None
+                data[ind]['post']['liked'] = False
+                data[ind]['post']['like_id'] = None
             if user in post.favourites.all():
                 data['post']['favourite'] = True
             else:
