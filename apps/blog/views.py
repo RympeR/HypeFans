@@ -493,9 +493,9 @@ class GetFavouritePosts(generics.GenericAPIView):
                 data[ind]['post']['liked'] = False
                 data[ind]['post']['like_id'] = None
             if user in post.favourites.all():
-                data['post']['favourite'] = True
+                data[ind]['post']['favourite'] = True
             else:
-                data['post']['favourite'] = False
+                data[ind]['post']['favourite'] = False
 
         for ind, post in enumerate(data):
             user_data = UserShortRetrieveSeriliazer(
