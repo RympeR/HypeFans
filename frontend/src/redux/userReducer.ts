@@ -1,9 +1,11 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { authAPI } from '~/api/authAPI';
+import { blogAPI } from '~/api/blogAPI';
 import {
   CardType,
   createCardRT,
+  createPostActionRT,
   createUserT,
   DonationType,
   getUserRT,
@@ -55,16 +57,50 @@ const authReducer = (state = initialState, action: AllActionsType): InitialState
         ...state,
         ...action.payload
       };
+    case 'SET_POST_DATA':
+      return {
+        ...state,
+        posts: state.posts.map((item) => {
+          if (item.post.pk === action.payload.post_id && action.payload.favourite !== null) {
+            return {
+              ...item,
+              post: { ...item.post, favourite: action.payload.favourite }
+            };
+          } else if (item.post.pk === action.payload.post_id && action.payload.liked === false) {
+            return {
+              ...item,
+              post: { ...item.post, liked: false, likes_amount: Number(item.post.likes_amount) - 1 }
+            };
+          } else if (item.post.pk === action.payload.post_id && action.payload.liked) {
+            return {
+              ...item,
+              post: {
+                ...item.post,
+                liked: true,
+                likes_amount: Number(item.post.likes_amount) + 1,
+                like_id: action.payload.id
+              }
+            };
+          } else return item;
+        })
+      };
     default:
       return state;
   }
 };
 const actions = {
+  setPostsData: (post_id: number, liked: boolean | null, id: number | null, favourite: boolean | null) => {
+    return {
+      type: 'SET_POST_DATA',
+      payload: { post_id, liked, id, favourite }
+    };
+  },
   isAuth: () => {
     return {
       type: 'AUTHORIZED'
     } as const;
   },
+
   setProfileData: (
     subscribtion_price: number | null,
     pk: number | null,
@@ -131,6 +167,28 @@ const actions = {
       }
     } as const;
   }
+};
+
+export const createPostAction = ({ like, comment, donation_amount, user, post }: createPostActionRT): Thunk => async (
+  dispatch
+) => {
+  const data = await blogAPI.createPostAction({
+    like,
+    comment,
+    donation_amount,
+    user,
+    post,
+    date_time: null,
+    id: null
+  });
+  dispatch(actions.setPostsData(post, true, data.id, null));
+};
+
+export const deletePostAction = ({ id, post_id }: { id: number; post_id: number }): Thunk => async (dispatch) => {
+  await blogAPI.deletePostAction({
+    id
+  });
+  dispatch(actions.setPostsData(post_id, false, null, null));
 };
 
 export const updateEmailConfirm = (new_email: string, uid: number): Thunk => async (dispatch) => {
@@ -247,6 +305,11 @@ export const onlineUserCreate = ({ user }: userStringType): Thunk => async (disp
 
 export const onlineUserRetrieve = (): Thunk => async (dispatch) => {
   await userAPI.onlineUserRetrieve();
+};
+
+export const setFavorite = (postId: number, favourite: boolean): Thunk => async (dispatch) => {
+  const data = await blogAPI.setFavorite(postId, favourite);
+  dispatch(actions.setPostsData(data.data.post_id, null, null, data.data.favourite));
 };
 
 export const onlineUserUpdatePut = ({ user }: userStringType): Thunk => async (dispatch) => {

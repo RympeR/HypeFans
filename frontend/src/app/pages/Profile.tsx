@@ -4,9 +4,8 @@ import { useHistory, useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import { createPostAction, deletePostAction } from '~/redux/blogReducer';
 import { RootState } from '~/redux/redux';
-import { getUser } from '~/redux/userReducer';
+import { createPostAction, deletePostAction, getUser, setFavorite } from '~/redux/userReducer';
 import { ReactComponent as MenuDots } from '../../assets/images/3dots.svg';
 import { ReactComponent as MenuDotsWhite } from '../../assets/images/3dotsWhite.svg';
 import { ReactComponent as BackButton } from '../../assets/images/arrow-leftWhite.svg';
@@ -153,8 +152,13 @@ const Profile = () => {
                             <CommentIcon className="post__action-icon" />
                           </button>
                         </div>
-                        <button className="post__action-btn">
-                          <SaveIcon className="post__action-icon" />
+                        <button
+                          className="post__action-btn"
+                          onClick={() => {
+                            return dispatch(setFavorite(item.post.pk, !item.post.favourite));
+                          }}
+                        >
+                          <SaveIcon className="post__action-icon" fill={item.post.favourite ? 'black' : 'none'} />
                         </button>
                       </div>
 
