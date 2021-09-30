@@ -17,7 +17,7 @@ from .serializers import *
 
 class AttachmentCreateAPI(generics.CreateAPIView):
     queryset = Attachment.objects.all()
-    serializer_class = AttachmentSerializer
+    serializer_class = AttachmentCreateSerializer
 
 class AttachmentManyCreateAPI(generics.CreateAPIView):
     queryset = Attachment.objects.all()

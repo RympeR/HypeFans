@@ -57,14 +57,6 @@ class AttachmentManySerializer(serializers.ModelSerializer):
         super(AttachmentManySerializer, self).__init__(
             many=many, *args, **kwargs)
 
-    _file = serializers.SerializerMethodField()
-
-    def get__file(self, attachment: Attachment):
-        path_file = attachment._file.url
-        file_url = 'https://{domain}{path}'.format(
-            domain='hype-fans.com', path=path_file)
-        return file_url
-
     class Meta:
         model = Attachment
         fields = '__all__'
@@ -79,6 +71,12 @@ class AttachmentSerializer(serializers.ModelSerializer):
         file_url = 'https://{domain}{path}'.format(
             domain='hype-fans.com', path=path_file)
         return file_url
+
+    class Meta:
+        model = Attachment
+        fields = '__all__'
+
+class AttachmentCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attachment
