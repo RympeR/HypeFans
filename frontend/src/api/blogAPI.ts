@@ -17,12 +17,10 @@ export const blogAPI = {
       return res;
     });
   },
-  createAttachment(file_type: number) {
-    return instance
-      .post<createAttachmentRT>('/blog/create-attachment/', { file_type })
-      .then((response) => {
-        return response;
-      });
+  createAttachment(file: any) {
+    return instance.post<createAttachmentRT>('/blog/create-attachment/', file).then((response) => {
+      return response;
+    });
   },
   createPostAction({ like, comment, donation_amount, user, post }: createPostActionRT) {
     return instance

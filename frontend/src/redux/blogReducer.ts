@@ -1,13 +1,6 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import {
-  createPostActionRT,
-  createPostBoughtRT,
-  createStoryActionRT,
-  createStoryRT,
-  idType,
-  PostType
-} from '~/api/types';
+import { createPostActionRT, createPostBoughtRT, createStoryActionRT, createStoryRT, idType } from '~/api/types';
 import { blogAPI } from './../api/blogAPI';
 import { InferActionsTypes, RootState } from './redux';
 
@@ -241,10 +234,13 @@ export const createPostBought = ({ user, amount, post }: createPostBoughtRT): Th
   await blogAPI.createPostBought({ user, amount, post, id: null });
 };
 
-export const createPost = (props: PostType): Thunk => async (dispatch) => {
+export const createPost = (props: any): Thunk => async (dispatch) => {
   const attachmentsID = [];
   for (let i = 0; i < props.attachments.length; i++) {
-    const data = await blogAPI.createAttachment(props.attachments[i]);
+    const formData = new FormData();
+    formData.append('_file', props.attachments[i]);
+    formData.append('file_type', '1');
+    const data = await blogAPI.createAttachment(formData);
     attachmentsID.push(data.data.id);
   }
   props.attachments = attachmentsID;
