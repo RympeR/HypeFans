@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     AttachmentCreateAPI,
+    AttachmentManyCreateAPI,
     PostListAPI,
     PostRetrieveAPI,
     PostCreateAPI,
@@ -28,6 +29,7 @@ urlpatterns = [
     path('partial-update-post/<int:pk>', PostPartialUpdateAPI.as_view()),
     path('create-post/', PostCreateAPI.as_view()),
     path('create-attachment/', AttachmentCreateAPI.as_view()),
+    path('create-many-attachments/', AttachmentManyCreateAPI.as_view()),
     path('create-story/', StoryCreateAPI.as_view()),
     path('mark-favourite/', MarkFavourite.as_view()),
     path('get-favourite-posts/', GetFavouritePosts.as_view()),

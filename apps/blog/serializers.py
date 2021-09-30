@@ -50,6 +50,26 @@ class PostActionShortSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class AttachmentManySerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        many = kwargs.pop('many', True)
+        super(AttachmentManySerializer, self).__init__(
+            many=many, *args, **kwargs)
+
+    _file = serializers.SerializerMethodField()
+
+    def get__file(self, attachment: Attachment):
+        path_file = attachment._file.url
+        file_url = 'https://{domain}{path}'.format(
+            domain='hype-fans.com', path=path_file)
+        return file_url
+
+    class Meta:
+        model = Attachment
+        fields = '__all__'
+
+
 class AttachmentSerializer(serializers.ModelSerializer):
 
     _file = serializers.SerializerMethodField()

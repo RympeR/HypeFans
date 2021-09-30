@@ -19,6 +19,10 @@ class AttachmentCreateAPI(generics.CreateAPIView):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
 
+class AttachmentManyCreateAPI(generics.CreateAPIView):
+    queryset = Attachment.objects.all()
+    serializer_class = AttachmentManySerializer
+
 
 class PostBoughtCreateAPI(generics.CreateAPIView):
     queryset = PostBought.objects.all()
