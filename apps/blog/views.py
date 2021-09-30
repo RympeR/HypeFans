@@ -19,6 +19,7 @@ class AttachmentCreateAPI(generics.CreateAPIView):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentCreateSerializer
 
+
 class AttachmentManyCreateAPI(generics.CreateAPIView):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentManySerializer
@@ -108,6 +109,9 @@ class PostRetrieveAPI(generics.RetrieveAPIView):
     queryset = Post.objects.all()
     serializer_class = PostGetSerializer
 
+    def get_serializer_context(self):
+        return {'request': self.request}
+
 
 class PostCreateAPI(generics.CreateAPIView):
     queryset = Post.objects.all()
@@ -142,6 +146,9 @@ class PostActionListAPI(generics.GenericAPIView):
         data = [self.get_serializer(instance=post, context={
                                     'request': request}) for post in qs]
         return Response(data)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 class PostActionCreateAPI(generics.CreateAPIView):

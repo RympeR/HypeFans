@@ -76,6 +76,7 @@ class AttachmentSerializer(serializers.ModelSerializer):
         model = Attachment
         fields = '__all__'
 
+
 class AttachmentCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -92,19 +93,60 @@ class PostGetSerializer(serializers.ModelSerializer):
     likes_amount = serializers.SerializerMethodField()
     comments_amount = serializers.SerializerMethodField()
     favourites_amount = serializers.SerializerMethodField()
+    favourite = serializers.SerializerMethodField()
+    liked = serializers.SerializerMethodField()
+    like_id = serializers.SerializerMethodField()
     attachments = AttachmentSerializer(many=True)
 
-    def get_likes_amount(self, obj: Post):
+    def get_likes_amount(self, obj: Post) -> int:
         return obj.user_postaction.filter(like=True).aggregate(Count('pk'))['pk__count']
 
-    def get_comments_amount(self, obj: Post):
+    def get_comments_amount(self, obj: Post) -> int:
         return obj.user_postaction.filter(~Q(comment__isnull=True) & ~Q(comment='')).aggregate(Count('pk'))['pk__count']
 
-    def get_favourites_amount(self, obj: Post):
+    def get_favourites_amount(self, obj: Post) -> int:
         return obj.favourites.all().aggregate(Count('pk'))['pk__count']
 
-    def get_comments(self, obj: Post):
+    def get_comments(self, obj: Post) -> list:
         return [PostActionShortSerializer(instance=post).data for post in obj.user_postaction.filter(~Q(comment__isnull=True) & ~Q(comment=''))]
+
+    def get_favourite(self, obj: Post) -> bool:
+        user = self.context.get('request').user
+        if user in obj.favourites.all():
+            return True
+        return False
+
+    def get_liked(self, obj: Post) -> bool:
+        request = self.context.get('request')
+        if request:
+            user = request.user
+            postActionQuerySet = PostAction.objects.filter(
+                post=obj, user=user)
+            if postActionQuerySet.exists():
+                for action in postActionQuerySet:
+                    if action.like:
+                        return True
+                else:
+                    return False
+            else:
+                return False
+        return True
+
+    def get_like_id(self, obj: Post) -> int:
+        request = self.context.get('request')
+        if request:
+            user = request.user
+            postActionQuerySet = PostAction.objects.filter(
+                post=obj, user=user)
+            if postActionQuerySet.exists():
+                for action in postActionQuerySet:
+                    if action.like:
+                        return action.pk
+                else:
+                    return None
+            else:
+                return None
+        return None
 
     class Meta:
         model = Post
