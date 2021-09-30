@@ -2,7 +2,7 @@ import { default as React, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import 'reactjs-popup/dist/index.css';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { createPostAction, deletePostAction, getPost } from '~/redux/blogReducer';
+import { createPostActionModal, deletePostActionModal, getPost, setFavoritePostModal } from '~/redux/blogReducer';
 import { RootState } from '~/redux/redux';
 import { ReactComponent as MenuDots } from '../../assets/images/3dots.svg';
 import { ReactComponent as SaveIcon } from '../../assets/images/bookmark.svg';
@@ -21,6 +21,8 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
   if (isLoading) {
     return <div>Загрузка...</div>;
   }
+
+  debugger;
 
   return (
     <div>
@@ -81,29 +83,34 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                   className="post__action-btn"
                   onClick={() => {
                     post?.liked
-                      ? dispatch(deletePostAction({ id: post?.like_id, post_id: post?.pk }))
+                      ? dispatch(deletePostActionModal({ id: post?.like_id, post_id: post?.id }))
                       : dispatch(
-                          createPostAction({
+                          createPostActionModal({
                             like: true,
                             comment: null,
                             donation_amount: 0,
                             user: myId,
                             date_time: null,
-                            post: post?.pk,
+                            post: post?.id,
                             id: null
                           })
                         );
                   }}
                 >
-                  <LikeIcon className="post__action-icon" fill={post?.liked ? 'red' : 'none'} />
+                  <LikeIcon className="post__action-icon" fill={post.liked ? 'red' : 'none'} />
                 </button>
 
                 <button className="post__action-btn">
                   <CommentIcon className="post__action-icon" />
                 </button>
               </div>
-              <button className="post__action-btn">
-                <SaveIcon className="post__action-icon" />
+              <button
+                className="post__action-btn"
+                onClick={() => {
+                  return dispatch(setFavoritePostModal(post.id, !post.favourite));
+                }}
+              >
+                <SaveIcon className="post__action-icon" fill={post.favourite ? 'black' : 'none'} />
               </button>
             </div>
 

@@ -13,7 +13,7 @@ const initialState = {
       first_name: null as string | null,
       background_photo: null as string | null
     },
-    pk: null as number | null,
+    id: null as number | null,
     favourites: [
       {
         pk: null as number | null,
@@ -116,7 +116,7 @@ const blogReducer = (state = initialState, action: AllActionsType): InitialState
         ...state,
         isPostLoading: action.payload
       };
-    case 'SET_POST_DATA':
+    case 'SET_POSTS_DATA':
       return {
         ...state,
         posts: state.posts.map((item) => {
@@ -148,6 +148,36 @@ const blogReducer = (state = initialState, action: AllActionsType): InitialState
         ...state,
         post: action.payload
       };
+    case 'SET_POST_DATA':
+      if (action.payload.liked && action.payload.favourite === null) {
+        return {
+          ...state,
+          post: {
+            ...state.post,
+            liked: true,
+            like_id: action.payload.id,
+            likes_amount: state.post.likes_amount + 1
+          }
+        };
+      } else if (action.payload.favourite !== null) {
+        return {
+          ...state,
+          post: {
+            ...state.post,
+            favourite: action.payload.favourite
+          }
+        };
+      } else {
+        return {
+          ...state,
+          post: {
+            ...state.post,
+            liked: false,
+            like_id: action.payload.id,
+            likes_amount: state.post.likes_amount - 1
+          }
+        };
+      }
     default:
       return state;
   }
@@ -169,9 +199,15 @@ const actions = {
       type: 'ISNT_LOADING'
     } as const;
   },
-  setPostsData: (post_id: number, liked: boolean | null, id: number | null, favourite: boolean | null) => {
+  setPostData: (liked: boolean | null, id: number | null, favourite: boolean | null) => {
     return {
       type: 'SET_POST_DATA',
+      payload: { liked, id, favourite }
+    };
+  },
+  setPostsData: (post_id: number, liked: boolean | null, id: number | null, favourite: boolean | null) => {
+    return {
+      type: 'SET_POSTS_DATA',
       payload: { post_id, liked, id, favourite }
     };
   },
@@ -210,9 +246,33 @@ export const getMainPageData = (): Thunk => async (dispatch) => {
   dispatch(actions.isntLoading());
 };
 
+export const setFavoritePostModal = (postId: number, favourite: boolean): Thunk => async (dispatch) => {
+  const data = await blogAPI.setFavorite(postId, favourite);
+  dispatch(actions.setPostData(null, null, data.data.favourite));
+};
+
 export const setFavorite = (postId: number, favourite: boolean): Thunk => async (dispatch) => {
   const data = await blogAPI.setFavorite(postId, favourite);
   dispatch(actions.setPostsData(data.data.post_id, null, null, data.data.favourite));
+};
+
+export const createPostActionModal = ({
+  like,
+  comment,
+  donation_amount,
+  user,
+  post
+}: createPostActionRT): Thunk => async (dispatch) => {
+  const data = await blogAPI.createPostAction({
+    like,
+    comment,
+    donation_amount,
+    user,
+    post,
+    date_time: null,
+    id: null
+  });
+  dispatch(actions.setPostData(true, data.id, null));
 };
 
 export const createPostAction = ({ like, comment, donation_amount, user, post }: createPostActionRT): Thunk => async (
@@ -279,6 +339,13 @@ export const createStory = ({ time_to_archive, reply_link, archived, user }: cre
     story: null,
     watched_story: null
   });
+};
+
+export const deletePostActionModal = ({ id, post_id }: { id: number; post_id: number }): Thunk => async (dispatch) => {
+  await blogAPI.deletePostAction({
+    id
+  });
+  dispatch(actions.setPostData(false, null, null));
 };
 
 export const deletePostAction = ({ id, post_id }: { id: number; post_id: number }): Thunk => async (dispatch) => {
