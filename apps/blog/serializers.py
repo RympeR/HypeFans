@@ -21,7 +21,7 @@ class UserFavouritesSerializer(serializers.Serializer):
 
 
 class PostActionCreationSerializer(serializers.ModelSerializer):
-
+    donation_amount = serializers.IntegerField(required=False)
     class Meta:
         model = PostAction
         fields = '__all__'
@@ -30,10 +30,10 @@ class PostActionCreationSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         user = request.user
         attrs['user'] = user
-        if attrs['donation_amount'] == 0:
+        if attrs.get('donation_amount') == 0:
             return attrs
-        if user.credit_amount >= attrs['donation_amount'] > 0:
-            user.credit_amount -= attrs['donation_amount']
+        if user.credit_amount >= attrs.get('donation_amount') > 0:
+            user.credit_amount -= attrs.get('donation_amount')
             attrs['post'].user.earned_credits_amount += attrs['donation_amount']
             user.save()
             attrs['post'].user.save()
