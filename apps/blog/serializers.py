@@ -32,8 +32,8 @@ class PostActionCreationSerializer(serializers.ModelSerializer):
         attrs['user'] = user
         if attrs.get('donation_amount') == 0:
             return attrs
-        if user.credit_amount >= attrs.get('donation_amount') > 0:
-            user.credit_amount -= attrs.get('donation_amount')
+        if user.credit_amount >= attrs.get('donation_amount', 0) > 0:
+            user.credit_amount -= attrs.get('donation_amount', 0)
             attrs['post'].user.earned_credits_amount += attrs['donation_amount']
             user.save()
             attrs['post'].user.save()
