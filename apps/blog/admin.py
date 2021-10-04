@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
-
+from mptt.admin import TreeRelatedFieldListFilter
+from mptt.admin import DraggableMPTTAdmin, TreeRelatedFieldListFilter
 from .models import (
     Attachment,
     Post,
@@ -48,7 +49,7 @@ class PostAdmin(admin.ModelAdmin):
 
 
 @admin.register(PostAction)
-class PostActionAdmin(admin.ModelAdmin):
+class PostActionAdmin(DraggableMPTTAdmin):
     list_display = (
         'pk', 'user', 'post', 'like', 'comment', 'donation_amount'
     )
@@ -61,7 +62,9 @@ class PostActionAdmin(admin.ModelAdmin):
     list_filter = (
         'like',
     )
-
+    list_filter = (
+        ('parent', TreeRelatedFieldListFilter),
+    )
 
 @admin.register(Story)
 class StoryAdmin(admin.ModelAdmin):

@@ -1,7 +1,7 @@
 from django.db import models
 from apps.users.models import User
 from unixtimestampfield.fields import UnixTimeStampField
-
+from mptt.models import MPTTModel, TreeForeignKey
 
 class Attachment(models.Model):
     class AtachmentChoices(models.IntegerChoices):
@@ -65,7 +65,9 @@ class Post(models.Model):
         return f"{self.pk}-{self.user}"
 
 
-class PostAction(models.Model):
+class PostAction(MPTTModel):
+    parent = TreeForeignKey(
+        'self', verbose_name='Вложенное действие', blank=True, null=True, related_name='parent_action', on_delete=models.CASCADE)
     user = models.ForeignKey(
         User,
         verbose_name='Взаимодействующий юзер',
@@ -90,6 +92,10 @@ class PostAction(models.Model):
     def __str__(self):
         return f"{self.pk}-{self.post}"
 
+
+    class MPTTMeta:
+        order_insertion_by = ['pk']
+        level_attr = 'sub_action'
 
 class Story(models.Model):
     user = models.ForeignKey(
