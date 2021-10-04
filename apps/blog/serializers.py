@@ -309,7 +309,7 @@ class CommentRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostAction
-        fields = ('post', 'comment', 'publication_date')
+        fields = ('post', 'comment', 'datetime')
 
 
 class LikeRetrieveSerializer(serializers.ModelSerializer):
