@@ -228,6 +228,7 @@ class WatchedStoriesCreateAPI(generics.CreateAPIView):
 
 
 class UserNotifications(GenericAPIView):
+    queryset = User.objects.all()
 
     def get(self, request):
         limit = request.GET.get('limit', 50)
