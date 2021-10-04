@@ -94,7 +94,7 @@ class PostAction(MPTTModel):
 
 
     class MPTTMeta:
-        order_insertion_by = ['pk']
+        order_insertion_by = ['id']
         level_attr = 'sub_action'
 
 class Story(models.Model):
