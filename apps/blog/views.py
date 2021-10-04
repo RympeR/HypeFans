@@ -136,7 +136,8 @@ class PostPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
 
 class PostActionListAPI(generics.GenericAPIView):
     serializer_class = PostActionGetSerializer
-
+    queryset = PostAction.objects.all()
+    
     def get(self, request, pk):
         limit = request.GET.get('limit', 20)
         offset = request.GET.get('offset', 0)
