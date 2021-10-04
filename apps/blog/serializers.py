@@ -22,6 +22,7 @@ class UserFavouritesSerializer(serializers.Serializer):
 
 class PostActionCreationSerializer(serializers.ModelSerializer):
     donation_amount = serializers.IntegerField(required=False)
+
     class Meta:
         model = PostAction
         fields = '__all__'
@@ -306,6 +307,7 @@ class WatchedStoriesCreationSerializer(serializers.ModelSerializer):
 
 class CommentRetrieveSerializer(serializers.ModelSerializer):
     post = PostGetShortSerializers()
+    datetime = TimestampField()
 
     class Meta:
         model = PostAction
@@ -314,6 +316,7 @@ class CommentRetrieveSerializer(serializers.ModelSerializer):
 
 class LikeRetrieveSerializer(serializers.ModelSerializer):
     post = PostGetShortSerializers()
+    datetime = TimestampField()
 
     class Meta:
         model = PostAction
