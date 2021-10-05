@@ -145,7 +145,7 @@ class PostActionListAPI(generics.GenericAPIView):
             post=Post.objects.get(pk=pk)
         )[offset:offset+limit]
         logging.warning(f'Context from VIEW-> {request}')
-
+        # print(request)
         data = [self.get_serializer(
                         instance=post, 
                         context={

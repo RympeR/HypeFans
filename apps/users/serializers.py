@@ -52,6 +52,7 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
+            print(request)
             host = request.get_host()
             file_url = 'http://{domain}{path}'.format(
                 domain=host, path=path_file)

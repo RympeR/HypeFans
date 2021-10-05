@@ -250,10 +250,10 @@ class PostGetShortSerializers(serializers.ModelSerializer):
 
 class PostActionGetSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
-    post = PostGetSerializer()
     parent_username = serializers.SerializerMethodField()
     parent_user_id = serializers.SerializerMethodField()
-
+    date_time = TimestampField()
+    
     def get_parent_username(self, post_action:PostAction):
         return post_action.parent.user.username if post_action.parent else None
 
@@ -263,6 +263,7 @@ class PostActionGetSerializer(serializers.ModelSerializer):
     def get_user(self, post_action:PostAction):
         serializer_context = {'request': self.context.get('request') }
         logging.warning(f'Context -> {self.context.get("request")}')
+        # print(self.context.get("request"))
         serializer = UserShortRetrieveSeriliazer(post_action.user, context=serializer_context)
         return serializer.data
 
