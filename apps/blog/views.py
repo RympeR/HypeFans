@@ -144,8 +144,12 @@ class PostActionListAPI(generics.GenericAPIView):
         qs = PostAction.objects.filter(
             post=Post.objects.get(pk=pk)
         )[offset:offset+limit]
-        data = [self.get_serializer(instance=post, context={
-                                    'request': request}).data for post in qs]
+        data = [self.get_serializer(
+                        instance=post, 
+                        context={
+                            'request': request
+                        }
+                    ).data for post in qs]
         return Response(data)
 
     def get_serializer_context(self):

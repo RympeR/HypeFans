@@ -249,7 +249,7 @@ class PostGetShortSerializers(serializers.ModelSerializer):
 
 
 class PostActionGetSerializer(serializers.ModelSerializer):
-    user = UserShortRetrieveSeriliazer()
+    user = UserShortRetrieveSeriliazer(context={'request':'self'.context.get('request')})
     post = PostGetSerializer()
     parent_username = serializers.SerializerMethodField()
     parent_user_id = serializers.SerializerMethodField()
