@@ -50,10 +50,10 @@ class PostActionShortSerializer(serializers.ModelSerializer):
     user = UserShortRetrieveSeriliazer()
 
     def get_parent_username(self, post_action:PostAction):
-        return post_action.parent.user.username
+        return post_action.parent.user.username if post_action.parent else None
 
     def get_parent_user_id(self, post_action:PostAction):
-        return post_action.parent.user.pk
+        return post_action.parent.user.pk if post_action.parent else None
 
     class Meta:
         model = PostAction
@@ -255,10 +255,10 @@ class PostActionGetSerializer(serializers.ModelSerializer):
     parent_user_id = serializers.SerializerMethodField()
 
     def get_parent_username(self, post_action:PostAction):
-        return post_action.parent.user.username
+        return post_action.parent.user.username if post_action.parent else None
 
     def get_parent_user_id(self, post_action:PostAction):
-        return post_action.parent.user.pk
+        return post_action.parent.user.pk if post_action.parent else None
 
     class Meta:
         model = PostAction
@@ -329,10 +329,10 @@ class CommentRetrieveSerializer(serializers.ModelSerializer):
     user = UserShortRetrieveSeriliazer()
 
     def get_parent_username(self, post_action:PostAction):
-        return post_action.parent.user.username
+        return post_action.parent.user.username if post_action.parent else None
 
     def get_parent_user_id(self, post_action:PostAction):
-        return post_action.parent.user.pk
+        return post_action.parent.user.pk if post_action.parent else None
 
     class Meta:
         model = PostAction
@@ -347,10 +347,10 @@ class LikeRetrieveSerializer(serializers.ModelSerializer):
     user = UserShortRetrieveSeriliazer()
 
     def get_parent_username(self, post_action:PostAction):
-        return post_action.parent.user.username
+        return post_action.parent.user.username if post_action.parent else None
 
     def get_parent_user_id(self, post_action:PostAction):
-        return post_action.parent.user.pk
+        return post_action.parent.user.pk if post_action.parent else None
 
     class Meta:
         model = PostAction
