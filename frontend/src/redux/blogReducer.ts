@@ -61,7 +61,7 @@ const initialState = {
           }
         ],
         publication_date: null as string | null,
-        comments: null as string | null,
+        comments: [] as Array<any> | null,
         likes_amount: null as any,
         comments_amount: null as string | null,
         favourites_amount: null as string | null,
@@ -355,6 +355,19 @@ export const deletePostAction = ({ id, post_id }: { id: number; post_id: number 
   dispatch(actions.setPostsData(post_id, false, null, null));
 };
 
+export const addCommentAction = async ({ comment, user, post }: { comment: string; user: number; post: number }) => {
+  const data = await blogAPI.createPostAction({
+    like: null,
+    comment,
+    donation_amount: null,
+    user,
+    post,
+    date_time: null,
+    id: null
+  });
+  return data;
+};
+
 export const deletePost = ({ id }: idType): Thunk => async (dispatch) => {
   await blogAPI.deletePost({
     id
@@ -374,10 +387,11 @@ export const deleteStory = ({ id }: idType): Thunk => async (dispatch) => {
   });
 };
 
-export const getPostActionList = ({ id }: idType): Thunk => async (dispatch) => {
-  await blogAPI.getPostActionList({
+export const getPostActionList = async ({ id }: idType) => {
+  const data = await blogAPI.getPostActionList({
     id
   });
+  return data;
 };
 
 export const getPostList = ({ username }: { username: string }): Thunk => async (dispatch) => {

@@ -13,6 +13,7 @@ import { ReactComponent as BackButton } from '../../assets/images/arrow-leftWhit
 import { ReactComponent as SaveIcon } from '../../assets/images/bookmark.svg';
 import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
 import { ReactComponent as CommentIcon } from '../../assets/images/message-circle.svg';
+import { CommentComponent } from '../components/CommentComponent';
 import { Preloader } from '../utils/Preloader';
 
 const Profile = () => {
@@ -181,7 +182,7 @@ const Profile = () => {
 
                       <p className="post__like-amount">{item.post.likes_amount} лайков</p>
 
-                      <p className="post__comment-amount">Оставить комменатрий</p>
+                      <CommentComponent data={item.post.comments} postId={item.post.pk} />
                     </div>
                   </div>
                 </div>

@@ -10,6 +10,7 @@ import { ReactComponent as LikeIcon } from '../../../assets/images/heart.svg';
 import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
 import { ReactComponent as CommentIcon } from '../../../assets/images/message-circle.svg';
 import { LangContext } from '../../utils/LangProvider';
+import { CommentComponent } from '../CommentComponent';
 import UserBanner from './UserBanner';
 
 const Post = ({
@@ -27,9 +28,11 @@ const Post = ({
       archived: boolean;
       like_id: number;
       favourite: boolean;
+      comments: Array<any>;
     };
   };
 }) => {
+  console.log(post.post);
   const user_id = useSelector((state: RootState) => state.auth.pk);
   const { currentLang } = useContext(LangContext);
 
@@ -141,9 +144,7 @@ const Post = ({
           {post.post.likes_amount} {currentLang.liks1}
         </p>
 
-        <p className="post__comment-amount">
-          {currentLang.watch} {post.post.comments_amount} {currentLang.comments1}
-        </p>
+        <CommentComponent data={post.post.comments} postId={post.post.pk} />
       </div>
     </article>
   );

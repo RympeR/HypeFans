@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { CommentComponent } from '~/app/components/CommentComponent';
 import { Preloader } from '~/app/utils/Preloader';
 import { createPostAction, deletePostAction, getFavourites } from '~/redux/favouritesReducer';
 import { RootState } from '~/redux/redux';
@@ -116,7 +117,7 @@ export const Favourites = () => {
 
                 <p className="post__like-amount">{item.post.likes_amount} лайков</p>
 
-                <p className="post__comment-amount">Оставить комменатрий</p>
+                <CommentComponent data={item.post.comments} postId={item.post.pk} />
               </div>
             </div>
           </div>

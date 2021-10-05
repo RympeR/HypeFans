@@ -26,7 +26,6 @@ const App = () => {
       <BrowserRouter>
         <ViewportProvider>
           <LangProvider>
-            <Navbar />
             <Switch>
               <Route exact path="/" component={Auth} />
               <Route exact path="/signup" component={Auth} />
@@ -40,6 +39,7 @@ const App = () => {
                 <Route path="/favourites" component={Favourites} />
               </Main>
             </Switch>
+            <Navbar />
           </LangProvider>
         </ViewportProvider>
       </BrowserRouter>

@@ -23,11 +23,19 @@ export const blogAPI = {
     });
   },
   createPostAction({ like, comment, donation_amount, user, post }: createPostActionRT) {
-    return instance
-      .post<createPostActionRT>('/blog/create-post-action/', { like, comment, donation_amount, user, post })
-      .then((response) => {
-        return response.data;
-      });
+    if (comment === null) {
+      return instance
+        .post<createPostActionRT>('/blog/create-post-action/', { like, comment, donation_amount, user, post })
+        .then((response) => {
+          return response.data;
+        });
+    } else {
+      return instance
+        .post<createPostActionRT>('/blog/create-post-action/', { comment, user, post, donation_amount: 0 })
+        .then((response) => {
+          return response.data;
+        });
+    }
   },
   createPostBought({ user, amount, post }: createPostBoughtRT) {
     return instance

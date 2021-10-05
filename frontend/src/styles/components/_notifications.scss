@@ -390,6 +390,12 @@
     border-radius: 8px;
   }
 
+  &__comment {
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid grey;
+  }
+
   &__modal h2 {
     font-family: Factor A;
     font-size: 18px;

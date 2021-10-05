@@ -8,6 +8,7 @@ import { ReactComponent as MenuDots } from '../../assets/images/3dots.svg';
 import { ReactComponent as SaveIcon } from '../../assets/images/bookmark.svg';
 import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
 import { ReactComponent as CommentIcon } from '../../assets/images/message-circle.svg';
+import { CommentComponent } from '../components/CommentComponent';
 
 export const PostModal = ({ post_id }: { post_id: number }) => {
   const dispatch = useDispatch();
@@ -21,8 +22,6 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
   if (isLoading) {
     return <div>Загрузка...</div>;
   }
-
-  debugger;
 
   return (
     <div>
@@ -116,7 +115,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
 
             <p className="post__like-amount">{post?.likes_amount} лайков</p>
 
-            <p className="post__comment-amount">Оставить комменатрий</p>
+            <CommentComponent data={post.comments} postId={post?.id} />
           </div>
         </div>
       </div>
