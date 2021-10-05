@@ -1,7 +1,7 @@
 from core.utils.customFields import TimestampField
 from django.db.models import Count, Q
 from rest_framework import serializers
-
+import logging
 from apps.users.models import User
 from apps.users.serializers import UserShortRetrieveSeriliazer
 
@@ -262,8 +262,10 @@ class PostActionGetSerializer(serializers.ModelSerializer):
 
     def get_user(self, post_action:PostAction):
         serializer_context = {'request': self.context.get('request') }
+        logging.warning(f'Context -> {self.context.get("request")}')
         serializer = UserShortRetrieveSeriliazer(post_action.user, context=serializer_context)
         return serializer.data
+
     class Meta:
         model = PostAction
         fields = '__all__'
