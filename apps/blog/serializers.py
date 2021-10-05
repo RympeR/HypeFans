@@ -44,7 +44,7 @@ class PostActionCreationSerializer(serializers.ModelSerializer):
 
 
 class PostActionShortSerializer(serializers.ModelSerializer):
-    datetime = TimestampField()
+    date_time = TimestampField()
     parent_username = serializers.SerializerMethodField()
     parent_user_id = serializers.SerializerMethodField()
     user = UserShortRetrieveSeriliazer()
@@ -323,7 +323,7 @@ class WatchedStoriesCreationSerializer(serializers.ModelSerializer):
 
 class CommentRetrieveSerializer(serializers.ModelSerializer):
     post = PostGetShortSerializers()
-    datetime = TimestampField()
+    date_time = TimestampField()
     parent_username = serializers.SerializerMethodField()
     parent_user_id = serializers.SerializerMethodField()
     user = UserShortRetrieveSeriliazer()
@@ -341,7 +341,7 @@ class CommentRetrieveSerializer(serializers.ModelSerializer):
 
 class LikeRetrieveSerializer(serializers.ModelSerializer):
     post = PostGetShortSerializers()
-    datetime = TimestampField()
+    date_time = TimestampField()
     parent_username = serializers.SerializerMethodField()
     parent_user_id = serializers.SerializerMethodField()
     user = UserShortRetrieveSeriliazer()

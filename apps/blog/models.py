@@ -81,7 +81,7 @@ class PostAction(MPTTModel):
         verbose_name='Комментарий к посту', null=True, blank=True)
     donation_amount = models.IntegerField(
         verbose_name='Пожертвование на пост', default=0)
-    datetime = UnixTimeStampField(
+    date_time = UnixTimeStampField(
         "Время действия", auto_now_add=True, null=True, blank=True)
 
     class Meta:
@@ -142,7 +142,7 @@ class WatchedStories(models.Model):
     watched = models.BooleanField('Просмотрел', default=True)
     times_watched = models.IntegerField(
         verbose_name='Сколько раз посмотрел', default=0)
-    datetime = UnixTimeStampField(
+    date_time = UnixTimeStampField(
         "Время действия", auto_now_add=True, null=True, blank=True)
 
     class Meta:
