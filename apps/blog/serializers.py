@@ -45,6 +45,15 @@ class PostActionCreationSerializer(serializers.ModelSerializer):
 
 class PostActionShortSerializer(serializers.ModelSerializer):
     datetime = TimestampField()
+    parent_username = serializers.SerializerMethodField()
+    parent_user_id = serializers.SerializerMethodField()
+    user = UserShortRetrieveSeriliazer()
+
+    def get_parent_username(self, post_action:PostAction):
+        return post_action.parent.user.username
+
+    def get_parent_user_id(self, post_action:PostAction):
+        return post_action.parent.user.pk
 
     class Meta:
         model = PostAction
@@ -240,9 +249,16 @@ class PostGetShortSerializers(serializers.ModelSerializer):
 
 
 class PostActionGetSerializer(serializers.ModelSerializer):
-
     user = UserShortRetrieveSeriliazer()
     post = PostGetSerializer()
+    parent_username = serializers.SerializerMethodField()
+    parent_user_id = serializers.SerializerMethodField()
+
+    def get_parent_username(self, post_action:PostAction):
+        return post_action.parent.user.username
+
+    def get_parent_user_id(self, post_action:PostAction):
+        return post_action.parent.user.pk
 
     class Meta:
         model = PostAction
@@ -308,6 +324,15 @@ class WatchedStoriesCreationSerializer(serializers.ModelSerializer):
 class CommentRetrieveSerializer(serializers.ModelSerializer):
     post = PostGetShortSerializers()
     datetime = TimestampField()
+    parent_username = serializers.SerializerMethodField()
+    parent_user_id = serializers.SerializerMethodField()
+    user = UserShortRetrieveSeriliazer()
+
+    def get_parent_username(self, post_action:PostAction):
+        return post_action.parent.user.username
+
+    def get_parent_user_id(self, post_action:PostAction):
+        return post_action.parent.user.pk
 
     class Meta:
         model = PostAction
@@ -317,6 +342,15 @@ class CommentRetrieveSerializer(serializers.ModelSerializer):
 class LikeRetrieveSerializer(serializers.ModelSerializer):
     post = PostGetShortSerializers()
     datetime = TimestampField()
+    parent_username = serializers.SerializerMethodField()
+    parent_user_id = serializers.SerializerMethodField()
+    user = UserShortRetrieveSeriliazer()
+
+    def get_parent_username(self, post_action:PostAction):
+        return post_action.parent.user.username
+
+    def get_parent_user_id(self, post_action:PostAction):
+        return post_action.parent.user.pk
 
     class Meta:
         model = PostAction
