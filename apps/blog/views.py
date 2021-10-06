@@ -270,7 +270,7 @@ class UserNotifications(GenericAPIView):
             res_dict['post'] = post_data
             res_dict['type'] = 'like'
             likes_result.append(res_dict)
-        for donation in user.recieved_user.all().order_by('-date_time').distinct():
+        for donation in user.recieved_user.all().order_by('-datetime').distinct():
             user_data = UserShortRetrieveSeriliazer(
                 instance=donation.sender, context={'request': request}).data
             res_dict = {}

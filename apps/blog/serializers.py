@@ -48,12 +48,17 @@ class PostActionShortSerializer(serializers.ModelSerializer):
     parent_username = serializers.SerializerMethodField()
     parent_user_id = serializers.SerializerMethodField()
     user = UserShortRetrieveSeriliazer()
+    parent_like_amount = serializers.SerializerMethodField()
+    
+    def get_parent_like_amount(self, post_action:PostAction):
+        return PostAction.objects.filter(parent=post_action.pk, like=True).aggregate(Count('pk'))['pk__count']
 
     def get_parent_username(self, post_action:PostAction):
         return post_action.parent.user.username if post_action.parent else None
 
     def get_parent_user_id(self, post_action:PostAction):
         return post_action.parent.user.pk if post_action.parent else None
+
 
     class Meta:
         model = PostAction
@@ -253,6 +258,10 @@ class PostActionGetSerializer(serializers.ModelSerializer):
     parent_username = serializers.SerializerMethodField()
     parent_user_id = serializers.SerializerMethodField()
     date_time = TimestampField()
+    parent_like_amount = serializers.SerializerMethodField()
+    
+    def get_parent_like_amount(self, post_action:PostAction):
+        return PostAction.objects.filter(parent=post_action, like=True).aggregate(Count('pk'))['pk__count']
 
     def get_parent_username(self, post_action:PostAction):
         return post_action.parent.user.username if post_action.parent else None
