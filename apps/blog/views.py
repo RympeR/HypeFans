@@ -276,7 +276,7 @@ class UserNotifications(GenericAPIView):
             res_dict = {}
             donation_data = {
                 'amount': donation.amount,
-                'date_time': donation.date_time
+                'date_time': donation.datetime
             }
             res_dict['user'] = user_data
             res_dict['donation'] = donation_data
