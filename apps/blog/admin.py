@@ -51,7 +51,7 @@ class PostAdmin(admin.ModelAdmin):
 @admin.register(PostAction)
 class PostActionAdmin(DraggableMPTTAdmin):
     list_display = (
-        'pk', 'user', 'post', 'like', 'comment', 'donation_amount'
+        'tree_actions', 'pk', 'user', 'post', 'like', 'comment', 'donation_amount'
     )
     list_display_links = [
         'pk',

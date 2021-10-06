@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
     'silk',
+    'mptt',
 
     'apps.chat',
     'apps.users',
