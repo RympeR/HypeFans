@@ -139,11 +139,9 @@ class PostActionListAPI(generics.GenericAPIView):
     queryset = PostAction.objects.all()
     
     def get(self, request, pk):
-        limit = request.GET.get('limit', 20)
-        offset = request.GET.get('offset', 0)
         qs = PostAction.objects.filter(
             post=Post.objects.get(pk=pk)
-        )[offset:offset+limit]
+        )
         data = [self.get_serializer(
                         instance=post, 
                         context={

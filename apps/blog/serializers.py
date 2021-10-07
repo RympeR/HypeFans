@@ -49,16 +49,15 @@ class PostActionShortSerializer(serializers.ModelSerializer):
     parent_user_id = serializers.SerializerMethodField()
     user = UserShortRetrieveSeriliazer()
     parent_like_amount = serializers.SerializerMethodField()
-    
-    def get_parent_like_amount(self, post_action:PostAction):
+
+    def get_parent_like_amount(self, post_action: PostAction):
         return PostAction.objects.filter(pk=post_action.parent, like=True).aggregate(Count('pk'))['pk__count']
 
-    def get_parent_username(self, post_action:PostAction):
+    def get_parent_username(self, post_action: PostAction):
         return post_action.parent.user.username if post_action.parent else None
 
-    def get_parent_user_id(self, post_action:PostAction):
+    def get_parent_user_id(self, post_action: PostAction):
         return post_action.parent.user.pk if post_action.parent else None
-
 
     class Meta:
         model = PostAction
@@ -114,7 +113,7 @@ class PostGetSerializer(serializers.ModelSerializer):
     attachments = AttachmentSerializer(many=True)
 
     def get_likes_amount(self, obj: Post) -> int:
-        return obj.user_postaction.filter(like=True).aggregate(Count('pk'))['pk__count']
+        return obj.user_postaction.filter(Q(parent__isnull=True) & Q(like=True)).aggregate(Count('pk'))['pk__count']
 
     def get_comments_amount(self, obj: Post) -> int:
         return obj.user_postaction.filter(~Q(comment__isnull=True) & ~Q(comment='')).aggregate(Count('pk'))['pk__count']
@@ -141,10 +140,6 @@ class PostGetSerializer(serializers.ModelSerializer):
                 for action in postActionQuerySet:
                     if action.like:
                         return True
-                else:
-                    return False
-            else:
-                return False
         return True
 
     def get_like_id(self, obj: Post) -> int:
@@ -157,10 +152,6 @@ class PostGetSerializer(serializers.ModelSerializer):
                 for action in postActionQuerySet:
                     if action.like:
                         return action.pk
-                else:
-                    return None
-            else:
-                return None
         return None
 
     class Meta:
@@ -228,7 +219,7 @@ class PostGetShortSerializers(serializers.ModelSerializer):
     publication_date = TimestampField(required=False)
 
     def get_likes_amount(self, obj: Post):
-        return obj.user_postaction.filter(like=True).aggregate(Count('pk'))['pk__count']
+        return obj.user_postaction.filter(Q(like=True) & Q(parent_isnull=True)).aggregate(Count('pk'))['pk__count']
 
     def get_comments_amount(self, obj: Post):
         return obj.user_postaction.filter(~Q(comment__isnull=True)).aggregate(Count('pk'))['pk__count']
@@ -259,19 +250,27 @@ class PostActionGetSerializer(serializers.ModelSerializer):
     parent_user_id = serializers.SerializerMethodField()
     date_time = TimestampField()
     parent_like_amount = serializers.SerializerMethodField()
-    
-    def get_parent_like_amount(self, post_action:PostAction):
+    parent_liked = serializers.SerializerMethodField()
+
+    def get_parent_liked(self, post_action: PostAction):
+        user = self.context.get('request').user
+        qs = PostAction.objects.filter(
+            user=user, parent=post_action, like=True).first()
+        return True if qs else False
+
+    def get_parent_like_amount(self, post_action: PostAction) -> list:
         return PostAction.objects.filter(parent=post_action, like=True).aggregate(Count('pk'))['pk__count']
 
-    def get_parent_username(self, post_action:PostAction):
+    def get_parent_username(self, post_action: PostAction):
         return post_action.parent.user.username if post_action.parent else None
 
-    def get_parent_user_id(self, post_action:PostAction):
+    def get_parent_user_id(self, post_action: PostAction):
         return post_action.parent.user.pk if post_action.parent else None
 
-    def get_user(self, post_action:PostAction):
-        serializer_context = {'request': self.context.get('request') }
-        serializer = UserShortRetrieveSeriliazer(post_action.user, context=serializer_context)
+    def get_user(self, post_action: PostAction):
+        serializer_context = {'request': self.context.get('request')}
+        serializer = UserShortRetrieveSeriliazer(
+            post_action.user, context=serializer_context)
         return serializer.data
 
     class Meta:
@@ -342,15 +341,16 @@ class CommentRetrieveSerializer(serializers.ModelSerializer):
     parent_user_id = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
 
-    def get_parent_username(self, post_action:PostAction):
+    def get_parent_username(self, post_action: PostAction):
         return post_action.parent.user.username if post_action.parent else None
 
-    def get_parent_user_id(self, post_action:PostAction):
+    def get_parent_user_id(self, post_action: PostAction):
         return post_action.parent.user.pk if post_action.parent else None
-    
-    def get_user(self, post_action:PostAction):
-        serializer_context = {'request': self.context.get('request') }
-        serializer = UserShortRetrieveSeriliazer(post_action.user, context=serializer_context)
+
+    def get_user(self, post_action: PostAction):
+        serializer_context = {'request': self.context.get('request')}
+        serializer = UserShortRetrieveSeriliazer(
+            post_action.user, context=serializer_context)
         return serializer.data
 
     class Meta:
@@ -365,17 +365,18 @@ class LikeRetrieveSerializer(serializers.ModelSerializer):
     parent_user_id = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
 
-    def get_parent_username(self, post_action:PostAction):
+    def get_parent_username(self, post_action: PostAction):
         return post_action.parent.user.username if post_action.parent else None
 
-    def get_parent_user_id(self, post_action:PostAction):
+    def get_parent_user_id(self, post_action: PostAction):
         return post_action.parent.user.pk if post_action.parent else None
-    
-    def get_user(self, post_action:PostAction):
-        serializer_context = {'request': self.context.get('request') }
-        serializer = UserShortRetrieveSeriliazer(post_action.user, context=serializer_context)
+
+    def get_user(self, post_action: PostAction):
+        serializer_context = {'request': self.context.get('request')}
+        serializer = UserShortRetrieveSeriliazer(
+            post_action.user, context=serializer_context)
         return serializer.data
-    
+
     class Meta:
         model = PostAction
         fields = '__all__'
