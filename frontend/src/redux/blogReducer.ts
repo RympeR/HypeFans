@@ -355,19 +355,6 @@ export const deletePostAction = ({ id, post_id }: { id: number; post_id: number 
   dispatch(actions.setPostsData(post_id, false, null, null));
 };
 
-export const addCommentAction = async ({ comment, user, post }: { comment: string; user: number; post: number }) => {
-  const data = await blogAPI.createPostAction({
-    like: null,
-    comment,
-    donation_amount: null,
-    user,
-    post,
-    date_time: null,
-    id: null
-  });
-  return data;
-};
-
 export const deletePost = ({ id }: idType): Thunk => async (dispatch) => {
   await blogAPI.deletePost({
     id

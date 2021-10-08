@@ -32,7 +32,6 @@ const Post = ({
     };
   };
 }) => {
-  console.log(post.post);
   const user_id = useSelector((state: RootState) => state.auth.pk);
   const { currentLang } = useContext(LangContext);
 

@@ -1,20 +1,56 @@
 import { Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { useDispatch, useSelector } from 'react-redux';
-import { addCommentAction, getPostActionList } from '~/redux/blogReducer';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { blogAPI } from '~/api/blogAPI';
+import { getPostActionList } from '~/redux/blogReducer';
 import { RootState } from '~/redux/redux';
+import { ReactComponent as BackButton } from '../../assets/images/arrow-left.svg';
+import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
 
 export const CommentComponent = ({ data, postId }: { data: any; postId: number }) => {
   const [show, setShow] = useState(false);
   const userID = useSelector((state: RootState) => state.auth.pk);
-  const dispatch = useDispatch();
-  const addComment = (val: { comment: string; user: number; post: number }) => {
-    setComments([...comments, { text: val.comment }]);
-    const response = dispatch(addCommentAction(val));
-  };
+  const user = useSelector((state: RootState) => state.auth);
+  const [comment, setComment] = useState('');
 
   const [comments, setComments] = useState([]);
+
+  const likeComment = (val: any) => {
+    const response = { id: 5, liked: true };
+    setComments(
+      comments.map((item) => {
+        if (item.id === response.id) {
+          return {
+            ...item,
+            liked: response.liked
+          };
+        } else return item;
+      })
+    );
+  };
+
+  const addComment = async (val: { user: number; post: number }) => {
+    await blogAPI
+      .createPostAction({
+        like: null,
+        comment: comment,
+        donation_amount: null,
+        user: val.user,
+        post: val.post,
+        date_time: null,
+        id: null
+      })
+      .then((res) => {
+        const pushObj = {
+          ...res,
+          user
+        };
+        setComments([...comments, pushObj]);
+        setComment('');
+      });
+  };
 
   useEffect(() => {
     if (postId === null || postId === undefined) return;
@@ -25,18 +61,76 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
     fetch();
   }, [postId]);
 
-  console.log(userID);
+  const Comment = ({ item, index }: { item: any; index: number }) => {
+    const [show, setShow] = useState(false);
+    return (
+      <div className="notifications__comment">
+        <Link to={`/profile/${item?.user?.username}`}>
+          <img src={item?.user?.avatar} alt="userPhoto" />
+        </Link>
+        <div className="notifications__commentText">
+          <p>
+            <span style={{ fontWeight: 'bolder' }}>{item?.user?.username}</span> {item.comment}
+          </p>
+          <div style={{ display: 'flex' }}>
+            <div style={{ marginRight: '10px' }}>2 мин.</div>
+            <div style={{ marginRight: '10px' }}>{item.likes_amount ?? 0} лайков</div>
+            <div style={{ marginRight: '10px' }}>Ответить</div>
+          </div>
+          {comments.filter((i) => i.parent === item.id).length === 0 ? (
+            <div></div>
+          ) : (
+            <p style={{ color: '$grey' }} onClick={() => setShow(!show)}>
+              {show ? ' —Скрыть ответы' : ' —Показать ответы'}
+            </p>
+          )}
+
+          <div style={show ? {} : { display: 'none' }}>
+            {comments
+              .filter((i) => i.parent === item.id)
+              .map((item, key) => {
+                return (
+                  <div className="notifications__comment" key={`${key}answer ${Math.random()}`}>
+                    <Link to={`/profile/${item?.user?.username}`}>
+                      <img src={item?.user?.avatar} alt="userPhoto" />
+                    </Link>
+                    <div className="notifications__commentText">
+                      <p>
+                        <span style={{ fontWeight: 'bolder' }}>{item?.user?.username}</span> {item.comment}
+                      </p>
+                      <div style={{ display: 'flex' }}>
+                        <div style={{ marginRight: '10px' }}>2 мин.</div>
+                        <div style={{ marginRight: '10px' }}>{item.parent_like_amount ?? 0} лайков</div>
+                        <div style={{ marginRight: '10px' }}>Ответить</div>
+                      </div>
+                    </div>
+                    <LikeIcon
+                      className="post__action-icon"
+                      fill={item.post.liked ? 'red' : 'none'}
+                      style={{ width: '20px', height: '20px', marginTop: '15px', marginLeft: '15px' }}
+                    />
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+        <LikeIcon
+          className="post__action-icon"
+          fill={item.post.liked ? 'red' : 'none'}
+          style={{ width: '20px', height: '20px', marginTop: '15px', marginLeft: '15px' }}
+        />
+      </div>
+    );
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <Formik
         initialValues={{
-          comment: '',
           user: userID,
           post: postId
         }}
         onSubmit={(val) => {
-          console.log(val);
           return addComment(val);
         }}
       >
@@ -54,7 +148,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
               ></textarea>
               <button
                 className="post__sendComment"
-                disabled={values.comment.length < 1 || values.comment.length > 255}
+                disabled={comment.length < 1 || comment.length > 255}
                 onClick={() => handleSubmit()}
               >
                 Отправить
@@ -73,20 +167,63 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
         }}
         centered
         size="xl"
+        style={{ borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px' }}
       >
+        <Modal.Header style={{ justifyContent: 'flex-start' }}>
+          <BackButton onClick={() => setShow(false)} />
+          <h3 style={{ marginBottom: '0px', marginLeft: '10px' }}>Комментарии</h3>
+        </Modal.Header>
         <Modal.Body className="notifications__modal" style={{ padding: '0px' }}>
-          {comments.map((item, index) => {
-            return (
-              <div key={index} className="notifications__comment">
-                <img src={item?.user?.avatar} alt="userPhoto" />
-                <div>
-                  <h2>Name</h2>
-                  <h3>6 min ago</h3>
+          {comments
+            .filter((item) => item.parent === null)
+            .map((item, index) => {
+              return <Comment item={item} index={index} key={index} />;
+            })}
+          <Formik
+            initialValues={{
+              comment: '',
+              user: userID,
+              post: postId
+            }}
+            onSubmit={(val) => {
+              addComment(val);
+            }}
+          >
+            {({ values, handleSubmit, setFieldValue }) => {
+              return (
+                <div
+                  style={{
+                    display: 'flex',
+                    padding: '10px',
+                    backgroundColor: '#d6d6d6',
+                    borderRadius: '16px',
+                    height: '55px',
+                    margin: '7px'
+                  }}
+                >
+                  <textarea
+                    placeholder="Оставить комментарий"
+                    className="post__comment-amount"
+                    name="comment"
+                    value={comment}
+                    onChange={(val) => {
+                      setComment(val.currentTarget.value);
+                      setFieldValue('user', userID);
+                    }}
+                  ></textarea>
+                  <button
+                    className="post__sendComment"
+                    disabled={comment.length < 1 || comment.length > 255}
+                    onClick={() => {
+                      handleSubmit();
+                    }}
+                  >
+                    Отправить
+                  </button>
                 </div>
-                <div>{item.comment}</div>
-              </div>
-            );
-          })}
+              );
+            }}
+          </Formik>
         </Modal.Body>
       </Modal>
     </div>

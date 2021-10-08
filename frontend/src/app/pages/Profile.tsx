@@ -82,9 +82,11 @@ const Profile = () => {
         }}
       >
         {myNick === nick ? (
-          <button className="notifications__settingBtn" style={{ margin: '0px', width: '100%' }}>
-            Редактировать профиль
-          </button>
+          <Link to="/settings/account" className="notifications__settingBtn">
+            <button className="notifications__settingBtn" style={{ margin: '0px', width: '100%' }}>
+              Редактировать профиль
+            </button>
+          </Link>
         ) : null}
       </div>
       <div className="profile__posts">

@@ -8,9 +8,8 @@ const UserBanner = ({ aside, profile }: { aside?: boolean; profile: any }) => {
   const { currentLang } = useContext(LangContext);
 
   return (
-    <a
+    <div
       className={`user-banner ${aside ? 'user-banner_aside' : ''}`}
-      href="#"
       style={{
         backgroundImage: `url(${profile?.background_photo?.length > 1 ? profile?.background_photo : profileLinkBg})`
       }}
@@ -29,7 +28,7 @@ const UserBanner = ({ aside, profile }: { aside?: boolean; profile: any }) => {
         </div>
       </div>
       <div className="user-banner__status">{currentLang.free}</div>
-    </a>
+    </div>
   );
 };
 

@@ -157,8 +157,19 @@
 
   &__donate-btn {
     font-weight: 700;
+    background: #fb5734;
+    border-radius: 8px;
+    padding: 7px;
+    font-family: Factor A;
+    font-size: 15px;
+    transition: 0.5s;
+    font-style: normal;
+    font-weight: 550;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: center;
     font-size: map-get($map: $font-size, $key: m);
-    color: $grey;
+    color: $white;
     cursor: pointer;
 
     @media (max-width: map-get($map: $media, $key: s)) {
@@ -178,7 +189,6 @@
 
   &__sendComment {
     height: 40px;
-    margin-top: 15px;
     background: #fb5734;
     border-radius: 8px;
     padding: 7px;
@@ -193,7 +203,6 @@
     color: $white;
   }
   &__sendComment :disabled {
-    margin-top: 15px;
     height: 40px;
     background: #fcdfd9;
     border-radius: 8px;
@@ -209,7 +218,6 @@
     transition: 0.5s;
   }
   &__sendComment[disabled] {
-    margin-top: 15px;
     height: 40px;
     background: #f3bcb0;
     transition: 0.5s;
@@ -227,7 +235,6 @@
 
   &__comment-amount {
     font-size: map-get($map: $font-size, $key: s);
-    margin-top: 15px;
     margin-right: 10px;
     width: 100%;
     padding-top: 8px;
