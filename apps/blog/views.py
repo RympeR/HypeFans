@@ -274,7 +274,7 @@ class UserNotifications(GenericAPIView):
             res_dict = {}
             donation_data = {
                 'amount': donation.amount,
-                'date_time': donation.datetime
+                'date_time': donation.datetime.timestamp()
             }
             res_dict['user'] = user_data
             res_dict['donation'] = donation_data
@@ -287,8 +287,8 @@ class UserNotifications(GenericAPIView):
             res_dict = {}
             subscription_data = {
                 'amount': user.subscribtion_price,
-                'start_date': subscription.start_date,
-                'end_date': subscription.end_date
+                'start_date': subscription.start_date.timestamp(),
+                'end_date': subscription.end_date.timestamp()
             }
             res_dict['user'] = user_data
             res_dict['subscription'] = subscription_data
