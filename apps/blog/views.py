@@ -273,7 +273,6 @@ class UserNotifications(GenericAPIView):
                 instance=donation.sender, context={'request': request}).data
             res_dict = {}
             donation_data = {
-                'pk': donation.pk,
                 'amount': donation.amount,
                 'date_time': donation.datetime.timestamp()
             }
