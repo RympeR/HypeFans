@@ -107,12 +107,18 @@ export const getFavourites = (): Thunk => async (dispatch) => {
   dispatch(isntLoading());
 };
 
-export const createPostAction = ({ like, comment, donation_amount, user, post }: createPostActionRT): Thunk => async (
-  dispatch
-) => {
+export const createPostAction = ({
+  like,
+  comment,
+  donation_amount,
+  user,
+  post,
+  parent
+}: createPostActionRT): Thunk => async (dispatch) => {
   const data = await blogAPI.createPostAction({
     like,
     comment,
+    parent,
     donation_amount,
     user,
     post,

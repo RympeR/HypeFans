@@ -88,6 +88,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                             like: true,
                             comment: null,
                             donation_amount: 0,
+                            parent: null,
                             user: myId,
                             date_time: null,
                             post: post?.id,

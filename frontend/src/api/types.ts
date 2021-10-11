@@ -181,6 +181,7 @@ export type createPostActionRT = {
   like: boolean | null;
   comment: string | null;
   donation_amount: number | null;
+  parent: number | null;
   user: number;
   post: number;
   date_time: null | undefined | string;

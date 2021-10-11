@@ -17,6 +17,8 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
 
   const [comments, setComments] = useState([]);
 
+  console.log(comments);
+
   const likeComment = (val: any) => {
     const response = { id: 5, liked: true };
     setComments(
@@ -31,11 +33,12 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
     );
   };
 
-  const addComment = async (val: { user: number; post: number }) => {
+  const addComment = async (val: { user: number; post: number; parent: number | null }) => {
     await blogAPI
       .createPostAction({
         like: null,
         comment: comment,
+        parent: val.parent,
         donation_amount: null,
         user: val.user,
         post: val.post,
@@ -62,7 +65,34 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
   }, [postId]);
 
   const Comment = ({ item, index }: { item: any; index: number }) => {
+    const [answer, setAnswer] = useState('');
+    const [parentID, setParentID] = useState(item.id);
+    console.log(parentID);
+    const [showAnswer, setShowAnswer] = useState(false);
     const [show, setShow] = useState(false);
+
+    const addComment = async (val: { user: number; post: number; parent: number | null }) => {
+      await blogAPI
+        .createPostAction({
+          like: null,
+          comment: answer,
+          parent: val.parent,
+          donation_amount: null,
+          user: val.user,
+          post: val.post,
+          date_time: null,
+          id: null
+        })
+        .then((res) => {
+          const pushObj = {
+            ...res,
+            user
+          };
+          setComments([...comments, pushObj]);
+          setComment('');
+        });
+    };
+
     return (
       <div className="notifications__comment">
         <Link to={`/profile/${item?.user?.username}`}>
@@ -75,7 +105,9 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
           <div style={{ display: 'flex' }}>
             <div style={{ marginRight: '10px' }}>2 мин.</div>
             <div style={{ marginRight: '10px' }}>{item.likes_amount ?? 0} лайков</div>
-            <div style={{ marginRight: '10px' }}>Ответить</div>
+            <div style={{ marginRight: '10px' }} onClick={() => setShowAnswer(!showAnswer)}>
+              {showAnswer ? 'Скрыть поле' : 'Ответить'}
+            </div>
           </div>
           {comments.filter((i) => i.parent === item.id).length === 0 ? (
             <div></div>
@@ -85,12 +117,16 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
             </p>
           )}
 
-          <div style={show ? {} : { display: 'none' }}>
+          <div>
             {comments
               .filter((i) => i.parent === item.id)
               .map((item, key) => {
                 return (
-                  <div className="notifications__comment" key={`${key}answer ${Math.random()}`}>
+                  <div
+                    className="notifications__comment"
+                    key={`${key}answer ${Math.random()}`}
+                    style={show ? {} : { display: 'none' }}
+                  >
                     <Link to={`/profile/${item?.user?.username}`}>
                       <img src={item?.user?.avatar} alt="userPhoto" />
                     </Link>
@@ -101,7 +137,9 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
                       <div style={{ display: 'flex' }}>
                         <div style={{ marginRight: '10px' }}>2 мин.</div>
                         <div style={{ marginRight: '10px' }}>{item.parent_like_amount ?? 0} лайков</div>
-                        <div style={{ marginRight: '10px' }}>Ответить</div>
+                        <div style={{ marginRight: '10px' }} onClick={() => setShowAnswer(!showAnswer)}>
+                          {showAnswer ? 'Скрыть поле' : 'Ответить'}
+                        </div>
                       </div>
                     </div>
                     <LikeIcon
@@ -112,6 +150,56 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
                   </div>
                 );
               })}
+            <Formik
+              initialValues={{
+                comment: '',
+                user: userID,
+                post: postId,
+                parent: parentID
+              }}
+              onSubmit={(val) => {
+                addComment(val);
+              }}
+            >
+              {({ values, handleSubmit, setFieldValue }) => {
+                return (
+                  <div
+                    style={
+                      showAnswer
+                        ? {
+                            display: 'flex',
+                            padding: '10px',
+                            backgroundColor: '#d6d6d6',
+                            borderRadius: '16px',
+                            height: '55px',
+                            margin: '7px'
+                          }
+                        : { display: 'none' }
+                    }
+                  >
+                    <textarea
+                      placeholder="Оставить комментарий"
+                      className="post__comment-amount"
+                      name="comment"
+                      value={answer}
+                      onChange={(val) => {
+                        setAnswer(val.currentTarget.value);
+                        setFieldValue('user', userID);
+                      }}
+                    ></textarea>
+                    <button
+                      className="post__sendComment"
+                      disabled={answer.length < 1 || answer.length > 255}
+                      onClick={() => {
+                        handleSubmit();
+                      }}
+                    >
+                      Отправить
+                    </button>
+                  </div>
+                );
+              }}
+            </Formik>
           </div>
         </div>
         <LikeIcon
@@ -128,7 +216,8 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
       <Formik
         initialValues={{
           user: userID,
-          post: postId
+          post: postId,
+          parent: null
         }}
         onSubmit={(val) => {
           return addComment(val);
@@ -183,7 +272,8 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
             initialValues={{
               comment: '',
               user: userID,
-              post: postId
+              post: postId,
+              parent: null
             }}
             onSubmit={(val) => {
               addComment(val);

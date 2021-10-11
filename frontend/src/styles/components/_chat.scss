@@ -121,28 +121,34 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column-reverse;
+  align-items: flex-end;
   min-height: 88%;
   max-height: 88%;
   border: 1px solid #cccccc;
-  text-align: right;
   padding: 10px;
   overflow-y: scroll;
 }
-.message-wrap li {
+
+.text-wrapp {
+  display: flex;
+  background: #f8f1f0;
+  border-radius: 4px 4px 0px 4px;
+  font-family: Factor A;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 15px;
+  left: 0;
   padding: 5px;
-  width: 100%;
-  margin: 15px 0;
-  padding: 0;
-  position: relative;
 }
-.message-wrap li .text-wrapp {
-  position: absolute;
-  border: 1px solid $black;
-  width: 70%;
-  height: 100%;
-  background: $green;
-}
-.message-wrap li:nth-child(even) .text-wrapp {
-  right: 0;
-  background: $blue;
+
+.time-text {
+  font-family: Factor A;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 13px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 16px;
+  margin-top: 7px;
 }

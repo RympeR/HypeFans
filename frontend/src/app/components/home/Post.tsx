@@ -112,6 +112,7 @@ const Post = ({
                         like: true,
                         comment: null,
                         donation_amount: 0,
+                        parent: null,
                         user: user_id,
                         date_time: null,
                         post: post.post.pk,

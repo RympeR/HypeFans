@@ -97,41 +97,29 @@ const Chat = () => {
           </div>
           <div className="chat__dialog">
             <div className="message-wrap">
-              <div>
-                <div className="text-wrapp">
-                  gdfffffffffffff
-                  <img src="https://avatars1.githubusercontent.com/u/2048511?v=4" alt="imdsa"></img>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', width: '100%' }}>
+                <div>
+                  <div className="text-wrapp">Привет,как дела? </div>
+                  <div className="time-text">15:33</div>
                 </div>
               </div>
-              <div>
-                <div className="text-wrapp">
-                  gdfffffffffffff
-                  <img src="https://avatars1.githubusercontent.com/u/2048511?v=4" alt="imdsa"></img>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
+                <div>
+                  <div className="text-wrapp">Привет,как дела? </div>
+                  <div className="time-text">15:33</div>
                 </div>
               </div>
-              <div>
-                <div className="text-wrapp">
-                  gdfffffffffffff
-                  <img src="https://avatars1.githubusercontent.com/u/2048511?v=4" alt="imdsa"></img>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', width: '100%' }}>
+                <div>
+                  <div className="text-wrapp">Привет,как дела? </div>
+                  <div className="time-text">15:33</div>
                 </div>
               </div>
-              <div>
-                <div className="text-wrapp">
-                  gdfffffffffffff
-                  <img src="https://avatars1.githubusercontent.com/u/2048511?v=4" alt="imdsa"></img>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
+                <div>
+                  <div className="text-wrapp">Привет,как дела? </div>
+                  <div className="time-text">15:33</div>
                 </div>
-              </div>
-              <div>
-                <div className="text-wrapp">
-                  gdfffffffffffff
-                  <img src="https://avatars1.githubusercontent.com/u/2048511?v=4" alt="imdsa"></img>
-                </div>
-              </div>
-              <div>
-                <div className="text-wrapp"></div>
-              </div>
-              <div>
-                <div className="text-wrapp"></div>
               </div>
             </div>
             <div className="chat__input">

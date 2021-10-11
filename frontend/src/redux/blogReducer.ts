@@ -261,11 +261,13 @@ export const createPostActionModal = ({
   comment,
   donation_amount,
   user,
+  parent,
   post
 }: createPostActionRT): Thunk => async (dispatch) => {
   const data = await blogAPI.createPostAction({
     like,
     comment,
+    parent,
     donation_amount,
     user,
     post,
@@ -275,14 +277,20 @@ export const createPostActionModal = ({
   dispatch(actions.setPostData(true, data.id, null));
 };
 
-export const createPostAction = ({ like, comment, donation_amount, user, post }: createPostActionRT): Thunk => async (
-  dispatch
-) => {
+export const createPostAction = ({
+  like,
+  comment,
+  donation_amount,
+  user,
+  post,
+  parent
+}: createPostActionRT): Thunk => async (dispatch) => {
   const data = await blogAPI.createPostAction({
     like,
     comment,
     donation_amount,
     user,
+    parent,
     post,
     date_time: null,
     id: null

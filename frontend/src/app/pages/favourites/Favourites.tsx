@@ -91,6 +91,7 @@ export const Favourites = () => {
                                 comment: null,
                                 donation_amount: 0,
                                 user: myId,
+                                parent: null,
                                 date_time: null,
                                 post: item.post.pk,
                                 id: null
