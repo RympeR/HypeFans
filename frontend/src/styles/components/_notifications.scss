@@ -2,6 +2,14 @@
   display: flex;
   justify-content: space-between;
 
+  &__navMobile {
+    display: none;
+  }
+
+  &__sidebarItemPhone {
+    display: none;
+  }
+
   &__headingText {
     //styleName: заголовки;
     font-family: Factor A;
@@ -108,6 +116,51 @@
     min-width: 350px;
     min-height: 80vh;
     border-bottom-left-radius: 16px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .notifications__header {
+      display: none;
+    }
+
+    .notifications__none {
+      display: none;
+    }
+
+    .notifications__sidebarItemPhone {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin: 15px;
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 24px;
+      line-height: 26px;
+    }
+
+    .notifications__navMobile {
+      background: #f8f1f0;
+      border-radius: 32px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      transition: 1s;
+      overflow: hidden;
+      margin-left: 15px;
+    }
+    .notifications__sidebar {
+      display: none;
+    }
+    .notifications__userPhoto {
+      width: 60px;
+      height: 60px;
+    }
+    .notifications__postPhoto {
+      width: 70px;
+      height: 70px;
+    }
   }
 
   &__listBlock {

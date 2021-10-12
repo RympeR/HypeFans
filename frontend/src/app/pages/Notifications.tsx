@@ -1,11 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-phone-input-2/lib/style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Route, useHistory, useLocation } from 'react-router-dom';
 import { getNotifications } from '~/redux/notificationsReducer';
 import { RootState } from '~/redux/redux';
 import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
+import { ReactComponent as BellIcon } from '../../assets/images/bell.svg';
+import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
+import { ReactComponent as ArrowLeft } from '../../assets/images/leftIcon.svg';
+import { ReactComponent as CommentIcon } from '../../assets/images/message-circle.svg';
 import { ReactComponent as SettingsIcon } from '../../assets/images/settings.svg';
+import { ReactComponent as DonateIcon } from '../../assets/images/tip.svg';
+import { ReactComponent as UnlockIcon } from '../../assets/images/unlock.svg';
 import { Preloader } from '../utils/Preloader';
 import { Notification } from './notifications/Notification';
 import { NotificationSidebarItem } from './notifications/NotificationSidebarItem';
@@ -23,7 +29,22 @@ const Notifications = () => {
     return <Preloader />;
   }
   const Text = ({ text }: { text: string }) => {
-    return <p>{text}</p>;
+    return (
+      <>
+        <p className="notifications__none">{text}</p>
+        <div className="notifications__sidebarItemPhone">
+          <div>
+            <ArrowLeft />
+          </div>
+          <div>{text}</div>
+          <div>
+            <Link to="/settings/notifications">
+              <Route path="/notifications" component={SettingsIcon} />
+            </Link>
+          </div>
+        </div>
+      </>
+    );
   };
 
   const NotificationsSidebar = () => {
@@ -68,7 +89,7 @@ const Notifications = () => {
       <div>
         <div className="notifications__header">
           <div className="notifications__back">
-            <BackButton />
+            <BackIcon />
           </div>
 
           <p className="notifications__headingText">
@@ -86,6 +107,12 @@ const Notifications = () => {
     );
   };
   const NotificationsMain = () => {
+    const [isShown, setShown] = useState(false);
+    useEffect(() => {
+      if (history.location.pathname !== '/notifications') {
+        setShown(true);
+      }
+    }, [history]);
     const Main = ({ notifications }: { notifications: Array<any> }) => {
       return (
         <div className="notifications__main">
@@ -111,6 +138,78 @@ const Notifications = () => {
           <Route path="/notifications/likes" render={() => <Text text="Лайки" />} exact />
           <Route path="/notifications/comments" render={() => <Text text="Комментарии" />} exact />
           {/* Заголовок(конец)*/}
+          <div className="notifications__navMobile" style={isShown ? { width: '240px' } : { width: '40px' }}>
+            {isShown ? (
+              <div>
+                <Link
+                  className={
+                    history.location.pathname === '/notifications'
+                      ? 'nav__icon_notifications_active '
+                      : 'nav__icon_notifications_inactive '
+                  }
+                  to="/notifications"
+                  onClick={() => setShown(true)}
+                >
+                  <BellIcon />
+                </Link>
+              </div>
+            ) : (
+              <div
+                className={
+                  history.location.pathname === '/notifications'
+                    ? 'nav__icon_notifications_active '
+                    : 'nav__icon_notifications_inactive '
+                }
+                onClick={() => setShown(true)}
+              >
+                <BellIcon />
+              </div>
+            )}
+            <Link
+              className={
+                history.location.pathname === '/notifications/comments'
+                  ? 'nav__icon_notifications_active '
+                  : 'nav__icon_notifications_inactive '
+              }
+              to="/notifications/comments"
+              style={{ marginLeft: '5px' }}
+            >
+              <CommentIcon />
+            </Link>
+            <Link
+              className={
+                history.location.pathname === '/notifications/likes'
+                  ? 'nav__icon_notifications_active '
+                  : 'nav__icon_notifications_inactive '
+              }
+              to="/notifications/likes"
+              style={{ marginLeft: '13px' }}
+            >
+              <LikeIcon />
+            </Link>
+            <Link
+              className={
+                history.location.pathname === '/notifications/subscriptions'
+                  ? 'nav__icon_notifications_active '
+                  : 'nav__icon_notifications_inactive '
+              }
+              to="/notifications/subscriptions"
+              style={{ marginLeft: '13px' }}
+            >
+              <UnlockIcon />
+            </Link>
+            <Link
+              className={
+                history.location.pathname === '/notifications/donations'
+                  ? 'nav__icon_notifications_active '
+                  : 'nav__icon_notifications_inactive '
+              }
+              to="/notifications/donations"
+              style={{ marginLeft: '13px', marginRight: '5px' }}
+            >
+              <DonateIcon />
+            </Link>
+          </div>
         </div>
         {/* Главное тело в зависимости от роута*/}
         <Route path="/notifications" render={() => <Main notifications={notifications} />} exact />

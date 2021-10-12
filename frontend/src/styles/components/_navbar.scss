@@ -58,5 +58,39 @@
         stroke: $orange;
       }
     }
+    &_notifications_active {
+      svg {
+        width: 40px;
+        height: 40px;
+        background: $orange;
+        border-radius: 100%;
+      }
+      circle {
+        stroke: $white;
+        stroke-opacity: 100%;
+      }
+      path {
+        stroke-opacity: 100%;
+        stroke-width: 2px;
+        stroke: $white;
+      }
+    }
+    &_notifications_inactive {
+      svg {
+        width: 35px;
+        height: 35px;
+        background: #f8f1f0;
+        border-radius: 100%;
+      }
+      circle {
+        stroke-opacity: 100%;
+        stroke: $black;
+      }
+      path {
+        stroke-opacity: 100%;
+        stroke-width: 2px;
+        stroke: $black;
+      }
+    }
   }
 }

@@ -19,18 +19,30 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
 
   console.log(comments);
 
-  const likeComment = (val: any) => {
-    const response = { id: 5, liked: true };
-    setComments(
-      comments.map((item) => {
-        if (item.id === response.id) {
-          return {
-            ...item,
-            liked: response.liked
-          };
-        } else return item;
+  const likeComment = async (val: any) => {
+    await blogAPI
+      .createPostAction({
+        like: val.like,
+        comment: null,
+        parent: val.parent,
+        donation_amount: 0,
+        user: userID,
+        post: val.post,
+        date_time: null,
+        id: null
       })
-    );
+      .then((res) => {
+        setComments(
+          comments.map((item) => {
+            if (item.id === res.id) {
+              return {
+                ...item,
+                liked: res.like
+              };
+            } else return item;
+          })
+        );
+      });
   };
 
   const addComment = async (val: { user: number; post: number; parent: number | null }) => {
@@ -104,7 +116,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
           </p>
           <div style={{ display: 'flex' }}>
             <div style={{ marginRight: '10px' }}>2 мин.</div>
-            <div style={{ marginRight: '10px' }}>{item.likes_amount ?? 0} лайков</div>
+            <div style={{ marginRight: '10px' }}>{item.parent_like_amount ?? 0} лайков</div>
             <div style={{ marginRight: '10px' }} onClick={() => setShowAnswer(!showAnswer)}>
               {showAnswer ? 'Скрыть поле' : 'Ответить'}
             </div>
@@ -121,6 +133,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
             {comments
               .filter((i) => i.parent === item.id)
               .map((item, key) => {
+                console.log(item);
                 return (
                   <div
                     className="notifications__comment"
@@ -144,7 +157,10 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
                     </div>
                     <LikeIcon
                       className="post__action-icon"
-                      fill={item.post.liked ? 'red' : 'none'}
+                      fill={item.like ? 'red' : 'none'}
+                      onClick={() =>
+                        likeComment({ like: !item.like, parent: item.id, post: item.post, user: item.user.id })
+                      }
                       style={{ width: '20px', height: '20px', marginTop: '15px', marginLeft: '15px' }}
                     />
                   </div>
@@ -204,7 +220,10 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
         </div>
         <LikeIcon
           className="post__action-icon"
-          fill={item.post.liked ? 'red' : 'none'}
+          fill={item.parent_liked ? 'red' : 'none'}
+          onClick={() =>
+            likeComment({ like: !item.parent_liked, parent: item.id, post: item.post, user: item.user.pk })
+          }
           style={{ width: '20px', height: '20px', marginTop: '15px', marginLeft: '15px' }}
         />
       </div>
