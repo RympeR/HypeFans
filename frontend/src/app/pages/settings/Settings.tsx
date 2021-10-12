@@ -11,6 +11,7 @@ import { changeSettings } from '~/redux/authReducer';
 import { RootState } from '~/redux/redux';
 import { updateEmailConfirm } from '~/redux/userReducer';
 import { ReactComponent as BackIcon } from '../../../assets/images/arrow-left.svg';
+import { ReactComponent as ArrowLeft } from '../../../assets/images/leftIcon.svg';
 import { NotificationSidebarItem } from '../notifications/NotificationSidebarItem';
 
 export const Settings = () => {
@@ -19,7 +20,17 @@ export const Settings = () => {
   const settings = useSelector((state: RootState) => state.auth);
   const isDisabled = useSelector((state: RootState) => state.auth.isSettingsDisabled);
   const Text = ({ text }: { text: string }) => {
-    return <p>{text}</p>;
+    return (
+      <>
+        <p className="notifications__none">{text}</p>
+        <div className="notifications__sidebarItemPhone" style={{ justifyContent: 'flex-start' }}>
+          <div>
+            <ArrowLeft onClick={history.goBack} />
+          </div>
+          <div style={{ marginLeft: '40px', marginTop: '7px' }}>{text}</div>
+        </div>
+      </>
+    );
   };
 
   const NotificationsSidebar = () => {

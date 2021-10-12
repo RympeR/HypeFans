@@ -34,9 +34,9 @@ const Notifications = () => {
         <p className="notifications__none">{text}</p>
         <div className="notifications__sidebarItemPhone">
           <div>
-            <ArrowLeft />
+            <ArrowLeft onClick={history.goBack} />
           </div>
-          <div>{text}</div>
+          <div style={{ marginTop: '7px' }}>{text}</div>
           <div>
             <Link to="/settings/notifications">
               <Route path="/notifications" component={SettingsIcon} />
@@ -89,7 +89,7 @@ const Notifications = () => {
       <div>
         <div className="notifications__header">
           <div className="notifications__back">
-            <BackIcon />
+            <BackButton />
           </div>
 
           <p className="notifications__headingText">
