@@ -123,6 +123,14 @@
       display: none;
     }
 
+    .notifications__mainWrapper {
+      margin-left: 0px;
+    }
+
+    .notifications__mainItem {
+      padding: 10px;
+    }
+
     .notifications__none {
       display: none;
     }
@@ -137,6 +145,7 @@
       font-style: normal;
       font-weight: bold;
       font-size: 24px;
+      margin-top: 29px;
       line-height: 26px;
     }
 
@@ -156,6 +165,15 @@
     .notifications__userPhoto {
       width: 60px;
       height: 60px;
+    }
+    .notifications__userInfo h2 {
+      font-size: 14px;
+    }
+    .notifications__userInfo h3 {
+      font-size: 14px;
+    }
+    .notifications__userInfo h4 {
+      font-size: 14px;
     }
     .notifications__postPhoto {
       width: 70px;
@@ -342,10 +360,6 @@
 
   &__userInfo {
     display: flex;
-  }
-
-  &__userInfo div {
-    margin-left: 8px;
   }
 
   &__sessions {

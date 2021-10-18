@@ -33,10 +33,10 @@ const Notifications = () => {
       <>
         <p className="notifications__none">{text}</p>
         <div className="notifications__sidebarItemPhone">
-          <div>
+          <div style={{ marginBottom: '5px', marginRight: '17px' }}>
             <ArrowLeft onClick={history.goBack} />
           </div>
-          <div style={{ marginTop: '7px' }}>{text}</div>
+          <div style={{ marginTop: '4px' }}>{text}</div>
           <div>
             <Link to="/settings/notifications">
               <Route path="/notifications" component={SettingsIcon} />
@@ -138,9 +138,9 @@ const Notifications = () => {
           <Route path="/notifications/likes" render={() => <Text text="Лайки" />} exact />
           <Route path="/notifications/comments" render={() => <Text text="Комментарии" />} exact />
           {/* Заголовок(конец)*/}
-          <div className="notifications__navMobile" style={isShown ? { width: '240px' } : { width: '40px' }}>
+          <div className="notifications__navMobile" style={isShown ? { width: '160px' } : { width: '25px' }}>
             {isShown ? (
-              <div>
+              <div style={{ marginLeft: '5px' }}>
                 <Link
                   className={
                     history.location.pathname === '/notifications'

@@ -34,10 +34,12 @@ export const Notification = ({ item }: any) => {
         <Link to={`/profile/${item.user.username}`}>
           <img src={item.user.avatar} alt="userPhoto" className="notifications__userPhoto"></img>
         </Link>
-        <div>
-          <h2>{item.user.first_name}</h2>
-          <h3>@{item.user.username}</h3>
-          <h4>{getTitle(item.type)}</h4>
+        <div style={{ marginLeft: '7px' }}>
+          <div style={{ display: 'flex' }}>
+            <h2 style={{ margin: '0px' }}>{item.user.first_name}</h2>&nbsp;
+            <h3 style={{ margin: '0px' }}>@{item.user.username}</h3>
+          </div>
+          <h4 style={{ margin: '0px' }}>{getTitle(item.type)}</h4>
           <p>2 часа назад</p>
         </div>
       </div>
