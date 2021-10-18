@@ -1,19 +1,21 @@
 import json
-from apps.users.models import User
-from channels.generic.websocket import AsyncWebsocketConsumer
-from channels.generic.websocket import WebsocketConsumer
-from asgiref.sync import async_to_sync
-import requests
-from .serializers import ChatCreationSerializer, UserMessageCreationSerializer
-from .models import Chat, UserMessage
 import logging
-logger = logging.getLogger('django')
+
+import requests
+from asgiref.sync import async_to_sync
+from channels.generic.websocket import (AsyncWebsocketConsumer,
+                                        WebsocketConsumer)
+
+from apps.users.models import User
+
+from .models import Chat, UserMessage
+from .serializers import ChatCreationSerializer, UserMessageCreationSerializer
+
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
-        print('connected')
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
@@ -43,7 +45,7 @@ class ChatConsumer(WebsocketConsumer):
         if chat.is_valid():
             chat.save()
         else:
-            logger.warning('not valid')
+            logging.warning('not valid')
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
@@ -72,7 +74,6 @@ class ChatConsumer(WebsocketConsumer):
                     if hasattr(attachment.file, 'url'):
                         path_file = attachment.file.url
                         file_url = 'https://hype-fans.com/{path}'.format(
-                        # file_url = 'http://hype-fans.com/{path}'.format(
                             path=path_file)
                         attachments_info.append(
                             {
@@ -92,7 +93,14 @@ class ChatConsumer(WebsocketConsumer):
 class ReadedConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'readed_chat_%s' % self.room_name
+        self.user_id = self.scope['url_route']['kwargs']['user_id']
+        self.room_group_name = 'readed_chat_%s_%s' % self.room_name, self.user_id
+        readed_chat = UserMessage.objects.filter(
+            message__room__pk=int(self.room_name),
+            user__pk=int(self.user_id),
+            readed=False
+        )
+        readed_chat.update(readed=True)
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
@@ -110,12 +118,13 @@ class ReadedConsumer(WebsocketConsumer):
         room = text_data_json['room']
         user = text_data_json['user']
         message = text_data_json['message']
-        messages = [Chat.objects.get(pk=_id) for _id in list(map(int, message))]
+        messages = list(map(int, message))
         readed_chat = UserMessage.objects.filter(
-            message__in=messages,
-            user=User.objects.get(pk=int(user))
+            message__pk__in=messages,
+            user=User.objects.get(pk=int(user)),
+            readed=False
         )
-        readed_chat.readed = True
+        readed_chat.update(readed=True)
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
@@ -133,6 +142,6 @@ class ReadedConsumer(WebsocketConsumer):
 
         self.send(text_data=json.dumps({
             "room": room,
-            "user": user,  # User.objects.get(pk=user).token,
+            "user": user,
             'messages': message,
         }))

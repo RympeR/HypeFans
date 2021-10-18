@@ -1,6 +1,8 @@
 from core.utils.default_responses import api_locked_423, api_not_found_404
 from django.shortcuts import get_object_or_404
+from django.db.models.aggregates import Count
 from rest_framework import generics
+from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import (FileUploadParser, FormParser, JSONParser,
                                     MultiPartParser)
@@ -130,7 +132,30 @@ class InviteUserAPI(generics.UpdateAPIView):
         return super().partial_update(request, *args, **kwargs)
 
 
-class GetDialogs(GenericAPIView):
+class GetUnreadedMessagesAmount(APIView):
+
+    def get(self, request):
+        user = request.user
+        rooms_creator = user.user_creator.all()
+        rooms_invited = user.invited_users.all()
+        room_ids = []
+        for room in rooms_creator:
+            room_ids.append(room.pk)
+        for room in rooms_invited:
+            room_ids.append(room.pk)
+        room_ids = set(room_ids)
+        messages_amount = user.destination_user.filter(
+            readed=False,
+            message__room__pk__in=room_ids
+        ).values('pk')
+        return Response(
+            {
+                'newMessagesCount': len(messages_amount)
+            }
+        )
+
+
+class GetDialogs(APIView):
 
     serializer_class = RetrieveChatsSerializer
 
@@ -164,7 +189,8 @@ class GetDialogs(GenericAPIView):
 
         filtered_results = []
         for room_obj in result:
-            user_obj = room_obj['message'].user if room_obj['message'] and hasattr(room_obj['message'], 'user') else None
+            user_obj = room_obj['message'].user if room_obj['message'] and hasattr(
+                room_obj['message'], 'user') else None
             message_obj = room_obj['message'] if room_obj['message'] else None
             attachment = True if message_obj and message_obj.attachment.all().exists() else False
 

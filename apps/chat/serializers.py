@@ -99,6 +99,11 @@ class RetrieveChatsSerializer(serializers.Serializer):
     offset = serializers.IntegerField(required=False)
 
 
+class NewMessagesCountSerializer(serializers.Serializer):
+
+    newMessagesCount = serializers.IntegerField(required=False)
+
+
 class RoomInviteUserSerializer(serializers.ModelSerializer):
 
     invited = serializers.PrimaryKeyRelatedField(
