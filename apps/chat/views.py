@@ -8,7 +8,7 @@ from rest_framework.parsers import (FileUploadParser, FormParser, JSONParser,
                                     MultiPartParser)
 from rest_framework.response import Response
 
-from apps.users.serializers import UserShortRetrieveSeriliazer
+from apps.users.serializers import UserShortChatRetrieveSeriliazer, UserShortRetrieveSeriliazer
 
 from .models import *
 from .serializers import *
@@ -72,11 +72,11 @@ class GetChatMessages(GenericAPIView):
             objects = Chat.objects.filter(
                 room=room,
                 pk__lte=request.data['message_id']
-            ).order_by('-date')[:15]
+            ).order_by('-date')[:50]
         else:
             objects = Chat.objects.filter(
                 room=room
-            ).order_by('-date')[:15]
+            ).order_by('-date')[:50]
         results = []
         domain = request.get_host()
 
@@ -108,7 +108,7 @@ class GetChatMessages(GenericAPIView):
                 {
                     "id": obj.pk,
                     "room_id": obj.room.pk,
-                    "user_id": obj.user.pk,
+                    "user": UserShortChatRetrieveSeriliazer(instance=obj.user).data,
                     "text": obj.text,
                     "attachments": attachments_info,
                     "date": obj.date.timestamp(),
@@ -129,6 +129,13 @@ class InviteUserAPI(generics.UpdateAPIView):
             self.get_object().invited.add(
                 User.objects.get(username=request.data['username'])
             )
+        return super().partial_update(request, *args, **kwargs)
+
+class ChatPartialUpdateAPI(generics.UpdateAPIView):
+    queryset = Chat.objects.all()
+    serializer_class = ChatPartialSerializer
+
+    def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
 
 

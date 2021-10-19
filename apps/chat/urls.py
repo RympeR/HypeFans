@@ -12,6 +12,7 @@ from .views import (
     GetChatMessages,
     GetDialogs,
     GetUnreadedMessagesAmount,
+    ChatPartialUpdateAPI,
 )
 
 urlpatterns = [
@@ -24,6 +25,7 @@ urlpatterns = [
     path('message-create/', MessageCreateAPI.as_view(), name=''),
     path('message-retrieve/<int:pk>', MessageRetrieveAPI.as_view(), name=''),
     path('message-update/<int:pk>', MessageUpdateAPI.as_view(), name=''),
+    path('message-partial-update/<int:pk>', ChatPartialUpdateAPI.as_view(), name=''),
     path('message-delete/<int:pk>', MessageDeleteAPI.as_view(), name=''),
 
     path('get-chat-messages/', GetChatMessages.as_view(), name=''),
