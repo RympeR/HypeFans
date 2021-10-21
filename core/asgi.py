@@ -16,7 +16,7 @@ application = ProtocolTypeRouter({
 
     "websocket": AuthMiddlewareStack(
         URLRouter([
-            re_path(r"ws/chat/(?P<room_name>\w+)/", ChatConsumer.as_asgi()),
+            re_path(r"wss/chat/(?P<room_name>\w+)/", ChatConsumer.as_asgi()),
             re_path(r'wss/chat-readed/(?P<room_name>\w+)/(?P<user_id>\w+)/$',
                     ReadedConsumer.as_asgi()),
             re_path(r'wss/last-message/(?P<room_name>\w+)/$',

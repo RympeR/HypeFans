@@ -77,7 +77,7 @@ class ChatPartialSerializer(serializers.ModelSerializer):
         required=False, queryset=User.objects.all())
     room = serializers.PrimaryKeyRelatedField(
         required=False, queryset=Room.objects.all())
-    attachment = serializers.ManyRelatedField(
+    attachment = serializers.PrimaryKeyRelatedField(many=True,
         required=False, queryset=Attachment.objects.all())
     text = serializers.CharField(required=False)
 
