@@ -1,6 +1,5 @@
 import os
 
-from apps.chat import consumers
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.conf.urls import url
@@ -10,6 +9,7 @@ from django.urls import re_path
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django_asgi_app = get_asgi_application()
 
+from apps.chat import consumers
 
 application = ProtocolTypeRouter({
     "http": django_asgi_app,
