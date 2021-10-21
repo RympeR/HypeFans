@@ -184,6 +184,7 @@ class LastMessageConsumer(WebsocketConsumer):
             'message': message,
         }))
 
+
 class ChatRoomsConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -239,7 +240,13 @@ class ChatRoomsConsumer(WebsocketConsumer):
                 {
                     "room": {
                         "id": room_obj['room'].id,
-                        "user": UserShortRetrieveSeriliazer(instance=user_obj, context={'request': request}).data if user_obj else UserShortRetrieveSeriliazer(instance=room_obj['room'].creator, context={'request': request}).data,
+                        "user": UserShortRetrieveSeriliazer(
+                            instance=user_obj,
+                            context={'request': self.request}).data
+                        if user_obj
+                        else UserShortRetrieveSeriliazer(
+                            instance=room_obj['room'].creator,
+                            context={'request': self.request}).data,
                         "message": {
                             'id': message_obj.id,
                             'time': message_obj.date.timestamp(),
