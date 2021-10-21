@@ -1,8 +1,9 @@
-from apps.chat.consumers import ChatConsumer, ChatRoomsConsumer, LastMessageConsumer, ReadedConsumer
-from channels.routing import ProtocolTypeRouter, URLRouter
-from channels.auth import AuthMiddlewareStack
 import os
 
+from apps.chat.consumers import (ChatConsumer, ChatRoomsConsumer,
+                                 LastMessageConsumer, ReadedConsumer)
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
 from django.conf.urls import url
 from django.core.asgi import get_asgi_application
 from django.urls import re_path
@@ -16,12 +17,12 @@ application = ProtocolTypeRouter({
 
     "websocket": AuthMiddlewareStack(
         URLRouter([
-            re_path(r"wss/chat/(?P<room_name>\w+)/", ChatConsumer.as_asgi()),
-            re_path(r'wss/chat-readed/(?P<room_name>\w+)/(?P<user_id>\w+)/$',
+            re_path(r"ws/chat/(?P<room_name>\w+)/", ChatConsumer.as_asgi()),
+            re_path(r'ws/chat-readed/(?P<room_name>\w+)/(?P<user_id>\w+)/$',
                     ReadedConsumer.as_asgi()),
-            re_path(r'wss/last-message/(?P<room_name>\w+)/$',
+            re_path(r'ws/last-message/(?P<room_name>\w+)/$',
                     LastMessageConsumer.as_asgi()),
-            re_path(r'wss/chat-rooms/(?P<user_id>\w+)/$',
+            re_path(r'ws/chat-rooms/(?P<user_id>\w+)/$',
                     ChatRoomsConsumer.as_asgi()),
         ])
     ),
