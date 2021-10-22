@@ -63,7 +63,7 @@ class MessageDeleteAPI(generics.DestroyAPIView):
 
 
 class GetChatMessages(GenericAPIView):
-
+    queryset = Chat.objects.all()
     serializer_class = ChatMessagesSerializer
 
     def post(self, request):
@@ -139,8 +139,9 @@ class ChatPartialUpdateAPI(generics.UpdateAPIView):
         return super().partial_update(request, *args, **kwargs)
 
 
-class GetUnreadedMessagesAmount(APIView):
-
+class GetUnreadedMessagesAmount(GenericAPIView):
+    queryset = Chat.objects.all()
+    serializer_class = RetrieveChatsSerializer
     def get(self, request):
         user = request.user
         rooms_creator = user.user_creator.all()
@@ -162,8 +163,8 @@ class GetUnreadedMessagesAmount(APIView):
         )
 
 
-class GetDialogs(APIView):
-
+class GetDialogs(GenericAPIView):
+    queryset = Chat.objects.all()
     serializer_class = RetrieveChatsSerializer
 
     def post(self, request):

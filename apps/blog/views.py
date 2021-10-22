@@ -416,7 +416,7 @@ class MainUserPage(GenericAPIView):
 
 
 class SubStories(GenericAPIView):
-
+    queryset = Story.objects.all()
     serializer_class = SubStoriesSerializer
 
     def get(self, request):
@@ -449,7 +449,7 @@ class SubStories(GenericAPIView):
 class MarkFavourite(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated, )
     serializer_class = UserFavouritesSerializer
-
+    queryset = User.objects.all()
     def put(self, request):
         data = request.data
         user = request.user

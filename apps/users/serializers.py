@@ -214,7 +214,7 @@ class CustomProfileSerializer(serializers.ModelSerializer):
 
 class UserGetSerializer(serializers.ModelSerializer):
     location = CountryField(country_dict=True)
-    birthday_date = serializers.DateTimeField(required=False)
+    birthday_date = TimestampField(required=False)
     avatar = serializers.SerializerMethodField()
     background_photo = serializers.SerializerMethodField()
 
