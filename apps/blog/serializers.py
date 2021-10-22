@@ -413,3 +413,4 @@ class PostBoughtCreateSerializer(serializers.ModelSerializer):
             user.save()
             return attrs
         raise serializers.ValidationError
+
