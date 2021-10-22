@@ -7,7 +7,7 @@ from django_countries.fields import CountryField
 from dateutil.relativedelta import relativedelta
 import datetime
 from django.db.models.signals import post_save
-
+from django.dispatch import receiver
 
 class User(AbstractUser):
     email = models.EmailField(
@@ -237,5 +237,12 @@ def update_verification(sender: PendingUser, instance: PendingUser, created: boo
             instance.user.verified = True
         instance.user.save()
 
+@receiver(post_save, sender=Subscription, dispatch_uid='user_fans_amount_update_signal')
+def update_fans_amount(sender: Subscription, instance: Subscription, created: bool, **kwargs):
+    if created:
+        instance.target.fans_amount += 1
+        instance.target.save()
+
 
 post_save.connect(update_verification, sender=PendingUser)
+

@@ -2,8 +2,7 @@ import logging
 from datetime import datetime, timedelta
 
 from core.utils.default_responses import api_block_by_policy_451
-from django.db.models.expressions import Exists
-from rest_framework import generics, permissions, renderers, status
+from rest_framework import generics, permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
@@ -35,7 +34,7 @@ class PostBoughtCreateAPI(generics.CreateAPIView):
             serializer.is_valid(raise_exception=True)
         except AssertionError:
             return api_block_by_policy_451({"status": "not enought credits"})
-        instance = self.perform_create(serializer)
+        self.perform_create(serializer)
         return Response(serializer.data)
 
     def get_serializer_context(self):
@@ -137,17 +136,17 @@ class PostPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
 class PostActionListAPI(generics.GenericAPIView):
     serializer_class = PostActionGetSerializer
     queryset = PostAction.objects.all()
-    
+
     def get(self, request, pk):
         qs = PostAction.objects.filter(
             post=Post.objects.get(pk=pk)
         )
         data = [self.get_serializer(
-                        instance=post, 
-                        context={
-                            'request': request
-                        }
-                    ).data for post in qs]
+            instance=post,
+            context={
+                'request': request
+            }
+        ).data for post in qs]
         return Response(data)
 
     def get_serializer_context(self):
@@ -274,7 +273,7 @@ class UserNotifications(GenericAPIView):
             res_dict = {}
             donation_data = {
                 'amount': donation.amount,
-                'date_time': donation.datetime
+                'date_time': donation.datetime.timestamp()
             }
             res_dict['user'] = user_data
             res_dict['donation'] = donation_data
@@ -287,8 +286,8 @@ class UserNotifications(GenericAPIView):
             res_dict = {}
             subscription_data = {
                 'amount': user.subscribtion_price,
-                'start_date': subscription.start_date,
-                'end_date': subscription.end_date
+                'start_date': subscription.start_date.timestamp(),
+                'end_date': subscription.end_date.timestamp()
             }
             res_dict['user'] = user_data
             res_dict['subscription'] = subscription_data
@@ -321,7 +320,9 @@ class MainUserPage(GenericAPIView):
         qs = User.objects.all().order_by('-fans_amount')[:9]
         if qs.exists():
             results['recommendations'].append(
-                UserShortRetrieveSeriliazer(instance=qs, many=True, context={'request': request}).data)
+                UserShortRetrieveSeriliazer(instance=qs, many=True, context={
+                                            'request': request}).data
+            )
         if data_compare == 0:
             for user_sub in user.my_subscribes.all():
                 logging.warning(f'user subs main page -> {user_sub}')
@@ -378,7 +379,7 @@ class MainUserPage(GenericAPIView):
                 {
                     'recommendations': results['recommendations'],
                     'posts': results['posts'][offset:limit+offset],
-                    'stoires': []
+                    'stories': []
                 }
             )
         for user_sub in user.my_subscribes.all():
@@ -406,7 +407,7 @@ class MainUserPage(GenericAPIView):
             {
                 'recommendations': results['recommendations'],
                 'posts': results['posts'][offset:limit+offset],
-                'stoires': []
+                'stories': []
             }
         )
 
@@ -415,7 +416,7 @@ class MainUserPage(GenericAPIView):
 
 
 class SubStories(GenericAPIView):
-
+    queryset = Story.objects.all()
     serializer_class = SubStoriesSerializer
 
     def get(self, request):
@@ -448,7 +449,7 @@ class SubStories(GenericAPIView):
 class MarkFavourite(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated, )
     serializer_class = UserFavouritesSerializer
-
+    queryset = User.objects.all()
     def put(self, request):
         data = request.data
         user = request.user

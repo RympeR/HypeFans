@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from apps.blog.models import Attachment
 from core.utils.customFields import TimestampField
 from .models import (
     Room,
@@ -7,7 +8,7 @@ from .models import (
 )
 from apps.users.models import User
 from apps.blog.serializers import AttachmentSerializer
-from apps.users.serializers import UserShortRetrieveSeriliazer
+from apps.users.serializers import UserShortChatRetrieveSeriliazer, UserShortRetrieveSeriliazer
 
 
 class RoomGetSerializer(serializers.ModelSerializer):
@@ -49,7 +50,7 @@ class RoomUpdateSerializer(serializers.ModelSerializer):
 class ChatGetSerializer(serializers.ModelSerializer):
 
     room = RoomGetSerializer()
-    user = UserShortRetrieveSeriliazer()
+    user = UserShortChatRetrieveSeriliazer()
     attachment = AttachmentSerializer(many=True)
     date = TimestampField(required=False)
 
@@ -63,11 +64,26 @@ class ChatCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
         exclude = 'date',
-    
+
     def validate(self, attrs):
         request = self.context.get('request')
         attrs['user'] = request.user
         return attrs
+
+
+class ChatPartialSerializer(serializers.ModelSerializer):
+
+    user = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+    room = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=Room.objects.all())
+    attachment = serializers.PrimaryKeyRelatedField(many=True,
+        required=False, queryset=Attachment.objects.all())
+    text = serializers.CharField(required=False)
+
+    class Meta:
+        model = Chat
+        exclude = 'date',
 
 
 class UserMessageGetSerializer(serializers.ModelSerializer):
@@ -81,7 +97,7 @@ class UserMessageGetSerializer(serializers.ModelSerializer):
 
 
 class UserMessageCreationSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = UserMessage
         fields = '__all__'
@@ -97,6 +113,11 @@ class RetrieveChatsSerializer(serializers.Serializer):
 
     limit = serializers.IntegerField(required=False)
     offset = serializers.IntegerField(required=False)
+
+
+class NewMessagesCountSerializer(serializers.Serializer):
+
+    newMessagesCount = serializers.IntegerField(required=False)
 
 
 class RoomInviteUserSerializer(serializers.ModelSerializer):

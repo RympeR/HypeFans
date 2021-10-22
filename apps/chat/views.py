@@ -1,12 +1,14 @@
 from core.utils.default_responses import api_locked_423, api_not_found_404
 from django.shortcuts import get_object_or_404
+from django.db.models.aggregates import Count
 from rest_framework import generics
+from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import (FileUploadParser, FormParser, JSONParser,
                                     MultiPartParser)
 from rest_framework.response import Response
 
-from apps.users.serializers import UserShortRetrieveSeriliazer
+from apps.users.serializers import UserShortChatRetrieveSeriliazer, UserShortRetrieveSeriliazer
 
 from .models import *
 from .serializers import *
@@ -61,7 +63,7 @@ class MessageDeleteAPI(generics.DestroyAPIView):
 
 
 class GetChatMessages(GenericAPIView):
-
+    queryset = Chat.objects.all()
     serializer_class = ChatMessagesSerializer
 
     def post(self, request):
@@ -70,11 +72,11 @@ class GetChatMessages(GenericAPIView):
             objects = Chat.objects.filter(
                 room=room,
                 pk__lte=request.data['message_id']
-            ).order_by('-date')[:15]
+            ).order_by('-date')[:50]
         else:
             objects = Chat.objects.filter(
                 room=room
-            ).order_by('-date')[:15]
+            ).order_by('-date')[:50]
         results = []
         domain = request.get_host()
 
@@ -106,7 +108,7 @@ class GetChatMessages(GenericAPIView):
                 {
                     "id": obj.pk,
                     "room_id": obj.room.pk,
-                    "user_id": obj.user.pk,
+                    "user": UserShortChatRetrieveSeriliazer(instance=obj.user).data,
                     "text": obj.text,
                     "attachments": attachments_info,
                     "date": obj.date.timestamp(),
@@ -129,9 +131,40 @@ class InviteUserAPI(generics.UpdateAPIView):
             )
         return super().partial_update(request, *args, **kwargs)
 
+class ChatPartialUpdateAPI(generics.UpdateAPIView):
+    queryset = Chat.objects.all()
+    serializer_class = ChatPartialSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+
+class GetUnreadedMessagesAmount(GenericAPIView):
+    queryset = Chat.objects.all()
+    serializer_class = RetrieveChatsSerializer
+    def get(self, request):
+        user = request.user
+        rooms_creator = user.user_creator.all()
+        rooms_invited = user.invited_users.all()
+        room_ids = []
+        for room in rooms_creator:
+            room_ids.append(room.pk)
+        for room in rooms_invited:
+            room_ids.append(room.pk)
+        room_ids = set(room_ids)
+        messages_amount = user.destination_user.filter(
+            readed=False,
+            message__room__pk__in=room_ids
+        ).values('pk')
+        return Response(
+            {
+                'newMessagesCount': len(messages_amount)
+            }
+        )
+
 
 class GetDialogs(GenericAPIView):
-
+    queryset = Chat.objects.all()
     serializer_class = RetrieveChatsSerializer
 
     def post(self, request):
@@ -164,7 +197,8 @@ class GetDialogs(GenericAPIView):
 
         filtered_results = []
         for room_obj in result:
-            user_obj = room_obj['message'].user if room_obj['message'] and hasattr(room_obj['message'], 'user') else None
+            user_obj = room_obj['message'].user if room_obj['message'] and hasattr(
+                room_obj['message'], 'user') else None
             message_obj = room_obj['message'] if room_obj['message'] else None
             attachment = True if message_obj and message_obj.attachment.all().exists() else False
 

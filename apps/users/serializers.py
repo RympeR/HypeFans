@@ -81,6 +81,30 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             'subscribtion_duration'
         )
 
+class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
+
+    avatar = serializers.SerializerMethodField()
+    background_photo = serializers.SerializerMethodField()
+
+    def get_avatar(self, user: User):
+        if user.avatar and hasattr(user.avatar, 'url'):
+            path_file = user.avatar.url
+            request = self.context.get('request')
+            host = request.get_host()
+            file_url = 'http://{domain}{path}'.format(
+                domain=host, path=path_file)
+            return file_url
+        return ''
+
+    class Meta:
+        model = User
+        fields = (
+            'pk',
+            'username',
+            'avatar',
+            'first_name',
+            'is_online',
+        )
 
 class UserCreationSerializer(serializers.ModelSerializer):
 
@@ -190,7 +214,7 @@ class CustomProfileSerializer(serializers.ModelSerializer):
 
 class UserGetSerializer(serializers.ModelSerializer):
     location = CountryField(country_dict=True)
-    birthday_date = serializers.DateTimeField(required=False)
+    birthday_date = TimestampField(required=False)
     avatar = serializers.SerializerMethodField()
     background_photo = serializers.SerializerMethodField()
 

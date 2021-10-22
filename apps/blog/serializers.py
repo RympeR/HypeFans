@@ -219,7 +219,7 @@ class PostGetShortSerializers(serializers.ModelSerializer):
     publication_date = TimestampField(required=False)
 
     def get_likes_amount(self, obj: Post):
-        return obj.user_postaction.filter(Q(like=True) & Q(parent_isnull=True)).aggregate(Count('pk'))['pk__count']
+        return obj.user_postaction.filter(Q(like=True) & Q(parent__isnull=True)).aggregate(Count('pk'))['pk__count']
 
     def get_comments_amount(self, obj: Post):
         return obj.user_postaction.filter(~Q(comment__isnull=True)).aggregate(Count('pk'))['pk__count']

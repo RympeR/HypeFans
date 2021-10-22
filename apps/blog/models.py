@@ -1,7 +1,11 @@
 from django.db import models
-from apps.users.models import User
-from unixtimestampfield.fields import UnixTimeStampField
+from django.db.models.signals import post_save
+from django.dispatch.dispatcher import receiver
 from mptt.models import MPTTModel, TreeForeignKey
+from unixtimestampfield.fields import UnixTimeStampField
+
+from apps.users.models import User
+
 
 class Attachment(models.Model):
     class AtachmentChoices(models.IntegerChoices):
@@ -92,10 +96,10 @@ class PostAction(MPTTModel):
     def __str__(self):
         return f"{self.pk}-{self.post}"
 
-
     class MPTTMeta:
         order_insertion_by = ['id']
         level_attr = 'sub_action'
+
 
 class Story(models.Model):
     user = models.ForeignKey(
@@ -171,8 +175,8 @@ class PostBought(models.Model):
         return f"{self.user}-{self.post}"
 
 
+@receiver(post_save, sender=Post, dispatch_uid='user_post_amount_update_signal')
 def create_post(sender: Post, instance: Post, created: bool, **kwargs):
     if created:
-        user = instance.user
-        user.post_amount += 1
-        user.save()
+        instance.user.post_amount += 1
+        instance.user.save()
