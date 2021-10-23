@@ -501,5 +501,353 @@
         "card": 1
     }
     @apiUse unathorized
+    @apiUse not-credits
 
+"""
+
+"""
+    @api {get} /user/get-donation/:id 1.14 Get donation
+    @apiName 1.14 Get donation
+    @apiGroup User
+    @apiVersion  0.1.0
+
+    @apiHeader {String} Authorization Authorization token
+
+    @apiSampleRequest https://hype-fans.com/user/get-donation/1
+    
+    @apiSuccess (200) {Number} id Donation id
+    @apiSuccess (200) {Object} sender Sender user object
+    @apiSuccess (200) {Object} reciever Receiver user object
+    @apiSuccess (200) {Number} amount Donation amount
+    @apiSuccess (200) {Number} datetime Donation timestamp
+
+    @apiSuccessExample {json} Success-Response:
+    HTTP 200 OK
+    {
+        "id": 1,
+        "datetime": 1634978237.64059,
+        "sender": {
+            "pk": 2,
+            "username": "test_user1",
+            "avatar": "",
+            "first_name": null,
+            "background_photo": "",
+            "subscribtion_price": 1,
+            "is_online": true,
+            "subscribtion_duration": 7
+        },
+        "reciever": {
+            "pk": 2,
+            "username": "test_user1",
+            "avatar": "",
+            "first_name": null,
+            "background_photo": "",
+            "subscribtion_price": 1,
+            "is_online": true,
+            "subscribtion_duration": 7
+        },
+        "amount": 123.0
+    }
+    @apiUse unathorized
+
+"""
+
+"""
+    @api {get} /user/get-payment/:id 1.15 Get payment
+    @apiName 1.15 Get payment
+    @apiGroup User
+    @apiVersion  0.1.0
+
+    @apiHeader {String} Authorization Authorization token
+
+    @apiSampleRequest https://hype-fans.com/user/get-payment/4
+    
+    @apiSuccess (200) {Number} id Payment id
+    @apiSuccess (200) {Object} card Card object
+    @apiSuccess (200) {Number} datetime Payment timestamp
+    @apiSuccess (200) {Number} amount Payment amount
+
+    @apiSuccessExample {json} Success-Response:
+    HTTP 200 OK
+    {
+        "id": 4,
+        "card": {
+            "id": 1,
+            "user": {
+                "pk": 1,
+                "username": "root",
+                "avatar": "http://127.0.0.1:8000/media/user/sdsmEGpleMY6.png",
+                "first_name": null,
+                "background_photo": "",
+                "subscribtion_price": 0,
+                "is_online": true,
+                "subscribtion_duration": 7
+            },
+            "number": 812787787837237940,
+            "date_year": "1223",
+            "cvc": "333",
+            "creator": true
+        },
+        "datetime": 1634979001.83044,
+        "amount": 123.0
+    }
+    @apiUse unathorized
+
+"""
+
+"""
+    @api {post} /user/validate-user/ 1.16 Validate user
+    @apiName 1.16 Validate user
+    @apiGroup User
+    @apiVersion  0.1.0
+
+    @apiHeader {String} Authorization Authorization token
+
+    @apiParam (required) {Number} user user  id
+    @apiParam (required) {File} photo Document photo
+    @apiParam (required) {Boolean} verified Verification
+
+    @apiSampleRequest https://hype-fans.com/user/validate-user/
+    
+    @apiSuccess (200) {Number} id Validated user id
+    @apiSuccess (200) {String} photo File url
+    @apiSuccess (200) {Boolean} verified Verified status
+    @apiSuccess (200) {Number} user User id
+
+    @apiSuccessExample {json} Success-Response:
+    HTTP 201 Created
+    {
+        "id": 1,
+        "photo": "http://127.0.0.1:8000/media/docs/test.png",
+        "verified": true,
+        "user": 2
+    }
+    @apiUse unathorized
+    @apiErrorExample {json} Error-Response:
+    HTTP 404 Bad request
+    {
+        "photo": [
+            "Загрузите правильное изображение. Файл, который вы загрузили, поврежден или не является изображением."
+        ]
+    }
+
+"""
+
+"""
+    @api {get} /user/user-donation-sended/ 1.17 Users donation sended
+    @apiName 1.17 Users donation sended
+    @apiGroup User
+    @apiVersion  0.1.0
+
+    @apiHeader {String} Authorization Authorization token
+
+    @apiSampleRequest https://hype-fans.com/user/user-donation-sended/
+    
+    @apiSuccess (200) {Number} count Donation amounts
+    @apiSuccess (200) {Number} next Next page number
+    @apiSuccess (200) {Number} previous Prev page number
+    @apiSuccess (200) {Array} results Array of donation object
+
+    @apiSuccessExample {json} Success-Response:
+    HTTP 200 OK
+    {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 2,
+                "datetime": 1634979692.07884,
+                "sender": {
+                    "pk": 1,
+                    "username": "root",
+                    "avatar": "http://127.0.0.1:8000/media/user/sdsmEGpleMY6.png",
+                    "first_name": null,
+                    "background_photo": "",
+                    "subscribtion_price": 0,
+                    "is_online": true,
+                    "subscribtion_duration": 7
+                },
+                "reciever": {
+                    "pk": 2,
+                    "username": "test_user1",
+                    "avatar": "",
+                    "first_name": null,
+                    "background_photo": "",
+                    "subscribtion_price": 1,
+                    "is_online": true,
+                    "subscribtion_duration": 7
+                },
+                "amount": 123.0
+            }
+        ]
+    }
+    @apiUse unathorized
+"""
+
+"""
+    @api {get} /user/user-donation-recieved/ 1.18 Users donation recieved
+    @apiName 1.18 Users donation recieved
+    @apiGroup User
+    @apiVersion  0.1.0
+
+    @apiHeader {String} Authorization Authorization token
+
+    @apiSampleRequest https://hype-fans.com/user/user-donation-recieved/
+    
+    @apiSuccess (200) {Number} count Donation amounts
+    @apiSuccess (200) {Number} next Next page number
+    @apiSuccess (200) {Number} previous Prev page number
+    @apiSuccess (200) {Array} results Array of donation object
+
+    @apiSuccessExample {json} Success-Response:
+    HTTP 200 OK
+    {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 2,
+                "datetime": 1634979692.07884,
+                "sender": {
+                    "pk": 1,
+                    "username": "root",
+                    "avatar": "http://127.0.0.1:8000/media/user/sdsmEGpleMY6.png",
+                    "first_name": null,
+                    "background_photo": "",
+                    "subscribtion_price": 0,
+                    "is_online": true,
+                    "subscribtion_duration": 7
+                },
+                "reciever": {
+                    "pk": 2,
+                    "username": "test_user1",
+                    "avatar": "",
+                    "first_name": null,
+                    "background_photo": "",
+                    "subscribtion_price": 1,
+                    "is_online": true,
+                    "subscribtion_duration": 7
+                },
+                "amount": 123.0
+            }
+        ]
+    }
+    @apiUse unathorized
+"""
+
+"""
+    @api {get} /user/user-payment-history/ 1.19 User payment history
+    @apiName 1.19 User payment history
+    @apiGroup User
+    @apiVersion  0.1.0
+
+    @apiHeader {String} Authorization Authorization token
+
+    @apiSampleRequest https://hype-fans.com/user/user-payment-history/
+    
+    @apiSuccess (200) {Number} count Donation amounts
+    @apiSuccess (200) {Number} next Next page number
+    @apiSuccess (200) {Number} previous Prev page number
+    @apiSuccess (200) {Array} results Array of payment objects
+
+    @apiSuccessExample {json} Success-Response:
+    HTTP 200 OK
+    {
+        "count": 4,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 4,
+                "card": {
+                    "id": 1,
+                    "user": {
+                        "pk": 1,
+                        "username": "root",
+                        "avatar": "http://127.0.0.1:8000/media/user/sdsmEGpleMY6.png",
+                        "first_name": null,
+                        "background_photo": "",
+                        "subscribtion_price": 0,
+                        "is_online": true,
+                        "subscribtion_duration": 7
+                    },
+                    "number": 812787787837237940,
+                    "date_year": "1223",
+                    "cvc": "333",
+                    "creator": true
+                },
+                "datetime": "2021-10-23T11:50:01.830440",
+                "amount": 123.0
+            },
+            {
+                "id": 1,
+                "card": {
+                    "id": 1,
+                    "user": {
+                        "pk": 1,
+                        "username": "root",
+                        "avatar": "http://127.0.0.1:8000/media/user/sdsmEGpleMY6.png",
+                        "first_name": null,
+                        "background_photo": "",
+                        "subscribtion_price": 0,
+                        "is_online": true,
+                        "subscribtion_duration": 7
+                    },
+                    "number": 812787787837237940,
+                    "date_year": "1223",
+                    "cvc": "333",
+                    "creator": true
+                },
+                "datetime": "1970-01-01T00:00:00",
+                "amount": 123.0
+            },
+            {
+                "id": 2,
+                "card": {
+                    "id": 1,
+                    "user": {
+                        "pk": 1,
+                        "username": "root",
+                        "avatar": "http://127.0.0.1:8000/media/user/sdsmEGpleMY6.png",
+                        "first_name": null,
+                        "background_photo": "",
+                        "subscribtion_price": 0,
+                        "is_online": true,
+                        "subscribtion_duration": 7
+                    },
+                    "number": 812787787837237940,
+                    "date_year": "1223",
+                    "cvc": "333",
+                    "creator": true
+                },
+                "datetime": "1970-01-01T00:00:00",
+                "amount": 123.0
+            },
+            {
+                "id": 3,
+                "card": {
+                    "id": 1,
+                    "user": {
+                        "pk": 1,
+                        "username": "root",
+                        "avatar": "http://127.0.0.1:8000/media/user/sdsmEGpleMY6.png",
+                        "first_name": null,
+                        "background_photo": "",
+                        "subscribtion_price": 0,
+                        "is_online": true,
+                        "subscribtion_duration": 7
+                    },
+                    "number": 812787787837237940,
+                    "date_year": "1223",
+                    "cvc": "333",
+                    "creator": true
+                },
+                "datetime": "1970-01-01T00:00:00",
+                "amount": 123.0
+            }
+        ]
+    }
+    @apiUse unathorized
 """

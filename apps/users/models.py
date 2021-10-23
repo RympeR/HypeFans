@@ -9,6 +9,7 @@ import datetime
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+
 class User(AbstractUser):
     email = models.EmailField(
         'E-mail',
@@ -157,7 +158,8 @@ class Subscription(models.Model):
 
 
 class Card(models.Model):
-    user = models.ForeignKey(User, related_name='user_card', on_delete=models.CASCADE,)
+    user = models.ForeignKey(
+        User, related_name='user_card', on_delete=models.CASCADE,)
     number = models.BigIntegerField(verbose_name='Номер карты')
     date_year = models.CharField(verbose_name='Месяц/год', max_length=5)
     cvc = models.CharField(verbose_name='CVC', max_length=3)
@@ -191,7 +193,7 @@ class Donation(models.Model):
 class Payment(models.Model):
     card = models.ForeignKey(Card, verbose_name='Карта пополнения',
                              related_name='card_payment', on_delete=models.DO_NOTHING)
-    datetime = UnixTimeStampField(verbose_name='Время пополнения')
+    datetime = UnixTimeStampField(verbose_name='Время пополнения',)
     amount = models.FloatField(verbose_name='Сумма пополнения')
 
     class Meta:
@@ -236,6 +238,7 @@ def update_verification(sender: PendingUser, instance: PendingUser, created: boo
             instance.user.verified = True
         instance.user.save()
 
+
 @receiver(post_save, sender=Subscription, dispatch_uid='user_fans_amount_update_signal')
 def update_fans_amount(sender: Subscription, instance: Subscription, created: bool, **kwargs):
     if created:
@@ -243,5 +246,11 @@ def update_fans_amount(sender: Subscription, instance: Subscription, created: bo
         instance.target.save()
 
 
-post_save.connect(update_verification, sender=PendingUser)
+@receiver(post_save, sender=Payment, dispatch_uid='user_payment_create_signal')
+def update_user_balance_payment(sender: Payment, instance: Payment, created: bool, **kwargs):
+    if created:
+        instance.card.user.credit_amount += instance.amount
+        instance.card.user.save()
 
+
+post_save.connect(update_verification, sender=PendingUser)

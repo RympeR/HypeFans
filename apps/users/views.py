@@ -233,6 +233,18 @@ class DonationCreateAPI(generics.CreateAPIView):
     def get_serializer_context(self):
         return {'request': self.request}
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except AssertionError:
+            return api_block_by_policy_451({"status": "not enought credits"})
+        instance = self.perform_create(serializer)
+        return Response(serializer.data)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
 
 class PaymentRetrieveAPI(generics.RetrieveAPIView):
     queryset = Payment.objects.all()

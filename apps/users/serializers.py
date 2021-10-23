@@ -310,7 +310,7 @@ class DonationCreationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class DonationGetSerializer(serializers.ModelSerializer):
-
+    datetime = TimestampField()
     sender = UserShortRetrieveSeriliazer()
     reciever = UserShortRetrieveSeriliazer()
 
@@ -325,11 +325,10 @@ class PaymentCreationSerializer(serializers.ModelSerializer):
         model = Payment
         exclude = 'datetime',
 
-
 class PaymentGetSerializer(serializers.ModelSerializer):
 
     card = CardGetSerializer()
-    datetime = TimestampField()
+    # datetime = TimestampField(required=False)
 
     class Meta:
         model = Payment
