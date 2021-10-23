@@ -339,7 +339,8 @@
 
     @apiHeader {String} Authorization Authorization token
 
-    @apiParam (required) {Number} end_date Subscription end date timestamp
+    @apiParam (not-required) {Number} start_date Subscription start date timestamp
+    @apiParam (not-required) {Number} end_date Subscription end date timestamp
     @apiParam (required) {Number} source User subscribed id
     @apiParam (required) {Number} target User subscribed to id
 

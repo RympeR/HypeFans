@@ -430,16 +430,18 @@ class SubStories(GenericAPIView):
                 instance=user_sub, context={'request': request}).data
             res_dict['user'] = user_data
             res_dict['stories'] = []
-            for story in user_sub.user_story.filter(archived=False):
-                story_data = StoryShortSerializer(instance=story)
-                watched = WatchedStories.objects.filter(
-                    source=story,
-                    target=user
-                )
-                res_dict['watched'] = watched.exists()
-                res_dict['stories'].append(story_data)
-            results.append(res_dict)
-
+            qs = user_sub.user_story.filter(archived=False)
+            if qs.exists():
+                for story in qs:
+                    story_data = StoryShortSerializer(instance=story)
+                    watched = WatchedStories.objects.filter(
+                        source=story,
+                        target=user
+                    )
+                    res_dict['watched'] = watched.exists()
+                    res_dict['stories'].append(story_data)
+                results.append(res_dict)
+        print(results[offset:limit+offset])
         return Response(
             sorted(results[offset:limit+offset],
                    key=lambda story: story['stories']['date_time'])[::-1]
