@@ -18,6 +18,7 @@ from .models import (
 class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
     end_date = TimestampField(required=False)
+    start_date = TimestampField(required=False)
     source = serializers.PrimaryKeyRelatedField(
         required=False, queryset=User.objects.all())
 
@@ -81,6 +82,7 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             'subscribtion_duration'
         )
 
+
 class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
 
     avatar = serializers.SerializerMethodField()
@@ -105,6 +107,7 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
             'first_name',
             'is_online',
         )
+
 
 class UserCreationSerializer(serializers.ModelSerializer):
 
@@ -214,7 +217,6 @@ class CustomProfileSerializer(serializers.ModelSerializer):
 
 class UserGetSerializer(serializers.ModelSerializer):
     location = CountryField(country_dict=True)
-    birthday_date = TimestampField(required=False)
     avatar = serializers.SerializerMethodField()
     background_photo = serializers.SerializerMethodField()
 
@@ -279,6 +281,19 @@ class CardCreationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CardPartialSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+    number = serializers.IntegerField(required=False)
+    date_year = serializers.CharField(required=False)
+    cvc = serializers.CharField(required=False)
+    creator = serializers.BooleanField(required=False)
+
+    class Meta:
+        model = Card
+        fields = '__all__'
+
+
 class CardGetSerializer(serializers.ModelSerializer):
 
     user = UserShortRetrieveSeriliazer()
@@ -289,11 +304,10 @@ class CardGetSerializer(serializers.ModelSerializer):
 
 
 class DonationCreationSerializer(serializers.ModelSerializer):
-
+    datetime = TimestampField(required=False)
     class Meta:
         model = Donation
-        exclude = 'datetime',
-
+        fields = '__all__'
 
 class DonationGetSerializer(serializers.ModelSerializer):
 
