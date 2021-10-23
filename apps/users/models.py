@@ -157,8 +157,7 @@ class Subscription(models.Model):
 
 
 class Card(models.Model):
-    user = models.ForeignKey(
-        User, related_name='user_card', on_delete=models.CASCADE,)
+    user = models.ForeignKey(User, related_name='user_card', on_delete=models.CASCADE,)
     number = models.BigIntegerField(verbose_name='Номер карты')
     date_year = models.CharField(verbose_name='Месяц/год', max_length=5)
     cvc = models.CharField(verbose_name='CVC', max_length=3)

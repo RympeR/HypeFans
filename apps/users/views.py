@@ -163,9 +163,9 @@ class CreateSubscriptioAPI(generics.CreateAPIView):
 
 class UserSubscription(GenericAPIView):
     queryset = User.objects.all()
-    serializer_class = UserCreationSerializer
+    serializer_class = SubscriptionCreateSerializer
 
-    def put(self, request, pk):
+    def post(self, request, pk):
         user = request.user
         subscribe_target = get_object_or_404(User, pk=pk)
         if user.credit_amount > subscribe_target.subscribtion_price:
