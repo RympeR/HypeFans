@@ -496,7 +496,7 @@
 
     @apiSuccessExample {json} Success-Response:
     HTTP 201 Created
-   {
+    {
         "id": 3,
         "amount": 1234.0,
         "card": 1
