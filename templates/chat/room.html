@@ -16,14 +16,15 @@
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
-            + '/ws/chat/'
+            + '/ws/chat-rooms/'
             + roomName
             + '/'
         );
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
+            console.log(data.room)
+            document.querySelector('#chat-log').value += (data.room + '\n');
         };
 
         chatSocket.onclose = function(e) {
@@ -41,10 +42,7 @@
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
             chatSocket.send(JSON.stringify({
-                'message': message,
-                'user': 1,
-                'room': roomName,
-                'file': [],
+                'room': 0,
             }));
             messageInputDom.value = '';
         };

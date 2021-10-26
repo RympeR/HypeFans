@@ -98,20 +98,23 @@ class ChatConsumer(WebsocketConsumer):
 
 class ReadedConsumer(WebsocketConsumer):
     def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.user_id = self.scope['url_route']['kwargs']['user_id']
-        self.room_group_name = 'readed_chat_%s_%s' % self.room_name, self.user_id
-        readed_chat = UserMessage.objects.filter(
-            message__room__pk=int(self.room_name),
-            user__pk=int(self.user_id),
-            readed=False
-        )
-        readed_chat.update(readed=True)
-        async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name,
-            self.channel_name
-        )
-        self.accept()
+        try:
+            self.room_name = self.scope['url_route']['kwargs']['room_name']
+            self.user_id = self.scope['url_route']['kwargs']['user_id']
+            self.room_group_name = f'readed_chat_{self.room_name}_{self.user_id}'
+            readed_chat = UserMessage.objects.filter(
+                message__room__pk=int(self.room_name),
+                user__pk=int(self.user_id),
+                readed=False
+            )
+            # readed_chat.update(readed=True)
+            async_to_sync(self.channel_layer.group_add)(
+                self.room_group_name,
+                self.channel_name
+            )
+            self.accept()
+        except Exception as e:
+            print(e)
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
@@ -134,8 +137,8 @@ class ReadedConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
-                'type': 'readed_messages',
-                'messages': message,
+                'type': 'chat_message',
+                'message': message,
                 'user': user,
                 'room': room,
             }
@@ -149,7 +152,7 @@ class ReadedConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({
             "room": room,
             "user": user,
-            'messages': message,
+            'message': message,
         }))
 
 
@@ -170,20 +173,18 @@ class LastMessageConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
         message = Chat.objects.filter(
             room__pk=int(self.room_name)).order_by('-date').first()
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
-                'type': 'last_message',
+                'type': 'chat_message',
                 'message': ChatGetSerializer(instance=message).data,
             }
         )
 
     def chat_message(self, event):
         message = event['message']
-
         self.send(text_data=json.dumps({
             'message': message,
         }))
@@ -191,7 +192,6 @@ class LastMessageConsumer(WebsocketConsumer):
 
 class ChatRoomsConsumer(WebsocketConsumer):
     def connect(self):
-        print('connected')
         self.room_name = self.scope['url_route']['kwargs']['user_id']
         self.room_group_name = 'chat_rooms_%s' % self.room_name
         async_to_sync(self.channel_layer.group_add)(
@@ -207,8 +207,6 @@ class ChatRoomsConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        print(text_data_json)
         try:
             user = User.objects.get(pk=int(self.room_name))
             rooms_creator = user.user_creator.all()
@@ -262,10 +260,11 @@ class ChatRoomsConsumer(WebsocketConsumer):
                         }
                     }
                 )
+            # print(filtered_results)
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {
-                    'type': 'chat_rooms',
+                    'type': 'chat_message',
                     'room': filtered_results,
                 }
             )
@@ -273,8 +272,6 @@ class ChatRoomsConsumer(WebsocketConsumer):
             print(e)
 
     def chat_message(self, event):
-        print('semd')
-        print(event)
         try:
             room = event['room']
             self.send(text_data=json.dumps({
@@ -282,35 +279,3 @@ class ChatRoomsConsumer(WebsocketConsumer):
             }))
         except Exception as e:
             print(e)
-
-
-# [
-#     {'room':
-#         {
-#             'id': 4,
-#             'user': {
-#                 'pk': 1,
-#                 'username': 'root',
-#                 'avatar': 'http://hype-fans.com//media/user/sdsmEGpleMY6.png',
-#                 'first_name': None,
-#                 'background_photo': '',
-#                 'subscribtion_price': 0,
-#                 'is_online': True,
-#                 'subscribtion_duration': 7
-#             },
-#             'message': None
-#         }
-#      },
-#     {'room': {'id': 3,
-#               'user': {'pk': 1, 'username': 'root', 'avatar': 'http://hype-fans.com//media/user/sdsmEGpleMY6.png',
-#                        'first_name': None, 'background_photo': '', 'subscribtion_price': 0, 'is_online': True, 'subscribtion_duration': 7},
-#               'message': None}},
-#     {'room': {'id': 2,
-#               'user': {'pk': 2, 'username': 'test_user1', 'avatar': '', 'first_name': None, 'background_photo': '', 'subscribtion_price': 1,
-#                        'is_online': True, 'subscribtion_duration': 7},
-#               'message': {'id': 1, 'time': 1623095278.96617, 'text': '1234', 'attachment': True}}},
-#     {'room': {'id': 1,
-#               'user': {'pk': 1, 'username': 'root', 'avatar': 'http://hype-fans.com//media/user/sdsmEGpleMY6.png', 'first_name': None, 'background_photo': '',
-#                        'subscribtion_price': 0, 'is_online': True, 'subscribtion_duration': 7},
-#               'message': {'id': 4, 'time': 1635148441.67419, 'text': 'aaaф22фффф', 'attachment': True}}}
-# ]
