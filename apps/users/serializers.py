@@ -101,7 +101,7 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
             if request:
                 host = request.get_host()
             else:
-                host = '127.0.0.1:8000/'
+                host = 'hype-fans.com/'
             file_url = 'http://{domain}{path}'.format(
                 domain=host, path=path_file)
             return file_url
@@ -114,7 +114,7 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
             if request:
                 host = request.get_host()
             else:
-                host = '127.0.0.1:8000/'
+                host = 'hype-fans.com/'
             file_url = 'http://{domain}{path}'.format(
                 domain=host, path=path_file)
             return file_url
