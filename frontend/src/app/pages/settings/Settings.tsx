@@ -2,6 +2,7 @@ import { Formik } from 'formik';
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import CurrencyInput from 'react-currency-input-field';
+import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import Recaptcha from 'react-recaptcha';
 import { useDispatch, useSelector } from 'react-redux';
@@ -218,7 +219,20 @@ export const Settings = () => {
     const PhoneSettings = ({ values, submit, setFieldValue, isDisabled }: settingsValType) => {
       return (
         <div className="notifications__main">
-          <p style={{ padding: '16px 24px' }}>Номер телефона</p>
+          <p style={{ padding: '16px 24px' }}> Изменить номер телефона</p>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ margin: '16px 24px', marginRight: '0px' }}>
+              <PhoneInput country={'ua'} value={values.phone} onChange={(phone) => setFieldValue('phone', phone)} />
+            </div>
+            <button
+              className="notifications__settingBtn"
+              style={{ width: '150px', height: '40px', margin: '12px 12px' }}
+              onClick={() => submit()}
+              disabled={isDisabled}
+            >
+              Изменить
+            </button>
+          </div>
         </div>
       );
     };
