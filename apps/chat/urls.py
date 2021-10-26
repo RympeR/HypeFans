@@ -13,9 +13,13 @@ from .views import (
     GetDialogs,
     GetUnreadedMessagesAmount,
     ChatPartialUpdateAPI,
+    index,
+    room
 )
 
 urlpatterns = [
+    path('', index, name='index'),
+    path('<str:room_name>/', room, name='room'),
     path('room-create/', RoomCreateAPI.as_view(), name=''),
     path('room-retrieve/<int:pk>', RoomRetrieveAPI.as_view(), name=''),
     path('room-update/<int:pk>', RoomUpdateAPI.as_view(), name=''),

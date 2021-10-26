@@ -1,14 +1,16 @@
+from django.shortcuts import render
 from core.utils.default_responses import api_locked_423, api_not_found_404
-from django.shortcuts import get_object_or_404
 from django.db.models.aggregates import Count
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
-from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import (FileUploadParser, FormParser, JSONParser,
                                     MultiPartParser)
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from apps.users.serializers import UserShortChatRetrieveSeriliazer, UserShortRetrieveSeriliazer
+from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
+                                    UserShortRetrieveSeriliazer)
 
 from .models import *
 from .serializers import *
@@ -131,6 +133,7 @@ class InviteUserAPI(generics.UpdateAPIView):
             )
         return super().partial_update(request, *args, **kwargs)
 
+
 class ChatPartialUpdateAPI(generics.UpdateAPIView):
     queryset = Chat.objects.all()
     serializer_class = ChatPartialSerializer
@@ -142,6 +145,7 @@ class ChatPartialUpdateAPI(generics.UpdateAPIView):
 class GetUnreadedMessagesAmount(GenericAPIView):
     queryset = Chat.objects.all()
     serializer_class = RetrieveChatsSerializer
+
     def get(self, request):
         user = request.user
         rooms_creator = user.user_creator.all()
@@ -219,3 +223,13 @@ class GetDialogs(GenericAPIView):
         limit = request.data.get('limit', 40)
         offset = request.data.get('offset', 0)
         return Response(filtered_results[offset:limit])
+
+
+def index(request):
+    return render(request, 'chat/index.html', {})
+
+
+def room(request, room_name):
+    return render(request, 'chat/room.html', {
+        'room_name': room_name
+    })

@@ -53,7 +53,10 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            host = request.get_host()
+            if request:
+                host = request.get_host()
+            else:
+                host = 'hype-fans.com/'
             file_url = 'http://{domain}{path}'.format(
                 domain=host, path=path_file)
             return file_url
@@ -63,7 +66,10 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
         if user.background_photo and hasattr(user.background_photo, 'url'):
             path_file = user.background_photo.url
             request = self.context.get('request')
-            host = request.get_host()
+            if request:
+                host = request.get_host()
+            else:
+                host = 'hype-fans.com/'
             file_url = 'http://{domain}{path}'.format(
                 domain=host, path=path_file)
             return file_url
@@ -92,7 +98,23 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            host = request.get_host()
+            if request:
+                host = request.get_host()
+            else:
+                host = '127.0.0.1:8000/'
+            file_url = 'http://{domain}{path}'.format(
+                domain=host, path=path_file)
+            return file_url
+        return ''
+
+    def get_background_photo(self, user: User):
+        if user.background_photo and hasattr(user.background_photo, 'url'):
+            path_file = user.background_photo.url
+            request = self.context.get('request')
+            if request:
+                host = request.get_host()
+            else:
+                host = '127.0.0.1:8000/'
             file_url = 'http://{domain}{path}'.format(
                 domain=host, path=path_file)
             return file_url
@@ -106,6 +128,7 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
             'avatar',
             'first_name',
             'is_online',
+            'background_photo',
         )
 
 
