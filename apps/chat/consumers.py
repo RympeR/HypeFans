@@ -246,6 +246,7 @@ class ChatRoomsConsumer(WebsocketConsumer):
                     {
                         "room": {
                             "id": room_obj['room'].id,
+                            "logo": room_obj['room'].get_logo,
                             "user": UserShortRetrieveSeriliazer(
                                 instance=user_obj).data
                             if user_obj

@@ -1,14 +1,14 @@
-from rest_framework import serializers
-from apps.blog.models import Attachment
 from core.utils.customFields import TimestampField
-from .models import (
-    Room,
-    Chat,
-    UserMessage
-)
-from apps.users.models import User
+from core.utils.func import return_file_url
+from rest_framework import serializers
+
+from apps.blog.models import Attachment
 from apps.blog.serializers import AttachmentSerializer
-from apps.users.serializers import UserShortChatRetrieveSeriliazer, UserShortRetrieveSeriliazer
+from apps.users.models import User
+from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
+                                    UserShortRetrieveSeriliazer)
+
+from .models import Chat, Room, UserMessage
 
 
 class RoomGetSerializer(serializers.ModelSerializer):
@@ -16,6 +16,14 @@ class RoomGetSerializer(serializers.ModelSerializer):
     creator = UserShortRetrieveSeriliazer()
     invited = UserShortRetrieveSeriliazer(many=True)
     date = TimestampField(required=False)
+    logo = serializers.SerializerMethodField()
+
+    def get_logo(self, room: Room):
+        if room.logo and hasattr(room.logo, 'url'):
+            return return_file_url(self, room.logo.url)
+        if room.creator.avatar and hasattr(room.creator.avatar, 'url'):
+            return return_file_url(self, room.creator.avatar.url)
+        return ''
 
     class Meta:
         model = Room
@@ -78,7 +86,7 @@ class ChatPartialSerializer(serializers.ModelSerializer):
     room = serializers.PrimaryKeyRelatedField(
         required=False, queryset=Room.objects.all())
     attachment = serializers.PrimaryKeyRelatedField(many=True,
-        required=False, queryset=Attachment.objects.all())
+                                                    required=False, queryset=Attachment.objects.all())
     text = serializers.CharField(required=False)
 
     class Meta:
