@@ -384,7 +384,7 @@ class UserOnlineGetSerializer(serializers.ModelSerializer):
 
 
 class UserOnlineCreationSerializer(serializers.ModelSerializer):
-
+    user = serializers.PrimaryKeyRelatedField(required=True, queryset=User.objects.all())
     class Meta:
         model = UserOnline
         fields = 'user',

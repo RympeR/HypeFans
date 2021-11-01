@@ -78,7 +78,7 @@ class GetChatMessages(GenericAPIView):
         else:
             objects = Chat.objects.filter(
                 room=room
-            ).order_by('-date')[:50]
+            ).order_by('-date')
         results = []
         domain = request.get_host()
 

@@ -125,7 +125,7 @@ class UserCreateAPI(generics.GenericAPIView):
             )
 
 
-class UserAPI(generics.RetrieveUpdateDestroyAPIView):
+class UserAPI(generics.DestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreationSerializer
 
@@ -272,17 +272,21 @@ class UserOnlineRetrieveAPI(generics.RetrieveAPIView):
     serializer_class = UserOnlineGetSerializer
 
 
-class UserOnlineCreateAPI(generics.CreateAPIView):
+class UserOnlineCreateAPI(generics.GenericAPIView):
     queryset = UserOnline.objects.all()
     serializer_class = UserOnlineCreationSerializer
 
     def get_serializer_context(self):
         return {'request': self.request}
 
-
-class UserOnlineUpdateAPI(generics.UpdateAPIView):
-    queryset = UserOnline.objects.all()
-    serializer_class = UserOnlineCreationSerializer
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except AssertionError:
+            return api_block_by_policy_451({"status": "not enought credits"})
+        instance = self.perform_create(serializer)
+        return Response(serializer.data)
 
 
 class DonationPayedUserRetrieveAPI(generics.ListAPIView):

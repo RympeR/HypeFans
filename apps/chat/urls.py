@@ -32,8 +32,8 @@ urlpatterns = [
     path('message-partial-update/<int:pk>', ChatPartialUpdateAPI.as_view(), name=''),
     path('message-delete/<int:pk>', MessageDeleteAPI.as_view(), name=''),
 
-    # path('get-chat-messages/', GetChatMessages.as_view(), name=''),
-    # path('get-user-dialogs/', GetDialogs.as_view(), name=''),
-    # path('get-unreaded-messages-amount/',
-    #      GetUnreadedMessagesAmount.as_view(), name='get-unreaded-messages-amount'),
+    path('get-chat-messages/', GetChatMessages.as_view(), name=''),
+    path('get-user-dialogs/', GetDialogs.as_view(), name=''),
+    path('get-unreaded-messages-amount/',
+         GetUnreadedMessagesAmount.as_view(), name='get-unreaded-messages-amount'),
 ]
