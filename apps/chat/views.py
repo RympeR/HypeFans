@@ -69,6 +69,7 @@ class GetChatMessages(GenericAPIView):
     serializer_class = ChatMessagesSerializer
 
     def post(self, request):
+        user = request.user
         room = get_object_or_404(Room, pk=request.data['room_id'])
         if request.data.get('message_id'):
             objects = Chat.objects.filter(
@@ -86,7 +87,7 @@ class GetChatMessages(GenericAPIView):
             attachments = obj.attachment.all()
             attachments_info = []
             for readed_obj in obj.delivered_message.all():
-                if readed_obj.readed:
+                if readed_obj.readed and readed_obj.user == user:
                     readed = True
                     break
             else:
