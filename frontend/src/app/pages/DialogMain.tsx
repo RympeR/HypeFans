@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import Popup from 'reactjs-popup';
 import { chatAPI } from '~/api/chatAPI';
 import { RootState } from '~/redux/redux';
 import { ReactComponent as ImageIcn } from '../../assets/images/imageI.svg';
@@ -46,7 +47,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 fontFamily: 'Factor A',
                 fontStyle: 'normal',
                 fontWeight: 'normal',
-                fontSize: '14px',
+                fontSize: '11px',
                 lineHeight: '15px',
                 color: ' #000000'
               }}
@@ -55,9 +56,30 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             </p> */}
           </div>
         </div>
-        <div style={{ marginRight: '24px' }}>
-          <MoreIcon />
-        </div>
+        <Popup
+          trigger={
+            <div style={{ marginRight: '24px' }}>
+              <MoreIcon />
+            </div>
+          }
+          position="bottom right"
+        >
+          <div style={{ padding: '5px', fontSize: '11px' }}>
+            <button>Отключить уведомления</button>
+          </div>
+          <div style={{ padding: '5px', fontSize: '11px' }}>
+            <button>Посмотреть вложения</button>
+          </div>
+          <div style={{ padding: '5px', fontSize: '11px' }}>
+            <button>Копировать ссылку на профиль</button>
+          </div>
+          <div style={{ padding: '5px', fontSize: '11px' }}>
+            <button>Убрать из всех групп</button>
+          </div>
+          <div style={{ padding: '5px', fontSize: '11px' }}>
+            <button>Заблокировать</button>
+          </div>
+        </Popup>
       </div>
       <div className="chat__dialog">
         <div className="message-wrap">

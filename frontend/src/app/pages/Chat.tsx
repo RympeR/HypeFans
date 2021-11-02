@@ -9,7 +9,6 @@ import { ReactComponent as UsersIcon } from '../../assets/images/users.svg';
 import { getLastUrlPoint } from '../utils/utilities';
 import { DialogMain } from './DialogMain';
 import { NoDialog } from './NoDialog';
-
 const Chat = () => {
   const userId = useSelector((state: RootState) => state.auth.pk);
   const history = useHistory();
