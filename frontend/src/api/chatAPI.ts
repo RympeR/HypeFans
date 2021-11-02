@@ -1,15 +1,8 @@
 import { instance } from './api';
 
 export const chatAPI = {
-  getChatMessages(room_id: number, message_id: number, data: any) {
-    const dataSend: any = {
-      room_id,
-      message_id
-    };
-    for (const key in data) {
-      dataSend[key] = data[key];
-    }
-    return instance.post(`/chat/get-chat-messages/`, data).then((response) => {
+  getChatMessages(room_id: number) {
+    return instance.post(`/chat/get-chat-messages/`, { room_id }).then((response) => {
       return response.data;
     });
   },
@@ -81,13 +74,7 @@ export const chatAPI = {
       return response;
     });
   },
-  roomCreate(invited: number[], data: any) {
-    const dataSend: any = {
-      invited
-    };
-    for (const key in data) {
-      dataSend[key] = data[key];
-    }
+  roomCreate(data: any) {
     return instance.post(`/chat/room-create/`, data).then((response) => {
       if (response.status !== 202) {
         console.log('Error!');

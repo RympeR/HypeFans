@@ -6,7 +6,7 @@ import { RootState } from '~/redux/redux';
 import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
 import { ReactComponent as PlusIcon } from '../../assets/images/plus.svg';
 import { ReactComponent as UsersIcon } from '../../assets/images/users.svg';
-import { getMainUrlPoint } from '../utils/utilities';
+import { getLastUrlPoint } from '../utils/utilities';
 import { DialogMain } from './DialogMain';
 import { NoDialog } from './NoDialog';
 
@@ -40,19 +40,20 @@ const Chat = () => {
   };
 
   ws.onmessage = (e) => {
+    // console.log(JSON.parse(e.data).room);
     return setRooms(JSON.parse(e.data).room);
   };
 
   const SidebarItem = (item: any) => {
     const history = useHistory();
-    const lastUrl = getMainUrlPoint(history.location.pathname);
+    const lastUrl = getLastUrlPoint(history.location.pathname);
     return (
       <Link to={`/chat/${item?.item?.room?.id}`}>
         <div
           style={
-            history.location.pathname === '/chat'
+            lastUrl !== item?.item?.room?.id
               ? { display: 'flex', borderBottom: '1px solid rgba(0, 0, 0, 0.2)' }
-              : { display: 'flex', borderBottom: '1px solid rgba(0, 0, 0, 0.2)' }
+              : { display: 'flex', borderBottom: '1px solid rgba(0, 0, 0, 0.2),', backgroundColor: 'red' }
           }
         >
           <div className="chat__sidebarItem">
@@ -94,7 +95,7 @@ const Chat = () => {
             );
           })}
         </div>
-        <Route path="/chat/:id" component={DialogMain} exact />
+        <Route path="/chat/:id" render={() => <DialogMain rooms={rooms} />} exact />
         <Route path="/chat" component={NoDialog} exact />
       </div>
     </div>
