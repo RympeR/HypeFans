@@ -227,20 +227,26 @@ class DonationRetrieveAPI(generics.RetrieveAPIView):
     serializer_class = DonationGetSerializer
 
 
-class AddBlockedUserAPI(generics.UpdateAPIView):
+class AddBlockedUserAPI(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated, )
     queryset = User.objects.all()
-    serializer_class = UserPartialSerializer
+    serializer_class = UserBlockSerializer
 
     def get_object(self):
         return self.request.user
 
-    def partial_update(self, request, *args, **kwargs):
-        self.request.user.blocked_users.add(
-            User.objects.get(username=request.data['username'])
-        )
+    def put(self, request, *args, **kwargs):
+        user = User.objects.get(username=request.data['username'])
+        if request.data['block']:
+            self.request.user.blocked_users.add(user)
+        else:
+            self.request.user.blocked_users.remove(user)
         self.request.user.save()
-        return super().partial_update(request, *args, **kwargs)
+        data = {
+            'user': user.pk,
+            'block': request.data['block']
+        }
+        return Response(data)
 
 
 class DonationCreateAPI(generics.CreateAPIView):

@@ -139,6 +139,11 @@ class UserCreationSerializer(serializers.ModelSerializer):
         fields = 'email', 'username', 'password'
 
 
+class UserBlockSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    block = serializers.BooleanField()
+
+
 class UserPartialSerializer(serializers.ModelSerializer):
     location = CountryField(country_dict=True, required=False)
     email = serializers.EmailField(required=False)
@@ -330,6 +335,7 @@ class DonationCreationSerializer(serializers.ModelSerializer):
     # datetime = TimestampField(required=False)
     sender = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     reciever = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
     class Meta:
         model = Donation
         exclude = 'datetime',
@@ -348,6 +354,7 @@ class DonationCreationSerializer(serializers.ModelSerializer):
             return attrs
         raise ValueError
 
+
 class DonationGetSerializer(serializers.ModelSerializer):
     datetime = TimestampField()
     sender = UserShortRetrieveSeriliazer()
@@ -363,6 +370,7 @@ class PaymentCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         exclude = 'datetime',
+
 
 class PaymentGetSerializer(serializers.ModelSerializer):
 
@@ -400,7 +408,9 @@ class UserOnlineGetSerializer(serializers.ModelSerializer):
 
 
 class UserOnlineCreationSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(required=True, queryset=User.objects.all())
+    user = serializers.PrimaryKeyRelatedField(
+        required=True, queryset=User.objects.all())
+
     class Meta:
         model = UserOnline
         fields = 'user',
