@@ -327,16 +327,17 @@ class CardGetSerializer(serializers.ModelSerializer):
 
 
 class DonationCreationSerializer(serializers.ModelSerializer):
-    datetime = TimestampField(required=False)
+    # datetime = TimestampField(required=False)
+    sender = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    reciever = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     class Meta:
         model = Donation
-        fields = '__all__'
+        exclude = 'datetime',
 
     def validate(self, attrs):
         request = self.context.get('request')
         user = request.user
-        attrs['sender'] = user
-        reciever = User.objects.get(pk=int(attrs['reciever']))
+        reciever = attrs['reciever']
         amount = int(attrs['amount'])
 
         if user.credit_amount >= amount:
@@ -345,7 +346,7 @@ class DonationCreationSerializer(serializers.ModelSerializer):
             user.save()
             reciever.save()
             return attrs
-        raise serializers.ValidationError
+        raise ValueError
 
 class DonationGetSerializer(serializers.ModelSerializer):
     datetime = TimestampField()

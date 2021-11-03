@@ -1,3 +1,4 @@
+from django.core.exceptions import NON_FIELD_ERRORS
 from apps.blog.models import PostAction, PostBought
 from apps.blog.serializers import PostGetShortSerializers
 from datetime import datetime, timedelta
@@ -238,7 +239,9 @@ class AddBlockedUserAPI(generics.UpdateAPIView):
         self.request.user.blocked_users.add(
             User.objects.get(username=request.data['username'])
         )
+        self.request.user.save()
         return super().partial_update(request, *args, **kwargs)
+
 
 class DonationCreateAPI(generics.CreateAPIView):
     queryset = Donation.objects.all()
@@ -251,7 +254,7 @@ class DonationCreateAPI(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         try:
             serializer.is_valid(raise_exception=True)
-        except AssertionError:
+        except ValueError:
             return api_block_by_policy_451({"status": "not enought credits"})
         instance = self.perform_create(serializer)
         return Response(serializer.data)
