@@ -332,6 +332,21 @@ class DonationCreationSerializer(serializers.ModelSerializer):
         model = Donation
         fields = '__all__'
 
+    def validate(self, attrs):
+        request = self.context.get('request')
+        user = request.user
+        attrs['sender'] = user
+        reciever = User.objects.get(pk=int(attrs['reciever']))
+        amount = int(attrs['amount'])
+
+        if user.credit_amount >= amount:
+            user.credit_amount -= amount
+            reciever.earned_credits_amount += amount
+            user.save()
+            reciever.save()
+            return attrs
+        raise serializers.ValidationError
+
 class DonationGetSerializer(serializers.ModelSerializer):
     datetime = TimestampField()
     sender = UserShortRetrieveSeriliazer()

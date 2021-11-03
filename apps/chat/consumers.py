@@ -107,7 +107,7 @@ class ReadedConsumer(WebsocketConsumer):
                 user__pk=int(self.user_id),
                 readed=False
             )
-            # readed_chat.update(readed=True)
+            readed_chat.update(readed=True)
             async_to_sync(self.channel_layer.group_add)(
                 self.room_group_name,
                 self.channel_name
@@ -215,23 +215,27 @@ class ChatRoomsConsumer(WebsocketConsumer):
             used_ids = []
             for room in rooms_creator:
                 if not room.pk in used_ids:
+                    blocked = True if user in room.invited.first().blocked_users.all() else False
                     used_ids.append(room.pk)
                     result.append(
                         {
                             "room": room,
                             "message": Chat.objects.filter(
-                                room=room).order_by('-date').first()
+                                room=room).order_by('-date').first(),
+                            "blocked": blocked,
                         }
                     )
 
             for room in rooms_invited:
                 if not room.pk in used_ids:
+                    blocked = True if user in room.creator.blocked_users.all() else False
                     used_ids.append(room.pk)
                     result.append(
                         {
                             "room": room,
                             "message": Chat.objects.filter(
-                                room=room).order_by('-date').first()
+                                room=room).order_by('-date').first(),
+                            "blocked": blocked,
                         }
                     )
 
@@ -247,6 +251,7 @@ class ChatRoomsConsumer(WebsocketConsumer):
                         "room": {
                             "id": room_obj['room'].id,
                             "logo": room_obj['room'].get_logo,
+                            "blocked": room_obj['blocked'],
                             "user": UserShortRetrieveSeriliazer(
                                 instance=user_obj).data
                             if user_obj

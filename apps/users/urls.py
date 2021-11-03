@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import (
+    AddBlockedUserAPI,
     UserRetrieveAPI,
     UserCreateAPI,
     UserAPI,
@@ -49,4 +50,5 @@ urlpatterns = [
     path('user-donation-recieved/', DonationPayedUserRetrieveAPI.as_view()),
     path('user-donation-sended/', DonationPayedUserToRetrieveAPI.as_view()),
     path('user-payment-history/', PaymentUserHistoryRetrieveAPI.as_view()),
+    path('block-user/', AddBlockedUserAPI.as_view(), name='BlockUser'),
 ]
