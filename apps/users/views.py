@@ -236,7 +236,7 @@ class AddBlockedUserAPI(generics.UpdateAPIView):
 
     def partial_update(self, request, *args, **kwargs):
         self.request.user.blocked_users.add(
-            User.objects.get(username=request.data['phone'])
+            User.objects.get(username=request.data['username'])
         )
         return super().partial_update(request, *args, **kwargs)
 
