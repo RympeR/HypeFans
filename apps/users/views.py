@@ -92,6 +92,14 @@ class UserCardListAPI(generics.ListAPIView):
         )
 
 
+class UserBlockedListAPI(generics.ListAPIView):
+    serializer_class = UserShortRetrieveSeriliazer
+
+    def get_queryset(self):
+        user = self.request.user
+        return user.blocked_users.all()
+
+
 class UserSettingsRetrieveAPI(generics.RetrieveAPIView):
     serializer_class = SettingsSerializer
     queryset = User.objects.all()
