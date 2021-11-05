@@ -32,12 +32,12 @@ class ChatConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):
-        print('recieved')
         text_data_json = json.loads(text_data)
-        room = text_data_json['room']
+        room = text_data_json['room_id']
+        message_id = text_data_json['message_id']
         user = text_data_json['user']
-        message = text_data_json['message']
-        _file = text_data_json['file']
+        message = text_data_json['text']
+        _file = text_data_json['attachments']
 
         chat = Chat.objects.create(
             room=Room.objects.get(pk=room),
@@ -50,21 +50,22 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'file': _file,
-                'message': message,
+                'attachments': _file,
+                'text': message,
+                'message_id': chat.pk,
                 'user': user,
-                'room': room,
+                'room_id': room,
             }
         )
 
     def chat_message(self, event):
-        message = event['message']
-        room = int(event['room'])
+        message_id = event['message_id']
+        message = event['text']
+        room = int(event['room_id'])
         user = int(event['user'])
         attachments_info = []
-        if event['file']:
-            print(event['file'])
-            attachments_pk = event['file']
+        if event['attachments']:
+            attachments_pk = event['attachments']
             attachments = Attachment.objects.filter(pk__in=attachments_pk)
             for attachment in attachments:
                 try:
@@ -88,11 +89,12 @@ class ChatConsumer(WebsocketConsumer):
             user = 0
 
         self.send(text_data=json.dumps({
-            "room": room,
+            "room_id": room,
             # .token,
             "user": user,
-            "message": message,
-            "file": attachments_info
+            "text": message,
+            "message_id": message_id,
+            "attachments": attachments_info
         }))
 
 
@@ -124,9 +126,9 @@ class ReadedConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        room = text_data_json['room']
+        room = text_data_json['room_id']
         user = text_data_json['user']
-        message = text_data_json['message']
+        message = text_data_json['text']
         message = int(message)
         readed_chat = UserMessage.objects.filter(
             message__pk=message,
@@ -138,21 +140,21 @@ class ReadedConsumer(WebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message,
+                'text': message,
                 'user': user,
-                'room': room,
+                'room_id': room,
             }
         )
 
     def chat_message(self, event):
-        message = event['message']
+        message = event['text']
         room = event['room']
         user = event['user']
 
         self.send(text_data=json.dumps({
-            "room": room,
+            "room_id": room,
             "user": user,
-            'message': message,
+            'text': message,
         }))
 
 
