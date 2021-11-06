@@ -70,7 +70,6 @@ class ChatConsumer(WebsocketConsumer):
             for attachment in attachments:
                 try:
                     if attachment._file and hasattr(attachment._file, 'url'):
-                        print(attachments_info)
                         path_file = attachment._file.url
                         file_url = 'https://hype-fans.com/{path}'.format(
                             path=path_file)
@@ -128,11 +127,10 @@ class ReadedConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         room = text_data_json['room_id']
         user = text_data_json['user']
-        message = text_data_json['text']
-        message = int(message)
+        message = text_data_json['message_id']
         readed_chat = UserMessage.objects.filter(
             message__pk=message,
-            user=User.objects.get(pk=int(user)),
+            user=User.objects.get(pk=user),
             readed=False
         )
         readed_chat.update(readed=True)
@@ -140,21 +138,21 @@ class ReadedConsumer(WebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'text': message,
+                'message_id': message,
                 'user': user,
                 'room_id': room,
             }
         )
 
     def chat_message(self, event):
-        message = event['text']
+        message = event['message_id']
         room = event['room']
         user = event['user']
 
         self.send(text_data=json.dumps({
             "room_id": room,
             "user": user,
-            'text': message,
+            'message_id': message,
         }))
 
 
