@@ -52,7 +52,7 @@ class PostActionShortSerializer(serializers.ModelSerializer):
     parent_like_amount = serializers.SerializerMethodField()
 
     def get_parent_like_amount(self, post_action: PostAction):
-        return PostAction.objects.filter(pk=post_action.parent, like=True).aggregate(Count('pk'))['pk__count']
+        return PostAction.objects.filter(pk=post_action.parent.pk, like=True).aggregate(Count('pk'))['pk__count']
 
     def get_parent_username(self, post_action: PostAction):
         return post_action.parent.user.username if post_action.parent else None
