@@ -53,7 +53,10 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            host = request.get_host()
+            if request:
+                host = request.get_host()
+            else:
+                host = 'hype-fans.com/'
             file_url = 'http://{domain}{path}'.format(
                 domain=host, path=path_file)
             return file_url
@@ -63,7 +66,10 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
         if user.background_photo and hasattr(user.background_photo, 'url'):
             path_file = user.background_photo.url
             request = self.context.get('request')
-            host = request.get_host()
+            if request:
+                host = request.get_host()
+            else:
+                host = 'hype-fans.com/'
             file_url = 'http://{domain}{path}'.format(
                 domain=host, path=path_file)
             return file_url
@@ -92,7 +98,23 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            host = request.get_host()
+            if request:
+                host = request.get_host()
+            else:
+                host = 'hype-fans.com/'
+            file_url = 'http://{domain}{path}'.format(
+                domain=host, path=path_file)
+            return file_url
+        return ''
+
+    def get_background_photo(self, user: User):
+        if user.background_photo and hasattr(user.background_photo, 'url'):
+            path_file = user.background_photo.url
+            request = self.context.get('request')
+            if request:
+                host = request.get_host()
+            else:
+                host = 'hype-fans.com/'
             file_url = 'http://{domain}{path}'.format(
                 domain=host, path=path_file)
             return file_url
@@ -106,6 +128,7 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
             'avatar',
             'first_name',
             'is_online',
+            'background_photo',
         )
 
 
@@ -114,6 +137,11 @@ class UserCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = 'email', 'username', 'password'
+
+
+class UserBlockSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    block = serializers.BooleanField()
 
 
 class UserPartialSerializer(serializers.ModelSerializer):
@@ -304,10 +332,28 @@ class CardGetSerializer(serializers.ModelSerializer):
 
 
 class DonationCreationSerializer(serializers.ModelSerializer):
-    datetime = TimestampField(required=False)
+    # datetime = TimestampField(required=False)
+    sender = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    reciever = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
     class Meta:
         model = Donation
-        fields = '__all__'
+        exclude = 'datetime',
+
+    def validate(self, attrs):
+        request = self.context.get('request')
+        user = request.user
+        reciever = attrs['reciever']
+        amount = int(attrs['amount'])
+
+        if user.credit_amount >= amount:
+            user.credit_amount -= amount
+            reciever.earned_credits_amount += amount
+            user.save()
+            reciever.save()
+            return attrs
+        raise ValueError
+
 
 class DonationGetSerializer(serializers.ModelSerializer):
     datetime = TimestampField()
@@ -324,6 +370,7 @@ class PaymentCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         exclude = 'datetime',
+
 
 class PaymentGetSerializer(serializers.ModelSerializer):
 
@@ -361,6 +408,8 @@ class UserOnlineGetSerializer(serializers.ModelSerializer):
 
 
 class UserOnlineCreationSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        required=True, queryset=User.objects.all())
 
     class Meta:
         model = UserOnline

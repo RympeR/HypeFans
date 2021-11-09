@@ -6,8 +6,10 @@ from django.core.validators import validate_email
 from rest_framework import pagination
 from rest_framework.response import Response
 
+
 def id_generator(size=12, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
 
 def set_unique_file_name(file_):
     if file_:
@@ -17,7 +19,24 @@ def set_unique_file_name(file_):
     else:
         return None
 
+
 def user_avatar(instance, filename):
     instance.original_file_name = filename
     file_ = set_unique_file_name(filename)
     return os.path.join('user', file_)
+
+
+def room_logo(instance, filename):
+    instance.original_file_name = filename
+    file_ = set_unique_file_name(filename)
+    return os.path.join('room', file_)
+
+
+def return_file_url(serializer, path_file):
+    request = serializer.context.get('request')
+    if request:
+        host = request.get_host()
+    else:
+        host = 'hype-fans.com/'
+    return 'http://{domain}{path}'.format(
+        domain=host, path=path_file)

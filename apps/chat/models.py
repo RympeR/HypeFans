@@ -1,8 +1,12 @@
+from core.utils.func import room_logo
 from django.db import models
-from apps.users.models import User
-from unixtimestampfield.fields import UnixTimeStampField
-from apps.blog.models import Attachment
 from django.db.models.signals import post_save
+from unixtimestampfield.fields import UnixTimeStampField
+
+from apps.blog.models import Attachment
+from apps.users.models import User
+from core.utils.func import return_file_url
+
 
 class Room(models.Model):
     creator = models.ForeignKey(
@@ -10,9 +14,25 @@ class Room(models.Model):
     invited = models.ManyToManyField(User, related_name='invited_users')
     date = UnixTimeStampField(
         "Дата создания", auto_now_add=True, null=True, blank=True)
+    logo = models.ImageField(
+        upload_to=room_logo,
+        verbose_name='Заставка комнаты',
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f"{self.creator}-{self.pk}"
+
+    @property
+    def get_logo(self):
+        if self.logo and hasattr(self.logo, 'url'):
+            return 'http://{domain}{path}'.format(
+                domain='hype-fans.com', path=self.logo.url)
+        if self.creator.avatar and hasattr(self.creator.avatar, 'url'):
+            return 'http://{domain}{path}'.format(
+                domain='hype-fans.com', path=self.creator.avatar.url)
+        return ''
 
     class Meta:
         verbose_name = 'Комната'
@@ -52,17 +72,16 @@ class UserMessage(models.Model):
         verbose_name = 'Статус сообщения'
         verbose_name_plural = 'Статусы сообщений'
         ordering = ['-message__date']
-        
+
     def __str__(self):
         return f"{self.message}-{self.user}"
+
 
 def create_message(sender, instance, created, **kwargs):
     if created:
         room = instance.room
-        users = []
+        users = [user for user in room.invited.all()]
         users.append(room.creator)
-        for user in room.invited.all():
-            users.append(user)
         for user in users:
             if user.pk != instance.user.pk:
                 UserMessage.objects.create(
@@ -70,5 +89,6 @@ def create_message(sender, instance, created, **kwargs):
                     user=user,
                     readed=False
                 ).save()
+
 
 post_save.connect(create_message, sender=Chat)

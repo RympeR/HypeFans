@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'silk',
     'mptt',
+    'channels',
 
     'apps.chat',
     'apps.users',

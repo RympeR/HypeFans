@@ -1,3 +1,4 @@
+from django.core.exceptions import NON_FIELD_ERRORS
 from apps.blog.models import PostAction, PostBought
 from apps.blog.serializers import PostGetShortSerializers
 from datetime import datetime, timedelta
@@ -91,6 +92,14 @@ class UserCardListAPI(generics.ListAPIView):
         )
 
 
+class UserBlockedListAPI(generics.ListAPIView):
+    serializer_class = UserShortRetrieveSeriliazer
+
+    def get_queryset(self):
+        user = self.request.user
+        return user.blocked_users.all()
+
+
 class UserSettingsRetrieveAPI(generics.RetrieveAPIView):
     serializer_class = SettingsSerializer
     queryset = User.objects.all()
@@ -125,7 +134,7 @@ class UserCreateAPI(generics.GenericAPIView):
             )
 
 
-class UserAPI(generics.RetrieveUpdateDestroyAPIView):
+class UserAPI(generics.DestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreationSerializer
 
@@ -226,6 +235,28 @@ class DonationRetrieveAPI(generics.RetrieveAPIView):
     serializer_class = DonationGetSerializer
 
 
+class AddBlockedUserAPI(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated, )
+    queryset = User.objects.all()
+    serializer_class = UserBlockSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def put(self, request, *args, **kwargs):
+        user = User.objects.get(username=request.data['username'])
+        if request.data['block']:
+            self.request.user.blocked_users.add(user)
+        else:
+            self.request.user.blocked_users.remove(user)
+        self.request.user.save()
+        data = {
+            'user': user.pk,
+            'block': request.data['block']
+        }
+        return Response(data)
+
+
 class DonationCreateAPI(generics.CreateAPIView):
     queryset = Donation.objects.all()
     serializer_class = DonationCreationSerializer
@@ -237,7 +268,7 @@ class DonationCreateAPI(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         try:
             serializer.is_valid(raise_exception=True)
-        except AssertionError:
+        except ValueError:
             return api_block_by_policy_451({"status": "not enought credits"})
         instance = self.perform_create(serializer)
         return Response(serializer.data)
@@ -272,17 +303,21 @@ class UserOnlineRetrieveAPI(generics.RetrieveAPIView):
     serializer_class = UserOnlineGetSerializer
 
 
-class UserOnlineCreateAPI(generics.CreateAPIView):
+class UserOnlineCreateAPI(generics.GenericAPIView):
     queryset = UserOnline.objects.all()
     serializer_class = UserOnlineCreationSerializer
 
     def get_serializer_context(self):
         return {'request': self.request}
 
-
-class UserOnlineUpdateAPI(generics.UpdateAPIView):
-    queryset = UserOnline.objects.all()
-    serializer_class = UserOnlineCreationSerializer
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except AssertionError:
+            return api_block_by_policy_451({"status": "not enought credits"})
+        instance = self.perform_create(serializer)
+        return Response(serializer.data)
 
 
 class DonationPayedUserRetrieveAPI(generics.ListAPIView):
