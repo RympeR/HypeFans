@@ -39,7 +39,7 @@ const Chat = () => {
   };
 
   ws.onmessage = (e) => {
-    // console.log(JSON.parse(e.data).room);
+    console.log(JSON.parse(e.data).room);
     return setRooms(JSON.parse(e.data).room);
   };
 

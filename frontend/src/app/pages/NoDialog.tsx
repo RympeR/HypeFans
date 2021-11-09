@@ -9,7 +9,7 @@ export const NoDialog = () => {
   const [currentTab, setCurrentTab] = useState(0);
   const userId = useSelector((state: RootState) => state.auth.pk);
   const createNewChat = async (data: any) => {
-    const response = await chatAPI.roomCreate(data);
+    await chatAPI.roomCreate(data);
     setCurrentTab(0);
   };
 
@@ -49,23 +49,34 @@ export const NoDialog = () => {
                   ) : null}
                   {currentTab === 2 ? (
                     <>
-                      <h2 style={{ marginBottom: '0px' }}>беседы</h2>
-                      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
-                        <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
-                          <p>Показывать статус активности </p>
+                      <h2 style={{ marginBottom: '0px' }}>Создание беседы</h2>
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          marginTop: '15px'
+                        }}
+                      >
+                        <div
+                          className="notifications__longList"
+                          style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}
+                        >
+                          <p>Цена за вход</p>
                           <input
                             type="checkbox"
                             className="notifications__toggle-button"
                             name="hide_online"
-                            checked={true}
+                            checked={false}
                             disabled={false}
                           ></input>
                         </div>
-                        <h3 onClick={() => setCurrentTab(currentTab - 1)} style={{ color: '#FB5734' }}>
-                          Отмена
-                        </h3>
-                        <div style={{ width: '20px' }}></div>
-                        <h3 onClick={() => setCurrentTab(currentTab + 1)}>Далее</h3>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '19px' }}>
+                          <h3 onClick={() => setCurrentTab(currentTab - 1)}>Отмена</h3>
+                          <div style={{ width: '20px' }}></div>
+                          <h3 onClick={() => setCurrentTab(currentTab + 1)} style={{ color: '#FB5734' }}>
+                            Далее
+                          </h3>
+                        </div>
                       </div>
                     </>
                   ) : null}
@@ -73,11 +84,11 @@ export const NoDialog = () => {
                     <>
                       <h2 style={{ marginBottom: '0px' }}>Созда</h2>
                       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
-                        <h3 onClick={() => setCurrentTab(currentTab - 1)} style={{ color: '#FB5734' }}>
-                          Отмена
-                        </h3>
+                        <h3 onClick={() => setCurrentTab(currentTab - 1)}>Отмена</h3>
                         <div style={{ width: '20px' }}></div>
-                        <h3 onClick={() => handleSubmit()}>Далее</h3>
+                        <h3 onClick={() => handleSubmit()} style={{ color: '#FB5734' }}>
+                          Далее
+                        </h3>
                       </div>
                     </>
                   ) : null}

@@ -36,6 +36,15 @@ export const userAPI = {
         return response;
       });
   },
+  blockUser({ user }: { user: number }) {
+    return instance
+      .patch('/user/block-user/', {
+        user
+      })
+      .then((response) => {
+        return response;
+      });
+  },
   createDonation({ amount, sender, reciever }: DonationType) {
     return instance
       .post<createDonationRT>('/user/create-donation/', {
