@@ -44,16 +44,18 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
                     instance=post, context={'request': request}).data
                 res_dict = {}
                 res_dict['post'] = post_data
+                sub_check = True if Subscription.objects.filter(
+                    target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
+                res_dict['subscribed'] = sub_check
                 if post.access_level == 1:
                     res_dict['post']['payed'] = (
                         True if PostBought.objects.filter(
                             post=post, user=user).exists() else False
                     )
                 else:
-                    res_dict['post']['payed'] = (
-                        True if Subscription.objects.filter(
-                            target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
-                    )
+                    res_dict['post']['payed'] = sub_check
+                    res_dict['subscribed'] = sub_check
+
                 postActionQuerySet = PostAction.objects.filter(
                     post=post, user=request.user)
                 if postActionQuerySet.exists():
