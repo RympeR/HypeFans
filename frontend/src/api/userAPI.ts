@@ -66,10 +66,9 @@ export const userAPI = {
         return response;
       });
   },
-  createSubscription({ end_date, source, target }: SubscriptionType) {
+  createSubscription({ source, target }: SubscriptionType) {
     return instance
       .post<createSubscriptionRT>('/user/create-subscription/', {
-        end_date,
         source,
         target
       })

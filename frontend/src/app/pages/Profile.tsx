@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { userAPI } from '~/api/userAPI';
 import { RootState } from '~/redux/redux';
 import { createPostAction, deletePostAction, getUser, setFavorite } from '~/redux/userReducer';
 import { ReactComponent as MenuDots } from '../../assets/images/3dots.svg';
@@ -19,7 +21,7 @@ import { Preloader } from '../utils/Preloader';
 const Profile = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-
+  const [subscribeShow, setSubscribeShow] = useState(false);
   const profile = useSelector((state: RootState) => state.user);
   const myNick = useSelector((state: RootState) => state.auth.username);
   const myId = useSelector((state: RootState) => state.auth.pk);
@@ -35,8 +37,25 @@ const Profile = () => {
     return <Preloader />;
   }
 
+  const subscribe = () => {
+    userAPI.createSubscription({ source: myId, target: profile.pk });
+  };
+
   return (
     <div className="profile">
+      <Modal show={subscribeShow} onHide={() => setSubscribeShow(false)} centered size="sm">
+        <Modal.Body className="notifications__modal">
+          {' '}
+          <h2 style={{ marginBottom: '0px' }}>Вы уверенны?</h2>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
+            <h3 onClick={() => setSubscribeShow(false)}>Нет</h3>
+            <div style={{ width: '20px' }}></div>
+            <h3 onClick={() => subscribe()} style={{ color: '#FB5734' }}>
+              Да
+            </h3>
+          </div>
+        </Modal.Body>
+      </Modal>
       <div
         style={{
           background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${profile.background_photo})`,
@@ -87,6 +106,21 @@ const Profile = () => {
               Редактировать профиль
             </button>
           </Link>
+        ) : null}
+        {myNick !== nick ? (
+          <div style={{ width: '100%' }}>
+            <p style={{ textAlign: 'center', fontSize: '14px', color: 'rgba(0, 0, 0, 0.6)' }}>Подписка на 1 месяц</p>
+            <button
+              className="notifications__settingBtn"
+              style={{
+                margin: '0px',
+                width: '100%'
+              }}
+              onClick={() => setSubscribeShow(true)}
+            >
+              Подписатся за 10$
+            </button>
+          </div>
         ) : null}
       </div>
       <div className="profile__posts">

@@ -11,7 +11,6 @@ import {
   getUserRT,
   idType,
   PaymentType,
-  SubscriptionType,
   userStringType
 } from '~/api/types';
 import { userAPI } from '../api/userAPI';
@@ -213,9 +212,9 @@ export const createPayment = ({ amount, card }: PaymentType): Thunk => async (di
   await userAPI.createPayment({ amount, card });
 };
 
-export const createSubscription = ({ end_date, source, target }: SubscriptionType): Thunk => async (dispatch) => {
-  await userAPI.createSubscription({ end_date, source, target });
-};
+// export const createSubscription = ({ end_date, source, target }: SubscriptionType): Thunk => async (dispatch) => {
+//   await userAPI.createSubscription({ end_date, source, target });
+// };
 
 export const createUser = ({ email, username, password }: createUserT): Thunk => async (dispatch) => {
   await userAPI.createUser({ email, username, password, id: null });

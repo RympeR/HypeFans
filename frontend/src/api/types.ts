@@ -16,7 +16,6 @@ export type PaymentType = {
   card: number;
 };
 export type SubscriptionType = {
-  end_date: string;
   source: number;
   target: number;
 };
