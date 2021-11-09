@@ -55,6 +55,7 @@ class PostActionShortSerializer(serializers.ModelSerializer):
         if post_action.parent and hasattr(post_action.parent, 'pk'):
             return PostAction.objects.filter(pk=post_action.parent.pk, like=True).aggregate(Count('pk'))['pk__count']
         return 0
+        
     def get_parent_username(self, post_action: PostAction):
         return post_action.parent.user.username if post_action.parent else None
 
