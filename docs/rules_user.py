@@ -7,7 +7,7 @@
     } 
 """
 """
-    @apiDefine not-credits
+    @apiDefine notcredits
     @apiErrorExample {json} Error-Response:
     HTTP 451 Unavailable For Legal Reasons
     {
@@ -370,8 +370,8 @@
 """
 
 """
-    @api {post} /user/create-card/ 1.10 Create card
-    @apiName 1.10 Create card
+    @api {post} /user/create-card/ 1.9(1) Create card
+    @apiName 1.9(1) Create card
     @apiGroup User
     @apiVersion  0.1.0
 
@@ -406,8 +406,8 @@
 """
 
 """
-    @api {get} /user/get-card/:id 1.11 Card retrieve
-    @apiName 1.11 Card retrieve
+    @api {get} /user/get-card/:id 1.9(2) Card retrieve
+    @apiName 1.9(2) Card retrieve
     @apiGroup User
     @apiVersion  0.1.0
 
@@ -444,8 +444,8 @@
 """
 
 """
-    @api {post} /user/create-donation/ 1.12 Create donation
-    @apiName 1.12 Create donation
+    @api {post} /user/create-donation/ 1.9 (3) Create donation
+    @apiName 1.9 (3) Create donation
     @apiGroup User
     @apiVersion  0.1.0
 
@@ -477,8 +477,8 @@
 """
 
 """
-    @api {post} /user/create-payment/ 1.13 Create payment
-    @apiName 1.13 Create payment
+    @api {post} /user/create-payment/ 1.9 (4) Create payment
+    @apiName 1.9 (4) Create payment
     @apiGroup User
     @apiVersion  0.1.0
 
@@ -502,13 +502,13 @@
         "card": 1
     }
     @apiUse unathorized
-    @apiUse not-credits
+    @apiUse notcredits
 
 """
 
 """
-    @api {get} /user/get-donation/:id 1.14 Get donation
-    @apiName 1.14 Get donation
+    @api {get} /user/get-donation/:id 1.9 (5) Get donation
+    @apiName 1.9 (5) Get donation
     @apiGroup User
     @apiVersion  0.1.0
 
@@ -554,8 +554,8 @@
 """
 
 """
-    @api {get} /user/get-payment/:id 1.15 Get payment
-    @apiName 1.15 Get payment
+    @api {get} /user/get-payment/:id 1.9 (6) Get payment
+    @apiName 1.9 (6) Get payment
     @apiGroup User
     @apiVersion  0.1.0
 
@@ -597,8 +597,8 @@
 """
 
 """
-    @api {post} /user/validate-user/ 1.16 Validate user
-    @apiName 1.16 Validate user
+    @api {post} /user/validate-user/ 1.9 (7) Validate user
+    @apiName 1.9 (7) Validate user
     @apiGroup User
     @apiVersion  0.1.0
 
@@ -635,8 +635,8 @@
 """
 
 """
-    @api {get} /user/user-donation-sended/ 1.17 Users donation sended
-    @apiName 1.17 Users donation sended
+    @api {get} /user/user-donation-sended/ 1.9 (8) Users donation sended
+    @apiName 1.9 (8) Users donation sended
     @apiGroup User
     @apiVersion  0.1.0
 
@@ -687,8 +687,8 @@
 """
 
 """
-    @api {get} /user/user-donation-recieved/ 1.18 Users donation recieved
-    @apiName 1.18 Users donation recieved
+    @api {get} /user/user-donation-recieved/ 1.9 (9) Users donation recieved
+    @apiName 1.9 (9) Users donation recieved
     @apiGroup User
     @apiVersion  0.1.0
 
@@ -739,8 +739,8 @@
 """
 
 """
-    @api {get} /user/user-payment-history/ 1.19 User payment history
-    @apiName 1.19 User payment history
+    @api {get} /user/user-payment-history/ 1.9 (10) User payment history
+    @apiName 1.9 (10) User payment history
     @apiGroup User
     @apiVersion  0.1.0
 
