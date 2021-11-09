@@ -7,7 +7,7 @@
     } 
 """
 """
-    @apiDefine not-credits
+    @apiDefine notcredits
     @apiErrorExample {json} Error-Response:
     HTTP 451 Unavailable For Legal Reasons
     {
@@ -534,5 +534,5 @@
     HTTP/1.1 201 Created
 
     @apiUse unathorized
-    @apiUse not-credits
+    @apiUse notcredits
 """
