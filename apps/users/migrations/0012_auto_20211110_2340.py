@@ -5,6 +5,9 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
+    dependencies = [
+        ('users', '0011_auto_20211029_0010'),
+    ]
 
     operations = [
         migrations.AddField(
