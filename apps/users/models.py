@@ -160,7 +160,8 @@ class Subscription(models.Model):
 class Card(models.Model):
     user = models.ForeignKey(
         User, related_name='user_card', on_delete=models.CASCADE,)
-    number = models.BigIntegerField(verbose_name='Номер карты')
+    name = models.CharField('Имя карты', max_length=255, null=True, blank=True)
+    number = models.CharField(verbose_name='Номер карты', max_length=16)
     date_year = models.CharField(verbose_name='Месяц/год', max_length=5)
     cvc = models.CharField(verbose_name='CVC', max_length=3)
     creator = models.BooleanField(

@@ -303,7 +303,7 @@ class UserGetSerializer(serializers.ModelSerializer):
 
 
 class CardCreationSerializer(serializers.ModelSerializer):
-
+    name = serializers.CharField(required=False)
     class Meta:
         model = Card
         fields = '__all__'
@@ -312,11 +312,12 @@ class CardCreationSerializer(serializers.ModelSerializer):
 class CardPartialSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
         required=False, queryset=User.objects.all())
-    number = serializers.IntegerField(required=False)
+    number = serializers.CharField(required=False)
     date_year = serializers.CharField(required=False)
     cvc = serializers.CharField(required=False)
     creator = serializers.BooleanField(required=False)
-
+    name = serializers.CharField(required=False)
+    
     class Meta:
         model = Card
         fields = '__all__'
