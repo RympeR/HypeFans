@@ -34,19 +34,22 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
 
     def retrieve(self, request, username):
         user = User.objects.get(username=username)
+        req_user = request.user
         data_compare = request.GET.get('datetime', 0)
         limit = request.GET.get('limit', 50)
         offset = request.GET.get('offset', 0)
         results = []
+        sub_check = True if Subscription.objects.filter(
+            target=user, source=req_user, end_date__gte=datetime.now()).exists() else False
+        sub_dict = {
+            'subscribed': sub_check
+        }
         if data_compare == 0:
             for post in user.user_post.filter(archived=False).order_by('-publication_date'):
                 post_data = PostGetShortSerializers(
                     instance=post, context={'request': request}).data
                 res_dict = {}
                 res_dict['post'] = post_data
-                sub_check = True if Subscription.objects.filter(
-                    target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
-                res_dict['subscribed'] = sub_check
                 if post.access_level == 1:
                     res_dict['post']['payed'] = (
                         True if PostBought.objects.filter(
@@ -54,7 +57,6 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
                     )
                 else:
                     res_dict['post']['payed'] = sub_check
-                    res_dict['subscribed'] = sub_check
 
                 postActionQuerySet = PostAction.objects.filter(
                     post=post, user=request.user)
@@ -77,7 +79,8 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
                 results.append(res_dict)
         return api_accepted_202({
             **self.serializer_class(instance=user, context={'request': request}).data,
-            **{'posts': results[offset:limit+offset]}
+            **{'posts': results[offset:limit+offset]}, 
+            **sub_dict
         })
 
     def get_serializer_context(self):
