@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useAlert } from 'react-alert';
 import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
@@ -20,6 +21,7 @@ import { Preloader } from '../utils/Preloader';
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const alert = useAlert();
   const history = useHistory();
   const [subscribeShow, setSubscribeShow] = useState(false);
   const profile = useSelector((state: RootState) => state.user);
@@ -33,12 +35,20 @@ const Profile = () => {
     dispatch(getUser({ username: nick }));
   }, [nick]);
 
+  // console.log(profile);
+
   if (isLoading) {
     return <Preloader />;
   }
 
-  const subscribe = () => {
-    userAPI.createSubscription({ source: myId, target: profile.pk });
+  const subscribe = async () => {
+    const data = await userAPI.createSubscription({ source: myId, target: profile.pk });
+    setSubscribeShow(false);
+    if (data.status == 200) {
+      alert.success('Вы подписались');
+    } else {
+      alert.error('Ошибка подписки');
+    }
   };
 
   return (
@@ -109,17 +119,25 @@ const Profile = () => {
         ) : null}
         {myNick !== nick ? (
           <div style={{ width: '100%' }}>
-            <p style={{ textAlign: 'center', fontSize: '14px', color: 'rgba(0, 0, 0, 0.6)' }}>Подписка на 1 месяц</p>
-            <button
-              className="notifications__settingBtn"
-              style={{
-                margin: '0px',
-                width: '100%'
-              }}
-              onClick={() => setSubscribeShow(true)}
-            >
-              Подписатся за 10$
-            </button>
+            {!profile.subscribed ? (
+              <>
+                <p style={{ textAlign: 'center', fontSize: '14px', color: 'rgba(0, 0, 0, 0.6)' }}>
+                  Подписка на 1 месяц
+                </p>
+                <button
+                  className="notifications__settingBtn"
+                  style={{
+                    margin: '0px',
+                    width: '100%'
+                  }}
+                  onClick={() => setSubscribeShow(true)}
+                >
+                  Подписатся за {profile.subscribtion_price}$
+                </button>
+              </>
+            ) : (
+              <p style={{ textAlign: 'center', fontSize: '14px', color: 'rgba(0, 0, 0, 0.6)' }}>Вы уже подписанны</p>
+            )}
           </div>
         ) : null}
       </div>

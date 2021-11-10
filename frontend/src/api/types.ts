@@ -100,6 +100,7 @@ export type getUserRT = {
   avatar: string | null;
   background_photo: string | null;
   username: string | null;
+  subscribed: boolean;
   first_name: string | null;
   bio: string | null;
   birthday_date: string | null;
