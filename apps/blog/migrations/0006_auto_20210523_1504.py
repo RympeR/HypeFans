@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='postaction',
-            name='datetime',
+            name='date_time',
             field=unixtimestampfield.fields.UnixTimeStampField(auto_now_add=True, null=True, verbose_name='Время действия'),
         ),
         migrations.AddField(

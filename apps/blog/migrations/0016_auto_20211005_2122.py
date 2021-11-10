@@ -12,12 +12,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RenameField(
             model_name='postaction',
-            old_name='datetime',
+            old_name='date_time',
             new_name='date_time',
         ),
         migrations.RenameField(
             model_name='watchedstories',
-            old_name='datetime',
+            old_name='date_time',
             new_name='date_time',
         ),
     ]
