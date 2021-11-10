@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         ),
         migrations.RenameField(
             model_name='watchedstories',
-            old_name='date_time',
+            old_name='datetime',
             new_name='date_time',
         ),
     ]
