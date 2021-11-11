@@ -13,6 +13,8 @@ import { RootState } from '~/redux/redux';
 import { updateEmailConfirm } from '~/redux/userReducer';
 import { ReactComponent as BackIcon } from '../../../assets/images/arrow-left.svg';
 import { ReactComponent as ArrowLeft } from '../../../assets/images/leftIcon.svg';
+import { ReactComponent as SettingsIcon } from '../../../assets/images/settings.svg';
+import { CardComponent } from '../card';
 import { NotificationSidebarItem } from '../notifications/NotificationSidebarItem';
 
 export const Settings = () => {
@@ -20,6 +22,7 @@ export const Settings = () => {
   const { pathname } = useLocation();
   const settings = useSelector((state: RootState) => state.auth);
   const isDisabled = useSelector((state: RootState) => state.auth.isSettingsDisabled);
+  const SettingsButton = () => <SettingsIcon />;
   const Text = ({ text }: { text: string }) => {
     return (
       <>
@@ -38,9 +41,22 @@ export const Settings = () => {
     const selectedColor = '#edebeb';
     const BackButton = () => <BackIcon onClick={history.goBack} />;
 
+    const ProfileSettingsSidebar = () => {
+      return (
+        <div className="notifications__sidebar">
+          <Link to="/settings/profileSettings/card">
+            <NotificationSidebarItem text="Карта" />
+          </Link>
+        </div>
+      );
+    };
+
     const SettingsSidebar = () => {
       return (
         <div className="notifications__sidebar">
+          <Link to="/settings/profileSettings">
+            <NotificationSidebarItem text="Профиль" />
+          </Link>
           <Link to="/settings/account" style={pathname === '/settings/account' ? { background: selectedColor } : {}}>
             <NotificationSidebarItem text="Аккаунт" />
           </Link>
@@ -69,13 +85,68 @@ export const Settings = () => {
           <div className="notifications__back">
             <BackButton />
           </div>
+          <Route
+            path="/settings/profileSettings"
+            render={() => {
+              return (
+                <div>
+                  <h4
+                    style={{
+                      fontFamily: 'Factor A',
+                      fontStyle: 'normal',
+                      fontWeight: 'bold',
+                      fontSize: '22px',
+                      marginBottom: '0px'
+                    }}
+                  >
+                    Nikky Rose
+                  </h4>
+                  <h5
+                    style={{
+                      fontFamily: 'Factor A',
+                      fontStyle: 'normal',
+                      fontWeight: 'normal',
+                      fontSize: '16px',
+                      lineHeight: '20px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: '0px',
+
+                      color: 'rgba(0, 0, 0, 0.6)'
+                    }}
+                  >
+                    @nikkyrose
+                  </h5>
+                </div>
+              );
+            }}
+          />
 
           <p className="notifications__headingText">
-            <Route path="/settings" render={() => <Text text="Настройки" />} />
+            <Route
+              path="/settings"
+              render={() => {
+                if (history.location.pathname.split('/')[2] !== 'profileSettings') {
+                  return <Text text="Настройки" />;
+                }
+              }}
+            />
           </p>
+          <Link to="/settings/notifications">
+            <Route path="/settings/profileSettings" component={SettingsButton} />
+          </Link>
         </div>
         {/* Кнопки в сайдбаре в зависимости от роута */}
-        <Route path="/settings" component={SettingsSidebar} />
+        <Route
+          path="/settings"
+          render={() => {
+            if (history.location.pathname.split('/')[2] !== 'profileSettings') {
+              return <Route path="/settings" component={SettingsSidebar} />;
+            } else {
+              return <Route path="/settings/profileSettings" component={ProfileSettingsSidebar} />;
+            }
+          }}
+        />
       </div>
     );
   };
@@ -516,6 +587,7 @@ export const Settings = () => {
         <div className="notifications__mainHeader">
           {/* Заголовок*/}
           <Route path="/settings/account" render={() => <Text text="Аккаунт" />} exact />
+          <Route path="/settings/profileSettings/card" render={() => <Text text="Карта" />} exact />
           <Route path="/settings/confidentiality" render={() => <Text text="Конфеденциальность" />} exact />
           <Route path="/settings/account/sessions" render={() => <Text text="Сеансы входа" />} exact />
           <Route path="/settings/notifications/push" render={() => <Text text="Push-уведомления" />} exact />
@@ -556,6 +628,7 @@ export const Settings = () => {
                   )}
                   exact
                 />
+                <Route path="/settings/profileSettings/card" render={() => <CardComponent />} exact />
                 <Route
                   path="/settings/prices/fans"
                   render={() => (
