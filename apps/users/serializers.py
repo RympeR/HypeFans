@@ -302,8 +302,83 @@ class UserGetSerializer(serializers.ModelSerializer):
         )
 
 
+class CardGetSerializer(serializers.ModelSerializer):
+
+    user = UserShortRetrieveSeriliazer()
+
+    class Meta:
+        model = Card
+        fields = '__all__'
+
+
+class UserOwnProfileGetSerializer(serializers.ModelSerializer):
+    location = CountryField(country_dict=True)
+    avatar = serializers.SerializerMethodField()
+    background_photo = serializers.SerializerMethodField()
+    cards = serializers.SerializerMethodField()
+
+    def get_cards(self, user: User):
+        cards = user.user_card.all()
+        return CardGetSerializer(instance=cards, many=True).data
+
+    def get_avatar(self, user: User):
+        if user.avatar and hasattr(user.avatar, 'url'):
+            path_file = user.avatar.url
+            request = self.context.get('request')
+            host = request.get_host()
+            file_url = 'http://{domain}{path}'.format(
+                domain=host, path=path_file)
+            return file_url
+        return ''
+
+    def get_background_photo(self, user: User):
+        if user.background_photo and hasattr(user.background_photo, 'url'):
+            path_file = user.background_photo.url
+            request = self.context.get('request')
+            host = request.get_host()
+            file_url = 'http://{domain}{path}'.format(
+                domain=host, path=path_file)
+            return file_url
+        return ''
+
+    class Meta:
+        model = User
+        fields = (
+            'pk',
+            'email',
+            'avatar',
+            'background_photo',
+            'username',
+            'first_name',
+            'bio',
+            'birthday_date',
+            'location',
+            'subscribtion_price',
+            'message_price',
+            'post_amount',
+            'fans_amount',
+            'repheral_link',
+            'repheral_users',
+            'blocked_users',
+            'email_notifications',
+            'push_notifications',
+            'hide_online',
+            'allow_comments',
+            'show_post_amount',
+            'show_fans_amount',
+            'show_watermark',
+            'validated_email',
+            'validated_user',
+            'credit_amount',
+            'earned_credits_amount',
+            'is_online',
+            'cards',
+        )
+
+
 class CardCreationSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=False)
+
     class Meta:
         model = Card
         fields = '__all__'
@@ -317,15 +392,6 @@ class CardPartialSerializer(serializers.ModelSerializer):
     cvc = serializers.CharField(required=False)
     creator = serializers.BooleanField(required=False)
     name = serializers.CharField(required=False)
-    
-    class Meta:
-        model = Card
-        fields = '__all__'
-
-
-class CardGetSerializer(serializers.ModelSerializer):
-
-    user = UserShortRetrieveSeriliazer()
 
     class Meta:
         model = Card

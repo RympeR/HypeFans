@@ -22,7 +22,7 @@ from .serializers import *
 
 class UserRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
-    serializer_class = UserGetSerializer
+    serializer_class = UserOwnProfileGetSerializer
 
     def get_object(self):
         return self.request.user
