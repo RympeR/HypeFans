@@ -1,4 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { userAPI } from '~/api/userAPI';
 import Card from './components/card';
 import CForm from './components/form';
 
@@ -14,6 +16,20 @@ const initialState = {
 export const CardComponent = () => {
   const [state, setState] = useState(initialState);
   const [currentFocusedElm, setCurrentFocusedElm] = useState(null);
+
+  const userID = useSelector((state) => state.auth.pk);
+
+  const createCard = async () => {
+    const data = await userAPI.createCard({
+      name: state.cardHolder,
+      number: state.cardNumber.split(' ').join(''),
+      date_year: `${state.cardMonth}/${state.cardYear}`,
+      cvc: state.cardCvv,
+      creator: true,
+      user: userID
+    });
+    console.log(data);
+  };
 
   const updateStateValues = useCallback(
     (keyName, value) => {
@@ -82,6 +98,9 @@ export const CardComponent = () => {
             cardDateRef={cardElementsRef.cardDate}
           ></Card>
         </CForm>
+        <button className="notifications__settingBtn" onClick={() => createCard()}>
+          Сохранить
+        </button>
       </div>
     </div>
   );

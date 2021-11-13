@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
 const currentYear = new Date().getFullYear();
+console.log(currentYear);
 const monthsArr = Array.from({ length: 12 }, (x, i) => {
   const month = i + 1;
   return month <= 9 ? '0' + month : month;
 });
-const yearsArr = Array.from({ length: 9 }, (_x, i) => currentYear + i);
+const yearsArr = Array.from({ length: 9 }, (_x, i) => Number(currentYear.toString().substr(-2)) + i);
 
 export default function CForm({
   cardMonth,
@@ -170,7 +171,7 @@ export default function CForm({
               <input
                 type="password"
                 className="card_card-input__input"
-                maxLength="4"
+                maxLength="3"
                 autoComplete="off"
                 name="cardCvv"
                 onChange={handleFormChange}

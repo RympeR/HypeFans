@@ -107,7 +107,11 @@ export const userAPI = {
   },
   getUser({ user }: userStringType) {
     return instance.get<getUserRT>(`user/get-profile/${user}`).then((response) => {
-      console.log(response.data);
+      return response.data;
+    });
+  },
+  getProfile() {
+    return instance.get(`user/get-user`).then((response) => {
       return response.data;
     });
   },

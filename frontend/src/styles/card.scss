@@ -2,6 +2,7 @@
 
 .card_wrapper {
   display: flex;
+  flex-direction: column;
   padding: 10px 8px;
   @media screen and (max-width: 700px), (max-height: 500px) {
     flex-wrap: wrap;

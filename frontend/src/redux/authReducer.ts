@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { authAPI } from '~/api/authAPI';
-import { userStringType } from './../api/types';
 import { userAPI } from './../api/userAPI';
 import { isLoading, isntLoading } from './blogReducer';
 import { InferActionsTypes, RootState } from './redux';
@@ -70,6 +69,7 @@ const actions = {
   setAuthUserData: (
     subscribtion_price: number | null,
     pk: number | null,
+    cards: any,
     email: string | null,
     avatar: string | null,
     background_photo: string | null,
@@ -102,6 +102,7 @@ const actions = {
       payload: {
         subscribtion_price,
         pk,
+        cards,
         email,
         avatar,
         background_photo,
@@ -149,12 +150,13 @@ const actions = {
   }
 };
 
-export const getAuthUserData = ({ user }: userStringType): Thunk => async (dispatch) => {
-  const meData = await userAPI.getUser({ user });
+export const getAuthUserData = (): Thunk => async (dispatch) => {
+  const meData = await userAPI.getProfile();
   if (meData) {
     const {
       subscribtion_price,
       pk,
+      cards,
       email,
       avatar,
       background_photo,
@@ -185,6 +187,7 @@ export const getAuthUserData = ({ user }: userStringType): Thunk => async (dispa
       actions.setAuthUserData(
         subscribtion_price,
         pk,
+        cards,
         email,
         avatar,
         background_photo,
@@ -236,6 +239,7 @@ export const logout = (): Thunk => async (dispatch) => {
         null,
         null,
         null,
+        null,
         [],
         [],
         false,
@@ -260,7 +264,7 @@ export const login = ({ email, password }: { email: string; password: string }):
   const response = await authAPI.login(email, password);
   const data = await authAPI.meGet();
   if (response) {
-    dispatch(getAuthUserData({ user: data.data.username }));
+    dispatch(getAuthUserData());
   }
   dispatch(isntLoading());
 };
@@ -280,7 +284,7 @@ export const changeSettings = (obj: any): Thunk => async (dispatch) => {
   const response = await authAPI.meUpdate(obj);
   const data = await authAPI.meGet();
   if (response) {
-    dispatch(getAuthUserData({ user: data.data.username }));
+    dispatch(getAuthUserData());
   }
   dispatch(isntSettingsDisabled());
 };
@@ -288,7 +292,7 @@ export const changeSettings = (obj: any): Thunk => async (dispatch) => {
 export const getUserData = (): Thunk => async (dispatch) => {
   dispatch(isLoading());
   const data = await authAPI.meGet();
-  await dispatch(getAuthUserData({ user: data.data.username }));
+  await dispatch(getAuthUserData());
   dispatch(isntLoading());
 };
 
