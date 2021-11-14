@@ -1,6 +1,7 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { userAPI } from '~/api/userAPI';
+import { Preloader } from '~/app/utils/Preloader';
 import Card from './components/card';
 import CForm from './components/form';
 
@@ -18,6 +19,10 @@ export const CardComponent = () => {
   const [currentFocusedElm, setCurrentFocusedElm] = useState(null);
 
   const userID = useSelector((state) => state.auth.pk);
+  const cardsIds = useSelector((state) => state.auth.cards);
+  const [cards, setCards] = useState([]);
+
+  const loading = useSelector((state) => state.blog.isLoading);
 
   const createCard = async () => {
     const data = await userAPI.createCard({
@@ -28,7 +33,6 @@ export const CardComponent = () => {
       creator: true,
       user: userID
     });
-    console.log(data);
   };
 
   const updateStateValues = useCallback(
@@ -69,6 +73,22 @@ export const CardComponent = () => {
     setCurrentFocusedElm(null);
   }, []);
 
+  useEffect(() => {
+    const cardsData = async () => {
+      const response = [];
+      for (let i = 0; i < cardsIds?.length; i++) {
+        const data = await userAPI.getCard(cardsIds[i]);
+        response.push(data);
+      }
+      setCards(response);
+    };
+    cardsData();
+  }, [cardsIds]);
+
+  if (loading) {
+    return <Preloader />;
+  }
+
   return (
     <div className="notifications__main">
       {' '}
@@ -99,8 +119,23 @@ export const CardComponent = () => {
           ></Card>
         </CForm>
         <button className="notifications__settingBtn" onClick={() => createCard()}>
-          Сохранить
+          Добавить карту
         </button>
+        <h2 style={{ textAlign: 'center' }}>{cards?.length > 0 ? 'Ваши карты' : 'Пока у вас нет карт'}</h2>
+        {cards.map((item, index) => {
+          return (
+            <div key={index + 'cardId'} style={{ paddingBottom: '25px' }}>
+              <Card
+                cardNumber={item.number}
+                cardHolder={item.name === null ? '' : item.name}
+                cardMonth={item.date_year.split('/')[0]}
+                cardYear={item.date_year.split('/')[1]}
+                cardCvv={item.cvc}
+                isCardFlipped={state.isCardFlipped}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
