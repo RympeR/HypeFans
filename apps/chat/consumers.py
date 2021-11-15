@@ -121,11 +121,17 @@ class ReadedConsumer(WebsocketConsumer):
         room = text_data_json['room_id']
         user = text_data_json['user']
         message = text_data_json['message_id']
-        readed_chat = UserMessage.objects.filter(
-            message__pk=message,
-            user=User.objects.get(pk=user),
-            readed=False
-        )
+        if message == 0:
+            readed_chat = UserMessage.objects.filter(
+                user=User.objects.get(pk=user),
+                readed=False
+            )
+        else:
+            readed_chat = UserMessage.objects.filter(
+                message__pk=message,
+                user=User.objects.get(pk=user),
+                readed=False
+            )
         readed_chat.update(readed=True)
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
