@@ -101,14 +101,7 @@ class ReadedConsumer(WebsocketConsumer):
     def connect(self):
         try:
             self.room_name = self.scope['url_route']['kwargs']['room_name']
-            self.user_id = self.scope['url_route']['kwargs']['user_id']
-            self.room_group_name = f'readed_chat_{self.room_name}_{self.user_id}'
-            readed_chat = UserMessage.objects.filter(
-                message__room__pk=int(self.room_name),
-                user__pk=int(self.user_id),
-                readed=False
-            )
-            readed_chat.update(readed=True)
+            self.room_group_name = f'readed_chat_{self.room_name}'
             async_to_sync(self.channel_layer.group_add)(
                 self.room_group_name,
                 self.channel_name

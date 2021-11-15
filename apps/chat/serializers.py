@@ -116,6 +116,10 @@ class ChatMessagesSerializer(serializers.Serializer):
     room_id = serializers.IntegerField()
     message_id = serializers.IntegerField()
 
+class ChatMessagesReadSerializer(serializers.Serializer):
+
+    room_id = serializers.IntegerField()
+
 
 class RetrieveChatsSerializer(serializers.Serializer):
 

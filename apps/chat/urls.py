@@ -13,6 +13,7 @@ from .views import (
     GetDialogs,
     GetUnreadedMessagesAmount,
     ChatPartialUpdateAPI,
+    ReadChatMessages,
     index,
     room
 )
@@ -33,6 +34,7 @@ urlpatterns = [
     path('message-delete/<int:pk>', MessageDeleteAPI.as_view(), name=''),
 
     path('get-chat-messages/', GetChatMessages.as_view(), name=''),
+    path('chat-read-messages/', ReadChatMessages.as_view(), name=''),
     path('get-user-dialogs/', GetDialogs.as_view(), name=''),
     path('get-unreaded-messages-amount/',
          GetUnreadedMessagesAmount.as_view(), name='get-unreaded-messages-amount'),
