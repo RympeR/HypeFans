@@ -61,8 +61,8 @@ class ChatConsumer(WebsocketConsumer):
     def chat_message(self, event):
         message_id = event['message_id']
         message = event['text']
-        room = int(event['room_id'])
-        user = int(event['user'])
+        room = event['room_id']
+        user = event['user']
         attachments_info = []
         if event['attachments']:
             attachments_pk = event['attachments']
@@ -89,7 +89,6 @@ class ChatConsumer(WebsocketConsumer):
 
         self.send(text_data=json.dumps({
             "room_id": room,
-            # .token,
             "user": user,
             "text": message,
             "message_id": message_id,
@@ -109,6 +108,7 @@ class ReadedConsumer(WebsocketConsumer):
             self.accept()
         except Exception as e:
             print(e)
+            logging.error(e)
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
@@ -117,31 +117,35 @@ class ReadedConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        room = text_data_json['room_id']
-        user = text_data_json['user']
-        message = text_data_json['message_id']
-        if message == 0:
-            readed_chat = UserMessage.objects.filter(
-                user=User.objects.get(pk=user),
-                readed=False
+        try:
+            text_data_json = json.loads(text_data)
+            room = text_data_json['room_id']
+            user = text_data_json['user']
+            message = text_data_json['message_id']
+            if message == 0:
+                readed_chat = UserMessage.objects.filter(
+                    user=User.objects.get(pk=user),
+                    readed=False
+                )
+            else:
+                readed_chat = UserMessage.objects.filter(
+                    message__pk=message,
+                    user=User.objects.get(pk=user),
+                    readed=False
+                )
+            readed_chat.update(readed=True)
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message_id': message,
+                    'user': user,
+                    'room_id': room,
+                }
             )
-        else:
-            readed_chat = UserMessage.objects.filter(
-                message__pk=message,
-                user=User.objects.get(pk=user),
-                readed=False
-            )
-        readed_chat.update(readed=True)
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message_id': message,
-                'user': user,
-                'room_id': room,
-            }
-        )
+        except Exception as e:
+            print(e)
+            logging.error(e)
 
     def chat_message(self, event):
         message = event['message_id']

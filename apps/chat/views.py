@@ -66,7 +66,7 @@ class MessageDeleteAPI(generics.DestroyAPIView):
 
 class ReadChatMessages(GenericAPIView):
     queryset = Chat.objects.all()
-    serializer_class = ChatMessagesReadSerializer
+    serializer_class = ChatMessagesSerializer
 
     def put(self, request):
         user = request.user
