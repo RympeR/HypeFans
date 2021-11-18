@@ -8,10 +8,10 @@ from channels.generic.websocket import (AsyncWebsocketConsumer,
 from apps.blog.models import Attachment
 
 from apps.users.models import User
-from apps.users.serializers import UserShortChatRetrieveSeriliazer, UserShortRetrieveSeriliazer
+from apps.users.serializers import UserShortChatRetrieveSeriliazer, UserShortRetrieveSeriliazer, UserShortSocketRetrieveSeriliazer
 
 from .models import Chat, Room, UserMessage
-from .serializers import ChatCreationSerializer, ChatGetSerializer, UserMessageCreationSerializer
+from .serializers import ChatCreationSerializer, ChatGetSerializer, RoomGetSerializer, RoomSocketSerializer, UserMessageCreationSerializer
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -244,21 +244,19 @@ class ChatRoomsConsumer(WebsocketConsumer):
 
             filtered_results = []
             for room_obj in result:
-                user_obj = room_obj['message'].user if room_obj['message'] and hasattr(
-                    room_obj['message'], 'user') else None
+                user_obj = None
+                if room_obj['message'] and hasattr(room_obj['message'], 'user'):
+                    user_obj = room_obj['message'].user
                 message_obj = room_obj['message'] if room_obj['message'] else None
                 attachment = True if message_obj and message_obj.attachment.all().exists() else False
-
                 filtered_results.append(
                     {
                         "room": {
-                            "id": room_obj['room'].id,
-                            "logo": room_obj['room'].get_logo,
                             "blocked": room_obj['blocked'],
-                            "user": UserShortRetrieveSeriliazer(
+                            "user": UserShortSocketRetrieveSeriliazer(
                                 instance=user_obj).data
                             if user_obj
-                            else UserShortRetrieveSeriliazer(
+                            else UserShortSocketRetrieveSeriliazer(
                                 instance=room_obj['room'].creator).data,
                             "message": {
                                 'id': message_obj.id,
@@ -266,6 +264,7 @@ class ChatRoomsConsumer(WebsocketConsumer):
                                 'text': message_obj.text,
                                 'attachment': attachment,
                             } if message_obj else None,
+                            "room_info": RoomSocketSerializer(instance=room_obj['room']).data
                         }
                     }
                 )

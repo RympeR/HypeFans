@@ -88,6 +88,33 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             'subscribtion_duration'
         )
 
+class UserShortSocketRetrieveSeriliazer(serializers.ModelSerializer):
+
+    avatar = serializers.SerializerMethodField()
+
+    def get_avatar(self, user: User):
+        if user.avatar and hasattr(user.avatar, 'url'):
+            path_file = user.avatar.url
+            request = self.context.get('request')
+            if request:
+                host = request.get_host()
+            else:
+                host = 'hype-fans.com/'
+            file_url = 'http://{domain}{path}'.format(
+                domain=host, path=path_file)
+            return file_url
+        return ''
+
+    class Meta:
+        model = User
+        fields = (
+            'pk',
+            'username',
+            'avatar',
+            'subscribtion_price',
+            'is_online',
+        )
+
 
 class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
 

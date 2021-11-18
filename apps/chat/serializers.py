@@ -6,7 +6,7 @@ from apps.blog.models import Attachment
 from apps.blog.serializers import AttachmentSerializer
 from apps.users.models import User
 from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
-                                    UserShortRetrieveSeriliazer)
+                                    UserShortRetrieveSeriliazer, UserShortSocketRetrieveSeriliazer)
 
 from .models import Chat, Room, UserMessage
 
@@ -21,8 +21,28 @@ class RoomGetSerializer(serializers.ModelSerializer):
     def get_logo(self, room: Room):
         if room.logo and hasattr(room.logo, 'url'):
             return return_file_url(self, room.logo.url)
-        if room.creator.avatar and hasattr(room.creator.avatar, 'url'):
-            return return_file_url(self, room.creator.avatar.url)
+        return ''
+
+    class Meta:
+        model = Room
+        fields = '__all__'
+
+class RoomSocketSerializer(serializers.ModelSerializer):
+
+    creator = UserShortSocketRetrieveSeriliazer()
+    invited = serializers.SerializerMethodField()
+    date = TimestampField(required=False)
+    logo = serializers.SerializerMethodField()
+
+    def get_invited(self, room: Room):
+        if len(room.invited.all()) == 1:
+            return UserShortSocketRetrieveSeriliazer(instance=room.invited.all().first()).data
+        else:
+            return len(room.invited.all())
+
+    def get_logo(self, room: Room):
+        if room.logo and hasattr(room.logo, 'url'):
+            return return_file_url(self, room.logo.url)
         return ''
 
     class Meta:

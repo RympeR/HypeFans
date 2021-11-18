@@ -20,7 +20,8 @@ class Room(models.Model):
         null=True,
         blank=True
     )
-
+    name = models.CharField('Имя комнаты', blank=True, null=True, max_length=255)
+    
     def __str__(self):
         return f"{self.creator}-{self.pk}"
 
