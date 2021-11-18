@@ -48,6 +48,19 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
 
     avatar = serializers.SerializerMethodField()
     background_photo = serializers.SerializerMethodField()
+    is_online = serializers.SerializerMethodField()
+
+    def get_is_online(self, user: User):
+        online = None
+        try:
+            online = user.user_online
+        except Exception:
+            ...
+        if online:
+            if not user.hide_online:
+                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 <= 5:
+                    return True
+        return (timedelta().seconds//60) % 60 <= 5
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -88,9 +101,23 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             'subscribtion_duration'
         )
 
+
 class UserShortSocketRetrieveSeriliazer(serializers.ModelSerializer):
 
     avatar = serializers.SerializerMethodField()
+    is_online = serializers.SerializerMethodField()
+
+    def get_is_online(self, user: User):
+        online = None
+        try:
+            online = user.user_online
+        except Exception:
+            ...
+        if online:
+            if not user.hide_online:
+                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 <= 5:
+                    return True
+        return (timedelta().seconds//60) % 60 <= 5
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -120,6 +147,19 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
 
     avatar = serializers.SerializerMethodField()
     background_photo = serializers.SerializerMethodField()
+    is_online = serializers.SerializerMethodField()
+
+    def get_is_online(self, user: User):
+        online = None
+        try:
+            online = user.user_online
+        except Exception:
+            ...
+        if online:
+            if not user.hide_online:
+                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 <= 5:
+                    return True
+        return (timedelta().seconds//60) % 60 <= 5
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -230,22 +270,23 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'validated_user',
             'credit_amount',
             'earned_credits_amount',
-            'email_notifications',
-            'push_notifications',
-            'hide_online',
-            'allow_comments',
-            'show_post_amount',
-            'show_fans_amount',
-            'show_watermark',
-            'validated_email',
-            'validated_user',
-            'credit_amount',
-            'earned_credits_amount',
-            'is_online'
         )
 
 
 class SettingsSerializer(serializers.ModelSerializer):
+    is_online = serializers.SerializerMethodField()
+
+    def get_is_online(self, user: User):
+        online = None
+        try:
+            online = user.user_online
+        except Exception:
+            ...
+        if online:
+            if not user.hide_online:
+                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 <= 5:
+                    return True
+        return (timedelta().seconds//60) % 60 <= 5
 
     class Meta:
         model = User
@@ -274,6 +315,19 @@ class UserGetSerializer(serializers.ModelSerializer):
     location = CountryField(country_dict=True)
     avatar = serializers.SerializerMethodField()
     background_photo = serializers.SerializerMethodField()
+    is_online = serializers.SerializerMethodField()
+
+    def get_is_online(self, user: User):
+        online = None
+        try:
+            online = user.user_online
+        except Exception:
+            ...
+        if online:
+            if not user.hide_online:
+                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 <= 5:
+                    return True
+        return (timedelta().seconds//60) % 60 <= 5
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -343,6 +397,19 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
     avatar = serializers.SerializerMethodField()
     background_photo = serializers.SerializerMethodField()
     cards = serializers.SerializerMethodField()
+    is_online = serializers.SerializerMethodField()
+
+    def get_is_online(self, user: User):
+        online = None
+        try:
+            online = user.user_online
+        except Exception:
+            ...
+        if online:
+            if not user.hide_online:
+                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 <= 5:
+                    return True
+        return (timedelta().seconds//60) % 60 <= 5
 
     def get_cards(self, user: User):
         cards = user.user_card.all()

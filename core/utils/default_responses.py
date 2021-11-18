@@ -19,6 +19,12 @@ def api_used_226(obj:dict = {}):
         status=status.HTTP_226_IM_USED
     )
 
+def api_bad_request_400(obj:dict = {}):
+    return Response(
+        obj,
+        status=status.HTTP_400_BAD_REQUEST
+    )
+
 def api_payment_required_402(obj:dict = {}):
     return Response(
         obj,

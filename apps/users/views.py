@@ -3,7 +3,7 @@ from apps.blog.models import PostAction, PostBought
 from apps.blog.serializers import PostGetShortSerializers
 from datetime import datetime, timedelta
 
-from core.utils.default_responses import (api_accepted_202,
+from core.utils.default_responses import (api_accepted_202, api_bad_request_400,
                                           api_block_by_policy_451,
                                           api_created_201,
                                           api_not_implemented_501,
@@ -320,8 +320,10 @@ class UserOnlineCreateAPI(generics.GenericAPIView):
         try:
             serializer.is_valid(raise_exception=True)
         except AssertionError:
-            return api_block_by_policy_451({"status": "not enought credits"})
-        instance = self.perform_create(serializer)
+            return api_bad_request_400({"status": "bad request"})
+        instance = UserOnline.objects.create_or_update(
+            user=request.user
+        )
         return Response(serializer.data)
 
 

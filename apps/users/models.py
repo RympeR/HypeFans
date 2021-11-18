@@ -5,7 +5,6 @@ from core.utils.func import user_avatar
 from unixtimestampfield.fields import UnixTimeStampField
 from django_countries.fields import CountryField
 from dateutil.relativedelta import relativedelta
-import datetime
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -75,7 +74,6 @@ class User(AbstractUser):
     push_notifications = models.BooleanField('Пуш уведомления', default=False)
 
     hide_online = models.BooleanField('Скрывать онлайн', default=False)
-
     allow_comments = models.BooleanField(
         'Разрешить комментарии постов', default=True)
     show_post_amount = models.BooleanField(
@@ -99,11 +97,6 @@ class User(AbstractUser):
     REQUIRED_FIELDS = [
         'username'
     ]
-
-    def is_online(self):
-        if not self.hide_online:
-            return True
-        return False
 
     @staticmethod
     def _create_user(password, email, **extra_fields):
@@ -221,8 +214,8 @@ class PendingUser(models.Model):
 
 
 class UserOnline(models.Model):
-    user = models.CharField(primary_key=True, max_length=255,
-                            verbose_name='Юзернейм пользователя', blank=True)
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE,
+        verbose_name='Юзернейм пользователя', blank=True, related_name='user_online', related_query_name='user_online')
     last_action = UnixTimeStampField(auto_now=True)
 
     class Meta:
