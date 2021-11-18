@@ -149,7 +149,7 @@ class ReadedConsumer(WebsocketConsumer):
 
     def chat_message(self, event):
         message = event['message_id']
-        room = event['room']
+        room = event['room_id']
         user = event['user']
 
         self.send(text_data=json.dumps({
