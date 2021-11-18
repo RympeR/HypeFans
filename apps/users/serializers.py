@@ -54,13 +54,15 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
         online = None
         try:
             online = user.user_online
-        except Exception:
+        except Exception as e:
             ...
         if online:
             if not user.hide_online:
-                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 <= 5:
+                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                     return True
-        return (timedelta().seconds//60) % 60 <= 5
+                else:
+                    return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+        return False
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -111,13 +113,15 @@ class UserShortSocketRetrieveSeriliazer(serializers.ModelSerializer):
         online = None
         try:
             online = user.user_online
-        except Exception:
+        except Exception as e:
             ...
         if online:
             if not user.hide_online:
-                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 <= 5:
+                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                     return True
-        return (timedelta().seconds//60) % 60 <= 5
+                else:
+                    return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+        return False
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -153,13 +157,15 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
         online = None
         try:
             online = user.user_online
-        except Exception:
+        except Exception as e:
             ...
         if online:
             if not user.hide_online:
-                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 <= 5:
+                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                     return True
-        return (timedelta().seconds//60) % 60 <= 5
+                else:
+                    return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+        return False
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -280,13 +286,15 @@ class SettingsSerializer(serializers.ModelSerializer):
         online = None
         try:
             online = user.user_online
-        except Exception:
+        except Exception as e:
             ...
         if online:
             if not user.hide_online:
-                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 <= 5:
+                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                     return True
-        return (timedelta().seconds//60) % 60 <= 5
+                else:
+                    return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+        return False
 
     class Meta:
         model = User
@@ -321,13 +329,15 @@ class UserGetSerializer(serializers.ModelSerializer):
         online = None
         try:
             online = user.user_online
-        except Exception:
+        except Exception as e:
             ...
         if online:
             if not user.hide_online:
-                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 <= 5:
+                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                     return True
-        return (timedelta().seconds//60) % 60 <= 5
+                else:
+                    return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+        return False
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -403,13 +413,15 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
         online = None
         try:
             online = user.user_online
-        except Exception:
+        except Exception as e:
             ...
         if online:
             if not user.hide_online:
-                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 <= 5:
+                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                     return True
-        return (timedelta().seconds//60) % 60 <= 5
+                else:
+                    return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+        return False
 
     def get_cards(self, user: User):
         cards = user.user_card.all()
