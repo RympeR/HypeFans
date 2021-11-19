@@ -141,6 +141,7 @@ class UserShortSocketRetrieveSeriliazer(serializers.ModelSerializer):
         fields = (
             'pk',
             'username',
+            'first_name',
             'avatar',
             'subscribtion_price',
             'is_online',
