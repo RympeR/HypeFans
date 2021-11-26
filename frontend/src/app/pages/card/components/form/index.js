@@ -18,8 +18,7 @@ export default function CForm({
   onCardInputFocus,
   onCardInputBlur,
   cardCvv,
-  children,
-  isCardFlipped
+  children
 }) {
   const [cardNumber, setCardNumber] = useState('');
 

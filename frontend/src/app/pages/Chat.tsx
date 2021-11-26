@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, Route, useHistory } from 'react-router-dom';
 import { RootState } from '~/redux/redux';
@@ -39,26 +39,47 @@ const Chat = () => {
   };
 
   ws.onmessage = (e) => {
-    console.log(JSON.parse(e.data).room);
     return setRooms(JSON.parse(e.data).room);
   };
 
   const SidebarItem = (item: any) => {
     const history = useHistory();
     const lastUrl = getLastUrlPoint(history.location.pathname);
+
+    const [amICreator, setCreator] = useState(false);
+    useEffect(() => {
+      if (userId === item?.item?.room?.room_info?.creator?.pk) setCreator(true);
+      else setCreator(false);
+    }, [item]);
+
     return (
-      <Link to={`/chat/${item?.item?.room?.id}`}>
+      <Link to={`/chat/${item?.item?.room?.room_info?.id}`}>
         <div
           style={
-            lastUrl !== item?.item?.room?.id
+            lastUrl !== item?.item?.room?.room_info?.id
               ? { display: 'flex', borderBottom: '1px solid rgba(0, 0, 0, 0.2)' }
               : { display: 'flex', borderBottom: '1px solid rgba(0, 0, 0, 0.2),', backgroundColor: 'red' }
           }
         >
           <div className="chat__sidebarItem">
-            <img src={item?.item?.room?.user?.avatar} alt="fdsfsdfsd"></img>
+            <img
+              src={
+                typeof item?.item?.room?.room_info?.invited !== 'number'
+                  ? amICreator
+                    ? item?.item?.room?.room_info?.invited?.avatar
+                    : item?.item?.room?.room_info?.creator?.avatar
+                  : item?.item?.room?.room_info?.logo
+              }
+              alt="logo"
+            ></img>
             <div>
-              <h2>{item?.item?.room?.user?.first_name}</h2>
+              <h2>
+                {typeof item?.item?.room?.room_info?.invited !== 'number'
+                  ? amICreator
+                    ? item?.item?.room?.room_info?.invited?.username
+                    : item?.item?.room?.room_info?.creator?.username
+                  : item?.item?.room?.room_info?.name}
+              </h2>
               <p>{item?.item?.room?.message?.text}</p>
             </div>
           </div>

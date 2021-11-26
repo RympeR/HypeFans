@@ -9,6 +9,8 @@ import { chatAPI } from '~/api/chatAPI';
 import { userAPI } from '~/api/userAPI';
 import { RootState } from '~/redux/redux';
 import { ReactComponent as ImageIcn } from '../../assets/images/imageI.svg';
+import { ReactComponent as Readed } from '../../assets/images/messageIcon.svg';
+import { ReactComponent as NotReaded } from '../../assets/images/messageIconWhite.svg';
 import { ReactComponent as MicrIcon } from '../../assets/images/micI.svg';
 import { ReactComponent as More } from '../../assets/images/more-vertical.svg';
 import { ReactComponent as Vektor } from '../../assets/images/send.svg';
@@ -38,10 +40,18 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const VideoIcon = () => <VideoIcn />;
   const ImageIcon = () => <ImageIcn />;
   const [ws, setWs] = useState(null);
+  const [wsRead, setWsRead] = useState(null);
   const [showTip, setShowTip] = useState(false);
   const [messages, setMessages] = useState([]);
 
   const uid = useSelector((state: RootState) => state.auth.pk);
+
+  const [amICreator, setCreator] = useState(false);
+  useEffect(() => {
+    if (uid === rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.creator?.pk)
+      setCreator(true);
+    else setCreator(false);
+  }, []);
 
   useEffect(() => {
     const wsClient = new WebSocket(`wss://hype-fans.com/ws/chat/${lastUrl}/`);
@@ -49,10 +59,17 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       console.log('ws opened');
       setWs(wsClient);
     };
+    const wsReadClient = new WebSocket(`wss://hype-fans.com/ws/chat-readed/${lastUrl}/`);
+    wsReadClient.onopen = () => {
+      setWsRead(wsReadClient);
+      wsReadClient.send(JSON.stringify({ room_id: lastUrl, user: uid, message_id: 0 }));
+    };
+    wsReadClient.onclose = () => console.log('ws closed read');
     wsClient.onclose = () => console.log('ws closed');
 
     return () => {
       wsClient.close();
+      wsReadClient.close();
     };
   }, []);
 
@@ -60,9 +77,19 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     if (!ws) return;
     ws.onmessage = (e: any) => {
       const message = JSON.parse(e.data);
+      if (message.user.pk !== uid) {
+        wsRead.send(JSON.stringify({ room_id: lastUrl, user: uid, message_id: message.message_id }));
+      }
       setMessages((oldMessages) => [message, ...oldMessages]);
     };
   }, [ws]);
+
+  useEffect(() => {
+    if (!wsRead) return;
+    wsRead.onmessage = (e: any) => {
+      console.log(e);
+    };
+  }, [wsRead]);
 
   const sendMessage = (message: string, setMessageText: any) => {
     ws.send(JSON.stringify({ text: message, user: uid, attachments: [], room_id: lastUrl, message_id: 0 }));
@@ -98,11 +125,29 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       <div className="chat__dialogsHeader">
         <div className="chat__sidebarItem" style={{ alignItems: 'center' }}>
           <img
-            src={rooms.find((item: any) => item.room.id === Number(lastUrl))?.room?.user?.avatar}
-            alt="fdsfsdfsd"
+            src={
+              typeof rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.invited !==
+              'number'
+                ? amICreator
+                  ? rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.invited
+                      ?.avatar
+                  : rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.creator
+                      ?.avatar
+                : rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.logo
+            }
+            alt="avatar"
           ></img>
           <div>
-            <h2>{rooms.find((item: any) => item.room.id === Number(lastUrl))?.room?.user?.first_name}</h2>
+            <h2>
+              {typeof rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info
+                ?.invited !== 'number'
+                ? amICreator
+                  ? rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.invited
+                      ?.first_name
+                  : rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.creator
+                      ?.first_name
+                : rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.name}
+            </h2>
             <h2
               style={{
                 fontFamily: 'Factor A',
@@ -113,7 +158,15 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 color: '#000000'
               }}
             >
-              @{rooms.find((item: any) => item.room.id === Number(lastUrl))?.room?.user?.username}
+              @{' '}
+              {typeof rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info
+                ?.invited !== 'number'
+                ? amICreator
+                  ? rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.invited
+                      ?.username
+                  : rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.creator
+                      ?.username
+                : rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.name}
             </h2>
           </div>
         </div>
@@ -125,6 +178,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           }
           position="bottom right"
         >
+          <div style={{ padding: '5px', fontSize: '11px' }}>
+            <button>Добавить участников</button>
+          </div>
           <div style={{ padding: '5px', fontSize: '11px' }}>
             <button>Отключить уведомления</button>
           </div>
@@ -139,7 +195,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           </div>
           <div style={{ padding: '5px', fontSize: '11px' }}>
             <button
-              onClick={() => blockUser(rooms.find((item: any) => item.room.id === Number(lastUrl))?.room?.user?.pk)}
+              onClick={() =>
+                blockUser(rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.user?.pk)
+              }
             >
               Заблокировать
             </button>
@@ -148,6 +206,21 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       </div>
       <div className="chat__dialog">
         <div className="message-wrap">
+          <div
+            style={{
+              fontFamily: 'Factor A',
+              fontStyle: 'normal',
+              fontWeight: 'normal',
+              fontSize: '14px',
+              lineHeight: '15px',
+              color: ' rgba(0, 0, 0, 0.6)'
+            }}
+          >
+            {messages.filter((item) => item.user.pk === uid)[messages.filter((item) => item.user.pk === uid).length - 1]
+              ?.readed
+              ? 'Прочитанно'
+              : 'Не прочитанно'}
+          </div>
           {messages.map((item, index) => {
             return (
               <div
@@ -159,7 +232,14 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 key={index}
               >
                 <div>
-                  <div className="text-wrapp">{item.text}</div>
+                  <div style={{ display: 'flex' }}>
+                    {item.user.pk === uid ? (
+                      <div style={{ marginRight: '5px' }}>{item.readed ? <Readed /> : <NotReaded />}</div>
+                    ) : (
+                      <></>
+                    )}
+                    <div className="text-wrapp">{item.text}</div>
+                  </div>
                   <div className="time-text">15:33</div>
                 </div>
               </div>
@@ -202,11 +282,13 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                   <h2>Отправить донат</h2>
                   <div className="chat__sidebarItem" style={{ alignItems: 'center', padding: '0px' }}>
                     <img
-                      src={rooms.find((item: any) => item.room.id === Number(lastUrl))?.room?.user?.avatar}
+                      src={rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.user?.avatar}
                       alt="fdsfsdfsd"
                     ></img>
                     <div>
-                      <h2>{rooms.find((item: any) => item.room.id === Number(lastUrl))?.room?.user?.first_name}</h2>
+                      <h2>
+                        {rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.user?.first_name}
+                      </h2>
                       <h2
                         style={{
                           fontFamily: 'Factor A',
@@ -217,7 +299,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           color: '#000000'
                         }}
                       >
-                        @{rooms.find((item: any) => item.room.id === Number(lastUrl))?.room?.user?.username}
+                        @{rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.user?.username}
                       </h2>
                     </div>
                   </div>
@@ -244,7 +326,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                       onClick={() =>
                         sendTip(
                           values.donation_amount,
-                          rooms.find((item: any) => item.room.id === Number(lastUrl))?.room?.user?.pk
+                          rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.user?.pk
                         )
                       }
                     >

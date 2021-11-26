@@ -13,6 +13,7 @@ import { RootState } from '~/redux/redux';
 import { updateEmailConfirm } from '~/redux/userReducer';
 import { ReactComponent as BackIcon } from '../../../assets/images/arrow-left.svg';
 import { ReactComponent as ArrowLeft } from '../../../assets/images/leftIcon.svg';
+import { ReactComponent as Readed } from '../../../assets/images/messageIcon.svg';
 import { ReactComponent as SettingsIcon } from '../../../assets/images/settings.svg';
 import { CardComponent } from '../card';
 import { NotificationSidebarItem } from '../notifications/NotificationSidebarItem';
@@ -37,8 +38,24 @@ export const Settings = () => {
     );
   };
 
+  const LangComponent = () => {
+    return (
+      <div className="notifications__main">
+        <div style={{ padding: '16px 24px', fontSize: '20px', display: 'flex' }}>Українська</div>
+        <div style={{ padding: '16px 24px', fontSize: '20px', borderTop: '1px solid grey' }}>English</div>
+        <div style={{ padding: '16px 24px', fontSize: '20px', borderTop: '1px solid grey', display: 'flex' }}>
+          Русский
+          <div style={{ marginLeft: '5px' }}>
+            <Readed />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const NotificationsSidebar = () => {
     const selectedColor = '#edebeb';
+    const [show, setShow] = useState(false);
     const BackButton = () => <BackIcon onClick={history.goBack} />;
 
     const ProfileSettingsSidebar = () => {
@@ -47,6 +64,37 @@ export const Settings = () => {
           <Link to="/settings/profileSettings/card">
             <NotificationSidebarItem text="Карта" />
           </Link>
+          <Link to="/settings/profileSettings/lang">
+            <NotificationSidebarItem text="Язык" />
+          </Link>
+          <div onClick={() => setShow(true)}>
+            <NotificationSidebarItem text="Выйти" />
+          </div>
+          {show ? (
+            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <div
+                // onClick={() => setShow(false)}
+                style={{
+                  boxShadow: '-2px -1px 15px 5px #929292',
+                  backgroundColor: 'white',
+                  borderRadius: '8px',
+                  marginTop: '50px',
+                  width: '80%'
+                }}
+              >
+                <h5 style={{ padding: '5px', textAlign: 'center' }}>Вы уверены, что хотите выйти из аккаунта?</h5>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
+                  <h6 style={{ color: '#FB5734' }} onClick={() => setShow(false)}>
+                    Отмена
+                  </h6>
+                  <div style={{ width: '20px' }}></div>
+                  <h6>Продолжить</h6>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div></div>
+          )}
         </div>
       );
     };
@@ -588,6 +636,7 @@ export const Settings = () => {
           {/* Заголовок*/}
           <Route path="/settings/account" render={() => <Text text="Аккаунт" />} exact />
           <Route path="/settings/profileSettings/card" render={() => <Text text="Карта" />} exact />
+          <Route path="/settings/profileSettings/lang" render={() => <Text text="Язык" />} exact />
           <Route path="/settings/confidentiality" render={() => <Text text="Конфеденциальность" />} exact />
           <Route path="/settings/account/sessions" render={() => <Text text="Сеансы входа" />} exact />
           <Route path="/settings/notifications/push" render={() => <Text text="Push-уведомления" />} exact />
@@ -629,6 +678,7 @@ export const Settings = () => {
                   exact
                 />
                 <Route path="/settings/profileSettings/card" render={() => <CardComponent />} exact />
+                <Route path="/settings/profileSettings/lang" render={() => <LangComponent />} exact />
                 <Route
                   path="/settings/prices/fans"
                   render={() => (
