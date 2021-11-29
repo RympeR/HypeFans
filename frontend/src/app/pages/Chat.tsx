@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -62,16 +63,31 @@ const Chat = () => {
           }
         >
           <div className="chat__sidebarItem">
-            <img
-              src={
-                typeof item?.item?.room?.room_info?.invited !== 'number'
-                  ? amICreator
-                    ? item?.item?.room?.room_info?.invited?.avatar
-                    : item?.item?.room?.room_info?.creator?.avatar
-                  : item?.item?.room?.room_info?.logo
-              }
-              alt="logo"
-            ></img>
+            {typeof item?.item?.room?.room_info?.invited !== 'number' ? (
+              <img
+                src={
+                  typeof item?.item?.room?.room_info?.invited !== 'number'
+                    ? amICreator
+                      ? item?.item?.room?.room_info?.invited?.avatar
+                      : item?.item?.room?.room_info?.creator?.avatar
+                    : item?.item?.room?.room_info?.logo
+                }
+                alt="logo"
+              ></img>
+            ) : (
+              <Link to={`/profile/${item?.item?.room_info?.invited?.avatar}`}>
+                <img
+                  src={
+                    typeof item?.item?.room?.room_info?.invited !== 'number'
+                      ? amICreator
+                        ? item?.item?.room?.room_info?.invited?.avatar
+                        : item?.item?.room?.room_info?.creator?.avatar
+                      : item?.item?.room?.room_info?.logo
+                  }
+                  alt="logo"
+                ></img>
+              </Link>
+            )}
             <div>
               <h2>
                 {typeof item?.item?.room?.room_info?.invited !== 'number'
@@ -80,7 +96,11 @@ const Chat = () => {
                     : item?.item?.room?.room_info?.creator?.username
                   : item?.item?.room?.room_info?.name}
               </h2>
-              <p>{item?.item?.room?.message?.text}</p>
+              <p>
+                {CryptoJS.AES.decrypt(item?.item?.room?.message?.text, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(
+                  CryptoJS.enc.Utf8
+                )}
+              </p>
             </div>
           </div>
           <p className="chat__p">{moment(item?.item?.room?.message?.time).format('L')}</p>

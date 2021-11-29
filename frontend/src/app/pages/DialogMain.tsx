@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js';
 import { Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
@@ -92,7 +93,15 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   }, [wsRead]);
 
   const sendMessage = (message: string, setMessageText: any) => {
-    ws.send(JSON.stringify({ text: message, user: uid, attachments: [], room_id: lastUrl, message_id: 0 }));
+    ws.send(
+      JSON.stringify({
+        text: CryptoJS.AES.encrypt(message, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(),
+        user: uid,
+        attachments: [],
+        room_id: lastUrl,
+        message_id: 0
+      })
+    );
     return setMessageText('');
   };
 
@@ -238,7 +247,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     ) : (
                       <></>
                     )}
-                    <div className="text-wrapp">{item.text}</div>
+                    <div className="text-wrapp">
+                      {CryptoJS.AES.decrypt(item.text, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(CryptoJS.enc.Utf8)}
+                    </div>
                   </div>
                   <div className="time-text">15:33</div>
                 </div>
