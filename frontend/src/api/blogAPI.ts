@@ -18,9 +18,19 @@ export const blogAPI = {
     });
   },
   createAttachment(file: any) {
-    return instance.post<createAttachmentRT>('/blog/create-attachment/', file).then((response) => {
-      return response;
-    });
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('_file', file);
+    formData.append('file_type', '3');
+    return instance
+      .post<createAttachmentRT>('/blog/create-attachment/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then((response) => {
+        return response;
+      });
   },
   createPostAction({ like, comment, donation_amount, user, post, parent }: createPostActionRT) {
     if (comment === null) {

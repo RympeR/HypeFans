@@ -305,10 +305,7 @@ export const createPostBought = ({ user, amount, post }: createPostBoughtRT): Th
 export const createPost = (props: any): Thunk => async (dispatch) => {
   const attachmentsID = [];
   for (let i = 0; i < props.attachments.length; i++) {
-    const formData = new FormData();
-    formData.append('_file', props.attachments[i]);
-    formData.append('file_type', '1');
-    const data = await blogAPI.createAttachment(formData);
+    const data = await blogAPI.createAttachment(props.attachments[i]);
     attachmentsID.push(data.data.id);
   }
   props.attachments = attachmentsID;

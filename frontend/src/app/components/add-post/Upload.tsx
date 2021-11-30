@@ -20,7 +20,8 @@ const Upload = () => {
 
   const id = useSelector((state: RootState) => state.auth.pk);
 
-  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
+  const [uploadedFilesImg, setUploadedFilesImg] = useState<string[]>([]);
 
   const [files, setFiles] = useState([]);
 
@@ -35,7 +36,9 @@ const Upload = () => {
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const lastIndex = e.target.files.length - 1;
     setFiles([...files, inputFileRef.current.value]);
-    setUploadedFiles([...uploadedFiles, URL.createObjectURL(e.target.files[lastIndex])]);
+    console.log(e.target.files[lastIndex]);
+    setUploadedFiles([...uploadedFiles, e.target.files[lastIndex]]);
+    setUploadedFilesImg([...uploadedFilesImg, URL.createObjectURL(e.target.files[lastIndex])]);
   };
 
   const deleteImg = (e: MouseEvent<HTMLOrSVGElement>, index: number) => {
@@ -49,6 +52,7 @@ const Upload = () => {
     inputFileRef.current.value = '';
     clearInput();
     setUploadedFiles([]);
+    setUploadedFilesImg([]);
   };
 
   return (
@@ -84,7 +88,7 @@ const Upload = () => {
             ></textarea>
 
             <div className="upload__img-list">
-              {uploadedFiles?.map((file: string, index: number) => (
+              {uploadedFilesImg?.map((file: string, index: number) => (
                 <div className="upload__img-wrapper" key={index}>
                   <img className="upload__img" src={file}></img>
                   <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
