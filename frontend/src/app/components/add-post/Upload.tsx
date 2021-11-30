@@ -42,6 +42,7 @@ const Upload = () => {
   };
 
   const deleteImg = (e: MouseEvent<HTMLOrSVGElement>, index: number) => {
+    setUploadedFilesImg([...uploadedFilesImg.filter((file: any, i: number) => i !== index)]);
     setUploadedFiles([...uploadedFiles.filter((file: any, i: number) => i !== index)]);
   };
 
