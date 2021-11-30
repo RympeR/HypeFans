@@ -91,13 +91,13 @@ const Upload = () => {
             <div className="upload__img-list">
               {uploadedFilesImg?.map((file: string, index: number) => (
                 <div className="upload__img-wrapper" key={index}>
-                  <img className="upload__img" src={file}></img>
+                  <img className="upload__img" src={file} alt="delete"></img>
                   <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
                 </div>
               ))}
             </div>
 
-            <label className="upload__file-input-label" htmlFor="file-input">
+            <label className="upload__file-input-label" htmlFor="file-input" style={{ marginBottom: '15px' }}>
               <AttachIcon className="upload__attach-icon" />
             </label>
             <input

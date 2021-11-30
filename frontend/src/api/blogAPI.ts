@@ -21,7 +21,15 @@ export const blogAPI = {
     if (!file) return;
     const formData = new FormData();
     formData.append('_file', file);
-    formData.append('file_type', '3');
+    if (file.type.split('/')[0] === 'video') {
+      formData.append('file_type', '4');
+    } else if (file.type.split('/')[0] === 'image') {
+      formData.append('file_type', '3');
+    } else if (file.type.split('/')[0] === 'music') {
+      formData.append('file_type', '2');
+    } else if (file.type.split('/')[0] === 'application') {
+      formData.append('file_type', '1');
+    }
     return instance
       .post<createAttachmentRT>('/blog/create-attachment/', formData, {
         headers: {
