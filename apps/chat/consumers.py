@@ -10,7 +10,7 @@ from apps.blog.models import Attachment
 from apps.users.models import User
 from apps.users.serializers import UserShortChatRetrieveSeriliazer, UserShortRetrieveSeriliazer, UserShortSocketRetrieveSeriliazer
 
-from .models import Chat, Room, UserMessage
+from .models import Chat, ChatBought, Room, UserMessage
 from .serializers import ChatCreationSerializer, ChatGetSerializer, RoomGetSerializer, RoomSocketSerializer, UserMessageCreationSerializer
 
 
@@ -34,7 +34,9 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         room = text_data_json['room_id']
+        paid = text_data_json['paid']
         message_id = text_data_json['message_id']
+        message_price = text_data_json['message_price']
         user = text_data_json['user']
         message = text_data_json['text']
         _file = text_data_json['attachments']
@@ -43,6 +45,7 @@ class ChatConsumer(WebsocketConsumer):
             room=Room.objects.get(pk=room),
             user=User.objects.get(pk=user),
             text=message,
+            price=message_price,
         )
         chat.attachment.set(Attachment.objects.filter(pk__in=_file))
 
@@ -52,18 +55,29 @@ class ChatConsumer(WebsocketConsumer):
                 'type': 'chat_message',
                 'attachments': _file,
                 'text': message,
+                'paid': paid,
                 'message_id': chat.pk,
+                'message_price': message_price,
                 'user': user,
                 'room_id': room,
             }
         )
 
     def chat_message(self, event):
+        message_price = event['message_price']
         message_id = event['message_id']
         message = event['text']
         room = event['room_id']
         user = event['user']
         attachments_info = []
+        paid = True
+        
+        if message_price > 0:
+            paid = False
+
+        if ChatBought.objects.filter(chat__pk=message_id, user__pk=user).exists():
+            paid = True
+
         if event['attachments']:
             attachments_pk = event['attachments']
             attachments = Attachment.objects.filter(pk__in=attachments_pk)
@@ -92,6 +106,8 @@ class ChatConsumer(WebsocketConsumer):
             "user": user,
             "text": message,
             "message_id": message_id,
+            "paid": paid,
+            "price": message_price,
             "attachments": attachments_info
         }))
 
@@ -262,6 +278,7 @@ class ChatRoomsConsumer(WebsocketConsumer):
                                 'id': message_obj.id,
                                 'time': message_obj.date.timestamp(),
                                 'text': message_obj.text,
+                                'price': message_obj.price,
                                 'attachment': attachment,
                             } if message_obj else None,
                             "room_info": RoomSocketSerializer(instance=room_obj['room']).data

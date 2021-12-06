@@ -4,8 +4,17 @@ from django.contrib.admin import DateFieldListFilter
 from .models import (
     Room,
     Chat,
-    UserMessage
+    UserMessage,
+    ChatBought
 )
+
+@admin.register(ChatBought)
+class ChatBoughtAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'user', 'chat', 'amount'
+    )
+    search_fields = ['user__username', ]
+
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):

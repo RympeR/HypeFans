@@ -8,12 +8,29 @@ from rest_framework.parsers import (FileUploadParser, FormParser, JSONParser,
                                     MultiPartParser)
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from core.utils.default_responses import api_block_by_policy_451
 from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
                                     UserShortRetrieveSeriliazer)
 
 from .models import *
 from .serializers import *
+
+
+class ChatBoughtCreateAPI(generics.CreateAPIView):
+    queryset = ChatBought.objects.all()
+    serializer_class = ChatBoughtCreateSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except AssertionError:
+            return api_block_by_policy_451({"status": "not enought credits"})
+        self.perform_create(serializer)
+        return Response(serializer.data)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 class RoomCreateAPI(generics.CreateAPIView):
@@ -222,7 +239,6 @@ class GetDialogs(GenericAPIView):
                 room_obj['message'], 'user') else None
             message_obj = room_obj['message'] if room_obj['message'] else None
             attachment = True if message_obj and message_obj.attachment.all().exists() else False
-
             filtered_results.append(
                 {
                     "room": {
@@ -232,6 +248,7 @@ class GetDialogs(GenericAPIView):
                             'id': message_obj.id,
                             'time': message_obj.date.timestamp(),
                             'text': message_obj.text,
+                            'price': message_obj.price,
                             'attachment': attachment,
                         } if message_obj else None,
                     }

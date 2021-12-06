@@ -51,6 +51,7 @@ class Chat(models.Model):
         Attachment, related_name='chat_attachment', blank=True)
     date = UnixTimeStampField(
         "Send datetime", auto_now_add=True, null=True, blank=True)
+    price = models.IntegerField(verbose_name='Цена сообщения', blank=True, default=0)
 
     def __str__(self):
         return f"{self.pk}-{self.room}"
@@ -60,6 +61,22 @@ class Chat(models.Model):
         verbose_name_plural = 'Чаты'
         ordering = ['-date']
         unique_together = ['date', 'user', 'room']
+
+
+class ChatBought(models.Model):
+    user = models.ForeignKey(User, related_name='bought_user',
+                             on_delete=models.CASCADE, verbose_name='Купивший пользователь')
+    chat  = models.ForeignKey(Chat, related_name='chat_bought',
+                             on_delete=models.CASCADE, verbose_name='Купленое сообщение')
+    amount = models.IntegerField(verbose_name='Цена покупки')
+
+    class Meta:
+        verbose_name = 'Купленное сообщение'
+        verbose_name_plural = 'Купленные сообщения'
+        unique_together = ['user', 'chat']
+
+    def __str__(self):
+        return f"{self.user}-{self.chat}"
 
 
 class UserMessage(models.Model):

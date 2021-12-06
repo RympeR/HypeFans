@@ -14,6 +14,7 @@ from .views import (
     GetUnreadedMessagesAmount,
     ChatPartialUpdateAPI,
     ReadChatMessages,
+    ChatBoughtCreateAPI,
     index,
     room
 )
@@ -27,6 +28,7 @@ urlpatterns = [
     path('invite-user/<int:pk>', InviteUserAPI.as_view()),
     path('room-delete/<int:pk>', RoomDestroyAPI.as_view(), name=''),
 
+    path('message-bought-create/', ChatBoughtCreateAPI.as_view(), name=''),
     path('message-create/', MessageCreateAPI.as_view(), name=''),
     path('message-retrieve/<int:pk>', MessageRetrieveAPI.as_view(), name=''),
     path('message-update/<int:pk>', MessageUpdateAPI.as_view(), name=''),

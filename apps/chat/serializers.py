@@ -8,7 +8,7 @@ from apps.users.models import User
 from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
                                     UserShortRetrieveSeriliazer, UserShortSocketRetrieveSeriliazer)
 
-from .models import Chat, Room, UserMessage
+from .models import Chat, Room, UserMessage, ChatBought
 
 
 class RoomGetSerializer(serializers.ModelSerializer):
@@ -26,6 +26,7 @@ class RoomGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = '__all__'
+
 
 class RoomSocketSerializer(serializers.ModelSerializer):
 
@@ -136,6 +137,7 @@ class ChatMessagesSerializer(serializers.Serializer):
     room_id = serializers.IntegerField()
     message_id = serializers.IntegerField()
 
+
 class ChatMessagesReadSerializer(serializers.Serializer):
 
     room_id = serializers.IntegerField()
@@ -160,3 +162,27 @@ class RoomInviteUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = 'invited',
+
+
+class ChatBoughtCreateSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+    chat = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=Chat.objects.all())
+    amount = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = ChatBought
+        fields = '__all__'
+
+    def validate(self, attrs):
+        request = self.context.get('request')
+        user = request.user
+        attrs['user'] = user
+        if user.credit_amount >= attrs['amount']:
+            user.credit_amount -= attrs['amount']
+            attrs['chat'].user.earned_credits_amount += attrs['amount']
+            attrs['chat'].user.save()
+            user.save()
+            return attrs
+        raise serializers.ValidationError
