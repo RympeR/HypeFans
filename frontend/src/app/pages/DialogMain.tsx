@@ -1,11 +1,12 @@
 import CryptoJS from 'crypto-js';
 import { Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import CurrencyInput from 'react-currency-input-field';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import Popup from 'reactjs-popup';
+import { blogAPI } from '~/api/blogAPI';
 import { chatAPI } from '~/api/chatAPI';
 import { userAPI } from '~/api/userAPI';
 import { RootState } from '~/redux/redux';
@@ -17,10 +18,19 @@ import { ReactComponent as More } from '../../assets/images/more-vertical.svg';
 import { ReactComponent as Vektor } from '../../assets/images/send.svg';
 import { ReactComponent as Tip } from '../../assets/images/tipI.svg';
 import { ReactComponent as VideoIcn } from '../../assets/images/videoI.svg';
+import { ReactComponent as CloseIcon } from '../../assets/images/x-circle.svg';
 import { getLastUrlPoint } from '../utils/utilities';
+import { ChatImage } from './card/components/ChatImage';
 
-const Input = ({ sendMessage }: { sendMessage: any }) => {
-  const [messageText, setMessageText] = useState('');
+const Input = ({
+  sendMessage,
+  messageText,
+  setMessageText
+}: {
+  sendMessage: any;
+  messageText: string;
+  setMessageText: (text: string) => void;
+}) => {
   const VektorIcon = () => <Vektor />;
   return (
     <div className="chat__text">
@@ -43,16 +53,16 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const [ws, setWs] = useState(null);
   const [wsRead, setWsRead] = useState(null);
   const [showTip, setShowTip] = useState(false);
+  const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState([]);
-
+  const [files, setFiles] = useState([]);
+  const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
+  const [uploadedFilesImg, setUploadedFilesImg] = useState<string[]>([]);
   const uid = useSelector((state: RootState) => state.auth.pk);
-
   const [amICreator, setCreator] = useState(false);
-  useEffect(() => {
-    if (uid === rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.creator?.pk)
-      setCreator(true);
-    else setCreator(false);
-  }, []);
+  const inputFileRef = useRef(null);
+
+  // useEffect`s
 
   useEffect(() => {
     const wsClient = new WebSocket(`wss://hype-fans.com/ws/chat/${lastUrl}/`);
@@ -92,18 +102,11 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     };
   }, [wsRead]);
 
-  const sendMessage = (message: string, setMessageText: any) => {
-    ws.send(
-      JSON.stringify({
-        text: CryptoJS.AES.encrypt(message, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(),
-        user: uid,
-        attachments: [],
-        room_id: lastUrl,
-        message_id: 0
-      })
-    );
-    return setMessageText('');
-  };
+  useEffect(() => {
+    if (uid === rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.creator?.pk)
+      setCreator(true);
+    else setCreator(false);
+  }, []);
 
   useEffect(() => {
     const recieveChatMessages = async () => {
@@ -112,6 +115,44 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     };
     recieveChatMessages();
   }, [lastUrl]);
+
+  // useEffect`s
+
+  // Добавление файлов в сообщение
+
+  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const lastIndex = e.target.files.length - 1;
+    setFiles([...files, inputFileRef?.current?.value]);
+    setUploadedFiles([...uploadedFiles, e?.target?.files[lastIndex]]);
+    setUploadedFilesImg([...uploadedFilesImg, URL.createObjectURL(e?.target?.files[lastIndex])]);
+  };
+
+  const deleteImg = (e: MouseEvent<HTMLOrSVGElement>, index: number) => {
+    setUploadedFilesImg([...uploadedFilesImg.filter((file: any, i: number) => i !== index)]);
+    setUploadedFiles([...uploadedFiles.filter((file: any, i: number) => i !== index)]);
+  };
+
+  // Добавление файлов в сообщение
+
+  const sendMessage = async () => {
+    const attachmentsIds: Array<number> = [];
+    if (uploadedFiles.length > 0) {
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        const data = await blogAPI.createAttachment(uploadedFiles[i]);
+        attachmentsIds.push(data.data.id);
+      }
+    }
+    ws.send(
+      JSON.stringify({
+        text: CryptoJS.AES.encrypt(messageText, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(),
+        user: uid,
+        attachments: attachmentsIds,
+        room_id: lastUrl,
+        message_id: 0
+      })
+    );
+    return setMessageText('');
+  };
 
   const sendTip = async (amount: number, reciever: number) => {
     const data = await userAPI.createDonation({ amount, sender: uid, reciever });
@@ -249,6 +290,11 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     )}
                     <div className="text-wrapp">
                       {CryptoJS.AES.decrypt(item.text, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(CryptoJS.enc.Utf8)}
+                      {item.attachments.length > 0
+                        ? item.attachments.map((item: any, index: number) => {
+                            return <ChatImage item={item} index={index} key={index + Math.random()} />;
+                          })
+                        : null}
                     </div>
                   </div>
                   <div className="time-text">15:33</div>
@@ -258,17 +304,77 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           })}
         </div>
         <div className="chat__input">
-          <Input sendMessage={sendMessage} />
+          <Input sendMessage={sendMessage} messageText={messageText} setMessageText={setMessageText} />
           <div style={{ margin: '0px 24px', marginBottom: '8px', display: 'flex' }}>
             <div onClick={() => setShowTip(true)}>
               <TipIcon />
             </div>
             <MicIcon />
-            <VideoIcon />
+            <div>
+              <label className="upload__file-input-label" htmlFor="file-input" style={{ marginBottom: '15px' }}>
+                <VideoIcon />
+              </label>
+              <input
+                className="upload__file-input"
+                id="file-input"
+                ref={inputFileRef}
+                type="file"
+                onChange={onFileChange}
+                multiple
+              />
+            </div>
             <ImageIcon />
           </div>
         </div>
       </div>
+      <Modal
+        show={uploadedFiles.length > 0}
+        onHide={() => {
+          setUploadedFiles([]);
+          setUploadedFilesImg([]);
+        }}
+        centered
+        size="xl"
+        style={{ borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px' }}
+      >
+        <Modal.Body className="notifications__modal" style={{ padding: '0px' }}>
+          <div style={{ display: 'flex' }}>
+            {uploadedFilesImg?.map((file: string, index: number) => (
+              <div className="upload__img-wrapper" key={index}>
+                <img className="upload__img" src={file} alt="delete"></img>
+                <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
+              </div>
+            ))}
+          </div>
+          <div>
+            <label className="upload__file-input-label" htmlFor="file-input" style={{ marginBottom: '15px' }}>
+              <VideoIcon />
+            </label>
+            <input
+              className="upload__file-input"
+              id="file-input"
+              ref={inputFileRef}
+              type="file"
+              onChange={onFileChange}
+              multiple
+            />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '19px' }}>
+            <h3
+              onClick={() => {
+                setUploadedFiles([]);
+                setUploadedFilesImg([]);
+              }}
+            >
+              Отмена
+            </h3>
+            <div style={{ width: '20px' }}></div>
+            <h3 onClick={() => sendMessage()} style={{ color: '#FB5734' }}>
+              Далее
+            </h3>
+          </div>
+        </Modal.Body>
+      </Modal>
       <Modal
         show={showTip}
         onHide={() => {
