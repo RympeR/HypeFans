@@ -32,69 +32,76 @@ class ChatConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        room = text_data_json['room_id']
-        paid = text_data_json['paid']
-        message_id = text_data_json['message_id']
-        message_price = text_data_json['message_price']
-        user = text_data_json['user']
-        message = text_data_json['text']
-        _file = text_data_json['attachments']
+        try:
+        
+            text_data_json = json.loads(text_data)
+            room = text_data_json['room_id']
+            paid = text_data_json['paid']
+            message_id = text_data_json['message_id']
+            message_price = text_data_json['message_price']
+            user = text_data_json['user']
+            message = text_data_json['text']
+            _file = text_data_json['attachments']
 
-        chat = Chat.objects.create(
-            room=Room.objects.get(pk=room),
-            user=User.objects.get(pk=user),
-            text=message,
-            price=message_price,
-        )
-        chat.attachment.set(Attachment.objects.filter(pk__in=_file))
+            chat = Chat.objects.create(
+                room=Room.objects.get(pk=room),
+                user=User.objects.get(pk=user),
+                text=message,
+                price=message_price,
+            )
+            chat.attachment.set(Attachment.objects.filter(pk__in=_file))
 
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'attachments': _file,
-                'text': message,
-                'paid': paid,
-                'message_id': chat.pk,
-                'message_price': message_price,
-                'user': user,
-                'room_id': room,
-            }
-        )
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'attachments': _file,
+                    'text': message,
+                    'paid': paid,
+                    'message_id': chat.pk,
+                    'message_price': message_price,
+                    'user': user,
+                    'room_id': room,
+                }
+            )
+        except Exception as e:
+            print(e)
 
     def chat_message(self, event):
-        message_price = event['message_price']
-        message_id = event['message_id']
-        message = event['text']
-        room = event['room_id']
-        user = event['user']
-        attachments_info = []
-        paid = True
-        
-        if message_price > 0:
-            paid = False
-
-        if ChatBought.objects.filter(chat__pk=message_id, user__pk=user).exists():
+        try:
+            message_price = event['message_price']
+            message_id = event['message_id']
+            message = event['text']
+            room = event['room_id']
+            user = event['user']
+            attachments_info = []
             paid = True
+            
+            if message_price > 0:
+                paid = False
 
-        if event['attachments']:
-            attachments_pk = event['attachments']
-            attachments = Attachment.objects.filter(pk__in=attachments_pk)
-            for attachment in attachments:
-                try:
-                    if attachment._file and hasattr(attachment._file, 'url'):
-                        path_file = attachment._file.url
-                        file_url = 'https://hype-fans.com/{path}'.format(
-                            path=path_file)
-                        attachments_info.append(
-                            {
-                                "file_type": attachment.file_type,
-                                "file_url": file_url,
-                            }
-                        )
-                except Exception as e:
-                    print(e)
+            if ChatBought.objects.filter(chat__pk=message_id, user__pk=user).exists():
+                paid = True
+
+            if event['attachments']:
+                attachments_pk = event['attachments']
+                attachments = Attachment.objects.filter(pk__in=attachments_pk)
+                for attachment in attachments:
+                    try:
+                        if attachment._file and hasattr(attachment._file, 'url'):
+                            path_file = attachment._file.url
+                            file_url = 'https://hype-fans.com/{path}'.format(
+                                path=path_file)
+                            attachments_info.append(
+                                {
+                                    "file_type": attachment.file_type,
+                                    "file_url": file_url,
+                                }
+                            )
+                    except Exception as e:
+                        print(e)
+        except Exception as e:
+            print(e)
         try:
             user = UserShortChatRetrieveSeriliazer(
                 instance=User.objects.get(pk=user)).data
