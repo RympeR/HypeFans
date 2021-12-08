@@ -146,7 +146,7 @@ class GetChatMessages(GenericAPIView):
                     "room_id": obj.room.pk,
                     "user": UserShortChatRetrieveSeriliazer(instance=obj.user).data,
                     "text": obj.text,
-                    "price": obj.price,
+                    "message_price": obj.price,
                     "attachments": attachments_info,
                     "date": obj.date.timestamp(),
                     "readed": readed
@@ -249,7 +249,7 @@ class GetDialogs(GenericAPIView):
                             'id': message_obj.id,
                             'time': message_obj.date.timestamp(),
                             'text': message_obj.text,
-                            'price': message_obj.price,
+                            'message_price': message_obj.price,
                             'attachment': attachment,
                         } if message_obj else None,
                     }
