@@ -37,6 +37,7 @@ class ChatConsumer(WebsocketConsumer):
             text_data_json = json.loads(text_data)
             room = text_data_json['room_id']
             message_id = text_data_json['message_id']
+            is_payed = text_data_json['is_payed']
             message_price = text_data_json['message_price']
             user = text_data_json['user']
             message = text_data_json['text']
@@ -57,6 +58,7 @@ class ChatConsumer(WebsocketConsumer):
                     'attachments': _file,
                     'text': message,
                     'message_id': chat.pk,
+                    'is_payed': is_payed,
                     'message_price': message_price,
                     'user': user,
                     'room_id': room,
@@ -72,8 +74,12 @@ class ChatConsumer(WebsocketConsumer):
             message = event['text']
             room = event['room_id']
             user = event['user']
+            is_payed = event['is_payed']
             attachments_info = []
-
+            is_payed = False
+            if message_price == 0:
+                is_payed = True
+                
             if event['attachments']:
                 attachments_pk = event['attachments']
                 attachments = Attachment.objects.filter(pk__in=attachments_pk)
@@ -104,6 +110,7 @@ class ChatConsumer(WebsocketConsumer):
             "user": user,
             "text": message,
             "message_id": message_id,
+            "is_payed": is_payed,
             "price": message_price,
             "attachments": attachments_info
         }))

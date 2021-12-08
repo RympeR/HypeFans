@@ -139,13 +139,19 @@ class GetChatMessages(GenericAPIView):
                     )
                 else:
                     file_url = None
-
+            paid = False
+            if obj.price == 0:
+                paid = True
+            if ChatBought.objects.filter(user__pk=user.pk, chat__pk=obj.pk).exists():
+                paid = True
+            
             results.append(
                 {
                     "id": obj.pk,
                     "room_id": obj.room.pk,
                     "user": UserShortChatRetrieveSeriliazer(instance=obj.user).data,
                     "text": obj.text,
+                    'is_payed': paid,
                     "message_price": obj.price,
                     "attachments": attachments_info,
                     "date": obj.date.timestamp(),
