@@ -24,7 +24,8 @@ const Profile = () => {
   const alert = useAlert();
   const history = useHistory();
   const [subscribeShow, setSubscribeShow] = useState(false);
-  const [profile, setProfile] = useState(useSelector((state: RootState) => state.user));
+  const profileData = useSelector((state: RootState) => state.user);
+  const [profile, setProfile] = useState(profileData);
   const myNick = useSelector((state: RootState) => state.auth.username);
   const myId = useSelector((state: RootState) => state.auth.pk);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
@@ -34,6 +35,10 @@ const Profile = () => {
   useEffect(() => {
     dispatch(getUser({ username: nick }));
   }, [nick]);
+
+  useEffect(() => {
+    setProfile(profileData);
+  }, [profileData]);
 
   // console.log(profile);
 
@@ -51,6 +56,8 @@ const Profile = () => {
       alert.error('Ошибка подписки');
     }
   };
+
+  console.log(profile);
 
   return (
     <div className="profile">
