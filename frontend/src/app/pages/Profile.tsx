@@ -24,7 +24,7 @@ const Profile = () => {
   const alert = useAlert();
   const history = useHistory();
   const [subscribeShow, setSubscribeShow] = useState(false);
-  const profile = useSelector((state: RootState) => state.user);
+  const [profile, setProfile] = useState(useSelector((state: RootState) => state.user));
   const myNick = useSelector((state: RootState) => state.auth.username);
   const myId = useSelector((state: RootState) => state.auth.pk);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
@@ -45,6 +45,7 @@ const Profile = () => {
     const data = await userAPI.createSubscription({ source: myId, target: profile.pk });
     setSubscribeShow(false);
     if (data.status == 200) {
+      setProfile({ ...profile, subscribed: true });
       alert.success('Вы подписались');
     } else {
       alert.error('Ошибка подписки');
