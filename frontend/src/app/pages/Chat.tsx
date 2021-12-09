@@ -97,9 +97,11 @@ const Chat = () => {
                   : item?.item?.room?.room_info?.name}
               </h2>
               <p>
-                {CryptoJS.AES.decrypt(item?.item?.room?.message?.text, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(
-                  CryptoJS.enc.Utf8
-                )}
+                {item.item.room.message?.text
+                  ? CryptoJS.AES.decrypt(item?.item?.room?.message?.text, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(
+                      CryptoJS.enc.Utf8
+                    )
+                  : null}
               </p>
             </div>
           </div>

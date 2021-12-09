@@ -17,6 +17,11 @@ export const blogAPI = {
       return res;
     });
   },
+  buyMessage(user: number, message_id: number, price: number) {
+    return instance.post('/chat/message-bought-create/', { user, chat: message_id, amount: 10 }).then((res) => {
+      return res;
+    });
+  },
   createAttachment(file: any) {
     if (!file) return;
     const formData = new FormData();

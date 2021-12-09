@@ -53,6 +53,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const [ws, setWs] = useState(null);
   const [wsRead, setWsRead] = useState(null);
   const [showTip, setShowTip] = useState(false);
+  const [isPaidModalShown, setPaidModalShow] = useState(false);
+  const [messageCost, setMessageCost] = useState('0');
   const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState([]);
   const [files, setFiles] = useState([]);
@@ -88,6 +90,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     if (!ws) return;
     ws.onmessage = (e: any) => {
       const message = JSON.parse(e.data);
+      console.log(message);
       if (message.user.pk !== uid) {
         wsRead.send(JSON.stringify({ room_id: lastUrl, user: uid, message_id: message.message_id }));
       }
@@ -148,9 +151,11 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         user: uid,
         attachments: attachmentsIds,
         room_id: lastUrl,
+        message_price: Number(messageCost),
         message_id: 0
       })
     );
+    setMessageCost('0');
     return setMessageText('');
   };
 
@@ -163,6 +168,21 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       return console.log('Не хватает средств');
     } else {
       return console.log('ошибка сервера');
+    }
+  };
+
+  const payForMessage = async (message_id: number, price: number) => {
+    const data = await blogAPI.buyMessage(uid, message_id, price);
+    if (data.status === 200) {
+      setMessages(
+        messages.map((item, index) => {
+          if (item.id === data.data.chat) {
+            return { ...item, payed: true };
+          } else {
+            return item;
+          }
+        })
+      );
     }
   };
 
@@ -281,24 +301,43 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 }
                 key={index}
               >
-                <div>
-                  <div style={{ display: 'flex' }}>
-                    {item.user.pk === uid ? (
-                      <div style={{ marginRight: '5px' }}>{item.readed ? <Readed /> : <NotReaded />}</div>
-                    ) : (
-                      <></>
-                    )}
-                    <div className="text-wrapp">
-                      {CryptoJS.AES.decrypt(item.text, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(CryptoJS.enc.Utf8)}
-                      {item.attachments.length > 0
-                        ? item.attachments.map((item: any, index: number) => {
-                            return <ChatImage item={item} index={index} key={index + Math.random()} />;
-                          })
-                        : null}
-                    </div>
+                {item.message_price !== 0 && !item.is_payed ? (
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      margin: '15px',
+                      backgroundColor: 'rgba(248, 241, 240, 0.4)'
+                    }}
+                  >
+                    <button
+                      style={{ background: '#FB5734', borderRadius: '16px', padding: '15px', margin: '20px' }}
+                      onClick={() => payForMessage(item.id, item.message_price)}
+                    >
+                      Посмотреть за {item.message_price}$
+                    </button>
                   </div>
-                  <div className="time-text">15:33</div>
-                </div>
+                ) : (
+                  <div>
+                    <div style={{ display: 'flex' }}>
+                      {item.user.pk === uid ? (
+                        <div style={{ marginRight: '5px' }}>{item.readed ? <Readed /> : <NotReaded />}</div>
+                      ) : (
+                        <></>
+                      )}
+                      <div className="text-wrapp">
+                        {CryptoJS.AES.decrypt(item.text, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(CryptoJS.enc.Utf8)}
+                        {item.attachments.length > 0
+                          ? item.attachments.map((item: any, index: number) => {
+                              return <ChatImage item={item} index={index} key={index + Math.random()} />;
+                            })
+                          : null}
+                      </div>
+                    </div>
+                    <div className="time-text">15:33</div>
+                  </div>
+                )}
               </div>
             );
           })}
@@ -324,9 +363,48 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               />
             </div>
             <ImageIcon />
+            <button style={{ marginBottom: '10px' }} onClick={() => setPaidModalShow(true)}>
+              Установить цену
+            </button>
           </div>
         </div>
       </div>
+      <Modal
+        show={isPaidModalShown}
+        onHide={() => {
+          setPaidModalShow(false);
+        }}
+        centered
+        size="sm"
+        style={{ borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px' }}
+      >
+        <Modal.Body className="notifications__modal" style={{ padding: '0px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', padding: '15px' }}>
+            <h2>Цена сообщения</h2>
+            <CurrencyInput
+              prefix="$"
+              style={{
+                border: '1px solid rgba(0, 0, 0, 0.4)',
+                boxSizing: 'border-box',
+                borderRadius: '8px',
+                padding: '8px',
+                marginTop: '16px'
+              }}
+              value={messageCost}
+              placeholder="$ Введите сумму..."
+              decimalsLimit={2}
+              onValueChange={(value, name) => setMessageCost(value)}
+            />
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '15px' }}>
+              <h3 onClick={() => setShowTip(false)}>Отмена</h3>
+              <div style={{ width: '20px' }}></div>
+              <h3 style={{ color: '#FB5734' }} onClick={() => sendMessage()}>
+                Отправить
+              </h3>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
       <Modal
         show={uploadedFiles.length > 0}
         onHide={() => {
