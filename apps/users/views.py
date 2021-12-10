@@ -79,7 +79,7 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
                 results.append(res_dict)
         return api_accepted_202({
             **self.serializer_class(instance=user, context={'request': request}).data,
-            **{'posts': results[offset:limit+offset]}, 
+            **{'posts': results[offset:limit+offset]},
             **sub_dict
         })
 

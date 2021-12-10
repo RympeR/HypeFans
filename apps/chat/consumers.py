@@ -5,13 +5,17 @@ import requests
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import (AsyncWebsocketConsumer,
                                         WebsocketConsumer)
-from apps.blog.models import Attachment
 
+from apps.blog.models import Attachment
 from apps.users.models import User
-from apps.users.serializers import UserShortChatRetrieveSeriliazer, UserShortRetrieveSeriliazer, UserShortSocketRetrieveSeriliazer
+from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
+                                    UserShortRetrieveSeriliazer,
+                                    UserShortSocketRetrieveSeriliazer)
 
 from .models import Chat, ChatBought, Room, UserMessage
-from .serializers import ChatCreationSerializer, ChatGetSerializer, RoomGetSerializer, RoomSocketSerializer, UserMessageCreationSerializer
+from .serializers import (ChatCreationSerializer, ChatGetSerializer,
+                          RoomGetSerializer, RoomSocketSerializer,
+                          UserMessageCreationSerializer)
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -33,7 +37,7 @@ class ChatConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         try:
-        
+
             text_data_json = json.loads(text_data)
             room = text_data_json['room_id']
             message_id = text_data_json['message_id']
@@ -79,7 +83,7 @@ class ChatConsumer(WebsocketConsumer):
             is_payed = False
             if message_price == 0:
                 is_payed = True
-                
+
             if event['attachments']:
                 attachments_pk = event['attachments']
                 attachments = Attachment.objects.filter(pk__in=attachments_pk)
