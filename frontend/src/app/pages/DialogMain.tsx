@@ -1,6 +1,7 @@
 import CryptoJS from 'crypto-js';
 import { Formik } from 'formik';
 import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
+import { useAlert } from 'react-alert';
 import Modal from 'react-bootstrap/Modal';
 import CurrencyInput from 'react-currency-input-field';
 import { useSelector } from 'react-redux';
@@ -16,6 +17,7 @@ import { ReactComponent as NotReaded } from '../../assets/images/messageIconWhit
 import { ReactComponent as MicrIcon } from '../../assets/images/micI.svg';
 import { ReactComponent as More } from '../../assets/images/more-vertical.svg';
 import { ReactComponent as Vektor } from '../../assets/images/send.svg';
+import { ReactComponent as VektorDisabled } from '../../assets/images/sendDisabled.svg';
 import { ReactComponent as Tip } from '../../assets/images/tipI.svg';
 import { ReactComponent as VideoIcn } from '../../assets/images/videoI.svg';
 import { ReactComponent as CloseIcon } from '../../assets/images/x-circle.svg';
@@ -32,11 +34,21 @@ const Input = ({
   setMessageText: (text: string) => void;
 }) => {
   const VektorIcon = () => <Vektor />;
+  const VektorIconDisabled = () => <VektorDisabled />;
   return (
     <div className="chat__text">
       <input value={messageText} onChange={(val) => setMessageText(val.currentTarget.value)}></input>
-      <button onClick={() => sendMessage(messageText, setMessageText)}>
-        <VektorIcon />
+      <button
+        disabled={messageText.length < 0 && messageText.length > 255}
+        onClick={() => {
+          if (messageText.length > 0 && messageText.length < 255) {
+            return sendMessage();
+          } else {
+            return null;
+          }
+        }}
+      >
+        {messageText.length > 0 && messageText.length < 255 ? <VektorIcon /> : <VektorIconDisabled />}
       </button>
     </div>
   );
@@ -45,6 +57,7 @@ const Input = ({
 export const DialogMain = ({ rooms }: { rooms: any }) => {
   const history = useHistory();
   const lastUrl = getLastUrlPoint(history.location.pathname);
+  const alert = useAlert();
   const MoreIcon = () => <More />;
   const TipIcon = () => <Tip />;
   const MicIcon = () => <MicrIcon />;
@@ -149,6 +162,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       JSON.stringify({
         text: CryptoJS.AES.encrypt(messageText, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(),
         user: uid,
+        is_payed: false,
         attachments: attachmentsIds,
         room_id: lastUrl,
         message_price: Number(messageCost),
@@ -156,6 +170,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       })
     );
     setMessageCost('0');
+    setPaidModalShow(false);
     return setMessageText('');
   };
 
@@ -301,7 +316,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 }
                 key={index}
               >
-                {item.message_price !== 0 && !item.is_payed ? (
+                {item.message_price !== 0 && !item.is_payed && item.user.pk !== uid ? (
                   <div
                     style={{
                       display: 'flex',
@@ -398,7 +413,16 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '15px' }}>
               <h3 onClick={() => setShowTip(false)}>Отмена</h3>
               <div style={{ width: '20px' }}></div>
-              <h3 style={{ color: '#FB5734' }} onClick={() => sendMessage()}>
+              <h3
+                style={messageText.length > 0 && messageText.length < 255 ? { color: '#FB5734' } : { color: 'grey' }}
+                onClick={() => {
+                  if (messageText.length > 0 && messageText.length < 255) {
+                    return sendMessage();
+                  } else {
+                    return null;
+                  }
+                }}
+              >
                 Отправить
               </h3>
             </div>
