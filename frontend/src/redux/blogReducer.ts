@@ -360,12 +360,6 @@ export const deletePostAction = ({ id, post_id }: { id: number; post_id: number 
   dispatch(actions.setPostsData(post_id, false, null, null));
 };
 
-export const deletePost = ({ id }: idType): Thunk => async (dispatch) => {
-  await blogAPI.deletePost({
-    id
-  });
-};
-
 export const deleteStoryGet = ({ id }: idType): Thunk => async (dispatch) => {
   // Дичь полная
   await blogAPI.deleteStoryGet({

@@ -9,7 +9,7 @@ import 'reactjs-popup/dist/index.css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { userAPI } from '~/api/userAPI';
 import { RootState } from '~/redux/redux';
-import { createPostAction, deletePostAction, getUser, setFavorite } from '~/redux/userReducer';
+import { createPostAction, deletePost, deletePostAction, getUser, setFavorite } from '~/redux/userReducer';
 import { ReactComponent as MenuDots } from '../../assets/images/3dots.svg';
 import { ReactComponent as MenuDotsWhite } from '../../assets/images/3dotsWhite.svg';
 import { ReactComponent as BackButton } from '../../assets/images/arrow-leftWhite.svg';
@@ -55,6 +55,10 @@ const Profile = () => {
     } else {
       alert.error('Ошибка подписки');
     }
+  };
+
+  const delPost = (id: number) => {
+    dispatch(deletePost({ id }));
   };
 
   console.log(profile);
@@ -103,7 +107,7 @@ const Profile = () => {
         <h3 className="profile__name">{profile.first_name}</h3>
         <h4 className="profile__nickname"> {`@${nick}`}</h4>
         <h5 className="profile__info">
-          {profile.posts.length} posts {profile.fans_amount} fans
+          {profile?.posts.length} posts {profile.fans_amount} fans
         </h5>
       </div>
       <p className="profile__status">{profile.bio}</p>
@@ -151,8 +155,8 @@ const Profile = () => {
       </div>
       <div className="profile__posts">
         <div className="profile__posts">
-          {profile.posts.length > 0 ? (
-            profile.posts.map((item, index) => {
+          {profile?.posts.length > 0 ? (
+            profile?.posts.map((item, index) => {
               return (
                 <div className="profile__post" key={`${index}_post`}>
                   <div className="profile__postHeader">
@@ -178,19 +182,30 @@ const Profile = () => {
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                           <div className="profile__postAgo">50 минут назад</div>
-                          <button className="post__menu-dots">
-                            <MenuDots />
-                          </button>
+                          <Popup
+                            trigger={
+                              <button className="post__menu-dots">
+                                <MenuDots />
+                              </button>
+                            }
+                            position="bottom right"
+                          >
+                            <div style={{ padding: '5px' }}>
+                              {profile.pk === myId ? (
+                                <button onClick={() => delPost(item?.post.pk)}>Удалить пост</button>
+                              ) : null}
+                            </div>
+                          </Popup>
                         </div>
                       </div>
-                      <div className="profile__postText">{item.post.description}</div>
+                      <div className="profile__postText">{item?.post.description}</div>
                     </div>
                   </div>
                   <div className="profile__postMain">
-                    {item.post?.attachments.length > 1 ? (
+                    {item?.post?.attachments.length > 1 ? (
                       <div className="profile__postIMG">
                         <Swiper pagination={true} spaceBetween={20} loop={true} slidesPerView={1}>
-                          {item.post.attachments.map((item: any, index: number) => {
+                          {item?.post.attachments.map((item: any, index: number) => {
                             return (
                               <SwiperSlide key={`${index} slideMain`}>
                                 <img src={item._file} alt="postIMG" className="profile"></img>
@@ -210,8 +225,8 @@ const Profile = () => {
                           <button
                             className="post__action-btn"
                             onClick={() => {
-                              item.post.liked
-                                ? dispatch(deletePostAction({ id: item.post.like_id, post_id: item.post.pk }))
+                              item?.post.liked
+                                ? dispatch(deletePostAction({ id: item?.post.like_id, post_id: item?.post.pk }))
                                 : dispatch(
                                     createPostAction({
                                       like: true,
@@ -220,13 +235,13 @@ const Profile = () => {
                                       user: myId,
                                       parent: null,
                                       date_time: null,
-                                      post: item.post.pk,
+                                      post: item?.post.pk,
                                       id: null
                                     })
                                   );
                             }}
                           >
-                            <LikeIcon className="post__action-icon" fill={item.post.liked ? 'red' : 'none'} />
+                            <LikeIcon className="post__action-icon" fill={item?.post.liked ? 'red' : 'none'} />
                           </button>
 
                           <button className="post__action-btn">
@@ -236,16 +251,16 @@ const Profile = () => {
                         <button
                           className="post__action-btn"
                           onClick={() => {
-                            return dispatch(setFavorite(item.post.pk, !item.post.favourite));
+                            return dispatch(setFavorite(item?.post.pk, !item?.post.favourite));
                           }}
                         >
-                          <SaveIcon className="post__action-icon" fill={item.post.favourite ? 'black' : 'none'} />
+                          <SaveIcon className="post__action-icon" fill={item?.post.favourite ? 'black' : 'none'} />
                         </button>
                       </div>
 
-                      <p className="post__like-amount">{item.post.likes_amount} лайков</p>
+                      <p className="post__like-amount">{item?.post.likes_amount} лайков</p>
 
-                      <CommentComponent data={item.post.comments} postId={item.post.pk} />
+                      <CommentComponent data={item?.post.comments} postId={item?.post.pk} />
                     </div>
                   </div>
                 </div>

@@ -56,6 +56,11 @@ const authReducer = (state = initialState, action: AllActionsType): InitialState
         ...state,
         ...action.payload
       };
+    case 'DELETE_POST':
+      return {
+        ...state,
+        posts: state.posts.filter((item) => item.post.pk !== action.payload.id)
+      };
     case 'SET_POST_DATA':
       return {
         ...state,
@@ -88,6 +93,12 @@ const authReducer = (state = initialState, action: AllActionsType): InitialState
   }
 };
 const actions = {
+  deletePost: (id: number) => {
+    return {
+      type: 'DELETE_POST',
+      payload: { id, liked: false, favourite: false, post_id: id }
+    };
+  },
   setPostsData: (post_id: number, liked: boolean | null, id: number | null, favourite: boolean | null) => {
     return {
       type: 'SET_POST_DATA',
@@ -202,6 +213,15 @@ export const updateEmailConfirm = (new_email: string, uid: number): Thunk => asy
 
 export const createCard = ({ number, date_year, cvc, creator, user }: CardType): Thunk => async (dispatch) => {
   await userAPI.createCard({ number, date_year, cvc, creator, user });
+};
+
+export const deletePost = ({ id }: idType): Thunk => async (dispatch) => {
+  const data = await blogAPI.deletePost({
+    id
+  });
+  if (data.status === 204) {
+    dispatch(actions.deletePost(id));
+  }
 };
 
 export const createDonation = ({ amount, sender, reciever }: DonationType): Thunk => async (dispatch) => {

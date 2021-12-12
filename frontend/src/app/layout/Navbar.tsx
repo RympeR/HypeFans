@@ -74,9 +74,13 @@ const Navbar = () => {
           </div>
         </NavLink>
 
-        <NavLink toPath={`${NAV_LINKS.PROFILE}/${nick}`}>
+        {nick ? (
+          <NavLink toPath={`${NAV_LINKS.PROFILE}/${nick}`}>
+            <ProfileIcon />
+          </NavLink>
+        ) : (
           <ProfileIcon />
-        </NavLink>
+        )}
       </div>
     </nav>
   );
