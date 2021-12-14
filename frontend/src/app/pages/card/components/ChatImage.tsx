@@ -8,7 +8,7 @@ export const ChatImage = ({ item, index }: { item: any; index: number }) => {
       <img
         onClick={() => setShow(true)}
         src={item.file_url}
-        style={{ width: '100px', height: '150px' }}
+        style={{ width: '250px', height: '300px' }}
         alt={`${index} photoMessage`}
         key={`${index} photoKeyMEssage`}
       ></img>

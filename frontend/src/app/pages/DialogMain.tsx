@@ -21,8 +21,10 @@ import { ReactComponent as VektorDisabled } from '../../assets/images/sendDisabl
 import { ReactComponent as Tip } from '../../assets/images/tipI.svg';
 import { ReactComponent as VideoIcn } from '../../assets/images/videoI.svg';
 import { ReactComponent as CloseIcon } from '../../assets/images/x-circle.svg';
+import { Preloader } from '../utils/Preloader';
 import { getLastUrlPoint } from '../utils/utilities';
 import { ChatImage } from './card/components/ChatImage';
+import { Video } from './card/components/Video';
 
 const Input = ({
   sendMessage,
@@ -59,6 +61,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const lastUrl = getLastUrlPoint(history.location.pathname);
   const alert = useAlert();
   const MoreIcon = () => <More />;
+  const [isMessagesLoading, setIsMessagesLoading] = useState(true);
   const TipIcon = () => <Tip />;
   const MicIcon = () => <MicrIcon />;
   const VideoIcon = () => <VideoIcn />;
@@ -128,6 +131,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     const recieveChatMessages = async () => {
       const response = await chatAPI.getChatMessages(Number(lastUrl));
       setMessages(response);
+      setIsMessagesLoading(false);
     };
     recieveChatMessages();
   }, [lastUrl]);
@@ -144,7 +148,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   };
 
   const deleteImg = (e: MouseEvent<HTMLOrSVGElement>, index: number) => {
-    setUploadedFilesImg([...uploadedFilesImg.filter((file: any, i: number) => i !== index)]);
+    setUploadedFilesImg([...uploadedFilesImg.filter((file: string, i: number) => i !== index)]);
     setUploadedFiles([...uploadedFiles.filter((file: any, i: number) => i !== index)]);
   };
 
@@ -306,56 +310,74 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               ? 'Прочитанно'
               : 'Не прочитанно'}
           </div>
-          {messages.map((item, index) => {
-            return (
-              <div
-                style={
-                  item.user.pk === uid
-                    ? { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', width: '100%' }
-                    : { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%' }
-                }
-                key={index}
-              >
-                {item.message_price !== 0 && !item.is_payed && item.user.pk !== uid ? (
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      margin: '15px',
-                      backgroundColor: 'rgba(248, 241, 240, 0.4)'
-                    }}
-                  >
-                    <button
-                      style={{ background: '#FB5734', borderRadius: '16px', padding: '15px', margin: '20px' }}
-                      onClick={() => payForMessage(item.id, item.message_price)}
+          {isMessagesLoading ? (
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+              <Preloader />
+            </div>
+          ) : (
+            messages.map((item, index) => {
+              return (
+                <div
+                  style={
+                    item.user.pk === uid
+                      ? { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', width: '100%' }
+                      : { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%' }
+                  }
+                  key={index}
+                >
+                  {item.message_price !== 0 && !item.is_payed && item.user.pk !== uid ? (
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        margin: '15px',
+                        backgroundColor: 'rgba(248, 241, 240, 0.4)'
+                      }}
                     >
-                      Посмотреть за {item.message_price}$
-                    </button>
-                  </div>
-                ) : (
-                  <div>
-                    <div style={{ display: 'flex' }}>
-                      {item.user.pk === uid ? (
-                        <div style={{ marginRight: '5px' }}>{item.readed ? <Readed /> : <NotReaded />}</div>
-                      ) : (
-                        <></>
-                      )}
-                      <div className="text-wrapp">
-                        {CryptoJS.AES.decrypt(item.text, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(CryptoJS.enc.Utf8)}
-                        {item.attachments.length > 0
-                          ? item.attachments.map((item: any, index: number) => {
-                              return <ChatImage item={item} index={index} key={index + Math.random()} />;
-                            })
-                          : null}
-                      </div>
+                      <button
+                        style={{ background: '#FB5734', borderRadius: '16px', padding: '15px', margin: '20px' }}
+                        onClick={() => payForMessage(item.id, item.message_price)}
+                      >
+                        Посмотреть за {item.message_price}$
+                      </button>
                     </div>
-                    <div className="time-text">15:33</div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  ) : (
+                    <div>
+                      <div style={{ display: 'flex' }}>
+                        {item.user.pk === uid ? (
+                          <div style={{ marginRight: '5px' }}>{item.readed ? <Readed /> : <NotReaded />}</div>
+                        ) : (
+                          <></>
+                        )}
+                        <div className="text-wrapp">
+                          {CryptoJS.AES.decrypt(item.text, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(CryptoJS.enc.Utf8)}
+                          {item.attachments.length > 0
+                            ? item.attachments.map((item: any, index: number) => {
+                                if (item.file_type === 4) {
+                                  return <Video src={item.file_url} />;
+                                } else if (item.file_type === 1) {
+                                  console.log(item);
+
+                                  return (
+                                    <a href={item.file_url} download>
+                                      Скачать {item.file_url.split('/')[item.file_url.split('/').length - 1]}
+                                    </a>
+                                  );
+                                } else {
+                                  return <ChatImage item={item} index={index} key={index + Math.random()} />;
+                                }
+                              })
+                            : null}
+                        </div>
+                      </div>
+                      <div className="time-text">15:33</div>
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          )}
         </div>
         <div className="chat__input">
           <Input sendMessage={sendMessage} messageText={messageText} setMessageText={setMessageText} />
