@@ -65,6 +65,16 @@
   &__post {
     margin-top: 20px;
   }
+  &__noPost {
+    background: linear-gradient(135deg, #fa5e5b 10%, #cfe4ed 100%);
+    width: '100%';
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    margin: 12px;
+  }
   &__postInfo {
     display: flex;
     flex-direction: column;

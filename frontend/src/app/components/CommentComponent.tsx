@@ -17,8 +17,6 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
 
   const [comments, setComments] = useState([]);
 
-  console.log(comments);
-
   const likeComment = async (val: any) => {
     await blogAPI
       .createPostAction({
@@ -79,7 +77,6 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
   const Comment = ({ item, index }: { item: any; index: number }) => {
     const [answer, setAnswer] = useState('');
     const [parentID, setParentID] = useState(item.id);
-    console.log(parentID);
     const [showAnswer, setShowAnswer] = useState(false);
     const [show, setShow] = useState(false);
 
@@ -133,7 +130,6 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
             {comments
               .filter((i) => i.parent === item.id)
               .map((item, key) => {
-                console.log(item);
                 return (
                   <div
                     className="notifications__comment"

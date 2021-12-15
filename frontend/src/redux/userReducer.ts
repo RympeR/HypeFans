@@ -6,6 +6,7 @@ import {
   CardType,
   createCardRT,
   createPostActionRT,
+  createPostBoughtRT,
   createUserT,
   DonationType,
   getUserRT,
@@ -61,6 +62,18 @@ const authReducer = (state = initialState, action: AllActionsType): InitialState
         ...state,
         posts: state.posts.filter((item) => item.post.pk !== action.payload.id)
       };
+    case 'BUY_POST':
+      return {
+        ...state,
+        posts: state.posts.map((item) => {
+          if (item.post.pk === action.payload.post_id) {
+            return {
+              ...item,
+              post: { ...item.post, payed: true }
+            };
+          } else return item;
+        })
+      };
     case 'SET_POST_DATA':
       return {
         ...state,
@@ -97,6 +110,12 @@ const actions = {
     return {
       type: 'DELETE_POST',
       payload: { id, liked: false, favourite: false, post_id: id }
+    };
+  },
+  buyPost: (post_id: number) => {
+    return {
+      type: 'BUY_POST',
+      payload: { post_id, liked: false, favourite: false, id: 10 }
     };
   },
   setPostsData: (post_id: number, liked: boolean | null, id: number | null, favourite: boolean | null) => {
@@ -221,6 +240,12 @@ export const deletePost = ({ id }: idType): Thunk => async (dispatch) => {
   });
   if (data.status === 204) {
     dispatch(actions.deletePost(id));
+  }
+};
+export const buyPost = ({ user, amount, post }: createPostBoughtRT): Thunk => async (dispatch) => {
+  const data = await blogAPI.createPostBought({ user, amount, post, id: null });
+  if (data.status === 200) {
+    dispatch(actions.buyPost(post));
   }
 };
 

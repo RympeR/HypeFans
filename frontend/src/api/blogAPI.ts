@@ -62,7 +62,7 @@ export const blogAPI = {
   },
   createPostBought({ user, amount, post }: createPostBoughtRT) {
     return instance
-      .post<createPostBoughtRT>('//blog/create-post-bought//', { user, amount, post })
+      .post<createPostBoughtRT>('/blog/create-post-bought/', { user, amount, post })
       .then((response) => {
         return response;
       });

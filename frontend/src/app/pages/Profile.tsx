@@ -9,7 +9,7 @@ import 'reactjs-popup/dist/index.css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { userAPI } from '~/api/userAPI';
 import { RootState } from '~/redux/redux';
-import { createPostAction, deletePost, deletePostAction, getUser, setFavorite } from '~/redux/userReducer';
+import { buyPost, createPostAction, deletePost, deletePostAction, getUser, setFavorite } from '~/redux/userReducer';
 import { ReactComponent as MenuDots } from '../../assets/images/3dots.svg';
 import { ReactComponent as MenuDotsWhite } from '../../assets/images/3dotsWhite.svg';
 import { ReactComponent as BackButton } from '../../assets/images/arrow-leftWhite.svg';
@@ -61,7 +61,9 @@ const Profile = () => {
     dispatch(deletePost({ id }));
   };
 
-  console.log(profile);
+  const payForPost = ({ amount, post }: { amount: number; post: number }) => {
+    dispatch(buyPost({ amount, post, user: myId, id: null }));
+  };
 
   return (
     <div className="profile">
@@ -157,7 +159,7 @@ const Profile = () => {
         <div className="profile__posts">
           {profile?.posts.length > 0 ? (
             profile?.posts.map((item, index) => {
-              return (
+              return myNick === nick || item.post.payed ? (
                 <div className="profile__post" key={`${index}_post`}>
                   <div className="profile__postHeader">
                     <div className="profile__postInfo">
@@ -262,6 +264,23 @@ const Profile = () => {
 
                       <CommentComponent data={item?.post.comments} postId={item?.post.pk} />
                     </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="profile__post" key={`${index}_post`}>
+                  <div className="profile__noPost">
+                    <button
+                      style={{
+                        background: '#FB5734',
+                        borderRadius: '16px',
+                        padding: '15px',
+                        margin: '20px',
+                        color: 'white'
+                      }}
+                      onClick={() => payForPost({ amount: item.post.price_to_watch, post: item.post.pk })}
+                    >
+                      Посмотреть за {item.post.price_to_watch}$
+                    </button>
                   </div>
                 </div>
               );
