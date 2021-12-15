@@ -131,7 +131,8 @@
 
 .text-wrapp {
   display: flex;
-  background: #f8f1f0;
+  background-color: #f8f1f0;
+  flex-wrap: wrap;
   border-radius: 4px 4px 0px 4px;
   font-family: Factor A;
   font-style: normal;

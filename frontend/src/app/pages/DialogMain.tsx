@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import CurrencyInput from 'react-currency-input-field';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { blogAPI } from '~/api/blogAPI';
 import { chatAPI } from '~/api/chatAPI';
@@ -213,19 +214,32 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     <div className="chat__dialogsMain">
       <div className="chat__dialogsHeader">
         <div className="chat__sidebarItem" style={{ alignItems: 'center' }}>
-          <img
-            src={
+          <Link
+            to={`/profile/${
               typeof rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.invited !==
               'number'
                 ? amICreator
                   ? rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.invited
-                      ?.avatar
+                      ?.username
                   : rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.creator
-                      ?.avatar
-                : rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.logo
-            }
-            alt="avatar"
-          ></img>
+                      ?.username
+                : rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.id
+            }`}
+          >
+            <img
+              src={
+                typeof rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info
+                  ?.invited !== 'number'
+                  ? amICreator
+                    ? rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.invited
+                        ?.avatar
+                    : rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.creator
+                        ?.avatar
+                  : rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.logo
+              }
+              alt="avatar"
+            ></img>
+          </Link>
           <div>
             <h2>
               {typeof rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info
@@ -350,15 +364,18 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                         ) : (
                           <></>
                         )}
-                        <div className="text-wrapp">
+                        <div
+                          className="text-wrapp"
+                          style={
+                            item.attachments.length > 0 ? { backgroundColor: 'white', justifyContent: 'flex-end' } : {}
+                          }
+                        >
                           {CryptoJS.AES.decrypt(item.text, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(CryptoJS.enc.Utf8)}
                           {item.attachments.length > 0
                             ? item.attachments.map((item: any, index: number) => {
                                 if (item.file_type === 4) {
                                   return <Video src={item.file_url} />;
                                 } else if (item.file_type === 1) {
-                                  console.log(item);
-
                                   return (
                                     <a href={item.file_url} download>
                                       Скачать {item.file_url.split('/')[item.file_url.split('/').length - 1]}
@@ -458,21 +475,24 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           setUploadedFilesImg([]);
         }}
         centered
-        size="xl"
+        size="sm"
         style={{ borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px' }}
       >
         <Modal.Body className="notifications__modal" style={{ padding: '0px' }}>
-          <div style={{ display: 'flex' }}>
-            {uploadedFilesImg?.map((file: string, index: number) => (
-              <div className="upload__img-wrapper" key={index}>
-                <img className="upload__img" src={file} alt="delete"></img>
-                <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
-              </div>
-            ))}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', borderRadius: '12px' }}>
+            {uploadedFilesImg?.map((file: string, index: number) => {
+              console.log(file);
+              return (
+                <div className="upload__img-wrapper" key={index} style={{ margin: '4px', borderRadius: '12px' }}>
+                  <img className="upload__img" src={file} alt="delete"></img>
+                  <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
+                </div>
+              );
+            })}
           </div>
-          <div>
+          <div style={{ marginLeft: '15px' }}>
             <label className="upload__file-input-label" htmlFor="file-input" style={{ marginBottom: '15px' }}>
-              <VideoIcon />
+              Добавить
             </label>
             <input
               className="upload__file-input"
@@ -483,6 +503,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               multiple
             />
           </div>
+
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '19px' }}>
             <h3
               onClick={() => {

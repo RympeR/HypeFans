@@ -1,5 +1,6 @@
 import { Formik } from 'formik';
 import React, { ChangeEvent, FormEvent, MouseEvent, useContext, useRef, useState } from 'react';
+import CurrencyInput from 'react-currency-input-field';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useTextInput } from '~/app/utils/useTextInput';
@@ -19,6 +20,8 @@ const Upload = () => {
   const dispatch = useDispatch();
 
   const id = useSelector((state: RootState) => state.auth.pk);
+
+  const [postCost, setPostCost] = useState('0');
 
   const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
   const [uploadedFilesImg, setUploadedFilesImg] = useState<string[]>([]);
@@ -48,11 +51,18 @@ const Upload = () => {
 
   const uploadSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
-    const send = { attachments: [...uploadedFiles], user: id, name: 'post', description: value };
+    const send = {
+      attachments: [...uploadedFiles],
+      user: id,
+      name: 'post',
+      description: value,
+      price_to_watch: postCost
+    };
     dispatch(createPost(send));
     inputFileRef.current.value = '';
     clearInput();
     setUploadedFiles([]);
+    setPostCost('0');
     setUploadedFilesImg([]);
   };
 
@@ -110,6 +120,22 @@ const Upload = () => {
             />
           </div>
           <div className="upload__bottom">
+            <div>
+              Цена поста:
+              <CurrencyInput
+                prefix="$"
+                style={{
+                  border: '1px solid rgba(0, 0, 0, 0.4)',
+                  boxSizing: 'border-box',
+                  borderRadius: '8px',
+                  padding: '8px',
+                  margin: '16px 10px'
+                }}
+                value={postCost}
+                decimalsLimit={2}
+                onValueChange={(value, name) => setPostCost(value)}
+              />
+            </div>
             <button
               className={
                 uploadedFiles.length || value ? 'upload__submit-btn upload__submit-btn_active' : 'upload__submit-btn'
