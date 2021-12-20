@@ -481,13 +481,38 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         <Modal.Body className="notifications__modal" style={{ padding: '0px' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', borderRadius: '12px' }}>
             {uploadedFilesImg?.map((file: string, index: number) => {
-              console.log(file);
-              return (
-                <div className="upload__img-wrapper" key={index} style={{ margin: '4px', borderRadius: '12px' }}>
-                  <img className="upload__img" src={file} alt="delete"></img>
-                  <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
-                </div>
-              );
+              switch (uploadedFiles[index].type.split('/')[0]) {
+                case 'image': {
+                  return (
+                    <div className="upload__img-wrapper" key={index}>
+                      <img className="upload__img" src={file} alt="delete"></img>
+                      <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
+                    </div>
+                  );
+                }
+                case 'video': {
+                  return (
+                    <div className="upload__img-wrapper" key={index}>
+                      <video className="upload__img">
+                        <source src={file} />
+                      </video>
+                      <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
+                    </div>
+                  );
+                }
+                case 'application': {
+                  return (
+                    <div className="upload__img-wrapper" key={index}>
+                      <img
+                        className="upload__img"
+                        src="https://w7.pngwing.com/pngs/748/480/png-transparent-computer-icons-filename-extension-scalable-graphics-link-symbol-document-file-format-downloads-black-and-white.png"
+                        alt="delete"
+                      ></img>
+                      <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
+                    </div>
+                  );
+                }
+              }
             })}
           </div>
           <div style={{ marginLeft: '15px' }}>
