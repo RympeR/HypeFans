@@ -182,11 +182,14 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const sendTip = async (amount: number, reciever: number) => {
     const data = await userAPI.createDonation({ amount, sender: uid, reciever });
     if (data.status === 200) {
+      alert.success('Донат отправлен');
       return setShowTip(false);
     } else if (data.status === 451) {
       setShowTip(false);
+      alert.error('Ошибка');
       return console.log('Не хватает средств');
     } else {
+      alert.error('Ошибка');
       return console.log('ошибка сервера');
     }
   };
