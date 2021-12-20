@@ -153,7 +153,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
                     </div>
                     <LikeIcon
                       className="post__action-icon"
-                      fill={item.like ? 'red' : 'none'}
+                      fill={item.like ? '#C41E3A' : 'none'}
                       onClick={() =>
                         likeComment({ like: !item.like, parent: item.id, post: item.post, user: item.user.id })
                       }
@@ -216,7 +216,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
         </div>
         <LikeIcon
           className="post__action-icon"
-          fill={item.parent_liked ? 'red' : 'none'}
+          fill={item.parent_liked ? '#C41E3A' : 'none'}
           onClick={() =>
             likeComment({ like: !item.parent_liked, parent: item.id, post: item.post, user: item.user.pk })
           }

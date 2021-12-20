@@ -97,7 +97,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                         );
                   }}
                 >
-                  <LikeIcon className="post__action-icon" fill={post.liked ? 'red' : 'none'} />
+                  <LikeIcon className="post__action-icon" fill={post.liked ? '#C41E3A' : 'none'} />
                 </button>
 
                 <button className="post__action-btn">

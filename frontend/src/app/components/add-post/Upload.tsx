@@ -39,7 +39,7 @@ const Upload = () => {
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const lastIndex = e.target.files.length - 1;
     setFiles([...files, inputFileRef.current.value]);
-    console.log(e.target.files[lastIndex]);
+    // console.log(e.target.files[lastIndex]);
     setUploadedFiles([...uploadedFiles, e.target.files[lastIndex]]);
     setUploadedFilesImg([...uploadedFilesImg, URL.createObjectURL(e.target.files[lastIndex])]);
   };
@@ -99,12 +99,41 @@ const Upload = () => {
             ></textarea>
 
             <div className="upload__img-list">
-              {uploadedFilesImg?.map((file: string, index: number) => (
-                <div className="upload__img-wrapper" key={index}>
-                  <img className="upload__img" src={file} alt="delete"></img>
-                  <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
-                </div>
-              ))}
+              {uploadedFilesImg?.map((file: string, index: number) => {
+                console.log(uploadedFiles[index].type.split('/')[0]);
+                switch (uploadedFiles[index].type.split('/')[0]) {
+                  case 'image': {
+                    return (
+                      <div className="upload__img-wrapper" key={index}>
+                        <img className="upload__img" src={file} alt="delete"></img>
+                        <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
+                      </div>
+                    );
+                  }
+                  case 'video': {
+                    return (
+                      <div className="upload__img-wrapper" key={index}>
+                        <video className="upload__img">
+                          <source src={file} />
+                        </video>
+                        <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
+                      </div>
+                    );
+                  }
+                  case 'application': {
+                    return (
+                      <div className="upload__img-wrapper" key={index}>
+                        <img
+                          className="upload__img"
+                          src="https://w7.pngwing.com/pngs/748/480/png-transparent-computer-icons-filename-extension-scalable-graphics-link-symbol-document-file-format-downloads-black-and-white.png"
+                          alt="delete"
+                        ></img>
+                        <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
+                      </div>
+                    );
+                  }
+                }
+              })}
             </div>
 
             <label className="upload__file-input-label" htmlFor="file-input" style={{ marginBottom: '15px' }}>

@@ -243,7 +243,7 @@ const Profile = () => {
                                   );
                             }}
                           >
-                            <LikeIcon className="post__action-icon" fill={item?.post.liked ? 'red' : 'none'} />
+                            <LikeIcon className="post__action-icon" fill={item?.post.liked ? '#C41E3A' : 'none'} />
                           </button>
 
                           <button className="post__action-btn">
