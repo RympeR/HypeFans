@@ -176,6 +176,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     );
     setMessageCost('0');
     setPaidModalShow(false);
+    setUploadedFilesImg([]);
+    setUploadedFiles([]);
     return setMessageText('');
   };
 
@@ -340,7 +342,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                       ? { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', width: '100%' }
                       : { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%' }
                   }
-                  key={index}
+                  key={Math.random() + index + Math.random()}
                 >
                   {item.message_price !== 0 && !item.is_payed && item.user.pk !== uid ? (
                     <div
@@ -487,7 +489,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               switch (uploadedFiles[index].type.split('/')[0]) {
                 case 'image': {
                   return (
-                    <div className="upload__img-wrapper" key={index}>
+                    <div className="upload__img-wrapper" key={Math.random() + Math.random() + index}>
                       <img className="upload__img" src={file} alt="delete"></img>
                       <CloseIcon className="upload__close-icon" onClick={(e) => deleteImg(e, index)} />
                     </div>
@@ -495,7 +497,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 }
                 case 'video': {
                   return (
-                    <div className="upload__img-wrapper" key={index}>
+                    <div className="upload__img-wrapper" key={Math.random() + Math.random() + index}>
                       <video className="upload__img">
                         <source src={file} />
                       </video>
@@ -505,7 +507,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 }
                 case 'application': {
                   return (
-                    <div className="upload__img-wrapper" key={index}>
+                    <div className="upload__img-wrapper" key={Math.random() + Math.random() + index}>
                       <img
                         className="upload__img"
                         src="https://w7.pngwing.com/pngs/748/480/png-transparent-computer-icons-filename-extension-scalable-graphics-link-symbol-document-file-format-downloads-black-and-white.png"

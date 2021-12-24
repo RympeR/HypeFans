@@ -92,9 +92,9 @@ const Notifications = () => {
             <BackButton />
           </div>
 
-          <p className="notifications__headingText">
+          <div className="notifications__headingText">
             <Route path="/notifications" render={() => <Text text="Уведомления" />} />
-          </p>
+          </div>
           <div className="notifications__settings">
             <Link to="/settings/notifications">
               <Route path="/notifications" component={SettingsButton} />

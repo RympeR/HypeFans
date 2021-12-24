@@ -133,7 +133,7 @@ const Chat = () => {
         <div className="chat__sidebar">
           {rooms.map((item, key) => {
             return (
-              <div key={key}>
+              <div key={Math.random() + String(key)}>
                 <SidebarItem item={item} />
               </div>
             );

@@ -29,7 +29,7 @@ const Home = () => {
             <SearchBar />
             <Aside recommendations={recommendations} />
             {posts.map((item, index) => {
-              return <Post key={index} post={item} />;
+              return <Post key={Math.random() + index} post={item} />;
             })}
           </div>
         </>
