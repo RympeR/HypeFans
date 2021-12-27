@@ -37,8 +37,13 @@ const Notifications = () => {
             <ArrowLeft onClick={history.goBack} />
           </div>
           <div style={{ marginTop: '4px' }}>{text}</div>
-          <div>
+          <div className="notifications__none">
             <Link to="/settings/notifications">
+              <Route path="/notifications" component={SettingsIcon} />
+            </Link>
+          </div>
+          <div className="notifications__displayMobile">
+            <Link to="/settings/mobileSidebar">
               <Route path="/notifications" component={SettingsIcon} />
             </Link>
           </div>

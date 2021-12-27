@@ -36,12 +36,23 @@ export const Settings = () => {
   const isDisabled = useSelector((state: RootState) => state.auth.isSettingsDisabled);
   const SettingsButton = () => <SettingsIcon />;
   const Text = ({ text }: { text: string }) => {
+    const lastLocation = history.location.pathname.split('/')[history.location.pathname.split('/').length - 1];
     return (
       <>
         <p className="notifications__none">{text}</p>
         <div className="notifications__sidebarItemPhone" style={{ justifyContent: 'flex-start' }}>
           <div>
-            <ArrowLeft onClick={history.goBack} />
+            <ArrowLeft
+              onClick={() => {
+                if (lastLocation === 'mobileSidebar') {
+                  history.push('/notifications');
+                } else if (lastLocation === 'profileSettings' || 'card' || 'lists' || 'stats' || 'lang') {
+                  history.push('/settings/profileSettings/mobileSidebar');
+                } else if (lastLocation === 'account' || 'confidentiality' || 'prices' || 'notifications') {
+                  history.push('/settings/mobileSidebar');
+                }
+              }}
+            />
           </div>
           <div style={{ marginLeft: '40px', marginTop: '7px' }}>{text}</div>
         </div>
@@ -64,116 +75,126 @@ export const Settings = () => {
     );
   };
 
-  const NotificationsSidebar = () => {
-    const selectedColor = '#F9F9F9';
+  const ProfileSettingsSidebar = ({ showStyle }: { showStyle: boolean }) => {
+    console.log(showStyle);
     const [show, setShow] = useState(false);
-    const BackButton = () => <BackIcon onClick={history.goBack} />;
-
-    const ProfileSettingsSidebar = () => {
-      return (
-        <div className="notifications__sidebar">
-          <Link
-            to="/settings/profileSettings"
-            style={pathname === '/settings/profileSettings' ? { background: selectedColor } : {}}
-          >
-            <SettingsSidebarItem text="Реферальная ссылка">
-              <RefSvg />
-            </SettingsSidebarItem>
-          </Link>
-          <Link
-            to="/settings/profileSettings/card"
-            style={pathname === '/settings/profileSettings/card' ? { background: selectedColor } : {}}
-          >
-            <SettingsSidebarItem text="Мой счёт">
-              <CardSvg />
-            </SettingsSidebarItem>
-          </Link>
-          <Link
-            to="/settings/profileSettings/lists"
-            style={pathname === '/settings/profileSettings/lists' ? { background: selectedColor } : {}}
-          >
-            <SettingsSidebarItem text="Списки">
-              <ListSvg />
-            </SettingsSidebarItem>
-          </Link>
-          <Link
-            to="/settings/profileSettings/stats"
-            style={pathname === '/settings/profileSettings/stats' ? { background: selectedColor } : {}}
-          >
-            <SettingsSidebarItem text="Статистика">
-              <BarSvg />
-            </SettingsSidebarItem>
-          </Link>
-          <Link
-            to="/settings/profileSettings/lang"
-            style={pathname === '/settings/profileSettings/lang' ? { background: selectedColor } : {}}
-          >
-            <SettingsSidebarItem text="Язык">
-              <EditSvg />
-            </SettingsSidebarItem>
-          </Link>
-          <div onClick={() => setShow(true)}>
-            <ExitItem text="Выйти">
-              <LogOutSvg />
-            </ExitItem>
-          </div>
-          {show ? (
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-              <div
-                // onClick={() => setShow(false)}
-                style={{
-                  boxShadow: '0px 0px 5px 1px rgba(34, 60, 80, 0.6)',
-                  backgroundColor: 'white',
-                  borderRadius: '8px',
-                  marginTop: '50px',
-                  width: '80%'
-                }}
-              >
-                <h5 style={{ padding: '5px', textAlign: 'center' }}>Вы уверены, что хотите выйти из аккаунта?</h5>
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
-                  <h6 style={{ color: '#FB5734' }} onClick={() => setShow(false)}>
-                    Отмена
-                  </h6>
-                  <div style={{ width: '20px' }}></div>
-                  <h6>Продолжить</h6>
-                </div>
+    const selectedColor = '#F9F9F9';
+    return (
+      <div className={showStyle ? 'notifications__sidebarMobile' : 'notifications__sidebar'}>
+        <Link
+          to="/settings/profileSettings"
+          style={pathname === '/settings/profileSettings' ? { background: selectedColor } : {}}
+        >
+          <SettingsSidebarItem text="Реферальная ссылка">
+            <RefSvg />
+          </SettingsSidebarItem>
+        </Link>
+        <Link
+          to="/settings/profileSettings/card"
+          style={pathname === '/settings/profileSettings/card' ? { background: selectedColor } : {}}
+        >
+          <SettingsSidebarItem text="Мой счёт">
+            <CardSvg />
+          </SettingsSidebarItem>
+        </Link>
+        <Link
+          to="/settings/profileSettings/lists"
+          style={pathname === '/settings/profileSettings/lists' ? { background: selectedColor } : {}}
+        >
+          <SettingsSidebarItem text="Списки">
+            <ListSvg />
+          </SettingsSidebarItem>
+        </Link>
+        <Link
+          to="/settings/profileSettings/stats"
+          style={pathname === '/settings/profileSettings/stats' ? { background: selectedColor } : {}}
+        >
+          <SettingsSidebarItem text="Статистика">
+            <BarSvg />
+          </SettingsSidebarItem>
+        </Link>
+        <Link
+          to="/settings/profileSettings/lang"
+          style={pathname === '/settings/profileSettings/lang' ? { background: selectedColor } : {}}
+        >
+          <SettingsSidebarItem text="Язык">
+            <EditSvg />
+          </SettingsSidebarItem>
+        </Link>
+        <div onClick={() => setShow(true)}>
+          <ExitItem text="Выйти">
+            <LogOutSvg />
+          </ExitItem>
+        </div>
+        {show ? (
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <div
+              // onClick={() => setShow(false)}
+              style={{
+                boxShadow: '0px 0px 5px 1px rgba(34, 60, 80, 0.6)',
+                backgroundColor: 'white',
+                borderRadius: '8px',
+                marginTop: '50px',
+                width: '80%'
+              }}
+            >
+              <h5 style={{ padding: '5px', textAlign: 'center' }}>Вы уверены, что хотите выйти из аккаунта?</h5>
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
+                <h6 style={{ color: '#FB5734' }} onClick={() => setShow(false)}>
+                  Отмена
+                </h6>
+                <div style={{ width: '20px' }}></div>
+                <h6>Продолжить</h6>
               </div>
             </div>
-          ) : (
-            <div></div>
-          )}
-        </div>
-      );
-    };
+          </div>
+        ) : (
+          <div></div>
+        )}
+      </div>
+    );
+  };
 
-    const SettingsSidebar = () => {
-      return (
-        <div className="notifications__sidebar">
+  const SettingsSidebar = ({ showStyle }: { showStyle: boolean }) => {
+    const selectedColor = '#F9F9F9';
+    const BackButton = () => <BackIcon onClick={history.goBack} />;
+    return (
+      <div className={showStyle ? 'notifications__sidebarMobile' : 'notifications__sidebar'}>
+        <div className="notifications__displayMobile">
+          <Link to="/settings/profileSettings/mobileSidebar">
+            <NotificationSidebarItem text="Профиль" />
+          </Link>
+        </div>
+        <div className="notifications__none">
           <Link to="/settings/profileSettings">
             <NotificationSidebarItem text="Профиль" />
           </Link>
-          <Link to="/settings/account" style={pathname === '/settings/account' ? { background: selectedColor } : {}}>
-            <NotificationSidebarItem text="Аккаунт" />
-          </Link>
-          <Link
-            to="/settings/confidentiality"
-            style={pathname === '/settings/confidentiality' ? { background: selectedColor } : {}}
-          >
-            <NotificationSidebarItem text="Конфеденциальность" />
-          </Link>
-          <Link to="/settings/prices" style={pathname === '/settings/prices' ? { background: selectedColor } : {}}>
-            <NotificationSidebarItem text="Цены" />
-          </Link>
-          <Link
-            to="/settings/notifications"
-            style={pathname === '/settings/notifications' ? { background: selectedColor } : {}}
-          >
-            <NotificationSidebarItem text="Уведомления" />
-          </Link>
         </div>
-      );
-    };
+        <Link to="/settings/account" style={pathname === '/settings/account' ? { background: selectedColor } : {}}>
+          <NotificationSidebarItem text="Аккаунт" />
+        </Link>
+        <Link
+          to="/settings/confidentiality"
+          style={pathname === '/settings/confidentiality' ? { background: selectedColor } : {}}
+        >
+          <NotificationSidebarItem text="Конфеденциальность" />
+        </Link>
+        <Link to="/settings/prices" style={pathname === '/settings/prices' ? { background: selectedColor } : {}}>
+          <NotificationSidebarItem text="Цены" />
+        </Link>
+        <Link
+          to="/settings/notifications"
+          style={pathname === '/settings/notifications' ? { background: selectedColor } : {}}
+        >
+          <NotificationSidebarItem text="Уведомления" />
+        </Link>
+      </div>
+    );
+  };
 
+  const NotificationsSidebar = () => {
+    const selectedColor = '#F9F9F9';
+    const BackButton = () => <BackIcon onClick={history.goBack} />;
     return (
       <div>
         <div className="notifications__header">
@@ -196,6 +217,7 @@ export const Settings = () => {
                   >
                     Nikky Rose
                   </h4>
+
                   <h5
                     style={{
                       fontFamily: 'Factor A',
@@ -236,9 +258,11 @@ export const Settings = () => {
           path="/settings"
           render={() => {
             if (history.location.pathname.split('/')[2] !== 'profileSettings') {
-              return <Route path="/settings" component={SettingsSidebar} />;
+              return <Route path="/settings" render={() => <SettingsSidebar showStyle={false} />} />;
             } else {
-              return <Route path="/settings/profileSettings" component={ProfileSettingsSidebar} />;
+              return (
+                <Route path="/settings/profileSettings" render={() => <ProfileSettingsSidebar showStyle={false} />} />
+              );
             }
           }}
         />
@@ -1148,6 +1172,7 @@ export const Settings = () => {
           }}
         >
           {({ values, handleSubmit, setFieldValue }) => {
+            const BackButton = () => <BackIcon onClick={history.goBack} />;
             return (
               <>
                 <Route path="/settings/notifications" render={() => <SettingsNotifications />} exact />
@@ -1162,6 +1187,70 @@ export const Settings = () => {
                     />
                   )}
                   exact
+                />
+                <Route
+                  path="/settings/mobileSidebar"
+                  render={() => {
+                    return (
+                      <div>
+                        <Text text="Настройки" />
+                        <SettingsSidebar showStyle={true} />
+                      </div>
+                    );
+                  }}
+                />
+                <Route
+                  path="/settings/profileSettings/mobileSidebar"
+                  render={() => {
+                    return (
+                      <div>
+                        <div className="notifications__headerMobile">
+                          <div className="notifications__back">
+                            <BackIcon
+                              onClick={() => {
+                                history.push('/settings/mobileSidebar');
+                              }}
+                            />
+                          </div>
+
+                          <div>
+                            <h4
+                              style={{
+                                fontFamily: 'Factor A',
+                                fontStyle: 'normal',
+                                fontWeight: 'bold',
+                                fontSize: '22px',
+                                marginBottom: '0px'
+                              }}
+                            >
+                              Nikky Rose
+                            </h4>
+                            <h5
+                              style={{
+                                fontFamily: 'Factor A',
+                                fontStyle: 'normal',
+                                fontWeight: 'normal',
+                                fontSize: '16px',
+                                lineHeight: '20px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                marginBottom: '0px',
+
+                                color: 'rgba(0, 0, 0, 0.6)'
+                              }}
+                            >
+                              @nikkyrose
+                            </h5>
+                          </div>
+                          <Link to="/settings/mobileSidebar">
+                            <Route path="/settings/profileSettings" component={SettingsButton} />
+                          </Link>
+                        </div>
+                        {/* Кнопки в сайдбаре в зависимости от роута */}
+                        <ProfileSettingsSidebar showStyle={true} />
+                      </div>
+                    );
+                  }}
                 />
                 <Route path="/settings/profileSettings" render={() => <RefComponent />} exact />
                 <Route path="/settings/profileSettings/lists" render={() => <ListsComponent />} exact />
