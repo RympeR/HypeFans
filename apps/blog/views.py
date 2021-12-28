@@ -452,6 +452,7 @@ class MarkFavourite(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated, )
     serializer_class = UserFavouritesSerializer
     queryset = User.objects.all()
+
     def put(self, request):
         data = request.data
         user = request.user
@@ -521,3 +522,43 @@ class GetFavouritePosts(generics.GenericAPIView):
             data[ind]['user'] = user_data
             data[ind]['post']['payed'] = True
         return Response(data)
+
+
+class GetUserLists(GenericAPIView):
+
+    serializer_class = UserShortRetrieveSeriliazer
+    queryset = User.objects.all()
+
+    def get(self, request):
+        user = request.user
+        friends = []
+        last_subscribers = []
+        favourite = []
+        supports = []
+
+        now = datetime.now()
+        result = {}
+
+        subs = user.target_user_subscribe.filter(start_date__gte=(
+            now - timedelta(2)).timestamp()).order_by('-start_date')
+        for sub in user.source_user_subscribe.filter(end_date__gte=now.timestamp()):
+            temp_subs = sub.target.target_user_subscribe.filter(
+                end_date__gte=now.timestamp())
+            if user in list(map(lambda x: x.source, temp_subs)):
+                friends.append(sub.target)
+
+        result['last_subs_amount'] = len(subs)
+        subs = list(map(lambda x: x.source, subs[:3]))
+
+        result['last_subs'] = UserShortRetrieveSeriliazer(
+            many=True, instance=subs).data
+
+        result['friends_amount'] = len(friends)
+        result['friends'] = UserShortRetrieveSeriliazer(
+            many=True, instance=friends[:3]).data
+        favourite_post = user.user_favourites.all()
+        favourite_post_users = list(set(map(lambda x: x.user, favourite_post)))
+        result['favourites_amount'] = len(favourite_post_users)
+        result['favourites'] = UserShortRetrieveSeriliazer(
+            many=True, instance=favourite_post_users[:3]).data
+        return Response(result)

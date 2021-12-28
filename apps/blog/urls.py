@@ -19,6 +19,7 @@ from .views import (
     UserNotifications,
     GetFavouritePosts,
     MarkFavourite,
+    GetUserLists,
 )
 
 urlpatterns = [
@@ -41,4 +42,5 @@ urlpatterns = [
     path('get-main-page/', MainUserPage.as_view()),
     path('get-user-stories/', SubStories.as_view()),
     path('get-notifications/', UserNotifications.as_view()),
+    path('get-users-lists/', GetUserLists.as_view()),
 ]
