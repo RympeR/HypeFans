@@ -78,6 +78,7 @@ export const Settings = () => {
 
   const ProfileSettingsSidebar = ({ showStyle }: { showStyle: boolean }) => {
     console.log(showStyle);
+    const user = useSelector((state: RootState) => state.auth);
     const [show, setShow] = useState(false);
     const selectedColor = '#F9F9F9';
     return (
@@ -194,7 +195,7 @@ export const Settings = () => {
   };
 
   const NotificationsSidebar = () => {
-    const selectedColor = '#F9F9F9';
+    const user = useSelector((state: RootState) => state.auth);
     const BackButton = () => <BackIcon onClick={history.goBack} />;
     return (
       <div>
@@ -216,7 +217,7 @@ export const Settings = () => {
                       marginBottom: '0px'
                     }}
                   >
-                    Nikky Rose
+                    {user.first_name}
                   </h4>
 
                   <h5
@@ -233,7 +234,7 @@ export const Settings = () => {
                       color: 'rgba(0, 0, 0, 0.6)'
                     }}
                   >
-                    @nikkyrose
+                    @{user.username}
                   </h5>
                 </div>
               );
@@ -1093,6 +1094,7 @@ export const Settings = () => {
         </div>
       );
     };
+    const user = useSelector((state: RootState) => state.auth);
     return (
       <div className="notifications__mainWrapper">
         <div className="notifications__mainHeader">
@@ -1128,7 +1130,6 @@ export const Settings = () => {
           }}
         >
           {({ values, handleSubmit, setFieldValue }) => {
-            const BackButton = () => <BackIcon onClick={history.goBack} />;
             return (
               <>
                 <Route path="/settings/notifications" render={() => <SettingsNotifications />} exact />
@@ -1179,7 +1180,7 @@ export const Settings = () => {
                                 marginBottom: '0px'
                               }}
                             >
-                              Nikky Rose
+                              @{user.first_name}
                             </h4>
                             <h5
                               style={{
@@ -1195,7 +1196,7 @@ export const Settings = () => {
                                 color: 'rgba(0, 0, 0, 0.6)'
                               }}
                             >
-                              @nikkyrose
+                              @{user.username}
                             </h5>
                           </div>
                           <Link to="/settings/mobileSidebar">
