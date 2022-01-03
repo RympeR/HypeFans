@@ -15,6 +15,17 @@ from .models import (
 )
 
 
+class SubscriptionGetSerializer(serializers.ModelSerializer):
+
+    end_date = TimestampField(required=False)
+    start_date = TimestampField(required=False)
+    source = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+
+    class Meta:
+        model = Subscription
+        fields = '__all__'
+
 class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
     end_date = TimestampField(required=False)

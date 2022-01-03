@@ -25,6 +25,7 @@ from .views import (
     UserProfileRetrieveAPI,
     UserSettingsRetrieveAPI,
     UserBlockedListAPI,
+    PayStatsHistoryRetrieveAPI,
 )
 
 urlpatterns = [
@@ -51,6 +52,7 @@ urlpatterns = [
     path('user-donation-recieved/', DonationPayedUserRetrieveAPI.as_view()),
     path('user-donation-sended/', DonationPayedUserToRetrieveAPI.as_view()),
     path('user-payment-history/', PaymentUserHistoryRetrieveAPI.as_view()),
+    path('pay-stats-history/', PayStatsHistoryRetrieveAPI.as_view()),
     path('block-user/', AddBlockedUserAPI.as_view(), name='BlockUser'),
     path('block-user-list/', UserBlockedListAPI.as_view(), name='BlockUserList'),
 ]

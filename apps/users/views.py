@@ -1,13 +1,12 @@
-from django.core.exceptions import NON_FIELD_ERRORS
-from apps.blog.models import PostAction, PostBought
-from apps.blog.serializers import PostGetShortSerializers
 from datetime import datetime, timedelta
 
-from core.utils.default_responses import (api_accepted_202, api_bad_request_400,
+from core.utils.default_responses import (api_accepted_202,
+                                          api_bad_request_400,
                                           api_block_by_policy_451,
                                           api_created_201,
                                           api_not_implemented_501,
                                           api_payment_required_402)
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.http import request
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
@@ -15,6 +14,11 @@ from rest_framework.authtoken.models import Token
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from apps.blog.models import PostAction, PostBought
+from apps.blog.serializers import PostGetShortSerializers
+from apps.chat.models import ChatBought
 
 from .models import *
 from .serializers import *
@@ -58,10 +62,10 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
                 else:
                     res_dict['post']['payed'] = sub_check
 
-                postActionQuerySet = PostAction.objects.filter(
+                post_action_queryset = PostAction.objects.filter(
                     post=post, user=request.user)
-                if postActionQuerySet.exists():
-                    for action in postActionQuerySet:
+                if post_action_queryset.exists():
+                    for action in post_action_queryset:
                         if action.like:
                             res_dict['post']['liked'] = True
                             res_dict['post']['like_id'] = action.pk
@@ -358,3 +362,37 @@ class PaymentUserHistoryRetrieveAPI(generics.ListAPIView):
         return Payment.objects.filter(
             card__user=sender
         ).order_by('-datetime')
+
+
+class PayStatsHistoryRetrieveAPI(APIView):
+    
+    def get(self, request, *args,):
+        current_month = datetime.now().month
+        user = request.user
+        donations = Donation.objects.filter(
+            receiver=user,
+            datetime__datetime__date__month=current_month,
+        ).order_by('-datetime')
+        donation_amount = sum((donation.amount for donation in donations))
+        subscriptions = Subscription.objects.filter(
+            target=user,
+            start_date__date__month=currentMonth,
+        ).order_by('-start_date')
+        subscription_amount = sum((
+            user.subscribtion_duration 
+            for _ in range(len(subscriptions))
+        ))
+
+        result_sum = subscription_amount + donation_amount
+        result = {
+            'result_sum': result_sum,
+            'donations': DonationGetSerializer(
+                instance=donations,
+                many=True
+            ).data,
+            'subscriptions': SubscriptionGetSerializer(
+                instance=subscriptions,
+                many=True
+            ).data,
+        }
+        return Response(result)

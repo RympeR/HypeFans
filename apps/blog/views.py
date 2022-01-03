@@ -532,9 +532,6 @@ class GetUserLists(GenericAPIView):
     def get(self, request):
         user = request.user
         friends = []
-        last_subscribers = []
-        favourite = []
-        supports = []
 
         now = datetime.now()
         result = {}
