@@ -221,9 +221,9 @@ CORS_ALLOW_METHODS = (
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'georg.rashkov@gmail.com'
 EMAIL_HOST_PASSWORD = 'Bluebird2804!'
-# EMAIL_PORT = 465
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_PORT = 465
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'georg.rashkov@gmail.com'
 
 DJOSER = {
