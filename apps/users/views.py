@@ -152,7 +152,8 @@ class UserCreateAPI(generics.GenericAPIView):
             logging.error(e)
             return api_block_by_policy_451(
                 {
-                    "info": "already exists"
+                    "info": "already exists",
+                    "error": e,
                 }
             )
 
