@@ -30,8 +30,6 @@ from .views import (
 )
 
 urlpatterns = [
-    re_path(
-        r'^auth/users/activate/(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$', UserActivationView.as_view()),
 
     path('get-user/', UserRetrieveAPI.as_view()),
     path('get-settings/', UserSettingsRetrieveAPI.as_view()),
