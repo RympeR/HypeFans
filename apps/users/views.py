@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+import requests
 from core.utils.default_responses import (api_accepted_202,
                                           api_bad_request_400,
                                           api_block_by_policy_451,
@@ -22,6 +23,17 @@ from apps.chat.models import ChatBought
 
 from .models import *
 from .serializers import *
+
+
+class UserActivationView(APIView):
+    def get(self, request, uid, token):
+        protocol = 'https://' if request.is_secure() else 'http://'
+        web_url = protocol + request.get_host()
+        post_url = web_url + "/auth/users/activate/"
+        post_data = {'uid': uid, 'token': token}
+        result = requests.post(post_url, data=post_data)
+        content = result.text
+        return Response(content)
 
 
 class UserRetrieveAPI(generics.RetrieveAPIView):
@@ -365,7 +377,7 @@ class PaymentUserHistoryRetrieveAPI(generics.ListAPIView):
 
 
 class PayStatsHistoryRetrieveAPI(APIView):
-    
+
     def get(self, request, *args,):
         current_month = datetime.now().month
         user = request.user
@@ -379,7 +391,7 @@ class PayStatsHistoryRetrieveAPI(APIView):
             start_date__date__month=currentMonth,
         ).order_by('-start_date')
         subscription_amount = sum((
-            user.subscribtion_duration 
+            user.subscribtion_duration
             for _ in range(len(subscriptions))
         ))
 

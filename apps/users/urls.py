@@ -1,6 +1,7 @@
-from django.urls import path
+from django.urls import path, re_path
 from .views import (
     AddBlockedUserAPI,
+    UserActivationView,
     UserRetrieveAPI,
     UserCreateAPI,
     UserAPI,
@@ -29,6 +30,9 @@ from .views import (
 )
 
 urlpatterns = [
+    re_path(
+        r'^auth/users/activate/(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$', UserActivationView.as_view()),
+
     path('get-user/', UserRetrieveAPI.as_view()),
     path('get-settings/', UserSettingsRetrieveAPI.as_view()),
     path('get-profile/<str:username>', UserProfileRetrieveAPI.as_view()),

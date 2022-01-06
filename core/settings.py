@@ -218,13 +218,15 @@ CORS_ALLOW_METHODS = (
 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'georg.rashkov@gmail.com'
-EMAIL_HOST_PASSWORD = 'Bluebird2804!'
+EMAIL_HOST = 'mail.hosting.reg.ru'
+# EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'management@hype-fans.com'
+EMAIL_HOST_PASSWORD = 'P3j2M7a9'
 EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+# EMAIL_USE_TLS = True    
 # EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'georg.rashkov@gmail.com'
+DEFAULT_FROM_EMAIL = 'management@hype-fans.com'
 
 DJOSER = {
     'SET_PASSWORD_RETYPE': True,
