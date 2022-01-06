@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta
 
 import requests
@@ -146,8 +147,9 @@ class UserCreateAPI(generics.GenericAPIView):
                 {
                     "auth_token": str(token)
                 }
-            )
+            )    
         except Exception as e:
+            logging.error(e)
             return api_block_by_policy_451(
                 {
                     "info": "already exists"
