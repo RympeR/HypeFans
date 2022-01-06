@@ -135,7 +135,7 @@ class UserCreateAPI(generics.GenericAPIView):
 
     def post(self, request):
         try:
-            user = User.objects.create(
+            user = User.objects.get_or_create(
                 email=request.data['email'],
                 username=request.data['username'],
             )
