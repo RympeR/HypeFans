@@ -135,27 +135,27 @@ class UserCreateAPI(generics.GenericAPIView):
     serializer_class = UserCreationSerializer
 
     def post(self, request):
-        # try:
-        user = User.objects.get_or_create(
-            email=request.data['email'],
-            username=request.data['username'],
-        )
-        user.set_password(request.data['password'])
-        user.save()
-        token, created = Token.objects.get_or_create(user=user)
-        return api_created_201(
-            {
-                "auth_token": str(token)
-            }
-        )    
-        # except Exception as e:
-        #     logging.error(e)
-        #     return api_block_by_policy_451(
-        #         {
-        #             "info": "already exists",
-        #             "error": e,
-        #         }
-        #     )
+        try:
+            user, created = User.objects.get_or_create(
+                email=request.data['email'],
+                username=request.data['username'],
+            )
+            if created:
+                user.set_password(request.data['password'])
+            user.save()
+            token, created = Token.objects.get_or_create(user=user)
+            return api_created_201(
+                {
+                    "auth_token": str(token)
+                }
+            )    
+        except Exception as e:
+            logging.error(e)
+            return api_block_by_policy_451(
+                {
+                    "info": "already exists",
+                }
+            )
 
 
 class UserAPI(generics.DestroyAPIView):
