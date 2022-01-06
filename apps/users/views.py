@@ -140,8 +140,10 @@ class UserCreateAPI(generics.GenericAPIView):
                 email=request.data['email'],
                 username=request.data['username'],
             )
-            if created:
-                user.set_password(request.data['password'])
+            assert created, "Already exists"
+            user.set_password(request.data['password'])
+            
+                
             user.save()
             token, created = Token.objects.get_or_create(user=user)
             return api_created_201(
