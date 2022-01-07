@@ -2,6 +2,7 @@ import logging
 from datetime import datetime, timedelta
 
 import requests
+from core.utils.func import create_ref_link
 from core.utils.default_responses import (api_accepted_202,
                                           api_bad_request_400,
                                           api_block_by_policy_451,
@@ -136,28 +137,30 @@ class UserCreateAPI(generics.GenericAPIView):
 
     def post(self, request):
         try:
+            if request.data['referrer']:
+                ref_user = User.objects.get(pk=request.data['referrer'])
+            else:
+                ref_user = None
+            username = request.data['username']
             user, created = User.objects.get_or_create(
                 email=request.data['email'],
-                username=request.data['username'],
+                username=username,
+                ref_link=create_ref_link(username),
+                referrer=ref_user
             )
             assert created, "Already exists"
             user.set_password(request.data['password'])
-            
-                
+
             user.save()
             token, created = Token.objects.get_or_create(user=user)
             return api_created_201(
                 {
                     "auth_token": str(token)
                 }
-            )    
+            )
         except Exception as e:
             logging.error(e)
-            return api_block_by_policy_451(
-                {
-                    "info": "already exists",
-                }
-            )
+            return api_block_by_policy_451({"info": "already exists"})
 
 
 class UserAPI(generics.DestroyAPIView):

@@ -144,7 +144,7 @@ class PostGetSerializer(serializers.ModelSerializer):
                         return True
         return False
 
-    def get_like_id(self, obj: Post) -> int:
+    def get_like_id(self, obj: Post):
         request = self.context.get('request')
         if request:
             user = request.user

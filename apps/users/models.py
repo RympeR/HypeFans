@@ -93,6 +93,7 @@ class User(AbstractUser):
     earned_credits_amount = models.IntegerField(
         verbose_name='Заработано', default=0)
     ref_link = models.CharField(max_length=255, verbose_name='Рефералка', null=True)
+    referrer = models.ForeignKey('self', verbose_name='Пригласивший пользователь', on_delete=models.SET_NULL, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
