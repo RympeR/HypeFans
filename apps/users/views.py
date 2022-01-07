@@ -2,14 +2,12 @@ import logging
 from datetime import datetime, timedelta
 
 import requests
-from core.utils.func import create_ref_link, REF_PERCANTAGE
 from core.utils.default_responses import (api_accepted_202,
                                           api_bad_request_400,
                                           api_block_by_policy_451,
                                           api_created_201,
                                           api_payment_required_402)
-from django.core.exceptions import NON_FIELD_ERRORS
-from django.http import request
+from core.utils.func import REF_PERCANTAGE, create_ref_link
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from rest_framework.authtoken.models import Token
@@ -20,7 +18,6 @@ from rest_framework.views import APIView
 
 from apps.blog.models import PostAction, PostBought
 from apps.blog.serializers import PostGetShortSerializers
-from apps.chat.models import ChatBought
 
 from .models import *
 from .serializers import *

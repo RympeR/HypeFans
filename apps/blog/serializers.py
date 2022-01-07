@@ -1,19 +1,15 @@
+import logging
+
 from core.utils.customFields import TimestampField
+from core.utils.func import REF_PERCANTAGE
 from django.db.models import Count, Q
 from rest_framework import serializers
-import logging
+
 from apps.users.models import User
 from apps.users.serializers import UserShortRetrieveSeriliazer
-from core.utils.func import REF_PERCANTAGE
 
-from .models import (
-    Attachment,
-    Post,
-    PostAction,
-    Story,
-    WatchedStories,
-    PostBought
-)
+from .models import (Attachment, Post, PostAction, PostBought, Story,
+                     WatchedStories)
 
 
 class UserFavouritesSerializer(serializers.Serializer):

@@ -1,10 +1,11 @@
+import datetime
 import os
 import random
 import string
-import datetime
 
 HOST = 'hype-fans.com/'
 REF_PERCANTAGE = 0.1
+
 
 def id_generator(size=12, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
