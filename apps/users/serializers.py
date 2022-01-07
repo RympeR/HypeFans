@@ -29,6 +29,7 @@ class SubscriptionGetSerializer(serializers.ModelSerializer):
         model = Subscription
         fields = '__all__'
 
+
 class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
     end_date = TimestampField(required=False)
@@ -71,10 +72,10 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
         except Exception as e:
             logging.error(e)
         if online and not user.hide_online:
-                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-                    return True
-                else:
-                    return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
+                return True
+            else:
+                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
         return False
 
     def get_avatar(self, user: User):
@@ -137,7 +138,7 @@ class UserShortSocketRetrieveSeriliazer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            if request: 
+            if request:
                 host = request.get_host()
             else:
                 host = HOST
@@ -170,10 +171,10 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
         except Exception as e:
             ...
         if online and not user.hide_online:
-                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-                    return True
-                else:
-                    return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
+                return True
+            else:
+                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
         return False
 
     def get_avatar(self, user: User):
@@ -212,11 +213,12 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
         )
 
 
-class UserCreationSerializer(serializers.ModelSerializer):
+class UserCreationSerializer(serializers.Serializer):
 
-    class Meta:
-        model = User
-        fields = 'email', 'username', 'password'
+    email = serializers.EmailField()
+    username = serializers.CharField()
+    password = serializers.CharField()
+    referrer = serializers.IntegerField()
 
 
 class UserBlockSerializer(serializers.Serializer):
@@ -296,10 +298,10 @@ class SettingsSerializer(serializers.ModelSerializer):
         except Exception as e:
             logging.error(e)
         if online and not user.hide_online:
-                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-                    return True
-                else:
-                    return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
+                return True
+            else:
+                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
         return False
 
     class Meta:
@@ -338,10 +340,10 @@ class UserGetSerializer(serializers.ModelSerializer):
         except Exception as e:
             logging.error(e)
         if online and not user.hide_online:
-                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-                    return True
-                else:
-                    return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
+                return True
+            else:
+                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
         return False
 
     def get_avatar(self, user: User):
@@ -420,10 +422,10 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
         except Exception as e:
             logging.error(e)
         if online and not user.hide_online:
-                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-                    return True
-                else:
-                    return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
+                return True
+            else:
+                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
         return False
 
     def get_cards(self, user: User):

@@ -24,7 +24,7 @@ def user_avatar(instance, filename):
 
 
 def create_ref_link(username):
-    return HOST + username + id_generator()
+    return HOST + username + '/' + id_generator()
 
 
 def room_logo(instance, filename):

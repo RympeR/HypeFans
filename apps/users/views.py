@@ -137,7 +137,7 @@ class UserCreateAPI(generics.GenericAPIView):
 
     def post(self, request):
         try:
-            if request.data['referrer']:
+            if request.data.get('referrer'):
                 ref_user = User.objects.get(pk=request.data['referrer'])
             else:
                 ref_user = None
@@ -192,7 +192,7 @@ class CreateSubscriptioAPI(generics.CreateAPIView):
             serializer.is_valid(raise_exception=True)
         except AssertionError:
             return api_block_by_policy_451({"status": "not enought credits"})
-        instance = self.perform_create(serializer)
+        self.perform_create(serializer)
         return Response(serializer.data)
 
     def get_serializer_context(self):
