@@ -27,11 +27,13 @@ from .views import (
     UserSettingsRetrieveAPI,
     UserBlockedListAPI,
     PayStatsHistoryRetrieveAPI,
+    UserSearchRetrieveAPI,
 )
 
 urlpatterns = [
 
     path('get-user/', UserRetrieveAPI.as_view()),
+    path('user-search/', UserSearchRetrieveAPI.as_view()),
     path('get-settings/', UserSettingsRetrieveAPI.as_view()),
     path('get-profile/<str:username>', UserProfileRetrieveAPI.as_view()),
     path('create-user/', UserCreateAPI.as_view()),

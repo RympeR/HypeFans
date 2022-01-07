@@ -45,9 +45,6 @@ class UserSearchRetrieveAPI(generics.RetrieveAPIView):
     serializer_class = UserShortRetrieveSeriliazer
     filterset_class = UserFilter
 
-    def get_object(self):
-        return self.request.user
-
 
 class UserProfileRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
