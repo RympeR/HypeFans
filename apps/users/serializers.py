@@ -16,7 +16,7 @@ class UserMeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = 'username', 'pk', 'email'
+        fields = 'username', 'id', 'email'
 
 
 class SubscriptionGetSerializer(serializers.ModelSerializer):
