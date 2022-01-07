@@ -1,4 +1,3 @@
-import logging
 from datetime import datetime, timedelta
 
 from core.utils.customFields import TimestampField
@@ -61,17 +60,7 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
     is_online = serializers.SerializerMethodField()
 
     def get_is_online(self, user: User):
-        online = None
-        try:
-            online = user.user_online
-        except Exception as e:
-            logging.error(e)
-        if online and not user.hide_online:
-            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-                return True
-            else:
-                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
-        return False
+        return get_online(self, user)
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -229,7 +218,6 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'location',
             'post_amount',
             'fans_amount',
-            'repheral_link',
             'repheral_users',
             'blocked_users',
             'email_notifications',
@@ -320,7 +308,6 @@ class UserGetSerializer(serializers.ModelSerializer):
             'message_price',
             'post_amount',
             'fans_amount',
-            'repheral_link',
             'repheral_users',
             'blocked_users',
             'email_notifications',
@@ -395,7 +382,6 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
             'message_price',
             'post_amount',
             'fans_amount',
-            'repheral_link',
             'repheral_users',
             'blocked_users',
             'email_notifications',
@@ -411,6 +397,7 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
             'earned_credits_amount',
             'is_online',
             'cards',
+            'ref_link',
         )
 
 

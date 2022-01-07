@@ -28,6 +28,7 @@ from .views import (
     UserBlockedListAPI,
     PayStatsHistoryRetrieveAPI,
     UserSearchRetrieveAPI,
+    UserLoginAPI,
 )
 
 urlpatterns = [
@@ -37,6 +38,7 @@ urlpatterns = [
     path('get-settings/', UserSettingsRetrieveAPI.as_view()),
     path('get-profile/<str:username>', UserProfileRetrieveAPI.as_view()),
     path('create-user/', UserCreateAPI.as_view()),
+    path('login-user/', UserLoginAPI.as_view()),
     path('delete-user/', UserAPI.as_view()),
     path('partial-update-user/', UserPartialUpdateAPI.as_view()),
     path('user-subscription/<int:pk>', UserSubscription.as_view()),

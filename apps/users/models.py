@@ -52,8 +52,6 @@ class User(AbstractUser):
     fans_amount = models.IntegerField(
         verbose_name='Кол-во фанатов', default=0, blank=True, null=True)
 
-    repheral_link = models.CharField(
-        verbose_name='Реферальная ссылка', max_length=255, null=True, blank=True)
     repheral_users = models.ManyToManyField(
         'self',
         verbose_name='Реферальные пользователи',

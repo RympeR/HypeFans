@@ -9,6 +9,7 @@ from core.utils.default_responses import (api_accepted_202,
                                           api_created_201,
                                           api_payment_required_402)
 from core.utils.func import REF_PERCANTAGE, create_ref_link
+from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from rest_framework.authtoken.models import Token
@@ -39,6 +40,8 @@ class UserRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserOwnProfileGetSerializer
 
+    def get_object(self):
+        return self.request.user
 
 class UserSearchRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
@@ -131,6 +134,30 @@ class UserSettingsRetrieveAPI(generics.RetrieveAPIView):
         return self.request.user
 
 
+class UserLoginAPI(generics.GenericAPIView):
+    permission_classes = permissions.AllowAny,
+    serializer_class = UserCreationSerializer
+
+    def post(self, request):
+        email = request.data['email']
+        password = request.data['password']
+        user = authenticate(username=email, password=password)
+        if user is not None:
+            token, _ = Token.objects.get_or_create(user=user)
+            return api_created_201(
+                {
+                    "auth_token": str(token)
+                }
+            )
+        else:
+            return api_bad_request_400(
+                {
+                    "non_field_errors": [
+                        "Невозможно войти с предоставленными учетными данными."
+                    ]
+                }
+            )
+
 class UserCreateAPI(generics.GenericAPIView):
     permission_classes = permissions.AllowAny,
     serializer_class = UserCreationSerializer
@@ -139,6 +166,7 @@ class UserCreateAPI(generics.GenericAPIView):
         try:
             if request.data.get('referrer'):
                 ref_user = User.objects.get(pk=request.data['referrer'])
+                ref_user.repheral_users.add()
             else:
                 ref_user = None
             username = request.data['username']
@@ -150,6 +178,7 @@ class UserCreateAPI(generics.GenericAPIView):
             )
             assert created, "Already exists"
             user.set_password(request.data['password'])
+            ref_user.repheral_users.add(user)
 
             user.save()
             token, created = Token.objects.get_or_create(user=user)

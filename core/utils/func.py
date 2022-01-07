@@ -2,6 +2,7 @@ import datetime
 import os
 import random
 import string
+from django.core.exceptions import ObjectDoesNotExist
 
 HOST = 'hype-fans.com/'
 REF_PERCANTAGE = 0.1
@@ -12,13 +13,14 @@ def id_generator(size=12, chars=string.ascii_uppercase + string.ascii_lowercase 
 
 
 def get_online(serializer, user):
-    online = getattr(serializer, 'user_online')
-    if online and not user.hide_online:
-        if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-            return True
-        else:
-            return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
-    return False
+    try:
+        if user.user_online and not user.hide_online:
+            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
+                return True
+            else:
+                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+    except ObjectDoesNotExist:
+        return False
 
 
 def set_unique_file_name(file_):
