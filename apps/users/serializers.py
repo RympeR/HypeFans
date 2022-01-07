@@ -82,10 +82,7 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            if request:
-                host = request.get_host()
-            else:
-                host = HOST
+            host = request.get_host() if request else HOST
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -94,10 +91,7 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
         if user.background_photo and hasattr(user.background_photo, 'url'):
             path_file = user.background_photo.url
             request = self.context.get('request')
-            if request:
-                host = request.get_host()
-            else:
-                host = HOST
+            host = request.get_host() if request else HOST
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -138,10 +132,7 @@ class UserShortSocketRetrieveSeriliazer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            if request:
-                host = request.get_host()
-            else:
-                host = HOST
+            host = request.get_host() if request else HOST
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -165,11 +156,7 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
     is_online = serializers.SerializerMethodField()
 
     def get_is_online(self, user: User):
-        online = None
-        try:
-            online = user.user_online
-        except Exception as e:
-            ...
+        online = getattr(self, 'user_online')
         if online and not user.hide_online:
             if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                 return True
@@ -181,10 +168,7 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            if request:
-                host = request.get_host()
-            else:
-                host = HOST
+            host = request.get_host() if request else HOST
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -193,10 +177,7 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
         if user.background_photo and hasattr(user.background_photo, 'url'):
             path_file = user.background_photo.url
             request = self.context.get('request')
-            if request:
-                host = request.get_host()
-            else:
-                host = HOST
+            host = request.get_host() if request else HOST
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -350,7 +331,7 @@ class UserGetSerializer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            host = request.get_host()
+            host = request.get_host() if request else HOST
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -359,7 +340,7 @@ class UserGetSerializer(serializers.ModelSerializer):
         if user.background_photo and hasattr(user.background_photo, 'url'):
             path_file = user.background_photo.url
             request = self.context.get('request')
-            host = request.get_host()
+            host = request.get_host() if request else HOST
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -436,7 +417,7 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            host = request.get_host()
+            host = request.get_host() if request else HOST
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -445,7 +426,7 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
         if user.background_photo and hasattr(user.background_photo, 'url'):
             path_file = user.background_photo.url
             request = self.context.get('request')
-            host = request.get_host()
+            host = request.get_host() if request else HOST
             file_url = create_path_file(host, path_file)
             return file_url
         return ''

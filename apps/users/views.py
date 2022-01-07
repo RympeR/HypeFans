@@ -7,7 +7,6 @@ from core.utils.default_responses import (api_accepted_202,
                                           api_bad_request_400,
                                           api_block_by_policy_451,
                                           api_created_201,
-                                          api_not_implemented_501,
                                           api_payment_required_402)
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.http import request

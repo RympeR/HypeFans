@@ -92,14 +92,16 @@ class User(AbstractUser):
         verbose_name='Кредитный баланс', default=0)
     earned_credits_amount = models.IntegerField(
         verbose_name='Заработано', default=0)
-    ref_link = models.CharField(max_length=255, verbose_name='Рефералка', null=True)
-    referrer = models.ForeignKey('self', verbose_name='Пригласивший пользователь', on_delete=models.SET_NULL, null=True, blank=True)
+    ref_link = models.CharField(
+        max_length=255, verbose_name='Рефералка', null=True)
+    referrer = models.ForeignKey('self', verbose_name='Пригласивший пользователь',
+                                 on_delete=models.SET_NULL, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
         'username'
     ]
-    
+
     @staticmethod
     def _create_user(password, email, **extra_fields):
         if not email:
@@ -217,7 +219,7 @@ class PendingUser(models.Model):
 
 class UserOnline(models.Model):
     user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE,
-        verbose_name='Юзернейм пользователя', blank=True, related_name='user_online', related_query_name='user_online')
+                                verbose_name='Юзернейм пользователя', blank=True, related_name='user_online', related_query_name='user_online')
     last_action = UnixTimeStampField(auto_now=True)
 
     class Meta:
