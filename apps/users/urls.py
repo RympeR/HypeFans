@@ -29,10 +29,12 @@ from .views import (
     PayStatsHistoryRetrieveAPI,
     UserSearchRetrieveAPI,
     UserLoginAPI,
+    UserMeRetrieveAPI,
 )
 
 urlpatterns = [
 
+    path('me/', UserMeRetrieveAPI.as_view()),
     path('get-user/', UserRetrieveAPI.as_view()),
     path('user-search/', UserSearchRetrieveAPI.as_view()),
     path('get-settings/', UserSettingsRetrieveAPI.as_view()),

@@ -12,6 +12,13 @@ from .models import (Card, Donation, Payment, PendingUser, Subscription, User,
                      UserOnline)
 
 
+class UserMeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = 'username', 'pk', 'email'
+
+
 class SubscriptionGetSerializer(serializers.ModelSerializer):
 
     end_date = TimestampField(required=False)

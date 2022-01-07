@@ -36,6 +36,13 @@ class UserActivationView(APIView):
         return Response(content)
 
 
+class UserMeRetrieveAPI(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserMeSerializer
+
+    def get_object(self):
+        return self.request.user
+
 class UserRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserOwnProfileGetSerializer
