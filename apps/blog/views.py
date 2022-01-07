@@ -74,10 +74,10 @@ class PostListAPI(generics.GenericAPIView):
                     True if Subscription.objects.filter(
                         target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                 )
-            postActionQuerySet = PostAction.objects.filter(
+            post_action_qs = PostAction.objects.filter(
                 post=post, user=user)
-            if postActionQuerySet.exists():
-                for action in postActionQuerySet:
+            if post_action_qs.exists():
+                for action in post_action_qs:
                     if action.like:
                         data[ind]['post']['liked'] = True
                         data[ind]['post']['like_id'] = action.pk
@@ -343,10 +343,10 @@ class MainUserPage(GenericAPIView):
                             True if Subscription.objects.filter(
                                 target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                         )
-                    postActionQuerySet = PostAction.objects.filter(
+                    post_action_qs = PostAction.objects.filter(
                         post=post, user=user)
-                    if postActionQuerySet.exists():
-                        for action in postActionQuerySet:
+                    if post_action_qs.exists():
+                        for action in post_action_qs:
                             if action.like:
                                 res_dict['post']['liked'] = True
                                 res_dict['post']['like_id'] = action.pk
@@ -495,10 +495,10 @@ class GetFavouritePosts(generics.GenericAPIView):
                     True if Subscription.objects.filter(
                         target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
                 )
-            postActionQuerySet = PostAction.objects.filter(
+            post_action_qs = PostAction.objects.filter(
                 post=post, user=user)
-            if postActionQuerySet.exists():
-                for action in postActionQuerySet:
+            if post_action_qs.exists():
+                for action in post_action_qs:
                     if action.like:
                         data[ind]['post']['liked'] = True
                         data[ind]['post']['like_id'] = action.pk

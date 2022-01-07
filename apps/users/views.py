@@ -2,6 +2,7 @@ import logging
 from datetime import datetime, timedelta
 
 import requests
+from core.utils.customClasses import UserFilter
 from core.utils.default_responses import (api_accepted_202,
                                           api_bad_request_400,
                                           api_block_by_policy_451,
@@ -37,6 +38,12 @@ class UserActivationView(APIView):
 class UserRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserOwnProfileGetSerializer
+
+
+class UserSearchRetrieveAPI(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserShortRetrieveSeriliazer
+    filterset_class = UserFilter
 
     def get_object(self):
         return self.request.user
