@@ -1,31 +1,16 @@
 import logging
-from rest_framework import serializers
-from core.utils.customFields import TimestampField
-from core.utils.func import create_path_file
-from django.db.models import Count
-from apps.blog.models import Post
-from django_countries.serializer_fields import CountryField
 from datetime import datetime, timedelta
-from .models import (
-    User,
-    Card,
-    Donation,
-    Payment,
-    UserOnline,
-    Subscription,
-    PendingUser
-)
-HOST = 'hype-fans.com/'
 
+from core.utils.customFields import TimestampField
+from core.utils.func import HOST, REF_PERCANTAGE, create_path_file, get_online
+from django.db.models import Count
+from django_countries.serializer_fields import CountryField
+from rest_framework import serializers
 
-def get_online(serializer, user: User):
-    online = getattr(serializer, 'user_online')
-    if online and not user.hide_online:
-        if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-            return True
-        else:
-            return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
-    return False
+from apps.blog.models import Post
+
+from .models import (Card, Donation, Payment, PendingUser, Subscription, User,
+                     UserOnline)
 
 
 class SubscriptionGetSerializer(serializers.ModelSerializer):
@@ -126,17 +111,7 @@ class UserShortSocketRetrieveSeriliazer(serializers.ModelSerializer):
     is_online = serializers.SerializerMethodField()
 
     def get_is_online(self, user: User):
-        online = None
-        try:
-            online = user.user_online
-        except Exception as e:
-            logging.error(e)
-        if online and not user.hide_online:
-            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-                return True
-            else:
-                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
-        return False
+        return get_online(self, user)
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -277,17 +252,7 @@ class SettingsSerializer(serializers.ModelSerializer):
     is_online = serializers.SerializerMethodField()
 
     def get_is_online(self, user: User):
-        online = None
-        try:
-            online = user.user_online
-        except Exception as e:
-            logging.error(e)
-        if online and not user.hide_online:
-            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-                return True
-            else:
-                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
-        return False
+        return get_online(self, user)
 
     class Meta:
         model = User
@@ -394,8 +359,7 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
         return get_online(self, user)
 
     def get_cards(self, user: User):
-        cards = user.user_card.all()
-        return CardGetSerializer(instance=cards, many=True).data
+        return CardGetSerializer(instance=user.user_card.all(), many=True).data
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -489,6 +453,9 @@ class DonationCreationSerializer(serializers.ModelSerializer):
         if user.credit_amount >= amount:
             user.credit_amount -= amount
             reciever.earned_credits_amount += amount
+            if reciever.referrer:
+                reciever.referrer.earned_credits_amount += amount * REF_PERCANTAGE
+                reciever.referrer.save()
             user.save()
             reciever.save()
             return attrs

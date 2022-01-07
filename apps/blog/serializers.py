@@ -4,6 +4,7 @@ from rest_framework import serializers
 import logging
 from apps.users.models import User
 from apps.users.serializers import UserShortRetrieveSeriliazer
+from core.utils.func import REF_PERCANTAGE
 
 from .models import (
     Attachment,
@@ -40,6 +41,11 @@ class PostActionCreationSerializer(serializers.ModelSerializer):
             user.save()
             attrs['post'].user.save()
             user.save()
+            referrer = attrs['post'].user.referrer
+            if referrer:
+                referrer.earned_credits_amount += attrs['donation_amount'] * \
+                    REF_PERCANTAGE
+                referrer.save()
             return attrs
         raise serializers.ValidationError
 
@@ -55,7 +61,7 @@ class PostActionShortSerializer(serializers.ModelSerializer):
         if post_action.parent and hasattr(post_action.parent, 'pk'):
             return PostAction.objects.filter(pk=post_action.parent.pk, like=True).aggregate(Count('pk'))['pk__count']
         return 0
-        
+
     def get_parent_username(self, post_action: PostAction):
         return post_action.parent.user.username if post_action.parent else None
 
@@ -413,6 +419,10 @@ class PostBoughtCreateSerializer(serializers.ModelSerializer):
             attrs['post'].user.earned_credits_amount += attrs['post'].price_to_watch
             attrs['post'].user.save()
             user.save()
+            referrer = attrs['post'].user.referrer
+            if referrer:
+                referrer.earned_credits_amount += attrs['post'].price_to_watch * \
+                    REF_PERCANTAGE
+                referrer.save()
             return attrs
         raise serializers.ValidationError
-

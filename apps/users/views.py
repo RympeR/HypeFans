@@ -2,7 +2,7 @@ import logging
 from datetime import datetime, timedelta
 
 import requests
-from core.utils.func import create_ref_link
+from core.utils.func import create_ref_link, REF_PERCANTAGE
 from core.utils.default_responses import (api_accepted_202,
                                           api_bad_request_400,
                                           api_block_by_policy_451,
@@ -208,7 +208,12 @@ class UserSubscription(GenericAPIView):
         if user.credit_amount > subscribe_target.subscribtion_price:
             user.my_subscribes.add(subscribe_target)
             subscribe_target.fans_amount += 1
+            subscribe_target.earned_credits_amount += subscribe_target.subscribtion_price
             subscribe_target.save()
+            referrer = subscribe_target.referrer
+            if referrer:
+                referrer.earned_credits_amount += subscribe_target.subscribtion_price * REF_PERCANTAGE
+                referrer.save()
             user.save()
             subscription_datetime = datetime.now()
             Subscription.objects.create(
@@ -298,7 +303,7 @@ class DonationCreateAPI(generics.CreateAPIView):
             serializer.is_valid(raise_exception=True)
         except ValueError:
             return api_block_by_policy_451({"status": "not enought credits"})
-        instance = self.perform_create(serializer)
+        self.perform_create(serializer)
         return Response(serializer.data)
 
     def get_serializer_context(self):

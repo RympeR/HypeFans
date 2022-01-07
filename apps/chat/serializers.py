@@ -1,5 +1,5 @@
 from core.utils.customFields import TimestampField
-from core.utils.func import return_file_url
+from core.utils.func import REF_PERCANTAGE, return_file_url
 from rest_framework import serializers
 
 from apps.blog.models import Attachment
@@ -183,6 +183,11 @@ class ChatBoughtCreateSerializer(serializers.ModelSerializer):
             user.credit_amount -= attrs['amount']
             attrs['chat'].user.earned_credits_amount += attrs['amount']
             attrs['chat'].user.save()
+            referrer = attrs['chat'].user.referrer
+            if referrer:
+                referrer.earned_credits_amount += attrs['amount'] * \
+                    REF_PERCANTAGE
+                referrer.save()
             user.save()
             return attrs
         raise serializers.ValidationError
