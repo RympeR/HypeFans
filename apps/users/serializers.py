@@ -18,6 +18,16 @@ from .models import (
 HOST = 'hype-fans.com/'
 
 
+def get_online(serializer, user: User):
+    online = getattr(serializer, 'user_online')
+    if online and not user.hide_online:
+        if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
+            return True
+        else:
+            return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+    return False
+
+
 class SubscriptionGetSerializer(serializers.ModelSerializer):
 
     end_date = TimestampField(required=False)
@@ -156,13 +166,7 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
     is_online = serializers.SerializerMethodField()
 
     def get_is_online(self, user: User):
-        online = getattr(self, 'user_online')
-        if online and not user.hide_online:
-            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-                return True
-            else:
-                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
-        return False
+        return get_online(self, user)
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -315,17 +319,7 @@ class UserGetSerializer(serializers.ModelSerializer):
     is_online = serializers.SerializerMethodField()
 
     def get_is_online(self, user: User):
-        online = None
-        try:
-            online = user.user_online
-        except Exception as e:
-            logging.error(e)
-        if online and not user.hide_online:
-            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-                return True
-            else:
-                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
-        return False
+        return get_online(self, user)
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
@@ -397,17 +391,7 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
     is_online = serializers.SerializerMethodField()
 
     def get_is_online(self, user: User):
-        online = None
-        try:
-            online = user.user_online
-        except Exception as e:
-            logging.error(e)
-        if online and not user.hide_online:
-            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-                return True
-            else:
-                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
-        return False
+        return get_online(self, user)
 
     def get_cards(self, user: User):
         cards = user.user_card.all()
