@@ -128,8 +128,7 @@ class PostGetSerializer(serializers.ModelSerializer):
         return [PostActionShortSerializer(instance=post).data for post in obj.user_postaction.filter(~Q(comment__isnull=True) & ~Q(comment=''))]
 
     def get_favourite(self, obj: Post) -> bool:
-        user = self.context.get('request').user
-        if user in obj.favourites.all():
+        if self.context.get('request').user in obj.favourites.all():
             return True
         return False
 
@@ -137,22 +136,22 @@ class PostGetSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if request:
             user = request.user
-            postActionQuerySet = PostAction.objects.filter(
+            post_action_qs = PostAction.objects.filter(
                 post=obj, user=user)
-            if postActionQuerySet.exists():
-                for action in postActionQuerySet:
+            if post_action_qs.exists():
+                for action in post_action_qs:
                     if action.like:
                         return True
-        return True
+        return False
 
     def get_like_id(self, obj: Post) -> int:
         request = self.context.get('request')
         if request:
             user = request.user
-            postActionQuerySet = PostAction.objects.filter(
+            post_action_qs = PostAction.objects.filter(
                 post=obj, user=user)
-            if postActionQuerySet.exists():
-                for action in postActionQuerySet:
+            if post_action_qs.exists():
+                for action in post_action_qs:
                     if action.like:
                         return action.pk
         return None

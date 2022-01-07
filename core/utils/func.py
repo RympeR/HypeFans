@@ -1,10 +1,6 @@
 import os
-import re
 import random
 import string
-from django.core.validators import validate_email
-from rest_framework import pagination
-from rest_framework.response import Response
 
 
 def id_generator(size=12, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
@@ -38,5 +34,10 @@ def return_file_url(serializer, path_file):
         host = request.get_host()
     else:
         host = 'hype-fans.com/'
+    return 'http://{domain}{path}'.format(
+        domain=host, path=path_file)
+
+
+def create_path_file(host: str, path_file: str):
     return 'http://{domain}{path}'.format(
         domain=host, path=path_file)

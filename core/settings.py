@@ -89,14 +89,14 @@ CHANNEL_LAYERS = {
         },
     },
 }
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': '/var/tmp/django_cache',
     }
 }
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -218,13 +218,13 @@ CORS_ALLOW_METHODS = (
 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.hosting.reg.ru'
 # EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'mail.hosting.reg.ru'
 EMAIL_HOST_USER = 'management@hype-fans.com'
 EMAIL_HOST_PASSWORD = 'P3j2M7a9'
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
-# EMAIL_USE_TLS = True    
+# EMAIL_USE_TLS = True
 # EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'management@hype-fans.com'
 

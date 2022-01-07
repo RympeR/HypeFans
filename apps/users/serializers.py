@@ -1,5 +1,7 @@
+import logging
 from rest_framework import serializers
 from core.utils.customFields import TimestampField
+from core.utils.func import create_path_file
 from django.db.models import Count
 from apps.blog.models import Post
 from django_countries.serializer_fields import CountryField
@@ -13,6 +15,7 @@ from .models import (
     Subscription,
     PendingUser
 )
+HOST = 'hype-fans.com/'
 
 
 class SubscriptionGetSerializer(serializers.ModelSerializer):
@@ -66,9 +69,8 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
         try:
             online = user.user_online
         except Exception as e:
-            ...
-        if online:
-            if not user.hide_online:
+            logging.error(e)
+        if online and not user.hide_online:
                 if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                     return True
                 else:
@@ -82,9 +84,8 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             if request:
                 host = request.get_host()
             else:
-                host = 'hype-fans.com/'
-            file_url = 'http://{domain}{path}'.format(
-                domain=host, path=path_file)
+                host = HOST
+            file_url = create_path_file(host, path_file)
             return file_url
         return ''
 
@@ -95,9 +96,8 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             if request:
                 host = request.get_host()
             else:
-                host = 'hype-fans.com/'
-            file_url = 'http://{domain}{path}'.format(
-                domain=host, path=path_file)
+                host = HOST
+            file_url = create_path_file(host, path_file)
             return file_url
         return ''
 
@@ -125,25 +125,23 @@ class UserShortSocketRetrieveSeriliazer(serializers.ModelSerializer):
         try:
             online = user.user_online
         except Exception as e:
-            ...
-        if online:
-            if not user.hide_online:
-                if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
-                    return True
-                else:
-                    return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+            logging.error(e)
+        if online and not user.hide_online:
+            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
+                return True
+            else:
+                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
         return False
 
     def get_avatar(self, user: User):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            if request:
+            if request: 
                 host = request.get_host()
             else:
-                host = 'hype-fans.com/'
-            file_url = 'http://{domain}{path}'.format(
-                domain=host, path=path_file)
+                host = HOST
+            file_url = create_path_file(host, path_file)
             return file_url
         return ''
 
@@ -171,8 +169,7 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
             online = user.user_online
         except Exception as e:
             ...
-        if online:
-            if not user.hide_online:
+        if online and not user.hide_online:
                 if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                     return True
                 else:
@@ -186,9 +183,8 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
             if request:
                 host = request.get_host()
             else:
-                host = 'hype-fans.com/'
-            file_url = 'http://{domain}{path}'.format(
-                domain=host, path=path_file)
+                host = HOST
+            file_url = create_path_file(host, path_file)
             return file_url
         return ''
 
@@ -199,9 +195,8 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
             if request:
                 host = request.get_host()
             else:
-                host = 'hype-fans.com/'
-            file_url = 'http://{domain}{path}'.format(
-                domain=host, path=path_file)
+                host = HOST
+            file_url = create_path_file(host, path_file)
             return file_url
         return ''
 
@@ -299,9 +294,8 @@ class SettingsSerializer(serializers.ModelSerializer):
         try:
             online = user.user_online
         except Exception as e:
-            ...
-        if online:
-            if not user.hide_online:
+            logging.error(e)
+        if online and not user.hide_online:
                 if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                     return True
                 else:
@@ -342,9 +336,8 @@ class UserGetSerializer(serializers.ModelSerializer):
         try:
             online = user.user_online
         except Exception as e:
-            ...
-        if online:
-            if not user.hide_online:
+            logging.error(e)
+        if online and not user.hide_online:
                 if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                     return True
                 else:
@@ -356,8 +349,7 @@ class UserGetSerializer(serializers.ModelSerializer):
             path_file = user.avatar.url
             request = self.context.get('request')
             host = request.get_host()
-            file_url = 'http://{domain}{path}'.format(
-                domain=host, path=path_file)
+            file_url = create_path_file(host, path_file)
             return file_url
         return ''
 
@@ -366,8 +358,7 @@ class UserGetSerializer(serializers.ModelSerializer):
             path_file = user.background_photo.url
             request = self.context.get('request')
             host = request.get_host()
-            file_url = 'http://{domain}{path}'.format(
-                domain=host, path=path_file)
+            file_url = create_path_file(host, path_file)
             return file_url
         return ''
 
@@ -402,6 +393,7 @@ class UserGetSerializer(serializers.ModelSerializer):
             'credit_amount',
             'earned_credits_amount',
             'is_online',
+            'ref_link',
         )
 
 
@@ -426,9 +418,8 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
         try:
             online = user.user_online
         except Exception as e:
-            ...
-        if online:
-            if not user.hide_online:
+            logging.error(e)
+        if online and not user.hide_online:
                 if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                     return True
                 else:
@@ -444,8 +435,7 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
             path_file = user.avatar.url
             request = self.context.get('request')
             host = request.get_host()
-            file_url = 'http://{domain}{path}'.format(
-                domain=host, path=path_file)
+            file_url = create_path_file(host, path_file)
             return file_url
         return ''
 
@@ -454,8 +444,7 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
             path_file = user.background_photo.url
             request = self.context.get('request')
             host = request.get_host()
-            file_url = 'http://{domain}{path}'.format(
-                domain=host, path=path_file)
+            file_url = create_path_file(host, path_file)
             return file_url
         return ''
 
@@ -517,7 +506,6 @@ class CardPartialSerializer(serializers.ModelSerializer):
 
 
 class DonationCreationSerializer(serializers.ModelSerializer):
-    # datetime = TimestampField(required=False)
     sender = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     reciever = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
@@ -560,7 +548,6 @@ class PaymentCreationSerializer(serializers.ModelSerializer):
 class PaymentGetSerializer(serializers.ModelSerializer):
 
     card = CardGetSerializer()
-    # datetime = TimestampField(required=False)
 
     class Meta:
         model = Payment

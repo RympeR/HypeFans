@@ -92,12 +92,13 @@ class User(AbstractUser):
         verbose_name='Кредитный баланс', default=0)
     earned_credits_amount = models.IntegerField(
         verbose_name='Заработано', default=0)
+    ref_link = models.CharField(max_length=255, verbose_name='Рефералка', null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
         'username'
     ]
-
+    
     @staticmethod
     def _create_user(password, email, **extra_fields):
         if not email:

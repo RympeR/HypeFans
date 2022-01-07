@@ -342,7 +342,7 @@ class UserOnlineCreateAPI(generics.GenericAPIView):
             serializer.is_valid(raise_exception=True)
         except AssertionError:
             return api_bad_request_400({"status": "bad request"})
-        instance = UserOnline.objects.create_or_update(
+        UserOnline.objects.create_or_update(
             user=request.user
         )
         return Response(serializer.data)
@@ -393,7 +393,7 @@ class PayStatsHistoryRetrieveAPI(APIView):
         donation_amount = sum((donation.amount for donation in donations))
         subscriptions = Subscription.objects.filter(
             target=user,
-            start_date__date__month=currentMonth,
+            start_date__date__month=current_month,
         ).order_by('-start_date')
         subscription_amount = sum((
             user.subscribtion_duration
