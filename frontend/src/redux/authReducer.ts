@@ -151,6 +151,7 @@ const actions = {
 };
 
 export const getAuthUserData = (): Thunk => async (dispatch) => {
+  dispatch(isLoading());
   const meData = await userAPI.getProfile();
   if (meData) {
     const {
@@ -217,6 +218,7 @@ export const getAuthUserData = (): Thunk => async (dispatch) => {
       )
     );
     dispatch(actions.isAuth());
+    dispatch(isntLoading());
   }
 };
 
@@ -260,13 +262,13 @@ export const logout = (): Thunk => async (dispatch) => {
 };
 
 export const login = ({ email, password }: { email: string; password: string }): Thunk => async (dispatch) => {
-  dispatch(isLoading());
+  // dispatch(isLoading());
   const response = await authAPI.login(email, password);
-  const data = await authAPI.meGet();
+  await authAPI.meGet();
   if (response) {
     dispatch(getAuthUserData());
   }
-  dispatch(isntLoading());
+  // dispatch(isntLoading());
 };
 
 export const isntSettingsDisabled = (): Thunk => async (dispatch) => {
@@ -291,7 +293,7 @@ export const changeSettings = (obj: any): Thunk => async (dispatch) => {
 
 export const getUserData = (): Thunk => async (dispatch) => {
   dispatch(isLoading());
-  const data = await authAPI.meGet();
+  await authAPI.meGet();
   await dispatch(getAuthUserData());
   dispatch(isntLoading());
 };

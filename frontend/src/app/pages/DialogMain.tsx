@@ -372,12 +372,12 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                         <div
                           className="text-wrapp"
                           style={
-                            item.attachments.length > 0 ? { backgroundColor: 'white', justifyContent: 'flex-end' } : {}
+                            item?.attachments.length > 0 ? { backgroundColor: 'white', justifyContent: 'flex-end' } : {}
                           }
                         >
                           {CryptoJS.AES.decrypt(item.text, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(CryptoJS.enc.Utf8)}
-                          {item.attachments.length > 0
-                            ? item.attachments.map((item: any, index: number) => {
+                          {item?.attachments.length > 0
+                            ? item?.attachments.map((item: any, index: number) => {
                                 if (item.file_type === 4) {
                                   return <Video src={item.file_url} />;
                                 } else if (item.file_type === 1) {

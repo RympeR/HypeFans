@@ -1,4 +1,5 @@
 import { Formik } from 'formik';
+import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import CurrencyInput from 'react-currency-input-field';
@@ -7,6 +8,7 @@ import 'react-phone-input-2/lib/style.css';
 import Recaptcha from 'react-recaptcha';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Route, useHistory, useLocation } from 'react-router-dom';
+import { authAPI } from '~/api/authAPI';
 import { settingsValType } from '~/api/types';
 import { useTabs } from '~/app/components/Tabs';
 import { changeSettings } from '~/redux/authReducer';
@@ -79,7 +81,15 @@ export const Settings = () => {
   const ProfileSettingsSidebar = ({ showStyle }: { showStyle: boolean }) => {
     console.log(showStyle);
     const user = useSelector((state: RootState) => state.auth);
+    const history = useHistory();
     const [show, setShow] = useState(false);
+
+    const logout = () => {
+      Cookies?.set('token', '');
+      authAPI.logout();
+      history.push('/');
+    };
+
     const selectedColor = '#F9F9F9';
     return (
       <div className={showStyle ? 'notifications__sidebarMobile' : 'notifications__sidebar'}>
@@ -146,7 +156,7 @@ export const Settings = () => {
                   Отмена
                 </h6>
                 <div style={{ width: '20px' }}></div>
-                <h6>Продолжить</h6>
+                <h6 onClick={() => logout()}>Продолжить</h6>
               </div>
             </div>
           </div>

@@ -107,7 +107,11 @@ export const userAPI = {
   },
   getUser({ user }: userStringType) {
     return instance.get<getUserRT>(`user/get-profile/${user}`).then((response) => {
-      return response.data;
+      if (response.status === 200 || 301) {
+        return response.data;
+      } else {
+        throw new Error();
+      }
     });
   },
   getProfile() {

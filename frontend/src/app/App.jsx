@@ -25,7 +25,7 @@ const options = {
 
 const App = () => {
   const dispatch = useDispatch();
-  if (Cookies.get('token') !== undefined && Cookies.get('token') !== null) {
+  if (Cookies?.get('token')?.length > 5) {
     dispatch(getUserData());
   }
 
