@@ -217,6 +217,7 @@ CORS_ALLOW_HEADERS = [
     "origin",
     "user-agent",
     "x-csrftoken",
+    'token',
     "x-requested-with",
 ]
 CORS_ALLOW_METHODS = (

@@ -43,12 +43,14 @@ class UserMeRetrieveAPI(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+
 class UserRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserOwnProfileGetSerializer
 
     def get_object(self):
         return self.request.user
+
 
 class UserSearchRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
@@ -164,6 +166,7 @@ class UserLoginAPI(generics.GenericAPIView):
                     ]
                 }
             )
+
 
 class UserCreateAPI(generics.GenericAPIView):
     permission_classes = permissions.AllowAny,
