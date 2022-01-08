@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'silk.middleware.SilkyMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middle.CustomAuthMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -210,13 +211,13 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
-    "authorization",
-    "x-authorization",
     "content-type",
     "dnt",
     "origin",
     "user-agent",
     "x-csrftoken",
+    "authorization",
+    "x-authorization",
     'token',
     "x-requested-with",
 ]
