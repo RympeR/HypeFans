@@ -9,14 +9,14 @@ export const instance = axios.create({
 
 export const setAuthToken = (token: string) => {
   if (token) {
+    console.log(token);
     instance.defaults.headers.common['authorization'] = `token ${token}`;
   }
 };
-
 (function () {
-  if (Cookies.get('token') === null) {
+  if (Cookies?.get('token')?.length < 5) {
     axios.defaults.headers.common.Authorization = null;
   } else {
-    setAuthToken(Cookies.get('token'));
+    setAuthToken(Cookies?.get('token'));
   }
 })();

@@ -69,6 +69,8 @@ export const getComputedWidth = async (marginLeft = 47) => {
 
     const postList = document.querySelector('#postlist');
 
+    if (main === null || postList === null) return;
+
     const postListWidth = +window.getComputedStyle(postList).width.replace('px', '');
 
     const mainWidth = +window.getComputedStyle(main).width.replace('px', '');
@@ -85,6 +87,8 @@ export const getComputedLeftPosition = async (marginLeft = 47) => {
     const main = document.querySelector('#main');
 
     const postList = document.querySelector('#postlist');
+
+    if (main === null || postList === null) return;
 
     const mainMarginLeft = +window.getComputedStyle(main).marginLeft.replace('px', '');
 

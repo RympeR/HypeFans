@@ -2,6 +2,151 @@
   display: flex;
   justify-content: space-between;
 
+  &__listItem {
+    display: flex;
+    justify-content: space-between;
+    // margin: 16px 32px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    img {
+      width: 46px;
+      height: 46px;
+      border-radius: 100%;
+      margin: 24px 32px;
+    }
+  }
+
+  &__listText {
+    h1 {
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 20px;
+      margin-top: 16px;
+      margin-left: 24px;
+    }
+    h2 {
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 18px;
+      margin-left: 24px;
+      line-height: 20px;
+    }
+  }
+
+  &__navMobile {
+    display: none;
+  }
+
+  &__wallet {
+    background: #f8f1f0;
+    border-radius: 8px;
+    width: 96%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding: 16px 20px;
+    h5 {
+      margin: 0px;
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 20px;
+    }
+  }
+
+  &__walletMain {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 100%;
+      margin: 12px 12px;
+    }
+  }
+
+  &__walletChild {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    align-items: center;
+    h3 {
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 18px;
+      margin: 0px;
+      margin-top: 20px;
+    }
+    h4 {
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 13px;
+      margin: 0px;
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+
+  &__walletUnder {
+    display: flex;
+    width: 96%;
+    margin-top: 40px;
+    justify-content: space-between;
+    h5 {
+      margin: 0px;
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 20px;
+    }
+    h6 {
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 15px;
+      color: $orange;
+    }
+  }
+
+  &__tabs {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    ul {
+      display: flex;
+      list-style-type: none;
+      margin: 0px;
+      justify-content: space-around;
+      margin-top: 8px;
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 18px;
+      line-height: 20px;
+      li {
+        a:hover {
+          color: $orange;
+          transition: 1s;
+        }
+      }
+    }
+  }
+  &__tab_active {
+    border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+  }
+
+  &__sidebarItemPhone {
+    display: none;
+  }
+
   &__headingText {
     //styleName: заголовки;
     font-family: Factor A;
@@ -13,7 +158,8 @@
     text-align: left;
   }
 
-  &__header {
+  &__header,
+  &__headerMobile {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,14 +175,14 @@
   }
 
   &__back {
-    margin-right: 24px;
+    margin-right: 10px;
   }
 
   &__free {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 21px;
+    margin-top: 24px;
   }
 
   &__priceText {
@@ -101,13 +247,97 @@
     }
   }
 
+  &__sidebarMobile {
+    display: flex;
+    flex-direction: column;
+    background-color: $white;
+    min-width: 350px;
+    min-height: 80vh;
+    border-bottom-left-radius: 16px;
+  }
+
+  &__displayMobile {
+    display: none;
+  }
+
   &__sidebar {
     display: flex;
     flex-direction: column;
     background-color: $white;
     min-width: 350px;
-    min-height: 100vh;
+    min-height: 80vh;
     border-bottom-left-radius: 16px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .notifications__header {
+      display: none;
+    }
+
+    .notifications__headerMobile {
+      min-width: 150px;
+    }
+
+    .notifications__mainWrapper {
+      margin-left: 0px;
+    }
+
+    .notifications__mainItem {
+      padding: 10px;
+    }
+
+    .notifications__none {
+      display: none;
+    }
+
+    .notifications__displayMobile {
+      display: block;
+    }
+
+    .notifications__sidebarItemPhone {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin: 15px;
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 24px;
+      margin-top: 29px;
+      line-height: 26px;
+    }
+
+    .notifications__navMobile {
+      background: #f8f1f0;
+      border-radius: 32px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      transition: 1s;
+      overflow: hidden;
+      margin-left: 15px;
+    }
+    .notifications__sidebar {
+      display: none;
+    }
+    .notifications__userPhoto {
+      width: 60px;
+      height: 60px;
+    }
+    .notifications__userInfo h2 {
+      font-size: 14px;
+    }
+    .notifications__userInfo h3 {
+      font-size: 14px;
+    }
+    .notifications__userInfo h4 {
+      font-size: 14px;
+    }
+    .notifications__postPhoto {
+      width: 70px;
+      height: 70px;
+    }
   }
 
   &__listBlock {
@@ -144,7 +374,7 @@
   }
 
   &__main {
-    height: 100vh;
+    height: 80vh;
     overflow: auto;
   }
 
@@ -184,6 +414,39 @@
     margin: 32px 24px;
     font-family: Factor A;
     font-size: 18px;
+    transition: 0.5s;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: center;
+    color: $white;
+  }
+  &__settingBtn :disabled {
+    width: 94%;
+    height: 50px;
+    background: #fcdfd9;
+    border-radius: 8px;
+    margin: 32px 24px;
+    font-family: Factor A;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: center;
+    color: $white;
+    transition: 0.5s;
+  }
+  &__settingBtn[disabled] {
+    width: 94%;
+    height: 50px;
+    background: #f3bcb0;
+    transition: 0.5s;
+    border-radius: 8px;
+    margin: 32px 24px;
+    font-family: Factor A;
+    font-size: 18px;
     font-style: normal;
     font-weight: 700;
     line-height: 20px;
@@ -204,6 +467,7 @@
     font-family: Factor A;
     font-size: 18px;
     font-style: normal;
+    color: black;
     font-weight: 400;
     line-height: 20px;
     letter-spacing: 0px;
@@ -236,7 +500,7 @@
     background-color: $white;
     padding-bottom: 26px;
     border-bottom-right-radius: 16px;
-    min-height: 100vh;
+    min-height: 80vh;
   }
 
   &__mainItem {
@@ -256,10 +520,6 @@
 
   &__userInfo {
     display: flex;
-  }
-
-  &__userInfo div {
-    margin-left: 8px;
   }
 
   &__sessions {
@@ -350,11 +610,30 @@
     width: 90px;
     height: 90px;
     border-radius: 4px;
-    border: 2px solid grey;
+    border: 2px solid $grey;
   }
 
   &__modal {
     border-radius: 8px;
+  }
+
+  &__comment {
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    img {
+      border-radius: 100%;
+      border: 2px solid $grey;
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  &__commentText {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin-left: 10px;
   }
 
   &__modal h2 {
@@ -379,10 +658,9 @@
 
   &__donationAmount {
     border-radius: 32px;
-    background-color: #FB5734;
+    background-color: #fb5734;
     color: #fff;
     padding: 5px;
     margin-bottom: 50px;
   }
 }
-

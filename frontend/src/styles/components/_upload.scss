@@ -134,6 +134,8 @@
   }
 
   &__bottom {
+    display: 'flex';
+    flex-direction: column;
     padding: 24px;
 
     @media (max-width: map-get($map: $media, $key: xs)) {

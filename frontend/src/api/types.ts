@@ -16,7 +16,6 @@ export type PaymentType = {
   card: number;
 };
 export type SubscriptionType = {
-  end_date: string;
   source: number;
   target: number;
 };
@@ -46,6 +45,13 @@ export type createSubscriptionRT = {
   source: number | null;
   start_date: string | null;
   target: number;
+};
+
+export type settingsValType = {
+  isDisabled: boolean;
+  values: any;
+  submit: () => void;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 };
 
 export type createUserT = {
@@ -88,11 +94,13 @@ export type getPaymentRT = {
   amount: number;
 };
 export type getUserRT = {
+  subscribtion_price: number | null;
   pk: number | null;
   email: string | null;
   avatar: string | null;
   background_photo: string | null;
   username: string | null;
+  subscribed: boolean;
   first_name: string | null;
   bio: string | null;
   birthday_date: string | null;
@@ -115,6 +123,7 @@ export type getUserRT = {
   validated_user: boolean | null;
   credit_amount: number | null;
   earned_credits_amount: number | null;
+  posts: Array<any>;
 };
 
 export type userStringType = {
@@ -172,9 +181,11 @@ export type createPostActionRT = {
   like: boolean | null;
   comment: string | null;
   donation_amount: number | null;
+  parent: number | null;
   user: number;
   post: number;
   date_time: null | undefined | string;
+  id: number | null;
 };
 export type createPostBoughtRT = {
   id: number | null;

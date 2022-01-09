@@ -34,7 +34,7 @@ This repository is a group of **boilerplates** including some **good practises**
 
 </p>
 
-### <img src="https://raw.githubusercontent.com/CKGrafico/Frontend-Boilerplates/docs/resources/techs/react.png" align="left" width="35" title="Boilerplate" /> React - Boilerplate Features
+### <img https://raw.githubusercontent.com/CKGrafico/Frontend-Boilerplates/docs/resources/techs/react.png" align="left" width="35" title="Boilerplate" /> React - Boilerplate Features
 
 These are the most relevant technologies that this boilerplate includes, all of them are configured to inspire your project and are showing examples of what you can do with them.
 

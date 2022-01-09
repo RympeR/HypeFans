@@ -1,40 +1,58 @@
 import React, { useEffect, useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import CurrencyInput from 'react-currency-input-field';
 import 'react-phone-input-2/lib/style.css';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, Route, useHistory, useLocation } from 'react-router-dom';
+import { getNotifications } from '~/redux/notificationsReducer';
+import { RootState } from '~/redux/redux';
 import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
+import { ReactComponent as BellIcon } from '../../assets/images/bell.svg';
+import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
+import { ReactComponent as ArrowLeft } from '../../assets/images/leftIcon.svg';
+import { ReactComponent as CommentIcon } from '../../assets/images/message-circle.svg';
 import { ReactComponent as SettingsIcon } from '../../assets/images/settings.svg';
+import { ReactComponent as DonateIcon } from '../../assets/images/tip.svg';
+import { ReactComponent as UnlockIcon } from '../../assets/images/unlock.svg';
+import { Preloader } from '../utils/Preloader';
 import { Notification } from './notifications/Notification';
 import { NotificationSidebarItem } from './notifications/NotificationSidebarItem';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '~/redux/redux';
-import { getNotifications } from '~/redux/notificationsReducer';
-
-type NotificationsPropsType = {
-  settingsVisible: boolean;
-  setSettingsVisible: (bool: boolean) => void;
-};
 
 const Notifications = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { pathname } = useLocation();
-  console.log(pathname);
   const notifications = useSelector((state: RootState) => state.notifications.notifications);
-  const [settingsVisible, setSettingsVisible] = useState<boolean>(false);
   const isLoading = useSelector((state: RootState) => state.notifications.isLoading);
   useEffect(() => {
     dispatch(getNotifications());
   }, []);
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return <Preloader />;
   }
   const Text = ({ text }: { text: string }) => {
-    return <p>{text}</p>;
+    return (
+      <>
+        <p className="notifications__none">{text}</p>
+        <div className="notifications__sidebarItemPhone">
+          <div style={{ marginBottom: '5px', marginRight: '17px' }}>
+            <ArrowLeft onClick={history.goBack} />
+          </div>
+          <div style={{ marginTop: '4px' }}>{text}</div>
+          <div className="notifications__none">
+            <Link to="/settings/notifications">
+              <Route path="/notifications" component={SettingsIcon} />
+            </Link>
+          </div>
+          <div className="notifications__displayMobile">
+            <Link to="/settings/mobileSidebar">
+              <Route path="/notifications" component={SettingsIcon} />
+            </Link>
+          </div>
+        </div>
+      </>
+    );
   };
 
-  const NotificationsSidebar = ({ settingsVisible, setSettingsVisible }: NotificationsPropsType) => {
+  const NotificationsSidebar = () => {
     const selectedColor = '#edebeb';
     const SettingsButton = () => <SettingsIcon />;
     const BackButton = () => <BackIcon onClick={history.goBack} />;
@@ -71,42 +89,6 @@ const Notifications = () => {
         </div>
       );
     };
-    const SettingsSidebar = () => {
-      return (
-        <div className="notifications__sidebar">
-          <Link
-            to="/notifications/settings/profile"
-            style={pathname === '/notifications/settings/profile' ? { background: selectedColor } : {}}
-          >
-            <NotificationSidebarItem text="Профиль" />
-          </Link>
-          <Link
-            to="/notifications/settings/account"
-            style={pathname === '/notifications/settings/account' ? { background: selectedColor } : {}}
-          >
-            <NotificationSidebarItem text="Аккаунт" />
-          </Link>
-          <Link
-            to="/notifications/settings/confidentiality"
-            style={pathname === '/notifications/settings/confidentiality' ? { background: selectedColor } : {}}
-          >
-            <NotificationSidebarItem text="Конфеденциальность" />
-          </Link>
-          <Link
-            to="/notifications/settings/prices"
-            style={pathname === '/notifications/settings/prices' ? { background: selectedColor } : {}}
-          >
-            <NotificationSidebarItem text="Цены" />
-          </Link>
-          <Link
-            to="/notifications/settings/notifications"
-            style={pathname === '/notifications/settings/notifications' ? { background: selectedColor } : {}}
-          >
-            <NotificationSidebarItem text="Уведомления" />
-          </Link>
-        </div>
-      );
-    };
 
     return (
       <div>
@@ -115,261 +97,28 @@ const Notifications = () => {
             <BackButton />
           </div>
 
-          <p className="notifications__headingText">
-            <Route path="/notifications" render={() => <Text text="Уведомления" />} exact />
-            <Route path="/notifications/subscriptions" render={() => <Text text="Уведомления" />} exact />
-            <Route path="/notifications/likes" render={() => <Text text="Уведомления" />} exact />
-            <Route path="/notifications/comments" render={() => <Text text="Уведомления" />} exact />
-            <Route path="/notifications/donations" render={() => <Text text="Уведомления" />} exact />
-            <Route path="/notifications/settings" render={() => <Text text="Настройки" />} />
-          </p>
+          <div className="notifications__headingText">
+            <Route path="/notifications" render={() => <Text text="Уведомления" />} />
+          </div>
           <div className="notifications__settings">
-            <Link to="/notifications/settings/notifications">
-              <Route path="/notifications" component={SettingsButton} exact />
-              <Route path="/notifications/subscriptions" component={SettingsButton} exact />
-              <Route path="/notifications/likes" component={SettingsButton} exact />
-              <Route path="/notifications/comments" component={SettingsButton} exact />
-              <Route path="/notifications/donations" component={SettingsButton} exact />
+            <Link to="/settings/notifications">
+              <Route path="/notifications" component={SettingsButton} />
             </Link>
           </div>
         </div>
         {/* Кнопки в сайдбаре в зависимости от роута */}
-        <Route path="/notifications/" component={DefaultSidebar} exact />
-        <Route path="/notifications/comments" component={DefaultSidebar} exact />
-        <Route path="/notifications/subscriptions" component={DefaultSidebar} exact />
-        <Route path="/notifications/likes" component={DefaultSidebar} exact />
-        <Route path="/notifications/donations" component={DefaultSidebar} exact />
-        <Route path="/notifications/settings" component={SettingsSidebar} />
+        <Route path="/notifications/" component={DefaultSidebar} />
       </div>
     );
   };
   const NotificationsMain = () => {
-    const PushSettingsNotifications = () => {
-      return (
-        <div className="notifications__main">
-          <div className="notifications__listBlock">
-            <p>Push-уведомления</p>
-            <input type="checkbox" className="notifications__toggle-button"></input>
-          </div>
-          <p className="notifications__listText">
-            Получайте push-уведомления, чтобы узнать, что происходит, когда вы не находитесь на HypeFans. Вы можете
-            выключить их в любое время.
-          </p>
-        </div>
-      );
-    };
-    const AccountSettings = () => {
-      return (
-        <div className="notifications__main">
-          <h2 className="notifications__settings_h2">Информация</h2>
-          <Link to="/notifications/settings/account/nickname">
-            <NotificationSidebarItem text="Ник" />
-          </Link>
-          <Link to="/notifications/settings/account/email">
-            <NotificationSidebarItem text="Email" />
-          </Link>
-          <Link to="/notifications/settings/account/phone">
-            <NotificationSidebarItem text="Номер телефона" />
-          </Link>
-          <h2 className="notifications__settings_h2" style={{ paddingTop: '40px' }}>
-            Безопасность
-          </h2>
-          <Link to="/notifications/settings/account/password">
-            <NotificationSidebarItem text="Пароль" />
-          </Link>
-          <Link to="/notifications/settings/account/sessions">
-            <NotificationSidebarItem text="Сеансы входа" />
-          </Link>
-          <h2 className="notifications__settings_h2" style={{ paddingTop: '40px' }}>
-            Действия
-          </h2>
-          <Link to="/notifications/settings/notifications/account/delete">
-            <NotificationSidebarItem text="Удалить аккаунт" />
-          </Link>
-        </div>
-      );
-    };
-    const DeleteAccount = () => {
-      return <div className="notifications__main">fdfd</div>;
-    };
-    const SessionsInfo = () => {
-      return (
-        <div className="notifications__sessions notifications__main">
-          <h3>MIUI Browser 12.9, Android 9, Xiaomi MI 9 SE</h3>
-          <p>188.130.176.46 - Ukraine </p>
-          <p>3/23/21 10:42</p>
-        </div>
-      );
-    };
-    const NicknameSettings = () => {
-      return (
-        <div className="notifications__main">
-          <p style={{ padding: '16px 24px' }}>Ник</p>
-          <input className="notifications__input"></input>
-          <button className="notifications__settingBtn">Сохранить</button>
-        </div>
-      );
-    };
-    const PasswordSettings = () => {
-      return (
-        <div className="notifications__main">
-          <p style={{ padding: '16px 24px' }}>Новый пароль</p>
-          <input className="notifications__input" placeholder="Введите новый пароль..."></input>
-          <input
-            className="notifications__input"
-            style={{ marginTop: '16px' }}
-            placeholder="Подтвердите новый пароль..."
-          ></input>
-          <button className="notifications__settingBtn">Сохранить</button>
-        </div>
-      );
-    };
-
-    const PhoneSettings = () => {
-      return (
-        <div className="notifications__main">
-          <p style={{ padding: '16px 24px' }}>Номер телефона</p>
-        </div>
-      );
-    };
-    const EmailSettings = () => {
-      const [emailModalShow, setEmailModalShow] = useState(false);
-      return (
-        <div className="notifications__main">
-          <p style={{ padding: '16px 24px' }}>Email</p>
-          <input className="notifications__input"></input>
-          <button
-            className="notifications__settingBtn"
-            onClick={() => {
-              setEmailModalShow(true);
-            }}
-          >
-            Изменить Email
-          </button>
-
-          <Modal show={emailModalShow} onHide={() => setEmailModalShow(false)} centered>
-            <Modal.Body className="notifications__modal">
-              <h2>Письмо подтверждения</h2>
-              <h2> отправлено на данный Email</h2>
-              <h3 onClick={() => setEmailModalShow(false)}>Понятно!</h3>
-            </Modal.Body>
-          </Modal>
-        </div>
-      );
-    };
-    const ConfidentialitySettings = () => {
-      return (
-        <div className="notifications__main">
-          <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
-            <p>Показывать статус активности </p>
-            <input type="checkbox" className="notifications__toggle-button"></input>
-          </div>
-          <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
-            <p>Показывать количество подписчиков</p>
-            <input type="checkbox" className="notifications__toggle-button"></input>
-          </div>
-          <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
-            <p>Показывать количество постов </p>
-            <input type="checkbox" className="notifications__toggle-button"></input>
-          </div>
-          <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
-            <p>Заблокированные аккаунты </p>
-            <input type="checkbox" className="notifications__toggle-button"></input>
-          </div>
-        </div>
-      );
-    };
-    const EmailSettingsNotifications = () => {
-      return (
-        <div className="notifications__main">
-          <div className="notifications__listBlock">
-            <p>Уведомления электронной почты </p>
-            <input type="checkbox" className="notifications__toggle-button"></input>
-          </div>
-          <p className="notifications__listText">
-            Получайте электронные письма, чтобы узнать, что происходит, когда вы не находитесь на HypeFans. Вы можете
-            выключить их в любое время.
-          </p>
-        </div>
-      );
-    };
-    const PageSettingsNotifications = () => {
-      return (
-        <div className="notifications__main">
-          <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
-            <p>Новые комментарии </p>
-            <input type="checkbox" className="notifications__toggle-button"></input>
-          </div>
-          <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
-            <p>Новые лайки </p>
-            <input type="checkbox" className="notifications__toggle-button"></input>
-          </div>
-          <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
-            <p>Новые подписки </p>
-            <input type="checkbox" className="notifications__toggle-button"></input>
-          </div>
-          <div className="notifications__longList" style={{ borderBottom: '1px solid #bbc1e1' }}>
-            <p>Новые донаты </p>
-            <input type="checkbox" className="notifications__toggle-button"></input>
-          </div>
-        </div>
-      );
-    };
-    const SettingsNotifications = () => {
-      return (
-        <div className="notifications__main">
-          <Link to="/notifications/settings/notifications/push">
-            <NotificationSidebarItem text="Push-уведомления" />
-          </Link>
-          <Link to="/notifications/settings/notifications/email">
-            <NotificationSidebarItem text="Email-уведомления" />
-          </Link>
-          <Link to="/notifications/settings/notifications/page">
-            <NotificationSidebarItem text="Уведомления на сайте" />
-          </Link>
-        </div>
-      );
-    };
-    const PricesSettings = () => {
-      return (
-        <div className="notifications__main">
-          <Link to="/notifications/settings/prices/messages">
-            <NotificationSidebarItem text="Цена сообщения" />
-          </Link>
-          <Link to="/notifications/settings/prices/subscribes">
-            <NotificationSidebarItem text="Цена подписки" />
-          </Link>
-          <Link to="/notifications/settings/prices/fans">
-            <NotificationSidebarItem text="Для фанатов" />
-          </Link>
-        </div>
-      );
-    };
-    const MessagesPrice = () => {
-      return (
-        <div className="notifications__main">
-          <div className="notifications__pricesHeader">
-            <p>Пользователь сможет общаться с вами, только заплатив определенную сумму.</p>
-            <div className="notifications__free">
-              <h2>Бесплатно</h2>
-              <input type="checkbox" className="notifications__toggle-button"></input>
-            </div>
-          </div>
-          <div style={{ borderTop: '1px solid rgba(0, 0, 0, 0.2)' }}>
-            <p className="notifications__priceText">Цена за 1 месяц</p>
-            <CurrencyInput
-              className="notifications__input"
-              prefix="$"
-              name="input-name"
-              placeholder="$ Введите сумму..."
-              decimalsLimit={2}
-              onValueChange={(value, name) => console.log(value, name)}
-            />
-          </div>
-        </div>
-      );
-    };
-    const DefaultMain = ({ notifications }: { notifications: Array<any> }) => {
+    const [isShown, setShown] = useState(false);
+    useEffect(() => {
+      if (history.location.pathname !== '/notifications') {
+        setShown(true);
+      }
+    }, [history]);
+    const Main = ({ notifications }: { notifications: Array<any> }) => {
       return (
         <div className="notifications__main">
           {notifications.length > 0 ? (
@@ -393,75 +142,102 @@ const Notifications = () => {
           <Route path="/notifications/subscriptions" render={() => <Text text="Подписки" />} exact />
           <Route path="/notifications/likes" render={() => <Text text="Лайки" />} exact />
           <Route path="/notifications/comments" render={() => <Text text="Комментарии" />} exact />
-          <Route path="/notifications/settings/profile" render={() => <Text text="Профиль" />} exact />
-          <Route path="/notifications/settings/account" render={() => <Text text="Аккаунт" />} exact />
-          <Route
-            path="/notifications/settings/confidentiality"
-            render={() => <Text text="Конфеденциальность" />}
-            exact
-          />
-          <Route path="/notifications/settings/account/sessions" render={() => <Text text="Сеансы входа" />} exact />
-          <Route
-            path="/notifications/settings/notifications/push"
-            render={() => <Text text="Push-уведомления" />}
-            exact
-          />
-          <Route path="/notifications/settings/account/phone" render={() => <Text text="Номер телефона" />} exact />
-          <Route
-            path="/notifications/settings/notifications/email"
-            render={() => <Text text="Email-уведомления" />}
-            exact
-          />
-          <Route
-            path="/notifications/settings/notifications/page"
-            render={() => <Text text="Уведомления на сайте" />}
-            exact
-          />
-          <Route path="/notifications/settings/notifications" render={() => <Text text="Уведомления" />} exact />
-          <Route path="/notifications/settings/prices" render={() => <Text text="Цены" />} exact />
-          <Route path="/notifications/settings/account/delete" render={() => <Text text="Удалить аккаунт" />} exact />
-          <Route path="/notifications/settings/account/email" render={() => <Text text="Изменить Email" />} exact />
-          <Route path="/notifications/settings/account/password" render={() => <Text text="Изменить пароль" />} exact />
-          <Route path="/notifications/settings/prices/messages" render={() => <Text text="Цена сообщения" />} exact />
-          <Route path="/notifications/settings/account/nickname" render={() => <Text text="Изменить ник" />} exact />
           {/* Заголовок(конец)*/}
+          <div className="notifications__navMobile" style={isShown ? { width: '160px' } : { width: '25px' }}>
+            {isShown ? (
+              <div style={{ marginLeft: '5px' }}>
+                <Link
+                  className={
+                    history.location.pathname === '/notifications'
+                      ? 'nav__icon_notifications_active '
+                      : 'nav__icon_notifications_inactive '
+                  }
+                  to="/notifications"
+                  onClick={() => setShown(true)}
+                >
+                  <BellIcon />
+                </Link>
+              </div>
+            ) : (
+              <div
+                className={
+                  history.location.pathname === '/notifications'
+                    ? 'nav__icon_notifications_active '
+                    : 'nav__icon_notifications_inactive '
+                }
+                onClick={() => setShown(true)}
+              >
+                <BellIcon />
+              </div>
+            )}
+            <Link
+              className={
+                history.location.pathname === '/notifications/comments'
+                  ? 'nav__icon_notifications_active '
+                  : 'nav__icon_notifications_inactive '
+              }
+              to="/notifications/comments"
+              style={{ marginLeft: '5px' }}
+            >
+              <CommentIcon />
+            </Link>
+            <Link
+              className={
+                history.location.pathname === '/notifications/likes'
+                  ? 'nav__icon_notifications_active '
+                  : 'nav__icon_notifications_inactive '
+              }
+              to="/notifications/likes"
+              style={{ marginLeft: '13px' }}
+            >
+              <LikeIcon />
+            </Link>
+            <Link
+              className={
+                history.location.pathname === '/notifications/subscriptions'
+                  ? 'nav__icon_notifications_active '
+                  : 'nav__icon_notifications_inactive '
+              }
+              to="/notifications/subscriptions"
+              style={{ marginLeft: '13px' }}
+            >
+              <UnlockIcon />
+            </Link>
+            <Link
+              className={
+                history.location.pathname === '/notifications/donations'
+                  ? 'nav__icon_notifications_active '
+                  : 'nav__icon_notifications_inactive '
+              }
+              to="/notifications/donations"
+              style={{ marginLeft: '13px', marginRight: '5px' }}
+            >
+              <DonateIcon />
+            </Link>
+          </div>
         </div>
         {/* Главное тело в зависимости от роута*/}
-        <Route path="/notifications/settings/notifications" component={SettingsNotifications} exact />
-        <Route path="/notifications/settings/notifications/push" component={PushSettingsNotifications} exact />
-        <Route path="/notifications/settings/notifications/email" component={EmailSettingsNotifications} exact />
-        <Route path="/notifications/settings/account" component={AccountSettings} exact />
-        <Route path="/notifications/settings/account/nickname" component={NicknameSettings} exact />
-        <Route path="/notifications/settings/confidentiality" component={ConfidentialitySettings} exact />
-        <Route path="/notifications/settings/notifications/page" component={PageSettingsNotifications} exact />
-        <Route path="/notifications" render={() => <DefaultMain notifications={notifications} />} exact />
+        <Route path="/notifications" render={() => <Main notifications={notifications} />} exact />
         <Route
           path="/notifications/subscriptions"
-          render={() => <DefaultMain notifications={notifications.filter((item) => item.type === 'subscription')} />}
+          render={() => <Main notifications={notifications.filter((item) => item.type === 'subscription')} />}
           exact
         />
         <Route
           path="/notifications/likes"
-          render={() => <DefaultMain notifications={notifications.filter((item) => item.type === 'like')} />}
+          render={() => <Main notifications={notifications.filter((item) => item.type === 'like')} />}
           exact
         />
         <Route
           path="/notifications/comments"
-          render={() => <DefaultMain notifications={notifications.filter((item) => item.type === 'comment')} />}
+          render={() => <Main notifications={notifications.filter((item) => item.type === 'comment')} />}
           exact
         />
         <Route
           path="/notifications/donations"
-          render={() => <DefaultMain notifications={notifications.filter((item) => item.type === 'donation')} />}
+          render={() => <Main notifications={notifications.filter((item) => item.type === 'donation')} />}
           exact
         />
-        <Route path="/notifications/settings/prices/messages" component={MessagesPrice} exact />
-        <Route path="/notifications/settings/prices" component={PricesSettings} exact />
-        <Route path="/notifications/settings/account/password" component={PasswordSettings} exact />
-        <Route path="/notifications/settings/account/phone" component={PhoneSettings} exact />
-        <Route path="/notifications/settings/account/delete" component={DeleteAccount} exact />
-        <Route path="/notifications/settings/account/sessions" component={SessionsInfo} exact />
-        <Route path="/notifications/settings/account/email" component={EmailSettings} exact />
       </div>
     );
   };
@@ -469,7 +245,7 @@ const Notifications = () => {
   return (
     <div className="notifications">
       {/* Сайдбар и блок с информацией */}
-      <NotificationsSidebar settingsVisible={settingsVisible} setSettingsVisible={setSettingsVisible} />
+      <NotificationsSidebar />
       <NotificationsMain />
     </div>
   );

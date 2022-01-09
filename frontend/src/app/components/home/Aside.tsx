@@ -39,6 +39,8 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
     sliced_array.push(recommendations.slice(i, i + 3));
   }
 
+  setInterval(handleWindowResize, 1);
+
   return (
     <aside className="aside" style={{ left: leftFixedPosition }}>
       <p className="aside__title">{currentLang.also}</p>

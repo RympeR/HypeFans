@@ -4,6 +4,7 @@ import { useLocation } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import SignInForm from '~/app/components/auth/SignInForm';
 import SignUpForm from '~/app/components/auth/SignUpForm';
+import { Preloader } from '~/app/utils/Preloader';
 import { NAV_LINKS } from '~/app/utils/utilities';
 import { RootState } from '~/redux/redux';
 import { ReactComponent as Logo } from '../../../assets/images/sign-in-logo.svg';
@@ -12,6 +13,11 @@ const Auth = () => {
   const { pathname } = useLocation();
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const isLoading = useSelector((state: RootState) => state.blog.isLoading);
+
+  if (isLoading) {
+    return <Preloader />;
+  }
 
   if (isAuth) {
     return <Redirect to="/home" />;
