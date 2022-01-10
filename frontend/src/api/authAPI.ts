@@ -33,7 +33,7 @@ export const authAPI = {
   },
   login(email: string, password: string) {
     return instance
-      .post('/auth/token/login/', {
+      .post('/user/login-user/', {
         email,
         password
       })
@@ -42,7 +42,7 @@ export const authAPI = {
           console.log('login error');
         }
         setAuthToken(response.data.auth_token);
-        Cookies.set('token', response.data.auth_token);
+        Cookies?.set('token', response.data.auth_token);
         return response.data.auth_token;
       });
   },
@@ -60,7 +60,8 @@ export const authAPI = {
     });
   },
   createUsers(username: string, email: string, password: string) {
-    return instance.post('/auth/users/', { username, email, password }).then((response) => {
+    return instance.post('/user/create-user/', { username, email, password }).then((response) => {
+      setAuthToken(response.data.auth_token);
       return response.data;
     });
   },
@@ -70,12 +71,16 @@ export const authAPI = {
     });
   },
   meGet() {
-    return instance.get('auth/users/me/').then((response) => {
-      return response;
+    return instance.get<{ username: 'string'; id: number; email: number }>('/auth/users/me/').then((response) => {
+      if (response.status === 200) {
+        return response;
+      } else {
+        throw new Error();
+      }
     });
   },
-  meUpdate(username: string) {
-    return instance.post('auth/users/me/', { username }).then((response) => {
+  meUpdate(data: any) {
+    return instance.put('user/partial-update-user/', data).then((response) => {
       return response;
     });
   },
@@ -99,8 +104,8 @@ export const authAPI = {
       return response;
     });
   },
-  resetEmailConfirm(new_email: string) {
-    return instance.post('/auth/users/reset_email_confirm/', { new_email }).then((response) => {
+  resetEmailConfirm({ new_email, uid }: { new_email: string; uid: number }) {
+    return instance.post('/auth/users/reset_email_confirm/', { new_email, uid }).then((response) => {
       return response;
     });
   },

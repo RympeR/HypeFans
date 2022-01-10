@@ -36,6 +36,15 @@ export const userAPI = {
         return response;
       });
   },
+  blockUser({ user }: { user: number }) {
+    return instance
+      .patch('/user/block-user/', {
+        user
+      })
+      .then((response) => {
+        return response;
+      });
+  },
   createDonation({ amount, sender, reciever }: DonationType) {
     return instance
       .post<createDonationRT>('/user/create-donation/', {
@@ -57,10 +66,9 @@ export const userAPI = {
         return response;
       });
   },
-  createSubscription({ end_date, source, target }: SubscriptionType) {
+  createSubscription({ source, target }: SubscriptionType) {
     return instance
       .post<createSubscriptionRT>('/user/create-subscription/', {
-        end_date,
         source,
         target
       })
@@ -99,6 +107,15 @@ export const userAPI = {
   },
   getUser({ user }: userStringType) {
     return instance.get<getUserRT>(`user/get-profile/${user}`).then((response) => {
+      if (response.status === 200 || 301) {
+        return response.data;
+      } else {
+        throw new Error();
+      }
+    });
+  },
+  getProfile() {
+    return instance.get(`user/get-user`).then((response) => {
       return response.data;
     });
   },

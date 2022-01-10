@@ -11,8 +11,11 @@
 /* Import Components */
 @import './components/navbar';
 @import './components/main';
+@import './components/profile';
+@import './components/chat';
 @import './components/post';
 @import './components/search-bar';
+@import './card.scss';
 @import './components/user-banner';
 @import './components/aside';
 @import './components/notifications';

@@ -1,10 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { authAPI } from '~/api/authAPI';
 import ISignUpData from '~/app/types/ISignUpData';
 import { LangContext } from '~/app/utils/LangProvider';
 import { getAuthScheme, NAV_LINKS } from '~/app/utils/utilities';
+import { getAuthUserData } from '~/redux/authReducer';
 import { ReactComponent as Facebook } from '../../../assets/images/facebook.svg';
 import { ReactComponent as Google } from '../../../assets/images/google.svg';
 import { ReactComponent as Instagram } from '../../../assets/images/instagram.svg';
@@ -29,7 +32,15 @@ const SignUpForm = ({ action }: { action: string }) => {
     resolver: yupResolver(signUpScheme)
   });
 
-  const onSubmit = (data: ISignUpData) => {
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const dispatch = useDispatch();
+
+  const onSubmit = async (data: ISignUpData) => {
+    setIsSigningIn(true);
+    const response = await authAPI.createUsers(data.username, data.email, data.password);
+    console.log(response);
+    setIsSigningIn(false);
+    dispatch(getAuthUserData());
     reset(initialValues);
   };
 
@@ -41,17 +52,35 @@ const SignUpForm = ({ action }: { action: string }) => {
         <p>{currentLang.akkExist1}</p>
 
         <Link to={`/${NAV_LINKS.SIGNIN}`}>
-          <button>{currentLang.akkExist2}</button>
+          <div style={{ color: '#FB5734' }}>{currentLang.akkExist2}</div>
         </Link>
       </div>
 
-      <input type="text" className="auth__input" placeholder={currentLang.nameDescr} {...register('username')} />
+      <input
+        type="text"
+        className="auth__input"
+        disabled={isSigningIn}
+        placeholder={currentLang.nameDescr}
+        {...register('username')}
+      />
       <p className="auth__input-error">{errors.username?.message}</p>
 
-      <input type="text" className="auth__input" placeholder={currentLang.emailDescr} {...register('email')} />
+      <input
+        type="text"
+        className="auth__input"
+        disabled={isSigningIn}
+        placeholder={currentLang.emailDescr}
+        {...register('email')}
+      />
       <p className="auth__input-error">{errors.email?.message}</p>
 
-      <input type="password" className="auth__input" placeholder={currentLang.passDescr} {...register('password')} />
+      <input
+        type="password"
+        className="auth__input"
+        disabled={isSigningIn}
+        placeholder={currentLang.passDescr}
+        {...register('password')}
+      />
       <p className="auth__input-error">{errors.password?.message}</p>
 
       <button className="auth__submit-btn" onClick={() => onSubmit}>

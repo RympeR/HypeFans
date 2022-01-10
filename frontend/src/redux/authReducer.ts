@@ -1,11 +1,12 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { authAPI } from '~/api/authAPI';
-import { userStringType } from './../api/types';
 import { userAPI } from './../api/userAPI';
+import { isLoading, isntLoading } from './blogReducer';
 import { InferActionsTypes, RootState } from './redux';
 
 const initialState = {
+  subscribtion_price: null as number | null,
   pk: null as number | null,
   email: null as string | null,
   avatar: null as string | null,
@@ -32,7 +33,8 @@ const initialState = {
   validated_user: false,
   credit_amount: null as number | null,
   earned_credits_amount: null as number | null,
-  isAuth: false
+  isAuth: false,
+  isSettingsDisabled: false
 };
 
 const authReducer = (state = initialState, action: AllActionsType): InitialStateType => {
@@ -48,13 +50,26 @@ const authReducer = (state = initialState, action: AllActionsType): InitialState
         ...state,
         isAuth: true
       };
+
+    case 'ISNT_SETTINGS_DISABLED':
+      return {
+        ...state,
+        isSettingsDisabled: false
+      };
+    case 'IS_SETTINGS_DISABLED':
+      return {
+        ...state,
+        isSettingsDisabled: true
+      };
     default:
       return state;
   }
 };
 const actions = {
   setAuthUserData: (
+    subscribtion_price: number | null,
     pk: number | null,
+    cards: any,
     email: string | null,
     avatar: string | null,
     background_photo: string | null,
@@ -85,7 +100,9 @@ const actions = {
     return {
       type: 'SET_USER_DATA',
       payload: {
+        subscribtion_price,
         pk,
+        cards,
         email,
         avatar,
         background_photo,
@@ -120,14 +137,27 @@ const actions = {
     return {
       type: 'AUTHORIZED'
     } as const;
+  },
+  isSettingsDisabled: () => {
+    return {
+      type: 'IS_SETTINGS_DISABLED'
+    } as const;
+  },
+  isntSettingsDisabled: () => {
+    return {
+      type: 'ISNT_SETTINGS_DISABLED'
+    } as const;
   }
 };
 
-export const getAuthUserData = ({ user }: userStringType): Thunk => async (dispatch) => {
-  const meData = await userAPI.getUser({ user });
+export const getAuthUserData = (): Thunk => async (dispatch) => {
+  dispatch(isLoading());
+  const meData = await userAPI.getProfile();
   if (meData) {
     const {
+      subscribtion_price,
       pk,
+      cards,
       email,
       avatar,
       background_photo,
@@ -156,7 +186,9 @@ export const getAuthUserData = ({ user }: userStringType): Thunk => async (dispa
     } = meData;
     dispatch(
       actions.setAuthUserData(
+        subscribtion_price,
         pk,
+        cards,
         email,
         avatar,
         background_photo,
@@ -186,6 +218,7 @@ export const getAuthUserData = ({ user }: userStringType): Thunk => async (dispa
       )
     );
     dispatch(actions.isAuth());
+    dispatch(isntLoading());
   }
 };
 
@@ -194,6 +227,8 @@ export const logout = (): Thunk => async (dispatch) => {
   if (response.data.resultCode === 0) {
     dispatch(
       actions.setAuthUserData(
+        null,
+        null,
         null,
         null,
         null,
@@ -227,14 +262,40 @@ export const logout = (): Thunk => async (dispatch) => {
 };
 
 export const login = ({ email, password }: { email: string; password: string }): Thunk => async (dispatch) => {
+  // dispatch(isLoading());
   const response = await authAPI.login(email, password);
+  await authAPI.meGet();
   if (response) {
-    dispatch(getAuthUserData({ user: 'root' }));
+    dispatch(getAuthUserData());
   }
+  // dispatch(isntLoading());
+};
+
+export const isntSettingsDisabled = (): Thunk => async (dispatch) => {
+  dispatch(actions.isntSettingsDisabled());
+};
+export const isSettingsDisabled = (): Thunk => async (dispatch) => {
+  dispatch(actions.isSettingsDisabled());
+};
+
+export const changeSettings = (obj: any): Thunk => async (dispatch) => {
+  delete obj.avatar;
+  delete obj.background_photo;
+  delete obj.repheral_link;
+  dispatch(isSettingsDisabled());
+  const response = await authAPI.meUpdate(obj);
+  const data = await authAPI.meGet();
+  if (response) {
+    dispatch(getAuthUserData());
+  }
+  dispatch(isntSettingsDisabled());
 };
 
 export const getUserData = (): Thunk => async (dispatch) => {
-  dispatch(getAuthUserData({ user: 'root' }));
+  dispatch(isLoading());
+  await authAPI.meGet();
+  await dispatch(getAuthUserData());
+  dispatch(isntLoading());
 };
 
 //  Types

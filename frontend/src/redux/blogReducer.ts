@@ -1,17 +1,45 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import {
-  createPostActionRT,
-  createPostBoughtRT,
-  createStoryActionRT,
-  createStoryRT,
-  idType,
-  PostType
-} from '~/api/types';
+import { createPostActionRT, createPostBoughtRT, createStoryActionRT, createStoryRT, idType } from '~/api/types';
 import { blogAPI } from './../api/blogAPI';
 import { InferActionsTypes, RootState } from './redux';
 
 const initialState = {
+  post: {
+    user: {
+      pk: null as number | null,
+      username: null as string | null,
+      avatar: null as string | null,
+      first_name: null as string | null,
+      background_photo: null as string | null
+    },
+    id: null as number | null,
+    favourites: [
+      {
+        pk: null as number | null,
+        username: null as string | null,
+        avatar: null as string | null,
+        first_name: null as string | null,
+        background_photo: null as string | null
+      }
+    ],
+    publication_date: null as string | null,
+    comments: null as string | null,
+    likes_amount: null as any,
+    comments_amount: null as string | null,
+    favourites_amount: null as string | null,
+    attachments: [{ id: null as number | null, _file: null as string | null, file_type: null as number | null }],
+    reply_link: null as string | null,
+    name: null as string,
+    description: null as string | null,
+    price_to_watch: null as number | null,
+    enabled_comments: false,
+    access_level: null as number | null,
+    archived: false,
+    like_id: null as number | null,
+    liked: false,
+    favourite: false
+  },
   posts: [
     {
       user: {
@@ -33,8 +61,8 @@ const initialState = {
           }
         ],
         publication_date: null as string | null,
-        comments: null as string | null,
-        likes_amount: null as string | null,
+        comments: [] as Array<any> | null,
+        likes_amount: null as any,
         comments_amount: null as string | null,
         favourites_amount: null as string | null,
         attachments: [{ id: null as number | null, _file: null as string | null, file_type: null as number | null }],
@@ -44,7 +72,10 @@ const initialState = {
         price_to_watch: null as number | null,
         enabled_comments: false,
         access_level: null as number | null,
-        archived: false
+        archived: false,
+        like_id: null as number | null,
+        liked: false,
+        favourite: false
       }
     }
   ],
@@ -59,7 +90,8 @@ const initialState = {
     }
   ],
   stories: [{}],
-  isLoading: false
+  isLoading: false,
+  isPostLoading: false
 };
 
 const blogReducer = (state = initialState, action: AllActionsType): InitialStateType => {
@@ -79,6 +111,73 @@ const blogReducer = (state = initialState, action: AllActionsType): InitialState
         ...state,
         isLoading: false
       };
+    case 'SET_POST_LOADING':
+      return {
+        ...state,
+        isPostLoading: action.payload
+      };
+    case 'SET_POSTS_DATA':
+      return {
+        ...state,
+        posts: state.posts.map((item) => {
+          if (item.post.pk === action.payload.post_id && action.payload.favourite !== null) {
+            return {
+              ...item,
+              post: { ...item.post, favourite: action.payload.favourite }
+            };
+          } else if (item.post.pk === action.payload.post_id && action.payload.liked === false) {
+            return {
+              ...item,
+              post: { ...item.post, liked: false, likes_amount: Number(item.post.likes_amount) - 1 }
+            };
+          } else if (item.post.pk === action.payload.post_id && action.payload.liked) {
+            return {
+              ...item,
+              post: {
+                ...item.post,
+                liked: true,
+                likes_amount: Number(item.post.likes_amount) + 1,
+                like_id: action.payload.id
+              }
+            };
+          } else return item;
+        })
+      };
+    case 'SET_POST':
+      return {
+        ...state,
+        post: action.payload
+      };
+    case 'SET_POST_DATA':
+      if (action.payload.liked && action.payload.favourite === null) {
+        return {
+          ...state,
+          post: {
+            ...state.post,
+            liked: true,
+            like_id: action.payload.id,
+            likes_amount: state.post.likes_amount + 1
+          }
+        };
+      } else if (action.payload.favourite !== null) {
+        return {
+          ...state,
+          post: {
+            ...state.post,
+            favourite: action.payload.favourite
+          }
+        };
+      } else {
+        return {
+          ...state,
+          post: {
+            ...state.post,
+            liked: false,
+            like_id: action.payload.id,
+            likes_amount: state.post.likes_amount - 1
+          }
+        };
+      }
     default:
       return state;
   }
@@ -99,7 +198,39 @@ const actions = {
     return {
       type: 'ISNT_LOADING'
     } as const;
+  },
+  setPostData: (liked: boolean | null, id: number | null, favourite: boolean | null) => {
+    return {
+      type: 'SET_POST_DATA',
+      payload: { liked, id, favourite }
+    };
+  },
+  setPostsData: (post_id: number, liked: boolean | null, id: number | null, favourite: boolean | null) => {
+    return {
+      type: 'SET_POSTS_DATA',
+      payload: { post_id, liked, id, favourite }
+    };
+  },
+  setPost: (post: any) => {
+    return {
+      type: 'SET_POST',
+      payload: post
+    };
+  },
+  setPostLoading: (isLoading: boolean) => {
+    return {
+      type: 'SET_POST_LOADING',
+      payload: isLoading
+    };
   }
+};
+
+export const isLoading = (): Thunk => async (dispatch) => {
+  dispatch(actions.isLoading());
+};
+
+export const isntLoading = (): Thunk => async (dispatch) => {
+  dispatch(actions.isntLoading());
 };
 
 export const getMainPageData = (): Thunk => async (dispatch) => {
@@ -115,17 +246,63 @@ export const getMainPageData = (): Thunk => async (dispatch) => {
   dispatch(actions.isntLoading());
 };
 
-export const createPostAction = ({ like, comment, donation_amount, user, post }: createPostActionRT): Thunk => async (
-  dispatch
-) => {
-  await blogAPI.createPostAction({ like, comment, donation_amount, user, post, date_time: null });
+export const setFavoritePostModal = (postId: number, favourite: boolean): Thunk => async (dispatch) => {
+  const data = await blogAPI.setFavorite(postId, favourite);
+  dispatch(actions.setPostData(null, null, data.data.favourite));
+};
+
+export const setFavorite = (postId: number, favourite: boolean): Thunk => async (dispatch) => {
+  const data = await blogAPI.setFavorite(postId, favourite);
+  dispatch(actions.setPostsData(data.data.post_id, null, null, data.data.favourite));
+};
+
+export const createPostActionModal = ({
+  like,
+  comment,
+  donation_amount,
+  user,
+  parent,
+  post
+}: createPostActionRT): Thunk => async (dispatch) => {
+  const data = await blogAPI.createPostAction({
+    like,
+    comment,
+    parent,
+    donation_amount,
+    user,
+    post,
+    date_time: null,
+    id: null
+  });
+  dispatch(actions.setPostData(true, data.id, null));
+};
+
+export const createPostAction = ({
+  like,
+  comment,
+  donation_amount,
+  user,
+  post,
+  parent
+}: createPostActionRT): Thunk => async (dispatch) => {
+  const data = await blogAPI.createPostAction({
+    like,
+    comment,
+    donation_amount,
+    user,
+    parent,
+    post,
+    date_time: null,
+    id: null
+  });
+  dispatch(actions.setPostsData(post, true, data.id, null));
 };
 
 export const createPostBought = ({ user, amount, post }: createPostBoughtRT): Thunk => async (dispatch) => {
   await blogAPI.createPostBought({ user, amount, post, id: null });
 };
 
-export const createPost = (props: PostType): Thunk => async (dispatch) => {
+export const createPost = (props: any): Thunk => async (dispatch) => {
   const attachmentsID = [];
   for (let i = 0; i < props.attachments.length; i++) {
     const data = await blogAPI.createAttachment(props.attachments[i]);
@@ -169,16 +346,18 @@ export const createStory = ({ time_to_archive, reply_link, archived, user }: cre
   });
 };
 
-export const deletePostAction = ({ id }: idType): Thunk => async (dispatch) => {
+export const deletePostActionModal = ({ id, post_id }: { id: number; post_id: number }): Thunk => async (dispatch) => {
   await blogAPI.deletePostAction({
     id
   });
+  dispatch(actions.setPostData(false, null, null));
 };
 
-export const deletePost = ({ id }: idType): Thunk => async (dispatch) => {
-  await blogAPI.deletePost({
+export const deletePostAction = ({ id, post_id }: { id: number; post_id: number }): Thunk => async (dispatch) => {
+  await blogAPI.deletePostAction({
     id
   });
+  dispatch(actions.setPostsData(post_id, false, null, null));
 };
 
 export const deleteStoryGet = ({ id }: idType): Thunk => async (dispatch) => {
@@ -194,10 +373,11 @@ export const deleteStory = ({ id }: idType): Thunk => async (dispatch) => {
   });
 };
 
-export const getPostActionList = ({ id }: idType): Thunk => async (dispatch) => {
-  await blogAPI.getPostActionList({
+export const getPostActionList = async ({ id }: idType) => {
+  const data = await blogAPI.getPostActionList({
     id
   });
+  return data;
 };
 
 export const getPostList = ({ username }: { username: string }): Thunk => async (dispatch) => {
@@ -206,10 +386,14 @@ export const getPostList = ({ username }: { username: string }): Thunk => async 
   });
 };
 
-export const getPost = ({ id }: idType): Thunk => async (dispatch) => {
-  await blogAPI.getPost({
+export const getPost = ({ id }: { id: number | null }): Thunk => async (dispatch) => {
+  if (id === null) dispatch(actions.setPost(null));
+  dispatch(actions.setPostLoading(true));
+  const data = await blogAPI.getPost({
     id
   });
+  dispatch(actions.setPost(data.data));
+  dispatch(actions.setPostLoading(false));
 };
 
 export const getStoryAction = ({ id }: idType): Thunk => async (dispatch) => {
@@ -222,9 +406,7 @@ export const getStoryList = (): Thunk => async (dispatch) => {
   await blogAPI.getStoryList();
 };
 
-export const getUserStories = ({ limit = 10, offset = 10 }: { limit: number; offset: number }): Thunk => async (
-  dispatch
-) => {
+export const getUserStories = ({ limit = 10, offset = 10 }: { limit: number; offset: number }): Thunk => async () => {
   await blogAPI.getUserStories({ limit, offset });
 };
 

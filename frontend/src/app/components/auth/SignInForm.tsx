@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -31,8 +31,12 @@ const SignInForm = ({ action }: { action: string }) => {
     resolver: yupResolver(signInScheme)
   });
 
-  const onSubmit = (data: ISignInData) => {
-    dispatch(login(data));
+  const [isSigningIn, setIsSigningIn] = useState(false);
+
+  const onSubmit = async (data: ISignInData) => {
+    setIsSigningIn(true);
+    await dispatch(login(data));
+    setIsSigningIn(false);
     reset(initialValues);
   };
 
@@ -44,14 +48,26 @@ const SignInForm = ({ action }: { action: string }) => {
         <p>{currentLang.createAcc1}</p>
 
         <Link to={`/${NAV_LINKS.SIGNUP}`}>
-          <button>{currentLang.createAcc2}</button>
+          <div style={{ color: '#FB5734' }}>{currentLang.createAcc2}</div>
         </Link>
       </div>
 
-      <input type="text" className="auth__input" placeholder={currentLang.emailDescr} {...register('email')} />
+      <input
+        type="text"
+        className="auth__input"
+        disabled={isSigningIn}
+        placeholder={currentLang.emailDescr}
+        {...register('email')}
+      />
       <p className="auth__input-error">{errors.email?.message}</p>
 
-      <input type="password" className="auth__input" placeholder={currentLang.passDescr} {...register('password')} />
+      <input
+        type="password"
+        className="auth__input"
+        disabled={isSigningIn}
+        placeholder={currentLang.passDescr}
+        {...register('password')}
+      />
       <p className="auth__input-error">{errors.password?.message}</p>
 
       <button className="auth__submit-btn">{currentLang.next}</button>
