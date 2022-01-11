@@ -175,6 +175,18 @@ class PostActionUpdateSerializer(serializers.ModelSerializer):
     donation_amount = serializers.IntegerField(required=False)
     date_time = serializers.FloatField(required=False)
 
+    def get_validation_exclusions(self):
+        exclusions = super(PostActionUpdateSerializer, self).get_validation_exclusions()
+        return exclusions + [
+            'parent',
+            'user',
+            'post',
+            'like',
+            'comment',
+            'donation_amount',
+            'date_time',
+        ]
+
     class Meta:
         model = PostAction
         fields = (
