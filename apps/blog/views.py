@@ -127,7 +127,7 @@ class PostDeleteAPI(generics.DestroyAPIView):
 
 class PostPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     queryset = Post.objects.all()
-    serializer_class = PostActionUpdateSerializer
+    serializer_class = PostUpdateSerializer
 
     def get_serializer_context(self):
         return {'request': self.request}
@@ -138,7 +138,7 @@ class PostPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
 
 class PostActionPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     queryset = PostAction.objects.all()
-    serializer_class = PostUpdateSerializer
+    serializer_class = PostActionUpdateSerializer
 
     def get_serializer_context(self):
         return {'request': self.request}
