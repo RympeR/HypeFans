@@ -50,11 +50,18 @@ export const blogAPI = {
   },
   createPostAction({ like, comment, donation_amount, user, post, parent }: createPostActionRT) {
     if (comment === null) {
-      return instance
-        .post<createPostActionRT>('/blog/create-post-action/', { like, comment, donation_amount, user, post, parent })
-        .then((response) => {
-          return response.data;
-        });
+      if (parent === null) {
+        return instance
+          .post<createPostActionRT>('/blog/create-post-action/', { like, donation_amount, user, post })
+          .then((response) => {
+            return response.data;
+          });
+      } else
+        return instance
+          .post<createPostActionRT>('/blog/create-post-action/', { like, donation_amount, user, post, parent })
+          .then((response) => {
+            return response.data;
+          });
     } else {
       return instance
         .post<createPostActionRT>('/blog/create-post-action/', { comment, user, post, donation_amount: 0, parent })
