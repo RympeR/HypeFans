@@ -52,7 +52,7 @@ class UserRetrieveAPI(generics.RetrieveAPIView):
         return self.request.user
 
 
-class UserSearchRetrieveAPI(generics.RetrieveAPIView):
+class UserSearchRetrieveAPI(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserShortRetrieveSeriliazer
     filterset_class = UserFilter
