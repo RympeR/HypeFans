@@ -163,7 +163,7 @@ class PostActionCreateAPI(generics.CreateAPIView):
             serializer.is_valid(raise_exception=True)
         except AssertionError:
             return api_block_by_policy_451({"status": "not enought credits"})
-        instance = self.perform_create(serializer)
+        self.perform_create(serializer)
         return Response(serializer.data)
 
     def get_serializer_context(self):

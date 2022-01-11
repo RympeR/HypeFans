@@ -38,7 +38,7 @@ export const userAPI = {
   },
   blockUser({ user }: { user: number }) {
     return instance
-      .patch('/user/block-user/', {
+      .put('/user/block-user/', {
         user
       })
       .then((response) => {

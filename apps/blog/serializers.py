@@ -19,7 +19,7 @@ class UserFavouritesSerializer(serializers.Serializer):
 
 class PostActionCreationSerializer(serializers.ModelSerializer):
     donation_amount = serializers.IntegerField(required=False)
-    comment = serializers.CharField(required=False)
+    # comment = serializers.CharField(required=False)
 
     class Meta:
         model = PostAction
