@@ -4,6 +4,7 @@ import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'rea
 import { useAlert } from 'react-alert';
 import Modal from 'react-bootstrap/Modal';
 import CurrencyInput from 'react-currency-input-field';
+import { useReactMediaRecorder } from 'react-media-recorder';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -22,6 +23,7 @@ import { ReactComponent as VektorDisabled } from '../../assets/images/sendDisabl
 import { ReactComponent as Tip } from '../../assets/images/tipI.svg';
 import { ReactComponent as VideoIcn } from '../../assets/images/videoI.svg';
 import { ReactComponent as CloseIcon } from '../../assets/images/x-circle.svg';
+import { AudioRecorder } from '../components/recordAudio/AudioRecorder';
 import { Preloader } from '../utils/Preloader';
 import { getLastUrlPoint } from '../utils/utilities';
 import { ChatImage } from './card/components/ChatImage';
@@ -103,6 +105,11 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     };
   }, []);
 
+  const { startRecording, stopRecording, mediaBlobUrl, clearBlobUrl } = useReactMediaRecorder({
+    video: false,
+    audio: true
+  });
+
   useEffect(() => {
     if (!ws) return;
     ws.onmessage = (e: any) => {
@@ -157,6 +164,11 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   const sendMessage = async () => {
     const attachmentsIds: Array<number> = [];
+    if (mediaBlobUrl !== null) {
+      const data = await blogAPI.createAttachment(new File([mediaBlobUrl], 'media.mp3'));
+      clearBlobUrl();
+      attachmentsIds.push(data.data.id);
+    }
     if (uploadedFiles.length > 0) {
       for (let i = 0; i < uploadedFiles.length; i++) {
         const data = await blogAPI.createAttachment(uploadedFiles[i]);
@@ -386,6 +398,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                                       Скачать {item.file_url.split('/')[item.file_url.split('/').length - 1]}
                                     </a>
                                   );
+                                } else if (item.file_type === 2) {
+                                  console.log(item.file_url);
+                                  return <audio src={item.file_url} />;
                                 } else {
                                   return <ChatImage item={item} index={index} key={index + Math.random()} />;
                                 }
@@ -403,11 +418,16 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         </div>
         <div className="chat__input">
           <Input sendMessage={sendMessage} messageText={messageText} setMessageText={setMessageText} />
-          <div style={{ margin: '0px 24px', marginBottom: '8px', display: 'flex' }}>
+          <div style={{ margin: '0px 24px', marginBottom: '8px', display: 'flex', flexWrap: 'wrap' }}>
             <div onClick={() => setShowTip(true)}>
               <TipIcon />
             </div>
-            <MicIcon />
+            <AudioRecorder
+              startRecording={startRecording}
+              stopRecording={stopRecording}
+              mediaBlobUrl={mediaBlobUrl}
+              clearBlobUrl={clearBlobUrl}
+            />
             <div>
               <label className="upload__file-input-label" htmlFor="file-input" style={{ marginBottom: '15px' }}>
                 <VideoIcon />
