@@ -18,6 +18,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
   const [comments, setComments] = useState([]);
 
   const likeComment = async (val: any) => {
+    console.log(val);
     await blogAPI
       .createPostAction({
         like: val.like,
