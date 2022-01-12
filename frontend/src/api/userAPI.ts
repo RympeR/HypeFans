@@ -105,6 +105,15 @@ export const userAPI = {
       return response.data;
     });
   },
+  searchUser({ user }: userStringType) {
+    return instance.get(`user/user-search/?username=${user}`).then((response) => {
+      if (response.status === 200 || 301) {
+        return response.data;
+      } else {
+        throw new Error();
+      }
+    });
+  },
   getUser({ user }: userStringType) {
     return instance.get<getUserRT>(`user/get-profile/${user}`).then((response) => {
       if (response.status === 200 || 301) {

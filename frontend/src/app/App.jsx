@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { getUserData } from '~/redux/authReducer';
 import '../styles/app.scss';
+import { Search } from './components/search/Search';
 import { Main, Navbar } from './layout';
 import AddPost from './pages/AddPost';
 import Auth from './pages/auth/Auth';
@@ -46,6 +47,7 @@ const App = () => {
                   <Route path="/profile" component={Profile} />
                   <Route path="/settings" component={Settings} />
                   <Route path="/favourites" component={Favourites} />
+                  <Route path="/search" component={Search} />
                 </Main>
               </Switch>
               <Navbar />
