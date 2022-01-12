@@ -20,6 +20,7 @@ const Chat = () => {
   const [rooms, setRooms] = useState([]);
   const [isSended, setSended] = useState(false);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
+  const [visible, setVisibility] = useState(false);
 
   if (isLoading) {
     return <Preloader />;
@@ -44,6 +45,8 @@ const Chat = () => {
     return setRooms(JSON.parse(e.data).room);
   };
 
+  // const validateUrl = (history: any) =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const SidebarItem = (item: any) => {
     const history = useHistory();
     const lastUrl = getLastUrlPoint(history.location.pathname);
@@ -55,7 +58,7 @@ const Chat = () => {
     }, [item]);
 
     return (
-      <Link to={`/chat/${item?.item?.room?.room_info?.id}`}>
+      <Link to={`/chat/${item?.item?.room?.room_info?.id}`} onClick={() => setVisibility(!visible)}>
         <div
           style={
             lastUrl !== item?.item?.room?.room_info?.id
@@ -118,29 +121,31 @@ const Chat = () => {
     <div>
       <div className="chat__header">
         <div className="chat__row">
-          <BackButton />
+          <div className="chat__resp_icon">
+            <BackButton />
+          </div>
           <p className="chat__header_title">Сообщения</p>
         </div>
         <div className="chat__row">
-          <div>
+          <div className="chat__resp_icon">
             <Plus />
           </div>
-          <div style={{ marginLeft: '40px' }}>
+          <div className="chat__resp_icon" style={{ marginLeft: '40px' }}>
             <UserIcon />
           </div>
         </div>
       </div>
       <div className="chat__main">
-        <div className="chat__sidebar">
+        <div className={'chat__sidebar ' + (visible ? 'chat__inactive' : '')}>
           {rooms.map((item, key) => {
             return (
               <div key={Math.random() + String(key)}>
-                <SidebarItem item={item} />
+                <SidebarItem item={item} visible={false} />
               </div>
             );
           })}
         </div>
-        <Route path="/chat/:id" render={() => <DialogMain rooms={rooms} />} exact />
+        <Route path="/chat/:id" render={() => <DialogMain visible={visible} rooms={rooms} />} exact />
         <Route path="/chat" component={NoDialog} exact />
       </div>
     </div>

@@ -59,7 +59,7 @@ const Input = ({
   );
 };
 
-export const DialogMain = ({ rooms }: { rooms: any }) => {
+export const DialogMain = ({ visible, rooms }: { visible: boolean; rooms: any }) => {
   const history = useHistory();
   const lastUrl = getLastUrlPoint(history.location.pathname);
   const alert = useAlert();
@@ -226,9 +226,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const blockUser = async (id: number) => {
     await userAPI.blockUser({ user: id });
   };
-
   return (
-    <div className="chat__dialogsMain">
+    <div className={'chat__dialogsMain ' + (visible ? '' : 'chat__inactive')}>
       <div className="chat__dialogsHeader">
         <div className="chat__sidebarItem" style={{ alignItems: 'center' }}>
           <Link
