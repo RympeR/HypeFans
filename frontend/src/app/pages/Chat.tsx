@@ -7,6 +7,7 @@ import { RootState } from '~/redux/redux';
 import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
 import { ReactComponent as PlusIcon } from '../../assets/images/plus.svg';
 import { ReactComponent as UsersIcon } from '../../assets/images/users.svg';
+import { Preloader } from '../utils/Preloader';
 import { getLastUrlPoint } from '../utils/utilities';
 import { DialogMain } from './DialogMain';
 import { NoDialog } from './NoDialog';
@@ -21,7 +22,7 @@ const Chat = () => {
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
 
   if (isLoading) {
-    return <div>fdfd</div>;
+    return <Preloader />;
   }
 
   const ws = new WebSocket(`wss://hype-fans.com/ws/chat-rooms/${userId}/`);

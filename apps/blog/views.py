@@ -132,6 +132,20 @@ class PostPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     def get_serializer_context(self):
         return {'request': self.request}
 
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+
+class PostActionPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
+    queryset = PostAction.objects.all()
+    serializer_class = PostActionUpdateSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
 
 class PostActionListAPI(generics.GenericAPIView):
     serializer_class = PostActionGetSerializer
@@ -163,7 +177,7 @@ class PostActionCreateAPI(generics.CreateAPIView):
             serializer.is_valid(raise_exception=True)
         except AssertionError:
             return api_block_by_policy_451({"status": "not enought credits"})
-        instance = self.perform_create(serializer)
+        self.perform_create(serializer)
         return Response(serializer.data)
 
     def get_serializer_context(self):

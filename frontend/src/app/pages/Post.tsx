@@ -49,7 +49,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <div className="profile__postAgo">50 минут назад</div>
+                <div className="profile__postAgo">{post?.publication_date} 50 минут назад</div>
                 <button className="post__menu-dots">
                   <MenuDots />
                 </button>

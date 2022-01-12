@@ -20,6 +20,7 @@ from .views import (
     GetFavouritePosts,
     MarkFavourite,
     GetUserLists,
+    PostActionPartialUpdateAPI,
 )
 
 urlpatterns = [
@@ -34,6 +35,7 @@ urlpatterns = [
     path('create-story/', StoryCreateAPI.as_view()),
     path('mark-favourite/', MarkFavourite.as_view()),
     path('get-favourite-posts/', GetFavouritePosts.as_view()),
+    path('partial-update-post-action/<int:pk>', PostActionPartialUpdateAPI.as_view()),
     path('create-post-action/', PostActionCreateAPI.as_view()),
     path('delete-post-action/<int:pk>', PostActionDeleteAPI.as_view()),
     path('delete-story/<int:pk>', StoryAPI.as_view()),

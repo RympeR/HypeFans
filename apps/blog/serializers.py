@@ -19,7 +19,6 @@ class UserFavouritesSerializer(serializers.Serializer):
 
 class PostActionCreationSerializer(serializers.ModelSerializer):
     donation_amount = serializers.IntegerField(required=False)
-    comment = serializers.CharField(required=False)
 
     class Meta:
         model = PostAction
@@ -161,6 +160,30 @@ class PostGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         exclude = 'time_to_archive',
+
+
+class PostActionUpdateSerializer(serializers.ModelSerializer):
+    parent = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=PostAction.objects.all())
+    user = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+    post = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=Post.objects.all())
+    like = serializers.BooleanField(required=False)
+    comment = serializers.CharField(required=False)
+    donation_amount = serializers.IntegerField(required=False)
+
+
+    class Meta:
+        model = PostAction
+        fields = (
+            'parent',
+            'user',
+            'post',
+            'like',
+            'comment',
+            'donation_amount',
+        )
 
 
 class PostUpdateSerializer(serializers.ModelSerializer):

@@ -23,6 +23,9 @@ export const blogAPI = {
     });
   },
   createAttachment(file: any) {
+    console.log(file);
+    console.log(file.name.split('.')[1] === 'mp3');
+    debugger;
     if (!file) return;
     const formData = new FormData();
     formData.append('_file', file);
@@ -30,7 +33,7 @@ export const blogAPI = {
       formData.append('file_type', '4');
     } else if (file.type.split('/')[0] === 'image') {
       formData.append('file_type', '3');
-    } else if (file.type.split('/')[0] === 'music') {
+    } else if (file.type.split('/')[0] === 'music' || file.name.split('.')[1] === 'mp3') {
       formData.append('file_type', '2');
     } else if (file.type.split('/')[0] === 'application') {
       formData.append('file_type', '1');
@@ -47,11 +50,18 @@ export const blogAPI = {
   },
   createPostAction({ like, comment, donation_amount, user, post, parent }: createPostActionRT) {
     if (comment === null) {
-      return instance
-        .post<createPostActionRT>('/blog/create-post-action/', { like, comment, donation_amount, user, post, parent })
-        .then((response) => {
-          return response.data;
-        });
+      if (parent === null) {
+        return instance
+          .post<createPostActionRT>('/blog/create-post-action/', { like, donation_amount, user, post })
+          .then((response) => {
+            return response.data;
+          });
+      } else
+        return instance
+          .post<createPostActionRT>('/blog/create-post-action/', { like, donation_amount, user, post, parent })
+          .then((response) => {
+            return response.data;
+          });
     } else {
       return instance
         .post<createPostActionRT>('/blog/create-post-action/', { comment, user, post, donation_amount: 0, parent })

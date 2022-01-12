@@ -9982,6 +9982,13 @@ known-css-properties@^0.5.0:
   resolved "https://registry.yarnpkg.com/known-css-properties/-/known-css-properties-0.5.0.tgz#6ff66943ed4a5b55657ee095779a91f4536f8084"
   integrity sha512-LOS0CoS8zcZnB1EjLw4LLqDXw8nvt3AGH5dXLQP3D9O1nLLA+9GC5GnPl5mmF+JiQAtSX4VyZC7KvEtcA4kUtA==
 
+lamejs@^1.2.0:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/lamejs/-/lamejs-1.2.1.tgz#0f92d38729213f106d4a19ded20821da7e89c8e4"
+  integrity sha512-s7bxvjvYthw6oPLCm5pFxvA84wUROODB8jEO2+CE1adhKgrIvVOlmMgY8zyugxGrvRaDHNJanOiS21/emty6dQ==
+  dependencies:
+    use-strict "1.0.1"
+
 language-subtag-registry@~0.3.2:
   version "0.3.21"
   resolved "https://registry.yarnpkg.com/language-subtag-registry/-/language-subtag-registry-0.3.21.tgz#04ac218bea46f04cb039084602c6da9e788dd45a"
@@ -10720,6 +10727,13 @@ methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
   integrity sha1-VSmk1nZUE07cxSZmVoNbD4Ua/O4=
+
+mic-recorder-to-mp3@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/mic-recorder-to-mp3/-/mic-recorder-to-mp3-2.2.1.tgz#a6a297496e2ebace8e9478feb0084bee187063d5"
+  integrity sha512-xlivxbGUjIr6DBCCJQeB1IeNuwDea+sVYi+zH38pedtKc011a/EG+nd6ykjc/O7vtWuVtPiGwixIdJfsYrN8JQ==
+  dependencies:
+    lamejs "^1.2.0"
 
 microevent.ts@~0.1.1:
   version "0.1.1"
@@ -13970,6 +13984,11 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-media-recorder@^1.6.3:
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/react-media-recorder/-/react-media-recorder-1.6.3.tgz#2e18172d90d4a26b0bbf3a141dfb8aeccb233dac"
+  integrity sha512-uJ5lys9JNzE77cLXZ0EOg9jxAqQb6BpntHHRpC1nHaVKA0ygbGLvBVXU95xms+VnS9mp8pW21oM9uxAjBylTtg==
 
 react-overlays@^5.1.1:
   version "5.1.1"
@@ -17313,6 +17332,19 @@ url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+use-recorder@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/use-recorder/-/use-recorder-0.0.6.tgz#34a0f71f082aac62c3c52676e2a9d09ca0d2f2f7"
+  integrity sha512-96vn7h4b1jZ+szNqzs6la9qAu3dYz48EgkT3Yuq0mn4bTGDJnEb/NC4q2yZxLoQTLubqqCb8N7qwezPhVPm1BQ==
+  dependencies:
+    compose-function "3.0.3"
+    mic-recorder-to-mp3 "2.2.1"
+
+use-strict@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/use-strict/-/use-strict-1.0.1.tgz#0bb80d94f49a4a05192b84a8c7d34e95f1a7e3a0"
+  integrity sha1-C7gNlPSaSgUZK4Sox9NOlfGn46A=
 
 use@^3.1.0:
   version "3.1.1"
