@@ -9,6 +9,7 @@ import { setFavorite } from '~/redux/userReducer';
 import { ReactComponent as MenuDots } from '../../../assets/images/3dots.svg';
 import { ReactComponent as SaveIcon } from '../../../assets/images/bookmark.svg';
 import { ReactComponent as LikeIcon } from '../../../assets/images/heart.svg';
+import logo from '../../../assets/images/logo.svg';
 import { ReactComponent as CommentIcon } from '../../../assets/images/message-circle.svg';
 
 export const Favourites = () => {
@@ -32,14 +33,7 @@ export const Favourites = () => {
               <div className="profile__postInfo">
                 <div className="profile__postUserInfo">
                   <div style={{ display: 'flex' }}>
-                    <img
-                      src={
-                        item.user.avatar !== ''
-                          ? item.user.avatar
-                          : 'https://i.pinimg.com/originals/f5/27/41/f52741fb62bf1d821948a49204406bdc.jpg'
-                      }
-                      alt="profile_photoPost"
-                    ></img>
+                    <img src={item.user.avatar !== '' ? item.user.avatar : logo} alt="profile_photoPost"></img>
                     <div>
                       <h3 className="profile__name" style={{ margin: '5px 8px', marginBottom: '0px' }}>
                         {item.user.first_name}

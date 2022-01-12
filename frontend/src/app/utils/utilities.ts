@@ -137,5 +137,5 @@ export const findIndexById = (arr: any[], id: string) => {
 
 //Checks if story is watched
 export const isStoryWatched = (id: string) => {
-  return localStorage.getItem(`${id}`) === 'watched';
+  return localStorage?.getItem(`${id}`) === 'watched';
 };

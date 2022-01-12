@@ -15,6 +15,9 @@ const Auth = () => {
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
 
+  const refLink = pathname.split('/').slice(2, 4).join('/');
+  console.log(refLink);
+
   if (isLoading) {
     return <Preloader />;
   }
@@ -30,7 +33,11 @@ const Auth = () => {
           <Logo className="auth__logo" />
           <h1 className="auth__logo-title">HypeFans</h1>
         </div>
-        {pathname === `/${NAV_LINKS.SIGNUP}` ? <SignUpForm action="signup" /> : <SignInForm action="signin" />}
+        {pathname === `/${NAV_LINKS.SIGNUP}` || refLink !== '' ? (
+          <SignUpForm action="signup" />
+        ) : (
+          <SignInForm action="signin" />
+        )}
       </div>
     </div>
   );

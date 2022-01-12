@@ -12,6 +12,7 @@ import { NAV_LINKS } from '../utils/utilities';
 
 const Navbar = () => {
   const { pathname } = useLocation();
+  const refLink = pathname.split('/').slice(2, 4).join('/');
 
   const nick = useSelector((state: RootState) => state.auth.username);
 
@@ -29,7 +30,7 @@ const Navbar = () => {
   //   return () => clearInterval(id);
   // }, []);
 
-  if (pathname === `/${NAV_LINKS.SIGNIN}` || pathname === `/${NAV_LINKS.SIGNUP}`) {
+  if (refLink !== '' || pathname === `/${NAV_LINKS.SIGNIN}` || pathname === `/${NAV_LINKS.SIGNUP}`) {
     return null;
   }
 

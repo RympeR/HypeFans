@@ -109,7 +109,7 @@ export type getUserRT = {
   message_price: number | null;
   post_amount: number | null;
   fans_amount: number | null;
-  repheral_link: string | null;
+  ref_link: string | null;
   repheral_users: Array<number>;
   blocked_users: Array<number>;
   email_notifications: boolean | null;

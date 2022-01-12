@@ -12,6 +12,14 @@ import {
 } from './types';
 
 export const blogAPI = {
+  likeComment({ like, donation_amount, user, post, parent }: createPostActionRT) {
+    console.log({ like, donation_amount, user, post });
+    return instance
+      .put<createPostActionRT>(`/partial-update-post-action/${parent}/`, { like, donation_amount, user, post })
+      .then((response) => {
+        return response.data;
+      });
+  },
   setFavorite(post_id: number, favourite: boolean) {
     return instance.put('/blog/mark-favourite/', { post_id: post_id, favourite: favourite }).then((res) => {
       return res;

@@ -80,7 +80,7 @@ const StoryBlock = () => {
     const localStorageKeys = Object.keys(localStorage).filter((key) => isStoryWatched(key));
     const storiesIds = stories.map((story) => story.id);
     localStorageKeys.forEach((key) => {
-      if (!storiesIds.includes(key)) localStorage.removeItem(`${key}`);
+      if (!storiesIds.includes(key)) localStorage?.removeItem(`${key}`);
     });
 
     const unwatchedStories = stories.filter((story) => !localStorageKeys.includes(story.id));

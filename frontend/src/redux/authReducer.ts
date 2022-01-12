@@ -19,7 +19,7 @@ const initialState = {
   message_price: null as number | null,
   post_amount: null as number | null,
   fans_amount: null as number | null,
-  repheral_link: null as string | null,
+  ref_link: null as string | null,
   repheral_users: [] as Array<number>,
   blocked_users: [] as Array<number>,
   email_notifications: false,
@@ -81,7 +81,7 @@ const actions = {
     message_price: number | null,
     post_amount: number | null,
     fans_amount: number | null,
-    repheral_link: string | null,
+    ref_link: string | null,
     repheral_user: Array<number>,
     blocked_user: Array<number>,
     email_notifications: boolean,
@@ -114,7 +114,7 @@ const actions = {
         message_price,
         post_amount,
         fans_amount,
-        repheral_link,
+        ref_link,
         repheral_user,
         blocked_user,
         email_notifications,
@@ -169,7 +169,7 @@ export const getAuthUserData = (): Thunk => async (dispatch) => {
       message_price,
       post_amount,
       fans_amount,
-      repheral_link,
+      ref_link,
       repheral_users,
       blocked_users,
       email_notifications,
@@ -200,7 +200,7 @@ export const getAuthUserData = (): Thunk => async (dispatch) => {
         message_price,
         post_amount,
         fans_amount,
-        repheral_link,
+        ref_link,
         repheral_users,
         blocked_users,
         email_notifications,
@@ -281,7 +281,7 @@ export const isSettingsDisabled = (): Thunk => async (dispatch) => {
 export const changeSettings = (obj: any): Thunk => async (dispatch) => {
   delete obj.avatar;
   delete obj.background_photo;
-  delete obj.repheral_link;
+  delete obj.ref_link;
   dispatch(isSettingsDisabled());
   const response = await authAPI.meUpdate(obj);
   const data = await authAPI.meGet();

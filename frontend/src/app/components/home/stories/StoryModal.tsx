@@ -29,7 +29,7 @@ const StoryModal = ({ stories, currentIdOfStory, setIsModalOpened }: IStoryModal
 
   const markStoryAsWatched = (index: number) => {
     const { id } = stories[index];
-    localStorage.setItem(`${id}`, 'watched');
+    localStorage?.setItem(`${id}`, 'watched');
   };
 
   const startStory = (index: number) => {

@@ -59,8 +59,9 @@ export const authAPI = {
       return response.data;
     });
   },
-  createUsers(username: string, email: string, password: string) {
-    return instance.post('/user/create-user/', { username, email, password }).then((response) => {
+  createUsers(username: string, email: string, password: string, ref_link: string) {
+    console.log({ username, email, password, ref_link });
+    return instance.post('/user/create-user/', { username, email, password, ref_link }).then((response) => {
       setAuthToken(response.data.auth_token);
       return response.data;
     });

@@ -37,8 +37,8 @@ const App = () => {
           <ViewportProvider>
             <LangProvider>
               <Switch>
+                <Route path="/signup" component={Auth} />
                 <Route exact path="/" component={Auth} />
-                <Route exact path="/signup" component={Auth} />
                 <Main>
                   <Route path="/home" component={Home} />
                   <Route path="/notifications" component={Notifications} />
