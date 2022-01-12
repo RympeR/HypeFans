@@ -7,6 +7,7 @@ import { RootState } from '~/redux/redux';
 import { ReactComponent as MenuDots } from '../../assets/images/3dots.svg';
 import { ReactComponent as SaveIcon } from '../../assets/images/bookmark.svg';
 import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
+import logo from '../../assets/images/logo.svg';
 import { ReactComponent as CommentIcon } from '../../assets/images/message-circle.svg';
 import { CommentComponent } from '../components/CommentComponent';
 
@@ -31,14 +32,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
           <div className="profile__postInfo">
             <div className="profile__postUserInfo">
               <div style={{ display: 'flex' }}>
-                <img
-                  src={
-                    post?.user.avatar !== ''
-                      ? post?.user.avatar
-                      : 'https://i.pinimg.com/originals/f5/27/41/f52741fb62bf1d821948a49204406bdc.jpg'
-                  }
-                  alt="profile_photoPost"
-                ></img>
+                <img src={post?.user.avatar !== '' ? post?.user.avatar : logo} alt="profile_photoPost"></img>
                 <div>
                   <h3 className="profile__name" style={{ margin: '5px 8px', marginBottom: '0px' }}>
                     {post?.user.first_name}

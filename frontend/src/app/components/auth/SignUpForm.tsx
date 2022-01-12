@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { authAPI } from '~/api/authAPI';
 import ISignUpData from '~/app/types/ISignUpData';
 import { LangContext } from '~/app/utils/LangProvider';
@@ -19,9 +19,12 @@ const initialValues: ISignUpData = {
 };
 
 const SignUpForm = ({ action }: { action: string }) => {
+  const { pathname } = useLocation();
   const { currentLang } = useContext(LangContext);
 
   const signUpScheme = getAuthScheme(currentLang, action);
+
+  const refLink = pathname.split('/').slice(2, 4).join('/');
 
   const {
     register,
@@ -37,8 +40,7 @@ const SignUpForm = ({ action }: { action: string }) => {
 
   const onSubmit = async (data: ISignUpData) => {
     setIsSigningIn(true);
-    const response = await authAPI.createUsers(data.username, data.email, data.password);
-    console.log(response);
+    await authAPI.createUsers(data.username, data.email, data.password, refLink);
     setIsSigningIn(false);
     dispatch(getAuthUserData());
     reset(initialValues);

@@ -281,7 +281,7 @@ export const isSettingsDisabled = (): Thunk => async (dispatch) => {
 export const changeSettings = (obj: any): Thunk => async (dispatch) => {
   delete obj.avatar;
   delete obj.background_photo;
-  delete obj.repheral_link;
+  delete obj.ref_link;
   dispatch(isSettingsDisabled());
   const response = await authAPI.meUpdate(obj);
   const data = await authAPI.meGet();

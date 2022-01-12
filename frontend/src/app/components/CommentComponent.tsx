@@ -8,6 +8,7 @@ import { getPostActionList } from '~/redux/blogReducer';
 import { RootState } from '~/redux/redux';
 import { ReactComponent as BackButton } from '../../assets/images/arrow-left.svg';
 import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
+import logo from '../../assets/images/logo.svg';
 
 export const CommentComponent = ({ data, postId }: { data: any; postId: number }) => {
   const [show, setShow] = useState(false);
@@ -20,7 +21,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
   const likeComment = async (val: any) => {
     console.log(val);
     await blogAPI
-      .createPostAction({
+      .likeComment({
         like: val.like,
         comment: null,
         parent: val.parent,
@@ -106,7 +107,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
     return (
       <div className="notifications__comment">
         <Link to={`/profile/${item?.user?.username}`}>
-          <img src={item?.user?.avatar} alt="userPhoto" />
+          <img src={item.user.avatar ?? logo} alt="userPhoto" />
         </Link>
         <div className="notifications__commentText">
           <p>
@@ -138,7 +139,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
                     style={show ? {} : { display: 'none' }}
                   >
                     <Link to={`/profile/${item?.user?.username}`}>
-                      <img src={item?.user?.avatar} alt="userPhoto" />
+                      <img src={item.user.avatar ?? logo} alt="userPhoto" />
                     </Link>
                     <div className="notifications__commentText">
                       <p>
