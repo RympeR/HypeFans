@@ -5,7 +5,7 @@ import string
 from django.core.exceptions import ObjectDoesNotExist
 
 HOST = 'hype-fans.com/'
-REF_PERCANTAGE = 0.1
+REF_PERCANTAGE = 0.05
 
 
 def id_generator(size=12, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
