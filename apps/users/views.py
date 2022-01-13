@@ -175,8 +175,7 @@ class UserCreateAPI(generics.GenericAPIView):
     def post(self, request):
         try:
             if request.data.get('referrer'):
-                ref_user = User.objects.get(pk=request.data['referrer'])
-                ref_user.repheral_users.add()
+                ref_user = User.objects.get(username=request.data['referrer'])
             else:
                 ref_user = None
             username = request.data['username']
@@ -188,7 +187,8 @@ class UserCreateAPI(generics.GenericAPIView):
             )
             assert created, "Already exists"
             user.set_password(request.data['password'])
-            ref_user.repheral_users.add(user)
+            if ref_user:
+                ref_user.repheral_users.add(user)
 
             user.save()
             token, created = Token.objects.get_or_create(user=user)
