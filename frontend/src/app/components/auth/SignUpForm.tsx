@@ -24,7 +24,7 @@ const SignUpForm = ({ action }: { action: string }) => {
 
   const signUpScheme = getAuthScheme(currentLang, action);
 
-  const refLink = pathname.split('/').slice(2, 4).join('/');
+  const refLink = pathname.split('/').slice(2, 3).join('/');
 
   const {
     register,
