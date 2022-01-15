@@ -15,7 +15,7 @@ export const blogAPI = {
   likeComment({ like, donation_amount, user, post, parent }: createPostActionRT) {
     console.log({ like, donation_amount, user, post });
     return instance
-      .put<createPostActionRT>(`/partial-update-post-action/${parent}/`, { like, donation_amount, user, post })
+      .put<createPostActionRT>(`/blog/partial-update-post-action/${parent}`, { like, donation_amount, user, post })
       .then((response) => {
         return response.data;
       });

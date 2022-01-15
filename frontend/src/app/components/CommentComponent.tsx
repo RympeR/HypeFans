@@ -31,16 +31,20 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
         id: null
       })
       .then((res) => {
-        setComments(
-          comments.map((item) => {
-            if (item.id === res.id) {
+        setComments((commentItem) => {
+          return commentItem.map((item) => {
+            if (item.id === val.parent) {
+              console.log({
+                ...item,
+                like: res.like
+              });
               return {
                 ...item,
-                liked: res.like
+                like: res.like
               };
             } else return item;
-          })
-        );
+          });
+        });
       });
   };
 
@@ -217,7 +221,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
         </div>
         <LikeIcon
           className="post__action-icon"
-          fill={item.parent_liked ? '#C41E3A' : 'none'}
+          fill={item.like ? '#C41E3A' : 'none'}
           onClick={() =>
             likeComment({ like: !item.parent_liked, parent: item.id, post: item.post, user: item.user.pk })
           }
