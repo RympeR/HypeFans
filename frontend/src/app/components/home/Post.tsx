@@ -36,7 +36,6 @@ const Post = ({
     };
   };
 }) => {
-  console.log(post);
   const alert = useAlert();
   const user_id = useSelector((state: RootState) => state.auth.pk);
   const { currentLang } = useContext(LangContext);
