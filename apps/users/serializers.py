@@ -195,7 +195,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
     fans_amount = serializers.IntegerField(required=False)
     subscribtion_price = serializers.IntegerField(required=False)
     message_price = serializers.IntegerField(required=False)
-    repheral_link = serializers.CharField(required=False)
+    reph_link = serializers.CharField(required=False)
     repheral_users = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), required=False, many=True)
     blocked_users = serializers.PrimaryKeyRelatedField(
@@ -225,6 +225,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'location',
             'post_amount',
             'fans_amount',
+            'reph_link',
             'repheral_users',
             'blocked_users',
             'email_notifications',
