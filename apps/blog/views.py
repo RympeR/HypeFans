@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from core.utils.default_responses import api_block_by_policy_451
 from rest_framework import generics, permissions
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import UpdateModelMixin
+from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 
 from apps.users.models import Subscription, User
@@ -136,7 +136,7 @@ class PostPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
         return self.partial_update(request, *args, **kwargs)
 
 
-class PostActionPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
+class PostActionPartialUpdateAPI(GenericAPIView, UpdateModelMixin, RetrieveModelMixin):
     queryset = PostAction.objects.all()
     serializer_class = PostActionUpdateSerializer
 
