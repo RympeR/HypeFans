@@ -6,12 +6,11 @@ const HttpProvider = TronWeb.providers.HttpProvider;
 const fullNode = new HttpProvider("https://api.trongrid.io");
 const solidityNode = new HttpProvider("https://api.trongrid.io");
 const eventServer = new HttpProvider("https://api.trongrid.io");
-const privateKey = "9ccaf7c13005acf1bf61de1255c675b01c90eea4f347d4f5e90b21923706adac";
+const privateKey = "";
 const tronWeb = new TronWeb(fullNode, solidityNode, eventServer, privateKey);
 
 
 const CONTRACT = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
-const FROM_ACCOUNT = "TWDMMLkESSp6TnVobe8gc25HC4UUqAygSg";
 const ACCOUNT = myArgs[0];
 
 const token_amount = myArgs[1];

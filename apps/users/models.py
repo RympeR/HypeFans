@@ -258,7 +258,7 @@ class ReferralPayment(models.Model):
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE, related_name='user_user_payment',)
     referrer = models.ForeignKey(User, verbose_name='Реферал', on_delete=models.CASCADE, related_name='referrer_user_payment',)
     amount = models.FloatField(verbose_name='Цена покупки')
-    date_time = UnixTimeStampField(verbose_name='')
+    date_time = UnixTimeStampField(verbose_name='Время оплаты', auto_now_add=True)
 
     class Meta:
         verbose_name = 'Реферальный платеж'

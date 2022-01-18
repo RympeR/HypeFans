@@ -5,7 +5,7 @@ from apps.users.dynamic_preferences_registry import ReferralPercentage
 from django.db.models import Count, Q
 from rest_framework import serializers
 
-from apps.users.models import User
+from apps.users.models import ReferralPayment, User
 from apps.users.serializers import UserShortRetrieveSeriliazer
 
 from .models import (Attachment, Post, PostAction, PostBought, Story,
@@ -38,9 +38,15 @@ class PostActionCreationSerializer(serializers.ModelSerializer):
             user.save()
             referrer = attrs['post'].user.referrer
             if referrer:
-                referrer.earned_credits_amount += attrs['donation_amount'] * \
+                amount = attrs['donation_amount'] * \
                     ReferralPercentage.value()
+                referrer.earned_credits_amount += amount
                 referrer.save()
+                ReferralPayment.objects.create(
+                    user=user,
+                    referrer=referrer,
+                    amount=amount 
+                )
             return attrs
         raise serializers.ValidationError
 
@@ -440,8 +446,14 @@ class PostBoughtCreateSerializer(serializers.ModelSerializer):
             user.save()
             referrer = attrs['post'].user.referrer
             if referrer:
-                referrer.earned_credits_amount += attrs['post'].price_to_watch * \
+                amount = attrs['post'].price_to_watch * \
                     ReferralPercentage.value()
+                referrer.earned_credits_amount += amount
                 referrer.save()
+                ReferralPayment.objects.create(
+                    user=user,
+                    referrer=referrer,
+                    amount=amount 
+                )
             return attrs
         raise serializers.ValidationError

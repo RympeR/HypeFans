@@ -256,9 +256,15 @@ class UserSubscription(GenericAPIView):
             subscribe_target.save()
             referrer = subscribe_target.referrer
             if referrer:
-                referrer.earned_credits_amount += subscribe_target.subscribtion_price * \
+                amount = subscribe_target.subscribtion_price * \
                     ReferralPercentage.value()
+                referrer.earned_credits_amount += amount
                 referrer.save()
+                ReferralPayment.objects.create(
+                    user=subscribe_target,
+                    referrer=referrer,
+                    amount=amount 
+                )
             user.save()
             subscription_datetime = datetime.now()
             Subscription.objects.create(
@@ -292,13 +298,19 @@ class UserChatSubscription(GenericAPIView):
         if user.credit_amount > subscribe_target.subscribtion_price:
             user.my_subscribes.add(subscribe_target)
             subscribe_target.fans_amount += 1
-            subscribe_target.earned_credits_amount += subscribe_target.subscribtion_price
+            subscribe_target.earned_credits_amount += subscribe_target.message_price
             subscribe_target.save()
             referrer = subscribe_target.referrer
             if referrer:
-                referrer.earned_credits_amount += subscribe_target.subscribtion_price * \
+                amount = subscribe_target.subscribtion_price * \
                     ReferralPercentage.value()
+                referrer.earned_credits_amount += amount
                 referrer.save()
+                ReferralPayment.objects.create(
+                    user=subscribe_target,
+                    referrer=referrer,
+                    amount=amount 
+                )
             user.save()
             subscription_datetime = datetime.now()
             ChatSubscription.objects.create(
