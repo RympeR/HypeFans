@@ -8,7 +8,9 @@ from .models import (
     Payment,
     Subscription,
     UserOnline,
-    PendingUser
+    PendingUser,
+    ChatSubscription,
+    ReferralPayment,
 )
 
 
@@ -39,7 +41,7 @@ class UserAdmin(admin.ModelAdmin):
     ordering = '-pk',
 
 
-@admin.register(Subscription)
+@admin.register(Subscription, ChatSubscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = [
         'pk','source', 'target', 'start_date', 'end_date'
@@ -68,6 +70,21 @@ class CardAdmin(admin.ModelAdmin):
     ]
     search_fields = [
         'user__username'
+    ]
+
+
+@admin.register(ReferralPayment)
+class ReferralPaymentAdmin(admin.ModelAdmin):
+    list_display = [
+        'pk', 'user', 'referrer', 'amount', 'date_time'
+    ]
+    list_display_links = ['pk']
+    list_filter = (
+            ('date_time', DateFieldListFilter),
+    )
+    search_fields = [
+        'user__username',
+        'referrer__username',
     ]
 
 

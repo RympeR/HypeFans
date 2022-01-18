@@ -7,6 +7,7 @@ from django_countries.fields import CountryField
 from dateutil.relativedelta import relativedelta
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from .dynamic_preferences_registry import ChatSubscriptionDuration
 
 
 class User(AbstractUser):
@@ -133,7 +134,7 @@ class User(AbstractUser):
 
     @property
     def new_user(self):
-        if datetime.datetime.now() - datetime.timedelta(7) < self.date_joined:
+        if datetime.datetime.now() - datetime.timedelta(ChatSubscriptionDuration.value()) < self.date_joined:
             return True
         return False
 
@@ -165,14 +166,13 @@ class ChatSubscription(models.Model):
                                related_name='target_user_chat_subscribe', on_delete=models.CASCADE)
     start_date = UnixTimeStampField('Время подписки', auto_now_add=True)
     end_date = UnixTimeStampField(
-        'Время конца подписки', 
+        'Время конца подписки',
         default=datetime.datetime.now() + datetime.timedelta(7)
     )
 
     class Meta:
         verbose_name = 'Подписка на  сообщение'
         verbose_name_plural = 'Подписки на сообщения'
-
 
     def __str__(self):
         return f"{self.user}-{self.chat}"
@@ -252,6 +252,20 @@ class UserOnline(models.Model):
 
     def __str__(self):
         return f"{self.user}-{self.last_action}"
+
+
+class ReferralPayment(models.Model):
+    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE, related_name='user_user_payment',)
+    referrer = models.ForeignKey(User, verbose_name='Реферал', on_delete=models.CASCADE, related_name='referrer_user_payment',)
+    amount = models.FloatField(verbose_name='Цена покупки')
+    date_time = UnixTimeStampField(verbose_name='')
+
+    class Meta:
+        verbose_name = 'Реферальный платеж'
+        verbose_name_plural = 'Реферальные платежи'
+
+    def __str__(self):
+        return f"{self.user}-{self.referrer}"
 
 
 def update_verification(sender: PendingUser, instance: PendingUser, created: bool, **kwargs):

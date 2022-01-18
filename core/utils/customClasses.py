@@ -1,4 +1,4 @@
-from apps.users.models import User
+
 from django.db.models import Model, Q, QuerySet
 from django_filters import rest_framework as filters
 from dynamic_preferences.registries import global_preferences_registry
@@ -35,16 +35,6 @@ def filter_related_objects(queryset: QuerySet, name: str, value, model: Model, s
             res.append(value)
 
     return queryset.filter(**{lookup: res}).distinct().order_by('id')
-
-
-class UserFilter(filters.FilterSet):
-    username = filters.CharFilter(lookup_expr='icontains')
-
-    class Meta:
-        model = User
-        fields = (
-            'username',
-        )
 
 
 global_preferences = global_preferences_registry.manager()

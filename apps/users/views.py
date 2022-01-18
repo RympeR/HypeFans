@@ -2,7 +2,7 @@ import logging
 from datetime import datetime, timedelta
 
 import requests
-from core.utils.customClasses import UserFilter
+from core.utils.customFilters import UserFilter
 from core.utils.default_responses import (api_accepted_202,
                                           api_bad_request_400,
                                           api_block_by_policy_451,
@@ -267,6 +267,46 @@ class UserSubscription(GenericAPIView):
                 start_date=subscription_datetime.timestamp(),
                 end_date=subscription_datetime + timedelta(
                     days=subscribe_target.subscribtion_duration
+                ).timestamp()
+            ).save()
+            return api_accepted_202(
+                {
+                    "subscriber": user.pk,
+                    "subscribed": subscribe_target.pk
+                }
+            )
+        return api_payment_required_402(
+            {
+                "need_to_pay":  subscribe_target.subscribtion_price - user.credit_amount
+            }
+        )
+
+
+class UserChatSubscription(GenericAPIView):
+    queryset = User.objects.all()
+    serializer_class = ChatSubscriptionCreateSerializer
+
+    def post(self, request, pk):
+        user = request.user
+        subscribe_target = get_object_or_404(User, pk=pk)
+        if user.credit_amount > subscribe_target.subscribtion_price:
+            user.my_subscribes.add(subscribe_target)
+            subscribe_target.fans_amount += 1
+            subscribe_target.earned_credits_amount += subscribe_target.subscribtion_price
+            subscribe_target.save()
+            referrer = subscribe_target.referrer
+            if referrer:
+                referrer.earned_credits_amount += subscribe_target.subscribtion_price * \
+                    ReferralPercentage.value()
+                referrer.save()
+            user.save()
+            subscription_datetime = datetime.now()
+            ChatSubscription.objects.create(
+                source=user,
+                target=subscribe_target,
+                start_date=subscription_datetime.timestamp(),
+                end_date=subscription_datetime + timedelta(
+                    days=ChatSubscriptionDuration.value()
                 ).timestamp()
             ).save()
             return api_accepted_202(

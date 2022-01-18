@@ -10,8 +10,8 @@ from apps.blog.models import Post
 from apps.users.dynamic_preferences_registry import (HostName,
                                                      ReferralPercentage)
 
-from .models import (Card, Donation, Payment, PendingUser, Subscription, User,
-                     UserOnline)
+from .models import (Card, ChatSubscription, Donation, Payment, PendingUser,
+                     Subscription, User, UserOnline)
 
 
 class UserMeSerializer(serializers.ModelSerializer):
@@ -33,6 +33,48 @@ class SubscriptionGetSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ChatSubscriptionGetSerializer(serializers.ModelSerializer):
+
+    end_date = TimestampField(required=False)
+    start_date = TimestampField(required=False)
+    source = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+
+    class Meta:
+        model = ChatSubscription
+        fields = '__all__'
+
+
+class ChatSubscriptionCreateSerializer(serializers.ModelSerializer):
+
+    end_date = TimestampField(required=False)
+    start_date = TimestampField(required=False)
+    source = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+
+    class Meta:
+        model = ChatSubscription
+        fields = '__all__'
+
+
+    def validate(self, attrs):
+        request = self.context.get('request')
+        user = request.user
+        now = datetime.now()
+        attrs['source'] = user
+        attrs['start_date'] = now
+        attrs['end_date'] = (
+            now + timedelta(days=user.subscribtion_duration)).timestamp()
+
+        if user.credit_amount >= attrs['target'].subscribtion_price:
+            user.credit_amount -= attrs['target'].subscribtion_price
+            attrs['target'].earned_credits_amount += attrs['target'].subscribtion_price
+            user.save()
+            attrs['target'].save()
+            return attrs
+        raise serializers.ValidationError
+
+
 class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
     end_date = TimestampField(required=False)
@@ -44,7 +86,7 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
         model = Subscription
         fields = '__all__'
 
-    # TODO update referral logic
+
     def validate(self, attrs):
         request = self.context.get('request')
         user = request.user

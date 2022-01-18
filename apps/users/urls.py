@@ -30,6 +30,7 @@ from .views import (
     UserSearchRetrieveAPI,
     UserLoginAPI,
     UserMeRetrieveAPI,
+    UserChatSubscription,
 )
 
 urlpatterns = [
@@ -44,6 +45,7 @@ urlpatterns = [
     path('delete-user/', UserAPI.as_view()),
     path('partial-update-user/', UserPartialUpdateAPI.as_view()),
     path('user-subscription/<int:pk>', UserSubscription.as_view()),
+    path('user-chat-subscription/<int:pk>', UserChatSubscription.as_view()),
     path('get-card/<int:pk>', CardRetrieveAPI.as_view()),
     path('create-card/', CardCreateAPI.as_view()),
     path('create-subscription/', CreateSubscriptioAPI.as_view()),
