@@ -1,5 +1,6 @@
 from core.utils.customFields import TimestampField
-from core.utils.func import REF_PERCANTAGE, return_file_url
+from core.utils.func import return_file_url
+from apps.users.dynamic_preferences_registry import ReferralPercentage
 from rest_framework import serializers
 
 from apps.blog.models import Attachment
@@ -186,7 +187,7 @@ class ChatBoughtCreateSerializer(serializers.ModelSerializer):
             referrer = attrs['chat'].user.referrer
             if referrer:
                 referrer.earned_credits_amount += attrs['amount'] * \
-                    REF_PERCANTAGE
+                    ReferralPercentage.value()
                 referrer.save()
             user.save()
             return attrs

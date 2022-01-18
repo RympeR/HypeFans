@@ -1,6 +1,9 @@
-from django_filters import rest_framework as filters
 from apps.users.models import User
-from django.db.models import Q, Model, QuerySet
+from django.db.models import Model, Q, QuerySet
+from django_filters import rest_framework as filters
+from dynamic_preferences.registries import global_preferences_registry
+from dynamic_preferences.settings import preferences_settings
+from dynamic_preferences.types import BasePreferenceType
 from rest_framework.serializers import ModelSerializer
 
 
@@ -42,3 +45,18 @@ class UserFilter(filters.FilterSet):
         fields = (
             'username',
         )
+
+
+global_preferences = global_preferences_registry.manager()
+
+
+class PreferenceMixin(BasePreferenceType):
+    @classmethod
+    def key(cls):
+        return '{}{}{}'.format(cls.section.name,
+                               preferences_settings.SECTION_KEY_SEPARATOR,
+                               cls.name)
+
+    @classmethod
+    def value(cls):
+        return global_preferences[cls.key()]

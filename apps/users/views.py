@@ -8,7 +8,7 @@ from core.utils.default_responses import (api_accepted_202,
                                           api_block_by_policy_451,
                                           api_created_201,
                                           api_payment_required_402)
-from core.utils.func import REF_PERCANTAGE, create_ref_link
+from core.utils.func import create_ref_link
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
@@ -20,6 +20,7 @@ from rest_framework.views import APIView
 
 from apps.blog.models import PostAction, PostBought
 from apps.blog.serializers import PostGetShortSerializers
+from apps.users.dynamic_preferences_registry import ReferralPercentage
 
 from .models import *
 from .serializers import *
@@ -80,13 +81,16 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
                     instance=post, context={'request': request}).data
                 res_dict = {}
                 res_dict['post'] = post_data
-                if post.access_level == 1:
-                    res_dict['post']['payed'] = (
-                        True if PostBought.objects.filter(
-                            post=post, user=user).exists() else False
-                    )
+                if user.new_user:
+                    res_dict['post']['payed'] = True
                 else:
-                    res_dict['post']['payed'] = sub_check
+                    if post.access_level == 1:
+                        res_dict['post']['payed'] = (
+                            True if PostBought.objects.filter(
+                                post=post, user=user).exists() else False
+                        )
+                    else:
+                        res_dict['post']['payed'] = sub_check
 
                 post_action_queryset = PostAction.objects.filter(
                     post=post, user=request.user)
@@ -252,7 +256,8 @@ class UserSubscription(GenericAPIView):
             subscribe_target.save()
             referrer = subscribe_target.referrer
             if referrer:
-                referrer.earned_credits_amount += subscribe_target.subscribtion_price * REF_PERCANTAGE
+                referrer.earned_credits_amount += subscribe_target.subscribtion_price * \
+                    ReferralPercentage.value()
                 referrer.save()
             user.save()
             subscription_datetime = datetime.now()

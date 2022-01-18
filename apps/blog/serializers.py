@@ -1,7 +1,7 @@
 import logging
 
 from core.utils.customFields import TimestampField
-from core.utils.func import REF_PERCANTAGE
+from apps.users.dynamic_preferences_registry import ReferralPercentage
 from django.db.models import Count, Q
 from rest_framework import serializers
 
@@ -39,7 +39,7 @@ class PostActionCreationSerializer(serializers.ModelSerializer):
             referrer = attrs['post'].user.referrer
             if referrer:
                 referrer.earned_credits_amount += attrs['donation_amount'] * \
-                    REF_PERCANTAGE
+                    ReferralPercentage.value()
                 referrer.save()
             return attrs
         raise serializers.ValidationError
@@ -441,7 +441,7 @@ class PostBoughtCreateSerializer(serializers.ModelSerializer):
             referrer = attrs['post'].user.referrer
             if referrer:
                 referrer.earned_credits_amount += attrs['post'].price_to_watch * \
-                    REF_PERCANTAGE
+                    ReferralPercentage.value()
                 referrer.save()
             return attrs
         raise serializers.ValidationError

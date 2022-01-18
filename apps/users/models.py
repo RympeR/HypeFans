@@ -131,6 +131,12 @@ class User(AbstractUser):
     def __str__(self):
         return str(self.username)
 
+    @property
+    def new_user(self):
+        if datetime.datetime.now() - datetime.timedelta(7) < self.date_joined:
+            return True
+        return False
+
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
@@ -150,6 +156,26 @@ class Subscription(models.Model):
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
+
+
+class ChatSubscription(models.Model):
+    source = models.ForeignKey(User, verbose_name='Кто подписался',
+                               related_name='source_user_chat_subscribe', on_delete=models.CASCADE)
+    target = models.ForeignKey(User, verbose_name='На кого подписался',
+                               related_name='target_user_chat_subscribe', on_delete=models.CASCADE)
+    start_date = UnixTimeStampField('Время подписки', auto_now_add=True)
+    end_date = UnixTimeStampField(
+        'Время конца подписки', 
+        default=datetime.datetime.now() + datetime.timedelta(7)
+    )
+
+    class Meta:
+        verbose_name = 'Подписка на  сообщение'
+        verbose_name_plural = 'Подписки на сообщения'
+
+
+    def __str__(self):
+        return f"{self.user}-{self.chat}"
 
 
 class Card(models.Model):

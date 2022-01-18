@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta
 
 from core.utils.customFields import TimestampField
-from core.utils.func import HOST, REF_PERCANTAGE, create_path_file, get_online
+from core.utils.func import create_path_file, get_online
 from django.db.models import Count
 from django_countries.serializer_fields import CountryField
 from rest_framework import serializers
 
 from apps.blog.models import Post
+from apps.users.dynamic_preferences_registry import (HostName,
+                                                     ReferralPercentage)
 
 from .models import (Card, Donation, Payment, PendingUser, Subscription, User,
                      UserOnline)
@@ -42,6 +44,7 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
         model = Subscription
         fields = '__all__'
 
+    # TODO update referral logic
     def validate(self, attrs):
         request = self.context.get('request')
         user = request.user
@@ -73,7 +76,7 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            host = request.get_host() if request else HOST
+            host = request.get_host() if request else HostName.value()
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -82,7 +85,7 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
         if user.background_photo and hasattr(user.background_photo, 'url'):
             path_file = user.background_photo.url
             request = self.context.get('request')
-            host = request.get_host() if request else HOST
+            host = request.get_host() if request else HostName.value()
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -113,7 +116,7 @@ class UserShortSocketRetrieveSeriliazer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            host = request.get_host() if request else HOST
+            host = request.get_host() if request else HostName.value()
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -143,7 +146,7 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            host = request.get_host() if request else HOST
+            host = request.get_host() if request else HostName.value()
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -152,7 +155,7 @@ class UserShortChatRetrieveSeriliazer(serializers.ModelSerializer):
         if user.background_photo and hasattr(user.background_photo, 'url'):
             path_file = user.background_photo.url
             request = self.context.get('request')
-            host = request.get_host() if request else HOST
+            host = request.get_host() if request else HostName.value()
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -286,7 +289,7 @@ class UserGetSerializer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            host = request.get_host() if request else HOST
+            host = request.get_host() if request else HostName.value()
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -295,7 +298,7 @@ class UserGetSerializer(serializers.ModelSerializer):
         if user.background_photo and hasattr(user.background_photo, 'url'):
             path_file = user.background_photo.url
             request = self.context.get('request')
-            host = request.get_host() if request else HOST
+            host = request.get_host() if request else HostName.value()
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -360,7 +363,7 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
         if user.avatar and hasattr(user.avatar, 'url'):
             path_file = user.avatar.url
             request = self.context.get('request')
-            host = request.get_host() if request else HOST
+            host = request.get_host() if request else HostName.value()
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -369,7 +372,7 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
         if user.background_photo and hasattr(user.background_photo, 'url'):
             path_file = user.background_photo.url
             request = self.context.get('request')
-            host = request.get_host() if request else HOST
+            host = request.get_host() if request else HostName.value()
             file_url = create_path_file(host, path_file)
             return file_url
         return ''
@@ -449,7 +452,7 @@ class DonationCreationSerializer(serializers.ModelSerializer):
             user.credit_amount -= amount
             reciever.earned_credits_amount += amount
             if reciever.referrer:
-                reciever.referrer.earned_credits_amount += amount * REF_PERCANTAGE
+                reciever.referrer.earned_credits_amount += amount * ReferralPercentage.value()
                 reciever.referrer.save()
             user.save()
             reciever.save()

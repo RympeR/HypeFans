@@ -25,6 +25,9 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'dynamic_preferences',
+    # comment the following line if you don't want to use user preferences
+    'dynamic_preferences.users.apps.UserPreferencesConfig',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -71,6 +74,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'dynamic_preferences.processors.global_preferences',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],

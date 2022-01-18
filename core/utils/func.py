@@ -13,6 +13,10 @@ def id_generator(size=12, chars=string.ascii_uppercase + string.ascii_lowercase 
 
 
 def get_online(serializer, user):
+    return online_check(user)
+
+
+def online_check(user):
     try:
         if user.user_online and not user.hide_online:
             if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:

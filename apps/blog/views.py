@@ -63,17 +63,19 @@ class PostListAPI(generics.GenericAPIView):
                 instance=post, context={'request': request}).data
             data[ind]['user'] = user_data
             data[ind]['post'] = post_data
-            if post.access_level == 1:
-                data[ind]['post']['payed'] = (
-                    True if PostBought.objects.filter(
-                        post=post, user=user).exists() else False
-                )
+            if user.new_user:
+                data[ind]['post']['payed'] = True
             else:
-
-                data[ind]['post']['payed'] = (
-                    True if Subscription.objects.filter(
-                        target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
-                )
+                if post.access_level == 1:
+                    data[ind]['post']['payed'] = (
+                        True if PostBought.objects.filter(
+                            post=post, user=user).exists() else False
+                    )
+                else:
+                    data[ind]['post']['payed'] = (
+                        True if Subscription.objects.filter(
+                            target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
+                    )
             post_action_qs = PostAction.objects.filter(
                 post=post, user=user)
             if post_action_qs.exists():
@@ -347,16 +349,19 @@ class MainUserPage(GenericAPIView):
                     res_dict = {}
                     res_dict['user'] = user_data
                     res_dict['post'] = post_data
-                    if post.access_level == 1:
-                        res_dict['post']['payed'] = (
-                            True if PostBought.objects.filter(
-                                post=post, user=user).exists() else False
-                        )
+                    if user.new_user:
+                        res_dict['post']['payed'] = True
                     else:
-                        res_dict['post']['payed'] = (
-                            True if Subscription.objects.filter(
-                                target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
-                        )
+                        if post.access_level == 1:
+                            res_dict['post']['payed'] = (
+                                True if PostBought.objects.filter(
+                                    post=post, user=user).exists() else False
+                            )
+                        else:
+                            res_dict['post']['payed'] = (
+                                True if Subscription.objects.filter(
+                                    target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
+                            )
                     post_action_qs = PostAction.objects.filter(
                         post=post, user=user)
                     if post_action_qs.exists():
@@ -498,17 +503,20 @@ class GetFavouritePosts(generics.GenericAPIView):
                 instance=post, context={'request': request}).data
             data[ind]['user'] = user_data
             data[ind]['post'] = post_data
-            if post.access_level == 1:
-                data[ind]['post']['payed'] = (
-                    True if PostBought.objects.filter(
-                        post=post, user=user).exists() else False
-                )
+            if user.new_user:
+                data[ind]['post']['payed'] = True
             else:
+                if post.access_level == 1:
+                    data[ind]['post']['payed'] = (
+                        True if PostBought.objects.filter(
+                            post=post, user=user).exists() else False
+                    )
+                else:
 
-                data[ind]['post']['payed'] = (
-                    True if Subscription.objects.filter(
-                        target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
-                )
+                    data[ind]['post']['payed'] = (
+                        True if Subscription.objects.filter(
+                            target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
+                    )
             post_action_qs = PostAction.objects.filter(
                 post=post, user=user)
             if post_action_qs.exists():
