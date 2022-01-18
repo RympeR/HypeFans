@@ -1,22 +1,26 @@
 from pathlib import Path
 import os
-
+import environ
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+
+env_file = BASE_DIR / '.env'
+if env_file.exists():
+    env.read_env(str(env_file))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'wnu^#puso-04rj&rktfe)i48v37)l1oz)yx#ncfpjkkcei20f7'
+SECRET_KEY = env.str('SECRET_KEY')
+PRIVATE_KEY = env.str('PRIVATE_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = [
-    '*'
-]
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['*'])
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000
 
@@ -85,22 +89,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 ASGI_APPLICATION = 'core.asgi.application'
 
-
+REDIS_URL = env.str('REDIS_URL', 'redis://localhost:6379/1')
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [REDIS_URL],
         },
     },
 }
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/var/tmp/django_cache',
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 LOGGING = {
     'version': 1,
@@ -137,9 +147,6 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     # {
     #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -155,10 +162,6 @@ AUTH_PASSWORD_VALIDATORS = [
     # },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
-
 LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'UTC'
@@ -171,15 +174,20 @@ USE_TZ = False
 
 AUTH_USER_MODEL = "users.User"
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'frontend/dist',
+]
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -202,7 +210,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
-
 }
 
 SIMPLE_JWT = {
@@ -240,7 +247,7 @@ CORS_ALLOW_METHODS = (
 # EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST = 'mail.hosting.reg.ru'
 EMAIL_HOST_USER = 'management@hype-fans.com'
-EMAIL_HOST_PASSWORD = 'P3j2M7a9'
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 # EMAIL_USE_TLS = True

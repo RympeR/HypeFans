@@ -34,7 +34,6 @@ from .views import (
 )
 
 urlpatterns = [
-
     path('me/', UserMeRetrieveAPI.as_view()),
     path('get-user/', UserRetrieveAPI.as_view()),
     path('user-search/', UserSearchRetrieveAPI.as_view()),

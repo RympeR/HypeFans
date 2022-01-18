@@ -38,3 +38,10 @@ class HostName(PreferenceMixin, StringPreference):
     section = settings
     name = 'host_name'
     default = 'hype-fans.com/'
+
+
+@global_preferences_registry.register
+class CryptoWalletAddress(PreferenceMixin, StringPreference):
+    section = settings
+    name = 'crypto_address'
+    default = 'hype-fans.com/'
