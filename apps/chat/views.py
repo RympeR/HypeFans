@@ -169,9 +169,10 @@ class InviteUserAPI(generics.UpdateAPIView):
 
     def partial_update(self, request, *args, **kwargs):
         if request.user == self.get_object().creator:
-            self.get_object().invited.add(
-                User.objects.get(username=request.data['username'])
-            )
+            for username in request.data['username']:
+                self.get_object().invited.add(
+                    User.objects.get(username=username)
+                )
         return super().partial_update(request, *args, **kwargs)
 
 
