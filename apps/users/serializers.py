@@ -8,10 +8,11 @@ from rest_framework import serializers
 
 from apps.blog.models import Post
 from apps.users.dynamic_preferences_registry import (HostName,
+                                                     ChatSubscriptionDuration,
                                                      ReferralPercentage)
 
 from .models import (Card, ChatSubscription, Donation, Payment, PendingUser,
-                     Subscription, User, UserOnline)
+                     Subscription, User, UserOnline, ReferralPayment)
 
 
 class UserMeSerializer(serializers.ModelSerializer):
@@ -27,10 +28,14 @@ class SubscriptionGetSerializer(serializers.ModelSerializer):
     start_date = TimestampField(required=False)
     source = serializers.PrimaryKeyRelatedField(
         required=False, queryset=User.objects.all())
+    price = serializers.SerializerMethodField()
 
     class Meta:
         model = Subscription
         fields = '__all__'
+
+    def get_price(self, subscription: Subscription):
+        return subscription.target.subscribtion_price
 
 
 class ChatSubscriptionGetSerializer(serializers.ModelSerializer):
@@ -39,6 +44,10 @@ class ChatSubscriptionGetSerializer(serializers.ModelSerializer):
     start_date = TimestampField(required=False)
     source = serializers.PrimaryKeyRelatedField(
         required=False, queryset=User.objects.all())
+    price = serializers.SerializerMethodField()
+    
+    def get_price(self, subscription: Subscription):
+        return subscription.target.subscribtion_price
 
     class Meta:
         model = ChatSubscription
@@ -56,7 +65,6 @@ class ChatSubscriptionCreateSerializer(serializers.ModelSerializer):
         model = ChatSubscription
         fields = '__all__'
 
-
     def validate(self, attrs):
         request = self.context.get('request')
         user = request.user
@@ -64,13 +72,24 @@ class ChatSubscriptionCreateSerializer(serializers.ModelSerializer):
         attrs['source'] = user
         attrs['start_date'] = now
         attrs['end_date'] = (
-            now + timedelta(days=user.subscribtion_duration)).timestamp()
+            now + timedelta(days=ChatSubscriptionDuration.value()))
 
-        if user.credit_amount >= attrs['target'].subscribtion_price:
-            user.credit_amount -= attrs['target'].subscribtion_price
-            attrs['target'].earned_credits_amount += attrs['target'].subscribtion_price
+        if user.credit_amount >= attrs['target'].message_price:
+            user.credit_amount -= attrs['target'].message_price
+            attrs['target'].earned_credits_amount += attrs['target'].message_price
             user.save()
             attrs['target'].save()
+            referrer = attrs['target'].referrer
+            if referrer:
+                amount = attrs['target'].message_price * \
+                    ReferralPercentage.value()
+                referrer.earned_credits_amount += amount
+                referrer.save()
+                ReferralPayment.objects.create(
+                    user=user,
+                    referrer=referrer,
+                    amount=amount
+                )
             return attrs
         raise serializers.ValidationError
 
@@ -86,7 +105,6 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
         model = Subscription
         fields = '__all__'
 
-
     def validate(self, attrs):
         request = self.context.get('request')
         user = request.user
@@ -99,7 +117,19 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
         if user.credit_amount >= attrs['target'].subscribtion_price:
             user.credit_amount -= attrs['target'].subscribtion_price
             attrs['target'].earned_credits_amount += attrs['target'].subscribtion_price
+
             user.save()
+            referrer = attrs['target'].referrer
+            if referrer:
+                amount = attrs['target'].subscribtion_price * \
+                    ReferralPercentage.value()
+                referrer.earned_credits_amount += amount
+                referrer.save()
+                ReferralPayment.objects.create(
+                    user=user,
+                    referrer=referrer,
+                    amount=amount
+                )
             attrs['target'].save()
             return attrs
         raise serializers.ValidationError
@@ -144,6 +174,16 @@ class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
             'is_online',
             'subscribtion_duration'
         )
+
+
+class ReferralPaymentGetSerializer(serializers.ModelSerializer):
+    user = UserShortRetrieveSeriliazer()
+    referrer = UserShortRetrieveSeriliazer()
+    date_time = TimestampField()
+
+    class Meta:
+        model = ReferralPayment
+        fields = '__all__'
 
 
 class UserShortSocketRetrieveSeriliazer(serializers.ModelSerializer):
@@ -493,11 +533,19 @@ class DonationCreationSerializer(serializers.ModelSerializer):
         if user.credit_amount >= amount:
             user.credit_amount -= amount
             reciever.earned_credits_amount += amount
-            if reciever.referrer:
-                reciever.referrer.earned_credits_amount += amount * ReferralPercentage.value()
-                reciever.referrer.save()
+            referrer = reciever.referrer
             user.save()
             reciever.save()
+            if referrer:
+                amount = amount * \
+                    ReferralPercentage.value()
+                referrer.earned_credits_amount += amount
+                referrer.save()
+                ReferralPayment.objects.create(
+                    user=user,
+                    referrer=referrer,
+                    amount=amount
+                )
             return attrs
         raise ValueError
 

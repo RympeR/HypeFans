@@ -263,7 +263,7 @@ class UserSubscription(GenericAPIView):
                 ReferralPayment.objects.create(
                     user=subscribe_target,
                     referrer=referrer,
-                    amount=amount 
+                    amount=amount
                 )
             user.save()
             subscription_datetime = datetime.now()
@@ -309,17 +309,17 @@ class UserChatSubscription(GenericAPIView):
                 ReferralPayment.objects.create(
                     user=subscribe_target,
                     referrer=referrer,
-                    amount=amount 
+                    amount=amount
                 )
             user.save()
             subscription_datetime = datetime.now()
             ChatSubscription.objects.create(
                 source=user,
                 target=subscribe_target,
-                start_date=subscription_datetime.timestamp(),
+                start_date=subscription_datetime,
                 end_date=subscription_datetime + timedelta(
                     days=ChatSubscriptionDuration.value()
-                ).timestamp()
+                )
             ).save()
             return api_accepted_202(
                 {
@@ -490,11 +490,23 @@ class PayStatsHistoryRetrieveAPI(APIView):
     def get(self, request, *args,):
         current_month = datetime.now().month
         user = request.user
+
         donations = Donation.objects.filter(
-            receiver=user,
-            datetime__datetime__date__month=current_month,
+            reciever=user,
+            datetime__date__month=current_month,
         ).order_by('-datetime')
+
         donation_amount = sum((donation.amount for donation in donations))
+
+        chat_subscriptions = ChatSubscription.objects.filter(
+            target=user,
+            start_date__date__month=current_month,
+        ).order_by('-start_date')
+        chat_subscription_amount = sum((
+            user.message_price
+            for _ in range(len(chat_subscriptions))
+        ))
+
         subscriptions = Subscription.objects.filter(
             target=user,
             start_date__date__month=current_month,
@@ -504,7 +516,13 @@ class PayStatsHistoryRetrieveAPI(APIView):
             for _ in range(len(subscriptions))
         ))
 
-        result_sum = subscription_amount + donation_amount
+        referral_payments = ReferralPayment.objects.filter(
+            referrer=user,
+        ).order_by('-date_time')
+        repherral_summ = sum((reph.amount for reph in referral_payments))
+
+        result_sum = subscription_amount + donation_amount + repherral_summ +\
+            chat_subscription_amount
         result = {
             'result_sum': result_sum,
             'donations': DonationGetSerializer(
@@ -513,6 +531,15 @@ class PayStatsHistoryRetrieveAPI(APIView):
             ).data,
             'subscriptions': SubscriptionGetSerializer(
                 instance=subscriptions,
+                many=True
+            ).data,
+            'chat_subscriptions': ChatSubscriptionGetSerializer(
+                instance=chat_subscriptions,
+                many=True
+            ).data,
+            'referral_payments': ReferralPaymentGetSerializer(
+                instance=referral_payments,
+                context={'request': request},
                 many=True
             ).data,
         }

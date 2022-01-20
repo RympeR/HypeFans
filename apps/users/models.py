@@ -148,8 +148,8 @@ class Subscription(models.Model):
                                related_name='source_user_subscribe', on_delete=models.CASCADE)
     target = models.ForeignKey(User, verbose_name='На кого подписался',
                                related_name='target_user_subscribe', on_delete=models.CASCADE)
-    start_date = UnixTimeStampField('Время подписки', auto_now_add=True)
-    end_date = UnixTimeStampField('Время конца подписки')
+    start_date = models.DateTimeField('Время подписки', auto_now_add=True)
+    end_date = models.DateTimeField('Время конца подписки')
 
     def __str__(self):
         return f'{self.source}-{self.target}'
@@ -164,8 +164,8 @@ class ChatSubscription(models.Model):
                                related_name='source_user_chat_subscribe', on_delete=models.CASCADE)
     target = models.ForeignKey(User, verbose_name='На кого подписался',
                                related_name='target_user_chat_subscribe', on_delete=models.CASCADE)
-    start_date = UnixTimeStampField('Время подписки', auto_now_add=True)
-    end_date = UnixTimeStampField(
+    start_date = models.DateTimeField('Время подписки', auto_now_add=True)
+    end_date = models.DateTimeField(
         'Время конца подписки',
         default=datetime.datetime.now() + datetime.timedelta(7)
     )
@@ -201,7 +201,7 @@ class Donation(models.Model):
         User, related_name='paid_user', on_delete=models.DO_NOTHING)
     reciever = models.ForeignKey(
         User, related_name='recieved_user', on_delete=models.DO_NOTHING)
-    datetime = UnixTimeStampField('Время оплаты', auto_now_add=True)
+    datetime = models.DateTimeField('Время оплаты', auto_now_add=True)
     amount = models.FloatField(verbose_name='Сумма', null=True, default=0)
 
     class Meta:
@@ -258,7 +258,7 @@ class ReferralPayment(models.Model):
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE, related_name='user_user_payment',)
     referrer = models.ForeignKey(User, verbose_name='Реферал', on_delete=models.CASCADE, related_name='referrer_user_payment',)
     amount = models.FloatField(verbose_name='Цена покупки')
-    date_time = UnixTimeStampField(verbose_name='Время оплаты', auto_now_add=True)
+    date_time = models.DateTimeField(verbose_name='Время оплаты', auto_now_add=True)
 
     class Meta:
         verbose_name = 'Реферальный платеж'
