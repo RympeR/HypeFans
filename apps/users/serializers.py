@@ -22,24 +22,6 @@ class UserMeSerializer(serializers.ModelSerializer):
         fields = 'username', 'id', 'email'
 
 
-class SubscriptionGetSerializer(serializers.ModelSerializer):
-
-    end_date = TimestampField(required=False)
-    start_date = TimestampField(required=False)
-    source = serializers.PrimaryKeyRelatedField(
-        required=False, queryset=User.objects.all())
-    price = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Subscription
-        fields = '__all__'
-
-    def get_price(self, subscription: Subscription):
-        return subscription.target.subscribtion_price
-
-
-
-
 class ChatSubscriptionCreateSerializer(serializers.ModelSerializer):
 
     end_date = TimestampField(required=False)
@@ -603,10 +585,26 @@ class ChatSubscriptionGetSerializer(serializers.ModelSerializer):
     source = UserShortRetrieveSeriliazer()
     target = UserShortRetrieveSeriliazer()
     price = serializers.SerializerMethodField()
-    
+
     def get_price(self, subscription: Subscription):
         return subscription.target.subscribtion_price
 
     class Meta:
         model = ChatSubscription
         fields = '__all__'
+
+
+class SubscriptionGetSerializer(serializers.ModelSerializer):
+
+    end_date = TimestampField(required=False)
+    start_date = TimestampField(required=False)
+    target = UserShortRetrieveSeriliazer()
+    source = UserShortRetrieveSeriliazer()
+    price = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Subscription
+        fields = '__all__'
+
+    def get_price(self, subscription: Subscription):
+        return subscription.target.subscribtion_price

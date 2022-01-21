@@ -69,6 +69,9 @@ export type userType = {
   avatar: string | null;
   first_name: string | null;
   background_photo: string | null;
+  is_online: boolean | null;
+  subscribtion_price: number | null;
+  subscribtion_duration: number | null;
 };
 export type userShortType = {
   pk: number | null;
@@ -93,7 +96,7 @@ export type getDonationRT = {
   id: number | null;
   sender: userType;
   reciever: userType;
-  datetime: string | null;
+  datetime: number | null;
   amount: number | null;
 };
 
@@ -244,7 +247,28 @@ export type referralPayment = {
   date_time: number | null;
   amount: number | null;
 };
+export type getSubscription = {
+  id: number | null;
+  source: userShortType;
+  target: userShortType;
+  date_time: number | null;
+  amount: number | null;
+  price: number | null;
+};
 export type referralHistory = {
   result_sum: number | null;
+  referral_payments: Array<referralPayment> | null;
+};
+export type spendHistory = {
+  result_sum: number | null;
+  donations: Array<getDonationRT> | null;
+  subscriptions: Array<getSubscription> | null;
+  chat_subscriptions: Array<getSubscription> | null;
+};
+export type earnHistory = {
+  result_sum: number | null;
+  donations: Array<getDonationRT> | null;
+  subscriptions: Array<getSubscription> | null;
+  chat_subscriptions: Array<getSubscription> | null;
   referral_payments: Array<referralPayment> | null;
 };
