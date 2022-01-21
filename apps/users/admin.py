@@ -54,7 +54,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
             ('end_date', DateFieldListFilter),
     )
     search_fields = [
-        'source__username', 'end_date__username',
+        'source__username', 'target__username',
     ]
     ordering = '-pk',
 
