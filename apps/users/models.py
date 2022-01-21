@@ -175,7 +175,7 @@ class ChatSubscription(models.Model):
         verbose_name_plural = 'Подписки на сообщения'
 
     def __str__(self):
-        return f"{self.source}-{self.chat}"
+        return f"{self.source}-{self.start_date}"
 
 
 class Card(models.Model):
