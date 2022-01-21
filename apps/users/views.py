@@ -300,6 +300,7 @@ class UserChatSubscription(GenericAPIView):
             subscribe_target.fans_amount += 1
             subscribe_target.earned_credits_amount += subscribe_target.message_price
             subscribe_target.save()
+            user.save()
             referrer = subscribe_target.referrer
             if referrer:
                 amount = subscribe_target.subscribtion_price * \
@@ -311,7 +312,6 @@ class UserChatSubscription(GenericAPIView):
                     referrer=referrer,
                     amount=amount
                 )
-            user.save()
             subscription_datetime = datetime.now()
             ChatSubscription.objects.create(
                 source=user,
@@ -540,6 +540,80 @@ class PayStatsHistoryRetrieveAPI(APIView):
             'referral_payments': ReferralPaymentGetSerializer(
                 instance=referral_payments,
                 context={'request': request},
+                many=True
+            ).data,
+        }
+        return Response(result)
+
+
+class RepheralHistoryRetrieveAPI(APIView):
+
+    def get(self, request, *args,):
+        current_month = datetime.now().month
+        user = request.user
+
+        referral_payments = ReferralPayment.objects.filter(
+            referrer=user,
+            date_time__date__month=current_month,
+        ).order_by('-date_time')
+        repherral_summ = sum((reph.amount for reph in referral_payments))
+
+        result = {
+            'result_sum': repherral_summ,
+            'referral_payments': ReferralPaymentGetSerializer(
+                instance=referral_payments,
+                context={'request': request},
+                many=True
+            ).data,
+        }
+        return Response(result)
+
+
+class SpendStatsHistoryRetrieveAPI(APIView):
+
+    def get(self, request, *args,):
+        current_month = datetime.now().month
+        user = request.user
+
+        donations = Donation.objects.filter(
+            sender=user,
+            datetime__date__month=current_month,
+        ).order_by('-datetime')
+
+        donation_amount = sum((donation.amount for donation in donations))
+
+        chat_subscriptions = ChatSubscription.objects.filter(
+            source=user,
+            start_date__date__month=current_month,
+        ).order_by('-start_date')
+        chat_subscription_amount = sum((
+            user.message_price
+            for _ in range(len(chat_subscriptions))
+        ))
+
+        subscriptions = Subscription.objects.filter(
+            source=user,
+            start_date__date__month=current_month,
+        ).order_by('-start_date')
+        subscription_amount = sum((
+            user.subscribtion_duration
+            for _ in range(len(subscriptions))
+        ))
+
+        result_sum = subscription_amount + donation_amount +\
+            chat_subscription_amount
+        result = {
+            'result_sum': result_sum,
+            'donations': DonationGetSerializer(
+                instance=donations,
+                many=True
+            ).data,
+            'subscriptions': SubscriptionGetSerializer(
+                instance=subscriptions,
+                many=True
+            ).data,
+            'chat_subscriptions': ChatSubscriptionGetSerializer(
+                instance=chat_subscriptions,
                 many=True
             ).data,
         }
