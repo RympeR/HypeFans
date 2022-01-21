@@ -38,20 +38,6 @@ class SubscriptionGetSerializer(serializers.ModelSerializer):
         return subscription.target.subscribtion_price
 
 
-class ChatSubscriptionGetSerializer(serializers.ModelSerializer):
-
-    end_date = TimestampField(required=False)
-    start_date = TimestampField(required=False)
-    source = serializers.PrimaryKeyRelatedField(
-        required=False, queryset=User.objects.all())
-    price = serializers.SerializerMethodField()
-    
-    def get_price(self, subscription: Subscription):
-        return subscription.target.subscribtion_price
-
-    class Meta:
-        model = ChatSubscription
-        fields = '__all__'
 
 
 class ChatSubscriptionCreateSerializer(serializers.ModelSerializer):
@@ -608,3 +594,19 @@ class UserOnlineCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserOnline
         fields = 'user',
+
+
+class ChatSubscriptionGetSerializer(serializers.ModelSerializer):
+
+    end_date = TimestampField(required=False)
+    start_date = TimestampField(required=False)
+    source = UserShortRetrieveSeriliazer()
+    target = UserShortRetrieveSeriliazer()
+    price = serializers.SerializerMethodField()
+    
+    def get_price(self, subscription: Subscription):
+        return subscription.target.subscribtion_price
+
+    class Meta:
+        model = ChatSubscription
+        fields = '__all__'
