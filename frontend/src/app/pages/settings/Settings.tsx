@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, Route, useHistory, useLocation } from 'react-router-dom';
 import { authAPI } from '~/api/authAPI';
 import { settingsValType } from '~/api/types';
+import { ExchangeModal } from '~/app/components/ExchangeComponent/ExchangeModal';
 import { useTabs } from '~/app/components/Tabs';
 import { changeSettings } from '~/redux/authReducer';
 import { RootState } from '~/redux/redux';
@@ -18,7 +19,6 @@ import { updateEmailConfirm } from '~/redux/userReducer';
 import { ReactComponent as BackIcon } from '../../../assets/images/arrow-left.svg';
 import { ReactComponent as BarSvg } from '../../../assets/images/bar-chart-2.svg';
 import { ReactComponent as Copy } from '../../../assets/images/copy.svg';
-import { ReactComponent as CardSvg } from '../../../assets/images/credit-card.svg';
 import { ReactComponent as EditSvg } from '../../../assets/images/edit.svg';
 import { ReactComponent as FacebookSvg } from '../../../assets/images/facebookRef.svg';
 import { ReactComponent as ArrowLeft } from '../../../assets/images/leftIcon.svg';
@@ -102,14 +102,7 @@ export const Settings = () => {
             <RefSvg />
           </SettingsSidebarItem>
         </Link>
-        <Link
-          to="/settings/profileSettings/card"
-          style={pathname === '/settings/profileSettings/card' ? { background: selectedColor } : {}}
-        >
-          <SettingsSidebarItem text="Мой счёт">
-            <CardSvg />
-          </SettingsSidebarItem>
-        </Link>
+        <ExchangeModal />
         <Link
           to="/settings/profileSettings/lists"
           style={pathname === '/settings/profileSettings/lists' ? { background: selectedColor } : {}}

@@ -4,6 +4,7 @@ import { userAPI } from '~/api/userAPI';
 import { ReactComponent as ArrowLeft } from '../../../assets/images/leftIcon.svg';
 import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
 import { ReactComponent as SearchSvg } from '../../../assets/images/search.svg';
+import { ExchangeModal } from '../ExchangeComponent/ExchangeModal';
 
 export const Search = () => {
   const [users, setUsers] = useState([]);
@@ -25,6 +26,7 @@ export const Search = () => {
 
   return (
     <div className="notifications__main">
+      <ExchangeModal />
       <div className="notifications__walletMain">
         <div
           style={{

@@ -1,0 +1,5820 @@
+// @import url(./libs/loading.scss);
+// @import url(./libs/fontello.scss);
+// @import url(./libs/normalize.scss);
+// @import url(./libs/jquery.mCustomScrollbar.scss);
+// @import url(../../node_modules/react-toastify/scss/main.scss);
+
+// /* width */
+// ::-webkit-scrollbar {
+// 	width: 6px;
+// 	background: #ede7f6;
+// }
+
+// * {
+// 	scrollbar-width: thin;
+// 	scrollbar-color: #7036b6 #ede7f6;
+// }
+
+// /* Track */
+// ::-webkit-scrollbar-track {
+// 	background: #ede7f6;
+// }
+
+// /* Handle */
+// ::-webkit-scrollbar-thumb {
+// 	border-radius: 20px;
+// 	background: #7036b6;
+// 	transition: all 0.5s;
+// 	border: 2px solid #ede7f6;
+// }
+
+// body {
+// 	min-height: 100vh;
+// 	position: relative;
+// 	-webkit-font-smoothing: antialiased;
+// 	-moz-osx-font-smoothing: grayscale;
+// 	text-rendering: optimizeLegibility;
+// 	background: linear-gradient(0deg, rgba(112, 54, 182, 0.05), rgba(112, 54, 182, 0.05)), #FFFFFF;
+// }
+
+// html {
+// 	height: 100%;
+// 	position: relative;
+// 	box-sizing: border-box;
+// }
+
+// * {
+// 	margin: 0;
+// 	padding: 0;
+// 	list-style: none;
+// 	outline: none;
+// 	font-weight: 400;
+// 	text-decoration: none;
+// 	font-family: 'Montserrat', sans-serif;
+// 	text-rendering: optimizeLegibility;
+// 	-webkit-font-smoothing: antialiased;
+// 	-moz-osx-font-smoothing: grayscale;
+// 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+// 	-webkit-tap-highlight-color: transparent;
+// 	-webkit-box-sizing: border-box;
+// 	-moz-box-sizing: border-box;
+// 	-ms-box-sizing: border-box;
+// 	-o-box-sizing: border-box;
+// 	box-sizing: border-box;
+// }
+
+// .wrapper {
+// 	overflow: hidden;
+// 	min-height: 100vh;
+// 	position: relative;
+// }
+
+// *:before,
+// *:after {
+// 	box-sizing: inherit;
+// }
+
+// img {
+// 	max-width: 100%;
+// 	height: auto;
+// }
+
+// i {
+// 	font-style: normal;
+// }
+
+// ul li,
+// ol li {
+// 	margin: 0;
+// }
+
+// input[type="submit"] {
+// 	-webkit-appearance: none;
+// 	-moz-appearance: none;
+// 	-ms-appearance: none;
+// 	-o-appearance: none;
+// 	appearance: none;
+// }
+
+// input:not([type=checkbox]):not([type=radio]),
+// textarea,
+// select {
+// 	-webkit-appearance: none;
+// 	-moz-appearance: none;
+// 	appearance: none;
+// }
+
+// button {
+// 	cursor: pointer;
+// }
+
+// .clearfix {
+// 	&:after {
+// 		content: " ";
+// 		visibility: hidden;
+// 		display: block;
+// 		font-size: 0;
+// 		clear: both;
+// 		height: 0;
+// 	}
+// }
+
+// input {
+// 	-webkit-appearance: none;
+// 	appearance: none;
+// }
+
+// a {
+// 	cursor: pointer;
+// }
+
+// .container {
+// 	width: 100%;
+// 	padding: 0 15px;
+// 	margin: 0 auto;
+// 	position: relative;
+
+// }
+
+// @media (min-width: 768px) {
+
+// 	.container {
+// 		width: 648px;
+// 		padding: 0;
+// 	}
+
+// }
+
+// @media (min-width: 1024px) {
+
+// 	.container {
+// 		width: 864px;
+// 	}
+
+// }
+
+// @media (min-width: 1280px) {
+
+// 	.container {
+// 		width: 1080px;
+// 	}
+
+// }
+
+// @media (min-width: 1400px) {
+
+// 	.container {
+// 		width: 1240px;
+// 	}
+
+// }
+
+// @media (min-width: 1600px) {}
+
+// [disabled],
+// .disabled {
+// 	opacity: .5;
+// 	pointer-events: none;
+// }
+
+// /* Chrome, Safari, Edge, Opera */
+// input::-webkit-outer-spin-button,
+// input::-webkit-inner-spin-button {
+// 	-webkit-appearance: none;
+// 	margin: 0;
+// }
+
+// /* Firefox */
+// input[type=number] {
+// 	-moz-appearance: textfield !important;
+// }
+
+// @import "https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap";
+
+// @font-face {
+// 	font-family: 'fontello';
+// 	font-weight: 400;
+// 	font-style: normal;
+// 	src: url(../fonts/fontello.eot?48529630);
+// 	src: url(../fonts/fontello.eot?48529630#iefix) format('embedded-opentype'), url(../fonts/fontello.woff2?48529630) format('woff2'), url(../fonts/fontello.woff?48529630) format('woff'), url(../fonts/fontello.ttf?48529630) format('truetype'), url(../fonts/fontello.svg?48529630#fontello) format('svg');
+// }
+
+// .loading {
+// 	position: fixed;
+// 	z-index: 8;
+// 	top: 0;
+// 	left: 0;
+// 	width: 100vw;
+// 	height: 100vh;
+// 	background: linear-gradient(0deg, rgba(112, 54, 182, .05), rgba(112, 54, 182, .05)), #fff;
+
+// 	.loading-content {
+// 		position: absolute;
+// 		top: 53.5%;
+// 		left: 50%;
+// 		width: 200px;
+// 		transform: translate(-50%, -50%);
+
+// 		.loading-img {
+// 			svg {
+// 				position: absolute;
+// 				top: 53.5%;
+// 				left: 50%;
+// 				width: 200px;
+// 				transform: translate(-50%, -50%);
+// 				top: 50%;
+// 				width: 102px;
+// 			}
+
+// 			position: relative;
+// 			display: block;
+// 			width: 92px;
+// 			margin: 0 auto 21px;
+
+// 			img {
+// 				display: flex;
+// 				width: 100%;
+// 			}
+// 		}
+
+// 		p {
+// 			font-size: 14px;
+// 			font-weight: 400;
+// 			line-height: 21px;
+// 			text-align: center;
+// 			color: #9999a5;
+// 		}
+// 	}
+// }
+
+// [class*='icon-'] {
+// 	&:before {
+// 		font-family: 'fontello';
+// 		font-weight: 400;
+// 		font-style: normal;
+// 		font-variant: normal;
+// 		display: inline-block;
+// 		text-align: center;
+// 		text-decoration: inherit;
+// 		text-transform: none;
+// 		speak: none;
+// 		-webkit-font-smoothing: antialiased;
+// 		-moz-osx-font-smoothing: grayscale;
+// 	}
+// }
+
+// [class^=icon-] {
+// 	&:before {
+// 		font-family: 'fontello';
+// 		font-weight: 400;
+// 		font-style: normal;
+// 		font-variant: normal;
+// 		display: inline-block;
+// 		text-align: center;
+// 		text-decoration: inherit;
+// 		text-transform: none;
+// 		speak: none;
+// 		-webkit-font-smoothing: antialiased;
+// 		-moz-osx-font-smoothing: grayscale;
+// 	}
+// }
+
+// .icon-help {
+// 	&:before {
+// 		content: '\e800';
+// 	}
+// }
+
+// .icon-trustwallet {
+// 	&:before {
+// 		content: '\e801';
+// 	}
+// }
+
+// .icon-check {
+// 	&:before {
+// 		content: '\e802';
+// 	}
+// }
+
+// .icon-plus {
+// 	&:before {
+// 		content: '\e803';
+// 	}
+// }
+
+// .icon-info {
+// 	&:before {
+// 		content: '\e804';
+// 	}
+// }
+
+// .icon-arrow-menu {
+// 	&:before {
+// 		content: '\e805';
+// 	}
+// }
+
+// .icon-copy {
+// 	&:before {
+// 		content: '\e806';
+// 	}
+// }
+
+// .icon-share {
+// 	&:before {
+// 		content: '\e807';
+// 	}
+// }
+
+// .icon-drop {
+// 	&:before {
+// 		content: '\e808';
+// 	}
+// }
+
+// .icon-menu {
+// 	&:before {
+// 		content: '\e809';
+// 	}
+// }
+
+// .icon-exit {
+// 	&:before {
+// 		content: '\e80a';
+// 	}
+// }
+
+.icon-close {
+  &:before {
+    content: '\e80b';
+  }
+}
+
+// .icon-dashboard {
+// 	&:before {
+// 		content: '\e80c';
+// 	}
+// }
+
+// .icon-farming {
+// 	&:before {
+// 		content: '\e80d';
+// 	}
+// }
+
+// .icon-games {
+// 	&:before {
+// 		content: '\e80e';
+// 	}
+// }
+
+// .icon-investment {
+// 	&:before {
+// 		content: '\e80f';
+// 	}
+// }
+
+// .icon-quests {
+// 	&:before {
+// 		content: '\e810';
+// 	}
+// }
+
+// .icon-top-arrow {
+// 	&:before {
+// 		content: '\e811';
+// 	}
+// }
+
+// .icon-exchange {
+// 	&:before {
+// 		content: '\e812';
+// 	}
+// }
+
+// .icon-exchange2 {
+// 	&:before {
+// 		content: '\e813';
+// 	}
+// }
+
+// .icon-referral {
+// 	&:before {
+// 		content: '\e814';
+// 	}
+// }
+
+// .icon-copy2 {
+// 	&:before {
+// 		content: '\e815';
+// 	}
+// }
+
+// .icon-copy3 {
+// 	&:before {
+// 		content: '\e816';
+// 	}
+// }
+
+// .icon-copy4 {
+// 	&:before {
+// 		content: '\e817';
+// 	}
+// }
+
+// .icon-farming2 {
+// 	&:before {
+// 		content: '\e818';
+// 	}
+// }
+
+// .icon-additional {
+// 	&:before {
+// 		content: '\e819';
+// 	}
+// }
+
+// .icon-deposits {
+// 	&:before {
+// 		content: '\e81a';
+// 	}
+// }
+
+// .icon-history {
+// 	&:before {
+// 		content: '\e81b';
+// 	}
+// }
+
+// .icon-staking {
+// 	&:before {
+// 		content: '\e81c';
+// 	}
+// }
+
+// .icon-present {
+// 	&:before {
+// 		content: '\e81d';
+// 	}
+// }
+
+// .icon-deposits2 {
+// 	&:before {
+// 		content: '\e81e';
+// 	}
+// }
+
+// .icon-info2 {
+// 	&:before {
+// 		content: '\e81f';
+// 	}
+// }
+
+// .icon-farming3 {
+// 	&:before {
+// 		content: '\e820';
+// 	}
+// }
+
+// .icon-liquidity-pool {
+// 	&:before {
+// 		content: '\e821';
+// 	}
+// }
+
+// .icon-error {
+// 	&:before {
+// 		content: '\e822';
+// 	}
+// }
+
+// .icon-pending {
+// 	&:before {
+// 		content: '\e824';
+// 	}
+// }
+
+// .icon-frozen {
+// 	&:before {
+// 		content: '\e825';
+// 	}
+// }
+
+// html {
+// 	font-family: sans-serif;
+// 	line-height: 1.15;
+// 	-ms-text-size-adjust: 100%;
+// 	-webkit-text-size-adjust: 100%;
+// 	box-sizing: border-box;
+// 	height: 100%;
+// 	position: relative;
+
+// 	[type=button] {
+// 		-webkit-appearance: button;
+// 	}
+// }
+
+// body {
+// 	position: relative;
+// 	margin: 0;
+// 	min-height: 100vh;
+// 	background: linear-gradient(0deg, rgba(112, 54, 182, .05), rgba(112, 54, 182, .05)), #fff;
+// 	-webkit-font-smoothing: antialiased;
+// 	-moz-osx-font-smoothing: grayscale;
+// 	text-rendering: optimizeLegibility;
+// }
+
+// sub {
+// 	position: relative;
+// 	font-size: 75%;
+// 	line-height: 0;
+// 	vertical-align: baseline;
+// 	bottom: -.25em;
+// }
+
+// sup {
+// 	position: relative;
+// 	font-size: 75%;
+// 	line-height: 0;
+// 	vertical-align: baseline;
+// 	top: -.5em;
+// }
+
+// article {
+// 	display: block;
+// }
+
+// aside {
+// 	display: block;
+// }
+
+// details {
+// 	display: block;
+// }
+
+// figcaption {
+// 	display: block;
+// }
+
+// figure {
+// 	display: block;
+// 	margin: 1em 40px;
+// }
+
+// footer {
+// 	display: block;
+// }
+
+// header {
+// 	display: block;
+// }
+
+// main {
+// 	display: block;
+// }
+
+// menu {
+// 	display: block;
+// }
+
+// nav {
+// 	display: block;
+// }
+
+// section {
+// 	display: block;
+// }
+
+// h1 {
+// 	font-size: 2em;
+// 	margin: .67em 0;
+// }
+
+// hr {
+// 	overflow: visible;
+// 	box-sizing: content-box;
+// 	height: 0;
+// }
+
+// code {
+// 	font-family: monospace, monospace;
+// 	font-size: 1em;
+// }
+
+// kbd {
+// 	font-family: monospace, monospace;
+// 	font-size: 1em;
+// }
+
+// pre {
+// 	font-family: monospace, monospace;
+// 	font-size: 1em;
+// }
+
+// samp {
+// 	font-family: monospace, monospace;
+// 	font-size: 1em;
+// }
+
+// a {
+// 	background-color: transparent;
+// 	-webkit-text-decoration-skip: objects;
+// 	cursor: pointer;
+
+// 	&:active {
+// 		outline-width: 0;
+// 	}
+
+// 	&:hover {
+// 		outline-width: 0;
+// 	}
+// }
+
+// abbr[title] {
+// 	text-decoration: underline dotted;
+// 	border-bottom: none;
+// 	-webkit-text-decoration: underline dotted;
+// }
+
+// b {
+// 	font-weight: bolder;
+// }
+
+// strong {
+// 	font-weight: bolder;
+// }
+
+// dfn {
+// 	font-style: italic;
+// }
+
+// mark {
+// 	color: #000;
+// 	background-color: #ff0;
+// }
+
+// small {
+// 	font-size: 80%;
+// }
+
+// audio {
+// 	display: inline-block;
+
+// 	&:not([controls]) {
+// 		display: none;
+// 		height: 0;
+// 	}
+// }
+
+// canvas {
+// 	display: inline-block;
+// }
+
+// video {
+// 	display: inline-block;
+// }
+
+// img {
+// 	border-style: none;
+// 	max-width: 100%;
+// 	height: auto;
+// }
+
+// svg {
+// 	&:not(:root) {
+// 		overflow: hidden;
+// 	}
+// }
+
+// button {
+// 	font-family: sans-serif;
+// 	font-size: 100%;
+// 	line-height: 1.15;
+// 	margin: 0;
+// 	overflow: visible;
+// 	text-transform: none;
+// 	-webkit-appearance: button;
+// 	cursor: pointer;
+
+// 	&::-moz-focus-inner {
+// 		padding: 0;
+// 		border-style: none;
+// 	}
+
+// 	&:-moz-focusring {
+// 		outline: 1px dotted ButtonText;
+// 	}
+// }
+
+// input {
+// 	font-family: sans-serif;
+// 	font-size: 100%;
+// 	line-height: 1.15;
+// 	margin: 0;
+// 	overflow: visible;
+// 	-webkit-appearance: none;
+// 	-moz-appearance: none;
+// 	appearance: none;
+
+// 	&:not([type=checkbox]) {
+// 		&:not([type=radio]) {
+// 			-webkit-appearance: none;
+// 			-moz-appearance: none;
+// 			appearance: none;
+// 		}
+// 	}
+// }
+
+// optgroup {
+// 	font-family: sans-serif;
+// 	font-size: 100%;
+// 	line-height: 1.15;
+// 	margin: 0;
+// }
+
+// select {
+// 	font-family: sans-serif;
+// 	font-size: 100%;
+// 	line-height: 1.15;
+// 	margin: 0;
+// 	text-transform: none;
+// 	-webkit-appearance: none;
+// 	-moz-appearance: none;
+// 	appearance: none;
+// }
+
+// textarea {
+// 	font-family: sans-serif;
+// 	font-size: 100%;
+// 	line-height: 1.15;
+// 	margin: 0;
+// 	overflow: auto;
+// 	-webkit-appearance: none;
+// 	-moz-appearance: none;
+// 	appearance: none;
+// }
+
+// [type=reset] {
+// 	-webkit-appearance: button;
+
+// 	&::-moz-focus-inner {
+// 		padding: 0;
+// 		border-style: none;
+// 	}
+
+// 	&:-moz-focusring {
+// 		outline: 1px dotted ButtonText;
+// 	}
+// }
+
+// [type=submit] {
+// 	-webkit-appearance: button;
+
+// 	&::-moz-focus-inner {
+// 		padding: 0;
+// 		border-style: none;
+// 	}
+
+// 	&:-moz-focusring {
+// 		outline: 1px dotted ButtonText;
+// 	}
+// }
+
+// [type=button] {
+// 	&::-moz-focus-inner {
+// 		padding: 0;
+// 		border-style: none;
+// 	}
+
+// 	&:-moz-focusring {
+// 		outline: 1px dotted ButtonText;
+// 	}
+// }
+
+// fieldset {
+// 	margin: 0 2px;
+// 	padding: .35em .625em .75em;
+// 	border: 1px solid silver;
+// }
+
+// legend {
+// 	display: table;
+// 	max-width: 100%;
+// 	white-space: normal;
+// 	color: inherit;
+// 	box-sizing: border-box;
+// 	padding: 0;
+// }
+
+// progress {
+// 	display: inline-block;
+// 	vertical-align: baseline;
+// }
+
+// [type=checkbox] {
+// 	box-sizing: border-box;
+// 	padding: 0;
+// }
+
+// [type=radio] {
+// 	box-sizing: border-box;
+// 	padding: 0;
+// }
+
+// [type=number] {
+// 	&::-webkit-inner-spin-button {
+// 		height: auto;
+// 	}
+
+// 	&::-webkit-outer-spin-button {
+// 		height: auto;
+// 	}
+// }
+
+// [type=search] {
+// 	outline-offset: -2px;
+// 	-webkit-appearance: textfield;
+
+// 	&::-webkit-search-cancel-button {
+// 		-webkit-appearance: none;
+// 	}
+
+// 	&::-webkit-search-decoration {
+// 		-webkit-appearance: none;
+// 	}
+// }
+
+// ::-webkit-file-upload-button {
+// 	font: inherit;
+// 	-webkit-appearance: button;
+// }
+
+// summary {
+// 	display: list-item;
+// }
+
+// [hidden] {
+// 	display: none;
+// }
+
+// template {
+// 	display: none;
+// }
+
+// .mCustomScrollbar {
+// 	touch-action: pinch-zoom;
+
+// 	>.mCustomScrollBox {
+// 		>.mCSB_scrollTools.mCSB_scrollTools_onDrag {
+// 			opacity: 1;
+// 			filter: 'alpha(opacity=100)';
+// 			-ms-filter: 'alpha(opacity=100)';
+// 		}
+// 	}
+
+// 	>.mCustomScrollBox~.mCSB_scrollTools.mCSB_scrollTools_onDrag {
+// 		opacity: 1;
+// 		filter: 'alpha(opacity=100)';
+// 		-ms-filter: 'alpha(opacity=100)';
+// 	}
+// }
+
+// .mCustomScrollbar.mCS_no_scrollbar {
+// 	touch-action: auto;
+// }
+
+// .mCustomScrollbar.mCS_touch_action {
+// 	touch-action: auto;
+// }
+
+// .mCustomScrollBox {
+// 	position: relative;
+// 	overflow: hidden;
+// 	height: 100%;
+// 	outline: 0;
+// 	direction: ltr;
+
+// 	&:hover {
+// 		>.mCSB_scrollTools {
+// 			opacity: 1;
+// 			filter: 'alpha(opacity=100)';
+// 			-ms-filter: 'alpha(opacity=100)';
+// 		}
+// 	}
+
+// 	&:hover~.mCSB_scrollTools {
+// 		opacity: 1;
+// 		filter: 'alpha(opacity=100)';
+// 		-ms-filter: 'alpha(opacity=100)';
+// 	}
+// }
+
+// .mCSB_container {
+// 	overflow: hidden;
+// 	width: auto;
+// 	height: auto;
+// }
+
+// .mCSB_inside {
+// 	>.mCSB_container {
+// 		margin-right: 30px;
+// 	}
+// }
+
+// .mCSB_container.mCS_no_scrollbar_y.mCS_y_hidden {
+// 	margin-right: 0;
+// }
+
+// .mCS-dir-rtl {
+// 	>.mCSB_inside {
+// 		>.mCSB_container {
+// 			margin-right: 0;
+// 			margin-left: 30px;
+// 		}
+
+// 		>.mCSB_container.mCS_no_scrollbar_y.mCS_y_hidden {
+// 			margin-left: 0;
+// 		}
+
+// 		>.mCSB_scrollTools {
+// 			right: auto;
+// 			left: 0;
+// 		}
+
+// 		>.mCSB_container_wrapper {
+// 			margin-right: 0;
+// 			margin-left: 30px;
+// 		}
+// 	}
+
+// 	>.mCSB_outside+.mCSB_scrollTools {
+// 		right: auto;
+// 		left: -26px;
+// 	}
+
+// 	>.mCustomScrollBox.mCSB_vertical_horizontal.mCSB_inside {
+// 		>.mCSB_container_wrapper.mCS_no_scrollbar_y.mCS_y_hidden+.mCSB_scrollTools~.mCSB_scrollTools.mCSB_scrollTools_horizontal {
+// 			left: 0;
+// 		}
+
+// 		>.mCSB_scrollTools.mCSB_scrollTools_horizontal {
+// 			right: 0;
+// 			left: 20px;
+// 		}
+// 	}
+
+// 	>.mCSB_outside+.mCS-minimal-dark.mCSB_scrollTools_vertical {
+// 		right: auto;
+// 		left: 0;
+// 	}
+
+// 	>.mCSB_outside+.mCS-minimal.mCSB_scrollTools_vertical {
+// 		right: auto;
+// 		left: 0;
+// 	}
+// }
+
+// .mCSB_scrollTools {
+// 	position: absolute;
+// 	top: 0;
+// 	right: 0;
+// 	bottom: 0;
+// 	left: auto;
+// 	width: 16px;
+// 	height: auto;
+// 	transition: opacity .2s ease-in-out, background-color .2s ease-in-out;
+// 	opacity: .75;
+// 	filter: 'alpha(opacity=75)';
+// 	-ms-filter: 'alpha(opacity=75)';
+
+// 	.mCSB_draggerContainer {
+// 		position: absolute;
+// 		top: 0;
+// 		right: 0;
+// 		bottom: 0;
+// 		left: 0;
+// 		height: auto;
+// 	}
+
+// 	a+.mCSB_draggerContainer {
+// 		margin: 20px 0;
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 2px;
+// 		height: 100%;
+// 		margin: 0 auto;
+// 		border-radius: 16px;
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .4);
+// 		filter: 'alpha(opacity=40)';
+// 		-ms-filter: 'alpha(opacity=40)';
+// 	}
+
+// 	.mCSB_dragger {
+// 		z-index: 1;
+// 		width: 100%;
+// 		height: 30px;
+// 		cursor: pointer;
+
+// 		.mCSB_dragger_bar {
+// 			position: relative;
+// 			width: 4px;
+// 			height: 100%;
+// 			margin: 0 auto;
+// 			text-align: center;
+// 			border-radius: 16px;
+// 			transition: opacity .2s ease-in-out, background-color .2s ease-in-out;
+// 			background-color: #fff;
+// 			background-color: rgba(255, 255, 255, .75);
+// 			filter: 'alpha(opacity=75)';
+// 			-ms-filter: 'alpha(opacity=75)';
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #fff;
+// 				background-color: rgba(255, 255, 255, .85);
+// 				filter: 'alpha(opacity=85)';
+// 				-ms-filter: 'alpha(opacity=85)';
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #fff;
+// 				background-color: rgba(255, 255, 255, .9);
+// 				filter: 'alpha(opacity=90)';
+// 				-ms-filter: 'alpha(opacity=90)';
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		position: absolute;
+// 		display: block;
+// 		overflow: hidden;
+// 		width: 100%;
+// 		height: 20px;
+// 		margin: 0 auto;
+// 		cursor: pointer;
+// 		bottom: 0;
+// 		transition: opacity .2s ease-in-out, background-color .2s ease-in-out;
+// 		opacity: .4;
+// 		background-image: url(../images/mCSB_buttons.png);
+// 		background-repeat: no-repeat;
+// 		filter: 'alpha(opacity=40)';
+// 		-ms-filter: 'alpha(opacity=40)';
+// 		background-position: 0 -20px;
+
+// 		&:hover {
+// 			opacity: .75;
+// 			filter: 'alpha(opacity=75)';
+// 			-ms-filter: 'alpha(opacity=75)';
+// 		}
+
+// 		&:active {
+// 			opacity: .9;
+// 			filter: 'alpha(opacity=90)';
+// 			-ms-filter: 'alpha(opacity=90)';
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		position: absolute;
+// 		display: block;
+// 		overflow: hidden;
+// 		width: 100%;
+// 		height: 20px;
+// 		margin: 0 auto;
+// 		cursor: pointer;
+// 		transition: opacity .2s ease-in-out, background-color .2s ease-in-out;
+// 		opacity: .4;
+// 		background-image: url(../images/mCSB_buttons.png);
+// 		background-repeat: no-repeat;
+// 		filter: 'alpha(opacity=40)';
+// 		-ms-filter: 'alpha(opacity=40)';
+// 		background-position: 0 0;
+
+// 		&:hover {
+// 			opacity: .75;
+// 			filter: 'alpha(opacity=75)';
+// 			-ms-filter: 'alpha(opacity=75)';
+// 		}
+
+// 		&:active {
+// 			opacity: .9;
+// 			filter: 'alpha(opacity=90)';
+// 			-ms-filter: 'alpha(opacity=90)';
+// 		}
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		transition: opacity .2s ease-in-out, background-color .2s ease-in-out;
+// 		opacity: .4;
+// 		background-image: url(../images/mCSB_buttons.png);
+// 		background-repeat: no-repeat;
+// 		filter: 'alpha(opacity=40)';
+// 		-ms-filter: 'alpha(opacity=40)';
+// 		background-position: 0 -40px;
+
+// 		&:hover {
+// 			opacity: .75;
+// 			filter: 'alpha(opacity=75)';
+// 			-ms-filter: 'alpha(opacity=75)';
+// 		}
+
+// 		&:active {
+// 			opacity: .9;
+// 			filter: 'alpha(opacity=90)';
+// 			-ms-filter: 'alpha(opacity=90)';
+// 		}
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		transition: opacity .2s ease-in-out, background-color .2s ease-in-out;
+// 		opacity: .4;
+// 		background-image: url(../images/mCSB_buttons.png);
+// 		background-repeat: no-repeat;
+// 		filter: 'alpha(opacity=40)';
+// 		-ms-filter: 'alpha(opacity=40)';
+// 		background-position: 0 -56px;
+
+// 		&:hover {
+// 			opacity: .75;
+// 			filter: 'alpha(opacity=75)';
+// 			-ms-filter: 'alpha(opacity=75)';
+// 		}
+
+// 		&:active {
+// 			opacity: .9;
+// 			filter: 'alpha(opacity=90)';
+// 			-ms-filter: 'alpha(opacity=90)';
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #fff;
+// 			background-color: rgba(255, 255, 255, .9);
+// 			filter: 'alpha(opacity=90)';
+// 			-ms-filter: 'alpha(opacity=90)';
+// 		}
+// 	}
+// }
+
+// .mCSB_outside+.mCSB_scrollTools {
+// 	right: -26px;
+// }
+
+// .mCSB_scrollTools_vertical.mCSB_scrollTools_onDrag_expand {
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded {
+// 		.mCSB_dragger_bar {
+// 			width: 12px;
+// 		}
+// 	}
+
+// 	.mCSB_draggerContainer {
+// 		&:hover {
+// 			.mCSB_dragger {
+// 				.mCSB_dragger_bar {
+// 					width: 12px;
+// 				}
+// 			}
+
+// 			.mCSB_draggerRail {
+// 				width: 8px;
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded+.mCSB_draggerRail {
+// 		width: 8px;
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		transition: width .2s ease-out .2s, height .2s ease-out .2s, margin-left .2s ease-out .2s, margin-right .2s ease-out .2s, margin-top .2s ease-out .2s, margin-bottom .2s ease-out .2s, opacity .2s ease-in-out, background-color .2s ease-in-out;
+// 	}
+
+// 	.mCSB_dragger_bar {
+// 		transition: width .2s ease-out .2s, height .2s ease-out .2s, margin-left .2s ease-out .2s, margin-right .2s ease-out .2s, margin-top .2s ease-out .2s, margin-bottom .2s ease-out .2s, opacity .2s ease-in-out, background-color .2s ease-in-out;
+// 	}
+// }
+
+// .mCSB_horizontal.mCSB_inside {
+// 	>.mCSB_container {
+// 		margin-right: 0;
+// 		margin-bottom: 30px;
+// 	}
+// }
+
+// .mCSB_horizontal.mCSB_outside {
+// 	>.mCSB_container {
+// 		min-height: 100%;
+// 	}
+// }
+
+// .mCSB_horizontal {
+// 	>.mCSB_container.mCS_no_scrollbar_x.mCS_x_hidden {
+// 		margin-bottom: 0;
+// 	}
+// }
+
+// .mCSB_container_wrapper {
+// 	top: auto;
+// 	right: 0;
+// 	bottom: 0;
+// 	left: 0;
+// 	width: auto;
+// 	height: 16px;
+// 	position: absolute;
+// 	top: 0;
+// 	overflow: hidden;
+// 	height: auto;
+// 	margin-right: 30px;
+// 	margin-bottom: 30px;
+
+// 	>.mCSB_container {
+// 		box-sizing: border-box;
+// 		padding-right: 30px;
+// 		padding-bottom: 30px;
+// 	}
+// }
+
+// .mCSB_scrollTools.mCSB_scrollTools_horizontal {
+// 	top: auto;
+// 	right: 0;
+// 	bottom: 0;
+// 	left: 0;
+// 	width: auto;
+// 	height: 16px;
+
+// 	a+.mCSB_draggerContainer {
+// 		margin: 0 20px;
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 2px;
+// 		margin: 7px 0;
+// 	}
+
+// 	.mCSB_dragger {
+// 		left: 0;
+// 		width: 30px;
+// 		height: 100%;
+
+// 		.mCSB_dragger_bar {
+// 			width: 100%;
+// 			height: 4px;
+// 			margin: 6px auto;
+// 		}
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		position: absolute;
+// 		display: block;
+// 		overflow: hidden;
+// 		width: 20px;
+// 		height: 100%;
+// 		margin: 0 auto;
+// 		cursor: pointer;
+// 		left: 0;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		position: absolute;
+// 		display: block;
+// 		overflow: hidden;
+// 		width: 20px;
+// 		height: 100%;
+// 		margin: 0 auto;
+// 		cursor: pointer;
+// 		right: 0;
+// 	}
+// }
+
+// .mCustomScrollBox+.mCSB_scrollTools+.mCSB_scrollTools.mCSB_scrollTools_horizontal {
+// 	bottom: -26px;
+// }
+
+// .mCustomScrollBox+.mCSB_scrollTools.mCSB_scrollTools_horizontal {
+// 	bottom: -26px;
+// }
+
+// .mCSB_scrollTools_horizontal.mCSB_scrollTools_onDrag_expand {
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded {
+// 		.mCSB_dragger_bar {
+// 			height: 12px;
+// 			margin: 2px auto;
+// 		}
+// 	}
+
+// 	.mCSB_draggerContainer {
+// 		&:hover {
+// 			.mCSB_dragger {
+// 				.mCSB_dragger_bar {
+// 					height: 12px;
+// 					margin: 2px auto;
+// 				}
+// 			}
+
+// 			.mCSB_draggerRail {
+// 				height: 8px;
+// 				margin: 4px 0;
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded+.mCSB_draggerRail {
+// 		height: 8px;
+// 		margin: 4px 0;
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		transition: width .2s ease-out .2s, height .2s ease-out .2s, margin-left .2s ease-out .2s, margin-right .2s ease-out .2s, margin-top .2s ease-out .2s, margin-bottom .2s ease-out .2s, opacity .2s ease-in-out, background-color .2s ease-in-out;
+// 	}
+
+// 	.mCSB_dragger_bar {
+// 		transition: width .2s ease-out .2s, height .2s ease-out .2s, margin-left .2s ease-out .2s, margin-right .2s ease-out .2s, margin-top .2s ease-out .2s, margin-bottom .2s ease-out .2s, opacity .2s ease-in-out, background-color .2s ease-in-out;
+// 	}
+// }
+
+// .mCSB_container_wrapper.mCS_no_scrollbar_y.mCS_y_hidden+.mCSB_scrollTools~.mCSB_scrollTools.mCSB_scrollTools_horizontal {
+// 	right: 0;
+// }
+
+// .mCSB_vertical_horizontal {
+// 	>.mCSB_scrollTools.mCSB_scrollTools_vertical {
+// 		bottom: 20px;
+// 	}
+
+// 	>.mCSB_scrollTools.mCSB_scrollTools_horizontal {
+// 		right: 20px;
+// 	}
+// }
+
+// .mCSB_container_wrapper.mCS_no_scrollbar_x.mCS_x_hidden+.mCSB_scrollTools.mCSB_scrollTools_vertical {
+// 	bottom: 0;
+// }
+
+// .mCSB_container_wrapper.mCS_no_scrollbar_y.mCS_y_hidden {
+// 	>.mCSB_container {
+// 		padding-right: 0;
+// 	}
+// }
+
+// .mCSB_container_wrapper.mCS_no_scrollbar_x.mCS_x_hidden {
+// 	>.mCSB_container {
+// 		padding-bottom: 0;
+// 	}
+// }
+
+// .mCustomScrollBox.mCSB_vertical_horizontal.mCSB_inside {
+// 	>.mCSB_container_wrapper.mCS_no_scrollbar_y.mCS_y_hidden {
+// 		margin-right: 0;
+// 		margin-left: 0;
+// 	}
+
+// 	>.mCSB_container_wrapper.mCS_no_scrollbar_x.mCS_x_hidden {
+// 		margin-bottom: 0;
+// 	}
+// }
+
+// .mCS-autoHide {
+// 	>.mCustomScrollBox {
+// 		>.mCSB_scrollTools {
+// 			opacity: 0;
+// 			filter: 'alpha(opacity=0)';
+// 			-ms-filter: 'alpha(opacity=0)';
+// 		}
+// 	}
+
+// 	>.mCustomScrollBox~.mCSB_scrollTools {
+// 		opacity: 0;
+// 		filter: 'alpha(opacity=0)';
+// 		-ms-filter: 'alpha(opacity=0)';
+// 	}
+
+// 	&:hover {
+// 		>.mCustomScrollBox {
+// 			>.mCSB_scrollTools {
+// 				opacity: 1;
+// 				filter: 'alpha(opacity=100)';
+// 				-ms-filter: 'alpha(opacity=100)';
+// 			}
+// 		}
+
+// 		>.mCustomScrollBox~.mCSB_scrollTools {
+// 			opacity: 1;
+// 			filter: 'alpha(opacity=100)';
+// 			-ms-filter: 'alpha(opacity=100)';
+// 		}
+// 	}
+// }
+
+// .mCS-dark.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .15);
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: rgba(0, 0, 0, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: rgba(0, 0, 0, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: rgba(0, 0, 0, .9);
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -80px 0;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -80px -20px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -80px -40px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -80px -56px;
+// 	}
+// }
+
+// .mCS-light-2.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		width: 4px;
+// 		border-radius: 1px;
+// 		background-color: #fff;
+// 		background-color: rgba(255, 255, 255, .1);
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 4px;
+// 			border-radius: 1px;
+// 			background-color: #fff;
+// 			background-color: rgba(255, 255, 255, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #fff;
+// 				background-color: rgba(255, 255, 255, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #fff;
+// 				background-color: rgba(255, 255, 255, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #fff;
+// 			background-color: rgba(255, 255, 255, .9);
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -32px 0;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -32px -20px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -40px -40px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -40px -56px;
+// 	}
+// }
+
+// .mCS-dark-2.mCSB_scrollTools {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 4px;
+// 			border-radius: 1px;
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 4px;
+// 		border-radius: 1px;
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .1);
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .9);
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -112px 0;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -112px -20px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -120px -40px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -120px -56px;
+// 	}
+// }
+
+// .mCS-dark-2.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 100%;
+// 			height: 4px;
+// 			margin: 6px auto;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 4px;
+// 		margin: 6px auto;
+// 	}
+// }
+
+// .mCS-light-2.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 100%;
+// 			height: 4px;
+// 			margin: 6px auto;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 4px;
+// 		margin: 6px auto;
+// 	}
+// }
+
+// .mCS-light-thick.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		width: 4px;
+// 		border-radius: 2px;
+// 		background-color: #fff;
+// 		background-color: rgba(255, 255, 255, .1);
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 6px;
+// 			border-radius: 2px;
+// 			background-color: #fff;
+// 			background-color: rgba(255, 255, 255, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #fff;
+// 				background-color: rgba(255, 255, 255, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #fff;
+// 				background-color: rgba(255, 255, 255, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #fff;
+// 			background-color: rgba(255, 255, 255, .9);
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -16px 0;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -16px -20px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -20px -40px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -20px -56px;
+// 	}
+// }
+
+// .mCS-dark-thick.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		width: 4px;
+// 		border-radius: 2px;
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .1);
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 6px;
+// 			border-radius: 2px;
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .9);
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -96px 0;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -96px -20px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -100px -40px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -100px -56px;
+// 	}
+// }
+
+// .mCS-dark-thick.mCSB_scrollTools_horizontal {
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 4px;
+// 		margin: 6px 0;
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 100%;
+// 			height: 6px;
+// 			margin: 5px auto;
+// 		}
+// 	}
+// }
+
+// .mCS-light-thick.mCSB_scrollTools_horizontal {
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 4px;
+// 		margin: 6px 0;
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 100%;
+// 			height: 6px;
+// 			margin: 5px auto;
+// 		}
+// 	}
+// }
+
+// .mCS-light-thin.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		background-color: #fff;
+// 		background-color: rgba(255, 255, 255, .1);
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 2px;
+// 		}
+// 	}
+// }
+
+// .mCS-dark-thin.mCSB_scrollTools {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 2px;
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .15);
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .9);
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -80px 0;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -80px -20px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -80px -40px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -80px -56px;
+// 	}
+// }
+
+// .mCS-dark-thin.mCSB_scrollTools_horizontal {
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 100%;
+// 			height: 2px;
+// 			margin: 7px auto;
+// 		}
+// 	}
+// }
+
+// .mCS-light-thin.mCSB_scrollTools_horizontal {
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 100%;
+// 			height: 2px;
+// 			margin: 7px auto;
+// 		}
+// 	}
+// }
+
+// .mCS-rounded.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		background-color: #fff;
+// 		background-color: rgba(255, 255, 255, .15);
+// 	}
+
+// 	.mCSB_dragger {
+// 		height: 14px;
+
+// 		.mCSB_dragger_bar {
+// 			width: 14px;
+// 			margin: 0 1px;
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: 0 -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: 0 -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: 0 -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: 0 -128px;
+// 	}
+// }
+
+// .mCS-rounded-dark.mCSB_scrollTools {
+// 	.mCSB_dragger {
+// 		height: 14px;
+
+// 		.mCSB_dragger_bar {
+// 			width: 14px;
+// 			margin: 0 1px;
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .15);
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .9);
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -80px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -80px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -80px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -80px -128px;
+// 	}
+// }
+
+// .mCS-rounded-dots-dark.mCSB_scrollTools {
+// 	.mCSB_dragger {
+// 		height: 14px;
+
+// 		.mCSB_dragger_bar {
+// 			width: 14px;
+// 			margin: 0 1px;
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .9);
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		background-color: transparent;
+// 		background-position: center;
+// 		opacity: .3;
+// 		background-repeat: repeat-y;
+// 		filter: 'alpha(opacity=30)';
+// 		-ms-filter: 'alpha(opacity=30)';
+// 		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAALElEQVQYV2NkIAAYSVFgDFR8BqrBBEifBbGRTfiPZhpYjiQFBK3A6l6CvgAAE9kGCd1mvgEAAAAASUVORK5CYII=);
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -96px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -96px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -100px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -100px -128px;
+// 	}
+// }
+
+// .mCS-rounded-dots.mCSB_scrollTools {
+// 	.mCSB_dragger {
+// 		height: 14px;
+
+// 		.mCSB_dragger_bar {
+// 			width: 14px;
+// 			margin: 0 1px;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		background-color: transparent;
+// 		background-position: center;
+// 		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAANElEQVQYV2NkIAAYiVbw//9/Y6DiM1ANJoyMjGdBbLgJQAX/kU0DKgDLkaQAvxW4HEvQFwCRcxIJK1XznAAAAABJRU5ErkJggg==);
+// 		opacity: .3;
+// 		background-repeat: repeat-y;
+// 		filter: 'alpha(opacity=30)';
+// 		-ms-filter: 'alpha(opacity=30)';
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -16px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -16px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -20px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -20px -128px;
+// 	}
+// }
+
+// .mCS-rounded-dark.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		width: 14px;
+
+// 		.mCSB_dragger_bar {
+// 			height: 14px;
+// 			margin: 1px 0;
+// 		}
+// 	}
+// }
+
+// .mCS-rounded-dots-dark.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		width: 14px;
+
+// 		.mCSB_dragger_bar {
+// 			height: 14px;
+// 			margin: 1px 0;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		background-color: transparent;
+// 		background-position: center;
+// 		height: 4px;
+// 		margin: 6px 0;
+// 		background-repeat: repeat-x;
+// 	}
+// }
+
+// .mCS-rounded-dots.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		width: 14px;
+
+// 		.mCSB_dragger_bar {
+// 			height: 14px;
+// 			margin: 1px 0;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		background-color: transparent;
+// 		background-position: center;
+// 		height: 4px;
+// 		margin: 6px 0;
+// 		background-repeat: repeat-x;
+// 	}
+// }
+
+// .mCS-rounded.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		width: 14px;
+
+// 		.mCSB_dragger_bar {
+// 			height: 14px;
+// 			margin: 1px 0;
+// 		}
+// 	}
+// }
+
+// .mCS-rounded-dark.mCSB_scrollTools_vertical.mCSB_scrollTools_onDrag_expand {
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded {
+// 		.mCSB_dragger_bar {
+// 			width: 16px;
+// 			height: 16px;
+// 			margin: -1px 0;
+// 		}
+// 	}
+
+// 	.mCSB_draggerContainer {
+// 		&:hover {
+// 			.mCSB_dragger {
+// 				.mCSB_dragger_bar {
+// 					width: 16px;
+// 					height: 16px;
+// 					margin: -1px 0;
+// 				}
+// 			}
+
+// 			.mCSB_draggerRail {
+// 				width: 4px;
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded+.mCSB_draggerRail {
+// 		width: 4px;
+// 	}
+// }
+
+// .mCS-rounded.mCSB_scrollTools_vertical.mCSB_scrollTools_onDrag_expand {
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded {
+// 		.mCSB_dragger_bar {
+// 			width: 16px;
+// 			height: 16px;
+// 			margin: -1px 0;
+// 		}
+// 	}
+
+// 	.mCSB_draggerContainer {
+// 		&:hover {
+// 			.mCSB_dragger {
+// 				.mCSB_dragger_bar {
+// 					width: 16px;
+// 					height: 16px;
+// 					margin: -1px 0;
+// 				}
+// 			}
+
+// 			.mCSB_draggerRail {
+// 				width: 4px;
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded+.mCSB_draggerRail {
+// 		width: 4px;
+// 	}
+// }
+
+// .mCS-rounded-dark.mCSB_scrollTools_horizontal.mCSB_scrollTools_onDrag_expand {
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded {
+// 		.mCSB_dragger_bar {
+// 			width: 16px;
+// 			height: 16px;
+// 			margin: 0 -1px;
+// 		}
+// 	}
+
+// 	.mCSB_draggerContainer {
+// 		&:hover {
+// 			.mCSB_dragger {
+// 				.mCSB_dragger_bar {
+// 					width: 16px;
+// 					height: 16px;
+// 					margin: 0 -1px;
+// 				}
+// 			}
+
+// 			.mCSB_draggerRail {
+// 				height: 4px;
+// 				margin: 6px 0;
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded+.mCSB_draggerRail {
+// 		height: 4px;
+// 		margin: 6px 0;
+// 	}
+// }
+
+// .mCS-rounded.mCSB_scrollTools_horizontal.mCSB_scrollTools_onDrag_expand {
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded {
+// 		.mCSB_dragger_bar {
+// 			width: 16px;
+// 			height: 16px;
+// 			margin: 0 -1px;
+// 		}
+// 	}
+
+// 	.mCSB_draggerContainer {
+// 		&:hover {
+// 			.mCSB_dragger {
+// 				.mCSB_dragger_bar {
+// 					width: 16px;
+// 					height: 16px;
+// 					margin: 0 -1px;
+// 				}
+// 			}
+
+// 			.mCSB_draggerRail {
+// 				height: 4px;
+// 				margin: 6px 0;
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded+.mCSB_draggerRail {
+// 		height: 4px;
+// 		margin: 6px 0;
+// 	}
+// }
+
+// .mCS-rounded-dots-dark.mCSB_scrollTools_vertical {
+// 	.mCSB_draggerRail {
+// 		width: 4px;
+// 	}
+// }
+
+// .mCS-rounded-dots.mCSB_scrollTools_vertical {
+// 	.mCSB_draggerRail {
+// 		width: 4px;
+// 	}
+// }
+
+// .mCS-3d-dark.mCSB_scrollTools {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			background-image: linear-gradient(to right, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, 0) 100%);
+// 			background-repeat: repeat-y;
+// 			border-radius: 16px;
+// 			background-color: #555;
+// 			width: 8px;
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #555;
+// 			}
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #555;
+// 			}
+// 		}
+// 	}
+
+// 	opacity: 1;
+// 	filter: 'alpha(opacity=30)';
+// 	-ms-filter: 'alpha(opacity=30)';
+
+// 	.mCSB_draggerRail {
+// 		border-radius: 16px;
+// 		width: 8px;
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .1);
+// 		box-shadow: inset 1px 0 1px rgba(0, 0, 0, .1);
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #555;
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -112px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -112px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -120px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -120px -128px;
+// 	}
+// }
+
+// .mCS-3d-thick-dark.mCSB_scrollTools {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			background-image: linear-gradient(to right, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, 0) 100%);
+// 			background-repeat: repeat-y;
+// 			border-radius: 5px;
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: 12px;
+// 			height: auto;
+// 			margin: 2px;
+// 			box-shadow: inset 1px 0 0 rgba(255, 255, 255, .4), inset -1px 0 0 rgba(0, 0, 0, .2);
+// 			background-color: #777;
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #777;
+// 			}
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #777;
+// 			}
+// 		}
+// 	}
+
+// 	opacity: 1;
+// 	filter: 'alpha(opacity=30)';
+// 	-ms-filter: 'alpha(opacity=30)';
+// 	border-radius: 7px;
+// 	box-shadow: inset 0 0 14px rgba(0, 0, 0, .2);
+
+// 	.mCSB_draggerContainer {
+// 		border-radius: 7px;
+// 		background-color: #fff;
+// 		background-color: rgba(0, 0, 0, .05);
+// 		box-shadow: inset 1px 1px 16px rgba(0, 0, 0, .1);
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #777;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		background-color: transparent;
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -112px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -112px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -120px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -120px -128px;
+// 	}
+// }
+
+// .mCS-3d-thick.mCSB_scrollTools {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			background-image: linear-gradient(to right, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, 0) 100%);
+// 			background-repeat: repeat-y;
+// 			box-shadow: inset 1px 0 0 rgba(255, 255, 255, .4);
+// 			border-radius: 5px;
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: 12px;
+// 			height: auto;
+// 			margin: 2px;
+// 			background-color: #555;
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #555;
+// 			}
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #555;
+// 			}
+// 		}
+// 	}
+
+// 	opacity: 1;
+// 	filter: 'alpha(opacity=30)';
+// 	-ms-filter: 'alpha(opacity=30)';
+// 	border-radius: 7px;
+
+// 	.mCSB_draggerContainer {
+// 		border-radius: 7px;
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .05);
+// 		box-shadow: inset 1px 1px 16px rgba(0, 0, 0, .1);
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #555;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		background-color: transparent;
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -32px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -32px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -40px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -40px -128px;
+// 	}
+// }
+
+// .mCS-3d.mCSB_scrollTools {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			background-image: linear-gradient(to right, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, 0) 100%);
+// 			background-repeat: repeat-y;
+// 			border-radius: 16px;
+// 			background-color: #555;
+// 			width: 8px;
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #555;
+// 			}
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #555;
+// 			}
+// 		}
+// 	}
+
+// 	opacity: 1;
+// 	filter: 'alpha(opacity=30)';
+// 	-ms-filter: 'alpha(opacity=30)';
+
+// 	.mCSB_draggerRail {
+// 		border-radius: 16px;
+// 		width: 8px;
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .2);
+// 		box-shadow: inset 1px 0 1px rgba(0, 0, 0, .5), inset -1px 0 1px rgba(255, 255, 255, .2);
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #555;
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -32px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -32px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -40px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -40px -128px;
+// 	}
+// }
+
+// .mCS-3d-dark.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			background-image: linear-gradient(to bottom, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, 0) 100%);
+// 			background-repeat: repeat-x;
+// 			width: 100%;
+// 			height: 8px;
+// 			margin: 4px auto;
+// 		}
+
+// 		width: 70px;
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 8px;
+// 		margin: 4px 0;
+// 		box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);
+// 	}
+// }
+
+// .mCS-3d-thick-dark.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			background-image: linear-gradient(to bottom, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, 0) 100%);
+// 			background-repeat: repeat-x;
+// 			width: auto;
+// 			height: 12px;
+// 			box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4), inset 0 -1px 0 rgba(0, 0, 0, .2);
+// 		}
+// 	}
+
+// 	bottom: 1px;
+// 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1),
+// 	inset 0 0 14px rgba(0, 0, 0, .2);
+// }
+
+// .mCS-3d-thick.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			background-image: linear-gradient(to bottom, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, 0) 100%);
+// 			background-repeat: repeat-x;
+// 			box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4);
+// 			width: auto;
+// 			height: 12px;
+// 		}
+// 	}
+
+// 	bottom: 1px;
+// 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1),
+// 	inset 0 0 14px rgba(0, 0, 0, .5);
+// }
+
+// .mCS-3d.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			background-image: linear-gradient(to bottom, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, 0) 100%);
+// 			background-repeat: repeat-x;
+// 			width: 100%;
+// 			height: 8px;
+// 			margin: 4px auto;
+// 		}
+
+// 		width: 70px;
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 8px;
+// 		margin: 4px 0;
+// 		box-shadow: inset 0 1px 1px rgba(0, 0, 0, .5), inset 0 -1px 1px rgba(255, 255, 255, .2);
+// 	}
+// }
+
+// .mCS-3d-dark.mCSB_scrollTools_vertical {
+// 	.mCSB_dragger {
+// 		height: 70px;
+// 	}
+// }
+
+// .mCS-3d.mCSB_scrollTools_vertical {
+// 	.mCSB_dragger {
+// 		height: 70px;
+// 	}
+// }
+
+// .mCSB_inside+.mCS-3d-thick-dark.mCSB_scrollTools_vertical {
+// 	right: 1px;
+// }
+
+// .mCSB_inside+.mCS-3d-thick.mCSB_scrollTools_vertical {
+// 	right: 1px;
+// }
+
+// .mCS-3d-thick-dark.mCSB_scrollTools_vertical {
+// 	box-shadow: inset 1px 0 1px rgba(0, 0, 0, .1), inset 0 0 14px rgba(0, 0, 0, .5);
+// }
+
+// .mCS-3d-thick.mCSB_scrollTools_vertical {
+// 	box-shadow: inset 1px 0 1px rgba(0, 0, 0, .1), inset 0 0 14px rgba(0, 0, 0, .5);
+// }
+
+// .mCSB_outside+.mCS-minimal-dark.mCSB_scrollTools_vertical {
+// 	right: 0;
+// 	margin: 12px 0;
+// }
+
+// .mCSB_outside+.mCS-minimal.mCSB_scrollTools_vertical {
+// 	right: 0;
+// 	margin: 12px 0;
+// }
+
+// .mCustomScrollBox.mCS-minimal+.mCSB_scrollTools+.mCSB_scrollTools.mCSB_scrollTools_horizontal {
+// 	bottom: 0;
+// 	margin: 0 12px;
+// }
+
+// .mCustomScrollBox.mCS-minimal+.mCSB_scrollTools.mCSB_scrollTools_horizontal {
+// 	bottom: 0;
+// 	margin: 0 12px;
+// }
+
+// .mCustomScrollBox.mCS-minimal-dark+.mCSB_scrollTools+.mCSB_scrollTools.mCSB_scrollTools_horizontal {
+// 	bottom: 0;
+// 	margin: 0 12px;
+// }
+
+// .mCustomScrollBox.mCS-minimal-dark+.mCSB_scrollTools.mCSB_scrollTools_horizontal {
+// 	bottom: 0;
+// 	margin: 0 12px;
+// }
+
+// .mCS-minimal-dark.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		background-color: transparent;
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .2);
+// 			filter: 'alpha(opacity=20)';
+// 			-ms-filter: 'alpha(opacity=20)';
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .5);
+// 				filter: 'alpha(opacity=50)';
+// 				-ms-filter: 'alpha(opacity=50)';
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .5);
+// 			filter: 'alpha(opacity=50)';
+// 			-ms-filter: 'alpha(opacity=50)';
+// 		}
+// 	}
+// }
+
+// .mCS-minimal.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		background-color: transparent;
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			background-color: #fff;
+// 			background-color: rgba(255, 255, 255, .2);
+// 			filter: 'alpha(opacity=20)';
+// 			-ms-filter: 'alpha(opacity=20)';
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #fff;
+// 				background-color: rgba(255, 255, 255, .5);
+// 				filter: 'alpha(opacity=50)';
+// 				-ms-filter: 'alpha(opacity=50)';
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #fff;
+// 			background-color: rgba(255, 255, 255, .5);
+// 			filter: 'alpha(opacity=50)';
+// 			-ms-filter: 'alpha(opacity=50)';
+// 		}
+// 	}
+// }
+
+// .mCS-minimal-dark.mCSB_scrollTools_vertical {
+// 	.mCSB_dragger {
+// 		height: 50px;
+// 	}
+// }
+
+// .mCS-minimal.mCSB_scrollTools_vertical {
+// 	.mCSB_dragger {
+// 		height: 50px;
+// 	}
+// }
+
+// .mCS-minimal-dark.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		width: 50px;
+// 	}
+// }
+
+// .mCS-minimal.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		width: 50px;
+// 	}
+// }
+
+// .mCS-light-3.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		width: 6px;
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .2);
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 6px;
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -32px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -32px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -40px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -40px -128px;
+// 	}
+// }
+
+// .mCS-dark-3.mCSB_scrollTools {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 6px;
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 6px;
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .1);
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .9);
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -112px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -112px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -120px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -120px -128px;
+// 	}
+// }
+
+// .mCS-dark-3.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 100%;
+// 			height: 6px;
+// 			margin: 5px 0;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 6px;
+// 		margin: 5px 0;
+// 	}
+// }
+
+// .mCS-light-3.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			width: 100%;
+// 			height: 6px;
+// 			margin: 5px 0;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 6px;
+// 		margin: 5px 0;
+// 	}
+// }
+
+// .mCS-dark-3.mCSB_scrollTools_vertical.mCSB_scrollTools_onDrag_expand {
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded+.mCSB_draggerRail {
+// 		width: 12px;
+// 	}
+
+// 	.mCSB_draggerContainer {
+// 		&:hover {
+// 			.mCSB_draggerRail {
+// 				width: 12px;
+// 			}
+// 		}
+// 	}
+// }
+
+// .mCS-light-3.mCSB_scrollTools_vertical.mCSB_scrollTools_onDrag_expand {
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded+.mCSB_draggerRail {
+// 		width: 12px;
+// 	}
+
+// 	.mCSB_draggerContainer {
+// 		&:hover {
+// 			.mCSB_draggerRail {
+// 				width: 12px;
+// 			}
+// 		}
+// 	}
+// }
+
+// .mCS-dark-3.mCSB_scrollTools_horizontal.mCSB_scrollTools_onDrag_expand {
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded+.mCSB_draggerRail {
+// 		height: 12px;
+// 		margin: 2px 0;
+// 	}
+
+// 	.mCSB_draggerContainer {
+// 		&:hover {
+// 			.mCSB_draggerRail {
+// 				height: 12px;
+// 				margin: 2px 0;
+// 			}
+// 		}
+// 	}
+// }
+
+// .mCS-light-3.mCSB_scrollTools_horizontal.mCSB_scrollTools_onDrag_expand {
+// 	.mCSB_dragger.mCSB_dragger_onDrag_expanded+.mCSB_draggerRail {
+// 		height: 12px;
+// 		margin: 2px 0;
+// 	}
+
+// 	.mCSB_draggerContainer {
+// 		&:hover {
+// 			.mCSB_draggerRail {
+// 				height: 12px;
+// 				margin: 2px 0;
+// 			}
+// 		}
+// 	}
+// }
+
+// .mCS-inset.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		width: 12px;
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .2);
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: 6px;
+// 			height: auto;
+// 			margin: 3px 5px;
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -32px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -32px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -40px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -40px -128px;
+// 	}
+// }
+
+// .mCS-inset-dark.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		width: 12px;
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .1);
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: 6px;
+// 			height: auto;
+// 			margin: 3px 5px;
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .9);
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -112px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -112px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -120px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -120px -128px;
+// 	}
+// }
+
+// .mCS-inset-2.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		width: 12px;
+// 		background-color: rgba(0, 0, 0, .2);
+// 		box-sizing: border-box;
+// 		border-width: 1px;
+// 		border-style: solid;
+// 		border-color: #fff;
+// 		border-color: rgba(255, 255, 255, .2);
+// 		background-color: transparent;
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: 6px;
+// 			height: auto;
+// 			margin: 3px 5px;
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -32px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -32px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -40px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -40px -128px;
+// 	}
+// }
+
+// .mCS-inset-2-dark.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		width: 12px;
+// 		background-color: rgba(0, 0, 0, .1);
+// 		box-sizing: border-box;
+// 		border-width: 1px;
+// 		border-style: solid;
+// 		border-color: #fff;
+// 		border-color: rgba(255, 255, 255, .2);
+// 		background-color: transparent;
+// 		border-color: #000;
+// 		border-color: rgba(0, 0, 0, .2);
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: 6px;
+// 			height: auto;
+// 			margin: 3px 5px;
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .9);
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -112px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -112px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -120px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -120px -128px;
+// 	}
+// }
+
+// .mCS-inset-3-dark.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		width: 12px;
+// 		background-color: #000;
+// 		background-color: rgba(0, 0, 0, .6);
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: 6px;
+// 			height: auto;
+// 			margin: 3px 5px;
+// 			background-color: #fff;
+// 			background-color: rgba(255, 255, 255, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #fff;
+// 				background-color: rgba(255, 255, 255, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #fff;
+// 				background-color: rgba(255, 255, 255, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -112px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -112px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -120px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -120px -128px;
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #fff;
+// 			background-color: rgba(255, 255, 255, .9);
+// 		}
+// 	}
+// }
+
+// .mCS-inset-3.mCSB_scrollTools {
+// 	.mCSB_draggerRail {
+// 		width: 12px;
+// 		background-color: #fff;
+// 		background-color: rgba(255, 255, 255, .6);
+// 	}
+
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: 6px;
+// 			height: auto;
+// 			margin: 3px 5px;
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .75);
+// 		}
+
+// 		&:hover {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .85);
+// 			}
+// 		}
+
+// 		&:active {
+// 			.mCSB_dragger_bar {
+// 				background-color: #000;
+// 				background-color: rgba(0, 0, 0, .9);
+// 			}
+// 		}
+// 	}
+
+// 	.mCSB_buttonUp {
+// 		background-position: -32px -72px;
+// 	}
+
+// 	.mCSB_buttonDown {
+// 		background-position: -32px -92px;
+// 	}
+
+// 	.mCSB_buttonLeft {
+// 		background-position: -40px -112px;
+// 	}
+
+// 	.mCSB_buttonRight {
+// 		background-position: -40px -128px;
+// 	}
+
+// 	.mCSB_dragger.mCSB_dragger_onDrag {
+// 		.mCSB_dragger_bar {
+// 			background-color: #000;
+// 			background-color: rgba(0, 0, 0, .9);
+// 		}
+// 	}
+// }
+
+// .mCS-inset-2-dark.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: auto;
+// 			height: 6px;
+// 			margin: 5px 3px;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 12px;
+// 		margin: 2px 0;
+// 	}
+// }
+
+// .mCS-inset-2.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: auto;
+// 			height: 6px;
+// 			margin: 5px 3px;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 12px;
+// 		margin: 2px 0;
+// 	}
+// }
+
+// .mCS-inset-3-dark.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: auto;
+// 			height: 6px;
+// 			margin: 5px 3px;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 12px;
+// 		margin: 2px 0;
+// 	}
+// }
+
+// .mCS-inset-3.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: auto;
+// 			height: 6px;
+// 			margin: 5px 3px;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 12px;
+// 		margin: 2px 0;
+// 	}
+// }
+
+// .mCS-inset-dark.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: auto;
+// 			height: 6px;
+// 			margin: 5px 3px;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 12px;
+// 		margin: 2px 0;
+// 	}
+// }
+
+// .mCS-inset.mCSB_scrollTools_horizontal {
+// 	.mCSB_dragger {
+// 		.mCSB_dragger_bar {
+// 			position: absolute;
+// 			top: 0;
+// 			right: 0;
+// 			bottom: 0;
+// 			left: 0;
+// 			width: auto;
+// 			height: 6px;
+// 			margin: 5px 3px;
+// 		}
+// 	}
+
+// 	.mCSB_draggerRail {
+// 		width: 100%;
+// 		height: 12px;
+// 		margin: 2px 0;
+// 	}
+// }
+
+// ::-webkit-scrollbar {
+// 	width: 6px;
+// 	background: #ede7f6;
+// }
+
+// ::-webkit-scrollbar-track {
+// 	background: #ede7f6;
+// }
+
+// ::-webkit-scrollbar-thumb {
+// 	-webkit-transition: all .5s;
+// 	transition: all .5s;
+// 	border: 2px solid #ede7f6;
+// 	border-radius: 20px;
+// 	background: #7036b6;
+// }
+
+// * {
+// 	font-family: 'Montserrat', sans-serif;
+// 	font-weight: 400;
+// 	box-sizing: border-box;
+// 	padding: 0;
+// 	list-style: none;
+// 	text-decoration: none;
+// 	outline: 0;
+// 	text-rendering: optimizeLegibility;
+// 	-webkit-font-smoothing: antialiased;
+// 	-moz-osx-font-smoothing: grayscale;
+// 	-webkit-tap-highlight-color: transparent;
+// 	-ms-box-sizing: border-box;
+// 	-o-box-sizing: border-box;
+// 	margin: 0;
+// }
+
+// .wrapper {
+// 	position: relative;
+// 	overflow: hidden;
+// 	min-height: 100vh;
+// }
+
+// :after {
+// 	box-sizing: inherit;
+// }
+
+// :before {
+// 	box-sizing: inherit;
+// }
+
+// i {
+// 	font-style: normal;
+// }
+
+// ol {
+// 	li {
+// 		margin: 0;
+// 	}
+// }
+
+// ul {
+// 	li {
+// 		margin: 0;
+// 	}
+// }
+
+// input[type=submit] {
+// 	-webkit-appearance: none;
+// 	-moz-appearance: none;
+// 	-o-appearance: none;
+// 	appearance: none;
+// }
+
+// .clearfix {
+// 	&:after {
+// 		font-size: 0;
+// 		display: block;
+// 		visibility: hidden;
+// 		clear: both;
+// 		height: 0;
+// 		content: ' ';
+// 	}
+// }
+
+// .container {
+// 	position: relative;
+// 	width: 100%;
+// 	margin: 0 auto;
+// 	padding: 0 15px;
+// }
+
+// @media (min-width:768px) {
+// 	.loading {
+// 		.loading-content {
+// 			width: 300px;
+
+// 			.loading-img {
+// 				width: 176px;
+// 				margin: 0 auto 31px;
+
+// 				svg {
+// 					width: 196px;
+// 				}
+// 			}
+
+// 			p {
+// 				font-size: 18px;
+// 				font-weight: 400;
+// 				line-height: 27px;
+// 				color: #9999a5;
+// 			}
+// 		}
+// 	}
+
+// 	.container {
+// 		width: 648px;
+// 		padding: 0;
+// 	}
+// }
+
+// @media (min-width:1600px) {
+// 	.loading {
+// 		.loading-content {
+// 			top: 51.5%;
+// 		}
+// 	}
+// }
+
+// @media (min-width:1024px) {
+// 	.container {
+// 		width: 864px;
+// 	}
+// }
+
+// @media (min-width:1280px) {
+// 	.container {
+// 		width: 1080px;
+// 	}
+// }
+
+// @media (min-width:1400px) {
+// 	.container {
+// 		width: 1240px;
+// 	}
+// }
+
+// .game .switch {
+// 	display: flex;
+// 	width: 320px;
+// 	margin: 5px auto 0;
+// 	padding: 2px;
+// 	border-radius: 10px;
+// 	background: #f1ebf8
+// }
+
+// .game .switch span {
+// 	display: inline-flex;
+// 	padding: 6px 47px;
+// 	opacity: .2;
+// 	color: #7a3dc2;
+// 	align-items: center;
+// 	justify-content: center
+// }
+
+// .game .switch span.active {
+// 	opacity: .75;
+// 	border-radius: 8px;
+// 	background: rgba(255, 255, 255, .4);
+// 	box-shadow: 3px 1px 4px rgba(180, 146, 211, .3)
+// }
+
+// .game .balance {
+// 	margin-top: 23px
+// }
+
+// .game .game-pool,
+// .game .game-withdraw,
+// .game .referral-commission {
+// 	box-sizing: border-box;
+// 	min-height: 200px;
+// 	margin-bottom: 12px;
+// 	padding: 20px;
+// 	text-align: center;
+// 	border: 1px solid rgba(112, 54, 182, .1);
+// 	border-radius: 18px;
+// 	background-color: #2d2882
+// }
+
+// .game .game-pool h3,
+// .game .game-withdraw h3,
+// .game .referral-commission h3 {
+// 	font-size: 14px;
+// 	font-weight: 600;
+// 	line-height: 17px;
+// 	text-align: center;
+// 	color: #fff
+// }
+
+// .game .game-pool h3 i,
+// .game .game-withdraw h3 i,
+// .game .referral-commission h3 i {
+// 	margin-left: 5px;
+// 	opacity: .6
+// }
+
+// .game .game-pool .total {
+// 	margin-top: 20px
+// }
+
+// .game .game-pool .total,
+// .game .game-withdraw .total {
+// 	display: flex;
+// 	flex-direction: column;
+// 	align-items: center;
+// 	justify-content: center
+// }
+
+// .game .referral-commission .total {
+// 	display: flex;
+// 	flex-direction: column;
+// 	margin-top: 20px;
+// 	align-items: center;
+// 	justify-content: center
+// }
+
+// .game .game-pool .total span,
+// .game .game-withdraw .total span,
+// .game .referral-commission .total span {
+// 	font-size: 12px;
+// 	font-weight: 500;
+// 	line-height: 15px;
+// 	text-align: center;
+// 	opacity: .6;
+// 	color: #fff
+// }
+
+// .game .game-pool .total span:nth-of-type(2),
+// .game .game-withdraw .total span:nth-of-type(2),
+// .game .referral-commission .total span:nth-of-type(2) {
+// 	font-size: 12px;
+// 	font-weight: 400;
+// 	line-height: 15px;
+// 	margin-top: 10px;
+// 	text-align: center;
+// 	opacity: .6;
+// 	color: #f8f5fb
+// }
+
+// .game .game-pool .total h2,
+// .game .game-withdraw .total h2,
+// .game .referral-commission .total h2 {
+// 	font-size: 32px;
+// 	font-weight: 700;
+// 	line-height: 39px;
+// 	display: flex;
+// 	margin-top: 11px;
+// 	text-align: center;
+// 	color: #f8f5fb;
+// 	align-items: center
+// }
+
+// .game .game-pool .total h2 img,
+// .game .game-withdraw .total h2 img,
+// .game .referral-commission .total h2 img {
+// 	width: 32px;
+// 	height: 32px;
+// 	margin-right: 5px
+// }
+
+// .game .game-pool ul,
+// .game .game-withdraw ul,
+// .game .referral-commission ul {
+// 	display: grid;
+// 	margin-top: 10px;
+// 	grid-template-columns: 1fr 1fr;
+// 	grid-gap: 67px
+// }
+
+// .game .game-pool ul .description,
+// .game .game-withdraw ul .description,
+// .game .referral-commission ul .description {
+// 	font-weight: 400;
+// 	display: block;
+// 	margin-top: 11px
+// }
+
+// .game .game-pool a,
+// .game .game-withdraw a,
+// .game .referral-commission a {
+// 	font-size: 14px;
+// 	font-weight: 500;
+// 	line-height: 17px;
+// 	display: inline-flex;
+// 	margin-top: 15px;
+// 	transition: all .3s linear;
+// 	color: #fff
+// }
+
+// .game .game-pool a:hover,
+// .game .game-withdraw a:hover,
+// .game .referral-commission a:hover {
+// 	transform: scale(1.1)
+// }
+
+// .game .game-pool a i,
+// .game .game-withdraw a i,
+// .game .referral-commission a i {
+// 	margin-right: 5px
+// }
+
+// .game .game-pool {
+// 	background-image: url('../images/game/bg-1.png');
+// 	background-repeat: no-repeat;
+// 	background-position: 50% 50%;
+// 	background-size: cover
+// }
+
+// .game .game-withdraw,
+// .game .referral-commission {
+// 	background-image: url('../images/game/bg-3.png');
+// 	background-repeat: no-repeat;
+// 	background-position: 50% 50%;
+// 	background-size: cover
+// }
+
+// .game .game-withdraw {
+// 	background-image: url('../images/game/bg-2.png')
+// }
+
+// .game .game-withdraw .total {
+// 	margin-top: 30px
+// }
+
+// .game .information {
+// 	position: relative;
+// 	display: flex;
+// 	margin-top: 25px;
+// 	padding: 15px 44px 15px 10px;
+// 	border: 1px solid rgba(112, 54, 182, .1);
+// 	border-radius: 15px;
+// 	background: #f1ebf8;
+// 	align-items: center
+// }
+
+// .game .information p {
+// 	font-size: 16px;
+// 	font-weight: 600;
+// 	line-height: 20px;
+// 	text-align: center;
+// 	color: #2b1a4f
+// }
+
+// .game .information p span {
+// 	font-size: 16px;
+// 	font-weight: 600;
+// 	line-height: 20px;
+// 	color: #cd2576
+// }
+
+// .game .information .icon-check {
+// 	font-size: 12px;
+// 	margin-right: 7px;
+// 	color: #7036b6
+// }
+
+.game .information .icon-close {
+  font-size: 12px;
+  position: absolute;
+  top: 14px;
+  right: 6px;
+  display: flex;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  color: #cd2576;
+  justify-content: center;
+  align-items: center;
+}
+
+// .game .level {
+// 	display: grid;
+// 	margin-top: 10px;
+// 	border: 1px solid #f1ebf8;
+// 	border-radius: 6px;
+// 	background: linear-gradient(269.92deg, #3ef9df -17.43%, #3febf3 -9.07%, #3fc8ec -.72%, #40aae6 7.64%, #428fe0 16%, #4379da 24.36%, #4466d5 32.72%, #4657d0 41.08%, #474bcb 49.43%, #5048c7 57.79%, #5a49c3 66.15%, #624ac0 74.51%, #684bbe 82.87%, #6c4cbc 91.22%, #704dba 99.58%, #714db9 107.94%, #724db9 116.3%);
+// 	box-shadow: 0 5px 15px rgba(112, 54, 182, .35);
+// 	grid-template-columns: repeat(5, 1fr)
+// }
+
+// .game .level li {
+// 	position: relative;
+// 	display: flex;
+// 	padding: 5px 0;
+// 	cursor: pointer;
+// 	color: #7036b6;
+// 	background: #fae9f1;
+// 	align-items: center;
+// 	justify-content: center
+// }
+
+// .game .level li i {
+// 	width: 12px;
+// 	height: 12px;
+// 	background: center/contain no-repeat url(../images/game/icon-roket.svg)
+// }
+
+// .game .level li:first-child {
+// 	border-radius: 5px 0 0 5px
+// }
+
+// .game .level li:last-child {
+// 	border-radius: 0 5px 5px 0
+// }
+
+// .game .level li.active,
+// .game .level li:hover {
+// 	color: #fae9f1;
+// 	background: 0 0
+// }
+
+// .game .level li.active i,
+// .game .level li:hover i {
+// 	background: center/contain no-repeat url(../images/game/icon-roket-light.svg)
+// }
+
+// .game .level li:hover {
+// 	transition: all .3s linear;
+
+// 	.tooltip {
+// 		opacity: 1;
+// 	}
+// }
+
+// .game .level li .tooltip {
+// 	position: absolute;
+// 	z-index: 10;
+// 	top: 31px;
+// 	left: 0;
+// 	width: 320px;
+// 	padding: 13px;
+// 	pointer-events: none;
+// 	opacity: 0;
+// 	border-radius: 10px;
+// 	background: #6f4dbb;
+// 	box-shadow: 0 12px 20px rgba(112, 54, 182, .4)
+// }
+
+// .game .level li .tooltip::before {
+// 	position: absolute;
+// 	top: -16px;
+// 	left: 21px;
+// 	content: '';
+// 	border: 8px solid transparent;
+// 	border-bottom: 10px solid #724db9
+// }
+
+// .game .level li .tooltip h4 {
+// 	font-size: 12px;
+// 	font-weight: 600;
+// 	line-height: 15px;
+// 	text-align: center;
+// 	color: #f8f5fb
+// }
+
+// .game .level li .tooltip p {
+// 	font-size: 11px;
+// 	font-weight: 400;
+// 	line-height: 150%;
+// 	margin-top: 8px;
+// 	text-align: center;
+// 	color: #fff
+// }
+
+// .game .level li:nth-of-type(2) .tooltip {
+// 	left: 50%;
+// 	transform: translate(-28%, 0);
+// 	background: #664bbf;
+// 	box-shadow: 0 12px 20px rgba(112, 54, 182, .4)
+// }
+
+// .game .level li:nth-of-type(2) .tooltip::before {
+// 	left: 83px;
+// 	border-bottom: 10px solid #664bbf
+// }
+
+// .game .level li:nth-of-type(3) .tooltip {
+// 	left: 50%;
+// 	transform: translate(-50%, 0);
+// 	background: #5048c7;
+// 	box-shadow: 0 12px 20px rgba(112, 54, 182, .4)
+// }
+
+// .game .level li:nth-of-type(3) .tooltip::before {
+// 	left: 50%;
+// 	border-bottom: 10px solid #5048c7
+// }
+
+// .game .level li:nth-of-type(4) .tooltip {
+// 	left: 50%;
+// 	transform: translate(-70%, 0);
+// 	background: #455cd2;
+// 	box-shadow: 0 12px 20px rgba(112, 54, 182, .4)
+// }
+
+// .game .level li:nth-of-type(4) .tooltip::before {
+// 	left: 68%;
+// 	border-bottom: 10px solid #455cd2
+// }
+
+// .game .level li:nth-of-type(5) .tooltip {
+// 	left: 50%;
+// 	transform: translate(-90%, 0);
+// 	background: #4289df;
+// 	box-shadow: 0 12px 20px rgba(112, 54, 182, .4)
+// }
+
+// .game .level li:nth-of-type(5) .tooltip::before {
+// 	left: 88%;
+// 	border-bottom: 10px solid #4289df
+// }
+
+// .game .level i,
+// .game .level span {
+// 	font-size: 10px;
+// 	font-weight: 600;
+// 	line-height: 12px;
+// 	color: inherit
+// }
+
+// .game .pool {
+// 	position: relative;
+// 	display: flex;
+// 	flex-direction: column;
+// 	box-sizing: border-box;
+// 	margin-top: 24px;
+// 	padding: 20px 20px 30px;
+// 	border: 1px solid rgba(112, 54, 182, .1);
+// 	border-radius: 18px;
+// 	background: center/cover no-repeat url('../images/game/pool-bg.png');
+// 	align-items: center
+// }
+
+// .game .pool::after {
+// 	position: absolute;
+// 	z-index: -1;
+// 	top: 0;
+// 	left: 0;
+// 	width: 100%;
+// 	height: 100%;
+// 	content: '';
+// 	opacity: .37;
+// 	border-radius: 18.3051px;
+// 	background: #cd2576;
+// 	filter: blur(18.56px)
+// }
+
+// .game .pool .decoration {
+// 	position: absolute;
+// 	width: 100%;
+// 	height: 100%;
+// 	pointer-events: none
+// }
+
+// .game .pool .decoration img {
+// 	position: absolute
+// }
+
+// .game .pool .decoration img:first-of-type {
+// 	right: -30px;
+// 	bottom: -43px;
+// 	width: 191px
+// }
+
+// .game .pool .decoration img:nth-of-type(2) {
+// 	top: -26px;
+// 	left: -50px;
+// 	width: 179px
+// }
+
+// .game .pool .decoration img:nth-of-type(3) {
+// 	top: 160px;
+// 	right: -13px;
+// 	width: 100px
+// }
+
+// .game .pool .decoration img:nth-of-type(4) {
+// 	top: -11px;
+// 	right: -10px;
+// 	width: 98px
+// }
+
+// .game .pool .decoration img:nth-of-type(5) {
+// 	bottom: 51px;
+// 	left: 10px;
+// 	width: 41px
+// }
+
+// .game .pool .decoration img:nth-of-type(6) {
+// 	top: 23%;
+// 	left: 5px;
+// 	width: 26px
+// }
+
+// .game .pool .decoration img:nth-of-type(7) {
+// 	bottom: 26%;
+// 	left: -48px;
+// 	width: 114px
+// }
+
+// .game .pool .decoration img:nth-of-type(8) {
+// 	bottom: 4px;
+// 	left: 66px;
+// 	width: 81px
+// }
+
+// .game .pool .decoration img:nth-of-type(9) {
+// 	right: 11px;
+// 	bottom: 136px;
+// 	width: 64px
+// }
+
+// .game .pool .decoration img:nth-of-type(10) {
+// 	bottom: 135px;
+// 	left: 30px;
+// 	width: 17px
+// }
+
+// .game .pool .decoration img:nth-of-type(11) {
+// 	right: -27px;
+// 	bottom: 248px;
+// 	width: 85px
+// }
+
+// .game .pool .heading {
+// 	z-index: 10;
+// 	display: flex;
+// 	align-items: center
+// }
+
+// .game .pool .heading i {
+// 	font-size: 18px;
+// 	font-weight: 400;
+// 	margin-left: 8px;
+// 	opacity: .6;
+// 	color: #3fe6e4
+// }
+
+// .game .pool .heading h2 {
+// 	font-size: 24px;
+// 	font-weight: 700;
+// 	line-height: 29px;
+// 	display: flex;
+// 	background: -webkit-linear-gradient(90deg, #46beec 0%, #46beec 6.25%, #46bfec 12.5%, #46bfec 18.75%, #46c1ec 25%, #45c2eb 31.25%, #45c4eb 37.5%, #45c6eb 43.75%, #44c8eb 50%, #44cbea 56.25%, #43ceea 62.5%, #43d2e9 68.75%, #42d6e9 75%, #41dae8 81.25%, #41dee7 87.5%, #40e3e7 93.75%, #3fe6e4 100%), linear-gradient(0deg, #3fe6e4, #3fe6e4);
+// 	background-clip: text;
+// 	-webkit-background-clip: text !important;
+// 	-webkit-text-fill-color: transparent
+// }
+
+// .game .pool .inner {
+// 	z-index: 1;
+// 	margin-top: 20px
+// }
+
+// .game .pool .item:nth-of-type(1) {
+// 	position: relative;
+// 	padding: 1px;
+// 	border: 1px solid transparent
+// }
+
+// .game .pool .item:nth-of-type(1)::before {
+// 	position: absolute;
+// 	z-index: 0;
+// 	top: -1px;
+// 	right: -1px;
+// 	bottom: -1px;
+// 	left: -1px;
+// 	content: '';
+// 	border-radius: 10px;
+// 	background: radial-gradient(80.38% 222.5% at -13.75% -12.36%, #98f9ff 0%, rgba(255, 255, 255, 0) 100%), radial-gradient(80.69% 208.78% at 108.28% 112.58%, #eabfff 0%, rgba(135, 38, 183, 0) 100%)
+// }
+
+// .game .pool .item:nth-of-type(1)::after {
+// 	position: absolute;
+// 	z-index: 0;
+// 	top: 50%;
+// 	left: 50%;
+// 	width: calc(100% - 2px);
+// 	height: calc(100% - 2px);
+// 	content: '';
+// 	transform: translate(-50%, -50%);
+// 	border-radius: 10px;
+// 	background: #2c2782
+// }
+
+// .game .pool .item:nth-of-type(1) p {
+// 	font-size: 16px;
+// 	font-weight: 400;
+// 	line-height: 20px;
+// 	position: relative;
+// 	z-index: 1;
+// 	height: 100%;
+// 	padding: 14px 19px;
+// 	text-align: center;
+// 	color: #f1ebf8;
+// 	border-radius: 10px;
+// 	background: #2c2782;
+// 	background: radial-gradient(90.16% 143.01% at 15.32% 21.04%, rgba(165, 239, 255, .2) 0%, rgba(110, 191, 244, .0447917) 77.08%, rgba(70, 144, 213, 0) 100%);
+// 	background-blend-mode: overlay, normal;
+// 	-webkit-backdrop-filter: blur(30px);
+// 	backdrop-filter: blur(30px)
+// }
+
+// .game .pool .item:nth-of-type(1) p span {
+// 	font-size: 16px;
+// 	font-weight: 600;
+// 	line-height: 20px
+// }
+
+// .game .pool .amount h3 {
+// 	font-size: 12px;
+// 	font-weight: 400;
+// 	line-height: 15px;
+// 	margin-top: 14px;
+// 	text-align: center;
+// 	color: #fae9f1
+// }
+
+// .game .pool .amount .inner {
+// 	display: flex;
+// 	margin: 10px -25px 0;
+// 	padding: 15px 10px;
+// 	border-radius: 8px;
+// 	background: #f1ebf8;
+// 	align-items: center;
+// 	justify-content: space-between
+// }
+
+// .game .pool .amount .inner input {
+// 	font-size: 13px;
+// 	font-weight: 600;
+// 	line-height: 16px;
+// 	padding-right: 20px;
+// 	text-align: center;
+// 	color: #9999a5;
+// 	border: 0;
+// 	background: 0 0
+// }
+
+// .game .pool .amount .inner span {
+// 	font-size: 11px;
+// 	font-weight: 500;
+// 	line-height: 13px;
+// 	color: #7036b6
+// }
+
+// .game .pool .amount ul {
+// 	display: flex;
+// 	margin: 20px -13px 0;
+// 	justify-content: space-between
+// }
+
+// .game .pool .amount ul li {
+// 	display: flex;
+// 	flex-direction: column;
+// 	align-items: center
+// }
+
+// .game .pool .amount ul .title {
+// 	font-size: 12px;
+// 	font-weight: 600;
+// 	line-height: 15px;
+// 	opacity: .3;
+// 	color: #f1ebf8
+// }
+
+// .game .pool .amount ul h2,
+// .game .pool .indicators ul li h2 {
+// 	display: flex;
+// 	text-align: center;
+// 	background: linear-gradient(90deg, #fae9f1 0%, #fae9f1 6.25%, #fae9f1 12.5%, #fae9f1 18.75%, #fae9f1 25%, #fae8f0 31.25%, #fae7f0 37.5%, #f9e5ef 43.75%, #f9e2ee 50%, #f8deec 56.25%, #f8d8ea 62.5%, #f7d0e8 68.75%, #f6c5e6 75%, #f5b6e6 81.25%, #f6a3e9 87.5%, #f78af3 93.75%, #eb69fb 100%);
+// 	background-clip: text;
+// 	-webkit-background-clip: text !important;
+// 	-webkit-text-fill-color: transparent
+// }
+
+// .game .pool .amount ul h2 {
+// 	margin-top: 5px;
+// 	align-items: center;
+// 	font-size: 24px;
+// 	font-weight: 700;
+// 	line-height: 29px
+// }
+
+// .game .pool .amount ul h2 span {
+// 	font-size: 24px;
+// 	font-weight: 300;
+// 	line-height: 29px;
+// 	text-align: center;
+// 	color: #fae9f1
+// }
+
+// .game .pool .amount button {
+// 	font-size: 14px;
+// 	font-weight: 600;
+// 	line-height: 17px;
+// 	display: flex;
+// 	width: -webkit-fill-available;
+// 	height: 43px;
+// 	margin: 12px -25px 0;
+// 	transition: all .3s linear;
+// 	color: #2c2782;
+// 	border: 0;
+// 	border-radius: 8px;
+// 	background: linear-gradient(112.56deg, #46beec -38.88%, #46beec -31.27%, #46bfec -23.66%, #46bfec -16.05%, #46c1ec -8.44%, #45c2eb -.83%, #45c4eb 6.78%, #45c6eb 14.39%, #44c8eb 22%, #44cbea 29.61%, #43ceea 37.22%, #43d2e9 44.83%, #42d6e9 52.44%, #41dae8 60.05%, #41dee7 67.66%, #40e3e7 75.27%, #3fe6e4 82.88%);
+// 	justify-content: center;
+// 	align-items: center
+// }
+
+// .game .pool .indicators ul {
+// 	margin-top: 44px
+// }
+
+// .game .pool .indicators ul li {
+// 	position: relative;
+// 	width: 60%;
+// 	margin: 0 auto 17px;
+// 	padding: 1px;
+// 	border: 1px solid transparent
+// }
+
+// .game .pool .indicators ul li::before {
+// 	position: absolute;
+// 	z-index: 0;
+// 	top: -1px;
+// 	right: -1px;
+// 	bottom: -1px;
+// 	left: -1px;
+// 	content: '';
+// 	border-radius: 10px;
+// 	background: radial-gradient(80.38% 222.5% at -13.75% -12.36%, #98f9ff 0%, rgba(255, 255, 255, 0) 100%), radial-gradient(80.69% 208.78% at 108.28% 112.58%, #eabfff 0%, rgba(135, 38, 183, 0) 100%)
+// }
+
+// .game .pool .indicators ul li::after {
+// 	position: absolute;
+// 	z-index: 0;
+// 	top: 50%;
+// 	left: 50%;
+// 	width: calc(100% - 2px);
+// 	height: calc(100% - 2px);
+// 	content: '';
+// 	transform: translate(-50%, -50%);
+// 	border-radius: 10px;
+// 	background: #2c2782
+// }
+
+// .game .pool .indicators ul li h2 {
+// 	font-size: 40px;
+// 	font-weight: 600;
+// 	line-height: 49px;
+// 	position: relative;
+// 	z-index: 1;
+// 	flex-direction: column;
+// 	padding: 14px 10px;
+// 	border-radius: 10px;
+// 	background-blend-mode: overlay, normal;
+// 	-webkit-backdrop-filter: blur(30px);
+// 	backdrop-filter: blur(30px)
+// }
+
+// .game .pool .indicators ul li h2 span {
+// 	font-size: 16px;
+// 	font-weight: 600;
+// 	line-height: 20px;
+// 	margin-top: 7px
+// }
+
+// .game .investing {
+// 	margin-top: 25px
+// }
+
+// .game .investing .investing-title {
+// 	position: relative;
+// 	display: flex;
+// 	margin: 0 -9px;
+// 	padding: 20px 23px;
+// 	border-radius: 10px;
+// 	background: #2c2782;
+// 	align-items: center
+// }
+
+// .game .investing .investing-title h4 {
+// 	font-size: 18px;
+// 	font-weight: 600;
+// 	line-height: 22px;
+// 	margin-left: 5px;
+// 	color: #fae9f1
+// }
+
+// .game .investing .investing-content {
+// 	margin: 0 -5px;
+// 	padding: 10px;
+// 	background-color: #fff
+// }
+
+// .game .investing .title {
+// 	display: block;
+// 	margin-bottom: 10px
+// }
+
+// .game .investing .title ul {
+// 	display: flex
+// }
+
+// .game .investing .title ul li {
+// 	font-size: 12px;
+// 	font-weight: 400;
+// 	line-height: 15px;
+// 	color: #9999a5
+// }
+
+// .game .investing .title ul li:nth-child(1) {
+// 	width: 25%
+// }
+
+// .game .investing .title ul li:nth-child(2) {
+// 	width: 33%
+// }
+
+// .game .investing .title ul li:nth-child(3) {
+// 	width: 30%
+// }
+
+// .game .investing .title ul li:nth-child(4),
+// .game .investing .title ul li:nth-child(5),
+// .game .investing .title ul li:nth-child(6) {
+// 	display: none
+// }
+
+// .game .investing .item {
+// 	position: relative;
+// 	display: flex;
+// 	padding: 11px 0 12px;
+// 	cursor: pointer;
+// 	border-top: 1px solid rgba(136, 136, 136, .15);
+// 	flex-wrap: wrap;
+// 	justify-content: space-between
+// }
+
+// .game .investing .item .data {
+// 	font-size: 16px;
+// 	font-weight: 400;
+// 	line-height: 20px;
+// 	width: 25%;
+// 	color: #3fd1ee;
+// 	order: 1
+// }
+
+// .game .investing .item .coins {
+// 	display: flex;
+// 	width: 34%;
+// 	align-items: center;
+// 	order: 2;
+// 	flex-wrap: wrap;
+// }
+
+// .game .investing .item .coins img {
+// 	display: block;
+// 	width: 22px;
+// 	margin-right: 5px
+// }
+
+// .game .investing .item .period {
+// 	font-size: 16px;
+// 	font-weight: 400;
+// 	line-height: 20px;
+// 	display: inline-block;
+// 	width: 29%;
+// 	color: #2b1a4f;
+// 	order: 3
+// }
+
+// .game .investing .item .profit,
+// .game .investing .item .profit-procent {
+// 	font-size: 16px;
+// 	font-weight: 600;
+// 	line-height: 20px;
+// 	display: flex;
+// 	flex-direction: column;
+// 	width: 45%;
+// 	margin-top: 10px;
+// 	padding: 8px;
+// 	color: #2b1a4f;
+// 	border-radius: 15px;
+// 	background: #f1ebf8;
+// 	align-items: center;
+// 	order: 5
+// }
+
+// .game .investing .item .profit {
+// 	color: #7036b6;
+// 	order: 6
+// }
+
+// .game .investing .item .withdraw {
+// 	width: 12%;
+// 	text-align: center;
+// 	order: 4
+// }
+
+// .game .investing .item .withdraw a {
+// 	display: inline-flex;
+// 	width: 100%;
+// 	height: 100%;
+// 	justify-content: center
+// }
+
+// .game .investing .item .withdraw a i {
+// 	font-size: 18px;
+// 	color: #7036b6
+// }
+
+// .game .investing .item .withdraw a span {
+// 	display: none
+// }
+
+// @media (min-width:768px) {
+
+// 	.game .investing .item .profit span,
+// 	.game .investing .item .profit-procent span,
+// 	.investment .history-investing .history-content .history-items .history-item .number-mob,
+// 	.liquidity-pool .monutes .table .monutes-content .monutes-item .coin i,
+// 	.liquidity-pool .monutes .table .monutes-content .monutes-item .contributed i,
+// 	.liquidity-pool .monutes .table .monutes-content .monutes-item .deposit i,
+// 	.liquidity-pool .monutes .table .monutes-content .monutes-item .profit i {
+// 		display: none
+// 	}
+
+// 	.game .pool .indicators ul li {
+// 		width: 100%
+// 	}
+
+// 	.game .game-pool h3,
+// 	.liquidity-pool .monutes .monutes-title h4,
+// 	.liquidity-pool .pool .pool-item .pool-content p {
+// 		font-size: 18px;
+// 		font-weight: 600;
+// 		line-height: 22px
+// 	}
+
+// 	.game .game-withdraw h3,
+// 	.game .referral-commission h3,
+// 	.help-content .help-items .help-item .video .text span {
+// 		font-size: 18px;
+// 		line-height: 22px
+// 	}
+
+// 	.game .balance {
+// 		margin-top: 20px
+// 	}
+
+// 	.game .balance .inner {
+// 		display: flex;
+// 		width: 100%;
+// 		justify-content: space-between
+// 	}
+
+// 	.game .game-pool {
+// 		width: 100%;
+// 		margin-bottom: 17px;
+// 		padding: 10px;
+// 		background-image: url('../images/game/bg-1-tablet.png')
+// 	}
+
+// 	.game .game-pool .total {
+// 		margin-top: 15px
+// 	}
+
+// 	.game .game-pool .total h2 {
+// 		font-size: 40px;
+// 		line-height: 49px
+// 	}
+
+// 	.game .game-pool .total h2 img,
+// 	.game .game-withdraw .total h2 img,
+// 	.game .referral-commission .total h2 img {
+// 		width: 40px;
+// 		height: 40px;
+// 		margin-right: 10px
+// 	}
+
+// 	.game .game-pool a {
+// 		font-size: 16px
+// 	}
+
+// 	.game .game-withdraw,
+// 	.game .referral-commission {
+// 		width: 49%;
+// 		padding: 11px
+// 	}
+
+// 	.game .game-withdraw .total,
+// 	.game .referral-commission .total {
+// 		margin-top: 26px
+// 	}
+
+// 	.game .game-withdraw .total h2,
+// 	.game .referral-commission .total h2 {
+// 		font-size: 40px;
+// 		font-weight: 700;
+// 		line-height: 43px
+// 	}
+
+// 	.game .game-withdraw ul,
+// 	.game .referral-commission ul {
+// 		position: relative;
+// 		margin-top: 2px
+// 	}
+
+// 	.game .game-withdraw ul::before,
+// 	.game .referral-commission ul::before {
+// 		position: absolute;
+// 		top: 50%;
+// 		left: 50%;
+// 		width: 2px;
+// 		height: 57px;
+// 		content: '';
+// 		transform: translate(-50%, -50%);
+// 		opacity: .2;
+// 		border-radius: 5px;
+// 		background: #fae9f1
+// 	}
+
+// 	.game .information {
+// 		margin-top: 8px;
+// 		padding: 15px 44px 15px 33px
+// 	}
+
+// 	.game .level {
+// 		border-radius: 8px
+// 	}
+
+// 	.game .level li .tooltip,
+// 	.game .level li:nth-of-type(2) .tooltip,
+// 	.game .level li:nth-of-type(3) .tooltip,
+// 	.game .level li:nth-of-type(4) .tooltip,
+// 	.game .level li:nth-of-type(5) .tooltip {
+// 		left: 0;
+// 		width: 100%;
+// 		transform: none
+// 	}
+
+// 	.game .level li .tooltip::before,
+// 	.game .level li:nth-of-type(2) .tooltip::before,
+// 	.game .level li:nth-of-type(3) .tooltip::before,
+// 	.game .level li:nth-of-type(4) .tooltip::before,
+// 	.game .level li:nth-of-type(5) .tooltip::before {
+// 		left: 50%;
+// 		transform: translate(-50%, 0)
+// 	}
+
+// 	.game .level li {
+// 		padding: 2px 0
+// 	}
+
+// 	.game .level li:last-child {
+// 		border-radius: 0 6px 6px 0
+// 	}
+
+// 	.game .level li:first-child {
+// 		border-radius: 8px 0 0 8px
+// 	}
+
+// 	.game .level li i {
+// 		width: 16px;
+// 		height: 16px;
+// 		margin-right: 2px
+// 	}
+
+// 	.game .level li span {
+// 		font-size: 12px;
+// 		font-weight: 600;
+// 		line-height: 15px
+// 	}
+
+// 	.game .pool {
+// 		margin-top: 20px;
+// 		padding: 20px 16px 42px
+// 	}
+
+// 	.game .pool .decoration img {
+// 		position: absolute
+// 	}
+
+// 	.game .pool .decoration img:first-of-type {
+// 		right: 72%;
+// 		bottom: -38px;
+// 		width: 196px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(2) {
+// 		top: -32px;
+// 		left: -59px;
+// 		width: 179px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(3) {
+// 		top: 77%;
+// 		right: 60%;
+// 		width: 100px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(4) {
+// 		top: 0;
+// 		right: 65%;
+// 		width: 98px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(5) {
+// 		bottom: 51px;
+// 		left: 1%;
+// 		width: 41px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(6) {
+// 		top: 54%;
+// 		left: 169px;
+// 		width: 26px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(7) {
+// 		bottom: -6%;
+// 		left: 67%;
+// 		width: 114px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(8) {
+// 		bottom: 9px;
+// 		left: 85%;
+// 		width: 81px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(9) {
+// 		right: 129px;
+// 		bottom: 68%;
+// 		width: 93px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(10) {
+// 		bottom: 42px;
+// 		left: 62%;
+// 		width: 41px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(11) {
+// 		right: 8px;
+// 		bottom: 86%;
+// 		width: 114px
+// 	}
+
+// 	.game .pool .inner {
+// 		display: grid;
+// 		grid-template-columns: 1fr 320px 1fr;
+// 		grid-gap: 24px;
+// 		align-items: flex-start
+// 	}
+
+// 	.game .pool .amount h3 {
+// 		margin-top: 3px
+// 	}
+
+// 	.game .pool .amount .inner {
+// 		margin: 10px 0
+// 	}
+
+// 	.game .pool .amount ul {
+// 		margin: 20px 0 0
+// 	}
+
+// 	.game .pool .amount button {
+// 		margin: 12px 0 0
+// 	}
+
+// 	.game .pool .amount form .inner {
+// 		display: flex;
+// 		padding: 15px 16px
+// 	}
+
+// 	.game .pool .amount form .inner input {
+// 		width: 50%;
+// 		padding-right: 0
+// 	}
+
+// 	.game .pool .amount form .inner input::-moz-placeholder {
+// 		font-size: 13px;
+// 		font-weight: 600;
+// 		line-height: 16px;
+// 		padding-right: 17px;
+// 		text-align: center;
+// 		color: #9999a5
+// 	}
+
+// 	.game .pool .amount form .inner input:-ms-input-placeholder {
+// 		font-size: 13px;
+// 		font-weight: 600;
+// 		line-height: 16px;
+// 		padding-right: 17px;
+// 		text-align: center;
+// 		color: #9999a5
+// 	}
+
+// 	.game .pool .amount form .inner input::placeholder {
+// 		font-size: 13px;
+// 		font-weight: 600;
+// 		line-height: 16px;
+// 		padding-right: 17px;
+// 		text-align: center;
+// 		color: #9999a5
+// 	}
+
+// 	.game .pool .item:nth-of-type(1) p {
+// 		padding: 14px 9px;
+// 		text-align: left
+// 	}
+
+// 	.game .pool .indicators ul {
+// 		margin-top: -11px
+// 	}
+
+// 	.game .investing {
+// 		margin-top: 19px
+// 	}
+
+// 	.game .investing .title {
+// 		margin-bottom: 13px
+// 	}
+
+// 	.game .investing .title ul li:nth-child(1) {
+// 		width: 12.2%
+// 	}
+
+// 	.game .investing .title ul li:nth-child(2),
+// 	.game .investing .title ul li:nth-child(3) {
+// 		width: 18%
+// 	}
+
+// 	.game .investing .title ul li:nth-child(4),
+// 	.game .investing .title ul li:nth-child(5) {
+// 		display: block;
+// 		width: 18%
+// 	}
+
+// 	.game .investing .title ul li:nth-child(6) {
+// 		display: block
+// 	}
+
+// 	.game .investing .investing-content {
+// 		margin: 0;
+// 		padding: 11px 20px
+// 	}
+
+// 	.game .investing .item {
+// 		padding: 14px 0 10px;
+// 		flex-wrap: nowrap
+// 	}
+
+// 	.game .investing .item .data {
+// 		width: 19%;
+// 		order: 1
+// 	}
+
+// 	.game .investing .item .coins {
+// 		width: 27%;
+// 		order: 2
+// 	}
+
+// 	.game .investing .item .period {
+// 		width: 27%
+// 	}
+
+// 	.game .investing .item .profit,
+// 	.game .investing .item .profit-procent {
+// 		flex-direction: row;
+// 		width: 27%;
+// 		margin-top: 0;
+// 		padding: 0;
+// 		color: #2b1a4f;
+// 		border-radius: initial;
+// 		background: 0 0;
+// 		order: 4
+// 	}
+
+// 	.game .investing .item .profit {
+// 		color: #7036b6;
+// 		order: 5
+// 	}
+
+// 	.game .investing .item .withdraw {
+// 		width: 24%;
+// 		order: 6
+// 	}
+
+// 	.game .investing .item .withdraw a span {
+// 		font-size: 16px;
+// 		font-weight: 500;
+// 		line-height: 20px;
+// 		display: block;
+// 		margin-left: 10px;
+// 		color: #7036b6
+// 	}
+// }
+
+// @media (min-width:1024px) {
+// 	.game .balance {
+// 		display: flex;
+// 		justify-content: space-between
+// 	}
+
+// 	.game .balance .inner {
+// 		display: flex;
+// 		flex-direction: column;
+// 		width: 49%;
+// 		justify-content: space-between
+// 	}
+
+// 	.game .game-pool {
+// 		width: 49%;
+// 		min-height: auto;
+// 		margin-bottom: 19px;
+// 		padding: 20px
+// 	}
+
+// 	.game .game-pool .total {
+// 		margin-top: 71px
+// 	}
+
+// 	.game .game-pool a {
+// 		margin-top: 73px
+// 	}
+
+// 	.game .game-withdraw,
+// 	.game .referral-commission {
+// 		width: 100%;
+// 		min-height: auto;
+// 		margin-bottom: 19px;
+// 		padding: 11px 50px
+// 	}
+
+// 	.game .game-withdraw .total,
+// 	.game .referral-commission .total {
+// 		margin-top: 13px
+// 	}
+
+// 	.game .game-withdraw ul,
+// 	.game .referral-commission ul {
+// 		display: flex;
+// 		width: 100%;
+// 		grid-gap: 0;
+// 		justify-content: space-between
+// 	}
+
+// 	.game .game-withdraw {
+// 		background-position: top
+// 	}
+
+// 	.game .information {
+// 		margin-top: 2px
+// 	}
+
+// 	.game .level li .tooltip {
+// 		top: 45px
+// 	}
+
+// 	.game .level li i {
+// 		width: 19px;
+// 		height: 19px
+// 	}
+
+// 	.game .level li span {
+// 		font-size: 16px;
+// 		font-weight: 600;
+// 		line-height: 29px
+// 	}
+
+// 	.game .pool {
+// 		margin-top: 19px;
+// 		padding: 10px 16px 26px
+// 	}
+
+// 	.game .pool .decoration img {
+// 		position: absolute
+// 	}
+
+// 	.game .pool .decoration img:first-of-type {
+// 		right: 80%;
+// 		bottom: -52px;
+// 		width: 221px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(2) {
+// 		top: -25px;
+// 		left: -24px;
+// 		width: 179px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(3) {
+// 		top: 72%;
+// 		right: 67%;
+// 		width: 139px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(4) {
+// 		top: -15px;
+// 		right: 62%;
+// 		width: 99px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(5) {
+// 		bottom: 76px;
+// 		left: 1%;
+// 		width: 41px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(6) {
+// 		top: 41%;
+// 		left: 308px;
+// 		width: 26px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(7) {
+// 		bottom: -16%;
+// 		left: 75%;
+// 		width: 132px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(8) {
+// 		bottom: 10px;
+// 		left: 91%;
+// 		width: 82px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(9) {
+// 		right: 131px;
+// 		bottom: 48%;
+// 		width: 126px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(10) {
+// 		bottom: 42px;
+// 		left: 70%;
+// 		width: 50px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(11) {
+// 		right: -6px;
+// 		bottom: 79%;
+// 		width: 138px
+// 	}
+
+// 	.game .pool .inner {
+// 		margin-top: 11px;
+// 		grid-template-columns: 1fr 317px 1fr;
+// 		grid-gap: 36px
+// 	}
+
+// 	.game .pool .item:nth-of-type(1) {
+// 		margin-top: 9px
+// 	}
+
+// 	.game .pool .item:nth-of-type(1) p {
+// 		font-size: 18px;
+// 		font-weight: 400;
+// 		line-height: 22px;
+// 		padding: 23px 19px
+// 	}
+
+// 	.game .pool .item:nth-of-type(1) p span {
+// 		font-size: 18px;
+// 		line-height: 22px
+// 	}
+
+// 	.game .pool .amount form .inner {
+// 		padding: 14px 16px
+// 	}
+
+// 	.game .pool .amount form .inner input {
+// 		width: 46%
+// 	}
+
+// 	.game .pool .amount button {
+// 		width: 162px;
+// 		margin: 21px auto 0
+// 	}
+
+// 	.game .pool .indicators ul {
+// 		margin-top: 25px
+// 	}
+
+// 	.game .pool .indicators ul li {
+// 		margin: 0 auto 20px
+// 	}
+
+// 	.game .pool .indicators ul li h2 {
+// 		flex-direction: row;
+// 		padding: 0 13px;
+// 		align-items: center
+// 	}
+
+// 	.game .pool .indicators ul li h2 span {
+// 		font-size: 18px;
+// 		line-height: 22px;
+// 		margin-top: 0;
+// 		margin-left: 10px
+// 	}
+// }
+
+// @media (min-width:1320px) {
+
+// 	.game .pool::after,
+// 	.platforma .platforma-content .platforma-nav nav ul li[data-tabs=liquidity-pool]::after {
+// 		display: none
+// 	}
+
+// 	.game .investing .title ul li:nth-child(1) {
+// 		width: 12%
+// 	}
+
+// 	.game .investing .title ul li:nth-child(2),
+// 	.game .investing .title ul li:nth-child(3),
+// 	.liquidity-pool .monutes .table .monutes-table ul li:nth-child(6) {
+// 		width: 18%
+// 	}
+
+// 	.game .game-withdraw,
+// 	.game .referral-commission {
+// 		margin-bottom: 19px;
+// 		padding: 11px 73px
+// 	}
+
+// 	.game .game-pool {
+// 		background-image: url('../images/game/bg-1-desc.png');
+// 		background-size: contain
+// 	}
+
+// 	.game .game-withdraw {
+// 		background-image: url('../images/game/bg-2-desc.png')
+// 	}
+
+// 	.game .information {
+// 		margin-top: 0;
+// 		padding: 15px 44px 15px 41px
+// 	}
+
+// 	.game .level {
+// 		margin-top: 16px
+// 	}
+
+// 	.game .pool {
+// 		padding: 10px 18px 26px
+// 	}
+
+// 	.game .pool .decoration img {
+// 		position: absolute
+// 	}
+
+// 	.game .pool .decoration img:first-of-type {
+// 		right: 82%;
+// 		bottom: -52px;
+// 		width: 221px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(2) {
+// 		top: -25px;
+// 		left: -24px;
+// 		width: 179px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(3) {
+// 		top: 72%;
+// 		right: 70%;
+// 		width: 139px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(4) {
+// 		top: -15px;
+// 		right: 65%;
+// 		width: 99px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(5) {
+// 		bottom: 76px;
+// 		left: 1%;
+// 		width: 41px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(6) {
+// 		top: 41%;
+// 		left: 318px;
+// 		width: 26px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(7) {
+// 		bottom: -16%;
+// 		left: 69%;
+// 		width: 132px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(8) {
+// 		bottom: 16px;
+// 		left: 90%;
+// 		width: 82px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(9) {
+// 		right: 205px;
+// 		bottom: 48%;
+// 		width: 126px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(10) {
+// 		bottom: 35px;
+// 		left: 64%;
+// 		width: 53px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(11) {
+// 		right: 0;
+// 		bottom: 77%;
+// 		width: 138px
+// 	}
+
+// 	.game .pool .inner {
+// 		grid-template-columns: 1fr 338px 1fr
+// 	}
+
+// 	.game .pool .inner ul li h2 {
+// 		padding: 0 21px
+// 	}
+
+// 	.game .pool .inner ul li h2 span {
+// 		margin-left: 31px
+// 	}
+
+// 	.game .pool .inner ul li h2.value span {
+// 		margin-left: 0
+// 	}
+
+// 	.game .investing .investing-title {
+// 		margin: 0;
+// 		padding: 20px 32px
+// 	}
+
+// 	.game .investing .investing-content {
+// 		margin: 0;
+// 		padding: 11px 12px 11px 27px
+// 	}
+
+// 	.game .investing .title {
+// 		margin-bottom: 13px
+// 	}
+
+// 	.game .investing .title ul li:nth-child(4),
+// 	.game .investing .title ul li:nth-child(5) {
+// 		display: block;
+// 		width: 18%
+// 	}
+
+// 	.game .investing .title ul li:nth-child(6) {
+// 		display: block
+// 	}
+// }
+
+// @media (min-width:1600px) {
+
+// 	.game .game-pool .total span,
+// 	.game .game-withdraw .total span,
+// 	.game .referral-commission .total span {
+// 		font-size: 18px;
+// 		line-height: 22px
+// 	}
+
+// 	.game .switch span {
+// 		font-size: 18px;
+// 		padding: 6px 44px
+// 	}
+
+// 	.game .game-pool {
+// 		padding: 25px
+// 	}
+
+// 	.game .game-pool h3 {
+// 		font-size: 24px;
+// 		line-height: 29px
+// 	}
+
+// 	.game .game-pool .total {
+// 		margin-top: 98px
+// 	}
+
+// 	.game .game-pool .total span:nth-of-type(2) {
+// 		font-size: 14px;
+// 		line-height: 17px
+// 	}
+
+// 	.game .game-pool .total h2 {
+// 		font-size: 46px;
+// 		line-height: 56px
+// 	}
+
+// 	.game .game-pool .total h2 img {
+// 		width: 45px;
+// 		height: 45px
+// 	}
+
+// 	.game .game-pool a {
+// 		font-size: 18px;
+// 		margin-top: 129px
+// 	}
+
+// 	.game .game-withdraw,
+// 	.game .referral-commission {
+// 		margin-bottom: 20px;
+// 		padding: 13px 122px
+// 	}
+
+// 	.game .game-withdraw h3,
+// 	.game .referral-commission h3 {
+// 		font-size: 24px;
+// 		line-height: 28px
+// 	}
+
+// 	.game .game-withdraw .total span:nth-of-type(2),
+// 	.game .referral-commission .total span:nth-of-type(2) {
+// 		font-size: 15px;
+// 		font-weight: 400;
+// 		line-height: 20px;
+// 		margin-top: 22px
+// 	}
+
+// 	.game .game-withdraw .total h2,
+// 	.game .referral-commission .total h2 {
+// 		font-size: 44px;
+// 		font-weight: 700;
+// 		line-height: 50px;
+// 		margin-top: 19px
+// 	}
+
+// 	.game .game-withdraw .total h2 img,
+// 	.game .referral-commission .total h2 img {
+// 		width: 44px;
+// 		height: 44px;
+// 		margin-right: 15px
+// 	}
+
+// 	.game .information {
+// 		margin-top: 28px
+// 	}
+
+// 	.game .information .icon-check {
+// 		font-size: 16px;
+// 		margin-right: 9px
+// 	}
+
+// 	.game .information p,
+// 	.game .information p span {
+// 		font-size: 18px;
+// 		line-height: 22px
+// 	}
+
+// 	.game .level li span {
+// 		font-size: 18px;
+// 		font-weight: 600;
+// 		line-height: 34px
+// 	}
+
+// 	.game .level li i {
+// 		width: 24px;
+// 		height: 24px
+// 	}
+
+// 	.game .pool {
+// 		margin-top: 36px;
+// 		padding: 28px 31px 33px 48px
+// 	}
+
+// 	.game .pool::after {
+// 		display: none
+// 	}
+
+// 	.game .pool .decoration img {
+// 		position: absolute
+// 	}
+
+// 	.game .pool .decoration img:first-of-type {
+// 		right: 80%;
+// 		bottom: -67px;
+// 		width: 302px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(2) {
+// 		top: -38px;
+// 		left: -91px;
+// 		width: 242px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(3) {
+// 		top: 72%;
+// 		right: 70%;
+// 		width: 180px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(4) {
+// 		top: -35px;
+// 		right: 66%;
+// 		width: 139px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(5) {
+// 		bottom: 76px;
+// 		left: 1%;
+// 		width: 41px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(6) {
+// 		top: 39%;
+// 		left: 443px;
+// 		width: 33px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(7) {
+// 		bottom: -12%;
+// 		left: 68%;
+// 		width: 175px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(8) {
+// 		bottom: 46px;
+// 		left: 89%;
+// 		width: 109px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(9) {
+// 		right: 311px;
+// 		bottom: 50%;
+// 		width: 173px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(10) {
+// 		bottom: 65px;
+// 		left: 64%;
+// 		width: 70px
+// 	}
+
+// 	.game .pool .decoration img:nth-of-type(11) {
+// 		right: 24px;
+// 		bottom: 81%;
+// 		width: 185px
+// 	}
+
+// 	.game .pool .heading i {
+// 		font-size: 26px;
+// 		font-weight: 400;
+// 		margin-left: 10px
+// 	}
+
+// 	.game .pool .heading h2 {
+// 		font-size: 32px;
+// 		line-height: 34px
+// 	}
+
+// 	.game .pool .inner {
+// 		grid-template-columns: 1fr 466px 1fr;
+// 		grid-gap: 30px
+// 	}
+
+// 	.game .pool .item:nth-of-type(1) p {
+// 		font-size: 24px;
+// 		font-weight: 400;
+// 		line-height: 29px;
+// 		padding: 29px 25px
+// 	}
+
+// 	.game .pool .item:nth-of-type(1) p span {
+// 		font-size: 24px;
+// 		line-height: 29px
+// 	}
+
+// 	.game .pool .amount form .inner span,
+// 	.game .pool .amount h3 {
+// 		font-size: 14px;
+// 		line-height: 17px
+// 	}
+
+// 	.game .pool .amount form .inner {
+// 		padding: 20px 19px;
+// 		border-radius: 15px
+// 	}
+
+// 	.game .pool .amount form .inner input {
+// 		font-size: 18px;
+// 		line-height: 22px;
+// 		width: 37%
+// 	}
+
+// 	.game .pool .amount form .inner input::-moz-placeholder {
+// 		font-size: 18px;
+// 		line-height: 22px
+// 	}
+
+// 	.game .pool .amount form .inner input:-ms-input-placeholder {
+// 		font-size: 18px;
+// 		line-height: 22px
+// 	}
+
+// 	.game .pool .amount form .inner input::placeholder {
+// 		font-size: 18px;
+// 		line-height: 22px
+// 	}
+
+// 	.game .pool .amount ul {
+// 		margin: 33px 0 0
+// 	}
+
+// 	.game .pool .amount ul .title {
+// 		font-size: 18px;
+// 		font-weight: 600;
+// 		line-height: 22px
+// 	}
+
+// 	.game .pool .amount ul li h2 {
+// 		font-size: 36px;
+// 		line-height: 44px;
+// 		padding: 0 21px;
+// 		text-align: center
+// 	}
+
+// 	.game .pool .amount ul li h2 span {
+// 		font-size: 36px;
+// 		line-height: 44px;
+// 		margin-left: 0
+// 	}
+
+// 	.game .pool .amount button {
+// 		font-size: 18px;
+// 		font-weight: 600;
+// 		line-height: 22px;
+// 		width: 196px;
+// 		height: 47px;
+// 		margin: 38px auto 0
+// 	}
+
+// 	.game .pool .indicators ul {
+// 		margin-top: 44px
+// 	}
+
+// 	.game .pool .indicators ul li h2 {
+// 		font-size: 45px;
+// 		font-weight: 600;
+// 		line-height: 55px;
+// 		padding: 7px 21px
+// 	}
+
+// 	.game .pool .indicators ul li h2 span {
+// 		font-size: 24px;
+// 		line-height: 26px;
+// 		margin-left: 21px
+// 	}
+
+// 	.game .investing {
+// 		margin-top: 41px
+// 	}
+
+// 	.game .investing .investing-title {
+// 		margin: 0;
+// 		padding: 22px 57px
+// 	}
+
+// 	.game .investing .investing-title h4 {
+// 		font-size: 20px;
+// 		font-weight: 600;
+// 		line-height: 28px
+// 	}
+
+// 	.game .investing .title {
+// 		margin-bottom: 17px
+// 	}
+
+// 	.game .investing .title ul li {
+// 		font-size: 14px;
+// 		font-weight: 400;
+// 		line-height: 17px
+// 	}
+
+// 	.game .investing .title ul li:nth-child(3) {
+// 		width: 22%
+// 	}
+
+// 	.game .investing .title ul li:nth-child(4) {
+// 		display: block;
+// 		width: 16.9%
+// 	}
+
+// 	.game .investing .item {
+// 		padding: 15px 0 13px
+// 	}
+
+// 	.game .investing .item .data {
+// 		width: 19%
+// 	}
+
+// 	.game .investing .item .coins {
+// 		width: 29%
+// 	}
+
+// 	.game .investing .item .coins i {
+// 		font-size: 18px;
+// 		font-weight: 400;
+// 		line-height: 22px
+// 	}
+
+// 	.game .investing .item .coins img {
+// 		width: 24px;
+// 		margin-right: 5px
+// 	}
+
+// 	.game .investing .item .period {
+// 		font-size: 18px;
+// 		line-height: 22px;
+// 		width: 35%
+// 	}
+
+// 	.game .investing .item .profit-procent {
+// 		font-size: 18px;
+// 		line-height: 22px;
+// 		width: 27%
+// 	}
+
+// 	.game .investing .item .profit {
+// 		font-size: 18px;
+// 		line-height: 22px;
+// 		width: 26%
+// 	}
+
+// 	.game .investing .item .withdraw {
+// 		width: 24%
+// 	}
+
+// 	.game .investing .item .withdraw a {
+// 		justify-content: flex-start
+// 	}
+
+// 	.game .investing .item .withdraw a span {
+// 		font-size: 18px;
+// 		line-height: 22px
+// 	}
+
+// 	.game .investing .investing-content {
+// 		margin: 0;
+// 		padding: 13px 52px 11px 36px
+// 	}
+// }
+
+// @media (min-width:1800px) {
+// 	.game .pool .inner {
+// 		grid-template-columns: 1fr 466px 1fr;
+// 		grid-gap: 82px
+// 	}
+// }
+
+// .game .investing .item .period {
+// 	width: 41%;
+
+// 	@media (min-width: 768px) {
+// 		width: 27%;
+// 	}
+
+// 	@media (min-width: 1600px) {
+// 		width: 35%;
+// 	}
+// }
+
+// .game .investing .title ul {
+// 	li:nth-child(1) {
+// 		width: 25%;
+
+// 		@media (min-width: 768px) {
+// 			width: 19%;
+// 		}
+// 	}
+
+// 	li:nth-child(2) {
+// 		width: 34%;
+
+// 		@media (min-width: 768px) {
+// 			width: 27%;
+// 		}
+
+// 		@media (min-width: 1600px) {
+// 			width: 29%;
+// 		}
+// 	}
+
+// 	li:nth-child(3) {
+// 		width: 29%;
+
+// 		@media (min-width: 768px) {
+// 			width: 27%;
+// 		}
+
+// 		@media (min-width: 1600px) {
+// 			width: 35%;
+// 		}
+// 	}
+
+// 	li:nth-child(4) {
+// 		width: 45%;
+
+// 		@media (min-width: 768px) {
+// 			width: 27%;
+// 		}
+
+// 		@media (min-width: 1600px) {
+// 			width: 27%;
+// 		}
+// 	}
+
+// 	li:nth-child(5) {
+// 		width: 45%;
+
+// 		@media (min-width: 768px) {
+// 			width: 27%;
+// 		}
+
+// 		@media (min-width: 1600px) {
+// 			width: 26%;
+// 		}
+// 	}
+// }
+
+// .info {
+// 	position: relative;
+// 	z-index: 2;
+
+// 	&:hover {
+// 		i {
+// 			opacity: 1;
+// 		}
+
+// 		.info-window {
+// 			display: block;
+// 		}
+// 	}
+
+// 	i {
+// 		opacity: 0.6;
+// 		font-size: 21px;
+// 		color: #ffffff;
+// 		display: inline-block;
+// 		transition: all 0.5s;
+// 	}
+
+// 	.info-window {
+// 		top: 40px;
+// 		right: -14px;
+// 		width: 220px;
+// 		display: none;
+// 		padding: 12px;
+// 		font-size: 13px;
+// 		color: #7036b6;
+// 		line-height: 19px;
+// 		font-weight: normal;
+// 		position: absolute;
+// 		border-radius: 10px;
+// 		background: #ffffff;
+// 		border: 1px solid rgba(112, 54, 182, 0.5);
+// 		box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+
+// 		&:after {
+// 			content: '';
+// 			position: absolute;
+// 			top: -16px;
+// 			right: 17px;
+// 			width: 13px;
+// 			height: 21px;
+// 			// background-color: #fff;
+// 			background: url('../images/info-window.png') no-repeat 50% 50%;
+// 			background-size: cover;
+// 			transform: rotate(90deg);
+// 		}
+
+// 		strong {
+// 			display: block;
+// 			font-size: 14px;
+// 			color: #7036b6;
+// 			font-weight: 600;
+// 			line-height: 17px;
+// 			margin-bottom: 3px;
+// 		}
+// 	}
+// }
+
+// .infoGame {
+// 	position: relative;
+// 	z-index: 2;
+
+// 	&:hover {
+// 		i {
+// 			opacity: 1;
+// 		}
+
+// 		.info-window {
+// 			display: block;
+// 		}
+
+// 		.icon-info {
+// 			opacity: 1;
+// 		}
+// 	}
+
+// 	i {
+// 		opacity: 0.6;
+// 		font-size: 21px;
+// 		color: #ffffff;
+// 		display: inline-block;
+// 		transition: all 0.5s;
+// 	}
+
+// 	.info-window {
+// 		top: 40px;
+// 		right: -14px;
+// 		width: 220px;
+// 		display: none;
+// 		padding: 12px;
+// 		font-size: 13px;
+// 		color: #7036b6;
+// 		line-height: 19px;
+// 		font-weight: normal;
+// 		position: absolute;
+// 		border-radius: 10px;
+// 		background: #ffffff;
+// 		border: 1px solid rgba(112, 54, 182, 0.5);
+// 		box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+
+// 		&:after {
+// 			content: '';
+// 			position: absolute;
+// 			top: -16px;
+// 			right: 17px;
+// 			width: 13px;
+// 			height: 21px;
+// 			// background-color: #fff;
+// 			background: url('../images/info-window.png') no-repeat 50% 50%;
+// 			background-size: cover;
+// 			transform: rotate(90deg);
+// 		}
+
+// 		strong {
+// 			display: block;
+// 			font-size: 14px;
+// 			color: #7036b6;
+// 			font-weight: 600;
+// 			line-height: 17px;
+// 			margin-bottom: 3px;
+// 		}
+// 	}
+// }
+
+// .info-tooltip {
+// 	position: relative;
+// 	z-index: 2;
+
+// 	&:hover {
+// 		i {
+// 			opacity: 1;
+// 		}
+
+// 		.info-window {
+// 			display: block;
+// 		}
+// 	}
+
+// 	i {
+// 		opacity: 0.6;
+// 		font-size: 21px;
+// 		color: #ffffff;
+// 		display: inline-block;
+// 		transition: all 0.5s;
+// 	}
+
+// 	.info-window {
+// 		top: 40px;
+// 		right: -14px;
+// 		width: 220px;
+// 		display: none;
+// 		padding: 12px;
+// 		font-size: 13px;
+// 		color: #7036b6;
+// 		line-height: 19px;
+// 		font-weight: normal;
+// 		position: absolute;
+// 		border-radius: 10px;
+// 		background: #ffffff;
+// 		border: 1px solid rgba(112, 54, 182, 0.5);
+// 		box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+
+// 		&:after {
+// 			content: '';
+// 			position: absolute;
+// 			top: -16px;
+// 			right: 17px;
+// 			width: 13px;
+// 			height: 21px;
+// 			background: url('../images/info-window.png') no-repeat 50% 50%;
+// 			background-size: cover;
+// 			transform: rotate(90deg);
+// 		}
+
+// 		strong {
+// 			display: block;
+// 			font-size: 14px;
+// 			color: #7036b6;
+// 			font-weight: 600;
+// 			line-height: 17px;
+// 			margin-bottom: 3px;
+// 		}
+// 	}
+// }
+
+// .infoGameIco {
+// 	position: relative;
+// 	z-index: 2;
+
+// 	&:hover {
+// 		i {
+// 			opacity: 1;
+// 		}
+
+// 		.info-window {
+// 			display: block;
+// 		}
+// 	}
+
+// 	i {
+// 		opacity: 0.6;
+// 		font-size: 21px;
+// 		color: #ffffff;
+// 		display: inline-block;
+// 		transition: all 0.5s;
+// 	}
+
+// 	.info-window {
+// 		top: 40px;
+// 		right: -14px;
+// 		width: 280px;
+// 		display: none;
+// 		padding: 12px;
+// 		font-size: 11px;
+// 		color: #7036b6;
+// 		line-height: 15px;
+// 		font-weight: normal;
+// 		position: absolute;
+// 		border-radius: 10px;
+// 		background: #ffffff;
+// 		border: 1px solid rgba(112, 54, 182, 0.5);
+// 		box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+
+// 		&:after {
+// 			content: '';
+// 			position: absolute;
+// 			top: -16px;
+// 			right: 17px;
+// 			width: 13px;
+// 			height: 21px;
+// 			background: url('../images/info-window.png') no-repeat 50% 50%;
+// 			background-size: cover;
+// 			transform: rotate(90deg);
+// 		}
+
+// 		strong {
+// 			display: block;
+// 			font-size: 14px;
+// 			color: #7036b6;
+// 			font-weight: 600;
+// 			line-height: 17px;
+// 			margin-bottom: 3px;
+// 		}
+// 	}
+// }
+
+// .level {
+// 	z-index: 15;
+// }
+
+// .pool {
+// 	z-index: 5;
+// }
