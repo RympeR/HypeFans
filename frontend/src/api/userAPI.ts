@@ -21,8 +21,7 @@ import {
   userStringType,
   userValidateUserRT,
   referralHistory,
-  spendHistory,
-  earnHistory
+  payHistory
 } from './types';
 
 export const userAPI = {
@@ -275,7 +274,7 @@ export const userAPI = {
   },
   userGetSpendHistory() {
     return instance
-      .get<spendHistory>(
+      .get<payHistory>(
         `
         /user/spend-stats-history/`
       )
@@ -285,7 +284,7 @@ export const userAPI = {
   },
   userGetEarnHistory() {
     return instance
-      .get<earnHistory>(
+      .get<payHistory>(
         `
         /user/pay-payment-history/`
       )

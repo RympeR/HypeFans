@@ -41,22 +41,22 @@ class UserAdmin(admin.ModelAdmin):
     ordering = '-pk',
 
 
-# @admin.register(Subscription, ChatSubscription)
-# class SubscriptionAdmin(admin.ModelAdmin):
-#     list_display = [
-#         'pk','source', 'target', 'start_date', 'end_date'
-#     ]
-#     list_display_links = [
-#         'pk'
-#     ]
-#     list_filter = (
-#             ('start_date', DateFieldListFilter),
-#             ('end_date', DateFieldListFilter),
-#     )
-#     search_fields = [
-#         'source__username', 'end_date__username',
-#     ]
-#     ordering = '-pk',
+@admin.register(Subscription, ChatSubscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = [
+        'pk','source', 'target', 'start_date', 'end_date'
+    ]
+    list_display_links = [
+        'pk'
+    ]
+    list_filter = (
+            ('start_date', DateFieldListFilter),
+            ('end_date', DateFieldListFilter),
+    )
+    search_fields = [
+        'source__username', 'end_date__username',
+    ]
+    ordering = '-pk',
 
 
 @admin.register(Card)

@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import Cookies from 'js-cookie';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import CurrencyInput from 'react-currency-input-field';
@@ -10,12 +10,12 @@ import Recaptcha from 'react-recaptcha';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Route, useHistory, useLocation } from 'react-router-dom';
 import { authAPI } from '~/api/authAPI';
-import { settingsValType } from '~/api/types';
+import { historyAction, settingsValType } from '~/api/types';
 import { ExchangeModal } from '~/app/components/ExchangeComponent/ExchangeModal';
 import { useTabs } from '~/app/components/Tabs';
 import { changeSettings } from '~/redux/authReducer';
 import { RootState } from '~/redux/redux';
-import { updateEmailConfirm } from '~/redux/userReducer';
+import { updateEmailConfirm, userGetSpendHistory, userGetEarnHistory } from '~/redux/userReducer';
 import { ReactComponent as BackIcon } from '../../../assets/images/arrow-left.svg';
 import { ReactComponent as BarSvg } from '../../../assets/images/bar-chart-2.svg';
 import { ReactComponent as Copy } from '../../../assets/images/copy.svg';
@@ -37,6 +37,13 @@ export const Settings = () => {
   const history = useHistory();
   const { pathname } = useLocation();
   const settings = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(userGetSpendHistory());
+    dispatch(userGetEarnHistory());
+  }, []);
+  const earnHistory = useSelector((state: RootState) => state.user.earnHistory);
+  const spendHistory = useSelector((state: RootState) => state.user.spendHistory);
   const isDisabled = useSelector((state: RootState) => state.auth.isSettingsDisabled);
   const SettingsButton = () => <SettingsIcon />;
   const Text = ({ text }: { text: string }) => {
@@ -466,30 +473,35 @@ export const Settings = () => {
           </div>
           <WithTabs tab={{ label: 'Траты' }} index={0}>
             <div className="notifications__walletMain">
-              <div className="notifications__walletChild">
-                <div style={{ display: 'flex' }}>
-                  <div>
-                    <img src={linka2} alt="img" />
+              {spendHistory.actions.map((el: historyAction, index: number) => {
+                return (
+                  <div className="notifications__walletChild" key={`${index}_post`}>
+                    <div style={{ display: 'flex' }}>
+                      <div>
+                        <img src={el.target.avatar || linka2} alt="img" />
+                      </div>
+                      <div>
+                        <h3>Вы задонатили {el.target.username}</h3>
+                        <h4>вчера {el.date_time}</h4>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: 'Factor A',
+                        fontStyle: 'normal',
+                        fontWeight: 'normal',
+                        fontSize: '18px',
+                        lineHeight: '20px',
+                        color: '#000000',
+                        marginRight: '12px'
+                      }}
+                    >
+                      {el.amount}$
+                    </div>
                   </div>
-                  <div>
-                    <h3>Вы задонатили Valera</h3>
-                    <h4>вчера</h4>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Factor A',
-                    fontStyle: 'normal',
-                    fontWeight: 'normal',
-                    fontSize: '18px',
-                    lineHeight: '20px',
-                    color: '#000000',
-                    marginRight: '12px'
-                  }}
-                >
-                  100$
-                </div>
-              </div>
+                );
+              })}
+
               <div className="notifications__walletChild">
                 <div style={{ display: 'flex' }}>
                   <div>

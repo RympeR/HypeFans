@@ -255,20 +255,19 @@ export type getSubscription = {
   amount: number | null;
   price: number | null;
 };
+export type historyAction = {
+  id: number | null;
+  source: userShortType;
+  target: userShortType;
+  date_time: number | null;
+  amount: number | null;
+  type: 'referral_payment' | 'donation' | 'subscription' | 'chat_subscription' | null;
+};
 export type referralHistory = {
   result_sum: number | null;
   referral_payments: Array<referralPayment> | null;
 };
-export type spendHistory = {
+export type payHistory = {
   result_sum: number | null;
-  donations: Array<getDonationRT> | null;
-  subscriptions: Array<getSubscription> | null;
-  chat_subscriptions: Array<getSubscription> | null;
-};
-export type earnHistory = {
-  result_sum: number | null;
-  donations: Array<getDonationRT> | null;
-  subscriptions: Array<getSubscription> | null;
-  chat_subscriptions: Array<getSubscription> | null;
-  referral_payments: Array<referralPayment> | null;
+  actions: Array<historyAction> | null;
 };

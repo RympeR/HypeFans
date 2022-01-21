@@ -12,6 +12,8 @@ import {
   getUserRT,
   idType,
   PaymentType,
+  referralHistory,
+  payHistory,
   userStringType
 } from '~/api/types';
 import { userAPI } from '../api/userAPI';
@@ -48,9 +50,9 @@ const initialState = {
   credit_amount: null as number | null,
   earned_credits_amount: null as number | null,
   posts: [] as Array<any>,
-  pay_histtory: [] as Array<any>,
-  earn_histtory: [] as Array<any>,
-  referal_histtory: [] as Array<any>
+  spendHistory: null as payHistory,
+  earnHistory: null as payHistory,
+  referalHistory: null as referralHistory
 };
 
 const authReducer = (state = initialState, action: AllActionsType): InitialStateType => {
@@ -63,17 +65,17 @@ const authReducer = (state = initialState, action: AllActionsType): InitialState
     case 'SET_PAY_HISTORY_DATA':
       return {
         ...state,
-        pay_histtory: action.payload
+        spendHistory: action.payload
       };
     case 'SET_EARN_HISTORY_DATA':
       return {
         ...state,
-        earn_histtory: action.payload
+        earnHistory: action.payload
       };
     case 'SET_REFERAL_HISTORY_DATA':
       return {
         ...state,
-        referal_histtory: action.payload
+        referalHistory: action.payload
       };
     case 'DELETE_POST':
       return {
