@@ -485,8 +485,10 @@ export const Settings = () => {
                         <img src={el.target.avatar || linka2} alt="img" />
                       </div>
                       <div>
-                        <h3>Вы задонатили {el.target.username}</h3>
-                        <h4>вчера {el.date_time}</h4>
+                        <h3>
+                          Вы {el.type} {el.target.username}
+                        </h3>
+                        <h4>{el.date_time}</h4>
                       </div>
                     </div>
                     <div
