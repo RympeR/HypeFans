@@ -638,7 +638,7 @@ class SpendStatsHistoryRetrieveAPI(APIView):
             ).data
         ]
         chat_subscriptions = [
-            {**chat_subscription, 'type': 'chat_subscriptions'}
+            {**chat_subscription, 'type': 'chat_subscription'}
             for chat_subscription in UnionChatSubscriptionGetSerializer(
                 instance=chat_subscriptions,
                 many=True
