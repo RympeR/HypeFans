@@ -19,7 +19,10 @@ import {
   userGetCardListRT,
   userGetPaymentHistoryRT,
   userStringType,
-  userValidateUserRT
+  userValidateUserRT,
+  referralHistory,
+  spendHistory,
+  earnHistory
 } from './types';
 
 export const userAPI = {
@@ -255,6 +258,36 @@ export const userAPI = {
       .get<userGetPaymentHistoryRT>(
         `
         /user/user-payment-history/`
+      )
+      .then((response) => {
+        return response;
+      });
+  },
+  userGetReferralHistory() {
+    return instance
+      .get<referralHistory>(
+        `
+        /user/referral-stats-history/`
+      )
+      .then((response) => {
+        return response;
+      });
+  },
+  userGetSpendHistory() {
+    return instance
+      .get<spendHistory>(
+        `
+        /user/spend-stats-history/`
+      )
+      .then((response) => {
+        return response;
+      });
+  },
+  userGetEarnHistory() {
+    return instance
+      .get<earnHistory>(
+        `
+        /user/pay-payment-history/`
       )
       .then((response) => {
         return response;

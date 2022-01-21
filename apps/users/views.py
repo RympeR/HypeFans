@@ -523,27 +523,49 @@ class PayStatsHistoryRetrieveAPI(APIView):
 
         result_sum = subscription_amount + donation_amount + repherral_summ +\
             chat_subscription_amount
-        result = {
-            'result_sum': result_sum,
-            'donations': DonationGetSerializer(
+        donations = [
+            {**donation, 'type': 'donation'}
+            for donation in UnionDonationGetSerializer(
                 instance=donations,
                 many=True
-            ).data,
-            'subscriptions': SubscriptionGetSerializer(
+            ).data
+        ]
+        subscriptions = [
+            {**subscription, 'type': 'subscription'}
+            for subscription in UnionSubscriptionGetSerializer(
                 instance=subscriptions,
                 many=True
-            ).data,
-            'chat_subscriptions': ChatSubscriptionGetSerializer(
+            ).data
+        ]
+        chat_subscriptions = [
+            {**chat_subscription, 'type': 'chat_subscriptions'}
+            for chat_subscription in UnionChatSubscriptionGetSerializer(
                 instance=chat_subscriptions,
                 many=True
-            ).data,
-            'referral_payments': ReferralPaymentGetSerializer(
+            ).data
+        ]
+        referral_payments = [
+            {**referral_payment, 'type': 'referral_payment'}
+            for referral_payment in UnionReferralPaymentGetSerializer(
                 instance=referral_payments,
                 context={'request': request},
                 many=True
-            ).data,
+            ).data
+        ]
+
+        result = sorted([
+            *donations,
+            *subscriptions,
+            *chat_subscriptions,
+            *referral_payments,
+        ], key=lambda x: x['date_time'], reverse=True)
+
+        result_dict = {
+            'result_sum': result_sum,
+            'actions': result
         }
-        return Response(result)
+
+        return Response(result_dict)
 
 
 class RepheralHistoryRetrieveAPI(APIView):
@@ -560,7 +582,7 @@ class RepheralHistoryRetrieveAPI(APIView):
 
         result = {
             'result_sum': repherral_summ,
-            'referral_payments': ReferralPaymentGetSerializer(
+            'referral_payments': UnionReferralPaymentGetSerializer(
                 instance=referral_payments,
                 context={'request': request},
                 many=True
@@ -600,21 +622,38 @@ class SpendStatsHistoryRetrieveAPI(APIView):
             for _ in range(len(subscriptions))
         ))
 
-        result_sum = subscription_amount + donation_amount +\
-            chat_subscription_amount
-        result = {
-            'result_sum': result_sum,
-            'donations': DonationGetSerializer(
+        result_sum = subscription_amount + donation_amount + chat_subscription_amount
+        donations = [
+            {**donation, 'type': 'donation'}
+            for donation in UnionDonationGetSerializer(
                 instance=donations,
                 many=True
-            ).data,
-            'subscriptions': SubscriptionGetSerializer(
+            ).data
+        ]
+        subscriptions = [
+            {**subscription, 'type': 'subscription'}
+            for subscription in UnionSubscriptionGetSerializer(
                 instance=subscriptions,
                 many=True
-            ).data,
-            'chat_subscriptions': ChatSubscriptionGetSerializer(
+            ).data
+        ]
+        chat_subscriptions = [
+            {**chat_subscription, 'type': 'chat_subscriptions'}
+            for chat_subscription in UnionChatSubscriptionGetSerializer(
                 instance=chat_subscriptions,
                 many=True
-            ).data,
+            ).data
+        ]
+
+        result = sorted([
+            *donations,
+            *subscriptions,
+            *chat_subscriptions,
+        ], key=lambda x: x['date_time'], reverse=True)
+
+        result_dict = {
+            'result_sum': result_sum,
+            'actions': result
         }
-        return Response(result)
+
+        return Response(result_dict)
