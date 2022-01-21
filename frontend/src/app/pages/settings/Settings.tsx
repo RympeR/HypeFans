@@ -473,35 +473,6 @@ export const Settings = () => {
           </div>
           <WithTabs tab={{ label: 'Траты' }} index={0}>
             <div className="notifications__walletMain">
-              {spendHistory.actions.map((el: historyAction, index: number) => {
-                return (
-                  <div className="notifications__walletChild" key={`${index}_post`}>
-                    <div style={{ display: 'flex' }}>
-                      <div>
-                        <img src={el.target.avatar || linka2} alt="img" />
-                      </div>
-                      <div>
-                        <h3>Вы задонатили {el.target.username}</h3>
-                        <h4>вчера {el.date_time}</h4>
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        fontFamily: 'Factor A',
-                        fontStyle: 'normal',
-                        fontWeight: 'normal',
-                        fontSize: '18px',
-                        lineHeight: '20px',
-                        color: '#000000',
-                        marginRight: '12px'
-                      }}
-                    >
-                      {el.amount}$
-                    </div>
-                  </div>
-                );
-              })}
-
               <div className="notifications__walletChild">
                 <div style={{ display: 'flex' }}>
                   <div>
