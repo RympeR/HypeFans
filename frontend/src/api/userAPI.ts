@@ -273,24 +273,14 @@ export const userAPI = {
       });
   },
   userGetSpendHistory() {
-    return instance
-      .get<payHistory>(
-        `
-        /user/spend-stats-history/`
-      )
-      .then((response) => {
-        return response;
-      });
+    return instance.get<payHistory>(`/user/spend-stats-history/`).then((response) => {
+      return response;
+    });
   },
   userGetEarnHistory() {
-    return instance
-      .get<payHistory>(
-        `
-        /user/pay-payment-history/`
-      )
-      .then((response) => {
-        return response;
-      });
+    return instance.get<payHistory>(`/user/pay-stats-history/`).then((response) => {
+      return response;
+    });
   },
   userSubscriptionUpdate({ id, email, username, password }: createUserT) {
     return instance
