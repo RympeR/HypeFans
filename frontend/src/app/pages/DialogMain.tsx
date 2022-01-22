@@ -23,6 +23,7 @@ import { ReactComponent as VektorDisabled } from '../../assets/images/sendDisabl
 import { ReactComponent as Tip } from '../../assets/images/tipI.svg';
 import { ReactComponent as VideoIcn } from '../../assets/images/videoI.svg';
 import { ReactComponent as CloseIcon } from '../../assets/images/x-circle.svg';
+import { AddToChat } from '../components/addToChat/AddToChat';
 import { AudioRecorder } from '../components/recordAudio/AudioRecorder';
 import { Preloader } from '../utils/Preloader';
 import { getLastUrlPoint } from '../utils/utilities';
@@ -227,8 +228,23 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     await userAPI.blockUser({ user: id });
   };
 
+  const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
+
   return (
     <div className="chat__dialogsMain">
+      <Modal
+        show={isAddModalShown}
+        onHide={() => {
+          setIsAddModalShow(false);
+        }}
+        centered
+        size="lg"
+        style={{ borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px' }}
+      >
+        <Modal.Body className="notifications__modal" style={{ padding: '0px' }}>
+          <AddToChat />
+        </Modal.Body>
+      </Modal>
       <div className="chat__dialogsHeader">
         <div className="chat__sidebarItem" style={{ alignItems: 'center' }}>
           <Link
@@ -299,7 +315,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           position="bottom right"
         >
           <div style={{ padding: '5px', fontSize: '11px' }}>
-            <button>Добавить участников</button>
+            <button onClick={() => setIsAddModalShow(true)}>Добавить участников</button>
           </div>
           <div style={{ padding: '5px', fontSize: '11px' }}>
             <button>Отключить уведомления</button>
