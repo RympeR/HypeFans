@@ -11,6 +11,12 @@ export const chatAPI = {
       return response.data;
     });
   },
+  inviteUsers(username: Array<any>, chat_id: string | number) {
+    console.log(chat_id);
+    return instance.patch(`/chat/invite-user/${chat_id}`, { username }).then((response) => {
+      return response;
+    });
+  },
   inviteUserPut(id: number, username: string, data: any) {
     const dataSend: any = {
       username

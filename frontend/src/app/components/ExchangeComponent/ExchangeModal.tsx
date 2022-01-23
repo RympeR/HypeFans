@@ -19,7 +19,7 @@ export const ExchangeModal = () => {
           <CardSvg />
         </SettingsSidebarItem>
       </div>
-      <div className={`modal ${show && 'active'} popup-refill`}>
+      <div className={`modalCustom ${show && 'active'} popup-refill`}>
         <span className="close" onClick={() => setShow(false)} />
         <div className="popup-content">
           <span className="close-popup" onClick={() => setShow(false)}>
