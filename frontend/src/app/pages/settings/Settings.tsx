@@ -457,14 +457,6 @@ export const Settings = () => {
         getUserSpendHistory();
         getUserEarnHistory();
       }, []);
-      const [referrals, setReferrals] = useState<{ referral_payments: Array<any> }>({ referral_payments: [] });
-      useEffect(() => {
-        const getReferrals = async () => {
-          const data = await userAPI.getReferrals();
-          setReferrals(data.data);
-        };
-        getReferrals();
-      }, []);
       const { Tabs, WithTabs } = useTabs([
         {
           label: 'Траты'
