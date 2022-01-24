@@ -232,6 +232,7 @@ CORS_ALLOW_HEADERS = [
     'token',
     "x-requested-with",
     'Auth',
+    'Access-Control-Allow-Origin'
 ]
 CORS_ALLOW_METHODS = (
     'GET',

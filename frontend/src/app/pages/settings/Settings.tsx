@@ -10,12 +10,8 @@ import Recaptcha from 'react-recaptcha';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Route, useHistory, useLocation } from 'react-router-dom';
 import { authAPI } from '~/api/authAPI';
-<<<<<<< HEAD
-import { historyAction, settingsValType } from '~/api/types';
-=======
-import { settingsValType } from '~/api/types';
+import { historyAction, payHistory, settingsValType } from '~/api/types';
 import { userAPI } from '~/api/userAPI';
->>>>>>> 683d62cca14144a49b233fa192014f012bc3fb5b
 import { ExchangeModal } from '~/app/components/ExchangeComponent/ExchangeModal';
 import { useTabs } from '~/app/components/Tabs';
 import { changeSettings } from '~/redux/authReducer';
@@ -441,13 +437,34 @@ export const Settings = () => {
     };
 
     const WalletComponent = () => {
+      const [spendHistory, setSpendHistory] = useState<{ result_sum: number; actions: Array<historyAction> }>({
+        result_sum: 0,
+        actions: []
+      });
+      const [earnHistory, setEarnHistory] = useState<{ result_sum: number; actions: Array<historyAction> }>({
+        result_sum: 0,
+        actions: []
+      });
       useEffect(() => {
-        dispatch(userGetSpendHistory());
-        dispatch(userGetEarnHistory());
+        const getUserSpendHistory = async () => {
+          const data = await userAPI.userGetSpendHistory();
+          setSpendHistory(data.data);
+        };
+        const getUserEarnHistory = async () => {
+          const data = await userAPI.userGetEarnHistory();
+          setEarnHistory(data.data);
+        };
+        getUserSpendHistory();
+        getUserEarnHistory();
       }, []);
-      const earnHistory = useSelector((state: RootState) => state.user.earnHistory);
-      const spendHistory = useSelector((state: RootState) => state.user.spendHistory);
-
+      const [referrals, setReferrals] = useState<{ referral_payments: Array<any> }>({ referral_payments: [] });
+      useEffect(() => {
+        const getReferrals = async () => {
+          const data = await userAPI.getReferrals();
+          setReferrals(data.data);
+        };
+        getReferrals();
+      }, []);
       const { Tabs, WithTabs } = useTabs([
         {
           label: 'Траты'
@@ -483,36 +500,42 @@ export const Settings = () => {
           </div>
           <WithTabs tab={{ label: 'Траты' }} index={0}>
             <div className="notifications__walletMain">
-              {spendHistory.actions.map((el: historyAction, index: number) => {
-                return (
-                  <div className="notifications__walletChild" key={`${index}_post`}>
-                    <div style={{ display: 'flex' }}>
-                      <div>
-                        <img src={el.target.avatar || linka2} alt="img" />
+              {spendHistory.actions.length > 0 ? (
+                spendHistory.actions.map((el: historyAction, index: number) => {
+                  return (
+                    <div className="notifications__walletChild" key={`${index}_post`}>
+                      <div style={{ display: 'flex' }}>
+                        <div>
+                          <img src={el.target.avatar || linka2} alt="img" />
+                        </div>
+                        <div>
+                          <h3>
+                            Вы {el.type} {el.target.username}
+                          </h3>
+                          <h4>{el.date_time}</h4>
+                        </div>
                       </div>
-                      <div>
-                        <h3>
-                          Вы {el.type} {el.target.username}
-                        </h3>
-                        <h4>{el.date_time}</h4>
+                      <div
+                        style={{
+                          fontFamily: 'Factor A',
+                          fontStyle: 'normal',
+                          fontWeight: 'normal',
+                          fontSize: '18px',
+                          lineHeight: '20px',
+                          color: '#000000',
+                          marginRight: '12px'
+                        }}
+                      >
+                        {el.amount}$
                       </div>
                     </div>
-                    <div
-                      style={{
-                        fontFamily: 'Factor A',
-                        fontStyle: 'normal',
-                        fontWeight: 'normal',
-                        fontSize: '18px',
-                        lineHeight: '20px',
-                        color: '#000000',
-                        marginRight: '12px'
-                      }}
-                    >
-                      {el.amount}$
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              ) : (
+                <div className="notifications__walletChild" style={{ border: 'none', marginLeft: '20px' }}>
+                  Пока пусто
+                </div>
+              )}
               <div style={{ display: 'flex', alignItems: 'center', width: '100%', flexDirection: 'column' }}>
                 <button
                   className="notifications__settingBtn"
@@ -557,102 +580,42 @@ export const Settings = () => {
           </WithTabs>
           <WithTabs tab={{ label: 'Зароботок' }} index={1}>
             <div className="notifications__walletMain">
-              <div className="notifications__walletChild">
-                <div style={{ display: 'flex' }}>
-                  <div>
-                    <img src={linka} alt="img" />
-                  </div>
-                  <div>
-                    <h3>Вам задонатил Valera</h3>
-                    <h4>вчера</h4>
-                  </div>
+              {earnHistory.actions.length > 0 ? (
+                earnHistory.actions.map((el: historyAction, index: number) => {
+                  return (
+                    <div className="notifications__walletChild" key={`${index}_post`}>
+                      <div style={{ display: 'flex' }}>
+                        <div>
+                          <img src={el.target.avatar || linka} alt="img" />
+                        </div>
+                        <div>
+                          <h3>
+                            Вам {el.type} {el.target.username}
+                          </h3>
+                          <h4>{el.date_time}</h4>
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: 'Factor A',
+                          fontStyle: 'normal',
+                          fontWeight: 'normal',
+                          fontSize: '18px',
+                          lineHeight: '20px',
+                          color: '#000000',
+                          marginRight: '12px'
+                        }}
+                      >
+                        {el.amount}$
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="notifications__walletChild" style={{ border: 'none', marginLeft: '20px' }}>
+                  Пока пусто
                 </div>
-                <div
-                  style={{
-                    fontFamily: 'Factor A',
-                    fontStyle: 'normal',
-                    fontWeight: 'normal',
-                    fontSize: '18px',
-                    lineHeight: '20px',
-                    color: '#000000',
-                    marginRight: '12px'
-                  }}
-                >
-                  100$
-                </div>
-              </div>
-              <div className="notifications__walletChild">
-                <div style={{ display: 'flex' }}>
-                  <div>
-                    <img src={linka} alt="img" />
-                  </div>
-                  <div>
-                    <h3>Вам задонатил Valera</h3>
-                    <h4>вчера</h4>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Factor A',
-                    fontStyle: 'normal',
-                    fontWeight: 'normal',
-                    fontSize: '18px',
-                    lineHeight: '20px',
-                    color: '#000000',
-                    marginRight: '12px'
-                  }}
-                >
-                  100$
-                </div>
-              </div>
-              <div className="notifications__walletChild">
-                <div style={{ display: 'flex' }}>
-                  <div>
-                    <img src={linka} alt="img" />
-                  </div>
-                  <div>
-                    <h3>Вам задонатил Valera</h3>
-                    <h4>вчера</h4>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Factor A',
-                    fontStyle: 'normal',
-                    fontWeight: 'normal',
-                    fontSize: '18px',
-                    lineHeight: '20px',
-                    color: '#000000',
-                    marginRight: '12px'
-                  }}
-                >
-                  100$
-                </div>
-              </div>
-              <div className="notifications__walletChild">
-                <div style={{ display: 'flex' }}>
-                  <div>
-                    <img src={linka} alt="img" />
-                  </div>
-                  <div>
-                    <h3>Вам задонатил Valera</h3>
-                    <h4>вчера</h4>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Factor A',
-                    fontStyle: 'normal',
-                    fontWeight: 'normal',
-                    fontSize: '18px',
-                    lineHeight: '20px',
-                    color: '#000000',
-                    marginRight: '12px'
-                  }}
-                >
-                  100$
-                </div>
-              </div>
+              )}
               <div style={{ display: 'flex', alignItems: 'center', width: '100%', flexDirection: 'column' }}>
                 <button className="notifications__settingBtn" style={{ marginLeft: '0px', marginRight: '0px' }}>
                   <Link to="/settings/profileSettings/card" style={{ color: 'white' }}>
