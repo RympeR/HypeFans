@@ -107,38 +107,37 @@ export const getFavourites = (): Thunk => async (dispatch) => {
   dispatch(isntLoading());
 };
 
-export const createPostAction = ({
-  like,
-  comment,
-  donation_amount,
-  user,
-  post,
-  parent
-}: createPostActionRT): Thunk => async (dispatch) => {
-  const data = await blogAPI.createPostAction({
-    like,
-    comment,
-    parent,
-    donation_amount,
-    user,
-    post,
-    date_time: null,
-    id: null
-  });
-  dispatch(actions.setPostsData(post, true, data.id, null));
-};
+export const createPostAction =
+  ({ like, comment, donation_amount, user, post, parent }: createPostActionRT): Thunk =>
+  async (dispatch) => {
+    const data = await blogAPI.createPostAction({
+      like,
+      comment,
+      parent,
+      donation_amount,
+      user,
+      post,
+      date_time: null,
+      id: null
+    });
+    dispatch(actions.setPostsData(post, true, data.id, null));
+  };
 
-export const setFavorite = (postId: number, favourite: boolean): Thunk => async (dispatch) => {
-  const data = await blogAPI.setFavorite(postId, favourite);
-  dispatch(actions.setPostsData(data.data.post_id, null, null, data.data.favourite));
-};
+export const setFavorite =
+  (postId: number, favourite: boolean): Thunk =>
+  async (dispatch) => {
+    const data = await blogAPI.setFavorite(postId, favourite);
+    dispatch(actions.setPostsData(data.data.post_id, null, null, data.data.favourite));
+  };
 
-export const deletePostAction = ({ id, post_id }: { id: number; post_id: number }): Thunk => async (dispatch) => {
-  await blogAPI.deletePostAction({
-    id
-  });
-  dispatch(actions.setPostsData(post_id, false, null, null));
-};
+export const deletePostAction =
+  ({ id, post_id }: { id: number; post_id: number }): Thunk =>
+  async (dispatch) => {
+    await blogAPI.deletePostAction({
+      id
+    });
+    dispatch(actions.setPostsData(post_id, false, null, null));
+  };
 
 //  Types
 

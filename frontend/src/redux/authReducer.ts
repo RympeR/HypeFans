@@ -261,15 +261,17 @@ export const logout = (): Thunk => async (dispatch) => {
   }
 };
 
-export const login = ({ email, password }: { email: string; password: string }): Thunk => async (dispatch) => {
-  // dispatch(isLoading());
-  const response = await authAPI.login(email, password);
-  await authAPI.meGet();
-  if (response) {
-    dispatch(getAuthUserData());
-  }
-  // dispatch(isntLoading());
-};
+export const login =
+  ({ email, password }: { email: string; password: string }): Thunk =>
+  async (dispatch) => {
+    // dispatch(isLoading());
+    const response = await authAPI.login(email, password);
+    await authAPI.meGet();
+    if (response) {
+      dispatch(getAuthUserData());
+    }
+    // dispatch(isntLoading());
+  };
 
 export const isntSettingsDisabled = (): Thunk => async (dispatch) => {
   dispatch(actions.isntSettingsDisabled());
@@ -278,18 +280,20 @@ export const isSettingsDisabled = (): Thunk => async (dispatch) => {
   dispatch(actions.isSettingsDisabled());
 };
 
-export const changeSettings = (obj: any): Thunk => async (dispatch) => {
-  delete obj.avatar;
-  delete obj.background_photo;
-  delete obj.ref_link;
-  dispatch(isSettingsDisabled());
-  const response = await authAPI.meUpdate(obj);
-  const data = await authAPI.meGet();
-  if (response) {
-    dispatch(getAuthUserData());
-  }
-  dispatch(isntSettingsDisabled());
-};
+export const changeSettings =
+  (obj: any): Thunk =>
+  async (dispatch) => {
+    delete obj.avatar;
+    delete obj.background_photo;
+    delete obj.ref_link;
+    dispatch(isSettingsDisabled());
+    const response = await authAPI.meUpdate(obj);
+    const data = await authAPI.meGet();
+    if (response) {
+      dispatch(getAuthUserData());
+    }
+    dispatch(isntSettingsDisabled());
+  };
 
 export const getUserData = (): Thunk => async (dispatch) => {
   dispatch(isLoading());
