@@ -79,18 +79,14 @@ export const blogAPI = {
     }
   },
   createPostBought({ user, amount, post }: createPostBoughtRT) {
-    return instance
-      .post<createPostBoughtRT>('/blog/create-post-bought/', { user, amount, post })
-      .then((response) => {
-        return response;
-      });
+    return instance.post<createPostBoughtRT>('/blog/create-post-bought/', { user, amount, post }).then((response) => {
+      return response;
+    });
   },
   createPost(props: PostType) {
-    return instance
-      .post<PostType>('/blog/create-post/', { ...props })
-      .then((response) => {
-        return response;
-      });
+    return instance.post<PostType>('/blog/create-post/', { ...props }).then((response) => {
+      return response;
+    });
   },
   createStoryAction({ comment, like, watched, time_watched, source, target }: createStoryActionRT) {
     return instance

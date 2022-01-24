@@ -11,16 +11,14 @@ import StoryModal from './StoryModal';
 //Example Data
 const fetchedStories: IStory[] = [
   {
-    src:
-      'https://images.unsplash.com/photo-1600749981395-1478679d4669?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
+    src: 'https://images.unsplash.com/photo-1600749981395-1478679d4669?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
     username: 'tonybellew',
     userAvatar:
       'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
     id: '1'
   },
   {
-    src:
-      'https://images.unsplash.com/photo-1616176885019-7eb95d47c19a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+    src: 'https://images.unsplash.com/photo-1616176885019-7eb95d47c19a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
     username: 'desiree ',
     userAvatar:
       'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=334&q=80',
@@ -28,16 +26,14 @@ const fetchedStories: IStory[] = [
     id: '2'
   },
   {
-    src:
-      'https://images.unsplash.com/photo-1621478654947-499529690845?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
+    src: 'https://images.unsplash.com/photo-1621478654947-499529690845?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
     username: ' rebecca',
     userAvatar:
       'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
     id: '3'
   },
   {
-    src:
-      'https://images.unsplash.com/photo-1550573079-b12f15bbfc8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
+    src: 'https://images.unsplash.com/photo-1550573079-b12f15bbfc8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
     username: ' rebecca',
     userAvatar: ava1,
 
