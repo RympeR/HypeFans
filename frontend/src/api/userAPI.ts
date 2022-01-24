@@ -176,6 +176,11 @@ export const userAPI = {
         return response.data;
       });
   },
+  getReferrals() {
+    return instance.get(`/user/referral-stats-history/`).then((response) => {
+      return response;
+    });
+  },
   updateDeleteCard({ id }: idType) {
     return instance.get<createCardRT>(`/user/update-delete-card/${id}`).then((response) => {
       return response;
