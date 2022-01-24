@@ -6,9 +6,16 @@ __pycache__/
 # C extensions
 *.so
 
+
+#static libs
+static/admin/
+static/drf-yasg/
+static/mptt/
+static/silk/
+static/rest_framework/
+
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/

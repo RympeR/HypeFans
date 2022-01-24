@@ -34,7 +34,6 @@ from .views import (
     SpendStatsHistoryRetrieveAPI,
     RepheralHistoryRetrieveAPI,
 )
-
 urlpatterns = [
     path('me/', UserMeRetrieveAPI.as_view()),
     path('get-user/', UserRetrieveAPI.as_view()),
