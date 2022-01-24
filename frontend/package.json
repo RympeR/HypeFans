@@ -6,6 +6,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
+    "build:prod": "parcel build --public-url /static/ src/index.html",
     "test": "craco test",
     "lint": "yarn lint:scripts && yarn lint:styles && yarn lint:editor",
     "lint:scripts": "eslint --fix . --ext .ts,.tsx src",

@@ -141,3 +141,4 @@ media/
 migrations/
 logs/
 !static/media
+.parcel-cache/
