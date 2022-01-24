@@ -140,3 +140,4 @@ node_modules/
 media/
 migrations/
 logs/
+!static/media
