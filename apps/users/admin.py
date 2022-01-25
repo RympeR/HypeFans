@@ -5,8 +5,24 @@ from .models import (
     User,
     Card,
     Donation,
-    Payment
+    Payment,
+    Subscription,
+    UserOnline,
+    PendingUser,
+    ChatSubscription,
+    ReferralPayment,
 )
+
+
+@admin.register(UserOnline)
+class UserOnlineAdmin(admin.ModelAdmin):
+    list_display = [
+        'user', 'last_action',
+    ]
+    search_fields = [
+        'user'
+    ]
+    ordering = '-last_action',
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -24,6 +40,25 @@ class UserAdmin(admin.ModelAdmin):
     ]
     ordering = '-pk',
 
+
+@admin.register(Subscription, ChatSubscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = [
+        'pk','source', 'target', 'start_date', 'end_date'
+    ]
+    list_display_links = [
+        'pk'
+    ]
+    list_filter = (
+            ('start_date', DateFieldListFilter),
+            ('end_date', DateFieldListFilter),
+    )
+    search_fields = [
+        'source__username', 'target__username',
+    ]
+    ordering = '-pk',
+
+
 @admin.register(Card)
 class CardAdmin(admin.ModelAdmin):
     list_display = [
@@ -37,16 +72,33 @@ class CardAdmin(admin.ModelAdmin):
         'user__username'
     ]
 
+
+@admin.register(ReferralPayment)
+class ReferralPaymentAdmin(admin.ModelAdmin):
+    list_display = [
+        'pk', 'user', 'referrer', 'amount', 'date_time'
+    ]
+    list_display_links = ['pk']
+    list_filter = (
+            ('date_time', DateFieldListFilter),
+    )
+    search_fields = [
+        'user__username',
+        'referrer__username',
+    ]
+
+
 @admin.register(Donation)
 class DonationAdmin(admin.ModelAdmin):
     list_display = [
-        'sender', 'reciever', 'amount', 'datetime' 
+        'sender', 'reciever', 'amount', 'datetime'
     ]
     list_display_links = []
     list_filter = [
         ('datetime', DateFieldListFilter),
     ]
     search_fields = ['sender__username', 'reciever__username']
+
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
@@ -58,3 +110,34 @@ class PaymentAdmin(admin.ModelAdmin):
         ('datetime', DateFieldListFilter),
     ]
     ordering = '-pk',
+
+
+@admin.register(PendingUser)
+class PendingUserAdmin(admin.ModelAdmin):
+    list_display = [
+        'pk', 'user', 'verified'
+    ]
+    search_fields = ['user__username']
+    list_filter = ['verified']
+    ordering = '-pk',
+    actions_row = actions_detail = 'confirm_user', 'reject_user',
+
+    def confirm_user(self, request, pk):
+        pending_user = PendingUser.objects.get(pk=pk) 
+        user = pending_user.user
+        user.validated_user = True
+        pending_user.verified = True
+        user.save()
+        pending_user.save()
+
+    confirm_user.short_description = 'Confirm'
+
+    def reject_user(self, request, pk):
+        pending_user = PendingUser.objects.get(pk=pk) 
+        user = pending_user.user
+        user.validated_user = False
+        pending_user.verified = False
+        user.save()
+        pending_user.save()
+
+    reject_user.short_description = 'Reject'

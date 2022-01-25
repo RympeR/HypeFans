@@ -12,6 +12,8 @@ import {
   getUserRT,
   idType,
   PaymentType,
+  referralHistory,
+  payHistory,
   userStringType
 } from '~/api/types';
 import { userAPI } from '../api/userAPI';
@@ -47,7 +49,10 @@ const initialState = {
   validated_user: false,
   credit_amount: null as number | null,
   earned_credits_amount: null as number | null,
-  posts: [] as Array<any>
+  posts: [] as Array<any>,
+  spendHistory: null as payHistory,
+  earnHistory: null as payHistory,
+  referalHistory: null as referralHistory
 };
 
 const authReducer = (state = initialState, action: AllActionsType): InitialStateType => {
@@ -56,6 +61,21 @@ const authReducer = (state = initialState, action: AllActionsType): InitialState
       return {
         ...state,
         ...action.payload
+      };
+    case 'SET_PAY_HISTORY_DATA':
+      return {
+        ...state,
+        spendHistory: action.payload
+      };
+    case 'SET_EARN_HISTORY_DATA':
+      return {
+        ...state,
+        earnHistory: action.payload
+      };
+    case 'SET_REFERAL_HISTORY_DATA':
+      return {
+        ...state,
+        referalHistory: action.payload
       };
     case 'DELETE_POST':
       return {
@@ -129,7 +149,24 @@ const actions = {
       type: 'AUTHORIZED'
     } as const;
   },
-
+  setSpendHistoryData: (data: any) => {
+    return {
+      type: 'SET_PAY_HISTORY_DATA',
+      payload: data
+    } as const;
+  },
+  setEarnHistoryData: (data: any) => {
+    return {
+      type: 'SET_EARN_HISTORY_DATA',
+      payload: data
+    } as const;
+  },
+  setReferalHistoryData: (data: any) => {
+    return {
+      type: 'SET_REFERAL_HISTORY_DATA',
+      payload: data
+    } as const;
+  },
   setProfileData: (
     subscribtion_price: number | null,
     pk: number | null,
@@ -422,6 +459,27 @@ export const userDonationRecieved = (): Thunk => async (dispatch) => {
 
 export const userDonationSended = (): Thunk => async (dispatch) => {
   await userAPI.userDonationSended();
+};
+
+export const userGetReferralHistory = (): Thunk => async (dispatch) => {
+  dispatch(isLoading());
+  const data = await userAPI.userGetReferralHistory();
+  dispatch(actions.setReferalHistoryData(data.data));
+  dispatch(isntLoading());
+};
+
+export const userGetSpendHistory = (): Thunk => async (dispatch) => {
+  dispatch(isLoading());
+  const data = await userAPI.userGetSpendHistory();
+  dispatch(actions.setSpendHistoryData(data.data));
+  dispatch(isntLoading());
+};
+
+export const userGetEarnHistory = (): Thunk => async (dispatch) => {
+  dispatch(isLoading());
+  const data = await userAPI.userGetEarnHistory();
+  dispatch(actions.setEarnHistoryData(data.data));
+  dispatch(isntLoading());
 };
 
 export const userGetPaymentHistory = (): Thunk => async (dispatch) => {

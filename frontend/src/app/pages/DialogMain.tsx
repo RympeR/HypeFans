@@ -60,7 +60,7 @@ const Input = ({
   );
 };
 
-export const DialogMain = ({ rooms }: { rooms: any }) => {
+export const DialogMain = ({ visible, rooms }: { visible: boolean; rooms: any }) => {
   const history = useHistory();
   const lastUrl = getLastUrlPoint(history.location.pathname);
   const alert = useAlert();

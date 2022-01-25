@@ -1,13 +1,31 @@
+import datetime
 import os
-import re
 import random
 import string
-from django.core.validators import validate_email
-from rest_framework import pagination
-from rest_framework.response import Response
+from django.core.exceptions import ObjectDoesNotExist
+
+HOST = 'hype-fans.com/'
+REF_PERCANTAGE = 0.05
+
 
 def id_generator(size=12, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+
+def get_online(serializer, user):
+    return online_check(user)
+
+
+def online_check(user):
+    try:
+        if user.user_online and not user.hide_online:
+            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
+                return True
+            else:
+                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+    except ObjectDoesNotExist:
+        return False
+
 
 def set_unique_file_name(file_):
     if file_:
@@ -17,7 +35,29 @@ def set_unique_file_name(file_):
     else:
         return None
 
+
 def user_avatar(instance, filename):
     instance.original_file_name = filename
     file_ = set_unique_file_name(filename)
     return os.path.join('user', file_)
+
+
+def create_ref_link(username):
+    return HOST + 'signup/' + username + '/' + id_generator()
+
+
+def room_logo(instance, filename):
+    instance.original_file_name = filename
+    file_ = set_unique_file_name(filename)
+    return os.path.join('room', file_)
+
+
+def create_path_file(host: str, path_file: str):
+    return 'http://{domain}{path}'.format(
+        domain=host, path=path_file)
+
+
+def return_file_url(serializer, path_file):
+    request = serializer.context.get('request')
+    host = request.get_host() if request else 'hype-fans.com/'
+    return create_path_file(host, path_file)

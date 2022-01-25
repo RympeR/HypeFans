@@ -69,6 +69,19 @@ export type userType = {
   avatar: string | null;
   first_name: string | null;
   background_photo: string | null;
+  is_online: boolean | null;
+  subscribtion_price: number | null;
+  subscribtion_duration: number | null;
+};
+export type userShortType = {
+  pk: number | null;
+  username: string | null;
+  avatar: string | null;
+  first_name: string | null;
+  background_photo: string | null;
+  is_online: boolean | null;
+  subscribtion_price: number | null;
+  subscribtion_duration: number | null;
 };
 
 export type getCardRT = {
@@ -83,7 +96,7 @@ export type getDonationRT = {
   id: number | null;
   sender: userType;
   reciever: userType;
-  datetime: string | null;
+  datetime: number | null;
   amount: number | null;
 };
 
@@ -226,4 +239,35 @@ export type getMainPageRT = {
   posts: Array<PostType> | null;
   stories: Array<unknown>;
   recommendations: Array<any>;
+};
+export type referralPayment = {
+  id: number | null;
+  user: userShortType;
+  referrer: userShortType;
+  date_time: number | null;
+  amount: number | null;
+};
+export type getSubscription = {
+  id: number | null;
+  source: userShortType;
+  target: userShortType;
+  date_time: number | null;
+  amount: number | null;
+  price: number | null;
+};
+export type historyAction = {
+  id: number | null;
+  source: userShortType;
+  target: userShortType;
+  date_time: number | null;
+  amount: number | null;
+  type: 'referral_payment' | 'donation' | 'subscription' | 'chat_subscription' | null;
+};
+export type referralHistory = {
+  result_sum: number | null;
+  referral_payments: Array<referralPayment> | null;
+};
+export type payHistory = {
+  result_sum: number | null;
+  actions: Array<historyAction> | null;
 };

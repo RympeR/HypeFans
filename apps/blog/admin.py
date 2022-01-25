@@ -1,13 +1,24 @@
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
-
+from mptt.admin import TreeRelatedFieldListFilter
+from mptt.admin import DraggableMPTTAdmin, TreeRelatedFieldListFilter
 from .models import (
     Attachment,
     Post,
     PostAction,
     Story,
     WatchedStories,
+    PostBought,
 )
+
+
+@admin.register(PostBought)
+class PostBoughtAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'user', 'post', 'amount'
+    )
+    search_fields = ['user__username', 'post__title']
+
 
 @admin.register(Attachment)
 class AttachmentAdmin(admin.ModelAdmin):
@@ -19,6 +30,7 @@ class AttachmentAdmin(admin.ModelAdmin):
     ]
     ordering = '-pk',
     list_filter = ('file_type', )
+
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -32,13 +44,14 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['user__username', 'name']
     ordering = '-pk',
     list_filter = (
-            ('publication_date', DateFieldListFilter),
+        ('publication_date', DateFieldListFilter),
     )
 
+
 @admin.register(PostAction)
-class PostActionAdmin(admin.ModelAdmin):
+class PostActionAdmin(DraggableMPTTAdmin):
     list_display = (
-        'pk', 'user', 'post', 'like', 'comment', 'donation_amount'
+        'tree_actions', 'pk', 'user', 'post', 'like', 'comment', 'donation_amount'
     )
     list_display_links = [
         'pk',
@@ -49,7 +62,9 @@ class PostActionAdmin(admin.ModelAdmin):
     list_filter = (
         'like',
     )
-
+    list_filter = (
+        ('parent', TreeRelatedFieldListFilter),
+    )
 
 @admin.register(Story)
 class StoryAdmin(admin.ModelAdmin):
@@ -60,17 +75,18 @@ class StoryAdmin(admin.ModelAdmin):
         'pk',
         'user'
     ]
-    search_fields = ['user__username',]
+    search_fields = ['user__username', ]
     ordering = '-pk',
     list_filter = (
-            ('publication_date', DateFieldListFilter),
-            'archived'
+        ('publication_date', DateFieldListFilter),
+        'archived'
     )
+
 
 @admin.register(WatchedStories)
 class WatchedStoriesAction(admin.ModelAdmin):
     list_display = (
-        'pk', 'source', 'target', 'like', 'watched', 'times_wathced'
+        'pk', 'source', 'target', 'like', 'watched', 'times_watched'
     )
     list_display_links = [
         'pk',
@@ -81,4 +97,3 @@ class WatchedStoriesAction(admin.ModelAdmin):
     list_filter = (
         'like',
     )
-

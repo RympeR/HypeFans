@@ -19,7 +19,9 @@ import {
   userGetCardListRT,
   userGetPaymentHistoryRT,
   userStringType,
-  userValidateUserRT
+  userValidateUserRT,
+  referralHistory,
+  payHistory
 } from './types';
 
 export const userAPI = {
@@ -38,7 +40,7 @@ export const userAPI = {
   },
   blockUser({ user }: { user: number }) {
     return instance
-      .patch('/user/block-user/', {
+      .put('/user/block-user/', {
         user
       })
       .then((response) => {
@@ -269,6 +271,26 @@ export const userAPI = {
       .then((response) => {
         return response;
       });
+  },
+  userGetReferralHistory() {
+    return instance
+      .get<referralHistory>(
+        `
+        /user/referral-stats-history/`
+      )
+      .then((response) => {
+        return response;
+      });
+  },
+  userGetSpendHistory() {
+    return instance.get<payHistory>(`/user/spend-stats-history/`).then((response) => {
+      return response;
+    });
+  },
+  userGetEarnHistory() {
+    return instance.get<payHistory>(`/user/pay-stats-history/`).then((response) => {
+      return response;
+    });
   },
   userSubscriptionUpdate({ id, email, username, password }: createUserT) {
     return instance
