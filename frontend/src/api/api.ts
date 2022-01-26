@@ -10,6 +10,7 @@ export const instance = axios.create({
 export const setAuthToken = (token: string) => {
   if (token) {
     console.log(token);
+    console.log(instance);
     // instance.defaults.headers.common['Access-Control-Allow-Headers'] = '*';
     instance.defaults.headers.common['Authorization'] = `token ${token}`;
   }
