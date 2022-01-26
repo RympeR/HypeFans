@@ -10,7 +10,7 @@ urlpatterns = [
     path('chat/', include('apps.chat.urls')),
     path('user/', include('apps.users.urls')),
     path('blog/', include('apps.blog.urls')),
-    path('', include('apps.front.urls')),
+    # path('', include('apps.front.urls')),
     path('silk/', include('silk.urls', namespace='silk')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
