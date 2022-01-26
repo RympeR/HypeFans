@@ -300,8 +300,8 @@ class UserNotifications(GenericAPIView):
             res_dict = {}
             subscription_data = {
                 'amount': user.subscribtion_price,
-                'start_date': subscription.start_date.timestamp(),
-                'end_date': subscription.end_date.timestamp()
+                'start_date': subscription.start_date.timestamp() if subscription.start_date else None ,
+                'end_date': subscription.end_date.timestamp() if subscription.end_date else None 
             }
             res_dict['user'] = user_data
             res_dict['subscription'] = subscription_data
