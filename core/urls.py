@@ -5,16 +5,16 @@ from core import settings
 from .yazg import urlpatterns as doc_urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('rest_framework.urls')),
-    path('chat/', include('apps.chat.urls')),
-    path('user/', include('apps.users.urls')),
-    path('blog/', include('apps.blog.urls')),
+    path('api/admin/', admin.site.urls),
+    path('api/api/', include('rest_framework.urls')),
+    path('api/chat/', include('apps.chat.urls')),
+    path('api/user/', include('apps.users.urls')),
+    path('api/blog/', include('apps.blog.urls')),
     # path('', include('apps.front.urls')),
-    path('silk/', include('silk.urls', namespace='silk')),
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.authtoken')),
-    path('auth/', include('djoser.urls.jwt')),
+    path('api/silk/', include('silk.urls', namespace='silk')),
+    path('api/auth/', include('djoser.urls')),
+    path('api/auth/', include('djoser.urls.authtoken')),
+    path('api/auth/', include('djoser.urls.jwt')),
 ]
 urlpatterns += doc_urls
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
