@@ -8,7 +8,7 @@ export default class Api {
 
 	constructor(token: string | null = null) {
 		this.elAxios = axios.create({
-			baseURL: "https://hype-fans.com/",
+			baseURL: "https://hype-fans.com/api/",
 			headers: {
 				authorization: token ? `Token ${token}` : null,
 			},
