@@ -243,7 +243,7 @@ export type getMainPageRT = {
 export type referralPayment = {
   id: number | null;
   user: userShortType;
-  referrer: userShortType;
+  source: userShortType;
   date_time: number | null;
   amount: number | null;
 };
@@ -270,4 +270,12 @@ export type referralHistory = {
 export type payHistory = {
   result_sum: number | null;
   actions: Array<historyAction> | null;
+};
+
+export type articleType = {
+  path: string;
+  text: string;
+  exact: boolean;
+  type: string;
+  icon: unknown;
 };

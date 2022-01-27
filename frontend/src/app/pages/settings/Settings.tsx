@@ -10,7 +10,7 @@ import Recaptcha from 'react-recaptcha';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Route, useHistory, useLocation } from 'react-router-dom';
 import { authAPI } from '~/api/authAPI';
-import { settingsValType } from '~/api/types';
+import { historyAction, payHistory, referralHistory, settingsValType } from '~/api/types';
 import { userAPI } from '~/api/userAPI';
 import { ExchangeModal } from '~/app/components/ExchangeComponent/ExchangeModal';
 import { useTabs } from '~/app/components/Tabs';
@@ -83,7 +83,6 @@ export const Settings = () => {
   };
 
   const ProfileSettingsSidebar = ({ showStyle }: { showStyle: boolean }) => {
-    const user = useSelector((state: RootState) => state.auth);
     const history = useHistory();
     const [show, setShow] = useState(false);
 
@@ -165,7 +164,6 @@ export const Settings = () => {
 
   const SettingsSidebar = ({ showStyle }: { showStyle: boolean }) => {
     const selectedColor = '#F9F9F9';
-    const BackButton = () => <BackIcon onClick={history.goBack} />;
     return (
       <div className={showStyle ? 'notifications__sidebarMobile' : 'notifications__sidebar'}>
         <div className="notifications__displayMobile">
@@ -436,7 +434,7 @@ export const Settings = () => {
     };
 
     const WalletComponent = () => {
-      const [spends, setSpends] = useState<{ actions: Array<any> }>({ actions: [] });
+      const [spends, setSpends] = useState<payHistory>({ actions: [], result_sum: 0 });
       const [spendsShow, setSpendsShow] = useState<boolean>(false);
       useEffect(() => {
         const getSpends = async () => {
@@ -454,7 +452,7 @@ export const Settings = () => {
         }
       ]);
 
-      const getSpendsText = (item: any) => {
+      const getSpendsText = (item: historyAction) => {
         console.log(item);
         switch (item.type) {
           case 'donation':
@@ -471,14 +469,18 @@ export const Settings = () => {
                 <h4>вчера</h4>
               </div>
             );
+          default: {
+            return (
+              <div>
+                <h3>Вы подписались на @{item.target.username}</h3>
+                <h4>вчера</h4>
+              </div>
+            );
+          }
         }
-        // return (
-        //   <div>
-        //     <h3>Вы задонатили Valera</h3>
-        //     <h4>вчера</h4>
-        //   </div>
-        // );
       };
+
+      const balance = useSelector((state: RootState) => state.auth.credit_amount);
 
       const linka =
         'data:image/jpeg;base64,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';
@@ -495,8 +497,14 @@ export const Settings = () => {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', width: '100%', flexDirection: 'column' }}>
             <div className="notifications__wallet">
-              <h5>Зароботок за месяц</h5>
-              <h5>$320</h5>
+              <div style={{ paddingBottom: '10px' }}>
+                <h5>Ваш балланс</h5>
+                <h5>${balance}</h5>
+              </div>
+              <div>
+                <h5>Зароботок за месяц</h5>
+                <h5>$320</h5>
+              </div>
             </div>
             <div className="notifications__walletUnder">
               <h5>История</h5>
@@ -508,31 +516,33 @@ export const Settings = () => {
           <WithTabs tab={{ label: 'Траты' }} index={0}>
             <div className="notifications__walletMain">
               {spends.actions.map((item, key) => {
-                if (key < 9 || spendsShow) {
-                  return (
-                    <div className="notifications__walletChild" key={'spends ' + key}>
-                      <div style={{ display: 'flex' }}>
-                        <div>
-                          <img src={item.target.avatar !== '' ? item.target.avatar : logo} alt="avatar" />
+                return (
+                  <>
+                    {key < 9 || spendsShow ? (
+                      <div className="notifications__walletChild" key={'spends ' + key}>
+                        <div style={{ display: 'flex' }}>
+                          <div>
+                            <img src={item.target.avatar !== '' ? item.target.avatar : logo} alt="avatar" />
+                          </div>
+                          {getSpendsText(item)}
                         </div>
-                        {getSpendsText(item)}
+                        <div
+                          style={{
+                            fontFamily: 'Factor A',
+                            fontStyle: 'normal',
+                            fontWeight: 'normal',
+                            fontSize: '18px',
+                            lineHeight: '20px',
+                            color: '#000000',
+                            marginRight: '12px'
+                          }}
+                        >
+                          {item.amount}$
+                        </div>
                       </div>
-                      <div
-                        style={{
-                          fontFamily: 'Factor A',
-                          fontStyle: 'normal',
-                          fontWeight: 'normal',
-                          fontSize: '18px',
-                          lineHeight: '20px',
-                          color: '#000000',
-                          marginRight: '12px'
-                        }}
-                      >
-                        {item.amount}$
-                      </div>
-                    </div>
-                  );
-                }
+                    ) : null}
+                  </>
+                );
               })}
               <div style={{ display: 'flex', alignItems: 'center', width: '100%', flexDirection: 'column' }}>
                 <button
@@ -860,7 +870,7 @@ export const Settings = () => {
 
     const RefComponent = () => {
       const refLink = useSelector((state: RootState) => state.auth.ref_link);
-      const [referrals, setReferrals] = useState<{ referral_payments: Array<any> }>({ referral_payments: [] });
+      const [referrals, setReferrals] = useState<referralHistory>({ referral_payments: [], result_sum: 0 });
       const [show, setShow] = useState<boolean>(false);
       useEffect(() => {
         const getReferrals = async () => {
@@ -898,30 +908,32 @@ export const Settings = () => {
           <div className="notifications__walletMain">
             {referrals.referral_payments.length > 0 ? (
               referrals.referral_payments.map((item, index) => {
-                if (index < 9 || show) {
-                  return (
-                    <div className="notifications__walletChild" style={{ border: 'none' }} key={index + 'referrals'}>
-                      <div style={{ display: 'flex' }}>
-                        <div>
-                          <img src={item.source.avatar === '' ? logo : item.source.avatar} alt="img" />
+                return (
+                  <>
+                    {index < 9 || show ? (
+                      <div className="notifications__walletChild" style={{ border: 'none' }} key={index + 'referrals'}>
+                        <div style={{ display: 'flex' }}>
+                          <div>
+                            <img src={item.source.avatar === '' ? logo : item.source.avatar} alt="img" />
+                          </div>
+                          <div>
+                            <h3 style={{ fontWeight: 'bold', fontSize: '14px' }}>{item.source.first_name ?? 'Имя'}</h3>
+                            <h4>@{item.source.username}</h4>
+                          </div>
                         </div>
-                        <div>
-                          <h3 style={{ fontWeight: 'bold', fontSize: '14px' }}>{item.source.first_name ?? 'Имя'}</h3>
-                          <h4>@{item.source.username}</h4>
+                        <div
+                          style={{
+                            fontSize: '18px',
+                            color: '#000000',
+                            marginRight: '12px'
+                          }}
+                        >
+                          {item.amount}$
                         </div>
                       </div>
-                      <div
-                        style={{
-                          fontSize: '18px',
-                          color: '#000000',
-                          marginRight: '12px'
-                        }}
-                      >
-                        {item.amount}$
-                      </div>
-                    </div>
-                  );
-                }
+                    ) : null}
+                  </>
+                );
               })
             ) : (
               <div className="notifications__walletChild" style={{ border: 'none', marginLeft: '20px' }}>

@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 export const instance = axios.create({
-  baseURL: 'https://hype-fans.com/',
+  baseURL: 'https://hype-fans.com/api/',
   xsrfCookieName: 'csrftoken',
   xsrfHeaderName: 'x-csrftoken'
 });
