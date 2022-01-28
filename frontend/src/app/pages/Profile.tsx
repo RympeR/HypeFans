@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
 import { userAPI } from '~/api/userAPI';
 import { RootState } from '~/redux/redux';
 import { buyPost, createPostAction, deletePost, deletePostAction, getUser, setFavorite } from '~/redux/userReducer';

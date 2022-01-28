@@ -1,7 +1,6 @@
 cd frontend
-yarn build:prod
+@REM yarn build:prod
+rmdir -r ../build
+mv -Force build ../build
 cd ..
 python .\manage.py collectstatic --no-input
-git add .
-git commit -am "%1"
-git push origin main

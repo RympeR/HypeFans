@@ -10,6 +10,7 @@ import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
 import logo from '../../assets/images/logo.svg';
 import { ReactComponent as CommentIcon } from '../../assets/images/message-circle.svg';
 import { CommentComponent } from '../components/CommentComponent';
+import 'swiper/swiper-bundle.css';
 
 export const PostModal = ({ post_id }: { post_id: number }) => {
   const dispatch = useDispatch();

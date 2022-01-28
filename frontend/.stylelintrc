@@ -2,7 +2,7 @@
   "extends": "stylelint-prettier/recommended",
   "ignoreFiles": ["**/*.html", "**/*.js", "**/*.ts"],
   "plugins": [
-    "stylelint-prettier",
+    "stylelint-prettier"
   ],
   "rules": {
     "prettier/prettier": true,
@@ -35,6 +35,6 @@
     "media-feature-name-no-vendor-prefix": true,
     "media-feature-colon-space-before": "never",
     "media-feature-colon-space-after": "always",
-    "max-empty-lines": null,
+    "max-empty-lines": null
   }
 }

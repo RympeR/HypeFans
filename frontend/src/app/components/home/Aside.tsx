@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import 'swiper/components/pagination/pagination.scss';
 import SwiperCore, { Autoplay, Pagination } from 'swiper/core';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper.scss';
+import 'swiper/swiper-bundle.css';
 import { LangContext } from '../../utils/LangProvider';
 import { getComputedLeftPosition } from '../../utils/utilities';
 import UserBanner from './UserBanner';

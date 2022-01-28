@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
 import { CommentComponent } from '~/app/components/CommentComponent';
 import { Preloader } from '~/app/utils/Preloader';
 import { createPostAction, deletePostAction, getFavourites } from '~/redux/favouritesReducer';

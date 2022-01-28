@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import CurrencyInput from 'react-currency-input-field';
 import { useDispatch, useSelector } from 'react-redux';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
 import { userAPI } from '~/api/userAPI';
 import { LENTGH_OF_VISIBLE_CAPTION, showVisibleText } from '~/app/utils/utilities';
 import { createPostAction, deletePostAction, setFavorite } from '~/redux/blogReducer';

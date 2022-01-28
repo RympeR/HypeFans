@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { getUserData } from '~/redux/authReducer';
 import '../styles/app.scss';
+// import 'bootstrap';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import { Search } from './components/search/Search';
 import { Main, Navbar } from './layout';
 import AddPost from './pages/AddPost';
@@ -18,6 +20,7 @@ import Profile from './pages/Profile';
 import { Settings } from './pages/settings/Settings';
 import { LangProvider } from './utils/LangProvider';
 import { ViewportProvider } from './utils/ViewportProvider';
+require('swiper/swiper-bundle.css');
 
 const options = {
   timeout: 5000,

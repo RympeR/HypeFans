@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper.scss';
+import 'swiper/swiper-bundle.css';
 import IStory from '~/app/types/IStory';
 import { isStoryWatched, showVisibleText, STORY_USERNAME_LENGTH } from '~/app/utils/utilities';
 import ava1 from '../../../../assets/images/ava1.png';
