@@ -481,7 +481,10 @@ export const Settings = () => {
           label: 'Зароботок'
         }
       ]);
-
+      const formatDateTime = (timestamp: number) => {
+        const d = new Date(timestamp * 1000);
+        return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+      };
       const getSpendsText = (item: historyAction) => {
         console.log(item);
         switch (item.type) {
@@ -489,21 +492,21 @@ export const Settings = () => {
             return (
               <div>
                 <h3>Вы задонатили @{item.target.username}</h3>
-                <h4>вчера</h4>
+                <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
           case 'chat_subscription':
             return (
               <div>
                 <h3>Вы подписались на чат с @{item.target.username}</h3>
-                <h4>вчера</h4>
+                <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
           default: {
             return (
               <div>
                 <h3>Вы подписались на @{item.target.username}</h3>
-                <h4>вчера</h4>
+                <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
           }
@@ -516,28 +519,28 @@ export const Settings = () => {
             return (
               <div>
                 <h3>Вам задонатили @{item.target.username}</h3>
-                <h4>вчера</h4>
+                <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
           case 'referral_payment':
             return (
               <div>
                 <h3>Реферальный бонус @{item.target.username}</h3>
-                <h4>вчера</h4>
+                <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
           case 'chat_subscription':
             return (
               <div>
                 <h3>На вас чат с @{item.target.username}</h3>
-                <h4>вчера</h4>
+                <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
           default: {
             return (
               <div>
                 <h3>На вас подписался @{item.target.username}</h3>
-                <h4>вчера</h4>
+                <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
           }
