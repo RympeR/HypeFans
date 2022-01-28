@@ -515,7 +515,7 @@ export const Settings = () => {
           case 'donation':
             return (
               <div>
-                <h3>Вы задонатили @{item.target.username}</h3>
+                <h3>Вам задонатили @{item.target.username}</h3>
                 <h4>вчера</h4>
               </div>
             );
@@ -529,14 +529,14 @@ export const Settings = () => {
           case 'chat_subscription':
             return (
               <div>
-                <h3>Вы подписались на чат с @{item.target.username}</h3>
+                <h3>На вас чат с @{item.target.username}</h3>
                 <h4>вчера</h4>
               </div>
             );
           default: {
             return (
               <div>
-                <h3>Вы подписались на @{item.target.username}</h3>
+                <h3>На вас подписался @{item.target.username}</h3>
                 <h4>вчера</h4>
               </div>
             );
@@ -662,7 +662,7 @@ export const Settings = () => {
                           <div>
                             <img src={item.target.avatar !== '' ? item.target.avatar : logo} alt="avatar" />
                           </div>
-                          {getSpendsText(item)}
+                          {getEarnsText(item)}
                         </div>
                         <div
                           style={{
