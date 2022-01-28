@@ -509,6 +509,40 @@ export const Settings = () => {
           }
         }
       };
+      const getEarnsText = (item: historyAction) => {
+        console.log(item);
+        switch (item.type) {
+          case 'donation':
+            return (
+              <div>
+                <h3>Вы задонатили @{item.target.username}</h3>
+                <h4>вчера</h4>
+              </div>
+            );
+          case 'referral_payment':
+            return (
+              <div>
+                <h3>Реферальный бонус @{item.target.username}</h3>
+                <h4>вчера</h4>
+              </div>
+            );
+          case 'chat_subscription':
+            return (
+              <div>
+                <h3>Вы подписались на чат с @{item.target.username}</h3>
+                <h4>вчера</h4>
+              </div>
+            );
+          default: {
+            return (
+              <div>
+                <h3>Вы подписались на @{item.target.username}</h3>
+                <h4>вчера</h4>
+              </div>
+            );
+          }
+        }
+      };
 
       const balance = useSelector((state: RootState) => state.auth.credit_amount);
       const earned_balance = useSelector((state: RootState) => state.auth.earned_credits_amount);
