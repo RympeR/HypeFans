@@ -172,6 +172,16 @@ export const userAPI = {
         return response.data;
       });
   },
+  getSpends() {
+    return instance.get(`/user/spend-stats-history/`).then((response) => {
+      return response;
+    });
+  },
+  geEarns() {
+    return instance.get(`/user/pay-stats-history/`).then((response) => {
+      return response;
+    });
+  },
   getReferrals() {
     return instance.get(`/user/referral-stats-history/`).then((response) => {
       return response;

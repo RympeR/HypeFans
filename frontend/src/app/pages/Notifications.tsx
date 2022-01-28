@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import 'react-phone-input-2/lib/style.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Route, useHistory, useLocation } from 'react-router-dom';
+import { Link, Route, useHistory } from 'react-router-dom';
 import { getNotifications } from '~/redux/notificationsReducer';
 import { RootState } from '~/redux/redux';
 import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
 import { ReactComponent as BellIcon } from '../../assets/images/bell.svg';
 import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
-import { ReactComponent as ArrowLeft } from '../../assets/images/leftIcon.svg';
 import { ReactComponent as CommentIcon } from '../../assets/images/message-circle.svg';
 import { ReactComponent as SettingsIcon } from '../../assets/images/settings.svg';
 import { ReactComponent as DonateIcon } from '../../assets/images/tip.svg';
 import { ReactComponent as UnlockIcon } from '../../assets/images/unlock.svg';
+import { DefaultSidebar } from '../components/notificationsComponents/DefaultSidebar';
+import { SidebarText } from '../components/notificationsComponents/SidebarText';
 import { Preloader } from '../utils/Preloader';
 import { Notification } from './notifications/Notification';
-import { NotificationSidebarItem } from './notifications/NotificationSidebarItem';
 
 const Notifications = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { pathname } = useLocation();
   const notifications = useSelector((state: RootState) => state.notifications.notifications);
   const isLoading = useSelector((state: RootState) => state.notifications.isLoading);
   useEffect(() => {
@@ -28,67 +27,18 @@ const Notifications = () => {
   if (isLoading) {
     return <Preloader />;
   }
-  const Text = ({ text }: { text: string }) => {
-    return (
-      <>
-        <p className="notifications__none">{text}</p>
-        <div className="notifications__sidebarItemPhone">
-          <div style={{ marginBottom: '5px', marginRight: '17px' }}>
-            <ArrowLeft onClick={history.goBack} />
-          </div>
-          <div style={{ marginTop: '4px' }}>{text}</div>
-          <div className="notifications__none">
-            <Link to="/settings/notifications">
-              <Route path="/notifications" component={SettingsIcon} />
-            </Link>
-          </div>
-          <div className="notifications__displayMobile">
-            <Link to="/settings/mobileSidebar">
-              <Route path="/notifications" component={SettingsIcon} />
-            </Link>
-          </div>
-        </div>
-      </>
-    );
-  };
+
+  const articles = [
+    { path: '/notifications', text: 'Все', exact: true, type: 'all', icon: <DonateIcon /> },
+    { path: '/notifications/donations', text: 'Донаты', exact: true, type: 'donation', icon: <DonateIcon /> },
+    { path: '/notifications/subscriptions', text: 'Подписки', exact: true, type: 'subscription', icon: <UnlockIcon /> },
+    { path: '/notifications/likes', text: 'Лайки', exact: true, type: 'like', icon: <LikeIcon /> },
+    { path: '/notifications/comments', text: 'Комментарии', exact: true, type: 'comment', icon: <CommentIcon /> }
+  ];
 
   const NotificationsSidebar = () => {
-    const selectedColor = '#edebeb';
     const SettingsButton = () => <SettingsIcon />;
     const BackButton = () => <BackIcon onClick={history.goBack} />;
-    const DefaultSidebar = () => {
-      return (
-        <div className="notifications__sidebar">
-          <Link to="/notifications" style={pathname === '/notifications' ? { background: selectedColor } : {}}>
-            <NotificationSidebarItem text="Все" />
-          </Link>
-          <Link
-            to="/notifications/comments"
-            style={pathname === '/notifications/comments' ? { background: selectedColor } : {}}
-          >
-            <NotificationSidebarItem text="Комментарии" />
-          </Link>
-          <Link
-            to="/notifications/likes"
-            style={pathname === '/notifications/likes' ? { background: selectedColor } : {}}
-          >
-            <NotificationSidebarItem text="Лайки" />
-          </Link>
-          <Link
-            to="/notifications/subscriptions"
-            style={pathname === '/notifications/subscriptions' ? { background: selectedColor } : {}}
-          >
-            <NotificationSidebarItem text="Подписки" />
-          </Link>
-          <Link
-            to="/notifications/donations"
-            style={pathname === '/notifications/donations' ? { background: selectedColor } : {}}
-          >
-            <NotificationSidebarItem text="Донаты" />
-          </Link>
-        </div>
-      );
-    };
 
     return (
       <div>
@@ -98,7 +48,7 @@ const Notifications = () => {
           </div>
 
           <div className="notifications__headingText">
-            <Route path="/notifications" render={() => <Text text="Уведомления" />} />
+            <Route path="/notifications" render={() => <SidebarText text="Уведомления" />} />
           </div>
           <div className="notifications__settings">
             <Link to="/settings/notifications">
@@ -107,7 +57,7 @@ const Notifications = () => {
           </div>
         </div>
         {/* Кнопки в сайдбаре в зависимости от роута */}
-        <Route path="/notifications/" component={DefaultSidebar} />
+        <Route path="/notifications/" render={() => <DefaultSidebar articles={articles} />} />
       </div>
     );
   };
@@ -133,15 +83,19 @@ const Notifications = () => {
         </div>
       );
     };
+
     return (
       <div className="notifications__mainWrapper">
         <div className="notifications__mainHeader">
           {/* Заголовок*/}
-          <Route path="/notifications" render={() => <Text text="Все" />} exact />
-          <Route path="/notifications/donations" render={() => <Text text="Донаты" />} exact />
-          <Route path="/notifications/subscriptions" render={() => <Text text="Подписки" />} exact />
-          <Route path="/notifications/likes" render={() => <Text text="Лайки" />} exact />
-          <Route path="/notifications/comments" render={() => <Text text="Комментарии" />} exact />
+          {articles.map((item, key) => (
+            <Route
+              path={item.path}
+              render={() => <SidebarText text={item.text} />}
+              exact={item.exact}
+              key={key + 'article'}
+            />
+          ))}
           {/* Заголовок(конец)*/}
           <div className="notifications__navMobile" style={isShown ? { width: '160px' } : { width: '25px' }}>
             {isShown ? (
@@ -170,74 +124,42 @@ const Notifications = () => {
                 <BellIcon />
               </div>
             )}
-            <Link
-              className={
-                history.location.pathname === '/notifications/comments'
-                  ? 'nav__icon_notifications_active '
-                  : 'nav__icon_notifications_inactive '
-              }
-              to="/notifications/comments"
-              style={{ marginLeft: '5px' }}
-            >
-              <CommentIcon />
-            </Link>
-            <Link
-              className={
-                history.location.pathname === '/notifications/likes'
-                  ? 'nav__icon_notifications_active '
-                  : 'nav__icon_notifications_inactive '
-              }
-              to="/notifications/likes"
-              style={{ marginLeft: '13px' }}
-            >
-              <LikeIcon />
-            </Link>
-            <Link
-              className={
-                history.location.pathname === '/notifications/subscriptions'
-                  ? 'nav__icon_notifications_active '
-                  : 'nav__icon_notifications_inactive '
-              }
-              to="/notifications/subscriptions"
-              style={{ marginLeft: '13px' }}
-            >
-              <UnlockIcon />
-            </Link>
-            <Link
-              className={
-                history.location.pathname === '/notifications/donations'
-                  ? 'nav__icon_notifications_active '
-                  : 'nav__icon_notifications_inactive '
-              }
-              to="/notifications/donations"
-              style={{ marginLeft: '13px', marginRight: '5px' }}
-            >
-              <DonateIcon />
-            </Link>
+            {articles.map((item, key) => {
+              if (item.text === 'Все') return null;
+              return (
+                <Link
+                  className={
+                    history.location.pathname === item.path
+                      ? 'nav__icon_notifications_active '
+                      : 'nav__icon_notifications_inactive '
+                  }
+                  to={item.path}
+                  style={{ marginLeft: '5px' }}
+                  key={key + 'mobileItems'}
+                >
+                  {item.icon}
+                </Link>
+              );
+            })}
           </div>
         </div>
         {/* Главное тело в зависимости от роута*/}
-        <Route path="/notifications" render={() => <Main notifications={notifications} />} exact />
-        <Route
-          path="/notifications/subscriptions"
-          render={() => <Main notifications={notifications.filter((item) => item.type === 'subscription')} />}
-          exact
-        />
-        <Route
-          path="/notifications/likes"
-          render={() => <Main notifications={notifications.filter((item) => item.type === 'like')} />}
-          exact
-        />
-        <Route
-          path="/notifications/comments"
-          render={() => <Main notifications={notifications.filter((item) => item.type === 'comment')} />}
-          exact
-        />
-        <Route
-          path="/notifications/donations"
-          render={() => <Main notifications={notifications.filter((item) => item.type === 'donation')} />}
-          exact
-        />
+        {articles.map((article, key) => {
+          return (
+            <Route
+              path={article.path}
+              render={() => (
+                <Main
+                  notifications={
+                    article.text === 'Все' ? notifications : notifications.filter((item) => item.type === article.type)
+                  }
+                />
+              )}
+              exact
+              key={key + 'mainItem'}
+            />
+          );
+        })}
       </div>
     );
   };
