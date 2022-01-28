@@ -13,15 +13,15 @@ import {
   getUserRT,
   idType,
   onlineUserRetrieveRT,
+  payHistory,
   PaymentType,
+  referralHistory,
   SubscriptionType,
   userDonationRecievedRT,
   userGetCardListRT,
   userGetPaymentHistoryRT,
   userStringType,
-  userValidateUserRT,
-  referralHistory,
-  payHistory
+  userValidateUserRT
 } from './types';
 
 export const userAPI = {
@@ -126,7 +126,8 @@ export const userAPI = {
     });
   },
   getProfile() {
-    return instance.get(`user/get-user`).then((response) => {
+    return instance.get(`/user/get-user/`).then((response) => {
+      debugger;
       return response.data;
     });
   },

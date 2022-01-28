@@ -5,7 +5,7 @@ import { ReactComponent as ArrowLeft } from '../../../assets/images/leftIcon.svg
 import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
 import { ReactComponent as SearchSvg } from '../../../assets/images/search.svg';
 
-export const Search = () => {
+export const Search: React.FC = () => {
   const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const history = useHistory();

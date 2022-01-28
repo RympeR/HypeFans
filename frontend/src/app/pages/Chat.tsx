@@ -11,7 +11,7 @@ import { Preloader } from '../utils/Preloader';
 import { getLastUrlPoint } from '../utils/utilities';
 import { DialogMain } from './DialogMain';
 import { NoDialog } from './NoDialog';
-const Chat = () => {
+const Chat: React.FC = () => {
   const userId = useSelector((state: RootState) => state.auth.pk);
   const history = useHistory();
   const BackButton = () => <BackIcon onClick={history.goBack} />;

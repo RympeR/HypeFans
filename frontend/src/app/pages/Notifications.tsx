@@ -16,7 +16,7 @@ import { SidebarText } from '../components/notificationsComponents/SidebarText';
 import { Preloader } from '../utils/Preloader';
 import { Notification } from './notifications/Notification';
 
-const Notifications = () => {
+const Notifications: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const notifications = useSelector((state: RootState) => state.notifications.notifications);
