@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime, timedelta
+from random import sample
 
 from core.utils.default_responses import api_block_by_policy_451
 from rest_framework import generics, permissions
@@ -291,7 +292,7 @@ class MainUserPage(GenericAPIView):
             'posts': [],
             'stories': []
         }
-        qs = User.objects.all().order_by('-fans_amount')[:9]
+        qs = sample(User.objects.all().order_by('-fans_amount'), 9)
         if qs.exists():
             results['recommendations'].append(
                 UserShortRetrieveSeriliazer(instance=qs, many=True, context={
@@ -299,34 +300,27 @@ class MainUserPage(GenericAPIView):
             )
         if data_compare == 0:
             for user_sub in user.my_subscribes.all():
-                logging.warning(f'user subs main page -> {user_sub}')
                 for post in user_sub.user_post.filter(archived=False).order_by('-publication_date'):
-                    logging.warning(f'user subs POST main page -> {post}')
-                    user_data = UserShortRetrieveSeriliazer(
-                        instance=user_sub, context={'request': request}).data
-                    post_data = PostGetShortSerializers(
-                        instance=post, context={'request': request}).data
-                    res_dict = {}
-                    res_dict['user'] = user_data
-                    res_dict['post'] = post_data
+                    res_dict = {
+                        'user': UserShortRetrieveSeriliazer(
+                            instance=user_sub, context={'request': request}).data,
+                        'post': PostGetShortSerializers(
+                            instance=post, context={'request': request}).data
+                    }
                     if user.new_user:
                         res_dict['post']['payed'] = True
                     else:
                         if post.access_level == 1:
-                            res_dict['post']['payed'] = (
-                                True if PostBought.objects.filter(
-                                    post=post, user=user).exists() else False
-                            )
+                            res_dict['post']['payed'] = check_post_bought(
+                                post, user)
                         else:
-                            res_dict['post']['payed'] = (
-                                True if Subscription.objects.filter(
-                                    target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
-                            )
+                            res_dict['post']['payed'] = sub_checker(
+                                post.user, user)
                     post_action_qs = PostAction.objects.filter(
                         post=post, user=user)
                     if post_action_qs.exists():
                         for action in post_action_qs:
-                            if action.like:
+                            if action.like and not action.parent:
                                 res_dict['post']['liked'] = True
                                 res_dict['post']['like_id'] = action.pk
                                 break
@@ -340,16 +334,14 @@ class MainUserPage(GenericAPIView):
                         res_dict['post']['favourite'] = True
                     else:
                         res_dict['post']['favourite'] = False
-
                     results['posts'].append(res_dict)
                 for story in user_sub.user_story.filter(archived=False, publication_date__lte=data_compare).order_by('-publication_date'):
-                    user_data = UserShortRetrieveSeriliazer(
-                        instance=user_sub, context={'request': request}).data
-                    post_data = StoryShortSerializer(
-                        instance=story, context={'request': request}).data
-                    res_dict = {}
-                    res_dict['user'] = user_data
-                    res_dict['post'] = post_data
+                    res_dict = {
+                        'user': UserShortRetrieveSeriliazer(
+                            instance=user_sub, context={'request': request}).data,
+                        'post': StoryShortSerializer(
+                            instance=story, context={'request': request}).data
+                    }
                     results['posts'].append(res_dict)
 
             return Response(
@@ -361,23 +353,21 @@ class MainUserPage(GenericAPIView):
             )
         for user_sub in user.my_subscribes.all():
             for post in user_sub.user_post.filter(archived=False, publication_date__lte=data_compare).order_by('-publication_date'):
-                user_data = UserShortRetrieveSeriliazer(
-                    instance=user_sub, context={'request': request}).data
-                post_data = PostGetShortSerializers(
-                    instance=post, context={'request': request}).data
-                res_dict = {}
-                res_dict['user'] = user_data
-                res_dict['post'] = post_data
+                res_dict = {
+                    'user': UserShortRetrieveSeriliazer(
+                        instance=user_sub, context={'request': request}).data,
+                    'post': PostGetShortSerializers(
+                        instance=post, context={'request': request}).data
+                }
                 results['posts'].append(res_dict)
 
             for story in user_sub.user_story.filter(archived=False, publication_date__lte=data_compare).order_by('-publication_date'):
-                user_data = UserShortRetrieveSeriliazer(
-                    instance=user_sub, context={'request': request}).data
-                post_data = StoryShortSerializer(
-                    instance=story, context={'request': request}).data
-                res_dict = {}
-                res_dict['user'] = user_data
-                res_dict['post'] = post_data
+                res_dict = {
+                    'user': UserShortRetrieveSeriliazer(
+                        instance=user_sub, context={'request': request}).data,
+                    'post': StoryShortSerializer(
+                        instance=story, context={'request': request}).data
+                }
                 results['posts'].append(res_dict)
 
         return Response(
