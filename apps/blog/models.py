@@ -1,10 +1,11 @@
 from django.db import models
+from django.db.models import QuerySet
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from mptt.models import MPTTModel, TreeForeignKey
 from unixtimestampfield.fields import UnixTimeStampField
 
-from apps.users.models import User
+from apps.users.models import User, sub_checker
 
 
 class Attachment(models.Model):
@@ -180,3 +181,43 @@ def create_post(sender: Post, instance: Post, created: bool, **kwargs):
     if created:
         instance.user.post_amount += 1
         instance.user.save()
+
+
+def check_post_bought(post: Post, user: User):
+    return True if PostBought.objects.filter(
+        post=post, user=user).exists() else False
+
+
+def payed_posts_update(data: object, ind: int, post: Post, user: User):
+    if user.new_user:
+        data[ind]['post']['payed'] = True
+    else:
+        if post.access_level == 1:
+            data[ind]['post']['payed'] = check_post_bought(post, user)
+        else:
+            data[ind]['post']['payed'] = sub_checker(post.user, user)
+    return data
+
+
+def like_posts_update(data: object, ind: int, qs: QuerySet):
+    if qs.exists():
+        for action in qs:
+            if action.like and not action.parent:
+                data[ind]['post']['liked'] = True
+                data[ind]['post']['like_id'] = action.pk
+                break
+        else:
+            data[ind]['post']['liked'] = False
+            data[ind]['post']['like_id'] = None
+    else:
+        data[ind]['post']['liked'] = False
+        data[ind]['post']['like_id'] = None
+    return data
+
+
+def favourite_posts_update(data: object, user: User, ind: int, post: Post):
+    if user in post.favourites.all():
+        data[ind]['post']['favourite'] = True
+    else:
+        data[ind]['post']['favourite'] = False
+    return data

@@ -8,7 +8,7 @@ from core.utils.default_responses import (api_accepted_202,
                                           api_block_by_policy_451,
                                           api_created_201,
                                           api_payment_required_402)
-from core.utils.func import create_ref_link
+from core.utils.func import create_ref_link, generate_pay_dict
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
@@ -70,11 +70,7 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
         limit = request.GET.get('limit', 50)
         offset = request.GET.get('offset', 0)
         results = []
-        sub_check = True if Subscription.objects.filter(
-            target=user, source=req_user, end_date__gte=datetime.now()).exists() else False
-        sub_dict = {
-            'subscribed': sub_check
-        }
+        sub_check = sub_checker(user, req_user)
         if data_compare == 0:
             for post in user.user_post.filter(archived=False).order_by('-publication_date'):
                 post_data = PostGetShortSerializers(
@@ -114,7 +110,7 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
         return api_accepted_202({
             **self.serializer_class(instance=user, context={'request': request}).data,
             **{'posts': results[offset:limit+offset]},
-            **sub_dict
+            'subscribed': sub_check
         })
 
     def get_serializer_context(self):
@@ -380,11 +376,10 @@ class AddBlockedUserAPI(generics.GenericAPIView):
         else:
             self.request.user.blocked_users.remove(user)
         self.request.user.save()
-        data = {
+        return Response({
             'user': user.pk,
             'block': request.data['block']
-        }
-        return Response(data)
+        })
 
 
 class DonationCreateAPI(generics.CreateAPIView):
@@ -523,41 +518,16 @@ class PayStatsHistoryRetrieveAPI(APIView):
 
         result_sum = subscription_amount + donation_amount + repherral_summ +\
             chat_subscription_amount
-        donations = [
-            {**donation, 'type': 'donation'}
-            for donation in UnionDonationGetSerializer(
-                instance=donations,
-                many=True
-            ).data
-        ]
-        subscriptions = [
-            {**subscription, 'type': 'subscription'}
-            for subscription in UnionSubscriptionGetSerializer(
-                instance=subscriptions,
-                many=True
-            ).data
-        ]
-        chat_subscriptions = [
-            {**chat_subscription, 'type': 'chat_subscriptions'}
-            for chat_subscription in UnionChatSubscriptionGetSerializer(
-                instance=chat_subscriptions,
-                many=True
-            ).data
-        ]
-        referral_payments = [
-            {**referral_payment, 'type': 'referral_payment'}
-            for referral_payment in UnionReferralPaymentGetSerializer(
-                instance=referral_payments,
-                context={'request': request},
-                many=True
-            ).data
-        ]
 
         result = sorted([
-            *donations,
-            *subscriptions,
-            *chat_subscriptions,
-            *referral_payments,
+            *generate_pay_dict(donations,
+                               UnionDonationGetSerializer, 'donation'),
+            *generate_pay_dict(subscriptions,
+                           UnionSubscriptionGetSerializer, 'subscription'),
+            *generate_pay_dict(chat_subscriptions,
+                                UnionChatSubscriptionGetSerializer, 'chat_subscriptions'),
+            *generate_pay_dict(referral_payments,
+                               UnionReferralPaymentGetSerializer, 'referral_payment'),
         ], key=lambda x: x['date_time'], reverse=True)
 
         result_dict = {
@@ -623,32 +593,15 @@ class SpendStatsHistoryRetrieveAPI(APIView):
         ))
 
         result_sum = subscription_amount + donation_amount + chat_subscription_amount
-        donations = [
-            {**donation, 'type': 'donation'}
-            for donation in UnionDonationGetSerializer(
-                instance=donations,
-                many=True
-            ).data
-        ]
-        subscriptions = [
-            {**subscription, 'type': 'subscription'}
-            for subscription in UnionSubscriptionGetSerializer(
-                instance=subscriptions,
-                many=True
-            ).data
-        ]
-        chat_subscriptions = [
-            {**chat_subscription, 'type': 'chat_subscription'}
-            for chat_subscription in UnionChatSubscriptionGetSerializer(
-                instance=chat_subscriptions,
-                many=True
-            ).data
-        ]
 
         result = sorted([
-            *donations,
-            *subscriptions,
-            *chat_subscriptions,
+            *generate_pay_dict(donations,
+                               UnionDonationGetSerializer, 'donation'),
+            *generate_pay_dict(subscriptions,
+                           UnionSubscriptionGetSerializer, 'subscription'),
+            *generate_pay_dict(chat_subscriptions,
+                                UnionChatSubscriptionGetSerializer, 'chat_subscriptions'),
+
         ], key=lambda x: x['date_time'], reverse=True)
 
         result_dict = {

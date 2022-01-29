@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from core.utils.default_responses import api_block_by_policy_451
 from rest_framework import generics, permissions
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin
+from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin
 from rest_framework.response import Response
 
 from apps.users.models import Subscription, User
@@ -46,60 +46,28 @@ class PostListAPI(generics.GenericAPIView):
     queryset = Post.objects.all()
 
     def get(self, request, username):
-        limit = request.GET.get('limit', 20)
-        offset = request.GET.get('offset', 0)
+        limit = request.query_params.get('limit', 20)
+        offset = request.query_params.get('offset', 0)
         page_user = User.objects.get(username=username)
         user = request.user
         qs = Post.objects.filter(
             user=page_user
         )[offset:offset+limit]
         data = [{'post': self.get_serializer(
-            instance=post, context={'request': request}).data} for post in qs]
+            instance=post, context={'request': request}
+        ).data} for post in qs]
 
         for ind, post in enumerate(qs):
-            user_data = UserShortRetrieveSeriliazer(
+            data[ind]['user'] = UserShortRetrieveSeriliazer(
                 instance=page_user, context={'request': request}).data
-            post_data = PostGetShortSerializers(
+            data[ind]['post'] = self.get_serializer(
                 instance=post, context={'request': request}).data
-            data[ind]['user'] = user_data
-            data[ind]['post'] = post_data
-            if user.new_user:
-                data[ind]['post']['payed'] = True
-            else:
-                if post.access_level == 1:
-                    data[ind]['post']['payed'] = (
-                        True if PostBought.objects.filter(
-                            post=post, user=user).exists() else False
-                    )
-                else:
-                    data[ind]['post']['payed'] = (
-                        True if Subscription.objects.filter(
-                            target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
-                    )
+            data = payed_posts_update(data, ind, post, user)
             post_action_qs = PostAction.objects.filter(
                 post=post, user=user)
-            if post_action_qs.exists():
-                for action in post_action_qs:
-                    if action.like:
-                        data[ind]['post']['liked'] = True
-                        data[ind]['post']['like_id'] = action.pk
-                        break
-                else:
-                    data[ind]['post']['liked'] = False
-                    data[ind]['post']['like_id'] = None
-            else:
-                data[ind]['post']['liked'] = False
-                data[ind]['post']['like_id'] = None
-            if user in post.favourites.all():
-                data[ind]['post']['favourite'] = True
-            else:
-                data[ind]['post']['favourite'] = False
+            data = like_posts_update(data, ind, post_action_qs)
+            data = favourite_posts_update(data, user, ind, post)
 
-        for ind, post in enumerate(data):
-            user_data = UserShortRetrieveSeriliazer(
-                instance=page_user, context={'request': request}).data
-            data[ind]['user'] = user_data
-            data[ind]['post']['payed'] = True
         return Response(data)
 
     def get_serializer_context(self):
@@ -245,66 +213,58 @@ class WatchedStoriesCreateAPI(generics.CreateAPIView):
 
 class UserNotifications(GenericAPIView):
     queryset = User.objects.all()
+    serializer_class = UserShortRetrieveSeriliazer
 
     def get(self, request):
         limit = request.GET.get('limit', 50)
         offset = request.GET.get('offset', 0)
         user = request.user
-        result = []
         comments_result = []
         likes_result = []
         donations_result = []
         subscriptions_result = []
         for comment in PostAction.objects.filter(
             comment__isnull=False,
-            user=user,
+            user=user
         ).order_by('-date_time').distinct():
-            res_dict = {}
-            user_data = UserShortRetrieveSeriliazer(
-                instance=comment.user, context={'request': request}).data
-            post_data = CommentRetrieveSerializer(
-                instance=comment, context={'request': request}).data
-            res_dict['user'] = user_data
-            res_dict['post'] = post_data
-            res_dict['type'] = 'comment'
+            res_dict = {
+                'user': self.serializer_class(
+                    instance=comment.user, context={'request': request}).data,
+                'post': CommentRetrieveSerializer(
+                    instance=comment, context={'request': request}).data,
+                'type': 'comment'
+            }
             comments_result.append(res_dict)
-        for like in PostAction.objects.filter(
-            user=user,
-            like=True
-        ).distinct():
-            res_dict = {}
-            user_data = UserShortRetrieveSeriliazer(
-                instance=like.user, context={'request': request}).data
-            post_data = LikeRetrieveSerializer(
-                instance=like, context={'request': request}).data
-            res_dict['user'] = user_data
-            res_dict['post'] = post_data
-            res_dict['type'] = 'like'
+        for like in PostAction.objects.filter(user=user, like=True).distinct():
+            res_dict = {
+                'user': self.serializer_class(
+                    instance=like.user, context={'request': request}).data,
+                'post': LikeRetrieveSerializer(
+                    instance=like, context={'request': request}).data,
+                'type': 'like'
+            }
             likes_result.append(res_dict)
         for donation in user.recieved_user.all().order_by('-datetime').distinct():
-            user_data = UserShortRetrieveSeriliazer(
-                instance=donation.sender, context={'request': request}).data
-            res_dict = {}
-            donation_data = {
-                'amount': donation.amount,
-                'date_time': donation.datetime.timestamp() if donation.datetime else None 
+            res_dict = {
+                'user': self.serializer_class(
+                    instance=donation.sender, context={'request': request}).data,
+                'donation': {
+                    'amount': donation.amount,
+                    'date_time': donation.datetime.timestamp() if donation.datetime else None
+                },
+                'type': 'donation'
             }
-            res_dict['user'] = user_data
-            res_dict['donation'] = donation_data
-            res_dict['type'] = 'donation'
             donations_result.append(res_dict)
 
         for subscription in user.target_user_subscribe.all().order_by('-start_date').distinct():
-            user_data = UserShortRetrieveSeriliazer(
-                instance=subscription.source, context={'request': request}).data
             res_dict = {}
-            subscription_data = {
+            res_dict['user'] = self.serializer_class(
+                instance=subscription.source, context={'request': request}).data
+            res_dict['subscription'] = {
                 'amount': user.subscribtion_price,
-                'start_date': subscription.start_date.timestamp() if subscription.start_date else None ,
-                'end_date': subscription.end_date.timestamp() if subscription.end_date else None 
+                'start_date': subscription.start_date.timestamp() if subscription.start_date else None,
+                'end_date': subscription.end_date.timestamp() if subscription.end_date else None
             }
-            res_dict['user'] = user_data
-            res_dict['subscription'] = subscription_data
             res_dict['type'] = 'subscription'
             subscriptions_result.append(res_dict)
         result = [
@@ -503,38 +463,11 @@ class GetFavouritePosts(generics.GenericAPIView):
                 instance=post, context={'request': request}).data
             data[ind]['user'] = user_data
             data[ind]['post'] = post_data
-            if user.new_user:
-                data[ind]['post']['payed'] = True
-            else:
-                if post.access_level == 1:
-                    data[ind]['post']['payed'] = (
-                        True if PostBought.objects.filter(
-                            post=post, user=user).exists() else False
-                    )
-                else:
-
-                    data[ind]['post']['payed'] = (
-                        True if Subscription.objects.filter(
-                            target=post.user, source=user, end_date__gte=datetime.now()).exists() else False
-                    )
+            data = payed_posts_update(data, ind, post, user)
             post_action_qs = PostAction.objects.filter(
                 post=post, user=user)
-            if post_action_qs.exists():
-                for action in post_action_qs:
-                    if action.like:
-                        data[ind]['post']['liked'] = True
-                        data[ind]['post']['like_id'] = action.pk
-                        break
-                else:
-                    data[ind]['post']['liked'] = False
-                    data[ind]['post']['like_id'] = None
-            else:
-                data[ind]['post']['liked'] = False
-                data[ind]['post']['like_id'] = None
-            if user in post.favourites.all():
-                data[ind]['post']['favourite'] = True
-            else:
-                data[ind]['post']['favourite'] = False
+            data = like_posts_update(data, ind,  post_action_qs)
+            data = favourite_posts_update(data, user, ind, post)
 
         for ind, post in enumerate(qs):
             user_data = UserShortRetrieveSeriliazer(
@@ -557,7 +490,7 @@ class GetUserLists(GenericAPIView):
         result = {}
 
         subs = user.target_user_subscribe.filter(start_date__gte=(
-            now - timedelta(2))).order_by('-start_date')
+            now - timedelta(days=30))).order_by('-start_date')
         for sub in user.source_user_subscribe.filter(end_date__gte=now):
             temp_subs = sub.target.target_user_subscribe.filter(
                 end_date__gte=now)
@@ -567,15 +500,15 @@ class GetUserLists(GenericAPIView):
         result['last_subs_amount'] = len(subs)
         subs = list(map(lambda x: x.source, subs[:3]))
 
-        result['last_subs'] = UserShortRetrieveSeriliazer(
+        result['last_subs'] = self.serializer_class(
             many=True, instance=subs).data
 
         result['friends_amount'] = len(friends)
-        result['friends'] = UserShortRetrieveSeriliazer(
+        result['friends'] = self.serializer_class(
             many=True, instance=friends[:3]).data
         favourite_post = user.user_favourites.all()
         favourite_post_users = list(set(map(lambda x: x.user, favourite_post)))
         result['favourites_amount'] = len(favourite_post_users)
-        result['favourites'] = UserShortRetrieveSeriliazer(
+        result['favourites'] = self.serializer_class(
             many=True, instance=favourite_post_users[:3]).data
         return Response(result)
