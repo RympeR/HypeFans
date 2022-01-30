@@ -81,10 +81,13 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
                     res_dict['post']['payed'] = True
                 else:
                     if post.access_level == 1:
-                        res_dict['post']['payed'] = (
-                            True if PostBought.objects.filter(
-                                post=post, user=req_user).exists() else False
-                        )
+                        if post.price_to_watch == 0:
+                            res_dict['post']['payed'] = True
+                        else:
+                            res_dict['post']['payed'] = (
+                                True if PostBought.objects.filter(
+                                    post=post, user=req_user).exists() else False
+                            )
                     else:
                         res_dict['post']['payed'] = sub_check
 
