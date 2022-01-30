@@ -15,7 +15,10 @@ export const NoDialog = () => {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', width: '62.5%', paddingTop: '10%' }}>
+      <div
+        className="chat__inactive chat__flex_0"
+        style={{ display: 'flex', flexDirection: 'column', width: '62.5%', paddingTop: '10%' }}
+      >
         <div style={{ textAlign: 'center' }}>Выберите диалог или создайте новый</div>
         <button className="notifications__settingBtn" style={{ marginTop: '20px' }} onClick={() => setCurrentTab(1)}>
           Новое сообщение

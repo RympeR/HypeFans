@@ -8,7 +8,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin
 from rest_framework.response import Response
 
-from apps.users.models import Subscription, User
+from apps.users.models import User
 from apps.users.serializers import UserShortRetrieveSeriliazer
 
 from .models import *

@@ -1,12 +1,13 @@
 import datetime
-from django.db import models
-from django.contrib.auth.models import AbstractUser
+
 from core.utils.func import user_avatar
-from unixtimestampfield.fields import UnixTimeStampField
-from django_countries.fields import CountryField
-from dateutil.relativedelta import relativedelta
+from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django_countries.fields import CountryField
+from unixtimestampfield.fields import UnixTimeStampField
+
 from .dynamic_preferences_registry import ChatSubscriptionDuration
 
 

@@ -30,6 +30,14 @@ import { getLastUrlPoint } from '../utils/utilities';
 import { ChatImage } from './card/components/ChatImage';
 import { Video } from './card/components/Video';
 
+import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
+import { ReactComponent as BellIcon } from '../../assets/images/bell.svg';
+import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
+import { ReactComponent as CommentIcon } from '../../assets/images/message-circle.svg';
+import { ReactComponent as SettingsIcon } from '../../assets/images/settings.svg';
+import { ReactComponent as DonateIcon } from '../../assets/images/tip.svg';
+import { ReactComponent as UnlockIcon } from '../../assets/images/unlock.svg';
+
 const Input = ({
   sendMessage,
   messageText,
@@ -60,7 +68,7 @@ const Input = ({
   );
 };
 
-export const DialogMain = ({ visible, rooms }: { visible: boolean; rooms: any }) => {
+export const DialogMain = ({ rooms }: { rooms: any }) => {
   const history = useHistory();
   const lastUrl = getLastUrlPoint(history.location.pathname);
   const alert = useAlert();
@@ -229,6 +237,7 @@ export const DialogMain = ({ visible, rooms }: { visible: boolean; rooms: any })
   };
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
+  const [isShown, setShown] = useState(true);
 
   return (
     <div className="chat__dialogsMain">
@@ -246,7 +255,7 @@ export const DialogMain = ({ visible, rooms }: { visible: boolean; rooms: any })
         </Modal.Body>
       </Modal>
       <div className="chat__dialogsHeader">
-        <div className="chat__sidebarItem" style={{ alignItems: 'center' }}>
+        <div className={'chat__sidebarItem'} style={{ alignItems: 'center' }}>
           <Link
             to={`/profile/${
               typeof rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))?.room?.room_info?.invited !==

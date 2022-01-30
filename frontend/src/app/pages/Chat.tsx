@@ -20,7 +20,6 @@ const Chat: React.FC = () => {
   const [rooms, setRooms] = useState([]);
   const [isSended, setSended] = useState(false);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
-  const [visible, setVisibility] = useState(false);
 
   if (isLoading) {
     return <Preloader />;
@@ -50,7 +49,6 @@ const Chat: React.FC = () => {
   const SidebarItem = (item: any) => {
     const history = useHistory();
     const lastUrl = getLastUrlPoint(history.location.pathname);
-
     const [amICreator, setCreator] = useState(false);
     useEffect(() => {
       if (userId === item?.item?.room?.room_info?.creator?.pk) setCreator(true);
@@ -58,7 +56,7 @@ const Chat: React.FC = () => {
     }, [item]);
 
     return (
-      <Link to={`/chat/${item?.item?.room?.room_info?.id}`} onClick={() => setVisibility(!visible)}>
+      <Link to={`/chat/${item?.item?.room?.room_info?.id}`}>
         <div
           style={
             lastUrl !== item?.item?.room?.room_info?.id
@@ -116,7 +114,12 @@ const Chat: React.FC = () => {
       </Link>
     );
   };
-
+  let VISIBLE = false;
+  if (window.location.href.match('/chat/d*')) {
+    VISIBLE = false;
+  } else {
+    VISIBLE = true;
+  }
   return (
     <div>
       <div className="chat__header">
@@ -136,16 +139,16 @@ const Chat: React.FC = () => {
         </div>
       </div>
       <div className="chat__main">
-        <div className={'chat__sidebar ' + (visible ? 'chat__inactive' : '')}>
+        <div className={'chat__sidebar ' + (VISIBLE ? '' : 'chat__inactive  chat__flex_0')}>
           {rooms.map((item, key) => {
             return (
               <div key={Math.random() + String(key)}>
-                <SidebarItem item={item} visible={false} />
+                <SidebarItem item={item} />
               </div>
             );
           })}
         </div>
-        <Route path="/chat/:id" render={() => <DialogMain visible={visible} rooms={rooms} />} exact />
+        <Route path="/chat/:id" render={() => <DialogMain rooms={rooms} />} exact />
         <Route path="/chat" component={NoDialog} exact />
       </div>
     </div>

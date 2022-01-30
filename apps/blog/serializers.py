@@ -1,5 +1,3 @@
-import logging
-
 from core.utils.customFields import TimestampField
 from apps.users.dynamic_preferences_registry import ReferralPercentage
 from django.db.models import Count, Q
