@@ -77,19 +77,19 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
                     instance=post, context={'request': request}).data
                 res_dict = {}
                 res_dict['post'] = post_data
-                if user.new_user:
+                if req_user.new_user:
                     res_dict['post']['payed'] = True
                 else:
                     if post.access_level == 1:
                         res_dict['post']['payed'] = (
                             True if PostBought.objects.filter(
-                                post=post, user=user).exists() else False
+                                post=post, user=req_user).exists() else False
                         )
                     else:
                         res_dict['post']['payed'] = sub_check
 
                 post_action_queryset = PostAction.objects.filter(
-                    post=post, user=request.user)
+                    post=post, user=req_user)
                 if post_action_queryset.exists():
                     for action in post_action_queryset:
                         if action.like:
@@ -102,7 +102,7 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
                 else:
                     res_dict['post']['liked'] = False
                     res_dict['post']['like_id'] = None
-                if request.user in post.favourites.all():
+                if req_user in post.favourites.all():
                     res_dict['post']['favourite'] = True
                 else:
                     res_dict['post']['favourite'] = False
