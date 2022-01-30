@@ -426,16 +426,16 @@ class SubStoriesSerializer(serializers.Serializer):
 class PostBoughtCreateSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
         required=False, queryset=User.objects.all())
-    amount = serializers.IntegerField(required=False)
+    post = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=Post.objects.all())
 
     class Meta:
         model = PostBought
-        fields = '__all__'
+        fields = 'user', 'post'
 
     def validate(self, attrs):
         request = self.context.get('request')
         user = request.user
-        attrs['user'] = user
         attrs['amount'] = attrs['post'].price_to_watch
         if user.credit_amount >= attrs['post'].price_to_watch:
             user.credit_amount -= attrs['post'].price_to_watch
