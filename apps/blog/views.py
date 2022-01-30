@@ -292,7 +292,6 @@ class MainUserPage(GenericAPIView):
             'posts': [],
             'stories': []
         }
-        qs = User.objects.all().order_by('-fans_amount')
         valid_profiles_id_list = User.objects.all().order_by('-fans_amount').values_list('id', flat=True)
         random_users_id_list = sample(list(valid_profiles_id_list), min(len(valid_profiles_id_list), 9))
         qs = User.objects.filter(id__in=random_users_id_list)
