@@ -24,23 +24,22 @@ class UserMeSerializer(serializers.ModelSerializer):
 
 class ChatSubscriptionCreateSerializer(serializers.ModelSerializer):
 
-    end_date = TimestampField(required=False)
-    start_date = TimestampField(required=False)
     source = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+    target = serializers.PrimaryKeyRelatedField(
         required=False, queryset=User.objects.all())
 
     class Meta:
         model = ChatSubscription
-        fields = '__all__'
+        fields = 'source', 'target'
 
     def validate(self, attrs):
         request = self.context.get('request')
         user = request.user
         now = datetime.now()
-        attrs['source'] = user
-        attrs['start_date'] = now
+        attrs['start_date'] = now.strftime("%Y-%m-%d %H:%M:%S")
         attrs['end_date'] = (
-            now + timedelta(days=ChatSubscriptionDuration.value()))
+            now + timedelta(days=ChatSubscriptionDuration.value())).strftime("%Y-%m-%d %H:%M:%S")
 
         if user.credit_amount >= attrs['target'].message_price:
             user.credit_amount -= attrs['target'].message_price
@@ -60,6 +59,14 @@ class ChatSubscriptionCreateSerializer(serializers.ModelSerializer):
                 )
             return attrs
         raise serializers.ValidationError
+
+    def create(self, validated_data):
+        return ChatSubscription.objects.create(
+            source=validated_data['source'],
+            target=validated_data['target'],
+            start_date=validated_data['start_date'],
+            end_date=validated_data['end_date'],
+        )
 
 
 class SubscriptionCreateSerializer(serializers.ModelSerializer):
@@ -108,6 +115,7 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
             start_date=validated_data['start_date'],
             end_date=validated_data['end_date'],
         )
+
 
 class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
 
@@ -705,6 +713,7 @@ class UnionReferralPaymentGetSerializer(serializers.ModelSerializer):
         return UserShortRetrieveSeriliazer(
             instance=ref_payment.referrer
         ).data
+
     class Meta:
         model = ReferralPayment
         fields = (
@@ -714,4 +723,3 @@ class UnionReferralPaymentGetSerializer(serializers.ModelSerializer):
             'source',
             'amount'
         )
-
