@@ -13,15 +13,15 @@ import {
   getUserRT,
   idType,
   onlineUserRetrieveRT,
+  payHistory,
   PaymentType,
+  referralHistory,
   SubscriptionType,
   userDonationRecievedRT,
   userGetCardListRT,
   userGetPaymentHistoryRT,
   userStringType,
-  userValidateUserRT,
-  referralHistory,
-  payHistory
+  userValidateUserRT
 } from './types';
 
 export const userAPI = {

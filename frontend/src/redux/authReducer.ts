@@ -153,6 +153,7 @@ const actions = {
 export const getAuthUserData = (): Thunk => async (dispatch) => {
   dispatch(isLoading());
   const meData = await userAPI.getProfile();
+  console.log(meData);
   if (meData) {
     const {
       subscribtion_price,

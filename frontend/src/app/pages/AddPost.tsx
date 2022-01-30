@@ -1,7 +1,7 @@
 import React from 'react';
 import Upload from '../components/add-post/Upload';
 
-const AddPost = () => {
+const AddPost: React.FC = () => {
   return (
     <>
       <Upload />

@@ -34,8 +34,10 @@ img,svg{vertical-align:middle}
 label{display:inline-block}
 button{border-radius:0}
 button:focus:not(:focus-visible){outline:0}
-input,button,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}
-button{text-transform:none}
+input,button,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}
+button,select{text-transform:none}
+select{word-wrap:normal}
+select:disabled{opacity:1}
 [list]::-webkit-calendar-picker-indicator{display:none}
 button,[type="button"],[type="reset"],[type="submit"]{-webkit-appearance:button}
 button:not(:disabled),[type="button"]:not(:disabled),[type="reset"]:not(:disabled),[type="submit"]:not(:disabled){cursor:pointer}

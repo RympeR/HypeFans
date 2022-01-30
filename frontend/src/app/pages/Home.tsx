@@ -8,10 +8,11 @@ import SearchBar from '../components/home/SearchBar';
 import StoryBlock from '../components/home/stories/StoryBlock';
 import { Preloader } from '../utils/Preloader';
 
-const Home = () => {
+const Home: React.FC = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getMainPageData());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const recommendations = useSelector((state: RootState) => state.blog.recommendations);
