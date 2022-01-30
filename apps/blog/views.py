@@ -292,12 +292,14 @@ class MainUserPage(GenericAPIView):
             'posts': [],
             'stories': []
         }
-        qs = sample(User.objects.all().order_by('-fans_amount'), 9)
-        if qs.exists():
-            results['recommendations'].append(
-                UserShortRetrieveSeriliazer(instance=qs, many=True, context={
-                                            'request': request}).data
-            )
+        qs = User.objects.all().order_by('-fans_amount')
+        valid_profiles_id_list = User.objects.all().order_by('-fans_amount').values_list('id', flat=True)
+        random_users_id_list = sample(list(valid_profiles_id_list), min(len(valid_profiles_id_list), 9))
+        qs = User.objects.filter(id__in=random_users_id_list)
+        results['recommendations'].append(
+            UserShortRetrieveSeriliazer(instance=qs, many=True, context={
+                                        'request': request}).data
+        )
         if data_compare == 0:
             for user_sub in user.my_subscribes.all():
                 for post in user_sub.user_post.filter(archived=False).order_by('-publication_date'):
