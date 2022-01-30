@@ -30,6 +30,7 @@ def online_check(user):
                 return True
             else:
                 return ((datetime.datetime.now() - user.user_online.last_action).seconds//60) % 60
+        return False
     except ObjectDoesNotExist:
         return False
 

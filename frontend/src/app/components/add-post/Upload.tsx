@@ -22,6 +22,7 @@ const Upload = () => {
   const id = useSelector((state: RootState) => state.auth.pk);
 
   const [postCost, setPostCost] = useState('0');
+  const [accessType, setAccessType] = useState('1');
 
   const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
   const [uploadedFilesImg, setUploadedFilesImg] = useState<string[]>([]);
@@ -49,6 +50,10 @@ const Upload = () => {
     setUploadedFiles([...uploadedFiles.filter((file: any, i: number) => i !== index)]);
   };
 
+  const handleChange = (event: any) => {
+    setAccessType(event.target.value);
+  };
+
   const uploadSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
     const send = {
@@ -56,13 +61,15 @@ const Upload = () => {
       user: id,
       name: 'post',
       description: value,
-      price_to_watch: postCost
+      price_to_watch: postCost,
+      access_level: accessType
     };
     dispatch(createPost(send));
     inputFileRef.current.value = '';
     clearInput();
     setUploadedFiles([]);
     setPostCost('0');
+    setAccessType('1');
     setUploadedFilesImg([]);
   };
 
@@ -164,6 +171,13 @@ const Upload = () => {
                 decimalsLimit={2}
                 onValueChange={(value, name) => setPostCost(value)}
               />
+            </div>
+            <div>
+              Урвоень доступа:
+              <select value={accessType} onChange={handleChange} name="acess_type" id="acess_type">
+                <option value="1">Покупка</option>
+                <option value="2">Подписка</option>
+              </select>
             </div>
             <button
               className={

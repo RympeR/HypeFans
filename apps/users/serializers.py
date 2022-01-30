@@ -345,6 +345,18 @@ class UserGetSerializer(serializers.ModelSerializer):
     avatar = serializers.SerializerMethodField()
     background_photo = serializers.SerializerMethodField()
     is_online = serializers.SerializerMethodField()
+    fans_amount = serializers.SerializerMethodField()
+    post_amount = serializers.SerializerMethodField()
+
+    def get_post_amount(self, user: User):
+        if user.show_post_amount:
+            return user.post_amount
+        return 0
+
+    def get_fans_amount(self, user: User):
+        if user.show_fans_amount:
+            return user.fans_amount
+        return 0
 
     def get_is_online(self, user: User):
         return get_online(self, user)
