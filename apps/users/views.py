@@ -8,7 +8,7 @@ from core.utils.default_responses import (api_accepted_202,
                                           api_block_by_policy_451,
                                           api_created_201,
                                           api_payment_required_402)
-from core.utils.func import create_ref_link, generate_pay_dict
+from core.utils.func import create_ref_link, generate_pay_dict, sum_by_attribute
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
@@ -153,11 +153,7 @@ class UserLoginAPI(generics.GenericAPIView):
         user = authenticate(username=email, password=password)
         if user is not None:
             token, _ = Token.objects.get_or_create(user=user)
-            return api_created_201(
-                {
-                    "auth_token": str(token)
-                }
-            )
+            return api_created_201({"auth_token": str(token)})
         else:
             return api_bad_request_400(
                 {
@@ -192,11 +188,7 @@ class UserCreateAPI(generics.GenericAPIView):
 
             user.save()
             token, created = Token.objects.get_or_create(user=user)
-            return api_created_201(
-                {
-                    "auth_token": str(token)
-                }
-            )
+            return api_created_201({"auth_token": str(token)})
         except Exception as e:
             logging.error(e)
             return api_block_by_policy_451({"info": "already exists"})
@@ -230,7 +222,7 @@ class CreateSubscriptioAPI(generics.CreateAPIView):
         try:
             serializer.is_valid(raise_exception=True)
         except AssertionError:
-            return api_block_by_policy_451({"status": "not enought credits"})
+            return api_block_by_policy_451({"status": "not enough credits"})
         self.perform_create(serializer)
         return Response(serializer.data)
 
@@ -497,19 +489,15 @@ class PayStatsHistoryRetrieveAPI(APIView):
             target=user,
             start_date__date__month=current_month,
         ).order_by('-start_date')
-        chat_subscription_amount = sum((
-            user.message_price
-            for _ in range(len(chat_subscriptions))
-        ))
+        chat_subscription_amount = sum_by_attribute(
+            user, 'message_price', chat_subscriptions, True)
 
         subscriptions = Subscription.objects.filter(
             target=user,
             start_date__date__month=current_month,
         ).order_by('-start_date')
-        subscription_amount = sum((
-            user.subscribtion_duration
-            for _ in range(len(subscriptions))
-        ))
+        subscription_amount = sum_by_attribute(
+            user, 'subscribtion_duration', subscriptions, True)
 
         referral_payments = ReferralPayment.objects.filter(
             referrer=user,
@@ -523,9 +511,9 @@ class PayStatsHistoryRetrieveAPI(APIView):
             *generate_pay_dict(donations,
                                UnionDonationGetSerializer, 'donation'),
             *generate_pay_dict(subscriptions,
-                           UnionSubscriptionGetSerializer, 'subscription'),
+                               UnionSubscriptionGetSerializer, 'subscription'),
             *generate_pay_dict(chat_subscriptions,
-                                UnionChatSubscriptionGetSerializer, 'chat_subscriptions'),
+                               UnionChatSubscriptionGetSerializer, 'chat_subscriptions'),
             *generate_pay_dict(referral_payments,
                                UnionReferralPaymentGetSerializer, 'referral_payment'),
         ], key=lambda x: x['date_time'], reverse=True)
@@ -598,9 +586,9 @@ class SpendStatsHistoryRetrieveAPI(APIView):
             *generate_pay_dict(donations,
                                UnionDonationGetSerializer, 'donation'),
             *generate_pay_dict(subscriptions,
-                           UnionSubscriptionGetSerializer, 'subscription'),
+                               UnionSubscriptionGetSerializer, 'subscription'),
             *generate_pay_dict(chat_subscriptions,
-                                UnionChatSubscriptionGetSerializer, 'chat_subscriptions'),
+                               UnionChatSubscriptionGetSerializer, 'chat_subscriptions'),
 
         ], key=lambda x: x['date_time'], reverse=True)
 

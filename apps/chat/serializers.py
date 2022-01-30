@@ -1,15 +1,16 @@
 from core.utils.customFields import TimestampField
 from core.utils.func import return_file_url
-from apps.users.dynamic_preferences_registry import ReferralPercentage
 from rest_framework import serializers
 
 from apps.blog.models import Attachment
 from apps.blog.serializers import AttachmentSerializer
+from apps.users.dynamic_preferences_registry import ReferralPercentage
 from apps.users.models import User
 from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
-                                    UserShortRetrieveSeriliazer, UserShortSocketRetrieveSeriliazer)
+                                    UserShortRetrieveSeriliazer,
+                                    UserShortSocketRetrieveSeriliazer)
 
-from .models import Chat, Room, UserMessage, ChatBought
+from .models import Chat, ChatBought, Room, UserMessage
 
 
 class RoomGetSerializer(serializers.ModelSerializer):

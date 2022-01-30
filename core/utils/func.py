@@ -9,6 +9,7 @@ from django.db.models import QuerySet
 HOST = 'hype-fans.com/'
 REF_PERCANTAGE = 0.05
 
+
 def id_generator(size=12, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
@@ -71,3 +72,12 @@ def return_file_url(serializer, path_file):
     request = serializer.context.get('request')
     host = request.get_host() if request else 'hype-fans.com/'
     return create_path_file(host, path_file)
+
+
+def sum_by_attribute(obj: object, attrib_name: str, qs=[], by_range: bool = False):
+    if by_range:
+        return sum((
+            getattr(obj, attrib_name)
+            for _ in range(len(qs))
+        ))
+    return sum((getattr(obj, attrib_name) for _ in qs))

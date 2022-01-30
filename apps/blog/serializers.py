@@ -142,9 +142,8 @@ class PostGetSerializer(serializers.ModelSerializer):
     def get_liked(self, obj: Post) -> bool:
         request = self.context.get('request')
         if request:
-            user = request.user
             post_action_qs = PostAction.objects.filter(
-                post=obj, user=user)
+                post=obj, user=request.user)
             if post_action_qs.exists():
                 for action in post_action_qs:
                     if action.like:
@@ -154,9 +153,8 @@ class PostGetSerializer(serializers.ModelSerializer):
     def get_like_id(self, obj: Post):
         request = self.context.get('request')
         if request:
-            user = request.user
             post_action_qs = PostAction.objects.filter(
-                post=obj, user=user)
+                post=obj, user=request.user)
             if post_action_qs.exists():
                 for action in post_action_qs:
                     if action.like:
