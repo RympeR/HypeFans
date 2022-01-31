@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.css';
 import Cookies from 'js-cookie';
 import React from 'react';
 import { positions, Provider } from 'react-alert';
