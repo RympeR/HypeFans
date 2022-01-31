@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.css';
+import Slider from 'react-slick';
 import { CommentComponent } from '~/app/components/CommentComponent';
 import { Preloader } from '~/app/utils/Preloader';
 import { createPostAction, deletePostAction, getFavourites } from '~/redux/favouritesReducer';
@@ -57,15 +56,15 @@ export const Favourites = () => {
             <div className="profile__postMain">
               {item.post?.attachments.length > 1 ? (
                 <div className="profile__postIMG">
-                  <Swiper pagination={true} spaceBetween={20} loop={true} slidesPerView={1}>
+                  <Slider>
                     {item.post.attachments.map((item: any, index: number) => {
                       return (
-                        <SwiperSlide key={`${index} slideMain`}>
+                        <div key={`${index} slideMain`}>
                           <img src={item._file} alt="postIMG" className="profile"></img>
-                        </SwiperSlide>
+                        </div>
                       );
                     })}
-                  </Swiper>
+                  </Slider>
                 </div>
               ) : (
                 <div className="profile__postIMG">

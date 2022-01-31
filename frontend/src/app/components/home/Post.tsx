@@ -3,8 +3,7 @@ import { useAlert } from 'react-alert';
 import Modal from 'react-bootstrap/Modal';
 import CurrencyInput from 'react-currency-input-field';
 import { useDispatch, useSelector } from 'react-redux';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.css';
+import Slider from 'react-slick';
 import { userAPI } from '~/api/userAPI';
 import { LENTGH_OF_VISIBLE_CAPTION, showVisibleText } from '~/app/utils/utilities';
 import { createPostAction, deletePostAction, setFavorite } from '~/redux/blogReducer';
@@ -108,15 +107,15 @@ const Post = ({
 
       {post.post?.attachments.length > 1 ? (
         <div className="profile__postIMG">
-          <Swiper pagination={true} spaceBetween={20} loop={true} slidesPerView={1}>
+          <Slider>
             {post.post.attachments.map((item: any, index: number) => {
               return (
-                <SwiperSlide key={`${index} slideMain`}>
+                <div key={`${index} slideMain`}>
                   <img src={item._file} alt="postIMG" className="profile"></img>
-                </SwiperSlide>
+                </div>
               );
             })}
-          </Swiper>
+          </Slider>
         </div>
       ) : (
         <div className="profile__postIMG">

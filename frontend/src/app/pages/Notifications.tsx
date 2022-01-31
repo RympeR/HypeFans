@@ -97,7 +97,7 @@ const Notifications: React.FC = () => {
             />
           ))}
           {/* Заголовок(конец)*/}
-          <div className="notifications__navMobile" style={isShown ? { width: '160px' } : { width: '25px' }}>
+          <div className="notifications__navMobile" style={isShown ? { width: '135px' } : { width: '25px' }}>
             {isShown ? (
               <div style={{ marginLeft: '5px' }}>
                 <Link
