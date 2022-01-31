@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 @import '~bootstrap/scss/bootstrap';
+=======
+@import 'bootstrap/dist/css/bootstrap.css';
+>>>>>>> b6da6f950a0e74a3229a8872725741fe6aaea4bf
 @import './variables';
 @import './base/global';
 @import './base/fonts';
@@ -15,4 +19,3 @@
 @import './components/upload';
 @import './components/stories';
 @import './components/auth';
-@import 'bootstrap/dist/css/bootstrap.css';
