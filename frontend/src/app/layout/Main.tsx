@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.css';
 import Cookies from 'js-cookie';
 import React, { ReactNode } from 'react';
 import { Redirect } from 'react-router-dom';
