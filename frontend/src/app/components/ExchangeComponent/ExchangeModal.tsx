@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import QRCode from 'react-qr-code';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 import { SettingsSidebarItem } from '~/app/pages/notifications/NotificationSidebarItem';
 import { ReactComponent as CopySvg } from '../../../assets/images/copy.svg';
@@ -44,18 +44,18 @@ export const ExchangeModal = () => {
               <a
                 className="share"
                 href="#"
-                onClick={(e) => {
-                  return toast.error('Your device does not support this feature');
-                }}
+                // onClick={(e) => {
+                //   return toast.error('Your device does not support this feature');
+                // }}
               >
                 <i className="icon-share" />
               </a>
               <p>Какая то ссылка</p>
               <div
                 className="copy"
-                onClick={(e) => {
-                  return toast.success('The link was copied');
-                }}
+                // onClick={(e) => {
+                //   return toast.success('The link was copied');
+                // }}
               >
                 <CopySvg />
               </div>
