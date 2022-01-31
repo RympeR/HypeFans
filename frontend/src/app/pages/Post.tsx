@@ -1,7 +1,7 @@
 import { default as React, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Slider from 'react-slick';
 import 'reactjs-popup/dist/index.css';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import { createPostActionModal, deletePostActionModal, getPost, setFavoritePostModal } from '~/redux/blogReducer';
 import { RootState } from '~/redux/redux';
 import { ReactComponent as MenuDots } from '../../assets/images/3dots.svg';
@@ -55,15 +55,15 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
         <div className="profile__postMain">
           {post?.attachments.length > 1 ? (
             <div className="profile__postIMG">
-              <Swiper pagination={true} spaceBetween={20} loop={true} slidesPerView={1}>
+              <Slider>
                 {post.attachments.map((item: any, index: number) => {
                   return (
-                    <SwiperSlide key={`${index} slideMain`}>
+                    <div key={`${index} slideMain`}>
                       <img src={item._file} alt="postIMG" className="profile"></img>
-                    </SwiperSlide>
+                    </div>
                   );
                 })}
-              </Swiper>
+              </Slider>
             </div>
           ) : (
             <div className="profile__postIMG">

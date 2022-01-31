@@ -4,9 +4,9 @@ import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
+import Slider from 'react-slick';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import { userAPI } from '~/api/userAPI';
 import { RootState } from '~/redux/redux';
 import { buyPost, createPostAction, deletePost, deletePostAction, getUser, setFavorite } from '~/redux/userReducer';
@@ -193,15 +193,15 @@ const Profile = () => {
                   <div className="profile__postMain">
                     {item?.post?.attachments.length > 1 ? (
                       <div className="profile__postIMG">
-                        <Swiper pagination={true} spaceBetween={20} loop={true} slidesPerView={1}>
+                        <Slider>
                           {item?.post.attachments.map((item: any, index: number) => {
                             return (
-                              <SwiperSlide key={`${index} slideMain`}>
+                              <div key={`${index} slideMain`}>
                                 <img src={item._file} alt="postIMG" className="profile"></img>
-                              </SwiperSlide>
+                              </div>
                             );
                           })}
-                        </Swiper>
+                        </Slider>
                       </div>
                     ) : (
                       <div className="profile__postIMG">

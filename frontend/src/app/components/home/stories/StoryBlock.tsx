@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import Slider from 'react-slick';
 import 'swiper/swiper.scss';
 import IStory from '~/app/types/IStory';
 import { isStoryWatched, showVisibleText, STORY_USERNAME_LENGTH } from '~/app/utils/utilities';
@@ -96,9 +96,9 @@ const StoryBlock = () => {
   return (
     <>
       <div className="stories">
-        <Swiper slidesPerView={'auto'} freeMode={true}>
+        <Slider>
           {stories.map((story) => (
-            <SwiperSlide key={story.id}>
+            <div key={story.id}>
               <div className="stories__story-thumbnail" onClick={() => openModalHandler(story.id)}>
                 <StoryOutline
                   className={`stories__outline ${isStoryWatched(story.id) ? 'stories__outline_watched' : ''}`}
@@ -108,9 +108,9 @@ const StoryBlock = () => {
                 </div>
                 <p className="stories__user-login">@{showVisibleText(story.username, STORY_USERNAME_LENGTH)}</p>
               </div>
-            </SwiperSlide>
+            </div>
           ))}
-        </Swiper>
+        </Slider>
         <Modal show={isModalOpened} onHide={() => setIsModalOpened(false)} centered fullscreen={true}>
           <Modal.Body className="notifications__modal">
             <StoryModal stories={stories} currentIdOfStory={currentIdOfStory} setIsModalOpened={setIsModalOpened} />
