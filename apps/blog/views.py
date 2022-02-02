@@ -349,15 +349,31 @@ class MainUserPage(GenericAPIView):
                     res_dict = {
                         'user': UserShortRetrieveSeriliazer(
                             instance=user_sub, context={'request': request}).data,
-                        'post': StoryShortSerializer(
+                        'story': StoryShortSerializer(
                             instance=story, context={'request': request}).data
                     }
                     results['posts'].append(res_dict)
+            results['posts'] = results['posts'][offset:limit+offset]
+
+            valid_posts_id_list = Post.objects.filter(show_in_recomendations=True).order_by(
+                '-publication_date').values_list('id', flat=True)
+            random_posts_id_list = sample(
+                list(valid_profiles_id_list), min(len(valid_posts_id_list), 9))
+            qs = Post.objects.filter(id__in=random_posts_id_list)
+
+            for post in qs:
+                res_dict = {
+                    'user': UserShortRetrieveSeriliazer(
+                        instance=post.user, context={'request': request}).data,
+                    'post': PostGetShortSerializers(
+                        instance=post, context={'request': request}).data
+                }
+                results['posts'].append(res_dict)
 
             return Response(
                 {
                     'recommendations': results['recommendations'],
-                    'posts': results['posts'][offset:limit+offset],
+                    'posts': results['posts'],
                     'stories': []
                 }
             )

@@ -60,6 +60,7 @@ class Post(models.Model):
     access_level = models.IntegerField(
         choices=AccessLevelChoices.choices, verbose_name='Уровень доступа', default=1)
     archived = models.BooleanField(verbose_name='Архивировано', default=False)
+    show_in_recomendations = models.BooleanField(verbose_name='Показывать в рекомендациях', default=False)
 
     class Meta:
         verbose_name = 'Публикация'

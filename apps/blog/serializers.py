@@ -161,7 +161,7 @@ class PostGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        exclude = 'time_to_archive',
+        exclude = 'time_to_archive', 'show_in_recomendations', 
 
 
 class PostActionUpdateSerializer(serializers.ModelSerializer):
