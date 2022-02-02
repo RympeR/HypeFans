@@ -109,6 +109,8 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
         raise serializers.ValidationError
 
     def create(self, validated_data):
+        request = self.context.get('request')
+        request.user.my_subscribes.add(validated_data['target'])
         return Subscription.objects.create(
             source=validated_data['source'],
             target=validated_data['target'],

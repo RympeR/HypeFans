@@ -248,16 +248,17 @@ class UserNotifications(GenericAPIView):
                 }
                 likes_result.append(res_dict)
         for donation in user.recieved_user.all().order_by('-datetime').distinct():
-            res_dict = {
-                'user': self.serializer_class(
-                    instance=donation.sender, context={'request': request}).data,
-                'donation': {
-                    'amount': donation.amount,
-                    'date_time': donation.datetime.timestamp() if donation.datetime else None
-                },
-                'type': 'donation'
-            }
-            donations_result.append(res_dict)
+            if user != donation.sender:
+                res_dict = {
+                    'user': self.serializer_class(
+                        instance=donation.sender, context={'request': request}).data,
+                    'donation': {
+                        'amount': donation.amount,
+                        'date_time': donation.datetime.timestamp() if donation.datetime else None
+                    },
+                    'type': 'donation'
+                }
+                donations_result.append(res_dict)
 
         for subscription in user.target_user_subscribe.all().order_by('-start_date').distinct():
             if user != subscription.source:
