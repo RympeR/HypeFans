@@ -228,23 +228,25 @@ class UserNotifications(GenericAPIView):
             comment__isnull=False,
             post__user=user
         ).order_by('-date_time').distinct():
-            res_dict = {
-                'user': self.serializer_class(
-                    instance=comment.user, context={'request': request}).data,
-                'post': CommentRetrieveSerializer(
-                    instance=comment, context={'request': request}).data,
-                'type': 'comment'
-            }
-            comments_result.append(res_dict)
+            if comment.user != user:
+                res_dict = {
+                    'user': self.serializer_class(
+                        instance=comment.user, context={'request': request}).data,
+                    'post': CommentRetrieveSerializer(
+                        instance=comment, context={'request': request}).data,
+                    'type': 'comment'
+                }
+                comments_result.append(res_dict)
         for like in PostAction.objects.filter(post__user=user, like=True).distinct():
-            res_dict = {
-                'user': self.serializer_class(
-                    instance=like.user, context={'request': request}).data,
-                'post': LikeRetrieveSerializer(
-                    instance=like, context={'request': request}).data,
-                'type': 'like'
-            }
-            likes_result.append(res_dict)
+            if like.user != user:
+                res_dict = {
+                    'user': self.serializer_class(
+                        instance=like.user, context={'request': request}).data,
+                    'post': LikeRetrieveSerializer(
+                        instance=like, context={'request': request}).data,
+                    'type': 'like'
+                }
+                likes_result.append(res_dict)
         for donation in user.recieved_user.all().order_by('-datetime').distinct():
             res_dict = {
                 'user': self.serializer_class(
