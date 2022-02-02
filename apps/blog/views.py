@@ -226,7 +226,7 @@ class UserNotifications(GenericAPIView):
         subscriptions_result = []
         for comment in PostAction.objects.filter(
             comment__isnull=False,
-            user=user
+            post__user=user
         ).order_by('-date_time').distinct():
             res_dict = {
                 'user': self.serializer_class(
@@ -236,7 +236,7 @@ class UserNotifications(GenericAPIView):
                 'type': 'comment'
             }
             comments_result.append(res_dict)
-        for like in PostAction.objects.filter(user=user, like=True).distinct():
+        for like in PostAction.objects.filter(post__user=user, like=True).distinct():
             res_dict = {
                 'user': self.serializer_class(
                     instance=like.user, context={'request': request}).data,
