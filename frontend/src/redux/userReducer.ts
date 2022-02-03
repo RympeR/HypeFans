@@ -547,7 +547,7 @@ export const changePassword =
 
 type AllActionsType = InferActionsTypes<typeof actions>;
 
-type DispatchType = Dispatch<AllActionsType>;
+// type DispatchType = Dispatch<AllActionsType>;
 
 export type InitialStateType = typeof initialState;
 

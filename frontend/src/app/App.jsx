@@ -20,7 +20,7 @@ import Profile from './pages/Profile';
 import { Settings } from './pages/settings/Settings';
 import { LangProvider } from './utils/LangProvider';
 import { ViewportProvider } from './utils/ViewportProvider';
-require('swiper/swiper-bundle.css');
+// require('swiper/swiper-bundle.css');
 
 const options = {
   timeout: 5000,

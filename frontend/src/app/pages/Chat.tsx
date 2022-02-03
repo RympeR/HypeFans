@@ -54,16 +54,10 @@ const Chat: React.FC = () => {
       if (userId === item?.item?.room?.room_info?.creator?.pk) setCreator(true);
       else setCreator(false);
     }, [item]);
-
     return (
-<<<<<<< HEAD
-      <Link to={`/chat/${item?.item?.room?.room_info?.id}`}>
-=======
       <Link
         to={`/chat/${item?.item?.room?.room_info?.id}`}
-        onClick={() => setVisibility(!visible)}
       >
->>>>>>> 78c1bf5aafc9bc4d4fd7661e67c7e1f8448b9c71
         <div
           style={
             lastUrl !== item?.item?.room?.room_info?.id
@@ -156,11 +150,7 @@ const Chat: React.FC = () => {
         </div>
       </div>
       <div className="chat__main">
-<<<<<<< HEAD
-        <div className={'chat__sidebar ' + (VISIBLE ? '' : 'chat__inactive  chat__flex_0')}>
-=======
-        <div className={"chat__sidebar " + (visible ? "chat__inactive" : "")}>
->>>>>>> 78c1bf5aafc9bc4d4fd7661e67c7e1f8448b9c71
+        <div className={"chat__sidebar " + (VISIBLE ? "chat__inactive" : "")}>
           {rooms.map((item, key) => {
             return (
               <div key={Math.random() + String(key)}>
@@ -169,15 +159,11 @@ const Chat: React.FC = () => {
             );
           })}
         </div>
-<<<<<<< HEAD
-        <Route path="/chat/:id" render={() => <DialogMain rooms={rooms} />} exact />
-=======
         <Route
           path="/chat/:id"
-          render={() => <DialogMain visible={visible} rooms={rooms} />}
+          render={() => <DialogMain rooms={rooms} />}
           exact
         />
->>>>>>> 78c1bf5aafc9bc4d4fd7661e67c7e1f8448b9c71
         <Route path="/chat" component={NoDialog} exact />
       </div>
     </div>

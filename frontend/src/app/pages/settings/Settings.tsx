@@ -620,7 +620,10 @@ export const Settings = () => {
         };
         getSpends();
       }, []);
-      const [earns, setEarns] = useState<payHistory>({ actions: [], result_sum: 0 });
+      const [earns, setEarns] = useState<payHistory>({
+        actions: [],
+        result_sum: 0,
+      });
       const [earnShow, setEarnShow] = useState<boolean>(false);
       useEffect(() => {
         const getEarns = async () => {
@@ -639,7 +642,7 @@ export const Settings = () => {
       ]);
       const formatDateTime = (timestamp: number) => {
         const d = new Date(timestamp * 1000);
-        return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+        return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
       };
       const getSpendsText = (item: historyAction) => {
         console.log(item);
@@ -671,21 +674,21 @@ export const Settings = () => {
       const getEarnsText = (item: historyAction) => {
         console.log(item);
         switch (item.type) {
-          case 'donation':
+          case "donation":
             return (
               <div>
                 <h3>Вам задонатили @{item.target.username}</h3>
                 <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
-          case 'referral_payment':
+          case "referral_payment":
             return (
               <div>
                 <h3>Реферальный бонус @{item.target.username}</h3>
                 <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
-          case 'chat_subscription':
+          case "chat_subscription":
             return (
               <div>
                 <h3>На вас чат с @{item.target.username}</h3>
@@ -854,102 +857,45 @@ export const Settings = () => {
           </WithTabs>
           <WithTabs tab={{ label: "Зароботок" }} index={1}>
             <div className="notifications__walletMain">
-              <div className="notifications__walletChild">
-                <div style={{ display: "flex" }}>
-                  <div>
-                    <img src={linka} alt="img" />
-                  </div>
-                  <div>
-                    <h3>Вам задонатил Valera</h3>
-                    <h4>вчера</h4>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontFamily: "Factor A",
-                    fontStyle: "normal",
-                    fontWeight: "normal",
-                    fontSize: "18px",
-                    lineHeight: "20px",
-                    color: "#000000",
-                    marginRight: "12px",
-                  }}
-                >
-                  100$
-                </div>
-              </div>
-              <div className="notifications__walletChild">
-                <div style={{ display: "flex" }}>
-                  <div>
-                    <img src={linka} alt="img" />
-                  </div>
-                  <div>
-                    <h3>Вам задонатил Valera</h3>
-                    <h4>вчера</h4>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontFamily: "Factor A",
-                    fontStyle: "normal",
-                    fontWeight: "normal",
-                    fontSize: "18px",
-                    lineHeight: "20px",
-                    color: "#000000",
-                    marginRight: "12px",
-                  }}
-                >
-                  100$
-                </div>
-              </div>
-              <div className="notifications__walletChild">
-                <div style={{ display: "flex" }}>
-                  <div>
-                    <img src={linka} alt="img" />
-                  </div>
-                  <div>
-                    <h3>Вам задонатил Valera</h3>
-                    <h4>вчера</h4>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontFamily: "Factor A",
-                    fontStyle: "normal",
-                    fontWeight: "normal",
-                    fontSize: "18px",
-                    lineHeight: "20px",
-                    color: "#000000",
-                    marginRight: "12px",
-                  }}
-                >
-                  100$
-                </div>
-              </div>
-              <div className="notifications__walletChild">
-                <div style={{ display: "flex" }}>
-                  <div>
-                    <img src={linka} alt="img" />
-                  </div>
-                  <div>
-                    <h3>Вам задонатил Valera</h3>
-                    <h4>вчера</h4>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontFamily: "Factor A",
-                    fontStyle: "normal",
-                    fontWeight: "normal",
-                    fontSize: "18px",
-                    lineHeight: "20px",
-                    color: "#000000",
-                    marginRight: "12px",
-                  }}
-                >
-                  100$
-                </div>
-              </div>
+              {earns.actions.map((item, key) => {
+                return (
+                  <>
+                    {key < 9 || earnShow ? (
+                      <div
+                        className="notifications__walletChild"
+                        key={"spends " + key}
+                      >
+                        <div style={{ display: "flex" }}>
+                          <div>
+                            <img
+                              src={
+                                item.target.avatar !== ""
+                                  ? item.target.avatar
+                                  : logo
+                              }
+                              alt="avatar"
+                            />
+                          </div>
+                          {getEarnsText(item)}
+                        </div>
+                        <div
+                          style={{
+                            fontFamily: "Factor A",
+                            fontStyle: "normal",
+                            fontWeight: "normal",
+                            fontSize: "18px",
+                            lineHeight: "20px",
+                            color: "#000000",
+                            marginRight: "12px",
+                          }}
+                        >
+                          {item.amount}$
+                        </div>
+                      </div>
+                    ) : null}
+                  </>
+                );
+              })}
               <div
                 style={{
                   display: "flex",
@@ -961,27 +907,29 @@ export const Settings = () => {
                 <button
                   className="notifications__settingBtn"
                   style={{ marginLeft: "0px", marginRight: "0px" }}
+                  onClick={() => setShow(true)}
                 >
-                  <Link
-                    to="/settings/profileSettings/card"
-                    style={{ color: "white" }}
-                  >
-                    Карта
-                  </Link>
+                  Пополнить баланс
                 </button>
                 <Modal show={isShow} onHide={() => setShow(false)} centered>
                   <Modal.Body className="notifications__modal">
-                    <div style={{ display: 'flex', flexDirection: 'column', padding: '15px' }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        padding: "15px",
+                      }}
+                    >
                       <h2>Пополнение балланса</h2>
 
                       <CurrencyInput
                         prefix="$"
                         style={{
-                          border: '1px solid rgba(0, 0, 0, 0.4)',
-                          boxSizing: 'border-box',
-                          borderRadius: '8px',
-                          padding: '8px',
-                          marginTop: '16px'
+                          border: "1px solid rgba(0, 0, 0, 0.4)",
+                          boxSizing: "border-box",
+                          borderRadius: "8px",
+                          padding: "8px",
+                          marginTop: "16px",
                         }}
                         name="donation_amount"
                         placeholder="$ Введите сумму..."
@@ -990,10 +938,19 @@ export const Settings = () => {
                           return null;
                         }}
                       />
-                      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '15px' }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          marginTop: "15px",
+                        }}
+                      >
                         <h3 onClick={() => setShow(false)}>Отмена</h3>
-                        <div style={{ width: '20px' }}></div>
-                        <h3 style={{ color: '#FB5734' }} onClick={() => setShow(false)}>
+                        <div style={{ width: "20px" }}></div>
+                        <h3
+                          style={{ color: "#FB5734" }}
+                          onClick={() => setShow(false)}
+                        >
                           Пополнить
                         </h3>
                       </div>
