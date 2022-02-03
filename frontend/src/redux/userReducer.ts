@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { authAPI } from '~/api/authAPI';
-import { blogAPI } from '~/api/blogAPI';
+import { authAPI } from '../api/authAPI';
+import { blogAPI } from '../api/blogAPI';
 import {
   CardType,
   createCardRT,
@@ -11,11 +11,11 @@ import {
   DonationType,
   getUserRT,
   idType,
+  payHistory,
   PaymentType,
   referralHistory,
-  payHistory,
   userStringType
-} from '~/api/types';
+} from '../api/types';
 import { userAPI } from '../api/userAPI';
 import { isLoading, isntLoading } from './blogReducer';
 import { InferActionsTypes, RootState } from './redux';

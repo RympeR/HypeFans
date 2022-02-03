@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { blogAPI } from '~/api/blogAPI';
-import { getPostActionList } from '~/redux/blogReducer';
-import { RootState } from '~/redux/redux';
+import { blogAPI } from '../../api/blogAPI';
 import { ReactComponent as BackButton } from '../../assets/images/arrow-left.svg';
 import { ReactComponent as LikeIcon } from '../../assets/images/heart.svg';
 import logo from '../../assets/images/logo.svg';
+import { getPostActionList } from '../../redux/blogReducer';
+import { RootState } from '../../redux/redux';
 
 export const CommentComponent = ({ data, postId }: { data: any; postId: number }) => {
   const [show, setShow] = useState(false);

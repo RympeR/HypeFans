@@ -1,12 +1,12 @@
-import React, { FormEvent, useContext } from 'react';
-import { LangContext } from '~/app/utils/LangProvider';
-import { useTextInput } from '~/app/utils/useTextInput';
-import { ReactComponent as Send } from '../../../../assets/images/send.svg';
+import React, { FormEvent, useContext } from "react";
+import { LangContext } from "../../../../app/utils/LangProvider";
+import { useTextInput } from "../../../../app/utils/useTextInput";
+import { ReactComponent as Send } from "../../../../assets/images/send.svg";
 
 const Story = ({ story }: { story: any }) => {
   const { currentLang } = useContext(LangContext);
 
-  const { value, onChangeHandler, clearInput } = useTextInput('');
+  const { value, onChangeHandler, clearInput } = useTextInput("");
 
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();

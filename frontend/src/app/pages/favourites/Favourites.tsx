@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Slider from 'react-slick';
-import { CommentComponent } from '~/app/components/CommentComponent';
-import { Preloader } from '~/app/utils/Preloader';
-import { createPostAction, deletePostAction, getFavourites } from '~/redux/favouritesReducer';
-import { RootState } from '~/redux/redux';
-import { setFavorite } from '~/redux/userReducer';
-import { ReactComponent as MenuDots } from '../../../assets/images/3dots.svg';
-import { ReactComponent as SaveIcon } from '../../../assets/images/bookmark.svg';
-import { ReactComponent as LikeIcon } from '../../../assets/images/heart.svg';
-import logo from '../../../assets/images/logo.svg';
-import { ReactComponent as CommentIcon } from '../../../assets/images/message-circle.svg';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Slider from "react-slick";
+import { CommentComponent } from "../../../app/components/CommentComponent";
+import { Preloader } from "../../../app/utils/Preloader";
+import {
+  createPostAction,
+  deletePostAction,
+  getFavourites,
+} from "../../../redux/favouritesReducer";
+import { RootState } from "../../../redux/redux";
+import { setFavorite } from "../../../redux/userReducer";
+import { ReactComponent as MenuDots } from "../../../assets/images/3dots.svg";
+import { ReactComponent as SaveIcon } from "../../../assets/images/bookmark.svg";
+import { ReactComponent as LikeIcon } from "../../../assets/images/heart.svg";
+import logo from "../../../assets/images/logo.svg";
+import { ReactComponent as CommentIcon } from "../../../assets/images/message-circle.svg";
 
 export const Favourites = () => {
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
@@ -25,25 +29,34 @@ export const Favourites = () => {
   }
   return (
     <div className="profile">
-      <h1 style={{ padding: '30px' }}>Избранное</h1>
+      <h1 style={{ padding: "30px" }}>Избранное</h1>
       {favourites.map((item, index) => {
         return (
           <div className="profile__post" key={`${index}_post`}>
             <div className="profile__postHeader">
               <div className="profile__postInfo">
                 <div className="profile__postUserInfo">
-                  <div style={{ display: 'flex' }}>
-                    <img src={item.user.avatar !== '' ? item.user.avatar : logo} alt="profile_photoPost"></img>
+                  <div style={{ display: "flex" }}>
+                    <img
+                      src={item.user.avatar !== "" ? item.user.avatar : logo}
+                      alt="profile_photoPost"
+                    ></img>
                     <div>
-                      <h3 className="profile__name" style={{ margin: '5px 8px', marginBottom: '0px' }}>
+                      <h3
+                        className="profile__name"
+                        style={{ margin: "5px 8px", marginBottom: "0px" }}
+                      >
                         {item.user.first_name}
                       </h3>
-                      <h4 className="profile__nickname" style={{ marginLeft: '8px' }}>
+                      <h4
+                        className="profile__nickname"
+                        style={{ marginLeft: "8px" }}
+                      >
                         {`@${item.user.username}`}
                       </h4>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <div style={{ display: "flex", alignItems: "center" }}>
                     <div className="profile__postAgo">50 минут назад</div>
                     <button className="post__menu-dots">
                       <MenuDots />
@@ -60,7 +73,11 @@ export const Favourites = () => {
                     {item.post.attachments.map((item: any, index: number) => {
                       return (
                         <div key={`${index} slideMain`}>
-                          <img src={item._file} alt="postIMG" className="profile"></img>
+                          <img
+                            src={item._file}
+                            alt="postIMG"
+                            className="profile"
+                          ></img>
                         </div>
                       );
                     })}
@@ -68,17 +85,25 @@ export const Favourites = () => {
                 </div>
               ) : (
                 <div className="profile__postIMG">
-                  <img src={item?.post.attachments[0]._file} alt="postIMG"></img>
+                  <img
+                    src={item?.post.attachments[0]._file}
+                    alt="postIMG"
+                  ></img>
                 </div>
               )}
-              <div className="post__bottom" style={{ margin: '24px 24px' }}>
+              <div className="post__bottom" style={{ margin: "24px 24px" }}>
                 <div className="post__actions">
                   <div className="post__actions-left">
                     <button
                       className="post__action-btn"
                       onClick={() => {
                         item.post.liked
-                          ? dispatch(deletePostAction({ id: item.post.like_id, post_id: item.post.pk }))
+                          ? dispatch(
+                              deletePostAction({
+                                id: item.post.like_id,
+                                post_id: item.post.pk,
+                              })
+                            )
                           : dispatch(
                               createPostAction({
                                 like: true,
@@ -88,12 +113,15 @@ export const Favourites = () => {
                                 parent: null,
                                 date_time: null,
                                 post: item.post.pk,
-                                id: null
+                                id: null,
                               })
                             );
                       }}
                     >
-                      <LikeIcon className="post__action-icon" fill={item.post.liked ? '#C41E3A' : 'none'} />
+                      <LikeIcon
+                        className="post__action-icon"
+                        fill={item.post.liked ? "#C41E3A" : "none"}
+                      />
                     </button>
 
                     <button className="post__action-btn">
@@ -103,16 +131,26 @@ export const Favourites = () => {
                   <button
                     className="post__action-btn"
                     onClick={() => {
-                      return dispatch(setFavorite(item.post.pk, !item.post.favourite));
+                      return dispatch(
+                        setFavorite(item.post.pk, !item.post.favourite)
+                      );
                     }}
                   >
-                    <SaveIcon className="post__action-icon" fill={item.post.favourite ? 'black' : 'none'} />
+                    <SaveIcon
+                      className="post__action-icon"
+                      fill={item.post.favourite ? "black" : "none"}
+                    />
                   </button>
                 </div>
 
-                <p className="post__like-amount">{item.post.likes_amount} лайков</p>
+                <p className="post__like-amount">
+                  {item.post.likes_amount} лайков
+                </p>
 
-                <CommentComponent data={item.post.comments} postId={item.post.pk} />
+                <CommentComponent
+                  data={item.post.comments}
+                  postId={item.post.pk}
+                />
               </div>
             </div>
           </div>

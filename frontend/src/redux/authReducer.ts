@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { authAPI } from '~/api/authAPI';
+import { authAPI } from '../api/authAPI';
 import { userAPI } from './../api/userAPI';
 import { isLoading, isntLoading } from './blogReducer';
 import { InferActionsTypes, RootState } from './redux';

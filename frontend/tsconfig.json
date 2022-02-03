@@ -2,11 +2,7 @@
   "extends": "./tsconfig.paths.json",
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -23,16 +19,9 @@
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
     "strictNullChecks": false,
-    "types": [
-      "jest"
-    ],
-    "typeRoots": [
-      "types",
-      "node_modules/@types"
-    ],
+    "types": ["jest"],
+    "typeRoots": ["types", "node_modules/@types"],
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
