@@ -359,8 +359,8 @@ class MainUserPage(GenericAPIView):
                 '-publication_date').values_list('id', flat=True)
             random_posts_id_list = sample(
                 list(valid_profiles_id_list), min(len(valid_posts_id_list), 9))
+            logging.warning(random_posts_id_list)
             qs = Post.objects.filter(id__in=random_posts_id_list)
-            logging.warning(valid_posts_id_list)
             logging.warning(qs)
             for post in qs:
                 res_dict = {
