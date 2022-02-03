@@ -129,7 +129,7 @@ const Profile = () => {
           </Popup>
         </div>
         <img
-          src={profile.avatar !== "" ? profile.avatar : logo}
+          src={profile.avatar ? profile.avatar : logo}
           alt="profile_photo"
         />
         <h3 className="profile__name">{profile.first_name}</h3>
@@ -209,7 +209,7 @@ const Profile = () => {
                       <div className="profile__postUserInfo">
                         <div style={{ display: "flex" }}>
                           <img
-                            src={profile.avatar !== "" ? profile.avatar : logo}
+                            src={profile.avatar ? profile.avatar : logo}
                             alt="profile_photoPost"
                           ></img>
                           <div>

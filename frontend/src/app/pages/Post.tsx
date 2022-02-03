@@ -38,7 +38,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
             <div className="profile__postUserInfo">
               <div style={{ display: "flex" }}>
                 <img
-                  src={post?.user.avatar !== "" ? post?.user.avatar : logo}
+                  src={post?.user.avatar ? post?.user.avatar : logo}
                   alt="profile_photoPost"
                 ></img>
                 <div>

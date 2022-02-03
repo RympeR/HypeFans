@@ -763,11 +763,7 @@ export const Settings = () => {
                         <div style={{ display: "flex" }}>
                           <div>
                             <img
-                              src={
-                                item.target.avatar !== ""
-                                  ? item.target.avatar
-                                  : logo
-                              }
+                              src={item.target.avatar || logo}
                               alt="avatar"
                             />
                           </div>
@@ -868,11 +864,7 @@ export const Settings = () => {
                         <div style={{ display: "flex" }}>
                           <div>
                             <img
-                              src={
-                                item.target.avatar !== ""
-                                  ? item.target.avatar
-                                  : logo
-                              }
+                              src={item.target.avatar || logo}
                               alt="avatar"
                             />
                           </div>
@@ -1256,14 +1248,7 @@ export const Settings = () => {
                       >
                         <div style={{ display: "flex" }}>
                           <div>
-                            <img
-                              src={
-                                item.source.avatar === ""
-                                  ? logo
-                                  : item.source.avatar
-                              }
-                              alt="img"
-                            />
+                            <img src={item.source.avatar || logo} alt="img" />
                           </div>
                           <div>
                             <h3

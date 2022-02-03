@@ -23,6 +23,7 @@ import { ReactComponent as CommentIcon } from "../../../assets/images/message-ci
 import { LangContext } from "../../utils/LangProvider";
 import { CommentComponent } from "../CommentComponent";
 import UserBanner from "./UserBanner";
+import logo from '../../../assets/images/logo.svg';
 
 const Post = ({
   post,
@@ -228,7 +229,7 @@ const Post = ({
               className="chat__sidebarItem"
               style={{ alignItems: "center", padding: "0px" }}
             >
-              <img src={post.user.avatar} alt="fdsfsdfsd"></img>
+              <img src={post.user.avatar ? post.user.avatar : logo} alt="fdsfsdfsd"></img>
               <div>
                 <h2>{post.user.first_name}</h2>
                 <h2

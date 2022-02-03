@@ -35,6 +35,7 @@ import { Preloader } from "../utils/Preloader";
 import { getLastUrlPoint } from "../utils/utilities";
 import { ChatImage } from "./card/components/ChatImage";
 import { Video } from "./card/components/Video";
+import logo from "../../assets/images/logo.svg";
 
 import { ReactComponent as BackIcon } from "../../assets/images/arrow-left.svg";
 import { ReactComponent as BellIcon } from "../../assets/images/bell.svg";
@@ -333,10 +334,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     : rooms.find(
                         (item: any) =>
                           item.room.room_info.id === Number(lastUrl)
-                      )?.room?.room_info?.creator?.avatar
+                      )?.room?.room_info?.creator?.avatar || logo
                   : rooms.find(
                       (item: any) => item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.logo
+                    )?.room?.room_info?.logo || logo
               }
               alt="avatar"
             ></img>
@@ -838,7 +839,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                         rooms.find(
                           (item: any) =>
                             item.room.room_info.id === Number(lastUrl)
-                        )?.room?.user?.avatar
+                        )?.room?.user?.avatar || logo
                       }
                       alt="fdsfsdfsd"
                     ></img>

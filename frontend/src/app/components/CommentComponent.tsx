@@ -111,7 +111,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
     return (
       <div className="notifications__comment">
         <Link to={`/profile/${item?.user?.username}`}>
-          <img src={item.user.avatar ?? logo} alt="userPhoto" />
+          <img src={item.user.avatar ? item.user.avatar : logo} alt="userPhoto" />
         </Link>
         <div className="notifications__commentText">
           <p>
@@ -143,7 +143,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
                     style={show ? {} : { display: 'none' }}
                   >
                     <Link to={`/profile/${item?.user?.username}`}>
-                      <img src={item.user.avatar ?? logo} alt="userPhoto" />
+                      <img src={item.user.avatar ? item.user.avatar : logo} alt="userPhoto" />
                     </Link>
                     <div className="notifications__commentText">
                       <p>

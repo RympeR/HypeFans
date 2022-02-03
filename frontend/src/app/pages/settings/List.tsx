@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { settingsAPI } from "../../../api/settingsAPI";
 import { ReactComponent as ArrowLeft } from "../../../assets/images/leftIcon.svg";
 import { ReactComponent as SearchSvg } from "../../../assets/images/search.svg";
+import logo from '../../../assets/images/logo.svg';
 
 export const ListsComponent = () => {
   const [lists, setLists] = React.useState({
@@ -136,7 +137,7 @@ export const ListsComponent = () => {
                   <div style={{ display: "flex" }}>
                     <div>
                       <Link to={`/profile/${item.username}`}>
-                        <img src={item.avatar} alt="img" />
+                        <img src={item.avatar || logo} alt="img" />
                       </Link>
                     </div>
                     <div>
@@ -197,7 +198,7 @@ export const ListsComponent = () => {
                   <div style={{ display: "flex" }}>
                     <div>
                       <Link to={`/profile/${item.username}`}>
-                        <img src={item.avatar} alt="img" />
+                        <img src={item.avatar || logo} alt="img" />
                       </Link>
                     </div>
                     <div>
@@ -258,7 +259,7 @@ export const ListsComponent = () => {
                   <div style={{ display: "flex" }}>
                     <div>
                       <Link to={`/profile/${item.username}`}>
-                        <img src={item.avatar} alt="img" />
+                        <img src={item.avatar || logo} alt="img" />
                       </Link>
                     </div>
                     <div>

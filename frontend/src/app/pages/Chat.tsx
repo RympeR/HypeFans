@@ -11,6 +11,8 @@ import { Preloader } from "../utils/Preloader";
 import { getLastUrlPoint } from "../utils/utilities";
 import { DialogMain } from "./DialogMain";
 import { NoDialog } from "./NoDialog";
+import logo from "../../assets/images/logo.svg";
+
 const Chat: React.FC = () => {
   const userId = useSelector((state: RootState) => state.auth.pk);
   const history = useHistory();
@@ -55,9 +57,7 @@ const Chat: React.FC = () => {
       else setCreator(false);
     }, [item]);
     return (
-      <Link
-        to={`/chat/${item?.item?.room?.room_info?.id}`}
-      >
+      <Link to={`/chat/${item?.item?.room?.room_info?.id}`}>
         <div
           style={
             lastUrl !== item?.item?.room?.room_info?.id
@@ -79,8 +79,8 @@ const Chat: React.FC = () => {
                   typeof item?.item?.room?.room_info?.invited !== "number"
                     ? amICreator
                       ? item?.item?.room?.room_info?.invited?.avatar
-                      : item?.item?.room?.room_info?.creator?.avatar
-                    : item?.item?.room?.room_info?.logo
+                      : item?.item?.room?.room_info?.creator?.avatar || logo
+                    : item?.item?.room?.room_info?.logo || logo
                 }
                 alt="logo"
               ></img>
@@ -91,8 +91,8 @@ const Chat: React.FC = () => {
                     typeof item?.item?.room?.room_info?.invited !== "number"
                       ? amICreator
                         ? item?.item?.room?.room_info?.invited?.avatar
-                        : item?.item?.room?.room_info?.creator?.avatar
-                      : item?.item?.room?.room_info?.logo
+                        : item?.item?.room?.room_info?.creator?.avatar || logo
+                      : item?.item?.room?.room_info?.logo || logo
                   }
                   alt="logo"
                 ></img>
@@ -126,7 +126,7 @@ const Chat: React.FC = () => {
     );
   };
   let VISIBLE = false;
-  if (window.location.href.match('/chat/d*')) {
+  if (window.location.href.match("/chat/d*")) {
     VISIBLE = false;
   } else {
     VISIBLE = true;
