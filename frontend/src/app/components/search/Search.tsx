@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { userAPI } from '~/api/userAPI';
-import { ReactComponent as ArrowLeft } from '../../../assets/images/leftIcon.svg';
-import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
-import { ReactComponent as SearchSvg } from '../../../assets/images/search.svg';
+import React, { useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { userAPI } from "../../../api/userAPI";
+import { ReactComponent as ArrowLeft } from "../../../assets/images/leftIcon.svg";
+import { ReactComponent as Logo } from "../../../assets/images/logo.svg";
+import { ReactComponent as SearchSvg } from "../../../assets/images/search.svg";
 
 export const Search: React.FC = () => {
   const [users, setUsers] = useState([]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const history = useHistory();
 
   const searchUsers = async () => {
@@ -17,7 +17,7 @@ export const Search: React.FC = () => {
 
   useEffect(() => {
     const search = async () => {
-      const data = await userAPI.searchUser({ user: '' });
+      const data = await userAPI.searchUser({ user: "" });
       setUsers(data.results);
     };
     search();
@@ -28,31 +28,31 @@ export const Search: React.FC = () => {
       <div className="notifications__walletMain">
         <div
           style={{
-            fontWeight: 'bold',
-            fontSize: '18px',
-            margin: '15px 16px',
-            display: 'flex',
-            alignItems: 'center'
+            fontWeight: "bold",
+            fontSize: "18px",
+            margin: "15px 16px",
+            display: "flex",
+            alignItems: "center",
           }}
         >
           <div>
-            <ArrowLeft onClick={() => history.push('/home')} />
+            <ArrowLeft onClick={() => history.push("/home")} />
           </div>
-          <div style={{ marginTop: '5px', marginLeft: '8px' }}>Поиск</div>
+          <div style={{ marginTop: "5px", marginLeft: "8px" }}>Поиск</div>
         </div>
         <div
           style={{
-            borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
-            paddingLeft: '15px',
-            paddingTop: '16px',
-            paddingBottom: '21px',
-            display: 'flex',
-            alignItems: 'center'
+            borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+            paddingLeft: "15px",
+            paddingTop: "16px",
+            paddingBottom: "21px",
+            display: "flex",
+            alignItems: "center",
           }}
         >
           <SearchSvg />
           <input
-            style={{ marginLeft: '16px', width: '80%' }}
+            style={{ marginLeft: "16px", width: "80%" }}
             placeholder="Найти людей:"
             value={inputValue}
             onChange={(val) => {
@@ -63,20 +63,34 @@ export const Search: React.FC = () => {
         </div>
         {users?.map((item, index) => {
           return (
-            <div className="notifications__walletChild" style={{ borderBottom: '0px' }} key={`${index} fav-list`}>
-              <div style={{ display: 'flex' }}>
+            <div
+              className="notifications__walletChild"
+              style={{ borderBottom: "0px" }}
+              key={`${index} fav-list`}
+            >
+              <div style={{ display: "flex" }}>
                 <div>
                   <Link to={`/profile/${item.username}`}>
                     {!item.avatar ? (
-                      <Logo style={{ width: '50px', height: '50px', margin: '12px' }} />
+                      <Logo
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          margin: "12px",
+                        }}
+                      />
                     ) : (
-                      <img src={item.avatar} alt="img" style={{ width: '50px', height: '50px' }} />
+                      <img
+                        src={item.avatar}
+                        alt="img"
+                        style={{ width: "50px", height: "50px" }}
+                      />
                     )}
                   </Link>
                 </div>
                 <div>
-                  <h3>{item.first_name ?? 'Имя'}</h3>
-                  <h4>@{item.username ?? 'nickname'}</h4>
+                  <h3>{item.first_name ?? "Имя"}</h3>
+                  <h4>@{item.username ?? "nickname"}</h4>
                 </div>
               </div>
             </div>

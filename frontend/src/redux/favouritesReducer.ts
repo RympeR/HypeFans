@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
 import { ThunkAction } from 'redux-thunk';
-import { blogAPI } from '~/api/blogAPI';
-import { createPostActionRT } from '~/api/types';
+import { blogAPI } from '../api/blogAPI';
+import { createPostActionRT } from '../api/types';
 import { isLoading, isntLoading } from './blogReducer';
 import { InferActionsTypes, RootState } from './redux';
 

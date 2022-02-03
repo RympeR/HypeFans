@@ -1,9 +1,9 @@
-import { Formik } from 'formik';
-import React, { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import { useSelector } from 'react-redux';
-import { chatAPI } from '~/api/chatAPI';
-import { RootState } from '~/redux/redux';
+import { Formik } from "formik";
+import React, { useState } from "react";
+import Modal from "react-bootstrap/Modal";
+import { useSelector } from "react-redux";
+import { chatAPI } from "../../api/chatAPI";
+import { RootState } from "../../redux/redux";
 
 export const NoDialog = () => {
   const [currentTab, setCurrentTab] = useState(0);
@@ -15,9 +15,22 @@ export const NoDialog = () => {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', width: '62.5%', paddingTop: '10%' }}>
-        <div style={{ textAlign: 'center' }}>Выберите диалог или создайте новый</div>
-        <button className="notifications__settingBtn" style={{ marginTop: '20px' }} onClick={() => setCurrentTab(1)}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "62.5%",
+          paddingTop: "10%",
+        }}
+      >
+        <div style={{ textAlign: "center" }}>
+          Выберите диалог или создайте новый
+        </div>
+        <button
+          className="notifications__settingBtn"
+          style={{ marginTop: "20px" }}
+          onClick={() => setCurrentTab(1)}
+        >
           Новое сообщение
         </button>
       </div>
@@ -26,7 +39,7 @@ export const NoDialog = () => {
           <Formik
             initialValues={{
               creator: userId,
-              invited: [38]
+              invited: [38],
             }}
             onSubmit={(val) => {
               createNewChat(val);
@@ -37,29 +50,44 @@ export const NoDialog = () => {
                 <>
                   {currentTab === 1 ? (
                     <>
-                      <h2 style={{ marginBottom: '0px' }}>Создание беседы</h2>
-                      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
-                        <h3 onClick={() => setCurrentTab(currentTab - 1)} style={{ color: '#FB5734' }}>
+                      <h2 style={{ marginBottom: "0px" }}>Создание беседы</h2>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          marginTop: "15px",
+                        }}
+                      >
+                        <h3
+                          onClick={() => setCurrentTab(currentTab - 1)}
+                          style={{ color: "#FB5734" }}
+                        >
                           Отмена
                         </h3>
-                        <div style={{ width: '20px' }}></div>
-                        <h3 onClick={() => setCurrentTab(currentTab + 1)}>Далее</h3>
+                        <div style={{ width: "20px" }}></div>
+                        <h3 onClick={() => setCurrentTab(currentTab + 1)}>
+                          Далее
+                        </h3>
                       </div>
                     </>
                   ) : null}
                   {currentTab === 2 ? (
                     <>
-                      <h2 style={{ marginBottom: '0px' }}>Создание беседы</h2>
+                      <h2 style={{ marginBottom: "0px" }}>Создание беседы</h2>
                       <div
                         style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          marginTop: '15px'
+                          display: "flex",
+                          flexDirection: "column",
+                          marginTop: "15px",
                         }}
                       >
                         <div
                           className="notifications__longList"
-                          style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            width: "100%",
+                          }}
                         >
                           <p>Цена за вход</p>
                           <input
@@ -70,10 +98,21 @@ export const NoDialog = () => {
                             disabled={false}
                           ></input>
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '19px' }}>
-                          <h3 onClick={() => setCurrentTab(currentTab - 1)}>Отмена</h3>
-                          <div style={{ width: '20px' }}></div>
-                          <h3 onClick={() => setCurrentTab(currentTab + 1)} style={{ color: '#FB5734' }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            marginRight: "19px",
+                          }}
+                        >
+                          <h3 onClick={() => setCurrentTab(currentTab - 1)}>
+                            Отмена
+                          </h3>
+                          <div style={{ width: "20px" }}></div>
+                          <h3
+                            onClick={() => setCurrentTab(currentTab + 1)}
+                            style={{ color: "#FB5734" }}
+                          >
                             Далее
                           </h3>
                         </div>
@@ -82,11 +121,22 @@ export const NoDialog = () => {
                   ) : null}
                   {currentTab === 3 ? (
                     <>
-                      <h2 style={{ marginBottom: '0px' }}>Созда</h2>
-                      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
-                        <h3 onClick={() => setCurrentTab(currentTab - 1)}>Отмена</h3>
-                        <div style={{ width: '20px' }}></div>
-                        <h3 onClick={() => handleSubmit()} style={{ color: '#FB5734' }}>
+                      <h2 style={{ marginBottom: "0px" }}>Созда</h2>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          marginTop: "15px",
+                        }}
+                      >
+                        <h3 onClick={() => setCurrentTab(currentTab - 1)}>
+                          Отмена
+                        </h3>
+                        <div style={{ width: "20px" }}></div>
+                        <h3
+                          onClick={() => handleSubmit()}
+                          style={{ color: "#FB5734" }}
+                        >
                           Далее
                         </h3>
                       </div>

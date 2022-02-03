@@ -26,9 +26,6 @@ module.exports = {
     }
   ],
   webpack: {
-    alias: {
-      '~': `${path.resolve(__dirname)}/src`
-    },
     configure: (webpackConfig) => {
       webpackConfig.optimization.minimizer = [
         new TerserPlugin({

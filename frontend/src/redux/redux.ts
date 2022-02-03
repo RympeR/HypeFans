@@ -1,9 +1,9 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import notificationsReducer from '~/redux/notificationsReducer';
 import authReducer from './authReducer';
 import blogReducer from './blogReducer';
 import favouritesReducer from './favouritesReducer';
+import notificationsReducer from './notificationsReducer';
 import userReducer from './userReducer';
 
 const reducers = combineReducers({

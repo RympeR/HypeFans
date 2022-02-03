@@ -1,16 +1,16 @@
-import CryptoJS from 'crypto-js';
-import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link, Route, useHistory } from 'react-router-dom';
-import { RootState } from '~/redux/redux';
-import { ReactComponent as BackIcon } from '../../assets/images/arrow-left.svg';
-import { ReactComponent as PlusIcon } from '../../assets/images/plus.svg';
-import { ReactComponent as UsersIcon } from '../../assets/images/users.svg';
-import { Preloader } from '../utils/Preloader';
-import { getLastUrlPoint } from '../utils/utilities';
-import { DialogMain } from './DialogMain';
-import { NoDialog } from './NoDialog';
+import CryptoJS from "crypto-js";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link, Route, useHistory } from "react-router-dom";
+import { RootState } from "../../redux/redux";
+import { ReactComponent as BackIcon } from "../../assets/images/arrow-left.svg";
+import { ReactComponent as PlusIcon } from "../../assets/images/plus.svg";
+import { ReactComponent as UsersIcon } from "../../assets/images/users.svg";
+import { Preloader } from "../utils/Preloader";
+import { getLastUrlPoint } from "../utils/utilities";
+import { DialogMain } from "./DialogMain";
+import { NoDialog } from "./NoDialog";
 const Chat: React.FC = () => {
   const userId = useSelector((state: RootState) => state.auth.pk);
   const history = useHistory();
@@ -35,7 +35,7 @@ const Chat: React.FC = () => {
       setSended(true);
       ws.send(
         JSON.stringify({
-          room: 0
+          room: 0,
         })
       );
     }
@@ -58,19 +58,29 @@ const Chat: React.FC = () => {
     }, [item]);
 
     return (
-      <Link to={`/chat/${item?.item?.room?.room_info?.id}`} onClick={() => setVisibility(!visible)}>
+      <Link
+        to={`/chat/${item?.item?.room?.room_info?.id}`}
+        onClick={() => setVisibility(!visible)}
+      >
         <div
           style={
             lastUrl !== item?.item?.room?.room_info?.id
-              ? { display: 'flex', borderBottom: '1px solid rgba(0, 0, 0, 0.2)' }
-              : { display: 'flex', borderBottom: '1px solid rgba(0, 0, 0, 0.2),', backgroundColor: '#C41E3A' }
+              ? {
+                  display: "flex",
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                }
+              : {
+                  display: "flex",
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2),",
+                  backgroundColor: "#C41E3A",
+                }
           }
         >
           <div className="chat__sidebarItem">
-            {typeof item?.item?.room?.room_info?.invited !== 'number' ? (
+            {typeof item?.item?.room?.room_info?.invited !== "number" ? (
               <img
                 src={
-                  typeof item?.item?.room?.room_info?.invited !== 'number'
+                  typeof item?.item?.room?.room_info?.invited !== "number"
                     ? amICreator
                       ? item?.item?.room?.room_info?.invited?.avatar
                       : item?.item?.room?.room_info?.creator?.avatar
@@ -82,7 +92,7 @@ const Chat: React.FC = () => {
               <Link to={`/profile/${item?.item?.room_info?.invited?.avatar}`}>
                 <img
                   src={
-                    typeof item?.item?.room?.room_info?.invited !== 'number'
+                    typeof item?.item?.room?.room_info?.invited !== "number"
                       ? amICreator
                         ? item?.item?.room?.room_info?.invited?.avatar
                         : item?.item?.room?.room_info?.creator?.avatar
@@ -94,7 +104,7 @@ const Chat: React.FC = () => {
             )}
             <div>
               <h2>
-                {typeof item?.item?.room?.room_info?.invited !== 'number'
+                {typeof item?.item?.room?.room_info?.invited !== "number"
                   ? amICreator
                     ? item?.item?.room?.room_info?.invited?.username
                     : item?.item?.room?.room_info?.creator?.username
@@ -102,16 +112,19 @@ const Chat: React.FC = () => {
               </h2>
               <p>
                 {item.item.room?.message?.attachment
-                  ? 'Файл'
+                  ? "Файл"
                   : item.item.room.message?.text
-                  ? CryptoJS.AES.decrypt(item?.item?.room?.message?.text, 'ffds#^$*#&#!;fsdfds#$&^$#@$@#').toString(
-                      CryptoJS.enc.Utf8
-                    )
+                  ? CryptoJS.AES.decrypt(
+                      item?.item?.room?.message?.text,
+                      "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+                    ).toString(CryptoJS.enc.Utf8)
                   : null}
               </p>
             </div>
           </div>
-          <p className="chat__p">{moment(item?.item?.room?.message?.time).format('L')}</p>
+          <p className="chat__p">
+            {moment(item?.item?.room?.message?.time).format("L")}
+          </p>
         </div>
       </Link>
     );
@@ -130,13 +143,13 @@ const Chat: React.FC = () => {
           <div className="chat__resp_icon">
             <Plus />
           </div>
-          <div className="chat__resp_icon" style={{ marginLeft: '40px' }}>
+          <div className="chat__resp_icon" style={{ marginLeft: "40px" }}>
             <UserIcon />
           </div>
         </div>
       </div>
       <div className="chat__main">
-        <div className={'chat__sidebar ' + (visible ? 'chat__inactive' : '')}>
+        <div className={"chat__sidebar " + (visible ? "chat__inactive" : "")}>
           {rooms.map((item, key) => {
             return (
               <div key={Math.random() + String(key)}>
@@ -145,7 +158,11 @@ const Chat: React.FC = () => {
             );
           })}
         </div>
-        <Route path="/chat/:id" render={() => <DialogMain visible={visible} rooms={rooms} />} exact />
+        <Route
+          path="/chat/:id"
+          render={() => <DialogMain visible={visible} rooms={rooms} />}
+          exact
+        />
         <Route path="/chat" component={NoDialog} exact />
       </div>
     </div>

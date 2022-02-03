@@ -4,7 +4,7 @@ import { positions, Provider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { getUserData } from '~/redux/authReducer';
+import { getUserData } from '../redux/authReducer';
 import '../styles/app.scss';
 import { Search } from './components/search/Search';
 import { Main, Navbar } from './layout';

@@ -1,24 +1,31 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useAlert } from 'react-alert';
-import Modal from 'react-bootstrap/Modal';
-import CurrencyInput from 'react-currency-input-field';
-import { useDispatch, useSelector } from 'react-redux';
-import Slider from 'react-slick';
-import { userAPI } from '~/api/userAPI';
-import { LENTGH_OF_VISIBLE_CAPTION, showVisibleText } from '~/app/utils/utilities';
-import { createPostAction, deletePostAction, setFavorite } from '~/redux/blogReducer';
-import { RootState } from '~/redux/redux';
-import { ReactComponent as MenuDots } from '../../../assets/images/3dots.svg';
-import { ReactComponent as SaveIcon } from '../../../assets/images/bookmark.svg';
-import { ReactComponent as LikeIcon } from '../../../assets/images/heart.svg';
-import { ReactComponent as Logo } from '../../../assets/images/logo.svg';
-import { ReactComponent as CommentIcon } from '../../../assets/images/message-circle.svg';
-import { LangContext } from '../../utils/LangProvider';
-import { CommentComponent } from '../CommentComponent';
-import UserBanner from './UserBanner';
+import React, { useContext, useEffect, useState } from "react";
+import { useAlert } from "react-alert";
+import Modal from "react-bootstrap/Modal";
+import CurrencyInput from "react-currency-input-field";
+import { useDispatch, useSelector } from "react-redux";
+import Slider from "react-slick";
+import { userAPI } from "../../../api/userAPI";
+import {
+  LENTGH_OF_VISIBLE_CAPTION,
+  showVisibleText,
+} from "../../../app/utils/utilities";
+import {
+  createPostAction,
+  deletePostAction,
+  setFavorite,
+} from "../../../redux/blogReducer";
+import { RootState } from "../../../redux/redux";
+import { ReactComponent as MenuDots } from "../../../assets/images/3dots.svg";
+import { ReactComponent as SaveIcon } from "../../../assets/images/bookmark.svg";
+import { ReactComponent as LikeIcon } from "../../../assets/images/heart.svg";
+import { ReactComponent as Logo } from "../../../assets/images/logo.svg";
+import { ReactComponent as CommentIcon } from "../../../assets/images/message-circle.svg";
+import { LangContext } from "../../utils/LangProvider";
+import { CommentComponent } from "../CommentComponent";
+import UserBanner from "./UserBanner";
 
 const Post = ({
-  post
+  post,
 }: {
   post: {
     user: any;
@@ -42,23 +49,27 @@ const Post = ({
 
   const [donateShow, setDonateShow] = useState(false);
 
-  const [donateValue, setDonateValue] = useState('0');
+  const [donateValue, setDonateValue] = useState("0");
 
   const [isWholeTextShowed, setIsWholeTextShowed] = useState<boolean>(true);
   const dispatch = useDispatch();
 
   const sendDonate = async () => {
-    const data = await userAPI.createDonation({ amount: Number(donateValue), sender: user_id, reciever: post.user.pk });
+    const data = await userAPI.createDonation({
+      amount: Number(donateValue),
+      sender: user_id,
+      reciever: post.user.pk,
+    });
     if (data.status === 200) {
-      alert.success('Донат отправлен');
+      alert.success("Донат отправлен");
       return setDonateShow(false);
     } else if (data.status === 451) {
       setDonateShow(false);
-      alert.error('Ошибка');
-      return console.log('Не хватает средств');
+      alert.error("Ошибка");
+      return console.log("Не хватает средств");
     } else {
-      alert.error('Ошибка');
-      return console.log('ошибка сервера');
+      alert.error("Ошибка");
+      return console.log("ошибка сервера");
     }
   };
 
@@ -93,11 +104,17 @@ const Post = ({
         </div>
       </div>
       <p className="post__caption">
-        {isWholeTextShowed ? post.post.description : showVisibleText(post.post.description, LENTGH_OF_VISIBLE_CAPTION)}
+        {isWholeTextShowed
+          ? post.post.description
+          : showVisibleText(post.post.description, LENTGH_OF_VISIBLE_CAPTION)}
       </p>
 
       <button
-        className={isWholeTextShowed ? 'post__read-more-btn post__read-more-btn_hidden' : 'post__read-more-btn'}
+        className={
+          isWholeTextShowed
+            ? "post__read-more-btn post__read-more-btn_hidden"
+            : "post__read-more-btn"
+        }
         onClick={() => setIsWholeTextShowed(true)}
       >
         {currentLang.readmore}
@@ -130,7 +147,12 @@ const Post = ({
               className="post__action-btn"
               onClick={() => {
                 post.post.liked
-                  ? dispatch(deletePostAction({ id: post.post.like_id, post_id: post.post.pk }))
+                  ? dispatch(
+                      deletePostAction({
+                        id: post.post.like_id,
+                        post_id: post.post.pk,
+                      })
+                    )
                   : dispatch(
                       createPostAction({
                         like: true,
@@ -140,19 +162,25 @@ const Post = ({
                         user: user_id,
                         date_time: null,
                         post: post.post.pk,
-                        id: null
+                        id: null,
                       })
                     );
               }}
             >
-              <LikeIcon className="post__action-icon" fill={post.post.liked ? '#C41E3A' : 'none'} />
+              <LikeIcon
+                className="post__action-icon"
+                fill={post.post.liked ? "#C41E3A" : "none"}
+              />
             </button>
 
             <button className="post__action-btn">
               <CommentIcon className="post__action-icon" />
             </button>
 
-            <button className="post__donate-btn" onClick={() => setDonateShow(true)}>
+            <button
+              className="post__donate-btn"
+              onClick={() => setDonateShow(true)}
+            >
               {currentLang.donut}
             </button>
           </div>
@@ -162,7 +190,10 @@ const Post = ({
               return dispatch(setFavorite(post.post.pk, !post.post.favourite));
             }}
           >
-            <SaveIcon className="post__action-icon" fill={post.post.favourite ? 'black' : 'none'} />
+            <SaveIcon
+              className="post__action-icon"
+              fill={post.post.favourite ? "black" : "none"}
+            />
           </button>
         </div>
 
@@ -179,23 +210,35 @@ const Post = ({
         }}
         centered
         size="sm"
-        style={{ borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px' }}
+        style={{
+          borderBottomLeftRadius: "16px",
+          borderBottomRightRadius: "16px",
+        }}
       >
-        <Modal.Body className="notifications__modal" style={{ padding: '0px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', padding: '15px' }}>
+        <Modal.Body className="notifications__modal" style={{ padding: "0px" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              padding: "15px",
+            }}
+          >
             <h2>Отправить донат</h2>
-            <div className="chat__sidebarItem" style={{ alignItems: 'center', padding: '0px' }}>
+            <div
+              className="chat__sidebarItem"
+              style={{ alignItems: "center", padding: "0px" }}
+            >
               <img src={post.user.avatar} alt="fdsfsdfsd"></img>
               <div>
                 <h2>{post.user.first_name}</h2>
                 <h2
                   style={{
-                    fontFamily: 'Factor A',
-                    fontStyle: 'normal',
-                    fontWeight: 'normal',
-                    fontSize: '18px',
-                    lineHeight: '20px',
-                    color: '#000000'
+                    fontFamily: "Factor A",
+                    fontStyle: "normal",
+                    fontWeight: "normal",
+                    fontSize: "18px",
+                    lineHeight: "20px",
+                    color: "#000000",
                   }}
                 >
                   @{post.user.username}
@@ -205,22 +248,32 @@ const Post = ({
             <CurrencyInput
               prefix="$"
               style={{
-                border: '1px solid rgba(0, 0, 0, 0.4)',
-                boxSizing: 'border-box',
-                borderRadius: '8px',
-                padding: '8px',
-                marginTop: '16px'
+                border: "1px solid rgba(0, 0, 0, 0.4)",
+                boxSizing: "border-box",
+                borderRadius: "8px",
+                padding: "8px",
+                marginTop: "16px",
               }}
               value={donateValue}
               placeholder="$ Введите сумму..."
               decimalsLimit={2}
               onValueChange={(value, name) => setDonateValue(value)}
             />
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '15px' }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "15px",
+              }}
+            >
               <h3 onClick={() => setDonateShow(false)}>Отмена</h3>
-              <div style={{ width: '20px' }}></div>
+              <div style={{ width: "20px" }}></div>
               <h3
-                style={Number(donateValue) > 0 ? { color: '#FB5734' } : { color: 'grey' }}
+                style={
+                  Number(donateValue) > 0
+                    ? { color: "#FB5734" }
+                    : { color: "grey" }
+                }
                 onClick={() => {
                   if (Number(donateValue) > 0) {
                     return sendDonate();

@@ -1,15 +1,15 @@
-import React, { FormEvent, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useTextInput } from '~/app/utils/useTextInput';
-import ava1 from '../../../assets/images/ava1.png';
-import { ReactComponent as SearchIcon } from '../../../assets/images/search.svg';
-import { LangContext } from '../../utils/LangProvider';
+import React, { FormEvent, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import { useTextInput } from "../../../app/utils/useTextInput";
+import ava1 from "../../../assets/images/ava1.png";
+import { ReactComponent as SearchIcon } from "../../../assets/images/search.svg";
+import { LangContext } from "../../utils/LangProvider";
 const SearchBar = () => {
   const { currentLang } = useContext(LangContext);
 
   const history = useHistory();
 
-  const { value, onChangeHandler, clearInput } = useTextInput('');
+  const { value, onChangeHandler, clearInput } = useTextInput("");
 
   const searchSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
@@ -37,7 +37,7 @@ const SearchBar = () => {
         className="search-bar__btn"
         type="submit"
         onClick={() => {
-          history.push('/search');
+          history.push("/search");
         }}
       >
         <SearchIcon />

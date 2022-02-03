@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { createPostActionRT, createPostBoughtRT, createStoryActionRT, createStoryRT, idType } from '~/api/types';
+import { createPostActionRT, createPostBoughtRT, createStoryActionRT, createStoryRT, idType } from '../api/types';
 import { blogAPI } from './../api/blogAPI';
 import { InferActionsTypes, RootState } from './redux';
 

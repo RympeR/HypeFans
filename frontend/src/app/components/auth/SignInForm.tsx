@@ -1,19 +1,19 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useContext, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import ISignInData from '~/app/types/ISignInData';
-import { LangContext } from '~/app/utils/LangProvider';
-import { getAuthScheme, NAV_LINKS } from '~/app/utils/utilities';
-import { login } from '~/redux/authReducer';
-import { ReactComponent as Facebook } from '../../../assets/images/facebook.svg';
-import { ReactComponent as Google } from '../../../assets/images/google.svg';
-import { ReactComponent as Instagram } from '../../../assets/images/instagram.svg';
+import { yupResolver } from "@hookform/resolvers/yup";
+import React, { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import ISignInData from "../../../app/types/ISignInData";
+import { LangContext } from "../../../app/utils/LangProvider";
+import { getAuthScheme, NAV_LINKS } from "../../../app/utils/utilities";
+import { ReactComponent as Facebook } from "../../../assets/images/facebook.svg";
+import { ReactComponent as Google } from "../../../assets/images/google.svg";
+import { ReactComponent as Instagram } from "../../../assets/images/instagram.svg";
+import { login } from "../../../redux/authReducer";
 
 const initialValues: ISignInData = {
-  email: '',
-  password: ''
+  email: "",
+  password: "",
 };
 
 const SignInForm = ({ action }: { action: string }) => {
@@ -26,9 +26,9 @@ const SignInForm = ({ action }: { action: string }) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm<ISignInData>({
-    resolver: yupResolver(signInScheme)
+    resolver: yupResolver(signInScheme),
   });
 
   const [isSigningIn, setIsSigningIn] = useState(false);
@@ -48,7 +48,7 @@ const SignInForm = ({ action }: { action: string }) => {
         <p>{currentLang.createAcc1}</p>
 
         <Link to={`/${NAV_LINKS.SIGNUP}`}>
-          <div style={{ color: '#FB5734' }}>{currentLang.createAcc2}</div>
+          <div style={{ color: "#FB5734" }}>{currentLang.createAcc2}</div>
         </Link>
       </div>
 
@@ -57,7 +57,7 @@ const SignInForm = ({ action }: { action: string }) => {
         className="auth__input"
         disabled={isSigningIn}
         placeholder={currentLang.emailDescr}
-        {...register('email')}
+        {...register("email")}
       />
       <p className="auth__input-error">{errors.email?.message}</p>
 
@@ -66,7 +66,7 @@ const SignInForm = ({ action }: { action: string }) => {
         className="auth__input"
         disabled={isSigningIn}
         placeholder={currentLang.passDescr}
-        {...register('password')}
+        {...register("password")}
       />
       <p className="auth__input-error">{errors.password?.message}</p>
 
