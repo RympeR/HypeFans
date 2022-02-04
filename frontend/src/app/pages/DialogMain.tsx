@@ -405,7 +405,19 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <button>Посмотреть вложения</button>
           </div>
           <div style={{ padding: "5px", fontSize: "11px" }}>
-            <button>Копировать ссылку на профиль</button>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `hype-fans.com/profile/${
+                    rooms.find(
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited.username
+                  }`
+                );
+              }}
+            >
+              Копировать ссылку на профиль
+            </button>
           </div>
           <div style={{ padding: "5px", fontSize: "11px" }}>
             <button>Убрать из всех групп</button>
