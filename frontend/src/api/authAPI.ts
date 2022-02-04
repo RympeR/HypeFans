@@ -1,14 +1,14 @@
-import Cookies from 'js-cookie';
-import { useHistory } from 'react-router-dom';
-import { instance, setAuthToken } from './api';
+import Cookies from "js-cookie";
+import { useHistory } from "react-router-dom";
+import { instance, setAuthToken } from "./api";
 
 export let token: number | null;
 export const authAPI = {
   jwtCreate(email: string, password: string) {
     return instance
-      .post<{ email: string; password: string }>('/auth/jwt/create/', {
+      .post<{ email: string; password: string }>("/auth/jwt/create/", {
         email,
-        password
+        password,
       })
       .then((response) => {
         return response;
@@ -16,8 +16,8 @@ export const authAPI = {
   },
   jwtRefresh(refresh: string) {
     return instance
-      .post('/auth/jwt/refresh/', {
-        refresh
+      .post("/auth/jwt/refresh/", {
+        refresh,
       })
       .then((response) => {
         return response;
@@ -25,8 +25,8 @@ export const authAPI = {
   },
   jwtVerify() {
     return instance
-      .post('/auth/jwt/verify/', {
-        token
+      .post("/auth/jwt/verify/", {
+        token,
       })
       .then((response) => {
         return response;
@@ -34,102 +34,136 @@ export const authAPI = {
   },
   login(email: string, password: string) {
     return instance
-      .post('/user/login-user/', {
+      .post("/user/login-user/", {
         email,
-        password
+        password,
       })
       .then((response) => {
+        console.log("here");
         if (response.status !== 200) {
-          console.log('login error');
+          console.log("login error");
         }
         setAuthToken(response.data.auth_token);
-        Cookies?.set('token', response.data.auth_token);
+        Cookies?.set("token", response.data.auth_token);
         return response.data.auth_token;
-      });
+      })
   },
   logout() {
-    return instance.post('/auth/token/logout/').then((response) => {
+    return instance.post("/auth/token/logout/").then((response) => {
       if (response.status !== 204) {
-        console.log('logout error');
+        console.log("logout error");
       }
       return response;
     });
   },
   getUsers() {
-    return instance.get('/auth/users/').then((response) => {
+    return instance.get("/auth/users/").then((response) => {
       return response.data;
     });
   },
-  createUsers(username: string, email: string, password: string, ref_link: string) {
+  createUsers(
+    username: string,
+    email: string,
+    password: string,
+    ref_link: string
+  ) {
     console.log({ username, email, password, ref_link });
-    return instance.post('/user/create-user/', { username, email, password, ref_link }).then((response) => {
-      setAuthToken(response.data.auth_token);
-      return response.data;
-    });
+    return instance
+      .post("/user/create-user/", { username, email, password, ref_link })
+      .then((response) => {
+        setAuthToken(response.data.auth_token);
+        return response.data;
+      });
   },
   activateUsers(uid: string) {
-    return instance.post('/auth/users/activation/', { uid, token }).then((response) => {
-      return response.data;
-    });
+    return instance
+      .post("/auth/users/activation/", { uid, token })
+      .then((response) => {
+        return response.data;
+      });
+  },
+  meGetLogin() {
+    return instance
+      .get<{ username: "string"; id: number; email: number }>("/auth/users/me/")
+      .then((response) => {
+        console.log("here");
+        if (response.status === 200) {
+          return response;
+        }
+      })
   },
   meGet() {
-    return instance.get<{ username: 'string'; id: number; email: number }>('/auth/users/me/').then((response) => {
-      const history = useHistory();
-      console.log('here')
-      if (response.status === 200) {
-        return response;
-      }
-      else {
-        Cookies?.set("token", "");
+    return instance
+      .get<{ username: "string"; id: number; email: number }>("/auth/users/me/")
+      .then((response) => {
+        console.log("here");
+        if (response.status === 200) {
+          return response;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        const history = useHistory();
         history.push("/");
-      }
-    });
+        // Cookies?.set("token", "");
+        return error;
+      });
   },
   meUpdate(data: any) {
-    return instance.put('user/partial-update-user/', data).then((response) => {
+    return instance.put("user/partial-update-user/", data).then((response) => {
       return response;
     });
   },
   mePatchUpdate(username: string) {
-    return instance.patch('auth/users/me/', { username }).then((response) => {
+    return instance.patch("auth/users/me/", { username }).then((response) => {
       return response;
     });
   },
   meDelete() {
-    return instance.delete('auth/users/me/').then((response) => {
+    return instance.delete("auth/users/me/").then((response) => {
       return response;
     });
   },
   resendActivation(email: string) {
-    return instance.post('/auth/users/resend_activation/', { email }).then((response) => {
-      return response;
-    });
+    return instance
+      .post("/auth/users/resend_activation/", { email })
+      .then((response) => {
+        return response;
+      });
   },
   resetEmail(email: string) {
-    return instance.post('/auth/users/reset_email/', { email }).then((response) => {
-      return response;
-    });
+    return instance
+      .post("/auth/users/reset_email/", { email })
+      .then((response) => {
+        return response;
+      });
   },
   resetEmailConfirm({ new_email, uid }: { new_email: string; uid: number }) {
-    return instance.post('/auth/users/reset_email_confirm/', { new_email, uid }).then((response) => {
-      return response;
-    });
+    return instance
+      .post("/auth/users/reset_email_confirm/", { new_email, uid })
+      .then((response) => {
+        return response;
+      });
   },
   resetPassword(email: string) {
-    return instance.post('/auth/users/reset_password/', { email }).then((response) => {
-      return response;
-    });
+    return instance
+      .post("/auth/users/reset_password/", { email })
+      .then((response) => {
+        return response;
+      });
   },
   resetPasswordConfirm(uid: string, new_password: string) {
-    return instance.post('/auth/users/reset_password_confirm/', { token, uid, new_password }).then((response) => {
-      return response;
-    });
+    return instance
+      .post("/auth/users/reset_password_confirm/", { token, uid, new_password })
+      .then((response) => {
+        return response;
+      });
   },
   setEmail(new_email: string, current_email: string) {
     return instance
-      .post('/auth/users/set_email/', {
+      .post("/auth/users/set_email/", {
         new_email,
-        current_email
+        current_email,
       })
       .then((response) => {
         return response.data;
@@ -137,9 +171,9 @@ export const authAPI = {
   },
   setPassword(new_password: string, current_password: string) {
     return instance
-      .post('auth/users/set_password/', {
+      .post("auth/users/set_password/", {
         new_password,
-        current_password
+        current_password,
       })
       .then((response) => {
         return response.data;
@@ -156,15 +190,17 @@ export const authAPI = {
     });
   },
   patchUpdateUser(id: string | number, username: string) {
-    return instance.patch(`/auth/users/${id}/`, { username }).then((response) => {
-      return response.data;
-    });
+    return instance
+      .patch(`/auth/users/${id}/`, { username })
+      .then((response) => {
+        return response.data;
+      });
   },
   deleteUser(id: string | number) {
     return instance.delete(`/auth/users/${id}/`).then((response) => {
       return response.data;
     });
-  }
+  },
 };
 
 // getProfile() {

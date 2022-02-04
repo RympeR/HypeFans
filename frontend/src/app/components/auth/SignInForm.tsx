@@ -12,6 +12,7 @@ import { ReactComponent as Instagram } from "../../../assets/images/instagram.sv
 import { ReactComponent as EyeIcon } from "../../../assets/images/eye.svg";
 import { ReactComponent as EyeOffIcon } from "../../../assets/images/eye-off.svg";
 import { login } from "../../../redux/authReducer";
+import { toast } from "react-toastify";
 
 const initialValues: ISignInData = {
   email: "",
@@ -41,7 +42,12 @@ const SignInForm = ({ action }: { action: string }) => {
 
   const onSubmit = async (data: ISignInData) => {
     setIsSigningIn(true);
-    await dispatch(login(data));
+    try{
+      await dispatch(login(data));
+      toast.success('Login Successfully');
+    } catch {
+      toast.error('Invaild credentials');
+    }
     setIsSigningIn(false);
     reset(initialValues);
   };

@@ -15,4 +15,5 @@
 @import './components/upload';
 @import './components/stories';
 @import './components/auth';
-// @import '~/src/app/components/ExchangeComponent/modals.scss';
+@import '../../node_modules/react-toastify/scss/main.scss';
+@import '../app/components/ExchangeComponent/modal';

@@ -22,6 +22,7 @@ import { LangProvider } from './utils/LangProvider';
 import { ViewportProvider } from './utils/ViewportProvider';
 // require('swiper/swiper-bundle.css');
 import MetaTags from 'react-meta-tags';
+import { ToastContainer } from "react-toastify";
 
 const options = {
   timeout: 5000,
@@ -41,6 +42,7 @@ const App = () => {
     </MetaTags>
       <Provider template={AlertTemplate} {...options}>
         <BrowserRouter>
+          <ToastContainer/>
           <ViewportProvider>
             <LangProvider>
               <Switch>

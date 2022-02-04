@@ -195,14 +195,18 @@ export const Settings = () => {
             <EditSvg />
           </SettingsSidebarItem>
         </Link>
-        <div onClick={() => setShow(true)}>
+        <div
+          onClick={() => {
+            setShow(true);
+          }}
+        >
           <ExitItem text="Выйти">
             <LogOutSvg />
           </ExitItem>
         </div>
         {show ? (
           <div
-            className="logout-model"
+            className="card__logout-model"
             // style={{ display: "flex", justifyContent: "center", width: "100%" }}
           >
             <div
