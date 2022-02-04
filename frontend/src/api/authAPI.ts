@@ -72,6 +72,7 @@ export const authAPI = {
       .post("/user/create-user/", { username, email, password, ref_link })
       .then((response) => {
         setAuthToken(response.data.auth_token);
+        Cookies?.set("token", response.data.auth_token);
         return response.data;
       });
   },

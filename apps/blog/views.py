@@ -535,10 +535,16 @@ class GetUserLists(GenericAPIView):
 
         result['friends_amount'] = len(friends)
         result['friends'] = self.serializer_class(
-            many=True, instance=friends[:3]).data
+            many=True, instance=friends[:10]).data
         favourite_post = user.user_favourites.all()
         favourite_post_users = list(set(map(lambda x: x.user, favourite_post)))
         result['favourites_amount'] = len(favourite_post_users)
         result['favourites'] = self.serializer_class(
-            many=True, instance=favourite_post_users[:3]).data
+            many=True, instance=favourite_post_users[:10]).data
+        
+        last_donators = user.recieved_user.filter(datetime__date__month=now.month)
+        last_donators = list(set(map(lambda x: x.sender, last_donators)))
+        result['last_donators_amount'] = len(last_donators)
+        result['last_donators'] = self.serializer_class(
+            many=True, instance=last_donators[:10]).data
         return Response(result)
