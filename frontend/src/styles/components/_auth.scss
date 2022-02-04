@@ -6,9 +6,22 @@ $form-width: 636;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url('../../assets/images/sign-in-bg.jpg') no-repeat center;
   background-size: cover;
-
+  &__main-slide {
+    background: url('../../assets/images/sign-in-bg.jpg') no-repeat center;
+  }
+  &__main-slide-second {
+    background: url('../../assets/images/boxed-water-is-better-zuj2m7qxDA0-unsplash.jpg') no-repeat center;
+  }
+  &__main-slide-third {
+    background: url('../../assets/images/elise-wilcox-bmbGUfd7y-I-unsplash.jpg') no-repeat center;
+  }
+  &__main-slide-thourth {
+    background: url('../../assets/images/helena-lopes-e3OUQGT9bWU-unsplash.jpg') no-repeat center;
+  }
+  &__main-slide-five {
+    background: url('../../assets/images/soundtrap-5Wj_tk8_Ens-unsplash.jpg') no-repeat center;
+  }
   &__show-hide-password-icon {
     width: 20px;
     height: 20px;

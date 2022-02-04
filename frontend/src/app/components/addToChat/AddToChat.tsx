@@ -52,7 +52,9 @@ export const AddToChat = () => {
         <button
           style={{ width: "50px", height: "50px" }}
           onClick={() => addToChat()}
-        ></button>
+        >
+          Add to chat
+        </button>
         <SearchSvg />
         <input
           style={{ marginLeft: "16px", width: "80%" }}
