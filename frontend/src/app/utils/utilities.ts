@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import * as yup from "yup";
+import { LangContext } from "./LangProvider";
 
 export enum NAV_LINKS {
   SIGNIN = "",
@@ -71,19 +73,33 @@ export const timeAgoTimestamp = (timestamp: number) => {
   return timeParser(duration);
 };
 
-export const prepareDateDiffStr = (time_diff:any) => {
-  let result_str = '';
-  if(time_diff.days > 0){
-    result_str += `${time_diff.days} дней `
+export const prepareDateDiffStr = (time_diff: any) => {
+  let result_str = "";
+  if (time_diff.days > 0) {
+    result_str += time_diff.days + " дней";
   }
-  if(time_diff.hours > 0){
-    result_str += `${time_diff.hours} часов `
+  if (time_diff.hours > 0) {
+    result_str += time_diff.hours + " часов";
   }
-  if(time_diff.minutes > 0){
-    result_str += `${time_diff.minutes} минут `
+  if (time_diff.minutes > 0) {
+    result_str += time_diff.minutes + " минут";
   }
-  return result_str + ' назад';
-}
+  return result_str + " назад";
+};
+
+export const prepareDateDiffStrLanguage = (time_diff: any, currentLang:any) => {
+  let result_str = "";
+  if (time_diff.days > 0) {
+    result_str += time_diff.days + " " + currentLang.timeAgo.days + ' ';
+  }
+  if (time_diff.hours > 0) {
+    result_str += time_diff.hours + " " + currentLang.timeAgo.hours + ' ';
+  }
+  if (time_diff.minutes > 0) {
+    result_str += time_diff.minutes + " " + currentLang.timeAgo.minutes + ' ';
+  }
+  return result_str + " " + currentLang.timeAgo.ago;
+};
 
 // Returns computed width of fixed aside block
 export const getComputedWidth = async (marginLeft = 47) => {

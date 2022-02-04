@@ -7,7 +7,10 @@ import Slider from "react-slick";
 import { userAPI } from "../../../api/userAPI";
 import {
   LENTGH_OF_VISIBLE_CAPTION,
+  prepareDateDiffStr,
+  prepareDateDiffStrLanguage,
   showVisibleText,
+  timeAgoTimestamp,
 } from "../../../app/utils/utilities";
 import {
   createPostAction,
@@ -23,7 +26,7 @@ import { ReactComponent as CommentIcon } from "../../../assets/images/message-ci
 import { LangContext } from "../../utils/LangProvider";
 import { CommentComponent } from "../CommentComponent";
 import UserBanner from "./UserBanner";
-import logo from '../../../assets/images/logo.svg';
+import logo from "../../../assets/images/logo.svg";
 
 const Post = ({
   post,
@@ -39,6 +42,7 @@ const Post = ({
       liked: boolean;
       archived: boolean;
       like_id: number;
+      publication_date: string;
       favourite: boolean;
       comments: Array<any>;
     };
@@ -80,6 +84,11 @@ const Post = ({
     }
   }, [window.innerWidth]);
 
+  const time_diif = prepareDateDiffStrLanguage(
+    timeAgoTimestamp(parseFloat(post?.post.publication_date)),
+    currentLang
+  );
+
   return (
     <article className="post">
       <div className="post__top">
@@ -95,9 +104,7 @@ const Post = ({
           </div>
         </div>
         <div className="post__top-right">
-          <p className="post__time">
-            50 {currentLang.timeAgo.minutes} {currentLang.timeAgo.ago}
-          </p>
+          <p className="post__time">{time_diif}</p>
 
           <button className="post__menu-dots">
             <MenuDots />
@@ -229,7 +236,10 @@ const Post = ({
               className="chat__sidebarItem"
               style={{ alignItems: "center", padding: "0px" }}
             >
-              <img src={post.user.avatar ? post.user.avatar : logo} alt="fdsfsdfsd"></img>
+              <img
+                src={post.user.avatar ? post.user.avatar : logo}
+                alt="fdsfsdfsd"
+              ></img>
               <div>
                 <h2>{post.user.first_name}</h2>
                 <h2
