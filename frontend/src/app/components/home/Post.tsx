@@ -236,7 +236,7 @@ const Post = ({
               style={{ alignItems: "center", padding: "0px" }}
             >
               <img
-                src={post.user.avatar ? post.user.avatar : logo}
+                src={post.user.avatar || logo}
                 alt="fdsfsdfsd"
               ></img>
               <div>

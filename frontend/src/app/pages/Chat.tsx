@@ -78,7 +78,7 @@ const Chat: React.FC = () => {
                 src={
                   typeof item?.item?.room?.room_info?.invited !== "number"
                     ? amICreator
-                      ? item?.item?.room?.room_info?.invited?.avatar
+                      ? item?.item?.room?.room_info?.invited?.avatar || logo
                       : item?.item?.room?.room_info?.creator?.avatar || logo
                     : item?.item?.room?.room_info?.logo || logo
                 }
@@ -90,7 +90,7 @@ const Chat: React.FC = () => {
                   src={
                     typeof item?.item?.room?.room_info?.invited !== "number"
                       ? amICreator
-                        ? item?.item?.room?.room_info?.invited?.avatar
+                        ? item?.item?.room?.room_info?.invited?.avatar || logo
                         : item?.item?.room?.room_info?.creator?.avatar || logo
                       : item?.item?.room?.room_info?.logo || logo
                   }

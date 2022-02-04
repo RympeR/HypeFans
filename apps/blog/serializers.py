@@ -283,7 +283,11 @@ class PostActionGetSerializer(serializers.ModelSerializer):
     date_time = TimestampField()
     parent_like_amount = serializers.SerializerMethodField()
     parent_liked = serializers.SerializerMethodField()
+    like_amount = serializers.SerializerMethodField()
 
+    def get_like_amount(self, post_action: PostAction):
+        return PostAction.objects.filter(pk=post_action.pk, like=True).aggregate(Count('pk'))['pk__count']
+        
     def get_parent_liked(self, post_action: PostAction):
         user = self.context.get('request').user
         qs = PostAction.objects.filter(

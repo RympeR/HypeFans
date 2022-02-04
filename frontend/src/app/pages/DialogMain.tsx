@@ -330,7 +330,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     ? rooms.find(
                         (item: any) =>
                           item.room.room_info.id === Number(lastUrl)
-                      )?.room?.room_info?.invited?.avatar
+                      )?.room?.room_info?.invited?.avatar || logo
                     : rooms.find(
                         (item: any) =>
                           item.room.room_info.id === Number(lastUrl)
