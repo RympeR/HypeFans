@@ -47,8 +47,5 @@
 
   &__btn {
     cursor: pointer;
-    @media (max-width: map-get($map: $media, $key: s)) {
-      display: none;
-    }
   }
 }

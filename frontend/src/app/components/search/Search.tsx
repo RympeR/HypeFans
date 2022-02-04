@@ -6,8 +6,11 @@ import { ReactComponent as Logo } from "../../../assets/images/logo.svg";
 import { ReactComponent as SearchSvg } from "../../../assets/images/search.svg";
 
 export const Search: React.FC = () => {
+  const params = new URLSearchParams(window.location.search);
   const [users, setUsers] = useState([]);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(
+    params.has("username") ? params.get("username") : ""
+  );
   const history = useHistory();
 
   const searchUsers = async () => {
@@ -17,7 +20,7 @@ export const Search: React.FC = () => {
 
   useEffect(() => {
     const search = async () => {
-      const data = await userAPI.searchUser({ user: "" });
+      const data = await userAPI.searchUser({ user: inputValue });
       setUsers(data.results);
     };
     search();
