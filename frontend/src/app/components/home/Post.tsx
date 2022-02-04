@@ -7,7 +7,6 @@ import Slider from "react-slick";
 import { userAPI } from "../../../api/userAPI";
 import {
   LENTGH_OF_VISIBLE_CAPTION,
-  prepareDateDiffStr,
   prepareDateDiffStrLanguage,
   showVisibleText,
   timeAgoTimestamp,
@@ -77,12 +76,12 @@ const Post = ({
       return console.log("ошибка сервера");
     }
   };
-
+  //? убрал зависимость из-за дебагера - надо смотреть
   useEffect(() => {
     if (window.innerWidth <= 768) {
       setIsWholeTextShowed(false);
     }
-  }, [window.innerWidth]);
+  }, []);
 
   const time_diif = prepareDateDiffStrLanguage(
     timeAgoTimestamp(parseFloat(post?.post.publication_date)),

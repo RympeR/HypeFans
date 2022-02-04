@@ -19,10 +19,12 @@ import { prepareDateDiffStr, timeAgoTimestamp } from "../utils/utilities";
 
 export const PostModal = ({ post_id }: { post_id: number }) => {
   const dispatch = useDispatch();
+
+  //? Дебагер попросил добавть зависимости
   useEffect(() => {
     dispatch(getPost({ id: post_id }));
-  }, []);
-
+  }, [dispatch, post_id]);
+  
   const myId = useSelector((state: RootState) => state.auth.pk);
   const post = useSelector((state: RootState) => state.blog.post);
   const isLoading = useSelector((state: RootState) => state.blog.isPostLoading);

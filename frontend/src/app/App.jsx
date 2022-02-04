@@ -21,6 +21,7 @@ import { Settings } from './pages/settings/Settings';
 import { LangProvider } from './utils/LangProvider';
 import { ViewportProvider } from './utils/ViewportProvider';
 // require('swiper/swiper-bundle.css');
+import MetaTags from 'react-meta-tags';
 
 const options = {
   timeout: 5000,
@@ -35,6 +36,9 @@ const App = () => {
 
   return (
     <>
+    <MetaTags>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    </MetaTags>
       <Provider template={AlertTemplate} {...options}>
         <BrowserRouter>
           <ViewportProvider>
