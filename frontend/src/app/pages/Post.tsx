@@ -15,6 +15,7 @@ import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
 import logo from "../../assets/images/logo.svg";
 import { ReactComponent as CommentIcon } from "../../assets/images/message-circle.svg";
 import { CommentComponent } from "../components/CommentComponent";
+import { prepareDateDiffStr, timeAgoTimestamp } from "../utils/utilities";
 
 export const PostModal = ({ post_id }: { post_id: number }) => {
   const dispatch = useDispatch();
@@ -29,7 +30,9 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
   if (isLoading) {
     return <div>Загрузка...</div>;
   }
-
+  const time_diif = prepareDateDiffStr(
+    timeAgoTimestamp(parseFloat(post?.publication_date))
+  );
   return (
     <div>
       <div className="profile__post" key={`${Math.random()}_post`}>
@@ -38,7 +41,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
             <div className="profile__postUserInfo">
               <div style={{ display: "flex" }}>
                 <img
-                  src={post?.user.avatar ? post?.user.avatar : logo}
+                  src={post?.user?.avatar || logo}
                   alt="profile_photoPost"
                 ></img>
                 <div>
@@ -46,20 +49,18 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                     className="profile__name"
                     style={{ margin: "5px 8px", marginBottom: "0px" }}
                   >
-                    {post?.user.first_name}
+                    {post?.user?.first_name}
                   </h3>
                   <h4
                     className="profile__nickname"
                     style={{ marginLeft: "8px" }}
                   >
-                    {`@${post?.user.username}`}
+                    {`@${post?.user?.username}`}
                   </h4>
                 </div>
               </div>
               <div style={{ display: "flex", alignItems: "center" }}>
-                <div className="profile__postAgo">
-                  {post?.publication_date} 50 минут назад
-                </div>
+                <div className="profile__postAgo">{time_diif}</div>
                 <button className="post__menu-dots">
                   <MenuDots />
                 </button>
@@ -69,7 +70,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
           </div>
         </div>
         <div className="profile__postMain">
-          {post?.attachments.length > 1 ? (
+          {post?.attachments && post?.attachments.length > 1 ? (
             <div className="profile__postIMG">
               <Slider>
                 {post.attachments.map((item: any, index: number) => {
@@ -87,7 +88,11 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
             </div>
           ) : (
             <div className="profile__postIMG">
-              <img src={post?.attachments[0]._file} alt="postIMG"></img>
+              {post?.attachments ? (
+                <img src={post?.attachments[0]._file} alt="postIMG"></img>
+              ) : (
+                <></>
+              )}
             </div>
           )}
           <div className="post__bottom" style={{ margin: "24px 24px" }}>

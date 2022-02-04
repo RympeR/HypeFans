@@ -8,11 +8,11 @@ export const Preloader = () => {
         display: 'flex',
         justifyContent: 'center',
         position: 'absolute',
-        bottom: 'calc(50% - 60px)',
-        left: 'calc(50% - 100px)'
+        bottom: 'calc(50% - 14px)',
+        left: 'calc(50% - 32px)'
       }}
     >
-      <img src={loader} alt="loading..." />
+      <img src={loader} width="66" alt="loading..." />
     </div>
   );
 };

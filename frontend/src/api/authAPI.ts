@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import { useHistory } from 'react-router-dom';
 import { instance, setAuthToken } from './api';
 
 export let token: number | null;
@@ -73,10 +74,14 @@ export const authAPI = {
   },
   meGet() {
     return instance.get<{ username: 'string'; id: number; email: number }>('/auth/users/me/').then((response) => {
+      const history = useHistory();
+      console.log('here')
       if (response.status === 200) {
         return response;
-      } else {
-        throw new Error();
+      }
+      else {
+        Cookies?.set("token", "");
+        history.push("/");
       }
     });
   },

@@ -202,7 +202,8 @@ export const Settings = () => {
         </div>
         {show ? (
           <div
-            style={{ display: "flex", justifyContent: "center", width: "100%" }}
+            className="logout-model"
+            // style={{ display: "flex", justifyContent: "center", width: "100%" }}
           >
             <div
               // onClick={() => setShow(false)}
