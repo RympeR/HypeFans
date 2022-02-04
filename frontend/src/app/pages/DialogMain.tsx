@@ -112,7 +112,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     const wsReadClient = new WebSocket(
       `wss://hype-fans.com/ws/api/chat-readed/${lastUrl}/`
     );
-    const wsClient = new WebSocket(`wss://hype-fans.com/ws/api/chat/${lastUrl}/`);
+    const wsClient = new WebSocket(
+      `wss://hype-fans.com/ws/api/chat/${lastUrl}/`
+    );
     wsClient.onopen = () => {
       console.log(wsClient);
       setWs(wsClient);
@@ -470,21 +472,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             messages.map((item, index) => {
               return (
                 <div
-                  style={
-                    item.user.pk === uid
-                      ? {
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "flex-end",
-                          width: "100%",
-                        }
-                      : {
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "flex-start",
-                          width: "100%",
-                        }
-                  }
+                  className={item.user.pk === uid ? "message" : "message own"}
                   key={Math.random() + index + Math.random()}
                 >
                   {item.message_price !== 0 &&
@@ -515,16 +503,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     </div>
                   ) : (
                     <div>
-                      <div style={{ display: "flex" }}>
-                        {item.user.pk === uid ? (
-                          <div style={{ marginRight: "5px" }}>
-                            {item.readed ? <Readed /> : <NotReaded />}
-                          </div>
-                        ) : (
-                          <></>
-                        )}
+                      <div className="message__content has-solid-background">
                         <div
-                          className="text-wrapp"
+                          className="message__text_content"
                           style={
                             item?.attachments.length > 0
                               ? {
@@ -569,9 +550,16 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                                 }
                               )
                             : null}
+                          {item.user.pk === uid ? (
+                            <span className="message__meta">
+                              <div className="message__time">15:33</div>
+                              {item.readed ? <Readed /> : <NotReaded />}
+                            </span>
+                          ) : (
+                            <></>
+                          )}
                         </div>
                       </div>
-                      <div className="time-text">15:33</div>
                     </div>
                   )}
                 </div>

@@ -127,9 +127,9 @@ const Chat: React.FC = () => {
   };
   let VISIBLE = false;
   if (window.location.href.match("/chat/d*")) {
-    VISIBLE = false;
-  } else {
     VISIBLE = true;
+  } else {
+    VISIBLE = false;
   }
   return (
     <div>

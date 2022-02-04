@@ -22,6 +22,7 @@ export const NoDialog = () => {
           width: "62.5%",
           paddingTop: "10%",
         }}
+        className="chat__inactive"
       >
         <div style={{ textAlign: "center" }}>
           Выберите диалог или создайте новый

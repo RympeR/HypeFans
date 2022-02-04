@@ -297,7 +297,7 @@
     }
 
     &__dialog {
-      height: 65vh;
+      height: 75vh;
     }
 
     &__input {
@@ -360,5 +360,61 @@
     color: rgba(0, 0, 0, 0.6);
     margin-bottom: 16px;
     margin-top: 7px;
+  }
+}
+
+.message{
+  $border-radius-messages: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: 0.375rem;
+    bottom: auto !important;
+    float: right;
+    line-height: 1.35;
+    height: calc(21px + 1rem);
+    margin-left: 0.4375rem;
+    margin-right: -0.5rem;
+
+    &>.message__time{
+      font-size: .75rem;
+      white-space: nowrap;
+      margin-right: 0.1875rem;
+    }
+  }
+
+  &.own {
+    align-items: flex-start;
+  }
+
+  &__content {
+    border-top-left-radius: $border-radius-messages;
+    border-top-right-radius: $border-radius-messages;
+    border-bottom-left-radius: $border-radius-messages;
+    border-bottom-right-radius: $border-radius-messages;
+    @media screen and (max-width: 600px) {
+      max-width: min(30rem, 100vw - 3.75rem);
+    }
+
+    &.has-solid-background {
+      padding: 0.3125rem 1rem 0.25rem 0.6rem;
+      background:rgb(249 208 183 / 67%);
+      margin-bottom: 7px;
+    }
+  }
+  &__text_content {
+    margin: 0;
+    word-break: break-word;
+    white-space: pre-wrap;
+    line-height: 1.3125;
+    text-align: initial;
+    display: flow-root;
+    unicode-bidi: plaintext;
   }
 }
