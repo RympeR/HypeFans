@@ -33,7 +33,7 @@ export const blogAPI = {
   createAttachment(file: any) {
     console.log(file);
     console.log(file.name.split('.')[1] === 'mp3');
-    debugger;
+    // debugger;
     if (!file) return;
     const formData = new FormData();
     formData.append('_file', file);
