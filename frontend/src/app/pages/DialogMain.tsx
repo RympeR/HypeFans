@@ -109,13 +109,13 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   // useEffect`s
 
   useEffect(() => {
-    const wsClient = new WebSocket(`wss://hype-fans.com/ws/chat/${lastUrl}/`);
+    const wsClient = new WebSocket(`wss://hype-fans.com/ws/api/chat/${lastUrl}/`);
     wsClient.onopen = () => {
       console.log("ws opened");
       setWs(wsClient);
     };
     const wsReadClient = new WebSocket(
-      `wss://hype-fans.com/ws/chat-readed/${lastUrl}/`
+      `wss://hype-fans.com/ws/api/chat-readed/${lastUrl}/`
     );
     wsReadClient.onopen = () => {
       setWsRead(wsReadClient);

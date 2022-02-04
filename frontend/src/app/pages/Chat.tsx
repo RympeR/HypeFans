@@ -27,7 +27,7 @@ const Chat: React.FC = () => {
     return <Preloader />;
   }
 
-  const ws = new WebSocket(`wss://hype-fans.com/ws/chat-rooms/${userId}/`);
+  const ws = new WebSocket(`wss://hype-fans.com/ws/api/chat-rooms/${userId}/`);
 
   ws.onopen = () => {
     if (isSended) {

@@ -1,5 +1,5 @@
 cd frontend
-@REM yarn build:prod
+yarn build
 rmdir -r ../build
 mv -Force build ../build
 cd ..

@@ -8,6 +8,9 @@
     width: 100%;
     padding: 10px 0 85px;
   }
+  @media (max-width: 800px) {
+    overflow-x: hidden;
+  }
 }
 
 p {

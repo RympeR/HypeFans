@@ -30,8 +30,8 @@ class ChatConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):
+        print(text_data)
         try:
-
             text_data_json = json.loads(text_data)
             room = text_data_json['room_id']
             message_id = text_data_json['message_id']
@@ -64,6 +64,7 @@ class ChatConsumer(WebsocketConsumer):
             )
         except Exception as e:
             print(e)
+            logging.error(e)
 
     def chat_message(self, event):
         try:
@@ -97,6 +98,7 @@ class ChatConsumer(WebsocketConsumer):
                         print(e)
         except Exception as e:
             print(e)
+            logging.error(e)
         try:
             user = UserShortChatRetrieveSeriliazer(
                 instance=User.objects.get(pk=user)).data

@@ -16,6 +16,7 @@ import logo from "../../assets/images/logo.svg";
 import { ReactComponent as CommentIcon } from "../../assets/images/message-circle.svg";
 import { CommentComponent } from "../components/CommentComponent";
 import { prepareDateDiffStr, timeAgoTimestamp } from "../utils/utilities";
+import { Video } from "./card/components/Video";
 
 export const PostModal = ({ post_id }: { post_id: number }) => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
   useEffect(() => {
     dispatch(getPost({ id: post_id }));
   }, [dispatch, post_id]);
-  
+
   const myId = useSelector((state: RootState) => state.auth.pk);
   const post = useSelector((state: RootState) => state.blog.post);
   const isLoading = useSelector((state: RootState) => state.blog.isPostLoading);
@@ -78,11 +79,36 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                 {post.attachments.map((item: any, index: number) => {
                   return (
                     <div key={`${index} slideMain`}>
-                      <img
-                        src={item._file}
-                        alt="postIMG"
-                        className="profile"
-                      ></img>
+                      {item?.attachments.length > 0
+                        ? item?.attachments.map((item: any, index: number) => {
+                            console.log(item.file_type);
+                            if (item.file_type === 4) {
+                              return <Video src={item.file_url} />;
+                            } else if (item.file_type === 1) {
+                              return (
+                                <a href={item.file_url} download>
+                                  Скачать{" "}
+                                  {
+                                    item.file_url.split("/")[
+                                      item.file_url.split("/").length - 1
+                                    ]
+                                  }
+                                </a>
+                              );
+                            } else if (item.file_type === 2) {
+                              console.log(item.file_url);
+                              return <audio src={item.file_url} />;
+                            } else {
+                              return (
+                                <img
+                                  src={item._file}
+                                  alt="postIMG"
+                                  className="profile"
+                                ></img>
+                              );
+                            }
+                          })
+                        : null}
                     </div>
                   );
                 })}
@@ -91,7 +117,34 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
           ) : (
             <div className="profile__postIMG">
               {post?.attachments ? (
-                <img src={post?.attachments[0]._file} alt="postIMG"></img>
+                () => {
+                  console.log(post?.attachments[0].file_type);
+                  if (post?.attachments[0].file_type === 4) {
+                    return <Video src={post?.attachments[0]._file} />;
+                  } else if (post?.attachments[0].file_type === 1) {
+                    return (
+                      <a href={post?.attachments[0]._file} download>
+                        Скачать{" "}
+                        {
+                          post?.attachments[0]._file.split("/")[
+                            post?.attachments[0]._file.split("/").length - 1
+                          ]
+                        }
+                      </a>
+                    );
+                  } else if (post?.attachments[0].file_type === 2) {
+                    console.log(post?.attachments[0]._file);
+                    return <audio src={post?.attachments[0]._file} />;
+                  } else {
+                    return (
+                      <img
+                        src={post?.attachments[0]._file}
+                        alt="postIMG"
+                        className="profile"
+                      ></img>
+                    );
+                  }
+                }
               ) : (
                 <></>
               )}
@@ -132,6 +185,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
 
                 <button className="post__action-btn">
                   <CommentIcon className="post__action-icon" />
+                  <CommentComponent data={post.comments} postId={post?.id} />
                 </button>
               </div>
               <button
