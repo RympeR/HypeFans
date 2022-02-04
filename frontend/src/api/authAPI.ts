@@ -46,7 +46,7 @@ export const authAPI = {
         setAuthToken(response.data.auth_token);
         Cookies?.set("token", response.data.auth_token);
         return response.data.auth_token;
-      })
+      });
   },
   logout() {
     return instance.post("/auth/token/logout/").then((response) => {
@@ -91,7 +91,7 @@ export const authAPI = {
         if (response.status === 200) {
           return response;
         }
-      })
+      });
   },
   meGet() {
     return instance

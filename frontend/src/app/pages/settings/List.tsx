@@ -10,6 +10,7 @@ export const ListsComponent = () => {
     favourites: [],
     last_subs: [],
     friends: [],
+    last_donators: []
   });
   const [currentTab, setCurrentTab] = React.useState("list");
 
@@ -72,11 +73,27 @@ export const ListsComponent = () => {
           >
             <div className="notifications__listText">
               <h1>Последние подписчики</h1>
-              <h2>{lists.last_subs.length} человек</h2>
+              <h2>{lists.last_donators.length} человек</h2>
             </div>
             <div>
               {lists?.last_subs[0]?.avatar ? (
                 <img src={lists?.last_subs[0]?.avatar} alt="fff" />
+              ) : null}
+            </div>
+          </div>
+          <div
+            className="notifications__listItem"
+            onClick={() =>
+              lists.last_donators.length > 0 ? setCurrentTab("last_donators") : null
+            }
+          >
+            <div className="notifications__listText">
+              <h1>Последние донатеры</h1>
+              <h2>{lists.last_donators.length} человек</h2>
+            </div>
+            <div>
+              {lists?.last_donators[0]?.avatar ? (
+                <img src={lists?.last_donators[0]?.avatar} alt="fff" />
               ) : null}
             </div>
           </div>
@@ -185,6 +202,67 @@ export const ListsComponent = () => {
             ></input>
           </div>
           {lists?.favourites
+            ?.filter(
+              (item) => inputValue === "" || item.username.includes(inputValue)
+            )
+            ?.map((item, index) => {
+              return (
+                <div
+                  className="notifications__walletChild"
+                  style={{ borderBottom: "0px" }}
+                  key={`${index} fav-list`}
+                >
+                  <div style={{ display: "flex" }}>
+                    <div>
+                      <Link to={`/profile/${item.username}`}>
+                        <img src={item.avatar || logo} alt="img" />
+                      </Link>
+                    </div>
+                    <div>
+                      <h3>{item.first_name ?? "Имя"}</h3>
+                      <h4>@{item.username ?? "nickname"}</h4>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+      ) : null}
+      {currentTab === "last_donators" ? (
+        <div className="notifications__walletMain">
+          <div
+            style={{
+              fontWeight: "bold",
+              fontSize: "18px",
+              margin: "15px 16px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <ArrowLeft onClick={() => setCurrentTab("list")} />
+            </div>
+            <div style={{ marginTop: "5px", marginLeft: "8px" }}>Последние донатеры</div>
+          </div>
+          <div
+            style={{
+              borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+              paddingLeft: "15px",
+              paddingTop: "16px",
+              paddingBottom: "21px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <SearchSvg />
+            <input
+              style={{ marginLeft: "16px", width: "80%" }}
+              placeholder="Найти людей:"
+              value={inputValue}
+              onChange={(val) => setInputValue(val.currentTarget.value)}
+            ></input>
+          </div>
+          {lists?.last_donators
             ?.filter(
               (item) => inputValue === "" || item.username.includes(inputValue)
             )

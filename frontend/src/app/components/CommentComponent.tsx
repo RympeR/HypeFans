@@ -119,7 +119,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
           </p>
           <div style={{ display: 'flex' }}>
             <div style={{ marginRight: '10px' }}>2 мин.</div>
-            <div style={{ marginRight: '10px' }}>{item.parent_like_amount ?? 0} лайков</div>
+            <div style={{ marginRight: '10px' }}>{item.parent_like_amount || 0} лайков</div>
             <div style={{ marginRight: '10px' }} onClick={() => setShowAnswer(!showAnswer)}>
               {showAnswer ? 'Скрыть поле' : 'Ответить'}
             </div>
@@ -151,7 +151,7 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
                       </p>
                       <div style={{ display: 'flex' }}>
                         <div style={{ marginRight: '10px' }}>2 мин.</div>
-                        <div style={{ marginRight: '10px' }}>{item.parent_like_amount ?? 0} лайков</div>
+                        <div style={{ marginRight: '10px' }}>{item.parent_like_amount || 0} лайков</div>
                         <div style={{ marginRight: '10px' }} onClick={() => setShowAnswer(!showAnswer)}>
                           {showAnswer ? 'Скрыть поле' : 'Ответить'}
                         </div>

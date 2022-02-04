@@ -43,7 +43,7 @@ class PostActionCreationSerializer(serializers.ModelSerializer):
                 ReferralPayment.objects.create(
                     user=user,
                     referrer=referrer,
-                    amount=amount 
+                    amount=amount
                 )
             return attrs
         raise serializers.ValidationError
@@ -55,6 +55,10 @@ class PostActionShortSerializer(serializers.ModelSerializer):
     parent_user_id = serializers.SerializerMethodField()
     user = UserShortRetrieveSeriliazer()
     parent_like_amount = serializers.SerializerMethodField()
+    like_amount = serializers.SerializerMethodField()
+
+    def get_like_amount(self, post_action: PostAction):
+        return PostAction.objects.filter(pk=post_action.pk, like=True).aggregate(Count('pk'))['pk__count']
 
     def get_parent_like_amount(self, post_action: PostAction):
         if post_action.parent and hasattr(post_action.parent, 'pk'):
@@ -161,7 +165,7 @@ class PostGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        exclude = 'time_to_archive', 'show_in_recomendations', 
+        exclude = 'time_to_archive', 'show_in_recomendations',
 
 
 class PostActionUpdateSerializer(serializers.ModelSerializer):
@@ -174,7 +178,6 @@ class PostActionUpdateSerializer(serializers.ModelSerializer):
     like = serializers.BooleanField(required=False)
     comment = serializers.CharField(required=False)
     donation_amount = serializers.IntegerField(required=False)
-
 
     class Meta:
         model = PostAction
@@ -449,7 +452,7 @@ class PostBoughtCreateSerializer(serializers.ModelSerializer):
                 ReferralPayment.objects.create(
                     user=user,
                     referrer=referrer,
-                    amount=amount 
+                    amount=amount
                 )
             return attrs
         raise serializers.ValidationError
