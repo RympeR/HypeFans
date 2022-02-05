@@ -2,10 +2,20 @@
   display: flex;
   flex-direction: column;
 
-  
-&__backNone {
-  display: none;
-}
+  &__chat_actions {
+    margin: 0px 24px;
+    margin-bottom: 8px;
+    display: flex;
+    flex-wrap: wrap;
+
+    @media screen and (max-width < 500px) {
+      margin: -60px 14px 8px;
+    }
+  }
+
+  &__backNone {
+    display: none;
+  }
 
   &__header {
     background-color: $white;
@@ -38,7 +48,6 @@
   &__main {
     background-color: $white;
     display: flex;
-    margin-bottom: 20px;
   }
 
   &__sidebar {
@@ -178,6 +187,10 @@
 
 @media screen and (max-width: 450px) {
   .chat {
+    &__chat_actions {
+      margin: -60px 14px 8px;
+    }
+
     display: flex;
     flex-direction: column;
 
@@ -213,7 +226,7 @@
     &__main {
       background-color: $white;
       display: flex;
-      margin-bottom: 20px;
+      margin-bottom: -7%;
     }
 
     &__sidebar {
@@ -234,32 +247,39 @@
         width: 60px;
         height: 60px;
         border-radius: 100%;
-      }
 
-      h2 {
-        font-family: Factor A;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 18px;
-        line-height: 20px;
-        display: flex;
-        align-items: center;
-        color: #000000;
-        margin-left: 8px;
-      }
-
-      p {
-        font-family: Factor A;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 15px;
-        display: flex;
-        align-items: center;
-        color: rgba(0, 0, 0, 0.6);
-        margin-left: 8px;
+        &.logo_site {
+          width: 35px;
+          height: 35px;
+          margin-top: -7px;
+        }
       }
     }
+
+    h2 {
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 20px;
+      display: flex;
+      align-items: center;
+      color: #000000;
+      margin-left: 8px;
+    }
+
+    p {
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 15px;
+      display: flex;
+      align-items: center;
+      color: rgba(0, 0, 0, 0.6);
+      margin-left: 8px;
+    }
+
 
     &__p {
       font-family: Factor A;
@@ -281,6 +301,10 @@
       border-bottom: 1px solid rgba(0, 0, 0, 0.2);
       height: 64px;
       width: 100%;
+
+      &.inChat {
+        height: 36px;
+      }
     }
 
     &__inactive {
@@ -298,12 +322,12 @@
     }
 
     &__dialog {
-      height: 75vh;
+      height: 87.1vh;
     }
 
     &__input {
       background: #e5e5e5;
-      height: 120px;
+      height: 60px;
       bottom: 0px;
       position: fixed;
       width: 100%;
@@ -332,7 +356,7 @@
     flex-direction: column-reverse;
     align-items: flex-end;
     min-height: 88%;
-    max-height: 88%;
+    max-height: 100%;
     border: 1px solid #cccccc;
     padding: 10px;
     overflow-y: scroll;
@@ -364,7 +388,7 @@
   }
 }
 
-.message{
+.message {
   $border-radius-messages: 0.75rem;
   display: flex;
   flex-direction: column;
@@ -383,7 +407,7 @@
     margin-left: 0.4375rem;
     margin-right: -0.5rem;
 
-    &>.message__time{
+    &>.message__time {
       font-size: .75rem;
       white-space: nowrap;
       margin-right: 0.1875rem;
@@ -399,16 +423,18 @@
     border-top-right-radius: $border-radius-messages;
     border-bottom-left-radius: $border-radius-messages;
     border-bottom-right-radius: $border-radius-messages;
+
     @media screen and (max-width: 600px) {
       max-width: min(30rem, 100vw - 3.75rem);
     }
 
     &.has-solid-background {
       padding: 0.3125rem 1rem 0.25rem 0.6rem;
-      background:rgb(249 208 183 / 67%);
+      background: rgb(249 208 183 / 67%);
       margin-bottom: 7px;
     }
   }
+
   &__text_content {
     margin: 0;
     word-break: break-word;
