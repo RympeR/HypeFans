@@ -50,6 +50,7 @@ export const authAPI = {
   },
   logout() {
     return instance.post("/auth/token/logout/").then((response) => {
+      setAuthToken("")
       if (response.status !== 204) {
         console.log("logout error");
       }

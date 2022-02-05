@@ -26,6 +26,7 @@ import logo from "../../assets/images/logo.svg";
 import { ReactComponent as CommentIcon } from "../../assets/images/message-circle.svg";
 import { CommentComponent } from "../components/CommentComponent";
 import { Preloader } from "../utils/Preloader";
+import { returnByFileType } from "../components/home/Post";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -254,29 +255,20 @@ const Profile = () => {
                   </div>
                   <div className="profile__postMain">
                     {item?.post?.attachments.length > 1 ? (
-                      <div className="profile__postIMG">
-                        <Slider>
-                          {item?.post.attachments.map(
-                            (item: any, index: number) => {
-                              return (
-                                <div key={`${index} slideMain`}>
-                                  <img
-                                    src={item._file}
-                                    alt="postIMG"
-                                    className="profile"
-                                  ></img>
-                                </div>
-                              );
-                            }
-                          )}
-                        </Slider>
-                      </div>
+                      <Slider className="profile__postIMG" arrows={false} dots={true}>
+                        {item?.post.attachments.map(
+                          (item: any, index: number) => {
+                            return (
+                              <div key={`${index} slideMain`}>
+                                {returnByFileType(item)}
+                              </div>
+                            );
+                          }
+                        )}
+                      </Slider>
                     ) : (
                       <div className="profile__postIMG">
-                        <img
-                          src={item?.post.attachments[0]._file}
-                          alt="postIMG"
-                        ></img>
+                        {returnByFileType(item?.post.attachments[0])}
                       </div>
                     )}
                     <div
@@ -290,23 +282,23 @@ const Profile = () => {
                             onClick={() => {
                               item?.post.liked
                                 ? dispatch(
-                                    deletePostAction({
-                                      id: item?.post.like_id,
-                                      post_id: item?.post.pk,
-                                    })
-                                  )
+                                  deletePostAction({
+                                    id: item?.post.like_id,
+                                    post_id: item?.post.pk,
+                                  })
+                                )
                                 : dispatch(
-                                    createPostAction({
-                                      like: true,
-                                      comment: null,
-                                      donation_amount: 0,
-                                      user: myId,
-                                      parent: null,
-                                      date_time: null,
-                                      post: item?.post.pk,
-                                      id: null,
-                                    })
-                                  );
+                                  createPostAction({
+                                    like: true,
+                                    comment: null,
+                                    donation_amount: 0,
+                                    user: myId,
+                                    parent: null,
+                                    date_time: null,
+                                    post: item?.post.pk,
+                                    id: null,
+                                  })
+                                );
                             }}
                           >
                             <LikeIcon

@@ -100,48 +100,45 @@ const StoryBlock = () => {
 
   return (
     <>
-      <div className="stories">
-        <Slider>
-          {stories.map((story) => (
-            <div key={story.id}>
-              <div
-                className="stories__story-thumbnail"
-                onClick={() => openModalHandler(story.id)}
-              >
-                <StoryOutline
-                  className={`stories__outline ${
-                    isStoryWatched(story.id) ? "stories__outline_watched" : ""
+      <Slider className="stories" dots={false} arrows={false}>
+        {stories.map((story) => (
+          <div key={story.id}>
+            <div
+              className="stories__story-thumbnail"
+              onClick={() => openModalHandler(story.id)}
+            >
+              <StoryOutline
+                className={`stories__outline ${isStoryWatched(story.id) ? "stories__outline_watched" : ""
                   }`}
+              />
+              <div className="stories__avatar-wrapper stories__avatar-wrapper_active">
+                <img
+                  className="stories__user-avatar"
+                  src={story.userAvatar}
+                  alt="story"
                 />
-                <div className="stories__avatar-wrapper stories__avatar-wrapper_active">
-                  <img
-                    className="stories__user-avatar"
-                    src={story.userAvatar}
-                    alt="story"
-                  />
-                </div>
-                <p className="stories__user-login">
-                  @{showVisibleText(story.username, STORY_USERNAME_LENGTH)}
-                </p>
               </div>
+              <p className="stories__user-login">
+                @{showVisibleText(story.username, STORY_USERNAME_LENGTH)}
+              </p>
             </div>
-          ))}
-        </Slider>
-        <Modal
-          show={isModalOpened}
-          onHide={() => setIsModalOpened(false)}
-          centered
-          fullscreen={true}
-        >
-          <Modal.Body className="notifications__modal">
-            <StoryModal
-              stories={stories}
-              currentIdOfStory={currentIdOfStory}
-              setIsModalOpened={setIsModalOpened}
-            />
-          </Modal.Body>
-        </Modal>
-      </div>
+          </div>
+        ))}
+      </Slider>
+      <Modal
+        show={isModalOpened}
+        onHide={() => setIsModalOpened(false)}
+        centered
+        fullscreen={true}
+      >
+        <Modal.Body className="notifications__modal">
+          <StoryModal
+            stories={stories}
+            currentIdOfStory={currentIdOfStory}
+            setIsModalOpened={setIsModalOpened}
+          />
+        </Modal.Body>
+      </Modal>
     </>
   );
 };

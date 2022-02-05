@@ -41,7 +41,7 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
     <aside className="aside" style={{ left: leftFixedPosition }}>
       <p className="aside__title">{currentLang.also}</p>
 
-      <Slider dots={true} arrows={false}>
+      <Slider dots={true} arrows={false} autoplay={true} autoplaySpeed={2000}>
         {sliced_array.map((item, index) => {
           return (
             <div key={`${index} slideMain`}>

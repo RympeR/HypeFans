@@ -231,14 +231,14 @@ export const CommentComponent = ({
                     style={
                       showAnswer
                         ? {
-                            display: "flex",
-                            padding: "10px",
-                            backgroundColor: "#d6d6d6",
-                            borderRadius: "16px",
-                            height: "55px",
-                            margin: "7px",
-                          }
-                        : { display: "none" }
+                          display: 'flex',
+                          padding: '10px',
+                          backgroundColor: '#d6d6d6',
+                          borderRadius: '16px',
+                          height: '55px',
+                          margin: '7px'
+                        }
+                        : { display: 'none' }
                     }
                   >
                     <textarea
@@ -308,8 +308,8 @@ export const CommentComponent = ({
                 className="post__comment-amount"
                 name="comment"
                 onChange={(val) => {
-                  setFieldValue("user", userID);
-                  setFieldValue("comment", val.currentTarget.value);
+                  setComment(val.currentTarget.value);
+                  setFieldValue('user', userID);
                 }}
               ></textarea>
               <button

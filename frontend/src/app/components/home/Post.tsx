@@ -26,6 +26,19 @@ import { LangContext } from "../../utils/LangProvider";
 import { CommentComponent } from "../CommentComponent";
 import UserBanner from "./UserBanner";
 import logo from "../../../assets/images/logo.svg";
+import { Video } from "../../../app/pages/card/components/Video";
+
+
+export const returnByFileType = (item: any) => {
+  switch (item.file_type) {
+    case 4:
+      return (
+        <Video src={item._file} />
+      )
+    default:
+      return <img src={item._file} alt="postIMG" className="profile"></img>
+  }
+}
 
 const Post = ({
   post,
@@ -86,7 +99,7 @@ const Post = ({
   const time_diif = prepareDateDiffStrLanguage(
     timeAgoTimestamp(parseFloat(post?.post.publication_date)),
     currentLang
-  );
+  )
 
   return (
     <article className="post">
@@ -130,20 +143,18 @@ const Post = ({
       <UserBanner profile={post.user} />
 
       {post.post?.attachments.length > 1 ? (
-        <div className="profile__postIMG">
-          <Slider>
-            {post.post.attachments.map((item: any, index: number) => {
-              return (
-                <div key={`${index} slideMain`}>
-                  <img src={item._file} alt="postIMG" className="profile"></img>
-                </div>
-              );
-            })}
-          </Slider>
-        </div>
+        <Slider dots={true} arrows={false} className="profile__postIMG">
+          {post.post.attachments.map((item: any, index: number) => {
+            return (
+              <div key={`${index} slideMain profile__postIMG`}>
+                {returnByFileType(item)}
+              </div>
+            );
+          })}
+        </Slider>
       ) : (
         <div className="profile__postIMG">
-          <img src={post?.post.attachments[0]._file} alt="postIMG"></img>
+          {returnByFileType(post?.post?.attachments[0])}
         </div>
       )}
 
@@ -155,23 +166,23 @@ const Post = ({
               onClick={() => {
                 post.post.liked
                   ? dispatch(
-                      deletePostAction({
-                        id: post.post.like_id,
-                        post_id: post.post.pk,
-                      })
-                    )
+                    deletePostAction({
+                      id: post.post.like_id,
+                      post_id: post.post.pk,
+                    })
+                  )
                   : dispatch(
-                      createPostAction({
-                        like: true,
-                        comment: null,
-                        donation_amount: 0,
-                        parent: null,
-                        user: user_id,
-                        date_time: null,
-                        post: post.post.pk,
-                        id: null,
-                      })
-                    );
+                    createPostAction({
+                      like: true,
+                      comment: null,
+                      donation_amount: 0,
+                      parent: null,
+                      user: user_id,
+                      date_time: null,
+                      post: post.post.pk,
+                      id: null,
+                    })
+                  );
               }}
             >
               <LikeIcon

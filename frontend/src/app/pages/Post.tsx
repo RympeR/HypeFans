@@ -73,47 +73,45 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
           </div>
         </div>
         <div className="profile__postMain">
-          {post?.attachments && post?.attachments.length > 1 ? (
-            <div className="profile__postIMG">
-              <Slider>
-                {post.attachments.map((item: any, index: number) => {
-                  return (
-                    <div key={`${index} slideMain`}>
-                      {item?.attachments.length > 0
-                        ? item?.attachments.map((item: any, index: number) => {
-                            console.log(item.file_type);
-                            if (item.file_type === 4) {
-                              return <Video src={item.file_url} />;
-                            } else if (item.file_type === 1) {
-                              return (
-                                <a href={item.file_url} download>
-                                  Скачать{" "}
-                                  {
-                                    item.file_url.split("/")[
-                                      item.file_url.split("/").length - 1
-                                    ]
-                                  }
-                                </a>
-                              );
-                            } else if (item.file_type === 2) {
-                              console.log(item.file_url);
-                              return <audio src={item.file_url} />;
-                            } else {
-                              return (
-                                <img
-                                  src={item._file}
-                                  alt="postIMG"
-                                  className="profile"
-                                ></img>
-                              );
-                            }
-                          })
-                        : null}
-                    </div>
-                  );
-                })}
-              </Slider>
-            </div>
+          {post?.attachments.length > 1 ? (
+            <Slider className="profile__postIMG" dots={true} arrows={false}>
+              {post.attachments.map((item: any, index: number) => {
+                return (
+                  <div key={`${index} slideMain`}>
+                    {item?.attachments.length > 0
+                      ? item?.attachments.map((item: any, index: number) => {
+                        console.log(item.file_type);
+                        if (item.file_type === 4) {
+                          return <Video src={item.file_url} />;
+                        } else if (item.file_type === 1) {
+                          return (
+                            <a href={item.file_url} download>
+                              Скачать{" "}
+                              {
+                                item.file_url.split("/")[
+                                item.file_url.split("/").length - 1
+                                ]
+                              }
+                            </a>
+                          );
+                        } else if (item.file_type === 2) {
+                          console.log(item.file_url);
+                          return <audio src={item.file_url} />;
+                        } else {
+                          return (
+                            <img
+                              src={item._file}
+                              alt="postIMG"
+                              className="profile"
+                            ></img>
+                          );
+                        }
+                      })
+                      : null}
+                  </div>
+                );
+              })}
+            </Slider>
           ) : (
             <div className="profile__postIMG">
               {post?.attachments ? (
@@ -127,7 +125,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                         Скачать{" "}
                         {
                           post?.attachments[0]._file.split("/")[
-                            post?.attachments[0]._file.split("/").length - 1
+                          post?.attachments[0]._file.split("/").length - 1
                           ]
                         }
                       </a>
@@ -158,23 +156,23 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                   onClick={() => {
                     post?.liked
                       ? dispatch(
-                          deletePostActionModal({
-                            id: post?.like_id,
-                            post_id: post?.id,
-                          })
-                        )
+                        deletePostActionModal({
+                          id: post?.like_id,
+                          post_id: post?.id,
+                        })
+                      )
                       : dispatch(
-                          createPostActionModal({
-                            like: true,
-                            comment: null,
-                            donation_amount: 0,
-                            parent: null,
-                            user: myId,
-                            date_time: null,
-                            post: post?.id,
-                            id: null,
-                          })
-                        );
+                        createPostActionModal({
+                          like: true,
+                          comment: null,
+                          donation_amount: 0,
+                          parent: null,
+                          user: myId,
+                          date_time: null,
+                          post: post?.id,
+                          id: null,
+                        })
+                      );
                   }}
                 >
                   <LikeIcon
