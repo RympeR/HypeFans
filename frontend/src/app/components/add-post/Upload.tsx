@@ -211,7 +211,7 @@ const Upload = () => {
               />
             </div>
             <div style={{ marginBottom: "25px" }}>
-              Урвоень доступа:
+              Уровень доступа:
               <select
                 className="post__access__select"
                 value={accessType}
