@@ -185,13 +185,13 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
                     style={
                       showAnswer
                         ? {
-                            display: 'flex',
-                            padding: '10px',
-                            backgroundColor: '#d6d6d6',
-                            borderRadius: '16px',
-                            height: '55px',
-                            margin: '7px'
-                          }
+                          display: 'flex',
+                          padding: '10px',
+                          backgroundColor: '#d6d6d6',
+                          borderRadius: '16px',
+                          height: '55px',
+                          margin: '7px'
+                        }
                         : { display: 'none' }
                     }
                   >
@@ -252,8 +252,8 @@ export const CommentComponent = ({ data, postId }: { data: any; postId: number }
                 className="post__comment-amount"
                 name="comment"
                 onChange={(val) => {
+                  setComment(val.currentTarget.value);
                   setFieldValue('user', userID);
-                  setFieldValue('comment', val.currentTarget.value);
                 }}
               ></textarea>
               <button
