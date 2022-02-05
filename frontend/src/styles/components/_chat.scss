@@ -1,6 +1,7 @@
 .chat {
   display: flex;
   flex-direction: column;
+
   &__header {
     background-color: $white;
     border-top-left-radius: 16px;
@@ -12,6 +13,7 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     justify-content: space-between;
   }
+
   &__header_title {
     font-family: Factor A;
     font-size: 24px;
@@ -22,15 +24,18 @@
     text-align: left;
     margin-left: 24px;
   }
+
   &__row {
     display: flex;
     align-items: center;
   }
+
   &__main {
     background-color: $white;
     display: flex;
     margin-bottom: 20px;
   }
+
   &__sidebar {
     background-color: $white;
     border-right: 1px solid rgba(0, 0, 0, 0.2);
@@ -38,15 +43,18 @@
     overflow-y: scroll;
     height: 73vh;
   }
+
   &__sidebarItem {
     display: flex;
     padding: 15.5px 24px;
     margin-right: 14px;
+
     img {
       width: 60px;
       height: 60px;
       border-radius: 100%;
     }
+
     h2 {
       font-family: Factor A;
       font-style: normal;
@@ -58,6 +66,7 @@
       color: #000000;
       margin-left: 8px;
     }
+
     p {
       font-family: Factor A;
       font-style: normal;
@@ -70,6 +79,7 @@
       margin-left: 8px;
     }
   }
+
   &__p {
     font-family: Factor A;
     font-style: normal;
@@ -82,6 +92,7 @@
     color: rgba(0, 0, 0, 0.6);
     margin-bottom: 50px;
   }
+
   &__dialogsHeader {
     display: flex;
     justify-content: space-between;
@@ -90,25 +101,31 @@
     height: 92px;
     width: 100%;
   }
+
   &__dialogsMain {
     display: flex;
     flex-direction: column;
     width: 62.5%;
   }
+
   &__dialog {
     height: 50vh;
   }
+
   &__input {
     background: #e5e5e5;
     height: 140px;
   }
+
   &__text {
     padding: 17px 8px 17px 15px;
     display: flex;
+
     button {
       width: 50px;
       height: 50px;
     }
+
     input {
       width: 100%;
     }
@@ -153,14 +170,17 @@
   margin-bottom: 16px;
   margin-top: 7px;
 }
+
 @media screen and (max-width: 450px) {
   .chat {
     display: flex;
     flex-direction: column;
+
     &__resp_icon {
       width: 30px;
       height: 30px;
     }
+
     &__header {
       background-color: $white;
       border-top-left-radius: 16px;
@@ -172,6 +192,7 @@
       border-bottom: 1px solid rgba(0, 0, 0, 0.2);
       justify-content: space-between;
     }
+
     &__header_title {
       font-family: Factor A;
       font-size: 24px;
@@ -182,31 +203,38 @@
       text-align: center;
       margin-left: 24px;
     }
+
     &__row {
       display: flex;
       align-items: center;
     }
+
     &__main {
       background-color: $white;
       display: flex;
       margin-bottom: 20px;
     }
+
     &__sidebar {
       background-color: $white;
       border-right: 1px solid rgba(0, 0, 0, 0.2);
       width: 100%;
       overflow-y: scroll;
+      overflow-x: hidden;
       height: 100%;
     }
+
     &__sidebarItem {
       display: flex;
       padding: 15.5px 24px;
       margin-right: 14px;
+
       img {
         width: 60px;
         height: 60px;
         border-radius: 100%;
       }
+
       h2 {
         font-family: Factor A;
         font-style: normal;
@@ -218,6 +246,7 @@
         color: #000000;
         margin-left: 8px;
       }
+
       p {
         font-family: Factor A;
         font-style: normal;
@@ -230,6 +259,7 @@
         margin-left: 8px;
       }
     }
+
     &__p {
       font-family: Factor A;
       font-style: normal;
@@ -242,42 +272,57 @@
       color: rgba(0, 0, 0, 0.6);
       margin-bottom: 50px;
     }
+
     &__dialogsHeader {
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-      height: 92px;
+      height: 64px;
       width: 100%;
     }
+
     &__inactive {
-      display: none!important;
+      display: none !important;
     }
+
+    &__flex_0 {
+      flex: 0 !important;
+    }
+
     &__dialogsMain {
       display: flex;
       flex-direction: column;
       width: 100%;
     }
+
     &__dialog {
-      height: 50vh;
+      height: 75vh;
     }
+
     &__input {
       background: #e5e5e5;
-      height: 140px;
+      height: 120px;
+      bottom: 0px;
+      position: fixed;
+      width: 100%;
     }
+
     &__text {
       padding: 17px 8px 17px 15px;
       display: flex;
+
       button {
         width: 50px;
         height: 50px;
       }
+
       input {
         width: 100%;
       }
     }
   }
-  
+
   .message-wrap {
     list-style: none;
     width: 100%;
@@ -291,7 +336,7 @@
     padding: 10px;
     overflow-y: scroll;
   }
-  
+
   .text-wrapp {
     display: flex;
     background-color: #f8f1f0;
@@ -305,7 +350,7 @@
     left: 0;
     padding: 5px;
   }
-  
+
   .time-text {
     font-family: Factor A;
     font-style: normal;
@@ -315,5 +360,61 @@
     color: rgba(0, 0, 0, 0.6);
     margin-bottom: 16px;
     margin-top: 7px;
+  }
+}
+
+.message{
+  $border-radius-messages: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: 0.375rem;
+    bottom: auto !important;
+    float: right;
+    line-height: 1.35;
+    height: calc(21px + 1rem);
+    margin-left: 0.4375rem;
+    margin-right: -0.5rem;
+
+    &>.message__time{
+      font-size: .75rem;
+      white-space: nowrap;
+      margin-right: 0.1875rem;
+    }
+  }
+
+  &.own {
+    align-items: flex-start;
+  }
+
+  &__content {
+    border-top-left-radius: $border-radius-messages;
+    border-top-right-radius: $border-radius-messages;
+    border-bottom-left-radius: $border-radius-messages;
+    border-bottom-right-radius: $border-radius-messages;
+    @media screen and (max-width: 600px) {
+      max-width: min(30rem, 100vw - 3.75rem);
+    }
+
+    &.has-solid-background {
+      padding: 0.3125rem 1rem 0.25rem 0.6rem;
+      background:rgb(249 208 183 / 67%);
+      margin-bottom: 7px;
+    }
+  }
+  &__text_content {
+    margin: 0;
+    word-break: break-word;
+    white-space: pre-wrap;
+    line-height: 1.3125;
+    text-align: initial;
+    display: flow-root;
+    unicode-bidi: plaintext;
   }
 }

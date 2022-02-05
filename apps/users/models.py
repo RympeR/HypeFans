@@ -1,12 +1,13 @@
 import datetime
-from django.db import models
-from django.contrib.auth.models import AbstractUser
+
 from core.utils.func import user_avatar
-from unixtimestampfield.fields import UnixTimeStampField
-from django_countries.fields import CountryField
-from dateutil.relativedelta import relativedelta
+from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django_countries.fields import CountryField
+from unixtimestampfield.fields import UnixTimeStampField
+
 from .dynamic_preferences_registry import ChatSubscriptionDuration
 
 
@@ -255,10 +256,13 @@ class UserOnline(models.Model):
 
 
 class ReferralPayment(models.Model):
-    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE, related_name='user_user_payment',)
-    referrer = models.ForeignKey(User, verbose_name='Реферал', on_delete=models.CASCADE, related_name='referrer_user_payment',)
+    user = models.ForeignKey(User, verbose_name='Пользователь',
+                             on_delete=models.CASCADE, related_name='user_user_payment',)
+    referrer = models.ForeignKey(User, verbose_name='Реферал',
+                                 on_delete=models.CASCADE, related_name='referrer_user_payment',)
     amount = models.FloatField(verbose_name='Цена покупки')
-    date_time = models.DateTimeField(verbose_name='Время оплаты', auto_now_add=True)
+    date_time = models.DateTimeField(
+        verbose_name='Время оплаты', auto_now_add=True)
 
     class Meta:
         verbose_name = 'Реферальный платеж'
@@ -290,3 +294,8 @@ def update_user_balance_payment(sender: Payment, instance: Payment, created: boo
 
 
 post_save.connect(update_verification, sender=PendingUser)
+
+
+def sub_checker(user: User, source: User):
+    return True if Subscription.objects.filter(
+        target=user, source=source, end_date__gte=datetime.datetime.now()).exists() else False

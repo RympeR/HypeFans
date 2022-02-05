@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { getPost } from "../../../redux/blogReducer";
 import { PostModal } from "../Post";
+import logo from '../../../assets/images/logo.svg';
 
 export const Notification = ({ item }: any) => {
   console.log(item);
@@ -37,7 +38,7 @@ export const Notification = ({ item }: any) => {
       <div className="notifications__userInfo">
         <Link to={`/profile/${item.user.username}`}>
           <img
-            src={item.user.avatar}
+            src={item.user.avatar ? item.user.avatar : logo}
             alt="userPhoto"
             className="notifications__userPhoto"
           ></img>

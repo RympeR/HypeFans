@@ -9,7 +9,10 @@ import { getAuthScheme, NAV_LINKS } from "../../../app/utils/utilities";
 import { ReactComponent as Facebook } from "../../../assets/images/facebook.svg";
 import { ReactComponent as Google } from "../../../assets/images/google.svg";
 import { ReactComponent as Instagram } from "../../../assets/images/instagram.svg";
+import { ReactComponent as EyeIcon } from "../../../assets/images/eye.svg";
+import { ReactComponent as EyeOffIcon } from "../../../assets/images/eye-off.svg";
 import { login } from "../../../redux/authReducer";
+import { toast } from "react-toastify";
 
 const initialValues: ISignInData = {
   email: "",
@@ -21,6 +24,10 @@ const SignInForm = ({ action }: { action: string }) => {
   const { currentLang } = useContext(LangContext);
 
   const signInScheme = getAuthScheme(currentLang, action);
+  const [passwordShown, setPasswordShown] = useState(false);
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
+  };
 
   const {
     register,
@@ -35,7 +42,12 @@ const SignInForm = ({ action }: { action: string }) => {
 
   const onSubmit = async (data: ISignInData) => {
     setIsSigningIn(true);
-    await dispatch(login(data));
+    try{
+      await dispatch(login(data));
+      toast.success('Login Successfully');
+    } catch {
+      toast.error('Invaild credentials');
+    }
     setIsSigningIn(false);
     reset(initialValues);
   };
@@ -60,14 +72,24 @@ const SignInForm = ({ action }: { action: string }) => {
         {...register("email")}
       />
       <p className="auth__input-error">{errors.email?.message}</p>
-
       <input
-        type="password"
+        type={passwordShown ? "text" : "password"}
         className="auth__input"
         disabled={isSigningIn}
         placeholder={currentLang.passDescr}
         {...register("password")}
       />
+      {passwordShown ? (
+        <EyeIcon
+          className="auth__show-hide-password-icon"
+          onClick={togglePassword}
+        />
+      ) : (
+        <EyeOffIcon
+          className="auth__show-hide-password-icon"
+          onClick={togglePassword}
+        />
+      )}
       <p className="auth__input-error">{errors.password?.message}</p>
 
       <button className="auth__submit-btn">{currentLang.next}</button>

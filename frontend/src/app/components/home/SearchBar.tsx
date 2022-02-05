@@ -24,11 +24,10 @@ const SearchBar = () => {
   return (
     <form className="search-bar" onSubmit={searchSubmitHandler}>
       <div className="search-bar__left">
-        <img className="search-bar__avatar" src={ava1} alt="avatar" />
         <input
           className="search-bar__input"
           type="text"
-          placeholder={currentLang.urThought}
+          placeholder={currentLang.searchText}
           value={value}
           onChange={onChangeHandler}
         />
@@ -37,7 +36,7 @@ const SearchBar = () => {
         className="search-bar__btn"
         type="submit"
         onClick={() => {
-          history.push("/search");
+          history.push(`/search?username=${value}`);
         }}
       >
         <SearchIcon />

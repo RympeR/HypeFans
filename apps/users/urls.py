@@ -1,4 +1,4 @@
-from django.urls import path, re_path
+from django.urls import path
 from .views import (
     AddBlockedUserAPI,
     UserActivationView,
@@ -34,7 +34,6 @@ from .views import (
     SpendStatsHistoryRetrieveAPI,
     RepheralHistoryRetrieveAPI,
 )
-
 urlpatterns = [
     path('me/', UserMeRetrieveAPI.as_view()),
     path('get-user/', UserRetrieveAPI.as_view()),

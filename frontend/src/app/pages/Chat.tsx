@@ -11,6 +11,8 @@ import { Preloader } from "../utils/Preloader";
 import { getLastUrlPoint } from "../utils/utilities";
 import { DialogMain } from "./DialogMain";
 import { NoDialog } from "./NoDialog";
+import logo from "../../assets/images/logo.svg";
+
 const Chat: React.FC = () => {
   const userId = useSelector((state: RootState) => state.auth.pk);
   const history = useHistory();
@@ -20,13 +22,12 @@ const Chat: React.FC = () => {
   const [rooms, setRooms] = useState([]);
   const [isSended, setSended] = useState(false);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
-  const [visible, setVisibility] = useState(false);
 
   if (isLoading) {
     return <Preloader />;
   }
 
-  const ws = new WebSocket(`wss://hype-fans.com/ws/chat-rooms/${userId}/`);
+  const ws = new WebSocket(`wss://hype-fans.com/ws/api/chat-rooms/${userId}/`);
 
   ws.onopen = () => {
     if (isSended) {
@@ -50,18 +51,13 @@ const Chat: React.FC = () => {
   const SidebarItem = (item: any) => {
     const history = useHistory();
     const lastUrl = getLastUrlPoint(history.location.pathname);
-
     const [amICreator, setCreator] = useState(false);
     useEffect(() => {
       if (userId === item?.item?.room?.room_info?.creator?.pk) setCreator(true);
       else setCreator(false);
     }, [item]);
-
     return (
-      <Link
-        to={`/chat/${item?.item?.room?.room_info?.id}`}
-        onClick={() => setVisibility(!visible)}
-      >
+      <Link to={`/chat/${item?.item?.room?.room_info?.id}`}>
         <div
           style={
             lastUrl !== item?.item?.room?.room_info?.id
@@ -82,9 +78,9 @@ const Chat: React.FC = () => {
                 src={
                   typeof item?.item?.room?.room_info?.invited !== "number"
                     ? amICreator
-                      ? item?.item?.room?.room_info?.invited?.avatar
-                      : item?.item?.room?.room_info?.creator?.avatar
-                    : item?.item?.room?.room_info?.logo
+                      ? item?.item?.room?.room_info?.invited?.avatar || logo
+                      : item?.item?.room?.room_info?.creator?.avatar || logo
+                    : item?.item?.room?.room_info?.logo || logo
                 }
                 alt="logo"
               ></img>
@@ -94,9 +90,9 @@ const Chat: React.FC = () => {
                   src={
                     typeof item?.item?.room?.room_info?.invited !== "number"
                       ? amICreator
-                        ? item?.item?.room?.room_info?.invited?.avatar
-                        : item?.item?.room?.room_info?.creator?.avatar
-                      : item?.item?.room?.room_info?.logo
+                        ? item?.item?.room?.room_info?.invited?.avatar || logo
+                        : item?.item?.room?.room_info?.creator?.avatar || logo
+                      : item?.item?.room?.room_info?.logo || logo
                   }
                   alt="logo"
                 ></img>
@@ -129,7 +125,12 @@ const Chat: React.FC = () => {
       </Link>
     );
   };
-
+  let VISIBLE = false;
+  if (window.location.href.match("/chat/d*")) {
+    VISIBLE = true;
+  } else {
+    VISIBLE = false;
+  }
   return (
     <div>
       <div className="chat__header">
@@ -149,18 +150,18 @@ const Chat: React.FC = () => {
         </div>
       </div>
       <div className="chat__main">
-        <div className={"chat__sidebar " + (visible ? "chat__inactive" : "")}>
+        <div className={"chat__sidebar " + (VISIBLE ? "chat__inactive" : "")}>
           {rooms.map((item, key) => {
             return (
               <div key={Math.random() + String(key)}>
-                <SidebarItem item={item} visible={false} />
+                <SidebarItem item={item} />
               </div>
             );
           })}
         </div>
         <Route
           path="/chat/:id"
-          render={() => <DialogMain visible={visible} rooms={rooms} />}
+          render={() => <DialogMain rooms={rooms} />}
           exact
         />
         <Route path="/chat" component={NoDialog} exact />

@@ -18,12 +18,12 @@ application = ProtocolTypeRouter({
 
     "websocket": AuthMiddlewareStack(
         URLRouter([
-            re_path(r"ws/chat/(?P<room_name>\w+)/", ChatConsumer.as_asgi()),
-            re_path(r'ws/chat-readed/(?P<room_name>\w+)/$',
+            re_path(r"ws/api/chat/(?P<room_name>\w+)/", ChatConsumer.as_asgi()),
+            re_path(r'ws/api/chat-readed/(?P<room_name>\w+)/$',
                     ReadedConsumer.as_asgi()),
-            re_path(r'ws/last-message/(?P<room_name>\w+)/$',
+            re_path(r'ws/api/last-message/(?P<room_name>\w+)/$',
                     LastMessageConsumer.as_asgi()),
-            re_path(r'ws/chat-rooms/(?P<user_id>\w+)/$',
+            re_path(r'ws/api/chat-rooms/(?P<user_id>\w+)/$',
                     ChatRoomsConsumer.as_asgi()),
         ])
     ),

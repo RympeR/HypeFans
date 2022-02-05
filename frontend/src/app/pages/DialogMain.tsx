@@ -36,6 +36,7 @@ import { getLastUrlPoint } from "../utils/utilities";
 import { ChatImage } from "./card/components/ChatImage";
 import { Video } from "./card/components/Video";
 import moment from "moment";
+import logo from "../../assets/images/logo.svg";
 
 const Input = ({
   sendMessage,
@@ -74,13 +75,7 @@ const Input = ({
   );
 };
 
-export const DialogMain = ({
-  visible,
-  rooms,
-}: {
-  visible: boolean;
-  rooms: any;
-}) => {
+export const DialogMain = ({ rooms }: { rooms: any }) => {
   const history = useHistory();
   const lastUrl = getLastUrlPoint(history.location.pathname);
   const alert = useAlert();
@@ -107,16 +102,19 @@ export const DialogMain = ({
   // useEffect`s
 
   useEffect(() => {
-    const wsClient = new WebSocket(`wss://hype-fans.com/ws/chat/${lastUrl}/`);
+    const wsReadClient = new WebSocket(
+      `wss://hype-fans.com/ws/api/chat-readed/${lastUrl}/`
+    );
+    const wsClient = new WebSocket(
+      `wss://hype-fans.com/ws/api/chat/${lastUrl}/`
+    );
     wsClient.onopen = () => {
-      console.log("ws opened");
+      console.log(wsClient);
       setWs(wsClient);
     };
-    const wsReadClient = new WebSocket(
-      `wss://hype-fans.com/ws/chat-readed/${lastUrl}/`
-    );
     wsReadClient.onopen = () => {
       setWsRead(wsReadClient);
+      console.log(wsReadClient);
       wsReadClient.send(
         JSON.stringify({ room_id: lastUrl, user: uid, message_id: 0 })
       );
@@ -280,6 +278,7 @@ export const DialogMain = ({
   };
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
+  const [isShown, setShown] = useState(true);
 
   return (
     <div className="chat__dialogsMain">
@@ -302,21 +301,20 @@ export const DialogMain = ({
       <div className="chat__dialogsHeader">
         <div className="chat__sidebarItem" style={{ alignItems: "center" }}>
           <Link
-            to={`/profile/${
-              typeof rooms.find(
-                (item: any) => item.room.room_info.id === Number(lastUrl)
-              )?.room?.room_info?.invited !== "number"
-                ? amICreator
-                  ? rooms.find(
-                      (item: any) => item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.invited?.username
-                  : rooms.find(
-                      (item: any) => item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.creator?.username
+            to={`/profile/${typeof rooms.find(
+              (item: any) => item.room.room_info.id === Number(lastUrl)
+            )?.room?.room_info?.invited !== "number"
+              ? amICreator
+                ? rooms.find(
+                  (item: any) => item.room.room_info.id === Number(lastUrl)
+                )?.room?.room_info?.invited?.username
                 : rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.id
-            }`}
+                  (item: any) => item.room.room_info.id === Number(lastUrl)
+                )?.room?.room_info?.creator?.username
+              : rooms.find(
+                (item: any) => item.room.room_info.id === Number(lastUrl)
+              )?.room?.room_info?.id
+              }`}
           >
             <img
               src={
@@ -325,16 +323,16 @@ export const DialogMain = ({
                 )?.room?.room_info?.invited !== "number"
                   ? amICreator
                     ? rooms.find(
-                        (item: any) =>
-                          item.room.room_info.id === Number(lastUrl)
-                      )?.room?.room_info?.invited?.avatar
+                      (item: any) =>
+                        item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited?.avatar || logo
                     : rooms.find(
-                        (item: any) =>
-                          item.room.room_info.id === Number(lastUrl)
-                      )?.room?.room_info?.creator?.avatar
+                      (item: any) =>
+                        item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.creator?.avatar || logo
                   : rooms.find(
-                      (item: any) => item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.logo
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.logo || logo
               }
               alt="avatar"
             ></img>
@@ -346,14 +344,14 @@ export const DialogMain = ({
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                      (item: any) => item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.invited?.first_name
-                  : rooms.find(
-                      (item: any) => item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.creator?.first_name
-                : rooms.find(
                     (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.name}
+                  )?.room?.room_info?.invited?.first_name
+                  : rooms.find(
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.creator?.first_name
+                : rooms.find(
+                  (item: any) => item.room.room_info.id === Number(lastUrl)
+                )?.room?.room_info?.name}
             </h2>
             <h2
               style={{
@@ -371,14 +369,14 @@ export const DialogMain = ({
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                      (item: any) => item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.invited?.username
-                  : rooms.find(
-                      (item: any) => item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.creator?.username
-                : rooms.find(
                     (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.name}
+                  )?.room?.room_info?.invited?.username
+                  : rooms.find(
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.creator?.username
+                : rooms.find(
+                  (item: any) => item.room.room_info.id === Number(lastUrl)
+                )?.room?.room_info?.name}
             </h2>
           </div>
         </div>
@@ -402,7 +400,18 @@ export const DialogMain = ({
             <button>Посмотреть вложения</button>
           </div>
           <div style={{ padding: "5px", fontSize: "11px" }}>
-            <button>Копировать ссылку на профиль</button>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `hype-fans.com/profile/${rooms.find(
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.invited.username
+                  }`
+                );
+              }}
+            >
+              Копировать ссылку на профиль
+            </button>
           </div>
           <div style={{ padding: "5px", fontSize: "11px" }}>
             <button>Убрать из всех групп</button>
@@ -454,26 +463,12 @@ export const DialogMain = ({
             messages.map((item, index) => {
               return (
                 <div
-                  style={
-                    item.user.pk === uid
-                      ? {
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "flex-end",
-                          width: "100%",
-                        }
-                      : {
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "flex-start",
-                          width: "100%",
-                        }
-                  }
+                  className={item.user.pk === uid ? "message" : "message own"}
                   key={Math.random() + index + Math.random()}
                 >
                   {item.message_price !== 0 &&
-                  !item.is_payed &&
-                  item.user.pk !== uid ? (
+                    !item.is_payed &&
+                    item.user.pk !== uid ? (
                     <div
                       style={{
                         display: "flex",
@@ -499,22 +494,15 @@ export const DialogMain = ({
                     </div>
                   ) : (
                     <div>
-                      <div style={{ display: "flex" }}>
-                        {item.user.pk === uid ? (
-                          <div style={{ marginRight: "5px" }}>
-                            {item.readed ? <Readed /> : <NotReaded />}
-                          </div>
-                        ) : (
-                          <></>
-                        )}
+                      <div className="message__content has-solid-background">
                         <div
-                          className="text-wrapp"
+                          className="message__text_content"
                           style={
                             item?.attachments.length > 0
                               ? {
-                                  backgroundColor: "white",
-                                  justifyContent: "flex-end",
-                                }
+                                backgroundColor: "white",
+                                justifyContent: "flex-end",
+                              }
                               : {}
                           }
                         >
@@ -524,35 +512,43 @@ export const DialogMain = ({
                           ).toString(CryptoJS.enc.Utf8)}
                           {item?.attachments.length > 0
                             ? item?.attachments.map(
-                                (item: any, index: number) => {
-                                  if (item.file_type === 4) {
-                                    return <Video src={item.file_url} />;
-                                  } else if (item.file_type === 1) {
-                                    return (
-                                      <a href={item.file_url} download>
-                                        Скачать{" "}
-                                        {
-                                          item.file_url.split("/")[
-                                            item.file_url.split("/").length - 1
-                                          ]
-                                        }
-                                      </a>
-                                    );
-                                  } else if (item.file_type === 2) {
-                                    console.log(item.file_url);
-                                    return <audio src={item.file_url} />;
-                                  } else {
-                                    return (
-                                      <ChatImage
-                                        item={item}
-                                        index={index}
-                                        key={index + Math.random()}
-                                      />
-                                    );
-                                  }
+                              (item: any, index: number) => {
+                                if (item.file_type === 4) {
+                                  return <Video src={item.file_url} />;
+                                } else if (item.file_type === 1) {
+                                  return (
+                                    <a href={item.file_url} download>
+                                      Скачать{" "}
+                                      {
+                                        item.file_url.split("/")[
+                                        item.file_url.split("/").length - 1
+                                        ]
+                                      }
+                                    </a>
+                                  );
+                                } else if (item.file_type === 2) {
+                                  console.log(item.file_url);
+                                  return <audio src={item.file_url} />;
+                                } else {
+                                  return (
+                                    <ChatImage
+                                      item={item}
+                                      index={index}
+                                      key={index + Math.random()}
+                                    />
+                                  );
                                 }
-                              )
+                              }
+                            )
                             : null}
+                          {item.user.pk === uid ? (
+                            <span className="message__meta">
+                              <div className="message__time">15:33</div>
+                              {item.readed ? <Readed /> : <NotReaded />}
+                            </span>
+                          ) : (
+                            <></>
+                          )}
                         </div>
                       </div>
                       <div className="time-text">   {moment(item?.item?.room?.message?.time).fromNow()}</div>
@@ -836,7 +832,7 @@ export const DialogMain = ({
                         rooms.find(
                           (item: any) =>
                             item.room.room_info.id === Number(lastUrl)
-                        )?.room?.user?.avatar
+                        )?.room?.user?.avatar || logo
                       }
                       alt="fdsfsdfsd"
                     ></img>

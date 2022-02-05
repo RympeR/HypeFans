@@ -8,7 +8,7 @@ from core.utils.default_responses import (api_accepted_202,
                                           api_block_by_policy_451,
                                           api_created_201,
                                           api_payment_required_402)
-from core.utils.func import create_ref_link
+from core.utils.func import create_ref_link, generate_pay_dict, sum_by_attribute
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
@@ -70,30 +70,29 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
         limit = request.GET.get('limit', 50)
         offset = request.GET.get('offset', 0)
         results = []
-        sub_check = True if Subscription.objects.filter(
-            target=user, source=req_user, end_date__gte=datetime.now()).exists() else False
-        sub_dict = {
-            'subscribed': sub_check
-        }
+        sub_check = sub_checker(user, req_user)
         if data_compare == 0:
             for post in user.user_post.filter(archived=False).order_by('-publication_date'):
                 post_data = PostGetShortSerializers(
                     instance=post, context={'request': request}).data
                 res_dict = {}
                 res_dict['post'] = post_data
-                if user.new_user:
+                if req_user.new_user:
                     res_dict['post']['payed'] = True
                 else:
                     if post.access_level == 1:
-                        res_dict['post']['payed'] = (
-                            True if PostBought.objects.filter(
-                                post=post, user=user).exists() else False
-                        )
+                        if post.price_to_watch == 0:
+                            res_dict['post']['payed'] = True
+                        else:
+                            res_dict['post']['payed'] = (
+                                True if PostBought.objects.filter(
+                                    post=post, user=req_user).exists() else False
+                            )
                     else:
                         res_dict['post']['payed'] = sub_check
 
                 post_action_queryset = PostAction.objects.filter(
-                    post=post, user=request.user)
+                    post=post, user=req_user)
                 if post_action_queryset.exists():
                     for action in post_action_queryset:
                         if action.like:
@@ -106,7 +105,7 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
                 else:
                     res_dict['post']['liked'] = False
                     res_dict['post']['like_id'] = None
-                if request.user in post.favourites.all():
+                if req_user in post.favourites.all():
                     res_dict['post']['favourite'] = True
                 else:
                     res_dict['post']['favourite'] = False
@@ -114,7 +113,7 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
         return api_accepted_202({
             **self.serializer_class(instance=user, context={'request': request}).data,
             **{'posts': results[offset:limit+offset]},
-            **sub_dict
+            'subscribed': sub_check
         })
 
     def get_serializer_context(self):
@@ -157,11 +156,7 @@ class UserLoginAPI(generics.GenericAPIView):
         user = authenticate(username=email, password=password)
         if user is not None:
             token, _ = Token.objects.get_or_create(user=user)
-            return api_created_201(
-                {
-                    "auth_token": str(token)
-                }
-            )
+            return api_created_201({"auth_token": str(token)})
         else:
             return api_bad_request_400(
                 {
@@ -196,11 +191,7 @@ class UserCreateAPI(generics.GenericAPIView):
 
             user.save()
             token, created = Token.objects.get_or_create(user=user)
-            return api_created_201(
-                {
-                    "auth_token": str(token)
-                }
-            )
+            return api_created_201({"auth_token": str(token)})
         except Exception as e:
             logging.error(e)
             return api_block_by_policy_451({"info": "already exists"})
@@ -234,7 +225,7 @@ class CreateSubscriptioAPI(generics.CreateAPIView):
         try:
             serializer.is_valid(raise_exception=True)
         except AssertionError:
-            return api_block_by_policy_451({"status": "not enought credits"})
+            return api_block_by_policy_451({"status": "not enough credits"})
         self.perform_create(serializer)
         return Response(serializer.data)
 
@@ -380,11 +371,10 @@ class AddBlockedUserAPI(generics.GenericAPIView):
         else:
             self.request.user.blocked_users.remove(user)
         self.request.user.save()
-        data = {
+        return Response({
             'user': user.pk,
             'block': request.data['block']
-        }
-        return Response(data)
+        })
 
 
 class DonationCreateAPI(generics.CreateAPIView):
@@ -502,19 +492,15 @@ class PayStatsHistoryRetrieveAPI(APIView):
             target=user,
             start_date__date__month=current_month,
         ).order_by('-start_date')
-        chat_subscription_amount = sum((
-            user.message_price
-            for _ in range(len(chat_subscriptions))
-        ))
+        chat_subscription_amount = sum_by_attribute(
+            user, 'message_price', chat_subscriptions, True)
 
         subscriptions = Subscription.objects.filter(
             target=user,
             start_date__date__month=current_month,
         ).order_by('-start_date')
-        subscription_amount = sum((
-            user.subscribtion_duration
-            for _ in range(len(subscriptions))
-        ))
+        subscription_amount = sum_by_attribute(
+            user, 'subscribtion_duration', subscriptions, True)
 
         referral_payments = ReferralPayment.objects.filter(
             referrer=user,
@@ -523,41 +509,16 @@ class PayStatsHistoryRetrieveAPI(APIView):
 
         result_sum = subscription_amount + donation_amount + repherral_summ +\
             chat_subscription_amount
-        donations = [
-            {**donation, 'type': 'donation'}
-            for donation in UnionDonationGetSerializer(
-                instance=donations,
-                many=True
-            ).data
-        ]
-        subscriptions = [
-            {**subscription, 'type': 'subscription'}
-            for subscription in UnionSubscriptionGetSerializer(
-                instance=subscriptions,
-                many=True
-            ).data
-        ]
-        chat_subscriptions = [
-            {**chat_subscription, 'type': 'chat_subscriptions'}
-            for chat_subscription in UnionChatSubscriptionGetSerializer(
-                instance=chat_subscriptions,
-                many=True
-            ).data
-        ]
-        referral_payments = [
-            {**referral_payment, 'type': 'referral_payment'}
-            for referral_payment in UnionReferralPaymentGetSerializer(
-                instance=referral_payments,
-                context={'request': request},
-                many=True
-            ).data
-        ]
 
         result = sorted([
-            *donations,
-            *subscriptions,
-            *chat_subscriptions,
-            *referral_payments,
+            *generate_pay_dict(donations,
+                               UnionDonationGetSerializer, 'donation'),
+            *generate_pay_dict(subscriptions,
+                               UnionSubscriptionGetSerializer, 'subscription'),
+            *generate_pay_dict(chat_subscriptions,
+                               UnionChatSubscriptionGetSerializer, 'chat_subscriptions'),
+            *generate_pay_dict(referral_payments,
+                               UnionReferralPaymentGetSerializer, 'referral_payment'),
         ], key=lambda x: x['date_time'], reverse=True)
 
         result_dict = {
@@ -623,32 +584,15 @@ class SpendStatsHistoryRetrieveAPI(APIView):
         ))
 
         result_sum = subscription_amount + donation_amount + chat_subscription_amount
-        donations = [
-            {**donation, 'type': 'donation'}
-            for donation in UnionDonationGetSerializer(
-                instance=donations,
-                many=True
-            ).data
-        ]
-        subscriptions = [
-            {**subscription, 'type': 'subscription'}
-            for subscription in UnionSubscriptionGetSerializer(
-                instance=subscriptions,
-                many=True
-            ).data
-        ]
-        chat_subscriptions = [
-            {**chat_subscription, 'type': 'chat_subscription'}
-            for chat_subscription in UnionChatSubscriptionGetSerializer(
-                instance=chat_subscriptions,
-                many=True
-            ).data
-        ]
 
         result = sorted([
-            *donations,
-            *subscriptions,
-            *chat_subscriptions,
+            *generate_pay_dict(donations,
+                               UnionDonationGetSerializer, 'donation'),
+            *generate_pay_dict(subscriptions,
+                               UnionSubscriptionGetSerializer, 'subscription'),
+            *generate_pay_dict(chat_subscriptions,
+                               UnionChatSubscriptionGetSerializer, 'chat_subscriptions'),
+
         ], key=lambda x: x['date_time'], reverse=True)
 
         result_dict = {

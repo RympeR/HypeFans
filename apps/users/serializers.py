@@ -24,23 +24,22 @@ class UserMeSerializer(serializers.ModelSerializer):
 
 class ChatSubscriptionCreateSerializer(serializers.ModelSerializer):
 
-    end_date = TimestampField(required=False)
-    start_date = TimestampField(required=False)
     source = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+    target = serializers.PrimaryKeyRelatedField(
         required=False, queryset=User.objects.all())
 
     class Meta:
         model = ChatSubscription
-        fields = '__all__'
+        fields = 'source', 'target'
 
     def validate(self, attrs):
         request = self.context.get('request')
         user = request.user
         now = datetime.now()
-        attrs['source'] = user
-        attrs['start_date'] = now
+        attrs['start_date'] = now.strftime("%Y-%m-%d %H:%M:%S")
         attrs['end_date'] = (
-            now + timedelta(days=ChatSubscriptionDuration.value()))
+            now + timedelta(days=ChatSubscriptionDuration.value())).strftime("%Y-%m-%d %H:%M:%S")
 
         if user.credit_amount >= attrs['target'].message_price:
             user.credit_amount -= attrs['target'].message_price
@@ -61,26 +60,33 @@ class ChatSubscriptionCreateSerializer(serializers.ModelSerializer):
             return attrs
         raise serializers.ValidationError
 
+    def create(self, validated_data):
+        return ChatSubscription.objects.create(
+            source=validated_data['source'],
+            target=validated_data['target'],
+            start_date=validated_data['start_date'],
+            end_date=validated_data['end_date'],
+        )
+
 
 class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
-    end_date = TimestampField(required=False)
-    start_date = TimestampField(required=False)
     source = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+    target = serializers.PrimaryKeyRelatedField(
         required=False, queryset=User.objects.all())
 
     class Meta:
         model = Subscription
-        fields = '__all__'
+        fields = 'source', 'target'
 
     def validate(self, attrs):
         request = self.context.get('request')
         user = request.user
         now = datetime.now()
-        attrs['source'] = user
-        attrs['start_date'] = now
+        attrs['start_date'] = now.strftime("%Y-%m-%d %H:%M:%S")
         attrs['end_date'] = (
-            now + timedelta(days=user.subscribtion_duration)).timestamp()
+            now + timedelta(days=user.subscribtion_duration)).strftime("%Y-%m-%d %H:%M:%S")
 
         if user.credit_amount >= attrs['target'].subscribtion_price:
             user.credit_amount -= attrs['target'].subscribtion_price
@@ -101,6 +107,16 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
             attrs['target'].save()
             return attrs
         raise serializers.ValidationError
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        request.user.my_subscribes.add(validated_data['target'])
+        return Subscription.objects.create(
+            source=validated_data['source'],
+            target=validated_data['target'],
+            start_date=validated_data['start_date'],
+            end_date=validated_data['end_date'],
+        )
 
 
 class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
@@ -331,6 +347,18 @@ class UserGetSerializer(serializers.ModelSerializer):
     avatar = serializers.SerializerMethodField()
     background_photo = serializers.SerializerMethodField()
     is_online = serializers.SerializerMethodField()
+    fans_amount = serializers.SerializerMethodField()
+    post_amount = serializers.SerializerMethodField()
+
+    def get_post_amount(self, user: User):
+        if user.show_post_amount:
+            return user.post_amount
+        return 0
+
+    def get_fans_amount(self, user: User):
+        if user.show_fans_amount:
+            return user.fans_amount
+        return 0
 
     def get_is_online(self, user: User):
         return get_online(self, user)
@@ -699,6 +727,7 @@ class UnionReferralPaymentGetSerializer(serializers.ModelSerializer):
         return UserShortRetrieveSeriliazer(
             instance=ref_payment.referrer
         ).data
+
     class Meta:
         model = ReferralPayment
         fields = (
@@ -708,4 +737,3 @@ class UnionReferralPaymentGetSerializer(serializers.ModelSerializer):
             'source',
             'amount'
         )
-

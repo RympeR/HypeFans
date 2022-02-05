@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'apps.chat',
     'apps.users',
     'apps.blog',
+    'apps.front',
 ]
 
 MIDDLEWARE = [
@@ -69,7 +70,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates')
+            os.path.join(BASE_DIR, 'build'),
+            os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -176,10 +178,10 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'frontend/dist',
+    os.path.join(BASE_DIR, "build/static"),
 ]
 
 STATICFILES_FINDERS = [
@@ -230,6 +232,7 @@ CORS_ALLOW_HEADERS = [
     'token',
     "x-requested-with",
     'Auth',
+    'Access-Control-Allow-Origin'
 ]
 CORS_ALLOW_METHODS = (
     'GET',

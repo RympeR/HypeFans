@@ -1,21 +1,16 @@
 import json
 import logging
 
-import requests
 from asgiref.sync import async_to_sync
-from channels.generic.websocket import (AsyncWebsocketConsumer,
-                                        WebsocketConsumer)
+from channels.generic.websocket import WebsocketConsumer
 
 from apps.blog.models import Attachment
 from apps.users.models import User
 from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
-                                    UserShortRetrieveSeriliazer,
                                     UserShortSocketRetrieveSeriliazer)
 
-from .models import Chat, ChatBought, Room, UserMessage
-from .serializers import (ChatCreationSerializer, ChatGetSerializer,
-                          RoomGetSerializer, RoomSocketSerializer,
-                          UserMessageCreationSerializer)
+from .models import Chat, Room, UserMessage
+from .serializers import ChatGetSerializer, RoomSocketSerializer
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -29,15 +24,14 @@ class ChatConsumer(WebsocketConsumer):
         self.accept()
 
     def disconnect(self, close_code):
-        # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name
         )
 
     def receive(self, text_data):
+        print(text_data)
         try:
-
             text_data_json = json.loads(text_data)
             room = text_data_json['room_id']
             message_id = text_data_json['message_id']
@@ -70,6 +64,7 @@ class ChatConsumer(WebsocketConsumer):
             )
         except Exception as e:
             print(e)
+            logging.error(e)
 
     def chat_message(self, event):
         try:
@@ -103,6 +98,7 @@ class ChatConsumer(WebsocketConsumer):
                         print(e)
         except Exception as e:
             print(e)
+            logging.error(e)
         try:
             user = UserShortChatRetrieveSeriliazer(
                 instance=User.objects.get(pk=user)).data
@@ -168,7 +164,6 @@ class ReadedConsumer(WebsocketConsumer):
                 }
             )
         except Exception as e:
-            print(e)
             logging.error(e)
 
     def chat_message(self, event):
@@ -293,7 +288,6 @@ class ChatRoomsConsumer(WebsocketConsumer):
                         }
                     }
                 )
-            # print(filtered_results)
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {
@@ -302,7 +296,7 @@ class ChatRoomsConsumer(WebsocketConsumer):
                 }
             )
         except Exception as e:
-            print(e)
+            logging.error(e)
 
     def chat_message(self, event):
         try:
@@ -311,4 +305,4 @@ class ChatRoomsConsumer(WebsocketConsumer):
                 "room": room,
             }))
         except Exception as e:
-            print(e)
+            logging.error(e)

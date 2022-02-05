@@ -10,7 +10,10 @@ import { getAuthScheme, NAV_LINKS } from "../../../app/utils/utilities";
 import { ReactComponent as Facebook } from "../../../assets/images/facebook.svg";
 import { ReactComponent as Google } from "../../../assets/images/google.svg";
 import { ReactComponent as Instagram } from "../../../assets/images/instagram.svg";
+import { ReactComponent as EyeIcon } from "../../../assets/images/eye.svg";
+import { ReactComponent as EyeOffIcon } from "../../../assets/images/eye-off.svg";
 import { getAuthUserData } from "../../../redux/authReducer";
+import { toast } from "react-toastify";
 
 const initialValues: ISignUpData = {
   username: "",
@@ -22,6 +25,10 @@ const SignUpForm = ({ action }: { action: string }) => {
   const { pathname } = useLocation();
   const { currentLang } = useContext(LangContext);
 
+  const [passwordShown, setPasswordShown] = useState(false);
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
+  };
   const signUpScheme = getAuthScheme(currentLang, action);
 
   const refLink = pathname.split("/").slice(2, 3).join("/");
@@ -40,14 +47,20 @@ const SignUpForm = ({ action }: { action: string }) => {
 
   const onSubmit = async (data: ISignUpData) => {
     setIsSigningIn(true);
-    await authAPI.createUsers(
-      data.username,
-      data.email,
-      data.password,
-      refLink
-    );
+    try {
+      await authAPI.createUsers(
+        data.username,
+        data.email,
+        data.password,
+        refLink
+      );
+      toast.success("Register Successfully");
+      dispatch(getAuthUserData());
+    } catch {
+      toast.error("Email or username already exists");
+    }
+
     setIsSigningIn(false);
-    dispatch(getAuthUserData());
     reset(initialValues);
   };
 
@@ -82,12 +95,23 @@ const SignUpForm = ({ action }: { action: string }) => {
       <p className="auth__input-error">{errors.email?.message}</p>
 
       <input
-        type="password"
+        type={passwordShown ? "text" : "password"}
         className="auth__input"
         disabled={isSigningIn}
         placeholder={currentLang.passDescr}
         {...register("password")}
       />
+      {passwordShown ? (
+        <EyeIcon
+          className="auth__show-hide-password-icon"
+          onClick={togglePassword}
+        />
+      ) : (
+        <EyeOffIcon
+          className="auth__show-hide-password-icon"
+          onClick={togglePassword}
+        />
+      )}
       <p className="auth__input-error">{errors.password?.message}</p>
 
       <button className="auth__submit-btn" onClick={() => onSubmit}>

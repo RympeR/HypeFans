@@ -2,6 +2,7 @@
   "EN": {
     "langBtn": "ENG",
     "language": "English",
+    "searchText": "Search ...",
     "lang": "Language",
     "reg": "Register",
     "email": "Email",
@@ -37,7 +38,7 @@
       "minute": "minute",
       "minutes": "minutes",
       "hour": "hour",
-      "hous": "hous",
+      "hours": "hours",
       "day": "day",
       "days": "days",
       "ago": "ago"
@@ -219,6 +220,7 @@
     "lang": "Язык",
     "reg": "Регистрация",
     "email": "Email",
+    "searchText": "Поиск ...",
     "emailDescr": "Введите свой email...",
     "emailWarn": "Введите корректный email",
     "pass": "Пароль",
@@ -433,6 +435,7 @@
     "lang": "Мова",
     "reg": "Реєстрація",
     "email": "Email",
+    "searchText": "Пошук ...",
     "emailDescr": "Введіть свій email ...",
     "pass": "Пароль",
     "passDescr": "Введіть свій пароль ...",

@@ -8,7 +8,7 @@ import { useLocalStorage } from "./useLocalStorage";
 
 // адрес сервера
 // требуется перенаправление запросов - смотрите ниже
-const SERVER_URL = "https://hype-fans.com/chat/";
+const SERVER_URL = 'https://hype-fans.com/api/chat/';
 
 // хук принимает название комнаты
 export const useChat = (roomId: any) => {

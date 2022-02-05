@@ -15,12 +15,16 @@ import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
 import logo from "../../assets/images/logo.svg";
 import { ReactComponent as CommentIcon } from "../../assets/images/message-circle.svg";
 import { CommentComponent } from "../components/CommentComponent";
+import { prepareDateDiffStr, timeAgoTimestamp } from "../utils/utilities";
+import { Video } from "./card/components/Video";
 
 export const PostModal = ({ post_id }: { post_id: number }) => {
   const dispatch = useDispatch();
+
+  //? Дебагер попросил добавть зависимости
   useEffect(() => {
     dispatch(getPost({ id: post_id }));
-  }, []);
+  }, [dispatch, post_id]);
 
   const myId = useSelector((state: RootState) => state.auth.pk);
   const post = useSelector((state: RootState) => state.blog.post);
@@ -29,7 +33,9 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
   if (isLoading) {
     return <div>Загрузка...</div>;
   }
-
+  const time_diif = prepareDateDiffStr(
+    timeAgoTimestamp(parseFloat(post?.publication_date))
+  );
   return (
     <div>
       <div className="profile__post" key={`${Math.random()}_post`}>
@@ -38,7 +44,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
             <div className="profile__postUserInfo">
               <div style={{ display: "flex" }}>
                 <img
-                  src={post?.user.avatar !== "" ? post?.user.avatar : logo}
+                  src={post?.user?.avatar || logo}
                   alt="profile_photoPost"
                 ></img>
                 <div>
@@ -46,20 +52,18 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                     className="profile__name"
                     style={{ margin: "5px 8px", marginBottom: "0px" }}
                   >
-                    {post?.user.first_name}
+                    {post?.user?.first_name}
                   </h3>
                   <h4
                     className="profile__nickname"
                     style={{ marginLeft: "8px" }}
                   >
-                    {`@${post?.user.username}`}
+                    {`@${post?.user?.username}`}
                   </h4>
                 </div>
               </div>
               <div style={{ display: "flex", alignItems: "center" }}>
-                <div className="profile__postAgo">
-                  {post?.publication_date} 50 минут назад
-                </div>
+                <div className="profile__postAgo">{time_diif}</div>
                 <button className="post__menu-dots">
                   <MenuDots />
                 </button>
@@ -70,22 +74,78 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
         </div>
         <div className="profile__postMain">
           {post?.attachments.length > 1 ? (
-              <Slider className="profile__postIMG" dots={true} arrows={false}>
-                {post.attachments.map((item: any, index: number) => {
-                  return (
-                    <div key={`${index} slideMain`}>
+            <Slider className="profile__postIMG" dots={true} arrows={false}>
+              {post.attachments.map((item: any, index: number) => {
+                return (
+                  <div key={`${index} slideMain`}>
+                    {item?.attachments.length > 0
+                      ? item?.attachments.map((item: any, index: number) => {
+                        console.log(item.file_type);
+                        if (item.file_type === 4) {
+                          return <Video src={item.file_url} />;
+                        } else if (item.file_type === 1) {
+                          return (
+                            <a href={item.file_url} download>
+                              Скачать{" "}
+                              {
+                                item.file_url.split("/")[
+                                item.file_url.split("/").length - 1
+                                ]
+                              }
+                            </a>
+                          );
+                        } else if (item.file_type === 2) {
+                          console.log(item.file_url);
+                          return <audio src={item.file_url} />;
+                        } else {
+                          return (
+                            <img
+                              src={item._file}
+                              alt="postIMG"
+                              className="profile"
+                            ></img>
+                          );
+                        }
+                      })
+                      : null}
+                  </div>
+                );
+              })}
+            </Slider>
+          ) : (
+            <div className="profile__postIMG">
+              {post?.attachments ? (
+                () => {
+                  console.log(post?.attachments[0].file_type);
+                  if (post?.attachments[0].file_type === 4) {
+                    return <Video src={post?.attachments[0]._file} />;
+                  } else if (post?.attachments[0].file_type === 1) {
+                    return (
+                      <a href={post?.attachments[0]._file} download>
+                        Скачать{" "}
+                        {
+                          post?.attachments[0]._file.split("/")[
+                          post?.attachments[0]._file.split("/").length - 1
+                          ]
+                        }
+                      </a>
+                    );
+                  } else if (post?.attachments[0].file_type === 2) {
+                    console.log(post?.attachments[0]._file);
+                    return <audio src={post?.attachments[0]._file} />;
+                  } else {
+                    return (
                       <img
-                        src={item._file}
+                        src={post?.attachments[0]._file}
                         alt="postIMG"
                         className="profile"
                       ></img>
-                    </div>
-                  );
-                })}
-              </Slider>
-          ) : (
-            <div className="profile__postIMG">
-              <img src={post?.attachments[0]._file} alt="postIMG"></img>
+                    );
+                  }
+                }
+              ) : (
+                <></>
+              )}
             </div>
           )}
           <div className="post__bottom" style={{ margin: "24px 24px" }}>
@@ -96,23 +156,23 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                   onClick={() => {
                     post?.liked
                       ? dispatch(
-                          deletePostActionModal({
-                            id: post?.like_id,
-                            post_id: post?.id,
-                          })
-                        )
+                        deletePostActionModal({
+                          id: post?.like_id,
+                          post_id: post?.id,
+                        })
+                      )
                       : dispatch(
-                          createPostActionModal({
-                            like: true,
-                            comment: null,
-                            donation_amount: 0,
-                            parent: null,
-                            user: myId,
-                            date_time: null,
-                            post: post?.id,
-                            id: null,
-                          })
-                        );
+                        createPostActionModal({
+                          like: true,
+                          comment: null,
+                          donation_amount: 0,
+                          parent: null,
+                          user: myId,
+                          date_time: null,
+                          post: post?.id,
+                          id: null,
+                        })
+                      );
                   }}
                 >
                   <LikeIcon
@@ -123,6 +183,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
 
                 <button className="post__action-btn">
                   <CommentIcon className="post__action-icon" />
+                  <CommentComponent data={post.comments} postId={post?.id} />
                 </button>
               </div>
               <button

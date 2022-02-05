@@ -131,11 +131,9 @@ export const userAPI = {
     });
   },
   onlineUserCreate({ user }: userStringType) {
-    return instance
-      .post<userStringType>(`/user/online-user-create/`, { user })
-      .then((response) => {
-        return response.data;
-      });
+    return instance.post<userStringType>(`/user/online-user-create/`, { user }).then((response) => {
+      return response.data;
+    });
   },
   onlineUserRetrieve() {
     return instance.get<onlineUserRetrieveRT>(`/user/online-user-retrieve/`).then((response) => {
@@ -143,18 +141,14 @@ export const userAPI = {
     });
   },
   onlineUserUpdatePut({ user }: userStringType) {
-    return instance
-      .put<userStringType>(`/user/online-user-update/`, { user })
-      .then((response) => {
-        return response.data;
-      });
+    return instance.put<userStringType>(`/user/online-user-update/`, { user }).then((response) => {
+      return response.data;
+    });
   },
   onlineUserUpdate({ user }: userStringType) {
-    return instance
-      .patch<userStringType>(`/user/online-user-update/`, { user })
-      .then((response) => {
-        return response.data;
-      });
+    return instance.patch<userStringType>(`/user/online-user-update/`, { user }).then((response) => {
+      return response.data;
+    });
   },
   particialUpdateCard({ number, date_year, cvc, creator, user }: createCardRT) {
     return instance
@@ -180,6 +174,11 @@ export const userAPI = {
   },
   getSpends() {
     return instance.get(`/user/spend-stats-history/`).then((response) => {
+      return response;
+    });
+  },
+  geEarns() {
+    return instance.get(`/user/pay-stats-history/`).then((response) => {
       return response;
     });
   },
@@ -214,18 +213,14 @@ export const userAPI = {
     });
   },
   updateDeleteUserPut({ email, username, password }: createUserT) {
-    return instance
-      .put<createUserT>(`/user/update-delete-user/`, { email, username, password })
-      .then((response) => {
-        return response;
-      });
+    return instance.put<createUserT>(`/user/update-delete-user/`, { email, username, password }).then((response) => {
+      return response;
+    });
   },
   updateDeleteUserPatch({ email, username, password }: createUserT) {
-    return instance
-      .patch<createUserT>(`/user/update-delete-user/`, { email, username, password })
-      .then((response) => {
-        return response;
-      });
+    return instance.patch<createUserT>(`/user/update-delete-user/`, { email, username, password }).then((response) => {
+      return response;
+    });
   },
   updateDeleteUserDelete() {
     return instance.delete(`/user/update-delete-user/`).then((response) => {
@@ -283,12 +278,12 @@ export const userAPI = {
       });
   },
   userGetSpendHistory() {
-    return instance.get<payHistory>(`/user/spend-stats-history/`).then((response) => {
+    return instance.get(`/user/spend-stats-history/`).then((response) => {
       return response;
     });
   },
   userGetEarnHistory() {
-    return instance.get<payHistory>(`/user/pay-stats-history/`).then((response) => {
+    return instance.get(`/user/pay-stats-history/`).then((response) => {
       return response;
     });
   },
@@ -300,10 +295,8 @@ export const userAPI = {
       });
   },
   userValidateUser(user: number, verified: boolean) {
-    return instance
-      .post<userValidateUserRT>(`/user/validate-user/`, { user, verified })
-      .then((response) => {
-        return response;
-      });
+    return instance.post<userValidateUserRT>(`/user/validate-user/`, { user, verified }).then((response) => {
+      return response;
+    });
   }
 };

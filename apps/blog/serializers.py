@@ -1,5 +1,3 @@
-import logging
-
 from core.utils.customFields import TimestampField
 from apps.users.dynamic_preferences_registry import ReferralPercentage
 from django.db.models import Count, Q
@@ -45,7 +43,7 @@ class PostActionCreationSerializer(serializers.ModelSerializer):
                 ReferralPayment.objects.create(
                     user=user,
                     referrer=referrer,
-                    amount=amount 
+                    amount=amount
                 )
             return attrs
         raise serializers.ValidationError
@@ -57,6 +55,10 @@ class PostActionShortSerializer(serializers.ModelSerializer):
     parent_user_id = serializers.SerializerMethodField()
     user = UserShortRetrieveSeriliazer()
     parent_like_amount = serializers.SerializerMethodField()
+    like_amount = serializers.SerializerMethodField()
+
+    def get_like_amount(self, post_action: PostAction):
+        return PostAction.objects.filter(pk=post_action.pk, like=True).aggregate(Count('pk'))['pk__count']
 
     def get_parent_like_amount(self, post_action: PostAction):
         if post_action.parent and hasattr(post_action.parent, 'pk'):
@@ -142,9 +144,8 @@ class PostGetSerializer(serializers.ModelSerializer):
     def get_liked(self, obj: Post) -> bool:
         request = self.context.get('request')
         if request:
-            user = request.user
             post_action_qs = PostAction.objects.filter(
-                post=obj, user=user)
+                post=obj, user=request.user)
             if post_action_qs.exists():
                 for action in post_action_qs:
                     if action.like:
@@ -154,9 +155,8 @@ class PostGetSerializer(serializers.ModelSerializer):
     def get_like_id(self, obj: Post):
         request = self.context.get('request')
         if request:
-            user = request.user
             post_action_qs = PostAction.objects.filter(
-                post=obj, user=user)
+                post=obj, user=request.user)
             if post_action_qs.exists():
                 for action in post_action_qs:
                     if action.like:
@@ -165,7 +165,7 @@ class PostGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        exclude = 'time_to_archive',
+        exclude = 'time_to_archive', 'show_in_recomendations',
 
 
 class PostActionUpdateSerializer(serializers.ModelSerializer):
@@ -178,7 +178,6 @@ class PostActionUpdateSerializer(serializers.ModelSerializer):
     like = serializers.BooleanField(required=False)
     comment = serializers.CharField(required=False)
     donation_amount = serializers.IntegerField(required=False)
-
 
     class Meta:
         model = PostAction
@@ -284,7 +283,11 @@ class PostActionGetSerializer(serializers.ModelSerializer):
     date_time = TimestampField()
     parent_like_amount = serializers.SerializerMethodField()
     parent_liked = serializers.SerializerMethodField()
+    like_amount = serializers.SerializerMethodField()
 
+    def get_like_amount(self, post_action: PostAction):
+        return PostAction.objects.filter(pk=post_action.pk, like=True).aggregate(Count('pk'))['pk__count']
+        
     def get_parent_liked(self, post_action: PostAction):
         user = self.context.get('request').user
         qs = PostAction.objects.filter(
@@ -428,16 +431,16 @@ class SubStoriesSerializer(serializers.Serializer):
 class PostBoughtCreateSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
         required=False, queryset=User.objects.all())
-    amount = serializers.IntegerField(required=False)
+    post = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=Post.objects.all())
 
     class Meta:
         model = PostBought
-        fields = '__all__'
+        fields = 'user', 'post'
 
     def validate(self, attrs):
         request = self.context.get('request')
         user = request.user
-        attrs['user'] = user
         attrs['amount'] = attrs['post'].price_to_watch
         if user.credit_amount >= attrs['post'].price_to_watch:
             user.credit_amount -= attrs['post'].price_to_watch
@@ -453,7 +456,7 @@ class PostBoughtCreateSerializer(serializers.ModelSerializer):
                 ReferralPayment.objects.create(
                     user=user,
                     referrer=referrer,
-                    amount=amount 
+                    amount=amount
                 )
             return attrs
         raise serializers.ValidationError

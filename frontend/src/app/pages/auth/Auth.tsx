@@ -14,7 +14,13 @@ const Auth = () => {
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
-
+  const back_classes = [
+    "auth__main-slide",
+    "auth__main-slide-second",
+    "auth__main-slide-third",
+    "auth__main-slide-thourth",
+    "auth__main-slide-five",
+  ];
   const refLink = pathname.split("/").slice(2, 4).join("/");
   console.log(refLink);
 
@@ -27,7 +33,9 @@ const Auth = () => {
   }
 
   return (
-    <div className="auth">
+    <div
+      className={"auth " + back_classes[Math.floor((Math.random() * 10) % 5)]}
+    >
       <div className="auth__inner">
         <div className="auth__logo-wrapper">
           <Logo className="auth__logo" />

@@ -3,6 +3,8 @@ import os
 import random
 import string
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.serializers import ModelSerializer
+from django.db.models import QuerySet
 
 HOST = 'hype-fans.com/'
 REF_PERCANTAGE = 0.05
@@ -12,19 +14,29 @@ def id_generator(size=12, chars=string.ascii_uppercase + string.ascii_lowercase 
     return ''.join(random.choice(chars) for _ in range(size))
 
 
-def get_online(serializer, user):
-    return online_check(user)
+def generate_pay_dict(obj: QuerySet, serializer: ModelSerializer, _type: str) -> tuple:
+    return (
+        {**res_obj, 'type': _type}
+        for res_obj in serializer(
+            instance=obj, many=True
+        ).data
+    )
 
 
 def online_check(user):
     try:
         if user.user_online and not user.hide_online:
-            if ((datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
+            if ((datetime.datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
                 return True
             else:
-                return ((datetime.now() - user.user_online.last_action).seconds//60) % 60
+                return ((datetime.datetime.now() - user.user_online.last_action).seconds//60) % 60
+        return False
     except ObjectDoesNotExist:
         return False
+
+
+def get_online(serializer, user):
+    return online_check(user)
 
 
 def set_unique_file_name(file_):
@@ -61,3 +73,12 @@ def return_file_url(serializer, path_file):
     request = serializer.context.get('request')
     host = request.get_host() if request else 'hype-fans.com/'
     return create_path_file(host, path_file)
+
+
+def sum_by_attribute(obj: object, attrib_name: str, qs=[], by_range: bool = False):
+    if by_range:
+        return sum((
+            getattr(obj, attrib_name)
+            for _ in range(len(qs))
+        ))
+    return sum((getattr(obj, attrib_name) for _ in qs))

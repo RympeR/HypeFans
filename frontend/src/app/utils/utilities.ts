@@ -1,13 +1,13 @@
-import * as yup from 'yup';
+import * as yup from "yup";
 
 export enum NAV_LINKS {
-  SIGNIN = '',
-  SIGNUP = 'signup',
-  HOME = 'home',
-  NOTIFICATIONS = 'notifications',
-  ADD = 'add',
-  CHAT = 'chat',
-  PROFILE = 'profile'
+  SIGNIN = "",
+  SIGNUP = "signup",
+  HOME = "home",
+  NOTIFICATIONS = "notifications",
+  ADD = "add",
+  CHAT = "chat",
+  PROFILE = "profile",
 }
 
 //Responsive breakpoints
@@ -16,7 +16,7 @@ export enum BREAKPOINTS {
   S = 768,
   M = 1024,
   L = 1280,
-  XL = 1440
+  XL = 1440,
 }
 //Duration of every story in Story Block
 export const STORY_DURATION = 2500;
@@ -29,11 +29,11 @@ export const LENTGH_OF_VISIBLE_CAPTION = 100;
 
 //  Get last endpoint of provided URL
 export const getLastUrlPoint = (url: string) => {
-  return url.substring(url.lastIndexOf('/') + 1);
+  return url.substring(url.lastIndexOf("/") + 1);
 };
 
 export const getMainUrlPoint = (url: string) => {
-  return url.split('/')[1];
+  return url.split("/")[1];
 };
 
 //Password pattern for SIGNIN or SIGNUP
@@ -62,18 +62,57 @@ export const timeAgo = (createdAt: Date) => {
   return timeParser(duration);
 };
 
+export const timeAgoTimestamp = (timestamp: number) => {
+  const createdAt = new Date(timestamp * 1000);
+  const currentDate = new Date();
+
+  const duration = currentDate.getTime() - createdAt.getTime();
+
+  return timeParser(duration);
+};
+
+export const prepareDateDiffStr = (time_diff: any) => {
+  let result_str = "";
+  if (time_diff.days > 0) {
+    result_str += time_diff.days + " дней";
+  }
+  if (time_diff.hours > 0) {
+    result_str += time_diff.hours + " часов";
+  }
+  if (time_diff.minutes > 0) {
+    result_str += time_diff.minutes + " минут";
+  }
+  return result_str + " назад";
+};
+
+export const prepareDateDiffStrLanguage = (time_diff: any, currentLang:any) => {
+  let result_str = "";
+  if (time_diff.days > 0) {
+    result_str += time_diff.days + " " + currentLang.timeAgo.days + ' ';
+  }
+  if (time_diff.hours > 0) {
+    result_str += time_diff.hours + " " + currentLang.timeAgo.hours + ' ';
+  }
+  if (time_diff.minutes > 0) {
+    result_str += time_diff.minutes + " " + currentLang.timeAgo.minutes + ' ';
+  }
+  return result_str + " " + currentLang.timeAgo.ago;
+};
+
 // Returns computed width of fixed aside block
 export const getComputedWidth = async (marginLeft = 47) => {
   const width = await new Promise((resolve, reject) => {
-    const main = document.querySelector('#main');
+    const main = document.querySelector("#main");
 
-    const postList = document.querySelector('#postlist');
+    const postList = document.querySelector("#postlist");
 
     if (main === null || postList === null) return;
 
-    const postListWidth = +window.getComputedStyle(postList).width.replace('px', '');
+    const postListWidth = +window
+      .getComputedStyle(postList)
+      .width.replace("px", "");
 
-    const mainWidth = +window.getComputedStyle(main).width.replace('px', '');
+    const mainWidth = +window.getComputedStyle(main).width.replace("px", "");
 
     resolve(mainWidth - postListWidth - marginLeft);
   });
@@ -84,15 +123,19 @@ export const getComputedWidth = async (marginLeft = 47) => {
 
 export const getComputedLeftPosition = async (marginLeft = 47) => {
   const leftPosition = await new Promise((resolve, reject) => {
-    const main = document.querySelector('#main');
+    const main = document.querySelector("#main");
 
-    const postList = document.querySelector('#postlist');
+    const postList = document.querySelector("#postlist");
 
     if (main === null || postList === null) return;
 
-    const mainMarginLeft = +window.getComputedStyle(main).marginLeft.replace('px', '');
+    const mainMarginLeft = +window
+      .getComputedStyle(main)
+      .marginLeft.replace("px", "");
 
-    const postListWidth = +window.getComputedStyle(postList).width.replace('px', '');
+    const postListWidth = +window
+      .getComputedStyle(postList)
+      .width.replace("px", "");
 
     resolve(postListWidth + mainMarginLeft + marginLeft);
   });
@@ -108,11 +151,11 @@ export const showVisibleText = (text: string, lengthOfVisibleText: number) => {
 
 //Return validation scheme depending on provided auth method
 export const getAuthScheme = (currentLang: any, action: string) => {
-  if (action === 'signup') {
+  if (action === "signup") {
     return yup.object().shape({
       username: yup.string().min(4, currentLang.nameWarn),
       email: yup.string().email(currentLang.emailWarn),
-      password: yup.string()
+      password: yup.string(),
       // password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
     });
   }
@@ -120,14 +163,14 @@ export const getAuthScheme = (currentLang: any, action: string) => {
   return yup.object().shape({
     username: yup.string().min(4, currentLang.nameWarn),
     // password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
-    password: yup.string()
+    password: yup.string(),
   });
 };
 
 //Debugging styles
 export const debugStyles = {
-  primary: 'color:lightblue;font-weight:bold',
-  secondary: 'color:orange;font-weight:bold'
+  primary: "color:lightblue;font-weight:bold",
+  secondary: "color:orange;font-weight:bold",
 };
 
 //Find index in array by providing id of element
@@ -137,5 +180,5 @@ export const findIndexById = (arr: any[], id: string) => {
 
 //Checks if story is watched
 export const isStoryWatched = (id: string) => {
-  return localStorage?.getItem(`${id}`) === 'watched';
+  return localStorage?.getItem(`${id}`) === "watched";
 };

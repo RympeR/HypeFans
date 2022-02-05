@@ -26,7 +26,7 @@ class RoomAdmin(admin.ModelAdmin):
     list_filter = (
             ('date', DateFieldListFilter),
     )
-
+    
 
 @admin.register(Chat)
 class ChatAdmin(admin.ModelAdmin):

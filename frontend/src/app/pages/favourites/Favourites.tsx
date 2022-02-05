@@ -38,7 +38,7 @@ export const Favourites = () => {
                 <div className="profile__postUserInfo">
                   <div style={{ display: "flex" }}>
                     <img
-                      src={item.user.avatar !== "" ? item.user.avatar : logo}
+                      src={item.user.avatar ? item.user.avatar : logo}
                       alt="profile_photoPost"
                     ></img>
                     <div>
