@@ -19,6 +19,7 @@ import { blogAPI } from "../../api/blogAPI";
 import { chatAPI } from "../../api/chatAPI";
 import { userAPI } from "../../api/userAPI";
 import { RootState } from "../../redux/redux";
+import { ReactComponent as BackIcon } from "../../assets/images/arrow-left.svg";
 import { ReactComponent as ImageIcn } from "../../assets/images/imageI.svg";
 import { ReactComponent as Readed } from "../../assets/images/messageIcon.svg";
 import { ReactComponent as NotReaded } from "../../assets/images/messageIconWhite.svg";
@@ -79,6 +80,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const history = useHistory();
   const lastUrl = getLastUrlPoint(history.location.pathname);
   const alert = useAlert();
+  const BackButton = () => <BackIcon onClick={history.goBack} />;
   const MoreIcon = () => <More />;
   const [isMessagesLoading, setIsMessagesLoading] = useState(true);
   const TipIcon = () => <Tip />;
@@ -300,6 +302,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       </Modal>
       <div className="chat__dialogsHeader">
         <div className="chat__sidebarItem" style={{ alignItems: "center" }}>
+          <div className="chat__resp_icon chat__backNone" style={{ marginRight: "14px" }}>
+            <BackButton />
+          </div>
           <Link
             to={`/profile/${typeof rooms.find(
               (item: any) => item.room.room_info.id === Number(lastUrl)
