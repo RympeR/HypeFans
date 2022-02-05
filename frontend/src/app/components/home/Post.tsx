@@ -123,17 +123,15 @@ const Post = ({
       <UserBanner profile={post.user} />
 
       {post.post?.attachments.length > 1 ? (
-        <div className="profile__postIMG">
-          <Slider>
-            {post.post.attachments.map((item: any, index: number) => {
+          <Slider dots={true} arrows={false} className="profile__postIMG">  
+              {post.post.attachments.map((item: any, index: number) => {
               return (
-                <div key={`${index} slideMain`}>
+                <div key={`${index} slideMain profile__postIMG`}>
                   <img src={item._file} alt="postIMG" className="profile"></img>
                 </div>
               );
             })}
           </Slider>
-        </div>
       ) : (
         <div className="profile__postIMG">
           <img src={post?.post.attachments[0]._file} alt="postIMG"></img>

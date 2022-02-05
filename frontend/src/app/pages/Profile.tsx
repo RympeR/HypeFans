@@ -254,8 +254,7 @@ const Profile = () => {
                   </div>
                   <div className="profile__postMain">
                     {item?.post?.attachments.length > 1 ? (
-                      <div className="profile__postIMG">
-                        <Slider>
+                        <Slider  className="profile__postIMG" arrows={false} dots={true}>
                           {item?.post.attachments.map(
                             (item: any, index: number) => {
                               return (
@@ -270,7 +269,6 @@ const Profile = () => {
                             }
                           )}
                         </Slider>
-                      </div>
                     ) : (
                       <div className="profile__postIMG">
                         <img

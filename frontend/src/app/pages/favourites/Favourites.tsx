@@ -68,21 +68,19 @@ export const Favourites = () => {
             </div>
             <div className="profile__postMain">
               {item.post?.attachments.length > 1 ? (
-                <div className="profile__postIMG">
-                  <Slider>
-                    {item.post.attachments.map((item: any, index: number) => {
-                      return (
-                        <div key={`${index} slideMain`}>
-                          <img
-                            src={item._file}
-                            alt="postIMG"
-                            className="profile"
-                          ></img>
-                        </div>
-                      );
-                    })}
-                  </Slider>
-                </div>
+                <Slider className="profile__postIMG" dots={true} arrows={false}>
+                  {item.post.attachments.map((item: any, index: number) => {
+                    return (
+                      <div key={`${index} slideMain`}>
+                        <img
+                          src={item._file}
+                          alt="postIMG"
+                          className="profile"
+                        ></img>
+                      </div>
+                    );
+                  })}
+                </Slider>
               ) : (
                 <div className="profile__postIMG">
                   <img
@@ -99,23 +97,23 @@ export const Favourites = () => {
                       onClick={() => {
                         item.post.liked
                           ? dispatch(
-                              deletePostAction({
-                                id: item.post.like_id,
-                                post_id: item.post.pk,
-                              })
-                            )
+                            deletePostAction({
+                              id: item.post.like_id,
+                              post_id: item.post.pk,
+                            })
+                          )
                           : dispatch(
-                              createPostAction({
-                                like: true,
-                                comment: null,
-                                donation_amount: 0,
-                                user: myId,
-                                parent: null,
-                                date_time: null,
-                                post: item.post.pk,
-                                id: null,
-                              })
-                            );
+                            createPostAction({
+                              like: true,
+                              comment: null,
+                              donation_amount: 0,
+                              user: myId,
+                              parent: null,
+                              date_time: null,
+                              post: item.post.pk,
+                              id: null,
+                            })
+                          );
                       }}
                     >
                       <LikeIcon

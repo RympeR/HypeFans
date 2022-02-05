@@ -70,8 +70,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
         </div>
         <div className="profile__postMain">
           {post?.attachments.length > 1 ? (
-            <div className="profile__postIMG">
-              <Slider>
+              <Slider className="profile__postIMG" dots={true} arrows={false}>
                 {post.attachments.map((item: any, index: number) => {
                   return (
                     <div key={`${index} slideMain`}>
@@ -84,7 +83,6 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                   );
                 })}
               </Slider>
-            </div>
           ) : (
             <div className="profile__postIMG">
               <img src={post?.attachments[0]._file} alt="postIMG"></img>
