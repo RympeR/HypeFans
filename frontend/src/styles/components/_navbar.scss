@@ -24,11 +24,12 @@
 
   @media (max-width: map-get($map: $media, $key: s)) {
     top: unset;
-    bottom: 0;
+    bottom: 0px;
     height: 60px;
     background: #f8f1f0;
     border-radius: 24px 24px 0px 0px;
     box-shadow: unset;
+    position: fixed;
   }
 
   &__inner {
