@@ -163,7 +163,7 @@ $form-width: 636;
 
     &::placeholder {
       font-size: map-get($map: $font-size, $key: s);
-      color: rgba(0, 0, 0, 0.3);
+      color: #816f6f;
     }
 
     &:nth-of-type(n + 2) {

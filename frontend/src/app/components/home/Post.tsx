@@ -26,7 +26,7 @@ import { LangContext } from "../../utils/LangProvider";
 import { CommentComponent } from "../CommentComponent";
 import UserBanner from "./UserBanner";
 import logo from "../../../assets/images/logo.svg";
-import { Video } from "../../../app/pages/card/components/Video";
+import { Video } from "../../../app/pages/card/components/VideoPost";
 
 
 export const returnByFileType = (item: any) => {
@@ -36,7 +36,7 @@ export const returnByFileType = (item: any) => {
         <Video src={item._file} />
       )
     default:
-      return <img src={item._file} alt="postIMG" className="profile"></img>
+      return <img src={item._file} alt="postIMG" className="profile__post_image"></img>
   }
 }
 

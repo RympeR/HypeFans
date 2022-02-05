@@ -13,7 +13,6 @@ import {
   getUserRT,
   idType,
   onlineUserRetrieveRT,
-  payHistory,
   PaymentType,
   referralHistory,
   SubscriptionType,

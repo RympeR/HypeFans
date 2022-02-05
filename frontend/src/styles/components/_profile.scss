@@ -4,6 +4,21 @@
   border-radius: 16px;
   background-color: $white;
   min-height: 80vh;
+  &__post_image {
+    width: 600px;
+    height: auto;
+    @media screen and (max-width: 500px) {
+      width: 380px;
+    }
+  }
+  &__post_video {
+    width: 600px;
+    height: 700px;
+    @media screen and (max-width: 500px) {
+      height: 500px;
+      width: 380px;
+    }
+  }
   &__header {
     background-repeat: no-repeat;
     border-radius: 8px 8px 0px 0px;

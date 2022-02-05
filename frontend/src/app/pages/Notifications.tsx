@@ -27,7 +27,7 @@ const Notifications: React.FC = () => {
   );
   useEffect(() => {
     dispatch(getNotifications());
-  }, []);
+  }, [dispatch]);
   if (isLoading) {
     return <Preloader />;
   }
@@ -107,7 +107,7 @@ const Notifications: React.FC = () => {
       if (history.location.pathname !== "/notifications") {
         setShown(true);
       }
-    }, [history]);
+    }, []);
     const Main = ({ notifications }: { notifications: Array<any> }) => {
       return (
         <div className="notifications__main">
