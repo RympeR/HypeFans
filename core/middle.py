@@ -1,6 +1,7 @@
 from rest_framework.authtoken.models import Token
 from apps.users.models import User
 
+
 class DisableCSRFMiddleware(object):
 
     def __init__(self, get_response):
@@ -10,6 +11,23 @@ class DisableCSRFMiddleware(object):
         setattr(request, '_dont_enforce_csrf_checks', True)
         response = self.get_response(request)
         return response
+
+
+class RemoveExternalTokenMiddleware(object):
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if 'Authorizaion' in request.headers:
+            if 'login-user/' in request.path:
+                del request.headers['Authorizaion']
+        if 'Auth' in request.headers:
+            if 'login-user/' in request.path:
+                del request.headers['Auth']
+        response = self.get_response(request)
+        return response
+
 
 class CustomAuthMiddleware(object):
 
