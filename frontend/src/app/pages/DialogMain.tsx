@@ -35,6 +35,7 @@ import { Preloader } from "../utils/Preloader";
 import { getLastUrlPoint } from "../utils/utilities";
 import { ChatImage } from "./card/components/ChatImage";
 import { Video } from "./card/components/Video";
+import moment from "moment";
 
 const Input = ({
   sendMessage,
@@ -554,7 +555,7 @@ export const DialogMain = ({
                             : null}
                         </div>
                       </div>
-                      <div className="time-text">15:33</div>
+                      <div className="time-text">   {moment(item?.item?.room?.message?.time).fromNow()}</div>
                     </div>
                   )}
                 </div>

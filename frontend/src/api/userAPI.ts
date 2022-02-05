@@ -127,7 +127,6 @@ export const userAPI = {
   },
   getProfile() {
     return instance.get(`/user/get-user/`).then((response) => {
-      debugger;
       return response.data;
     });
   },

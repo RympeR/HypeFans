@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import moment from "moment";
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch } from "react-redux";
@@ -7,6 +8,8 @@ import { getPost } from "../../../redux/blogReducer";
 import { PostModal } from "../Post";
 
 export const Notification = ({ item }: any) => {
+  console.log(item);
+  
   const [isModalOpened, setIsModalOpened] = useState(false);
   const dispatch = useDispatch();
   const closeModal = () => {
@@ -45,7 +48,7 @@ export const Notification = ({ item }: any) => {
             <h3 style={{ margin: "0px" }}>@{item.user.username}</h3>
           </div>
           <h4 style={{ margin: "0px" }}>{getTitle(item.type)}</h4>
-          <p>2 часа назад</p>
+          <p>   {moment(item?.time).fromNow()}</p>
         </div>
       </div>
       {item.type !== "donation" && item.type !== "subscription" ? (

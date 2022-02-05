@@ -123,7 +123,7 @@ const Chat: React.FC = () => {
             </div>
           </div>
           <p className="chat__p">
-            {moment(item?.item?.room?.message?.time).format("L")}
+            {moment(item?.item?.room?.message?.time).fromNow()}
           </p>
         </div>
       </Link>
