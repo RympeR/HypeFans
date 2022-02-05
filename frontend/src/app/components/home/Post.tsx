@@ -28,6 +28,18 @@ import UserBanner from "./UserBanner";
 import logo from "../../../assets/images/logo.svg";
 import { Video } from "../../../app/pages/card/components/Video";
 
+
+export const returnByFileType = (item: any) => {
+  switch (item.file_type) {
+    case 4:
+      return (
+        <Video src={item._file} />
+      )
+    default:
+      return <img src={item._file} alt="postIMG" className="profile"></img>
+  }
+}
+
 const Post = ({
   post,
 }: {
@@ -88,17 +100,6 @@ const Post = ({
     timeAgoTimestamp(parseFloat(post?.post.publication_date)),
     currentLang
   )
-
-  const returnByFileType = (item: any) => {
-    switch (item.file_type) {
-      case 4:
-        return (
-          <Video src={item._file} />
-        )
-      default:
-        return <img src={item._file} alt="postIMG" className="profile"></img>
-    }
-  }
 
   return (
     <article className="post">

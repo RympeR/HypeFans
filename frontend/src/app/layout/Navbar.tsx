@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { RootState } from "../../redux/redux";
 import { ReactComponent as AddIcon } from "../../assets/images/add.svg";
@@ -9,6 +9,8 @@ import { ReactComponent as ChatIcon } from "../../assets/images/message.svg";
 import { ReactComponent as ProfileIcon } from "../../assets/images/user.svg";
 import NavLink from "../components/home/NavLink";
 import { NAV_LINKS } from "../utils/utilities";
+import { getUserData } from "../../redux/authReducer";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -30,12 +32,18 @@ const Navbar = () => {
   //   return () => clearInterval(id);
   // }, []);
 
+  const dispatch = useDispatch();
+
   if (
     refLink !== "" ||
     pathname === `/${NAV_LINKS.SIGNIN}` ||
     pathname === `/${NAV_LINKS.SIGNUP}`
   ) {
     return null;
+  }
+
+  if (Cookies?.get('token')?.length > 5) {
+    dispatch(getUserData());
   }
 
   return (

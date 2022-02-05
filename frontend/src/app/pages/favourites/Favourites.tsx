@@ -15,6 +15,7 @@ import { ReactComponent as SaveIcon } from "../../../assets/images/bookmark.svg"
 import { ReactComponent as LikeIcon } from "../../../assets/images/heart.svg";
 import logo from "../../../assets/images/logo.svg";
 import { ReactComponent as CommentIcon } from "../../../assets/images/message-circle.svg";
+import { returnByFileType } from "../../../app/components/home/Post";
 
 export const Favourites = () => {
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
@@ -72,21 +73,14 @@ export const Favourites = () => {
                   {item.post.attachments.map((item: any, index: number) => {
                     return (
                       <div key={`${index} slideMain`}>
-                        <img
-                          src={item._file}
-                          alt="postIMG"
-                          className="profile"
-                        ></img>
+                        {returnByFileType(item)}
                       </div>
                     );
                   })}
                 </Slider>
               ) : (
                 <div className="profile__postIMG">
-                  <img
-                    src={item?.post.attachments[0]._file}
-                    alt="postIMG"
-                  ></img>
+                  {returnByFileType(item?.post.attachments[0]._file)}
                 </div>
               )}
               <div className="post__bottom" style={{ margin: "24px 24px" }}>

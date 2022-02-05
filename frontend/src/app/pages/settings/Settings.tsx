@@ -34,7 +34,7 @@ import { ReactComponent as Readed } from "../../../assets/images/messageIcon.svg
 import { ReactComponent as SettingsIcon } from "../../../assets/images/settings.svg";
 import { ReactComponent as TelegramSvg } from "../../../assets/images/telegramRef.svg";
 import { ReactComponent as ViberSvg } from "../../../assets/images/viberRef.svg";
-import { changeSettings } from "../../../redux/authReducer";
+import { changeSettings, logout } from "../../../redux/authReducer";
 import { RootState } from "../../../redux/redux";
 import { updateEmailConfirm } from "../../../redux/userReducer";
 import { CardComponent } from "../card";
@@ -56,7 +56,7 @@ export const Settings = () => {
   const Text = ({ text }: { text: string }) => {
     const lastLocation =
       history.location.pathname.split("/")[
-        history.location.pathname.split("/").length - 1
+      history.location.pathname.split("/").length - 1
       ];
     return (
       <>
@@ -131,11 +131,12 @@ export const Settings = () => {
 
   const ProfileSettingsSidebar = ({ showStyle }: { showStyle: boolean }) => {
     const history = useHistory();
+    const dispatch = useDispatch()
     const [show, setShow] = useState(false);
 
-    const logout = () => {
-      Cookies?.set("token", "");
-      authAPI.logout();
+    const logoutFunc = async () => {
+      Cookies?.set("token", null);
+      await dispatch(logout())
       history.push("/");
     };
 
@@ -207,7 +208,7 @@ export const Settings = () => {
         {show ? (
           <div
             className="card__logout-model"
-            // style={{ display: "flex", justifyContent: "center", width: "100%" }}
+          // style={{ display: "flex", justifyContent: "center", width: "100%" }}
           >
             <div
               // onClick={() => setShow(false)}
@@ -233,7 +234,7 @@ export const Settings = () => {
                   Отмена
                 </h6>
                 <div style={{ width: "20px" }}></div>
-                <h6 onClick={() => logout()}>Продолжить</h6>
+                <h6 onClick={() => logoutFunc()}>Продолжить</h6>
               </div>
             </div>
           </div>
@@ -650,7 +651,6 @@ export const Settings = () => {
         return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
       };
       const getSpendsText = (item: historyAction) => {
-        console.log(item);
         switch (item.type) {
           case "donation":
             return (
