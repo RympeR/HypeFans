@@ -21,10 +21,10 @@ class RemoveExternalTokenMiddleware(object):
     def __call__(self, request):
         if 'Authorizaion' in request.headers:
             if 'login-user/' in request.path:
-                del request.headers['Authorizaion']
+                del request.META['Authorizaion']
         if 'Auth' in request.headers:
             if 'login-user/' in request.path:
-                del request.headers['Auth']
+                del request.META['Auth']
         response = self.get_response(request)
         return response
 
