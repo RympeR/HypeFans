@@ -13,7 +13,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     dispatch(getMainPageData());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   const recommendations = useSelector(
     (state: RootState) => state.blog.recommendations
