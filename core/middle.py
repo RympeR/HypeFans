@@ -1,5 +1,8 @@
+from curses import echo
 from rest_framework.authtoken.models import Token
 from apps.users.models import User
+from django.core.exceptions import ObjectDoesNotExist
+import logging
 
 
 class DisableCSRFMiddleware(object):
@@ -36,8 +39,12 @@ class CustomAuthMiddleware(object):
 
     def __call__(self, request):
         if not request.user.pk and request.headers.get('Auth'):
-            token = Token.objects.get(key=request.headers['Auth'].split()[1])
-            user = User.objects.get(username=token.user)
-            setattr(request, 'user', user)
+            try:
+                token = Token.objects.get(
+                    key=request.headers['Auth'].split()[1])
+                user = User.objects.get(username=token.user)
+                setattr(request, 'user', user)
+            except ObjectDoesNotExist as e:
+                logging.error(e)
         response = self.get_response(request)
         return response
