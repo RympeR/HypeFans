@@ -30,6 +30,7 @@ import { ReactComponent as VektorDisabled } from "../../assets/images/sendDisabl
 import { ReactComponent as Tip } from "../../assets/images/tipI.svg";
 import { ReactComponent as VideoIcn } from "../../assets/images/videoI.svg";
 import { ReactComponent as CloseIcon } from "../../assets/images/x-circle.svg";
+import { ReactComponent as AttachIcon } from "../../assets/images/attachment.svg";
 import { AddToChat } from "../components/addToChat/AddToChat";
 import { AudioRecorder } from "../components/recordAudio/AudioRecorder";
 import { Preloader } from "../utils/Preloader";
@@ -51,12 +52,15 @@ const Input = ({
   const VektorIcon = () => <Vektor />;
   const VektorIconDisabled = () => <VektorDisabled />;
   return (
-    <div className="chat__text">
-      <input
-        value={messageText}
-        onChange={(val) => setMessageText(val.currentTarget.value)}
-      ></input>
+    <>
+      <div className="chat__text">
+        <input
+          value={messageText}
+          onChange={(val) => setMessageText(val.currentTarget.value)}
+        ></input>
+      </div>
       <button
+        className="send"
         disabled={messageText.length < 0 && messageText.length > 255}
         onClick={() => {
           if (messageText.length > 0 && messageText.length < 255) {
@@ -72,7 +76,7 @@ const Input = ({
           <VektorIconDisabled />
         )}
       </button>
-    </div>
+    </>
   );
 };
 
@@ -90,6 +94,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const [ws, setWs] = useState(null);
   const [wsRead, setWsRead] = useState(null);
   const [showTip, setShowTip] = useState(false);
+  const [showActions, setShowActions] = useState(false);
   const [isPaidModalShown, setPaidModalShow] = useState(false);
   const [messageCost, setMessageCost] = useState("0");
   const [messageText, setMessageText] = useState("");
@@ -301,7 +306,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         </Modal.Body>
       </Modal>
       <div className="chat__dialogsHeader inChat">
-        <div className="chat__sidebarItem" style={{ alignItems: "center" }}>
+        <div
+          className="chat__sidebarItem"
+          style={{ alignItems: "center", paddingLeft: "0px" }}
+        >
           <div
             className="chat__resp_icon chat__backNone"
             style={{ marginRight: "14px", marginTop: "-20px" }}
@@ -378,7 +386,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         </div>
         <Popup
           trigger={
-            <div style={{ marginRight: "24px", marginTop: "-7px" }}>
+            <div className="chat__more_icon">
               <MoreIcon />
             </div>
           }
@@ -560,46 +568,58 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           )}
         </div>
         <div className="chat__input">
+          <button
+            className="chat__attach_icon"
+            onClick={() => {
+              setShowActions(!showActions);
+            }}
+          >
+            <AttachIcon style={{ width: "25px", height: "25px" }} />
+          </button>
           <Input
             sendMessage={sendMessage}
             messageText={messageText}
             setMessageText={setMessageText}
           />
-          <div className="chat__chat_actions">
-            <div onClick={() => setShowTip(true)}>
-              <TipIcon />
-            </div>
-            <AudioRecorder
-              startRecording={startRecording}
-              stopRecording={stopRecording}
-              mediaBlobUrl={mediaBlobUrl}
-              clearBlobUrl={clearBlobUrl}
-            />
-            <div>
-              <label
-                className="upload__file-input-label"
-                htmlFor="file-input"
-                style={{ marginBottom: "15px" }}
-              >
-                <VideoIcon />
-              </label>
-              <input
-                className="upload__file-input"
-                id="file-input"
-                ref={inputFileRef}
-                type="file"
-                onChange={onFileChange}
-                multiple
-              />
-            </div>
-            <ImageIcon />
-            <button
-              style={{ marginBottom: "10px" }}
-              onClick={() => setPaidModalShow(true)}
-            >
-              Установить цену
-            </button>
+        </div>
+        <div
+          className={
+            "chat__chat_actions" + (showActions ? " chat__actions_open" : "")
+          }
+        >
+          <div onClick={() => setShowTip(true)}>
+            <TipIcon />
           </div>
+          <AudioRecorder
+            startRecording={startRecording}
+            stopRecording={stopRecording}
+            mediaBlobUrl={mediaBlobUrl}
+            clearBlobUrl={clearBlobUrl}
+          />
+          <div>
+            <label
+              className="upload__file-input-label"
+              htmlFor="file-input"
+              style={{ marginBottom: "15px" }}
+            >
+              <VideoIcon />
+            </label>
+            <input
+              className="upload__file-input"
+              id="file-input"
+              ref={inputFileRef}
+              type="file"
+              onChange={onFileChange}
+              multiple
+            />
+          </div>
+          <ImageIcon />
+          <button
+            style={{ marginBottom: "10px" }}
+            onClick={() => setPaidModalShow(true)}
+          >
+            Установить цену
+          </button>
         </div>
       </div>
       <Modal

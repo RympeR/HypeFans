@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.adce9185.css",
-    "main.js": "/static/js/main.e79d28df.js",
+    "main.css": "/static/css/main.25618514.css",
+    "main.js": "/static/js/main.c9b3bf9c.js",
     "static/media/sign-in-bg.jpg": "/static/media/sign-in-bg.baad8d0a3cefccbb5e4c.jpg",
     "static/media/elise-wilcox-bmbGUfd7y-I-unsplash.jpg": "/static/media/elise-wilcox-bmbGUfd7y-I-unsplash.8e371d10859f7fd15eb5.jpg",
     "static/media/boxed-water-is-better-zuj2m7qxDA0-unsplash.jpg": "/static/media/boxed-water-is-better-zuj2m7qxDA0-unsplash.4e5d9b0f993795d62d9d.jpg",
@@ -31,6 +31,7 @@
     "static/media/settings.svg": "/static/media/settings.e3e87cc0d5a7e281516e86b2594720e1.svg",
     "static/media/instagram.svg": "/static/media/instagram.02eb741958617a85b31b68e3b849d0e8.svg",
     "static/media/viberRef.svg": "/static/media/viberRef.77a0454d3d27e2ae3fc72151882f8cd0.svg",
+    "static/media/attachment.svg": "/static/media/attachment.13434a83a2073a1fcb240db80ed1ddb0.svg",
     "static/media/telegramRef.svg": "/static/media/telegramRef.8073a7317fbd89b0787fc811e1402d23.svg",
     "static/media/users.svg": "/static/media/users.0e932a5b63049325d1fe0b182ec92454.svg",
     "static/media/google.svg": "/static/media/google.7191ecef6a0b8375a68b15e3323558ed.svg",
@@ -81,11 +82,11 @@
     "static/media/simpleArrow-right.svg": "/static/media/simpleArrow-right.540688dc4b856d711b1a3e6a2abe7c31.svg",
     "static/media/arrow-left-mobile.svg": "/static/media/arrow-left-mobile.2d743aa0ee7183dbcbfa59f4f1750e98.svg",
     "static/media/leftIcon.svg": "/static/media/leftIcon.8570736da78871456bcf4a7b23b88ede.svg",
-    "main.adce9185.css.map": "/static/css/main.adce9185.css.map",
-    "main.e79d28df.js.map": "/static/js/main.e79d28df.js.map"
+    "main.25618514.css.map": "/static/css/main.25618514.css.map",
+    "main.c9b3bf9c.js.map": "/static/js/main.c9b3bf9c.js.map"
   },
   "entrypoints": [
-    "static/css/main.adce9185.css",
-    "static/js/main.e79d28df.js"
+    "static/css/main.25618514.css",
+    "static/js/main.c9b3bf9c.js"
   ]
 }
