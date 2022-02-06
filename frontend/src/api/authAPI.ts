@@ -106,8 +106,8 @@ export const authAPI = {
       .catch((error) => {
         console.log(error);
         const history = useHistory();
-        history.push("/");
         Cookies?.set("token", "");
+        history.push("/");
         return error;
       });
   },
