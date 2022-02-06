@@ -145,7 +145,7 @@ export const getComputedLeftPosition = async (marginLeft = 47) => {
 
 //Show text of provided length, if the text is bigger, than it returns text + ...
 export const showVisibleText = (text: string, lengthOfVisibleText: number) => {
-  if (text.length === lengthOfVisibleText) return text;
+  if (text?.length === lengthOfVisibleText) return text;
   return `${text.slice(0, lengthOfVisibleText)}...`;
 };
 
