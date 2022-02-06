@@ -210,7 +210,8 @@
   .chat {
     &__chat_actions {
       margin: -60px 14px 8px;
-      display: none;
+      // display: none;
+      visibility: hidden;
 
       &.chat__actions_open {
         display: flex;
@@ -223,6 +224,8 @@
         padding-top: 9px;
         padding-right: 10px;
         padding-left: 10px;
+        visibility: visible;
+        transition: 1s;
       }
     }
 

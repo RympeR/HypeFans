@@ -149,7 +149,7 @@ export const showVisibleText = (text: string, lengthOfVisibleText: number) => {
     if (text?.length === lengthOfVisibleText) return text;
     return `${text.slice(0, lengthOfVisibleText)}...`;
   }
-  return ''
+  return '' 
 };
 
 //Return validation scheme depending on provided auth method
