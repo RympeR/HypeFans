@@ -1,4 +1,3 @@
-from curses import echo
 from rest_framework.authtoken.models import Token
 from apps.users.models import User
 from django.core.exceptions import ObjectDoesNotExist
