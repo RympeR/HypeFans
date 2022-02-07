@@ -1,7 +1,8 @@
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
+import { setAuthToken } from "../api/api";
 import { authAPI } from "../api/authAPI";
-import { userAPI } from "./../api/userAPI";
+import { userAPI } from "../api/userAPI";
 import { isLoading, isntLoading } from "./blogReducer";
 import { InferActionsTypes, RootState } from "./redux";
 
@@ -290,7 +291,7 @@ export const changeSettings =
       delete obj.ref_link;
       dispatch(isSettingsDisabled());
       const response = await authAPI.meUpdate(obj);
-      const data = await authAPI.meGet();
+      await authAPI.meGet();
       if (response) {
         dispatch(getAuthUserData());
       }
@@ -299,8 +300,14 @@ export const changeSettings =
 
 export const getUserData = (): Thunk => async (dispatch) => {
   dispatch(isLoading());
-  await authAPI.meGet();
-  await dispatch(getAuthUserData());
+  const data = await authAPI.meGet();
+  console.log(data)
+  debugger
+  if (data.status !== 401) {
+    await dispatch(getAuthUserData());
+  } else {
+    setAuthToken("")
+  }
   dispatch(isntLoading());
 };
 

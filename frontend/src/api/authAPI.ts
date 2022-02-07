@@ -98,17 +98,12 @@ export const authAPI = {
     return instance
       .get<{ username: "string"; id: number; email: number }>("/auth/users/me/")
       .then((response) => {
-        console.log("here");
         if (response.status === 200) {
           return response;
         }
       })
       .catch((error) => {
-        console.log(error);
-        const history = useHistory();
-        history.push("/");
-        Cookies?.set("token", "");
-        return error;
+        return { status: 401 }
       });
   },
   meUpdate(data: any) {
