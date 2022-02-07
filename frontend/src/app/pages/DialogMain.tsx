@@ -30,6 +30,7 @@ import { ReactComponent as VektorDisabled } from "../../assets/images/sendDisabl
 import { ReactComponent as Tip } from "../../assets/images/tipI.svg";
 import { ReactComponent as VideoIcn } from "../../assets/images/videoI.svg";
 import { ReactComponent as CloseIcon } from "../../assets/images/x-circle.svg";
+import { ReactComponent as AttachIcon } from "../../assets/images/attachment.svg";
 import { AddToChat } from "../components/addToChat/AddToChat";
 import { AudioRecorder } from "../components/recordAudio/AudioRecorder";
 import { Preloader } from "../utils/Preloader";
@@ -51,12 +52,15 @@ const Input = ({
   const VektorIcon = () => <Vektor />;
   const VektorIconDisabled = () => <VektorDisabled />;
   return (
-    <div className="chat__text">
-      <input
-        value={messageText}
-        onChange={(val) => setMessageText(val.currentTarget.value)}
-      ></input>
+    <>
+      <div className="chat__text">
+        <input
+          value={messageText}
+          onChange={(val) => setMessageText(val.currentTarget.value)}
+        ></input>
+      </div>
       <button
+        className="send"
         disabled={messageText.length < 0 && messageText.length > 255}
         onClick={() => {
           if (messageText.length > 0 && messageText.length < 255) {
@@ -72,7 +76,7 @@ const Input = ({
           <VektorIconDisabled />
         )}
       </button>
-    </div>
+    </>
   );
 };
 
@@ -90,6 +94,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const [ws, setWs] = useState(null);
   const [wsRead, setWsRead] = useState(null);
   const [showTip, setShowTip] = useState(false);
+  const [showActions, setShowActions] = useState(false);
   const [isPaidModalShown, setPaidModalShow] = useState(false);
   const [messageCost, setMessageCost] = useState("0");
   const [messageText, setMessageText] = useState("");
@@ -300,26 +305,33 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           <AddToChat />
         </Modal.Body>
       </Modal>
-      <div className="chat__dialogsHeader">
-        <div className="chat__sidebarItem" style={{ alignItems: "center" }}>
-          <div className="chat__resp_icon chat__backNone" style={{ marginRight: "14px" }}>
+      <div className="chat__dialogsHeader inChat">
+        <div
+          className="chat__sidebarItem"
+          style={{ alignItems: "center", paddingLeft: "0px" }}
+        >
+          <div
+            className="chat__resp_icon chat__backNone"
+            style={{ marginRight: "14px", marginTop: "-20px" }}
+          >
             <BackButton />
           </div>
           <Link
-            to={`/profile/${typeof rooms.find(
-              (item: any) => item.room.room_info.id === Number(lastUrl)
-            )?.room?.room_info?.invited !== "number"
-              ? amICreator
-                ? rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.invited?.username
-                : rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.creator?.username
-              : rooms.find(
+            to={`/profile/${
+              typeof rooms.find(
                 (item: any) => item.room.room_info.id === Number(lastUrl)
-              )?.room?.room_info?.id
-              }`}
+              )?.room?.room_info?.invited !== "number"
+                ? amICreator
+                  ? rooms.find(
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited?.username
+                  : rooms.find(
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.creator?.username
+                : rooms.find(
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.id
+            }`}
           >
             <img
               src={
@@ -328,36 +340,22 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 )?.room?.room_info?.invited !== "number"
                   ? amICreator
                     ? rooms.find(
-                      (item: any) =>
-                        item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.invited?.avatar || logo
+                        (item: any) =>
+                          item.room.room_info.id === Number(lastUrl)
+                      )?.room?.room_info?.invited?.avatar || logo
                     : rooms.find(
-                      (item: any) =>
-                        item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.creator?.avatar || logo
+                        (item: any) =>
+                          item.room.room_info.id === Number(lastUrl)
+                      )?.room?.room_info?.creator?.avatar || logo
                   : rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.logo || logo
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.logo || logo
               }
+              className="logo_site"
               alt="avatar"
             ></img>
           </Link>
           <div>
-            <h2>
-              {typeof rooms.find(
-                (item: any) => item.room.room_info.id === Number(lastUrl)
-              )?.room?.room_info?.invited !== "number"
-                ? amICreator
-                  ? rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited?.first_name
-                  : rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.creator?.first_name
-                : rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.name}
-            </h2>
             <h2
               style={{
                 fontFamily: "Factor A",
@@ -365,6 +363,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 fontWeight: "normal",
                 fontSize: "18px",
                 lineHeight: "20px",
+                marginLeft: "15px",
                 color: "#000000",
               }}
             >
@@ -374,20 +373,20 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited?.username
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited?.username
                   : rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.creator?.username
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.creator?.username
                 : rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.name}
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.name}
             </h2>
           </div>
         </div>
         <Popup
           trigger={
-            <div style={{ marginRight: "24px" }}>
+            <div className="chat__more_icon">
               <MoreIcon />
             </div>
           }
@@ -408,9 +407,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `hype-fans.com/profile/${rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited.username
+                  `hype-fans.com/profile/${
+                    rooms.find(
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited.username
                   }`
                 );
               }}
@@ -472,8 +472,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                   key={Math.random() + index + Math.random()}
                 >
                   {item.message_price !== 0 &&
-                    !item.is_payed &&
-                    item.user.pk !== uid ? (
+                  !item.is_payed &&
+                  item.user.pk !== uid ? (
                     <div
                       style={{
                         display: "flex",
@@ -505,9 +505,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           style={
                             item?.attachments.length > 0
                               ? {
-                                backgroundColor: "white",
-                                justifyContent: "flex-end",
-                              }
+                                  backgroundColor: "white",
+                                  justifyContent: "flex-end",
+                                }
                               : {}
                           }
                         >
@@ -517,34 +517,34 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           ).toString(CryptoJS.enc.Utf8)}
                           {item?.attachments.length > 0
                             ? item?.attachments.map(
-                              (item: any, index: number) => {
-                                if (item.file_type === 4) {
-                                  return <Video src={item.file_url} />;
-                                } else if (item.file_type === 1) {
-                                  return (
-                                    <a href={item.file_url} download>
-                                      Скачать{" "}
-                                      {
-                                        item.file_url.split("/")[
-                                        item.file_url.split("/").length - 1
-                                        ]
-                                      }
-                                    </a>
-                                  );
-                                } else if (item.file_type === 2) {
-                                  console.log(item.file_url);
-                                  return <audio src={item.file_url} />;
-                                } else {
-                                  return (
-                                    <ChatImage
-                                      item={item}
-                                      index={index}
-                                      key={index + Math.random()}
-                                    />
-                                  );
+                                (item: any, index: number) => {
+                                  if (item.file_type === 4) {
+                                    return <Video src={item.file_url} />;
+                                  } else if (item.file_type === 1) {
+                                    return (
+                                      <a href={item.file_url} download>
+                                        Скачать{" "}
+                                        {
+                                          item.file_url.split("/")[
+                                            item.file_url.split("/").length - 1
+                                          ]
+                                        }
+                                      </a>
+                                    );
+                                  } else if (item.file_type === 2) {
+                                    console.log(item.file_url);
+                                    return <audio src={item.file_url} />;
+                                  } else {
+                                    return (
+                                      <ChatImage
+                                        item={item}
+                                        index={index}
+                                        key={index + Math.random()}
+                                      />
+                                    );
+                                  }
                                 }
-                              }
-                            )
+                              )
                             : null}
                           {item.user.pk === uid ? (
                             <span className="message__meta">
@@ -556,7 +556,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           )}
                         </div>
                       </div>
-                      <div className="time-text">   {moment(item?.item?.room?.message?.time).fromNow()}</div>
+                      <div className="time-text">
+                        {" "}
+                        {moment(item?.item?.room?.message?.time).fromNow()}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -565,53 +568,58 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           )}
         </div>
         <div className="chat__input">
+          <button
+            className="chat__attach_icon"
+            onClick={() => {
+              setShowActions(!showActions);
+            }}
+          >
+            <AttachIcon style={{ width: "25px", height: "25px" }} />
+          </button>
           <Input
             sendMessage={sendMessage}
             messageText={messageText}
             setMessageText={setMessageText}
           />
-          <div
-            style={{
-              margin: "0px 24px",
-              marginBottom: "8px",
-              display: "flex",
-              flexWrap: "wrap",
-            }}
-          >
-            <div onClick={() => setShowTip(true)}>
-              <TipIcon />
-            </div>
-            <AudioRecorder
-              startRecording={startRecording}
-              stopRecording={stopRecording}
-              mediaBlobUrl={mediaBlobUrl}
-              clearBlobUrl={clearBlobUrl}
-            />
-            <div>
-              <label
-                className="upload__file-input-label"
-                htmlFor="file-input"
-                style={{ marginBottom: "15px" }}
-              >
-                <VideoIcon />
-              </label>
-              <input
-                className="upload__file-input"
-                id="file-input"
-                ref={inputFileRef}
-                type="file"
-                onChange={onFileChange}
-                multiple
-              />
-            </div>
-            <ImageIcon />
-            <button
-              style={{ marginBottom: "10px" }}
-              onClick={() => setPaidModalShow(true)}
-            >
-              Установить цену
-            </button>
+        </div>
+        <div
+          className={
+            "chat__chat_actions" + (showActions ? " chat__actions_open" : "")
+          }
+        >
+          <div onClick={() => setShowTip(true)}>
+            <TipIcon />
           </div>
+          <AudioRecorder
+            startRecording={startRecording}
+            stopRecording={stopRecording}
+            mediaBlobUrl={mediaBlobUrl}
+            clearBlobUrl={clearBlobUrl}
+          />
+          <div>
+            <label
+              className="upload__file-input-label"
+              htmlFor="file-input"
+              style={{ marginBottom: "15px" }}
+            >
+              <VideoIcon />
+            </label>
+            <input
+              className="upload__file-input"
+              id="file-input"
+              ref={inputFileRef}
+              type="file"
+              onChange={onFileChange}
+              multiple
+            />
+          </div>
+          <ImageIcon />
+          <button
+            style={{ marginBottom: "10px" }}
+            onClick={() => setPaidModalShow(true)}
+          >
+            Установить цену
+          </button>
         </div>
       </div>
       <Modal

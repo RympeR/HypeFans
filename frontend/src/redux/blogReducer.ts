@@ -242,8 +242,9 @@ export const getMainPageData = (): Thunk => async (dispatch) => {
     const stories = [{}];
     dispatch(actions.setMainPageData(posts, recommendations, stories));
     dispatch(actions.isntLoading());
+  } else {
+    dispatch(actions.isntLoading());
   }
-  dispatch(actions.isntLoading());
 };
 
 export const setFavoritePostModal =

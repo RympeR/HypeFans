@@ -46,9 +46,6 @@ export const ExchangeModal = () => {
               <a
                 className="share"
                 href="#"
-                // onClick={(e) => {
-                //   return toast.error('Your device does not support this feature');
-                // }}
               >
                 <i className="icon-share" />
               </a>

@@ -36,9 +36,9 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
   }
 
   setInterval(handleWindowResize, 1);
-
+  // style={{ left: leftFixedPosition }}
   return (
-    <aside className="aside" style={{ left: leftFixedPosition }}>
+    <aside className="aside" >
       <p className="aside__title">{currentLang.also}</p>
 
       <Slider dots={true} arrows={false} autoplay={true} autoplaySpeed={2000}>

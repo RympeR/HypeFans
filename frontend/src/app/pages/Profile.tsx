@@ -61,7 +61,7 @@ const Profile = () => {
       target: profile.pk,
     });
     setSubscribeShow(false);
-    if (data.status == 200) {
+    if (data.status === 200) {
       setProfile({ ...profile, subscribed: true });
       alert.success("Вы подписались");
     } else {

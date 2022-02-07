@@ -28,8 +28,9 @@ const Upload = () => {
 
   const id = useSelector((state: RootState) => state.auth.pk);
 
-  const [postCost, setPostCost] = useState('0');
-  const [accessType, setAccessType] = useState('1');
+  const [postCost, setPostCost] = useState("0");
+  const [accessType, setAccessType] = useState("1");
+  const [showInRecommendations, setShowInRecommendations] = useState(false);
 
   const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
   const [uploadedFilesImg, setUploadedFilesImg] = useState<string[]>([]);
@@ -76,13 +77,14 @@ const Upload = () => {
       name: "post",
       description: value,
       price_to_watch: postCost,
+      show_in_recomendations: showInRecommendations,
     };
     dispatch(createPost(send));
     inputFileRef.current.value = "";
     clearInput();
     setUploadedFiles([]);
-    setPostCost('0');
-    setAccessType('1');
+    setPostCost("0");
+    setAccessType("1");
     setUploadedFilesImg([]);
   };
 
@@ -208,12 +210,35 @@ const Upload = () => {
                 onValueChange={(value, name) => setPostCost(value)}
               />
             </div>
-            <div>
-              Урвоень доступа:
-              <select value={accessType} onChange={handleChange} name="acess_type" id="acess_type">
-                <option value="1">Покупка</option>
-                <option value="2">Подписка</option>
+            <div style={{ marginBottom: "25px" }}>
+              Уровень доступа:
+              <select
+                className="post__access__select"
+                value={accessType}
+                onChange={handleChange}
+                name="acess_type"
+                id="acess_type"
+              >
+                <option className="post__access__select__option" value="1">
+                  Покупка
+                </option>
+                <option className="post__access__select__option" value="2">
+                  Подписка
+                </option>
               </select>
+            </div>
+            <div style={{ marginBottom: "25px" }}>
+              Показывать в рекомендациях:
+              <input
+                type="checkbox"
+                className="notifications__toggle-button"
+                name="push_notifications"
+                style={{ marginLeft: "10px" }}
+                checked={showInRecommendations}
+                onChange={(val) => {
+                  setShowInRecommendations(val.target.checked);
+                }}
+              ></input>
             </div>
             <button
               className={

@@ -17,7 +17,19 @@
   @media (max-width: map-get($map: $media, $key: s)) {
     padding: 24px 16px;
   }
-
+  &__access__select {
+    margin-left: 15px;
+    border-radius: 15px;
+    height: 2.5em;
+    width: 7em;
+    text-align: center;
+  }
+  &__access__select__option {
+    border-radius: 15px;
+    height: 2em;
+    width: 9em;
+    text-align: center;
+  }
   &__top {
     display: flex;
     justify-content: space-between;

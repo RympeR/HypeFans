@@ -149,7 +149,8 @@ class UserSettingsRetrieveAPI(generics.RetrieveAPIView):
 class UserLoginAPI(generics.GenericAPIView):
     permission_classes = permissions.AllowAny,
     serializer_class = UserCreationSerializer
-
+    authentication_classes = []
+    
     def post(self, request):
         email = request.data['email']
         password = request.data['password']

@@ -2,10 +2,21 @@
   display: flex;
   flex-direction: column;
 
-  
-&__backNone {
-  display: none;
-}
+  &__chat_actions {
+    margin: 0px 24px;
+    margin-bottom: 8px;
+    display: flex;
+    flex-wrap: wrap;
+
+    @media screen and (max-width < 500px) {
+      margin: -60px 14px 8px;
+
+    }
+  }
+
+  &__backNone {
+    display: none;
+  }
 
   &__header {
     background-color: $white;
@@ -38,7 +49,6 @@
   &__main {
     background-color: $white;
     display: flex;
-    margin-bottom: 20px;
   }
 
   &__sidebar {
@@ -118,24 +128,44 @@
   }
 
   &__input {
-    background: #e5e5e5;
-    height: 140px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background: white;
+    height: 60px;
+    bottom: 0px;
+    position: fixed;
+    z-index: 11;
   }
 
   &__text {
-    padding: 17px 8px 17px 15px;
-    display: flex;
-
-    button {
-      width: 50px;
-      height: 50px;
-    }
-
-    input {
-      width: 100%;
+    @media screen and (min-width : 500px) {
+      &+button.send{
+        position: fixed;
+        left: min( 88%, 1307px );
+        bottom: 15.5%;
+      }
+      padding: 17px 8px 17px 15px;
+      display: flex;
+      width: 49%;
+      max-width: 628px;
+      bottom: 14%;
+      position: fixed;
+      background: #fbdfcf;
+      border-radius: 21px;
+      button {
+        width: 50px;
+        height: 50px;
+      }
+  
+      input {
+        width: 100%;
+      }
     }
   }
+
 }
+
 
 .message-wrap {
   list-style: none;
@@ -144,8 +174,8 @@
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-end;
-  min-height: 88%;
-  max-height: 88%;
+  min-height: 115%;
+  max-height: 115%;
   border: 1px solid #cccccc;
   padding: 10px;
   overflow-y: scroll;
@@ -178,6 +208,29 @@
 
 @media screen and (max-width: 450px) {
   .chat {
+    &__chat_actions {
+      margin: -60px 14px 8px;
+      // display: none;
+      visibility: hidden;
+
+      &.chat__actions_open {
+        display: flex;
+        z-index: 13;
+        position: fixed;
+        bottom: -3px;
+        border-radius: 15px;
+        background-color: white;
+        height: 50px;
+        padding-top: 9px;
+        padding-right: 10px;
+        padding-left: 10px;
+        visibility: visible;
+        transition: 1s;
+      }
+    }
+
+
+
     display: flex;
     flex-direction: column;
 
@@ -213,7 +266,7 @@
     &__main {
       background-color: $white;
       display: flex;
-      margin-bottom: 20px;
+      margin-bottom: -7%;
     }
 
     &__sidebar {
@@ -234,32 +287,39 @@
         width: 60px;
         height: 60px;
         border-radius: 100%;
-      }
 
-      h2 {
-        font-family: Factor A;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 18px;
-        line-height: 20px;
-        display: flex;
-        align-items: center;
-        color: #000000;
-        margin-left: 8px;
-      }
-
-      p {
-        font-family: Factor A;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 15px;
-        display: flex;
-        align-items: center;
-        color: rgba(0, 0, 0, 0.6);
-        margin-left: 8px;
+        &.logo_site {
+          width: 35px;
+          height: 35px;
+          margin-top: -7px;
+        }
       }
     }
+
+    h2 {
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 20px;
+      display: flex;
+      align-items: center;
+      color: #000000;
+      margin-left: 8px;
+    }
+
+    p {
+      font-family: Factor A;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 15px;
+      display: flex;
+      align-items: center;
+      color: rgba(0, 0, 0, 0.6);
+      margin-left: 8px;
+    }
+
 
     &__p {
       font-family: Factor A;
@@ -281,6 +341,26 @@
       border-bottom: 1px solid rgba(0, 0, 0, 0.2);
       height: 64px;
       width: 100%;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      position: fixed;
+      background-color: white;
+      padding-top: 5px;
+      margin-top: -9px;
+      z-index: 11;
+
+      &.inChat {
+        height: 36px;
+      }
+    }
+
+    &__more_icon {
+      flex-shrink: 0;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-bottom: 6px;
     }
 
     &__inactive {
@@ -294,34 +374,56 @@
     &__dialogsMain {
       display: flex;
       flex-direction: column;
+      height: 100%;
       width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    &__attach_icon {
+      order: 1;
+      z-index: 12;
+      position: absolute;
+      left: 77%;
+      top: 28%;
     }
 
     &__dialog {
-      height: 75vh;
+      height: 43%;
+      margin-top: 7%;
     }
 
     &__input {
-      background: #e5e5e5;
-      height: 120px;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      background: white;
+      height: 60px;
       bottom: 0px;
       position: fixed;
-      width: 100%;
+      z-index: 11;
+
+      button.send {
+        order: 2;
+        width: 50px;
+        height: 50px;
+        margin-top: 1.5%;
+      }
     }
 
     &__text {
       padding: 17px 8px 17px 15px;
       display: flex;
-
-      button {
-        width: 50px;
-        height: 50px;
-      }
+      width: 90%;
+      background: #fbdfcf;
+      border-radius: 21px;
 
       input {
         width: 100%;
       }
+
     }
+
   }
 
   .message-wrap {
@@ -332,7 +434,7 @@
     flex-direction: column-reverse;
     align-items: flex-end;
     min-height: 88%;
-    max-height: 88%;
+    max-height: 100%;
     border: 1px solid #cccccc;
     padding: 10px;
     overflow-y: scroll;
@@ -364,7 +466,7 @@
   }
 }
 
-.message{
+.message {
   $border-radius-messages: 0.75rem;
   display: flex;
   flex-direction: column;
@@ -383,7 +485,7 @@
     margin-left: 0.4375rem;
     margin-right: -0.5rem;
 
-    &>.message__time{
+    &>.message__time {
       font-size: .75rem;
       white-space: nowrap;
       margin-right: 0.1875rem;
@@ -399,16 +501,18 @@
     border-top-right-radius: $border-radius-messages;
     border-bottom-left-radius: $border-radius-messages;
     border-bottom-right-radius: $border-radius-messages;
+
     @media screen and (max-width: 600px) {
       max-width: min(30rem, 100vw - 3.75rem);
     }
 
     &.has-solid-background {
       padding: 0.3125rem 1rem 0.25rem 0.6rem;
-      background:rgb(249 208 183 / 67%);
+      background: rgb(249 208 183 / 67%);
       margin-bottom: 7px;
     }
   }
+
   &__text_content {
     margin: 0;
     word-break: break-word;
