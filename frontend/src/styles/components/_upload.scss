@@ -133,6 +133,11 @@
     display: none;
   }
 
+  &__file-inputBgc {
+    // visibility: hidden;
+    display: none;
+  }
+
   &__bottom {
     display: 'flex';
     flex-direction: column;

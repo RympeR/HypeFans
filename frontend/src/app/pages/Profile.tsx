@@ -152,7 +152,7 @@ const Profile = () => {
         }}
       >
         {myNick === nick ? (
-          <Link to="/settings/account" className="notifications__settingBtn">
+          <Link to="/personalSettings" className="notifications__settingBtn">
             <button
               className="notifications__settingBtn"
               style={{ margin: "0px", width: "100%" }}
