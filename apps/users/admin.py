@@ -1,6 +1,8 @@
+from django import forms
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
-
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.admin import UserAdmin
 from .models import (
     User,
     Card,
@@ -12,6 +14,7 @@ from .models import (
     ChatSubscription,
     ReferralPayment,
 )
+from django.utils.translation import gettext, gettext_lazy as _
 
 
 @admin.register(UserOnline)
@@ -24,8 +27,10 @@ class UserOnlineAdmin(admin.ModelAdmin):
     ]
     ordering = '-last_action',
 
+
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserBaseAdmin(UserAdmin):
+
     list_display = [
         'email', 'username', 'first_name', 'validated_user'
     ]
@@ -40,18 +45,62 @@ class UserAdmin(admin.ModelAdmin):
     ]
     ordering = '-pk',
 
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': (
+            'first_name',
+            'email',
+            'avatar',
+            'background_photo',
+            'bio',
+            'birthday_date',
+            'location',
+            'city')}),
+        (_('Money'), {'fields': (
+            'subscribtion_price',
+            'message_price',
+            'subscribtion_duration',
+            'credit_amount',
+            'earned_credits_amount',
+            'ref_link',
+            'referrer',
+            'wallet'
+        )}),
+        (_('Confidence'), {'fields': (
+            'email_notifications',
+            'push_notifications',
+            'hide_online',
+            'allow_comments',
+            'show_post_amount',
+            'show_fans_amount',
+            'show_watermark',
+        )}),
+        (_('Permissions'), {
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+        }),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+        (_('Models'), {'fields': ('validated_user', 'creator')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'password1', 'password2'),
+        }),
+    )
+    filter_horizontal = ('groups', 'user_permissions',)
+
 
 @admin.register(Subscription, ChatSubscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = [
-        'pk','source', 'target', 'start_date', 'end_date'
+        'pk', 'source', 'target', 'start_date', 'end_date'
     ]
     list_display_links = [
         'pk'
     ]
     list_filter = (
-            ('start_date', DateFieldListFilter),
-            ('end_date', DateFieldListFilter),
+        ('start_date', DateFieldListFilter),
+        ('end_date', DateFieldListFilter),
     )
     search_fields = [
         'source__username', 'target__username',
@@ -80,7 +129,7 @@ class ReferralPaymentAdmin(admin.ModelAdmin):
     ]
     list_display_links = ['pk']
     list_filter = (
-            ('date_time', DateFieldListFilter),
+        ('date_time', DateFieldListFilter),
     )
     search_fields = [
         'user__username',
@@ -123,7 +172,7 @@ class PendingUserAdmin(admin.ModelAdmin):
     actions_row = actions_detail = 'confirm_user', 'reject_user',
 
     def confirm_user(self, request, pk):
-        pending_user = PendingUser.objects.get(pk=pk) 
+        pending_user = PendingUser.objects.get(pk=pk)
         user = pending_user.user
         user.validated_user = True
         pending_user.verified = True
@@ -133,7 +182,7 @@ class PendingUserAdmin(admin.ModelAdmin):
     confirm_user.short_description = 'Confirm'
 
     def reject_user(self, request, pk):
-        pending_user = PendingUser.objects.get(pk=pk) 
+        pending_user = PendingUser.objects.get(pk=pk)
         user = pending_user.user
         user.validated_user = False
         pending_user.verified = False

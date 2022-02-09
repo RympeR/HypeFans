@@ -64,6 +64,24 @@ def room_logo(instance, filename):
     return os.path.join('room', file_)
 
 
+def agency_declaration(instance, filename):
+    instance.original_file_name = filename
+    file_ = set_unique_file_name(filename)
+    return os.path.join('agency_declaration', file_)
+
+
+def passport(instance, filename):
+    instance.original_file_name = filename
+    file_ = set_unique_file_name(filename)
+    return os.path.join('passports', file_)
+
+
+def video_verify(instance, filename):
+    instance.original_file_name = filename
+    file_ = set_unique_file_name(filename)
+    return os.path.join('video_verify', file_)
+
+
 def create_path_file(host: str, path_file: str):
     return 'http://{domain}{path}'.format(
         domain=host, path=path_file)

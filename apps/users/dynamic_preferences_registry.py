@@ -20,6 +20,13 @@ class ReferralPercentage(PreferenceMixin, FloatPreference):
 
 
 @global_preferences_registry.register
+class WithdrawPercentage(PreferenceMixin, FloatPreference):
+    section = settings
+    name = 'withdraw_percentage'
+    default = 0.8
+
+
+@global_preferences_registry.register
 class FreeDays(PreferenceMixin, IntegerPreference):
     section = settings
     name = 'free_days'

@@ -42,7 +42,8 @@ class User(AbstractUser):
     bio = models.TextField(verbose_name='БИО профиля', null=True, blank=True)
     birthday_date = UnixTimeStampField(
         verbose_name='День рождения', null=True, blank=True)
-    location = CountryField(null=True, blank=True)
+    location = models.CharField('Страна', null=True, blank=True, max_length=80)
+    city = models.CharField('Город', null=True, blank=True, max_length=80)
     subscribtion_price = models.IntegerField(
         verbose_name='Цена подписки', default=0)
     message_price = models.IntegerField(
@@ -87,7 +88,13 @@ class User(AbstractUser):
         'Подтвержденная почта', default=False)
     validated_user = models.BooleanField(
         'Подтвержденный профиль', default=False)
+    creator = models.BooleanField(
+        'Создатель', default=False)
+    wallet = models.CharField(
+        'Кошелек вывода', null=True, max_length=200)
 
+    withdraw_percentage = models.FloatField(
+        verbose_name='Процент дохода', default=0)
     credit_amount = models.IntegerField(
         verbose_name='Кредитный баланс', default=0)
     earned_credits_amount = models.IntegerField(

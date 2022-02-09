@@ -20,7 +20,7 @@ from rest_framework.views import APIView
 
 from apps.blog.models import PostAction, PostBought
 from apps.blog.serializers import PostGetShortSerializers
-from apps.users.dynamic_preferences_registry import ReferralPercentage
+from apps.users.dynamic_preferences_registry import ReferralPercentage, WithdrawPercentage
 
 from .models import *
 from .serializers import *
@@ -150,7 +150,7 @@ class UserLoginAPI(generics.GenericAPIView):
     permission_classes = permissions.AllowAny,
     serializer_class = UserCreationSerializer
     authentication_classes = []
-    
+
     def post(self, request):
         email = request.data['email']
         password = request.data['password']
@@ -244,12 +244,16 @@ class UserSubscription(GenericAPIView):
         if user.credit_amount > subscribe_target.subscribtion_price:
             user.my_subscribes.add(subscribe_target)
             subscribe_target.fans_amount += 1
-            subscribe_target.earned_credits_amount += subscribe_target.subscribtion_price
+            if subscribe_target.withdraw_percentage == 0:
+                percentage = WithdrawPercentage.value()
+            else:
+                percentage = subscribe_target.withdraw_percentage
+            subscribe_target.earned_credits_amount += subscribe_target.subscribtion_price * percentage
             subscribe_target.save()
             referrer = subscribe_target.referrer
             if referrer:
                 amount = subscribe_target.subscribtion_price * \
-                    ReferralPercentage.value()
+                    ReferralPercentage.value() * percentage
                 referrer.earned_credits_amount += amount
                 referrer.save()
                 ReferralPayment.objects.create(
@@ -290,14 +294,18 @@ class UserChatSubscription(GenericAPIView):
         if user.credit_amount > subscribe_target.subscribtion_price:
             user.my_subscribes.add(subscribe_target)
             subscribe_target.fans_amount += 1
-            subscribe_target.earned_credits_amount += subscribe_target.message_price
+            if subscribe_target.withdraw_percentage == 0:
+                percentage = WithdrawPercentage.value()
+            else:
+                percentage = subscribe_target.withdraw_percentage
+            subscribe_target.earned_credits_amount += subscribe_target.message_price * percentage
             subscribe_target.save()
             user.save()
             referrer = subscribe_target.referrer
             if referrer:
                 amount = subscribe_target.subscribtion_price * \
                     ReferralPercentage.value()
-                referrer.earned_credits_amount += amount
+                referrer.earned_credits_amount += amount * percentage
                 referrer.save()
                 ReferralPayment.objects.create(
                     user=subscribe_target,

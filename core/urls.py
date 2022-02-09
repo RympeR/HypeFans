@@ -9,6 +9,7 @@ urlpatterns = [
     path('api/api/', include('rest_framework.urls')),
     path('api/chat/', include('apps.chat.urls')),
     path('api/user/', include('apps.users.urls')),
+    path('api/agency/', include('apps.agency.urls')),
     path('api/blog/', include('apps.blog.urls')),
     path('api/silk/', include('silk.urls', namespace='silk')),
     path('api/auth/', include('djoser.urls')),
