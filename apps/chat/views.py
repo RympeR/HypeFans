@@ -37,6 +37,18 @@ class RoomCreateAPI(generics.CreateAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomCreationSerializer
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except AssertionError as e:
+            return api_locked_423({"pk": e})
+        except ValueError as e:
+            print(e)
+            return api_locked_423({"pk": int(str(e))})
+        self.perform_create(serializer)
+        return Response(serializer.data)
+
     def get_serializer_context(self):
         return {'request': self.request}
 
@@ -144,7 +156,7 @@ class GetChatMessages(GenericAPIView):
                 paid = True
             if ChatBought.objects.filter(user__pk=user.pk, chat__pk=obj.pk).exists():
                 paid = True
-            
+
             results.append(
                 {
                     "id": obj.pk,

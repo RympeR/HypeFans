@@ -1,4 +1,5 @@
 import datetime
+from apps.agency.models import Agency
 
 from core.utils.func import user_avatar
 from django.contrib.auth.models import AbstractUser
@@ -92,7 +93,8 @@ class User(AbstractUser):
         'Создатель', default=False)
     wallet = models.CharField(
         'Кошелек вывода', null=True, max_length=200)
-
+    agency = models.ForeignKey(
+        Agency, blank=True, null=True, verbose_name='Агенство', related_name='agency_model', on_delete=models.SET_NULL)
     withdraw_percentage = models.FloatField(
         verbose_name='Процент дохода', default=0)
     credit_amount = models.IntegerField(
