@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.f449b8e5.css",
-    "main.js": "/static/js/main.1abd979a.js",
+    "main.css": "/static/css/main.55a09ce0.css",
+    "main.js": "/static/js/main.03df2e31.js",
     "static/media/sign-in-bg.jpg": "/static/media/sign-in-bg.baad8d0a3cefccbb5e4c.jpg",
     "static/media/elise-wilcox-bmbGUfd7y-I-unsplash.jpg": "/static/media/elise-wilcox-bmbGUfd7y-I-unsplash.8e371d10859f7fd15eb5.jpg",
     "static/media/boxed-water-is-better-zuj2m7qxDA0-unsplash.jpg": "/static/media/boxed-water-is-better-zuj2m7qxDA0-unsplash.4e5d9b0f993795d62d9d.jpg",
@@ -40,7 +40,8 @@
     "static/media/facebookRef.svg": "/static/media/facebookRef.e69b0043ddddcf6bce20337b695f5084.svg",
     "static/media/3dots.svg": "/static/media/3dots.868a133cce351afbfea1361ece5847ac.svg",
     "static/media/3dotsWhite.svg": "/static/media/3dotsWhite.61c4718d9e05a930387db6277767ccae.svg",
-    "static/media/eye-off.svg": "/static/media/eye-off.b122d781d708d5383132b7dbbff2b930.svg",
+    "static/media/camera.svg": "/static/media/camera.690317de39606b70746fa298dab28f49.svg",
+    "static/media/eye-off.svg": "/static/media/eye-off.248c096c090ba8076fd7046fec3a934d.svg",
     "static/media/more-vertical.svg": "/static/media/more-vertical.da42205f6b7582f98d606d10458be02b.svg",
     "static/media/heart.svg": "/static/media/heart.869f62642fe44306503d06c80957a010.svg",
     "static/media/attach.svg": "/static/media/attach.363448374dfe2e6f6bc9480429a91cd2.svg",
@@ -61,7 +62,7 @@
     "static/media/add.svg": "/static/media/add.11ccbee9f186824c73b011ee105915eb.svg",
     "static/media/log-in.svg": "/static/media/log-in.c6780efa0961350e6bf5558dff1eb61c.svg",
     "static/media/home.svg": "/static/media/home.1e45dd3389fed1eae4edba4d4864b5e5.svg",
-    "static/media/eye.svg": "/static/media/eye.9077c8d19c93ee5caa15141414818484.svg",
+    "static/media/eye.svg": "/static/media/eye.0d969b5f8070bad3f1b8de955885e7dc.svg",
     "static/media/message.svg": "/static/media/message.be9d6590f38c3c82d36065e4c58288f2.svg",
     "static/media/x-circle.svg": "/static/media/x-circle.1fd8ad4f34e5869fa5a7d667296c7fa7.svg",
     "static/media/bookmark.svg": "/static/media/bookmark.5228784eb58d2c29cbcd536fd9bccef6.svg",
@@ -82,11 +83,11 @@
     "static/media/simpleArrow-right.svg": "/static/media/simpleArrow-right.540688dc4b856d711b1a3e6a2abe7c31.svg",
     "static/media/arrow-left-mobile.svg": "/static/media/arrow-left-mobile.2d743aa0ee7183dbcbfa59f4f1750e98.svg",
     "static/media/leftIcon.svg": "/static/media/leftIcon.8570736da78871456bcf4a7b23b88ede.svg",
-    "main.f449b8e5.css.map": "/static/css/main.f449b8e5.css.map",
-    "main.1abd979a.js.map": "/static/js/main.1abd979a.js.map"
+    "main.55a09ce0.css.map": "/static/css/main.55a09ce0.css.map",
+    "main.03df2e31.js.map": "/static/js/main.03df2e31.js.map"
   },
   "entrypoints": [
-    "static/css/main.f449b8e5.css",
-    "static/js/main.1abd979a.js"
+    "static/css/main.55a09ce0.css",
+    "static/js/main.03df2e31.js"
   ]
 }
