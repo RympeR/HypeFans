@@ -298,11 +298,33 @@ export const changeSettings =
       dispatch(isntSettingsDisabled());
     };
 
+export const changeAvatar =
+  (obj: any): Thunk =>
+    async (dispatch) => {
+      dispatch(isSettingsDisabled());
+      const response = await authAPI.meUpdate(obj);
+      await authAPI.meGet();
+      if (response) {
+        dispatch(getAuthUserData());
+      }
+      dispatch(isntSettingsDisabled());
+    };
+
+export const changeBackground =
+  (obj: any): Thunk =>
+    async (dispatch) => {
+      dispatch(isSettingsDisabled());
+      const response = await authAPI.meUpdate(obj);
+      await authAPI.meGet();
+      if (response) {
+        dispatch(getAuthUserData());
+      }
+      dispatch(isntSettingsDisabled());
+    };
+
 export const getUserData = (): Thunk => async (dispatch) => {
   dispatch(isLoading());
   const data = await authAPI.meGet();
-  console.log(data)
-  debugger
   if (data.status !== 401) {
     await dispatch(getAuthUserData());
   } else {

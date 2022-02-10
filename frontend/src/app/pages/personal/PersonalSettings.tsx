@@ -10,7 +10,7 @@ import { Preloader } from "../../utils/Preloader";
 import { Formik } from "formik";
 import { Link } from "react-router-dom";
 import { NotificationSidebarItem } from "../notifications/NotificationSidebarItem";
-import { changeSettings } from "../../../redux/authReducer";
+import { changeAvatar, changeBackground, changeSettings } from "../../../redux/authReducer";
 import { userAPI } from "../../../api/userAPI";
 
 
@@ -29,11 +29,15 @@ export const PersonalSettings = () => {
     const [avatarUploadImg, setAvatarUploadImg] = useState<string>(null);
 
     const setNewAvatar = async () => {
-
+        const formData = new FormData();
+        formData.append("avatar", avatarUpload);
+        await dispatch(changeAvatar(formData))
     }
 
     const setNewBackground = async () => {
-
+        const formData = new FormData();
+        formData.append("background_photo", backgroundUpload);
+        await dispatch(changeBackground(formData))
     }
 
     const onAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -44,12 +48,19 @@ export const PersonalSettings = () => {
     };
 
     const onBackgroundChange = (e: ChangeEvent<HTMLInputElement>) => {
-        debugger
         setBackgroundUpload(e?.target?.files[0]);
         setBackgroundUploadImg(
             URL.createObjectURL(e?.target?.files[0]),
         );
     };
+
+    useEffect(() => {
+        setNewBackground()
+    }, [backgroundUpload])
+
+    useEffect(() => {
+        setNewAvatar()
+    }, [avatarUpload])
 
     useEffect(() => {
         const getData = async () => {
@@ -108,14 +119,14 @@ export const PersonalSettings = () => {
                         <div>
                             <label
                                 className="upload__file-input-label"
-                                htmlFor="file-input"
+                                htmlFor="file-inputAvatar"
                                 style={{ marginBottom: "15px" }}
                             >
                                 <PhotoIcon className="personalSettings__changeAvatarBtn" />
                             </label>
                             <input
                                 className="upload__file-input"
-                                id="file-input"
+                                id="file-inputAvatar"
                                 ref={avatarFileRef}
                                 type="file"
                                 onChange={(val) => onAvatarChange(val)}
