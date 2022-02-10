@@ -42,10 +42,10 @@ class RoomCreateAPI(generics.CreateAPIView):
         try:
             serializer.is_valid(raise_exception=True)
         except AssertionError as e:
-            return api_locked_423({"pk": e})
+            return api_locked_423({"id": e})
         except ValueError as e:
             print(e)
-            return api_locked_423({"pk": int(str(e))})
+            return api_locked_423({"id": int(str(e))})
         self.perform_create(serializer)
         return Response(serializer.data)
 

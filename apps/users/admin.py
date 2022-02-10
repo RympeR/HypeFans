@@ -55,7 +55,11 @@ class UserBaseAdmin(UserAdmin):
             'bio',
             'birthday_date',
             'location',
-            'city')}),
+            'city',
+            'repheral_users',
+            'blocked_users',
+            'my_subscribes',
+            )}),
         (_('Money'), {'fields': (
             'subscribtion_price',
             'message_price',
@@ -87,7 +91,9 @@ class UserBaseAdmin(UserAdmin):
             'fields': ('username', 'password1', 'password2'),
         }),
     )
-    filter_horizontal = ('groups', 'user_permissions',)
+    filter_horizontal = ('groups', 'user_permissions', 'repheral_users',
+                         'blocked_users',
+                         'my_subscribes')
 
 
 @admin.register(Subscription, ChatSubscription)
