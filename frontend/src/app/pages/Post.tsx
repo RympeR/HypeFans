@@ -1,4 +1,4 @@
-import { default as React, useEffect } from "react";
+import { default as React, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
 import "reactjs-popup/dist/index.css";
@@ -29,6 +29,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
   const myId = useSelector((state: RootState) => state.auth.pk);
   const post = useSelector((state: RootState) => state.blog.post);
   const isLoading = useSelector((state: RootState) => state.blog.isPostLoading);
+  const [show, setShow] = useState<boolean>(false)
 
   if (isLoading) {
     return <div>Загрузка...</div>;
@@ -182,8 +183,8 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                 </button>
 
                 <button className="post__action-btn">
-                  <CommentIcon className="post__action-icon" />
-                  <CommentComponent data={post.comments} postId={post?.id} />
+                  <CommentIcon className="post__action-icon" onClick={() => setShow(true)} />
+                  <CommentComponent data={post.comments} postId={post?.id} show={show} setShow={setShow} />
                 </button>
               </div>
               <button
@@ -203,7 +204,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
 
             <p className="post__like-amount">{post?.likes_amount} лайков</p>
 
-            <CommentComponent data={post.comments} postId={post?.id} />
+            <CommentComponent data={post.comments} postId={post?.id} show={show} setShow={setShow} />
           </div>
         </div>
       </div>

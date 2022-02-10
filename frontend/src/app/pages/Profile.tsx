@@ -34,6 +34,7 @@ const Profile = () => {
   const alert = useAlert();
   const history = useHistory();
   const [subscribeShow, setSubscribeShow] = useState(false);
+  const [show, setShow] = useState<boolean>(false)
   const profileData = useSelector((state: RootState) => state.user);
   const [profile, setProfile] = useState(profileData);
   const myNick = useSelector((state: RootState) => state.auth.username);
@@ -317,7 +318,7 @@ const Profile = () => {
                           </button>
 
                           <button className="post__action-btn">
-                            <CommentIcon className="post__action-icon" />
+                            <CommentIcon className="post__action-icon" onClick={() => setShow(true)} />
                           </button>
                         </div>
                         <button
@@ -342,6 +343,8 @@ const Profile = () => {
                       <CommentComponent
                         data={item?.post.comments}
                         postId={item?.post.pk}
+                        show={show}
+                        setShow={setShow}
                       />
                     </div>
                   </div>

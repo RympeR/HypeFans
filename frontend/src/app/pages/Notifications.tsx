@@ -204,8 +204,8 @@ const Notifications: React.FC = () => {
                     article.text === "Все"
                       ? notifications
                       : notifications.filter(
-                          (item) => item.type === article.type
-                        )
+                        (item) => item.type === article.type
+                      )
                   }
                 />
               )}
