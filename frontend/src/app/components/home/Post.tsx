@@ -68,6 +68,8 @@ const Post = ({
 
   const [donateValue, setDonateValue] = useState("0");
 
+  const [show, setShow] = useState<boolean>(false)
+
   const [isWholeTextShowed, setIsWholeTextShowed] = useState<boolean>(true);
   const dispatch = useDispatch();
 
@@ -192,7 +194,7 @@ const Post = ({
             </button>
 
             <button className="post__action-btn">
-              <CommentIcon className="post__action-icon" />
+              <CommentIcon className="post__action-icon" onClick={() => setShow(true)} />
             </button>
 
             <button
@@ -219,7 +221,7 @@ const Post = ({
           {post.post.likes_amount} {currentLang.liks1}
         </p>
 
-        <CommentComponent data={post.post.comments} postId={post.post.pk} />
+        <CommentComponent data={post.post.comments} postId={post.post.pk} show={show} setShow={setShow} />
       </div>
       <Modal
         show={donateShow}

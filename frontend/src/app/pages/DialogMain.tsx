@@ -88,7 +88,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const MoreIcon = () => <More />;
   const [isMessagesLoading, setIsMessagesLoading] = useState(true);
   const TipIcon = () => <Tip />;
-  const MicIcon = () => <MicrIcon />;
   const VideoIcon = () => <VideoIcn />;
   const ImageIcon = () => <ImageIcn />;
   const [ws, setWs] = useState(null);
@@ -116,12 +115,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       `wss://hype-fans.com/ws/api/chat/${lastUrl}/`
     );
     wsClient.onopen = () => {
-      console.log(wsClient);
       setWs(wsClient);
     };
     wsReadClient.onopen = () => {
       setWsRead(wsReadClient);
-      console.log(wsReadClient);
       wsReadClient.send(
         JSON.stringify({ room_id: lastUrl, user: uid, message_id: 0 })
       );
@@ -145,6 +142,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     if (!ws) return;
     ws.onmessage = (e: any) => {
       const message = JSON.parse(e.data);
+      debugger
       console.log(message);
       if (message.user.pk !== uid) {
         wsRead.send(

@@ -27,12 +27,14 @@ import { ReactComponent as CommentIcon } from "../../assets/images/message-circl
 import { CommentComponent } from "../components/CommentComponent";
 import { Preloader } from "../utils/Preloader";
 import { returnByFileType } from "../components/home/Post";
+import { chatAPI } from "../../api/chatAPI";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
   const history = useHistory();
   const [subscribeShow, setSubscribeShow] = useState(false);
+  const [show, setShow] = useState<boolean>(false)
   const profileData = useSelector((state: RootState) => state.user);
   const [profile, setProfile] = useState(profileData);
   const myNick = useSelector((state: RootState) => state.auth.username);
@@ -68,6 +70,11 @@ const Profile = () => {
       alert.error("Ошибка подписки");
     }
   };
+
+  const writeMessage = async () => {
+    const data = await chatAPI.roomCreate({ creator: myId, invited: [profile.pk] });
+    history.push(`/chat/${data.data.id}`)
+  }
 
   const delPost = (id: number) => {
     dispatch(deletePost({ id }));
@@ -126,6 +133,9 @@ const Profile = () => {
               <Link to="/favourites">
                 <button>Избранные</button>
               </Link>
+            </div>
+            <div style={{ padding: "5px" }}>
+              {myNick === nick ? null : <button onClick={() => writeMessage()}>Написать</button>}
             </div>
           </Popup>
         </div>
@@ -308,7 +318,7 @@ const Profile = () => {
                           </button>
 
                           <button className="post__action-btn">
-                            <CommentIcon className="post__action-icon" />
+                            <CommentIcon className="post__action-icon" onClick={() => setShow(true)} />
                           </button>
                         </div>
                         <button
@@ -333,6 +343,8 @@ const Profile = () => {
                       <CommentComponent
                         data={item?.post.comments}
                         postId={item?.post.pk}
+                        show={show}
+                        setShow={setShow}
                       />
                     </div>
                   </div>

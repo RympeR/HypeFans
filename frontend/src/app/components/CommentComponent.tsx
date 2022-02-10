@@ -13,11 +13,13 @@ import { RootState } from "../../redux/redux";
 export const CommentComponent = ({
   data,
   postId,
+  show,
+  setShow
 }: {
   data: any;
   postId: number;
+  show: boolean; setShow: (bool: boolean) => void
 }) => {
-  const [show, setShow] = useState(false);
   const userID = useSelector((state: RootState) => state.auth.pk);
   const user = useSelector((state: RootState) => state.auth);
   const [comment, setComment] = useState("");
@@ -25,7 +27,6 @@ export const CommentComponent = ({
   const [comments, setComments] = useState([]);
 
   const likeComment = async (val: any) => {
-    console.log(val);
     await blogAPI
       .likeComment({
         like: val.like,
@@ -41,10 +42,6 @@ export const CommentComponent = ({
         setComments((commentItem) => {
           return commentItem.map((item) => {
             if (item.id === val.parent) {
-              console.log({
-                ...item,
-                like: res.like,
-              });
               return {
                 ...item,
                 like: res.like,
@@ -94,7 +91,6 @@ export const CommentComponent = ({
     const [answer, setAnswer] = useState("");
     const [parentID, setParentID] = useState(item.id);
     const [showAnswer, setShowAnswer] = useState(false);
-    const [show, setShow] = useState(false);
     const [likeAmount, setLikeAmount] = useState(item.likeAmount);
 
     const addComment = async (val: {

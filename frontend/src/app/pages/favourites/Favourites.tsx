@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
 import { CommentComponent } from "../../../app/components/CommentComponent";
@@ -22,6 +22,7 @@ export const Favourites = () => {
   const favourites = useSelector((state: RootState) => state.favourites.posts);
   const dispatch = useDispatch();
   const myId = useSelector((state: RootState) => state.auth.pk);
+  const [show, setShow] = useState<boolean>(false)
   useEffect(() => {
     dispatch(getFavourites());
   }, []);
@@ -117,7 +118,7 @@ export const Favourites = () => {
                     </button>
 
                     <button className="post__action-btn">
-                      <CommentIcon className="post__action-icon" />
+                      <CommentIcon className="post__action-icon" onClick={() => setShow(true)} />
                     </button>
                   </div>
                   <button
@@ -142,6 +143,8 @@ export const Favourites = () => {
                 <CommentComponent
                   data={item.post.comments}
                   postId={item.post.pk}
+                  show={show}
+                  setShow={setShow}
                 />
               </div>
             </div>
