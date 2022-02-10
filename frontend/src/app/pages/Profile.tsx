@@ -27,6 +27,7 @@ import { ReactComponent as CommentIcon } from "../../assets/images/message-circl
 import { CommentComponent } from "../components/CommentComponent";
 import { Preloader } from "../utils/Preloader";
 import { returnByFileType } from "../components/home/Post";
+import { chatAPI } from "../../api/chatAPI";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -68,6 +69,11 @@ const Profile = () => {
       alert.error("Ошибка подписки");
     }
   };
+
+  const writeMessage = async () => {
+    const data = await chatAPI.roomCreate({ creator: myId, invited: [profile.pk] });
+    history.push(`/chat/${data.data.id}`)
+  }
 
   const delPost = (id: number) => {
     dispatch(deletePost({ id }));
@@ -126,6 +132,9 @@ const Profile = () => {
               <Link to="/favourites">
                 <button>Избранные</button>
               </Link>
+            </div>
+            <div style={{ padding: "5px" }}>
+              {myNick === nick ? null : <button onClick={() => writeMessage()}>Написать</button>}
             </div>
           </Popup>
         </div>
