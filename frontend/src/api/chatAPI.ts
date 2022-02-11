@@ -110,15 +110,11 @@ export const chatAPI = {
   roomCreate(data: any) {
     return instance.post(`/chat/room-create/`, data).then((response) => {
       console.log(response.status);
-      if (response.status == 423) {
+      if (response.status == 226) {
         return response;
       }
-      // if (response.status !== 202) {
-      //   console.log("Error!");
-      // }
       return response;
-    })
-    ;
+    });
   },
   roomDelete(id: number) {
     return instance.delete(`/chat/room-delete/${id}`).then((response) => {

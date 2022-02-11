@@ -501,6 +501,7 @@
     padding-bottom: 26px;
     border-bottom-right-radius: 16px;
     min-height: 80vh;
+    overflow-x: hidden;
   }
 
   &__mainItem {
@@ -632,7 +633,6 @@
   &__commentText {
     display: flex;
     flex-direction: column;
-    width: 80%;
     margin-left: 10px;
   }
 

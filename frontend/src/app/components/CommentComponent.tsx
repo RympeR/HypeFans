@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { blogAPI } from "../../api/blogAPI";
 import { ReactComponent as BackButton } from "../../assets/images/arrow-left.svg";
 import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
+// import { ReactComponent as RedLikeIcon } from "../../assets/images/RedHeart.svg";
 import logo from "../../assets/images/logo.svg";
 import { getPostActionList } from "../../redux/blogReducer";
 import { RootState } from "../../redux/redux";
@@ -189,6 +190,7 @@ export const CommentComponent = ({
                     <LikeIcon
                       className="post__action-icon"
                       fill={item.like ? "#C41E3A" : "none"}
+                      stroke-opacity={item.like ? 0 : 0.6}
                       onClick={() => {
                         setLikeAmount(
                           likeAmount - 1 ? !item.like : likeAmount + 1
@@ -265,6 +267,7 @@ export const CommentComponent = ({
         <LikeIcon
           className="post__action-icon"
           fill={item.like ? "#C41E3A" : "none"}
+          stroke-opacity={item.like ? 0 : 0.6}
           onClick={() =>
             likeComment({
               like: !item.parent_liked,

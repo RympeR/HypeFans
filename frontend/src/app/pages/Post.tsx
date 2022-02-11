@@ -179,6 +179,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                   <LikeIcon
                     className="post__action-icon"
                     fill={post.liked ? "#C41E3A" : "none"}
+                    stroke-opacity={post.liked ? 0 : 0.6}
                   />
                 </button>
 

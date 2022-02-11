@@ -321,6 +321,7 @@ const Profile = () => {
                             <LikeIcon
                               className="post__action-icon"
                               fill={item?.post.liked ? "#C41E3A" : "none"}
+                              stroke-opacity={item?.post.liked ? 0 : 0.6}
                             />
                           </button>
 

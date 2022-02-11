@@ -190,6 +190,7 @@ const Post = ({
               <LikeIcon
                 className="post__action-icon"
                 fill={post.post.liked ? "#C41E3A" : "none"}
+                stroke-opacity={post.post.liked ? 0 : 0.6}
               />
             </button>
 
