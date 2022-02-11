@@ -50,7 +50,7 @@ export const authAPI = {
   },
   logout() {
     return instance.post("/auth/token/logout/").then((response) => {
-      setAuthToken("")
+      setAuthToken("");
       if (response.status !== 204) {
         console.log("logout error");
       }
@@ -101,9 +101,6 @@ export const authAPI = {
         if (response.status === 200) {
           return response;
         }
-      })
-      .catch((error) => {
-        return { status: 401 }
       });
   },
   meUpdate(data: any) {

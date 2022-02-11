@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from core.utils.default_responses import api_locked_423, api_not_found_404
+from core.utils.default_responses import api_locked_423, api_not_found_404, api_used_226
 from django.db.models.aggregates import Count
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
@@ -42,10 +42,10 @@ class RoomCreateAPI(generics.CreateAPIView):
         try:
             serializer.is_valid(raise_exception=True)
         except AssertionError as e:
-            return api_locked_423({"id": e})
+            return api_used_226({"id": e})
         except ValueError as e:
             print(e)
-            return api_locked_423({"id": int(str(e))})
+            return api_used_226({"id": int(str(e))})
         self.perform_create(serializer)
         return Response(serializer.data)
 

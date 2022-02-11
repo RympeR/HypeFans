@@ -34,7 +34,7 @@ const Profile = () => {
   const alert = useAlert();
   const history = useHistory();
   const [subscribeShow, setSubscribeShow] = useState(false);
-  const [show, setShow] = useState<boolean>(false)
+  const [show, setShow] = useState<boolean>(false);
   const profileData = useSelector((state: RootState) => state.user);
   const [profile, setProfile] = useState(profileData);
   const myNick = useSelector((state: RootState) => state.auth.username);
@@ -72,9 +72,13 @@ const Profile = () => {
   };
 
   const writeMessage = async () => {
-    const data = await chatAPI.roomCreate({ creator: myId, invited: [profile.pk] });
-    history.push(`/chat/${data.data.id}`)
-  }
+    const data = await chatAPI.roomCreate({
+      creator: myId,
+      invited: [profile.pk],
+    });
+    console.log(data.data);
+    history.push(`/chat/${data.data.id}`);
+  };
 
   const delPost = (id: number) => {
     dispatch(deletePost({ id }));
@@ -135,14 +139,13 @@ const Profile = () => {
               </Link>
             </div>
             <div style={{ padding: "5px" }}>
-              {myNick === nick ? null : <button onClick={() => writeMessage()}>Написать</button>}
+              {myNick === nick ? null : (
+                <button onClick={() => writeMessage()}>Написать</button>
+              )}
             </div>
           </Popup>
         </div>
-        <img
-          src={profile.avatar ? profile.avatar : logo}
-          alt="profile_photo"
-        />
+        <img src={profile.avatar ? profile.avatar : logo} alt="profile_photo" />
         <h3 className="profile__name">{profile.first_name}</h3>
         <h4 className="profile__nickname"> {`@${nick}`}</h4>
         <h5 className="profile__info">
@@ -265,7 +268,11 @@ const Profile = () => {
                   </div>
                   <div className="profile__postMain">
                     {item?.post?.attachments.length > 1 ? (
-                      <Slider className="profile__postIMG" arrows={false} dots={true}>
+                      <Slider
+                        className="profile__postIMG"
+                        arrows={false}
+                        dots={true}
+                      >
                         {item?.post.attachments.map(
                           (item: any, index: number) => {
                             return (
@@ -292,23 +299,23 @@ const Profile = () => {
                             onClick={() => {
                               item?.post.liked
                                 ? dispatch(
-                                  deletePostAction({
-                                    id: item?.post.like_id,
-                                    post_id: item?.post.pk,
-                                  })
-                                )
+                                    deletePostAction({
+                                      id: item?.post.like_id,
+                                      post_id: item?.post.pk,
+                                    })
+                                  )
                                 : dispatch(
-                                  createPostAction({
-                                    like: true,
-                                    comment: null,
-                                    donation_amount: 0,
-                                    user: myId,
-                                    parent: null,
-                                    date_time: null,
-                                    post: item?.post.pk,
-                                    id: null,
-                                  })
-                                );
+                                    createPostAction({
+                                      like: true,
+                                      comment: null,
+                                      donation_amount: 0,
+                                      user: myId,
+                                      parent: null,
+                                      date_time: null,
+                                      post: item?.post.pk,
+                                      id: null,
+                                    })
+                                  );
                             }}
                           >
                             <LikeIcon
@@ -318,7 +325,10 @@ const Profile = () => {
                           </button>
 
                           <button className="post__action-btn">
-                            <CommentIcon className="post__action-icon" onClick={() => setShow(true)} />
+                            <CommentIcon
+                              className="post__action-icon"
+                              onClick={() => setShow(true)}
+                            />
                           </button>
                         </div>
                         <button

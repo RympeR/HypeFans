@@ -59,7 +59,7 @@ class UserBaseAdmin(UserAdmin):
             'repheral_users',
             'blocked_users',
             'my_subscribes',
-            )}),
+        )}),
         (_('Money'), {'fields': (
             'subscribtion_price',
             'message_price',
