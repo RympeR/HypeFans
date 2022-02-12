@@ -108,7 +108,7 @@ const Profile = () => {
           >
             <h3 onClick={() => setSubscribeShow(false)}>Нет</h3>
             <div style={{ width: "20px" }}></div>
-            <h3 onClick={() => subscribe()} style={{ color: "#FB5734" }}>
+            <h3 onClick={subscribe} style={{ color: "#FB5734" }}>
               Да
             </h3>
           </div>
@@ -321,7 +321,7 @@ const Profile = () => {
                             <LikeIcon
                               className="post__action-icon"
                               fill={item?.post.liked ? "#C41E3A" : "none"}
-                              stroke-opacity={item?.post.liked ? 0 : 0.6}
+                              strokeOpacity={item?.post.liked ? 0 : 0.6}
                             />
                           </button>
 

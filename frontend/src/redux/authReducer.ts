@@ -325,11 +325,7 @@ export const changeBackground =
 export const getUserData = (): Thunk => async (dispatch) => {
   dispatch(isLoading());
   const data = await authAPI.meGet();
-  if (data.status !== 401) {
-    await dispatch(getAuthUserData());
-  } else {
-    setAuthToken("")
-  }
+  await dispatch(getAuthUserData());
   dispatch(isntLoading());
 };
 

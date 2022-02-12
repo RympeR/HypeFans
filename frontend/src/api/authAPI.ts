@@ -43,7 +43,6 @@ export const authAPI = {
         if (response.status !== 200) {
           console.log("login error");
         }
-        setAuthToken(response.data.auth_token);
         Cookies?.set("token", response.data.auth_token);
         return response.data.auth_token;
       });

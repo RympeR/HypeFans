@@ -191,6 +191,7 @@ const Upload = () => {
               type="file"
               onChange={onFileChange}
               multiple
+              accept="image/*, video/*"
             />
           </div>
           <div className="upload__bottom">

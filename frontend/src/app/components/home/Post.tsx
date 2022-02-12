@@ -28,17 +28,20 @@ import UserBanner from "./UserBanner";
 import logo from "../../../assets/images/logo.svg";
 import { Video } from "../../../app/pages/card/components/VideoPost";
 
-
 export const returnByFileType = (item: any) => {
   switch (item.file_type) {
     case 4:
-      return (
-        <Video src={item._file} />
-      )
+      return <Video src={item._file} />;
     default:
-      return <img src={item._file} alt="postIMG" className="profile__post_image"></img>
+      return (
+        <img
+          src={item._file}
+          alt="postIMG"
+          className="profile__post_image"
+        ></img>
+      );
   }
-}
+};
 
 const Post = ({
   post,
@@ -68,7 +71,7 @@ const Post = ({
 
   const [donateValue, setDonateValue] = useState("0");
 
-  const [show, setShow] = useState<boolean>(false)
+  const [show, setShow] = useState<boolean>(false);
 
   const [isWholeTextShowed, setIsWholeTextShowed] = useState<boolean>(true);
   const dispatch = useDispatch();
@@ -101,7 +104,7 @@ const Post = ({
   const time_diif = prepareDateDiffStrLanguage(
     timeAgoTimestamp(parseFloat(post?.post.publication_date)),
     currentLang
-  )
+  );
 
   return (
     <article className="post">
@@ -168,34 +171,37 @@ const Post = ({
               onClick={() => {
                 post.post.liked
                   ? dispatch(
-                    deletePostAction({
-                      id: post.post.like_id,
-                      post_id: post.post.pk,
-                    })
-                  )
+                      deletePostAction({
+                        id: post.post.like_id,
+                        post_id: post.post.pk,
+                      })
+                    )
                   : dispatch(
-                    createPostAction({
-                      like: true,
-                      comment: null,
-                      donation_amount: 0,
-                      parent: null,
-                      user: user_id,
-                      date_time: null,
-                      post: post.post.pk,
-                      id: null,
-                    })
-                  );
+                      createPostAction({
+                        like: true,
+                        comment: null,
+                        donation_amount: 0,
+                        parent: null,
+                        user: user_id,
+                        date_time: null,
+                        post: post.post.pk,
+                        id: null,
+                      })
+                    );
               }}
             >
               <LikeIcon
                 className="post__action-icon"
                 fill={post.post.liked ? "#C41E3A" : "none"}
-                stroke-opacity={post.post.liked ? 0 : 0.6}
+                strokeOpacity={post.post.liked ? 0 : 0.6}
               />
             </button>
 
             <button className="post__action-btn">
-              <CommentIcon className="post__action-icon" onClick={() => setShow(true)} />
+              <CommentIcon
+                className="post__action-icon"
+                onClick={() => setShow(true)}
+              />
             </button>
 
             <button
@@ -222,7 +228,12 @@ const Post = ({
           {post.post.likes_amount} {currentLang.liks1}
         </p>
 
-        <CommentComponent data={post.post.comments} postId={post.post.pk} show={show} setShow={setShow} />
+        <CommentComponent
+          data={post.post.comments}
+          postId={post.post.pk}
+          show={show}
+          setShow={setShow}
+        />
       </div>
       <Modal
         show={donateShow}

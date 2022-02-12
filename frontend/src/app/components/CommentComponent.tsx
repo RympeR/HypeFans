@@ -190,7 +190,7 @@ export const CommentComponent = ({
                     <LikeIcon
                       className="post__action-icon"
                       fill={item.like ? "#C41E3A" : "none"}
-                      stroke-opacity={item.like ? 0 : 0.6}
+                      strokeOpacity={item.like ? 0 : 0.6}
                       onClick={() => {
                         setLikeAmount(
                           likeAmount - 1 ? !item.like : likeAmount + 1
@@ -267,7 +267,7 @@ export const CommentComponent = ({
         <LikeIcon
           className="post__action-icon"
           fill={item.like ? "#C41E3A" : "none"}
-          stroke-opacity={item.like ? 0 : 0.6}
+          strokeOpacity={item.like ? 0 : 0.6}
           onClick={() =>
             likeComment({
               like: !item.parent_liked,

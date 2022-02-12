@@ -7,7 +7,7 @@ import { LangContext } from "../../utils/LangProvider";
 const SearchBar = () => {
   const { currentLang } = useContext(LangContext);
 
-  const history = useHistory();
+  // const history = useHistory();
 
   const { value, onChangeHandler, clearInput } = useTextInput("");
 
@@ -35,9 +35,9 @@ const SearchBar = () => {
       <button
         className="search-bar__btn"
         type="submit"
-        onClick={() => {
-          history.push(`/search?username=${value}`);
-        }}
+        // onClick={() => {
+        //   history.push(`/search?username=${value}`);
+        // }}
       >
         <SearchIcon />
       </button>
