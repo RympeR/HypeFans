@@ -195,6 +195,7 @@ export const CommentComponent = ({
                         setLikeAmount(
                           likeAmount - 1 ? !item.like : likeAmount + 1
                         );
+                        console.log('liked');
                         likeComment({
                           like: !item.like,
                           parent: item.id,
@@ -270,7 +271,7 @@ export const CommentComponent = ({
           strokeOpacity={item.like ? 0 : 0.6}
           onClick={() =>
             likeComment({
-              like: !item.parent_liked,
+              like: !item.like,
               parent: item.id,
               post: item.post,
               user: item.user.pk,
