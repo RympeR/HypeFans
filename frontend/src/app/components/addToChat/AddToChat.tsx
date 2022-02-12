@@ -30,7 +30,7 @@ export const AddToChat = () => {
     const data = await chatAPI.inviteUsers(
       selectedItems.map((item) => item.username),
       history.location.pathname.split("/")[
-        history.location.pathname.split("/").length - 1
+      history.location.pathname.split("/").length - 1
       ]
     );
     console.log(data);
@@ -39,6 +39,14 @@ export const AddToChat = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column", padding: "15px" }}>
       <h2>Добавить человека в беседу:</h2>
+      <button
+        className="notifications__settingBtn"
+        style={{ margin: "0px", width: "100%" }}
+        onClick={() => addToChat()}
+        disabled={selectedItems.length === 0}
+      >
+        Добавить
+      </button>
       <div
         style={{
           borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
@@ -49,12 +57,6 @@ export const AddToChat = () => {
           alignItems: "center",
         }}
       >
-        <button
-          style={{ width: "50px", height: "50px" }}
-          onClick={() => addToChat()}
-        >
-          Add to chat
-        </button>
         <SearchSvg />
         <input
           style={{ marginLeft: "16px", width: "80%" }}
