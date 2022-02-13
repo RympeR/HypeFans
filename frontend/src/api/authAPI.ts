@@ -40,10 +40,12 @@ export const authAPI = {
       })
       .then((response) => {
         console.log("here");
-        if (response.status !== 200) {
+        if (response.status !== 200 && response.status !== 201) {
           console.log("login error");
         }
+        console.log(response.data.auth_token);
         Cookies?.set("token", response.data.auth_token);
+        setAuthToken(response.data.auth_token);
         return response.data.auth_token;
       });
   },
