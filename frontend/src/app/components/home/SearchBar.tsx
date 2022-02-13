@@ -1,13 +1,12 @@
 import React, { FormEvent, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { useTextInput } from "../../../app/utils/useTextInput";
-import ava1 from "../../../assets/images/ava1.png";
 import { ReactComponent as SearchIcon } from "../../../assets/images/search.svg";
 import { LangContext } from "../../utils/LangProvider";
 const SearchBar = () => {
   const { currentLang } = useContext(LangContext);
 
-  // const history = useHistory();
+  const history = useHistory();
 
   const { value, onChangeHandler, clearInput } = useTextInput("");
 
@@ -35,9 +34,9 @@ const SearchBar = () => {
       <button
         className="search-bar__btn"
         type="submit"
-        // onClick={() => {
-        //   history.push(`/search?username=${value}`);
-        // }}
+        onClick={() => {
+          history.push(`/search?username=${value}`);
+        }}
       >
         <SearchIcon />
       </button>

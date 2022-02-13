@@ -25,7 +25,7 @@ export const Favourites = () => {
   const [show, setShow] = useState<boolean>(false)
   useEffect(() => {
     dispatch(getFavourites());
-  }, []);
+  }, [dispatch]);
   if (isLoading) {
     return <Preloader />;
   }
@@ -69,7 +69,7 @@ export const Favourites = () => {
               </div>
             </div>
             <div className="profile__postMain">
-              {item.post?.attachments.length > 1 ? (
+              {item.post?.attachments?.length > 1 ? (
                 <Slider className="profile__postIMG" dots={true} arrows={false}>
                   {item.post.attachments.map((item: any, index: number) => {
                     return (

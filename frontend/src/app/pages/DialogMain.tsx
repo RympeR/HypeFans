@@ -130,7 +130,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       wsClient.close();
       wsReadClient.close();
     };
-  }, []);
+  }, [lastUrl, uid]);
 
   const { startRecording, stopRecording, mediaBlobUrl, clearBlobUrl } =
     useReactMediaRecorder({
@@ -155,7 +155,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       }
       setMessages((oldMessages) => [message, ...oldMessages]);
     };
-  }, [ws]);
+  }, [ws, lastUrl, uid, wsRead]);
 
   useEffect(() => {
     if (!wsRead) return;
@@ -172,7 +172,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     )
       setCreator(true);
     else setCreator(false);
-  }, []);
+  }, [lastUrl, rooms, uid]);
 
   useEffect(() => {
     const recieveChatMessages = async () => {
@@ -283,7 +283,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   };
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
-  const [isShown, setShown] = useState(true);
 
   return (
     <div className="chat__dialogsMain">
@@ -554,7 +553,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           )}
                         </div>
                       </div>
-                      {index == 0 ? (
+                      {index === 0 ? (
                         <div className="time-text">
                           {" "}
                           {moment(item?.item?.room?.message?.time).fromNow()}
@@ -730,6 +729,16 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     </div>
                   );
                 }
+                case "audio": {
+                  return (
+                    <div
+                      className="upload__img-wrapper"
+                      key={Math.random() + Math.random() + index}
+                    >
+                      <audio className="upload__img" src={file} />
+                    </div>
+                  );
+                }
                 case "video": {
                   return (
                     <div
@@ -763,6 +772,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                       />
                     </div>
                   );
+                }
+                default: {
+                  return <></>;
                 }
               }
             })}

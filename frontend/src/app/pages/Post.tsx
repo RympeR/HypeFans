@@ -74,12 +74,12 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
           </div>
         </div>
         <div className="profile__postMain">
-          {post?.attachments.length > 1 ? (
+          {post?.attachments?.length > 1 ? (
             <Slider className="profile__postIMG" dots={true} arrows={false}>
               {post.attachments.map((item: any, index: number) => {
                 return (
                   <div key={`${index} slideMain`}>
-                    {item?.attachments.length > 0
+                    {item?.attachments?.length > 0
                       ? item?.attachments.map((item: any, index: number) => {
                         console.log(item.file_type);
                         if (item.file_type === 4) {

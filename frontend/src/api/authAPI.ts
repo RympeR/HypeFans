@@ -1,5 +1,4 @@
 import Cookies from "js-cookie";
-import { useHistory } from "react-router-dom";
 import { instance, setAuthToken } from "./api";
 
 export let token: number | null;

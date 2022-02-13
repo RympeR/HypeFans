@@ -45,7 +45,7 @@ const Profile = () => {
   const nick = location[location.length - 1];
   useEffect(() => {
     dispatch(getUser({ username: nick }));
-  }, [nick]);
+  }, [nick, dispatch]);
 
   useEffect(() => {
     setProfile(profileData);
@@ -267,7 +267,7 @@ const Profile = () => {
                     </div>
                   </div>
                   <div className="profile__postMain">
-                    {item?.post?.attachments.length > 1 ? (
+                    {item?.post?.attachments?.length > 1 ? (
                       <Slider
                         className="profile__postIMG"
                         arrows={false}

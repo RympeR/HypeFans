@@ -1,6 +1,5 @@
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { setAuthToken } from "../api/api";
 import { authAPI } from "../api/authAPI";
 import { userAPI } from "../api/userAPI";
 import { isLoading, isntLoading } from "./blogReducer";
@@ -324,7 +323,7 @@ export const changeBackground =
 
 export const getUserData = (): Thunk => async (dispatch) => {
   dispatch(isLoading());
-  const data = await authAPI.meGet();
+  await authAPI.meGet();
   await dispatch(getAuthUserData());
   dispatch(isntLoading());
 };
