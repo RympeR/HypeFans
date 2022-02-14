@@ -727,6 +727,12 @@ export const Settings = () => {
       const balance = useSelector(
         (state: RootState) => state.auth.credit_amount
       );
+      const earned = useSelector(
+        (state: RootState) => state.auth.earned_credits_amount
+      );
+      const spended = useSelector(
+        (state: RootState) => state.auth.earned_credits_amount
+      );
 
       const [isShow, setShow] = useState(false);
       const isLoading = useSelector((state: RootState) => state.blog.isLoading);
@@ -752,8 +758,14 @@ export const Settings = () => {
                 <h5>${balance}</h5>
               </div>
               <div>
-                <h5>Зароботок за месяц</h5>
-                <h5>$320</h5>
+                <WithTabs tab={{ label: "Траты" }} index={0}>
+                  <h5>Траты за месяц</h5>
+                  <h5>${spended}</h5>
+                </WithTabs>
+                <WithTabs tab={{ label: "Зароботок" }} index={1}>
+                  <h5>Зароботок за месяц</h5>
+                  <h5>${earned}</h5>
+                </WithTabs>
               </div>
             </div>
             <div className="notifications__walletUnder">
