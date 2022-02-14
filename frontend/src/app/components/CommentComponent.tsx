@@ -27,6 +27,7 @@ export const CommentComponent = ({
   const [comments, setComments] = useState([]);
 
   const likeComment = async (val: any) => {
+    debugger
     await blogAPI
       .likeComment({
         like: val.like,
@@ -267,7 +268,7 @@ export const CommentComponent = ({
           fill={item.like ? "#C41E3A" : "none"}
           onClick={() =>
             likeComment({
-              like: !item.parent_liked,
+              like: !item.like,
               parent: item.id,
               post: item.post,
               user: item.user.pk,

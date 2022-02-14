@@ -16,7 +16,7 @@ import logo from "../../assets/images/logo.svg";
 const Chat: React.FC = () => {
   const userId = useSelector((state: RootState) => state.auth.pk);
   const history = useHistory();
-  const BackButton = () => <BackIcon onClick={history.goBack} />;
+  const BackButton = () => <BackIcon onClick={() => history.push("/chat")} />;
   const Plus = () => <PlusIcon />;
   const UserIcon = () => <UsersIcon />;
   const [rooms, setRooms] = useState([]);
@@ -85,18 +85,16 @@ const Chat: React.FC = () => {
                 alt="logo"
               ></img>
             ) : (
-              <Link to={`/profile/${item?.item?.room_info?.invited?.avatar}`}>
-                <img
-                  src={
-                    typeof item?.item?.room?.room_info?.invited !== "number"
-                      ? amICreator
-                        ? item?.item?.room?.room_info?.invited?.avatar || logo
-                        : item?.item?.room?.room_info?.creator?.avatar || logo
-                      : item?.item?.room?.room_info?.logo || logo
-                  }
-                  alt="logo"
-                ></img>
-              </Link>
+              <img
+                src={
+                  typeof item?.item?.room?.room_info?.invited !== "number"
+                    ? amICreator
+                      ? item?.item?.room?.room_info?.invited?.avatar || logo
+                      : item?.item?.room?.room_info?.creator?.avatar || logo
+                    : item?.item?.room?.room_info?.logo || logo
+                }
+                alt="logo"
+              ></img>
             )}
             <div>
               <h2>
