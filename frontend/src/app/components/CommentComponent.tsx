@@ -92,6 +92,7 @@ export const CommentComponent = ({
     const [answer, setAnswer] = useState("");
     const [parentID, setParentID] = useState(item.id);
     const [showAnswer, setShowAnswer] = useState(false);
+    const [showComments, setShowComments] = useState(false);
     const [likeAmount, setLikeAmount] = useState(item.likeAmount);
 
     const addComment = async (val: {
@@ -146,8 +147,8 @@ export const CommentComponent = ({
           {comments.filter((i) => i.parent === item.id).length === 0 ? (
             <div></div>
           ) : (
-            <p style={{ color: "$grey" }} onClick={() => setShow(!show)}>
-              {show ? " —Скрыть ответы" : " —Показать ответы"}
+            <p style={{ color: "$grey" }} onClick={() => setShowComments(!showComments)}>
+              {showComments ? " —Скрыть ответы" : " —Показать ответы"}
             </p>
           )}
 
@@ -159,7 +160,7 @@ export const CommentComponent = ({
                   <div
                     className="notifications__comment"
                     key={`${key}answer ${Math.random()}`}
-                    style={show ? {} : { display: "none" }}
+                    style={showComments ? {} : { display: "none" }}
                   >
                     <Link to={`/profile/${item?.user?.username}`}>
                       <img

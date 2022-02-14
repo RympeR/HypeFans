@@ -68,8 +68,6 @@ export const Settings = () => {
           <div>
             <ArrowLeft
               onClick={() => {
-                console.log(lastLocation);
-
                 if (lastLocation === "mobileSidebar") {
                   history.push("/notifications");
                 } else if (
