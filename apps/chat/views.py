@@ -187,6 +187,7 @@ class InviteUserAPI(GenericAPIView, UpdateModelMixin):
                 self.get_object().invited.add(
                     User.objects.get(username=username)
                 )
+            self.get_object().save()
         return self.partial_update(request, *args, **kwargs)
 
 
