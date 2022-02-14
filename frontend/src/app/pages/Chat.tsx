@@ -16,7 +16,7 @@ import logo from "../../assets/images/logo.svg";
 const Chat: React.FC = () => {
   const userId = useSelector((state: RootState) => state.auth.pk);
   const history = useHistory();
-  const BackButton = () => <BackIcon onClick={history.goBack} />;
+  const BackButton = () => <BackIcon onClick={() => history.push("/chat")} />;
   const Plus = () => <PlusIcon />;
   const UserIcon = () => <UsersIcon />;
   const [rooms, setRooms] = useState([]);

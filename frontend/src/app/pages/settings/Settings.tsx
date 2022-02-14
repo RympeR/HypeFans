@@ -68,23 +68,38 @@ export const Settings = () => {
           <div>
             <ArrowLeft
               onClick={() => {
+                console.log(lastLocation);
+
                 if (lastLocation === "mobileSidebar") {
                   history.push("/notifications");
                 } else if (
                   lastLocation === "profileSettings" ||
-                  "card" ||
-                  "lists" ||
-                  "stats" ||
-                  "lang"
+                  lastLocation === "card" ||
+                  lastLocation === "lists" ||
+                  lastLocation === "stats" ||
+                  lastLocation === "lang"
                 ) {
                   history.push("/settings/profileSettings/mobileSidebar");
-                } else if (
-                  lastLocation === "account" ||
-                  "confidentiality" ||
-                  "prices" ||
-                  "notifications"
+                }
+                else if (
+                  lastLocation === "account" || lastLocation === "confidentiality" || lastLocation === "prices" || lastLocation === "notifications"
                 ) {
                   history.push("/settings/mobileSidebar");
+                }
+                else if (
+                  lastLocation === "nickname" || history.location.pathname === "/settings/account/email" || lastLocation === "phone" || lastLocation === "password" || lastLocation === "sessions" || lastLocation === "delete"
+                ) {
+                  history.push("/settings/account")
+                }
+                else if (
+                  lastLocation === "messages" || lastLocation === "subscribes" || lastLocation === "fans"
+                ) {
+                  history.push("/settings/prices")
+                }
+                else if (
+                  lastLocation === "push" || history.location.pathname === "/settings/notifications/email" || lastLocation === "page"
+                ) {
+                  history.push("/settings/notifications")
                 }
               }}
             />

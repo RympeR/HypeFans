@@ -72,13 +72,12 @@ const Notifications: React.FC = () => {
 
   const NotificationsSidebar = () => {
     const SettingsButton = () => <SettingsIcon />;
-    const BackButton = () => <BackIcon onClick={history.goBack} />;
 
     return (
       <div>
         <div className="notifications__header">
           <div className="notifications__back">
-            <BackButton />
+            <BackIcon onClick={() => history.push("/home")} />
           </div>
 
           <div className="notifications__headingText">
