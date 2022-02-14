@@ -183,7 +183,7 @@ class InviteUserAPI(GenericAPIView, UpdateModelMixin):
 
     def put(self, request, *args, **kwargs):
         if request.user == self.get_object().creator:
-            for username in request.data.getlist('username'):
+            for username in request.data.get('username'):
                 self.get_object().invited.add(
                     User.objects.get(username=username)
                 )
