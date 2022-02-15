@@ -139,12 +139,12 @@ const Chat: React.FC = () => {
           <p className="chat__header_title">Сообщения</p>
         </div>
         <div className="chat__row">
-          <div className="chat__resp_icon">
+          {/* <div className="chat__resp_icon">
             <Plus />
           </div>
           <div className="chat__resp_icon" style={{ marginLeft: "40px" }}>
             <UserIcon />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="chat__main">

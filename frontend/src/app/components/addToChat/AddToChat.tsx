@@ -30,12 +30,11 @@ export const AddToChat = () => {
     const data = await chatAPI.inviteUsers(
       selectedItems.map((item) => item.username),
       history.location.pathname.split("/")[
-      history.location.pathname.split("/").length - 1
+        history.location.pathname.split("/").length - 1
       ]
     );
     console.log(data);
   };
-
   return (
     <div style={{ display: "flex", flexDirection: "column", padding: "15px" }}>
       <h2>Добавить человека в беседу:</h2>

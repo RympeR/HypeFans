@@ -142,7 +142,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     if (!ws) return;
     ws.onmessage = (e: any) => {
       const message = JSON.parse(e.data);
-      debugger;
       console.log(message);
       if (message.user.pk !== uid) {
         wsRead.send(
@@ -284,13 +283,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
   const [isShown, setShown] = useState(true);
-  const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false)
-  console.log(rooms.find(
-    (item: any) => item.room.room_info.id === Number(lastUrl)
-  ));
-
-  debugger
-
+  const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false);
+  console.log(
+    rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))
+  );
 
   return (
     <div className="chat__dialogsMain">
@@ -384,16 +380,14 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                    (item: any) =>
-                      item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited?.avatar || logo
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited?.avatar || logo
                   : rooms.find(
-                    (item: any) =>
-                      item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.creator?.avatar || logo
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.creator?.avatar || logo
                 : rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.logo || logo
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.logo || logo
             }
             className="logo_site"
             alt="avatar"
