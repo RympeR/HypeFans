@@ -38,6 +38,34 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
     timeAgoTimestamp(parseFloat(post?.publication_date))
   );
 
+  const getPostType = (item: any) => {
+    if (item.file_type === 4) {
+      return <Video src={item._file} />;
+    } else if (item.file_type === 1) {
+      return (
+        <a href={item._file} download>
+          Скачать{" "}
+          {
+            item._file.split("/")[
+            item._file.split("/").length - 1
+            ]
+          }
+        </a>
+      );
+    } else if (item.file_type === 2) {
+      return <audio src={item._file} />;
+    } else if (item.file_type === 3) {
+      return (
+        <img
+          src={item._file}
+          alt="postIMG"
+          className="profile"
+        ></img>
+      );
+    }
+
+  }
+
   return (
     <div>
       <div className="profile__post" key={`${Math.random()}_post`}>
@@ -80,72 +108,14 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
               {post.attachments.map((item: any, index: number) => {
                 return (
                   <div key={`${index} slideMain`}>
-                    {item?.attachments?.length > 0
-                      ? item?.attachments.map((item: any, index: number) => {
-                        console.log(item.file_type);
-                        if (item.file_type === 4) {
-                          return <Video src={item.file_url} />;
-                        } else if (item.file_type === 1) {
-                          return (
-                            <a href={item.file_url} download>
-                              Скачать{" "}
-                              {
-                                item.file_url.split("/")[
-                                item.file_url.split("/").length - 1
-                                ]
-                              }
-                            </a>
-                          );
-                        } else if (item.file_type === 2) {
-                          console.log(item.file_url);
-                          return <audio src={item.file_url} />;
-                        } else {
-                          return (
-                            <img
-                              src={item._file}
-                              alt="postIMG"
-                              className="profile"
-                            ></img>
-                          );
-                        }
-                      })
-                      : null}
+                    {getPostType(item)}
                   </div>
                 );
               })}
             </Slider>
           ) : (
             <div className="profile__postIMG">
-              {post?.attachments ? (
-                () => {
-                  console.log(post?.attachments[0].file_type);
-                  if (post?.attachments[0].file_type === 4) {
-                    return <Video src={post?.attachments[0]._file} />;
-                  } else if (post?.attachments[0].file_type === 1) {
-                    return (
-                      <a href={post?.attachments[0]._file} download>
-                        Скачать{" "}
-                        {
-                          post?.attachments[0]._file.split("/")[
-                          post?.attachments[0]._file.split("/").length - 1
-                          ]
-                        }
-                      </a>
-                    );
-                  } else if (post?.attachments[0].file_type === 2) {
-                    console.log(post?.attachments[0]._file);
-                    return <audio src={post?.attachments[0]._file} />;
-                  } else if (post?.attachments[0].file_type === 3) {
-                    return (
-                      <img
-                        src={post?.attachments[0]._file}
-                        alt="postIMG"
-                        className="profile"
-                      ></img>
-                    );
-                  }
-                }
-              ) : (
+              {post?.attachments ? getPostType(post?.attachments[0]) : (
                 <></>
               )}
             </div>
@@ -209,6 +179,6 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
