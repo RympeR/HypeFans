@@ -320,7 +320,7 @@ export const Settings = () => {
 
   const NotificationsSidebar = () => {
     const user = useSelector((state: RootState) => state.auth);
-    const BackButton = () => <BackIcon onClick={history.goBack} />;
+    const BackButton = () => <BackIcon onClick={() => history.push("/settings/account")} />;
     return (
       <div>
         <div className="notifications__header">

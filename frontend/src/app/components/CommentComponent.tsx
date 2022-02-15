@@ -28,6 +28,7 @@ export const CommentComponent = ({
   const [comments, setComments] = useState([]);
 
   const likeComment = async (val: any) => {
+    debugger
     await blogAPI
       .likeComment({
         like: val.like,

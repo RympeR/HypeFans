@@ -1,14 +1,16 @@
-from django.shortcuts import render
-from core.utils.default_responses import api_locked_423, api_not_found_404, api_used_226
+from core.utils.default_responses import (api_block_by_policy_451,
+                                          api_locked_423, api_not_found_404,
+                                          api_used_226)
 from django.db.models.aggregates import Count
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from rest_framework import generics
 from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import UpdateModelMixin
 from rest_framework.parsers import (FileUploadParser, FormParser, JSONParser,
                                     MultiPartParser)
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from core.utils.default_responses import api_block_by_policy_451
+
 from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
                                     UserShortRetrieveSeriliazer)
 
@@ -175,17 +177,18 @@ class GetChatMessages(GenericAPIView):
         )
 
 
-class InviteUserAPI(generics.UpdateAPIView):
+class InviteUserAPI(GenericAPIView, UpdateModelMixin):
     queryset = Room.objects.all()
     serializer_class = RoomInviteUserSerializer
 
-    def partial_update(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         if request.user == self.get_object().creator:
-            for username in request.POST.getlist('username'):
+            for username in request.data.get('username'):
                 self.get_object().invited.add(
                     User.objects.get(username=username)
                 )
-        return super().partial_update(request, *args, **kwargs)
+            self.get_object().save()
+        return self.partial_update(request, *args, **kwargs)
 
 
 class ChatPartialUpdateAPI(generics.UpdateAPIView):

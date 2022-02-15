@@ -85,18 +85,16 @@ const Chat: React.FC = () => {
                 alt="logo"
               ></img>
             ) : (
-              <Link to={`/profile/${item?.item?.room_info?.invited?.avatar}`}>
-                <img
-                  src={
-                    typeof item?.item?.room?.room_info?.invited !== "number"
-                      ? amICreator
-                        ? item?.item?.room?.room_info?.invited?.avatar || logo
-                        : item?.item?.room?.room_info?.creator?.avatar || logo
-                      : item?.item?.room?.room_info?.logo || logo
-                  }
-                  alt="logo"
-                ></img>
-              </Link>
+              <img
+                src={
+                  typeof item?.item?.room?.room_info?.invited !== "number"
+                    ? amICreator
+                      ? item?.item?.room?.room_info?.invited?.avatar || logo
+                      : item?.item?.room?.room_info?.creator?.avatar || logo
+                    : item?.item?.room?.room_info?.logo || logo
+                }
+                alt="logo"
+              ></img>
             )}
             <div>
               <h2>
