@@ -130,6 +130,11 @@
   &__postIMG {
     display: flex;
     justify-content: center;
+    // width: 600px;
+    // @media screen and (max-width : 450px) {
+    //   width: 380px;
+      
+    // }
   }
   &__headerButtons {
     width: 100%;

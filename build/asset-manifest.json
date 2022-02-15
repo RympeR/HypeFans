@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.fe96faf9.css",
-    "main.js": "/static/js/main.e9138907.js",
+    "main.js": "/static/js/main.40ee0fd7.js",
     "static/media/sign-in-bg.jpg": "/static/media/sign-in-bg.baad8d0a3cefccbb5e4c.jpg",
     "static/media/elise-wilcox-bmbGUfd7y-I-unsplash.jpg": "/static/media/elise-wilcox-bmbGUfd7y-I-unsplash.8e371d10859f7fd15eb5.jpg",
     "static/media/boxed-water-is-better-zuj2m7qxDA0-unsplash.jpg": "/static/media/boxed-water-is-better-zuj2m7qxDA0-unsplash.4e5d9b0f993795d62d9d.jpg",
@@ -29,6 +29,7 @@
     "static/media/FactorA-Bold.woff2": "/static/media/FactorA-Bold.321597e7e8401629d48d.woff2",
     "static/media/FactorALight-Regular.woff2": "/static/media/FactorALight-Regular.d371ba18015ad0fdb574.woff2",
     "static/media/settings.svg": "/static/media/settings.e3e87cc0d5a7e281516e86b2594720e1.svg",
+    "static/media/settingsWhite.svg": "/static/media/settingsWhite.d16dd2313e071a58ac294583ecb224d0.svg",
     "static/media/instagram.svg": "/static/media/instagram.02eb741958617a85b31b68e3b849d0e8.svg",
     "static/media/viberRef.svg": "/static/media/viberRef.77a0454d3d27e2ae3fc72151882f8cd0.svg",
     "static/media/attachment.svg": "/static/media/attachment.13434a83a2073a1fcb240db80ed1ddb0.svg",
@@ -84,10 +85,10 @@
     "static/media/arrow-left-mobile.svg": "/static/media/arrow-left-mobile.2d743aa0ee7183dbcbfa59f4f1750e98.svg",
     "static/media/leftIcon.svg": "/static/media/leftIcon.8570736da78871456bcf4a7b23b88ede.svg",
     "main.fe96faf9.css.map": "/static/css/main.fe96faf9.css.map",
-    "main.e9138907.js.map": "/static/js/main.e9138907.js.map"
+    "main.40ee0fd7.js.map": "/static/js/main.40ee0fd7.js.map"
   },
   "entrypoints": [
     "static/css/main.fe96faf9.css",
-    "static/js/main.e9138907.js"
+    "static/js/main.40ee0fd7.js"
   ]
 }
