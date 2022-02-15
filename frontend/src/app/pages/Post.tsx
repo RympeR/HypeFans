@@ -37,6 +37,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
   const time_diif = prepareDateDiffStr(
     timeAgoTimestamp(parseFloat(post?.publication_date))
   );
+
   return (
     <div>
       <div className="profile__post" key={`${Math.random()}_post`}>
@@ -134,7 +135,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                   } else if (post?.attachments[0].file_type === 2) {
                     console.log(post?.attachments[0]._file);
                     return <audio src={post?.attachments[0]._file} />;
-                  } else {
+                  } else if (post?.attachments[0].file_type === 3) {
                     return (
                       <img
                         src={post?.attachments[0]._file}
@@ -185,7 +186,6 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
 
                 <button className="post__action-btn">
                   <CommentIcon className="post__action-icon" onClick={() => setShow(true)} />
-                  <CommentComponent data={post.comments} postId={post?.id} show={show} setShow={setShow} />
                 </button>
               </div>
               <button
