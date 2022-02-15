@@ -690,7 +690,6 @@ export const Settings = () => {
         }
       };
       const getEarnsText = (item: historyAction) => {
-        console.log(item);
         switch (item.type) {
           case "donation":
             return (

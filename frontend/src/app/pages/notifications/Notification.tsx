@@ -9,8 +9,6 @@ import { PostModal } from "../Post";
 import logo from '../../../assets/images/logo.svg';
 
 export const Notification = ({ item }: any) => {
-  console.log(item);
-  
   const [isModalOpened, setIsModalOpened] = useState(false);
   const dispatch = useDispatch();
   const closeModal = () => {

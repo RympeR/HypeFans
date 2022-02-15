@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import "reactjs-popup/dist/index.css";
 import { RootState } from "../../../redux/redux";
 import { ReactComponent as BackButton } from "../../../assets/images/arrow-leftWhite.svg";
+import { ReactComponent as SettingsIcon } from '../../../assets/images/settingsWhite.svg';
 import { ReactComponent as PhotoIcon } from "../../../assets/images/camera.svg";
 import logo from "../../../assets/images/logo.svg";
 import { Preloader } from "../../utils/Preloader";
@@ -109,6 +110,10 @@ export const PersonalSettings = () => {
                         <BackButton
                             style={{ width: "35px", height: "35px" }}
                             onClick={history.goBack}
+                        />
+                        <SettingsIcon
+                            style={{ width: "35px", height: "35px" }}
+                            onClick={() => history.push("/settings/profileSettings")}
                         />
                     </div>
                     <div className="personalSettings__changeAvatar" style={{
