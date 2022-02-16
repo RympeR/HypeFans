@@ -69,7 +69,7 @@ export const Notification = ({ item }: any) => {
           closeModal();
         }}
         centered
-        size="xl"
+        size="lg"
       >
         <Modal.Body className="notifications__modal">
           <PostModal post_id={item?.post?.post?.pk} />
