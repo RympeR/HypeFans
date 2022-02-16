@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { useAlert } from "react-alert";
 import Modal from "react-bootstrap/Modal";
+import ReactAudioPlayer from "react-audio-player"
 import CurrencyInput from "react-currency-input-field";
 import { useReactMediaRecorder } from "react-media-recorder";
 import { useSelector } from "react-redux";
@@ -411,14 +412,14 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                      (item: any) => item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.invited?.username
-                  : rooms.find(
-                      (item: any) => item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.creator?.username
-                : rooms.find(
                     (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.name}
+                  )?.room?.room_info?.invited?.username
+                  : rooms.find(
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.creator?.username
+                : rooms.find(
+                  (item: any) => item.room.room_info.id === Number(lastUrl)
+                )?.room?.room_info?.name}
             </h2>
           </div>
         </div>
@@ -445,10 +446,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `hype-fans.com/profile/${
-                    rooms.find(
-                      (item: any) => item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.invited.username
+                  `hype-fans.com/profile/${rooms.find(
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.invited.username
                   }`
                 );
               }}
@@ -510,8 +510,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                   key={Math.random() + index + Math.random()}
                 >
                   {item.message_price !== 0 &&
-                  !item.is_payed &&
-                  item.user.pk !== uid ? (
+                    !item.is_payed &&
+                    item.user.pk !== uid ? (
                     <div
                       style={{
                         display: "flex",
@@ -543,9 +543,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           style={
                             item?.attachments.length > 0
                               ? {
-                                  backgroundColor: "white",
-                                  justifyContent: "flex-end",
-                                }
+                                backgroundColor: "white",
+                                justifyContent: "flex-end",
+                              }
                               : {}
                           }
                         >
@@ -555,34 +555,33 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           ).toString(CryptoJS.enc.Utf8)}
                           {item?.attachments.length > 0
                             ? item?.attachments.map(
-                                (item: any, index: number) => {
-                                  if (item.file_type === 4) {
-                                    return <Video src={item.file_url} />;
-                                  } else if (item.file_type === 1) {
-                                    return (
-                                      <a href={item.file_url} download>
-                                        Скачать{" "}
-                                        {
-                                          item.file_url.split("/")[
-                                            item.file_url.split("/").length - 1
-                                          ]
-                                        }
-                                      </a>
-                                    );
-                                  } else if (item.file_type === 2) {
-                                    console.log(item.file_url);
-                                    return <audio src={item.file_url} />;
-                                  } else {
-                                    return (
-                                      <ChatImage
-                                        item={item}
-                                        index={index}
-                                        key={index + Math.random()}
-                                      />
-                                    );
-                                  }
+                              (item: any, index: number) => {
+                                if (item.file_type === 4) {
+                                  return <Video src={item.file_url} />;
+                                } else if (item.file_type === 1) {
+                                  return (
+                                    <a href={item.file_url} download>
+                                      Скачать{" "}
+                                      {
+                                        item.file_url.split("/")[
+                                        item.file_url.split("/").length - 1
+                                        ]
+                                      }
+                                    </a>
+                                  );
+                                } else if (item.file_type === 2) {
+                                  return <ReactAudioPlayer src={item.file_url} controls />;
+                                } else {
+                                  return (
+                                    <ChatImage
+                                      item={item}
+                                      index={index}
+                                      key={index + Math.random()}
+                                    />
+                                  );
                                 }
-                              )
+                              }
+                            )
                             : null}
                           {item.user.pk === uid ? (
                             <span className="message__meta">
@@ -776,7 +775,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                       className="upload__img-wrapper"
                       key={Math.random() + Math.random() + index}
                     >
-                      <audio className="upload__img" src={file} />
+                      <ReactAudioPlayer src={file} controls />
                     </div>
                   );
                 }
