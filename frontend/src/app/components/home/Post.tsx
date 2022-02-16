@@ -29,13 +29,15 @@ import logo from "../../../assets/images/logo.svg";
 import { Video } from "../../../app/pages/card/components/VideoPost";
 
 export const returnByFileType = (item: any) => {
-  switch (item.file_type) {
+  console.log(item);
+
+  switch (item?.file_type) {
     case 4:
-      return <Video src={item._file} />;
+      return <Video src={item?._file} />;
     default:
       return (
         <img
-          src={item._file}
+          src={item?._file}
           alt="postIMG"
           className="profile__post_image"
         ></img>
@@ -171,23 +173,23 @@ const Post = ({
               onClick={() => {
                 post.post.liked
                   ? dispatch(
-                      deletePostAction({
-                        id: post.post.like_id,
-                        post_id: post.post.pk,
-                      })
-                    )
+                    deletePostAction({
+                      id: post.post.like_id,
+                      post_id: post.post.pk,
+                    })
+                  )
                   : dispatch(
-                      createPostAction({
-                        like: true,
-                        comment: null,
-                        donation_amount: 0,
-                        parent: null,
-                        user: user_id,
-                        date_time: null,
-                        post: post.post.pk,
-                        id: null,
-                      })
-                    );
+                    createPostAction({
+                      like: true,
+                      comment: null,
+                      donation_amount: 0,
+                      parent: null,
+                      user: user_id,
+                      date_time: null,
+                      post: post.post.pk,
+                      id: null,
+                    })
+                  );
               }}
             >
               <LikeIcon
