@@ -1,0 +1,322 @@
+.greeting-wrapper {
+    .logo{
+        top: 20px;
+        left: 50%;
+        z-index: 2;
+        width: 108px;
+        position: absolute;
+        transform: translate(-50%, 0);
+        img{
+            width: 100%;
+            display: inline-block;
+        }
+        @media (min-width: 768px) {
+            top: 40px;
+        }
+        @media (min-width: 1320px) {
+            width: 128px;
+        }
+        @media (min-width: 1600px) {
+            top: 60px;
+            width: 168px;
+        }
+    }
+
+    .greeting{
+        z-index: 0;
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        .greeting-content{
+            top: 52%;
+            left: 50%;
+            width: 80%;
+            max-width: 940px;
+            min-width: 290px;
+            text-align: center;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            h1{
+                font-size: 24px;
+                margin: 0 0 10px;
+                color: #2B1A4F;
+                line-height: 36px;
+                font-weight: bold;
+                strong{
+                    color: #7036B6;
+                    font-weight: bold;
+                }
+            }
+            p{
+                font-size: 14px;
+                color: #2B1A4F;
+                line-height: 21px;
+                text-align: center;
+                font-weight: normal;
+                margin-bottom: 15px;
+            }
+            .plug{
+                font-size: 14px;
+                color: #9999A5;
+                line-height: 21px;
+                margin-bottom: 9px;
+                font-weight: normal;
+                display: inline-block;
+            }
+            .link{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                a{
+                    width: 280px;
+                    height: 53px;
+                    display: flex;
+                    font-size: 14px;
+                    color: #FFFFFF;
+                    font-weight: 500;
+                    line-height: 21px;
+                    margin: 0 auto 10px;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.4s;
+                    img{
+                        width: 24px;
+                        margin-left: 6px;
+                    }
+                    i{
+                        font-size: 22px;
+                        color: #FFFFFF;
+                        margin-left: 8px;
+                        display: inline-block;
+                        transition: all 0.4s;
+                    }
+                }
+                .metaMask{
+                    border-radius: 11px;
+                    background: #7036B6;
+                    border: 2px solid #7036B6;
+                    &:hover{
+                        color: #7036B6;
+                        background: transparent;
+                    }
+                }
+                .trustWallet{
+                    border-radius: 11px;
+                    background: #3375BB;
+                    border: 2px solid #3375BB;
+                    &:hover{
+                        color: #3375BB;
+                        background: transparent;
+                        i{
+                            color: #3375BB;
+                        }
+                    }
+                }
+            }
+        }
+        @media (min-width: 768px) {
+            .greeting-content{
+                width: 90%;
+                h1{
+                    font-size: 48px;
+                    line-height: 72px;
+                }
+                p {
+                    font-size: 16px;
+                    line-height: 24px;
+                    margin-bottom: 20px;
+                }
+                .plug {
+                    font-size: 16px;
+                    line-height: 24px;
+                    margin-bottom: 10px;
+                }
+                .link{
+                    flex-direction: row;
+                    a{
+                        width: 244px;
+                        height: 62px;
+                        margin: 0 10px;
+                        font-size: 18px;
+                        line-height: 22px;
+                        img {
+                            width: 29px;
+                            margin-left: 8px;
+                        }
+                        i {
+                            font-size: 26px;
+                            margin-left: 10px;
+                        }
+                    }
+                }
+            }
+        }
+        @media (min-width: 1024px) {
+            .greeting-content {
+                width: 68%;
+                h1 {
+                    font-size: 36px;
+                    line-height: 54px;
+                }
+            }
+        }
+        @media (min-width: 1320px) {
+            .greeting-content {
+                width: 55%;
+            }
+        }
+        @media (min-width: 1600px) {
+            .greeting-content {
+                h1 {
+                    font-size: 48px;
+                    line-height: 72px;
+                    margin: 0 0 17px;
+                }
+                p {
+                    font-size: 18px;
+                    line-height: 27px;
+                    margin-bottom: 20px;
+                }
+                .plug {
+                    font-size: 18px;
+                    line-height: 28px;
+                    margin-bottom: 14px;
+                }
+                .link {
+                    a {
+                        margin: 0 20px;
+                    }
+                }
+            }
+        }
+    }
+
+    .help{
+        left: 50%;
+        z-index: 2;
+        bottom: 19px;
+        font-size: 14px;
+        color: #CD2576;
+        font-weight: 500;
+        line-height: 17px;
+        padding-left: 22px;
+        position: absolute;
+        transform: translate(-50%, 0);
+        &:hover{
+            i{
+                transform: translate(0, -50%) rotate(360deg);
+            }
+        }
+        i{
+            left: 0;
+            top: 45%;
+            font-size: 18px;
+            color: #CD2576;
+            position: absolute;
+            transform: translate(0, -50%);
+            transition: all 0.6s;
+        }
+        @media (min-width: 768px) {
+            bottom: 30px;
+            font-size: 18px;
+            line-height: 22px;
+            padding-left: 32px;
+            i{
+                font-size: 24px;
+            }
+        }
+        @media (min-width: 1600px) {
+            bottom: 40px;
+        }
+    }
+}
+
+.trust-unsupported-modal {
+    top: 0;
+    left: 0;
+    z-index: 9;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background: rgba(0, 0, 0, 0.6);
+
+    .close{
+        top: 0;
+        left: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        position: absolute;
+    }
+
+    .popup-content {
+        top: 50%;
+        left: 50%;
+        width: 320px;
+        position: absolute;
+        border-radius: 25px;
+        padding: 10px 30px;
+        background: #FFFFFF;
+        transform: translate(-50%, -50%);
+        border: 1px solid rgba(112, 54, 182, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .close-popup {
+            top: 17px;
+            right: 12px;
+            z-index: 3;
+            cursor: pointer;
+            position: absolute;
+
+            &:hover {
+                i {
+                    transform: rotate(360deg);
+                }
+            }
+
+            i {
+                color: #fff;
+                display: block;
+                font-size: 18px;
+                transition: all 0.5s;
+            }
+        }
+
+        img {
+            margin-bottom: 20px;
+            width: 60px;
+            height: 60px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+    }
+    @media (min-width: 768px){
+        .popup-content {
+            width: 467px;
+            padding: 0 59px 40px;
+
+            .close-popup {
+                top: 2px;
+                right: -47px;
+            }
+        }
+    }
+
+    @media (min-width: 1600px) {
+        .popup-content {
+            .close-popup {
+                top: 1px;
+
+                i {
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+}
+

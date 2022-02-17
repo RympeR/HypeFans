@@ -6,9 +6,16 @@ __pycache__/
 # C extensions
 *.so
 
+
+#static libs
+static/admin/
+static/drf-yasg/
+static/mptt/
+static/silk/
+static/rest_framework/
+
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
@@ -26,6 +33,8 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+.idea/
+.vscode/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -127,3 +136,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+node_modules/
+media/
+migrations/
+logs/
+!static/media
+.parcel-cache/
