@@ -27,6 +27,7 @@ import { ReactComponent as EditSvg } from "../../../assets/images/edit.svg";
 import { ReactComponent as FacebookSvg } from "../../../assets/images/facebookRef.svg";
 import { ReactComponent as ArrowLeft } from "../../../assets/images/leftIcon.svg";
 import { ReactComponent as RefSvg } from "../../../assets/images/link.svg";
+import { ReactComponent as PhotoIcon } from "../../../assets/images/cameraLink.svg";
 import { ReactComponent as ListSvg } from "../../../assets/images/list.svg";
 import { ReactComponent as LogOutSvg } from "../../../assets/images/log-in.svg";
 import logo from "../../../assets/images/logo.svg";
@@ -195,6 +196,18 @@ export const Settings = () => {
         >
           <SettingsSidebarItem text="Статистика">
             <BarSvg />
+          </SettingsSidebarItem>
+        </Link>
+        <Link
+          to="/personalSettings"
+          style={
+            pathname === "/personalSettings"
+              ? { background: selectedColor }
+              : {}
+          }
+        >
+          <SettingsSidebarItem text="Редактирование профиля">
+            <PhotoIcon />
           </SettingsSidebarItem>
         </Link>
         <Link

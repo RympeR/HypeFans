@@ -186,17 +186,17 @@ export const PersonalSettings = () => {
                         }}
                     </Formik>
                 </div>
-            </div>
-            <div style={{ marginTop: "10px", backgroundColor: "white", padding: "10px", borderBottomLeftRadius: "10px", borderBottomRightRadius: "10px" }}>
-                <Link to="/settings/prices/messages">
-                    <NotificationSidebarItem text="Цена сообщения" />
-                </Link>
-                <Link to="/settings/prices/subscribes">
-                    <NotificationSidebarItem text="Цена подписки" />
-                </Link>
-                <Link to="/settings/prices/fans">
-                    <NotificationSidebarItem text="Для фанатов" />
-                </Link>
+                <div style={{ marginTop: "10px", backgroundColor: "white", padding: "10px", borderBottomLeftRadius: "10px", borderBottomRightRadius: "10px" }}>
+                    <Link to="/settings/prices/messages">
+                        <NotificationSidebarItem text="Цена сообщения" />
+                    </Link>
+                    <Link to="/settings/prices/subscribes">
+                        <NotificationSidebarItem text="Цена подписки" />
+                    </Link>
+                    <Link to="/settings/prices/fans">
+                        <NotificationSidebarItem text="Для фанатов" />
+                    </Link>
+                </div>
             </div>
         </>
     );
