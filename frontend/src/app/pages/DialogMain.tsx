@@ -44,9 +44,11 @@ import logo from "../../assets/images/logo.svg";
 const Input = ({
   sendMessage,
   messageText,
+  isSendDisabled,
   setMessageText,
 }: {
   sendMessage: any;
+  isSendDisabled: boolean;
   messageText: string;
   setMessageText: (text: string) => void;
 }) => {
@@ -62,16 +64,16 @@ const Input = ({
       </div>
       <button
         className="send"
-        disabled={messageText.length < 0 && messageText.length > 255}
+        disabled={(messageText.length < 0 && messageText.length > 255) || isSendDisabled}
         onClick={() => {
-          if (messageText.length > 0 && messageText.length < 255) {
+          if ((messageText.length > 0 && messageText.length < 255) || isSendDisabled) {
             return sendMessage();
           } else {
             return null;
           }
         }}
       >
-        {messageText.length > 0 && messageText.length < 255 ? (
+        {(messageText.length > 0 && messageText.length < 255) || isSendDisabled ? (
           <VektorIcon />
         ) : (
           <VektorIconDisabled />
@@ -105,6 +107,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const uid = useSelector((state: RootState) => state.auth.pk);
   const [amICreator, setCreator] = useState(false);
   const inputFileRef = useRef(null);
+  const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false)
 
   // useEffect`s
 
@@ -143,7 +146,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     if (!ws) return;
     ws.onmessage = (e: any) => {
       const message = JSON.parse(e.data);
-      console.log(message);
       if (message.user.pk !== uid) {
         wsRead.send(
           JSON.stringify({
@@ -209,6 +211,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   // Добавление файлов в сообщение
 
   const sendMessage = async () => {
+    setIsSendDisabled(true)
     const attachmentsIds: Array<number> = [];
     if (mediaBlobUrl !== null) {
       const data = await blogAPI.createAttachment(
@@ -240,6 +243,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     setMessageCost("0");
     setPaidModalShow(false);
     setUploadedFilesImg([]);
+    setIsSendDisabled(false)
     setUploadedFiles([]);
     return setMessageText("");
   };
@@ -284,10 +288,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
   const [isShown, setShown] = useState(true);
-  const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false);
-  console.log(
-    rooms.find((item: any) => item.room.room_info.id === Number(lastUrl))
-  );
+  const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false)
 
   return (
     <div className="chat__dialogsMain">
@@ -556,6 +557,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           {item?.attachments.length > 0
                             ? item?.attachments.map(
                               (item: any, index: number) => {
+                                // debugger
                                 if (item.file_type === 4) {
                                   return <Video src={item.file_url} />;
                                 } else if (item.file_type === 1) {
@@ -619,6 +621,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           </button>
           <Input
             sendMessage={sendMessage}
+            isSendDisabled={isSendDisabled}
             messageText={messageText}
             setMessageText={setMessageText}
           />
@@ -709,12 +712,12 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               <div style={{ width: "20px" }}></div>
               <h3
                 style={
-                  messageText.length > 0 && messageText.length < 255
+                  (messageText.length > 0 && messageText.length < 255) || isSendDisabled
                     ? { color: "#FB5734" }
                     : { color: "grey" }
                 }
                 onClick={() => {
-                  if (messageText.length > 0 && messageText.length < 255) {
+                  if ((messageText.length > 0 && messageText.length < 255) || isSendDisabled) {
                     return sendMessage();
                   } else {
                     return null;
@@ -770,6 +773,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                   );
                 }
                 case "audio": {
+                  console.log(file);
+                  // debugger
+
                   return (
                     <div
                       className="upload__img-wrapper"
@@ -868,7 +874,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               Отмена
             </h3>
             <div style={{ width: "20px" }}></div>
-            <h3 onClick={() => sendMessage()} style={{ color: "#FB5734" }}>
+            <h3 onClick={() => {
+              if (!isSendDisabled) sendMessage()
+            }} style={{ color: "#FB5734" }}>
               Далее
             </h3>
           </div>
