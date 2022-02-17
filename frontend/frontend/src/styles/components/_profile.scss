@@ -1,26 +1,37 @@
 .profile {
   margin-top: 7px;
-  width: 100%;
+  width: 470px;
+  height: auto;
+  margin: auto;
   border-radius: 16px;
   background-color: $white;
-  min-height: 40vh;
-  max-height: 50vh;
+
+  @media screen and (max-width: 500px) {
+    min-height: 40vh;
+    max-height: 50vh;
+    width: 100%;
+  }
+
   &__post_image {
     width: 600px;
     height: auto;
     margin: auto;
+
     @media screen and (max-width: 500px) {
       width: 380px;
     }
   }
+
   &__post_video {
     width: 600px;
     height: 700px;
+
     @media screen and (max-width: 500px) {
       height: 500px;
       width: 380px;
     }
   }
+
   &__header {
     background-repeat: no-repeat;
     border-radius: 8px 8px 0px 0px;
@@ -28,6 +39,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
     img {
       width: 160px;
       background-color: $white;
@@ -37,6 +49,7 @@
       margin-top: 70px;
     }
   }
+
   &__name {
     font-family: Factor A;
     font-style: normal;
@@ -46,6 +59,7 @@
     color: $black;
     margin-top: 10px;
   }
+
   &__nickname {
     font-family: Factor A;
     font-style: normal;
@@ -54,6 +68,7 @@
     line-height: 20px;
     color: rgba(0, 0, 0, 0.6);
   }
+
   &__info {
     font-family: Factor A;
     font-style: normal;
@@ -62,6 +77,7 @@
     line-height: 15px;
     color: #000000;
   }
+
   &__status {
     font-family: Factor A;
     font-style: normal;
@@ -70,6 +86,7 @@
     line-height: 150%;
     margin-left: 24px;
   }
+
   &__statusFull {
     font-family: Factor A;
     font-style: normal;
@@ -79,9 +96,11 @@
     color: #fb5734;
     margin-left: 24px;
   }
+
   &__post {
     margin-top: 20px;
   }
+
   &__noPost {
     background: linear-gradient(135deg, #fa5e5b 10%, #cfe4ed 100%);
     width: '100%';
@@ -92,21 +111,25 @@
     border-radius: 12px;
     margin: 12px;
   }
+
   &__postInfo {
     display: flex;
     flex-direction: column;
     padding: 0px 24px;
   }
+
   &__postUserInfo {
     img {
       width: 50px;
       height: 50px;
       border-radius: 100%;
     }
+
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+
   &__postAgo {
     font-family: Factor A;
     font-style: normal;
@@ -116,6 +139,7 @@
     color: rgba(0, 0, 0, 0.6);
     margin-right: 16px;
   }
+
   &__postText {
     font-family: Factor A;
     font-style: normal;
@@ -125,13 +149,16 @@
     line-height: 21px;
     color: #000000;
   }
+
   &__postMain {
     border-bottom: 1px solid $grey;
   }
+
   &__postIMG {
     display: flex;
     justify-content: center;
   }
+
   &__headerButtons {
     width: 100%;
     display: flex;
