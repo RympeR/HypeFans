@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { blogAPI } from '~/api/blogAPI';
+import { blogAPI } from '../api/blogAPI';
 import { InferActionsTypes, RootState } from './redux';
 
 const initialState = {

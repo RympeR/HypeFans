@@ -1,20 +1,14 @@
-/* Import bootstrap */
-@import '~bootstrap/scss/bootstrap';
-
-/*Import Variables*/
+@import './bootstrap.css';
 @import './variables';
-
-/* Import Base */
 @import './base/global';
 @import './base/fonts';
-
-/* Import Components */
 @import './components/navbar';
 @import './components/main';
 @import './components/profile';
 @import './components/chat';
 @import './components/post';
 @import './components/search-bar';
+@import './components/personalSettings';
 @import './card.scss';
 @import './components/user-banner';
 @import './components/aside';
@@ -22,3 +16,5 @@
 @import './components/upload';
 @import './components/stories';
 @import './components/auth';
+@import '../../node_modules/react-toastify/scss/main.scss';
+@import '../app/components/ExchangeComponent/modal';

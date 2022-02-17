@@ -14,6 +14,7 @@ import {
   idType,
   onlineUserRetrieveRT,
   PaymentType,
+  referralHistory,
   SubscriptionType,
   userDonationRecievedRT,
   userGetCardListRT,
@@ -38,7 +39,7 @@ export const userAPI = {
   },
   blockUser({ user }: { user: number }) {
     return instance
-      .patch('/user/block-user/', {
+      .put('/user/block-user/', {
         user
       })
       .then((response) => {
@@ -124,7 +125,7 @@ export const userAPI = {
     });
   },
   getProfile() {
-    return instance.get(`user/get-user`).then((response) => {
+    return instance.get(`/user/get-user/`).then((response) => {
       return response.data;
     });
   },
@@ -169,6 +170,21 @@ export const userAPI = {
       .then((response) => {
         return response.data;
       });
+  },
+  getSpends() {
+    return instance.get(`/user/spend-stats-history/`).then((response) => {
+      return response;
+    });
+  },
+  geEarns() {
+    return instance.get(`/user/pay-stats-history/`).then((response) => {
+      return response;
+    });
+  },
+  getReferrals() {
+    return instance.get(`/user/referral-stats-history/`).then((response) => {
+      return response;
+    });
   },
   updateDeleteCard({ id }: idType) {
     return instance.get<createCardRT>(`/user/update-delete-card/${id}`).then((response) => {
@@ -249,6 +265,26 @@ export const userAPI = {
       .then((response) => {
         return response;
       });
+  },
+  userGetReferralHistory() {
+    return instance
+      .get<referralHistory>(
+        `
+        /user/referral-stats-history/`
+      )
+      .then((response) => {
+        return response;
+      });
+  },
+  userGetSpendHistory() {
+    return instance.get(`/user/spend-stats-history/`).then((response) => {
+      return response;
+    });
+  },
+  userGetEarnHistory() {
+    return instance.get(`/user/pay-stats-history/`).then((response) => {
+      return response;
+    });
   },
   userSubscriptionUpdate({ id, email, username, password }: createUserT) {
     return instance

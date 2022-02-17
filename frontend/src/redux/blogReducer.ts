@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { createPostActionRT, createPostBoughtRT, createStoryActionRT, createStoryRT, idType } from '~/api/types';
+import { createPostActionRT, createPostBoughtRT, createStoryActionRT, createStoryRT, idType } from '../api/types';
 import { blogAPI } from './../api/blogAPI';
 import { InferActionsTypes, RootState } from './redux';
 
@@ -242,8 +242,9 @@ export const getMainPageData = (): Thunk => async (dispatch) => {
     const stories = [{}];
     dispatch(actions.setMainPageData(posts, recommendations, stories));
     dispatch(actions.isntLoading());
+  } else {
+    dispatch(actions.isntLoading());
   }
-  dispatch(actions.isntLoading());
 };
 
 export const setFavoritePostModal =

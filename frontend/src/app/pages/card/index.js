@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { userAPI } from '~/api/userAPI';
-import { Preloader } from '~/app/utils/Preloader';
-import Card from './components/card';
-import CForm from './components/form';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { userAPI } from "../../../api/userAPI";
+import { Preloader } from "../../../app/utils/Preloader";
+import Card from "./components/card";
+import CForm from "./components/form";
 
 const initialState = {
-  cardNumber: '#### #### #### ####',
-  cardHolder: 'ПОЛНОЕ ИМЯ',
-  cardMonth: '',
-  cardYear: '',
-  cardCvv: '',
-  isCardFlipped: false
+  cardNumber: "#### #### #### ####",
+  cardHolder: "ПОЛНОЕ ИМЯ",
+  cardMonth: "",
+  cardYear: "",
+  cardCvv: "",
+  isCardFlipped: false,
 };
 
 export const CardComponent = () => {
@@ -27,11 +27,11 @@ export const CardComponent = () => {
   const createCard = async () => {
     const data = await userAPI.createCard({
       name: state.cardHolder,
-      number: state.cardNumber.split(' ').join(''),
+      number: state.cardNumber.split(" ").join(""),
       date_year: `${state.cardMonth}/${state.cardYear}`,
       cvc: state.cardCvv,
       creator: true,
-      user: userID
+      user: userID,
     });
   };
 
@@ -39,7 +39,7 @@ export const CardComponent = () => {
     (keyName, value) => {
       setState({
         ...state,
-        [keyName]: value || initialState[keyName]
+        [keyName]: value || initialState[keyName],
       });
     },
     [state]
@@ -50,7 +50,7 @@ export const CardComponent = () => {
     cardNumber: useRef(),
     cardHolder: useRef(),
     cardDate: useRef(),
-    cardCvv: useRef()
+    cardCvv: useRef(),
   };
 
   let focusFormFieldByKey = useCallback((key) => {
@@ -61,7 +61,7 @@ export const CardComponent = () => {
   let cardElementsRef = {
     cardNumber: useRef(),
     cardHolder: useRef(),
-    cardDate: useRef()
+    cardDate: useRef(),
   };
 
   let onCardFormInputFocus = (_event, inputName) => {
@@ -91,7 +91,7 @@ export const CardComponent = () => {
 
   return (
     <div className="notifications__main">
-      {' '}
+      {" "}
       <div className="card_wrapper">
         <CForm
           cardMonth={state.cardMonth}
@@ -118,18 +118,23 @@ export const CardComponent = () => {
             cardDateRef={cardElementsRef.cardDate}
           ></Card>
         </CForm>
-        <button className="notifications__settingBtn" onClick={() => createCard()}>
+        <button
+          className="notifications__settingBtn"
+          onClick={() => createCard()}
+        >
           Добавить карту
         </button>
-        <h2 style={{ textAlign: 'center' }}>{cards?.length > 0 ? 'Ваши карты' : 'Пока у вас нет карт'}</h2>
+        <h2 style={{ textAlign: "center" }}>
+          {cards?.length > 0 ? "Ваши карты" : "Пока у вас нет карт"}
+        </h2>
         {cards.map((item, index) => {
           return (
-            <div key={index + 'cardId'} style={{ paddingBottom: '25px' }}>
+            <div key={index + "cardId"} style={{ paddingBottom: "25px" }}>
               <Card
                 cardNumber={item.number}
-                cardHolder={item.name === null ? '' : item.name}
-                cardMonth={item.date_year.split('/')[0]}
-                cardYear={item.date_year.split('/')[1]}
+                cardHolder={item.name === null ? "" : item.name}
+                cardMonth={item.date_year.split("/")[0]}
+                cardYear={item.date_year.split("/")[1]}
                 cardCvv={item.cvc}
                 isCardFlipped={state.isCardFlipped}
               />
