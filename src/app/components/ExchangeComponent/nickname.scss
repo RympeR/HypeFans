@@ -1,0 +1,336 @@
+.nickname-wrapper {
+    .logo{
+        top: 20px;
+        left: 50%;
+        z-index: 2;
+        width: 108px;
+        position: absolute;
+        transform: translate(-50%, 0);
+        img{
+            width: 100%;
+            display: inline-block;
+        }
+        @media (min-width: 768px) {
+            top: 40px;
+        }
+        @media (min-width: 1320px) {
+            width: 128px;
+        }
+        @media (min-width: 1600px) {
+            top: 60px;
+            width: 168px;
+        }
+    }
+
+    .nickname{
+        z-index: 0;
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        .nickname-content{
+            top: 54%;
+            left: 50%;
+            width: 89%;
+            max-width: 586px;
+            min-width: 290px;
+            text-align: center;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            .wallet{
+                padding: 14px 10px;
+                border-radius: 15px;
+                margin-bottom: 41px;
+                background: #F1EBF8;
+                border: 1px solid rgba(112, 54, 182, 0.1);
+                h3{
+                    font-size: 14px;
+                    color: #2B1A4F;
+                    line-height: 17px;
+                    padding-left: 20px;
+                    position: relative;
+                    margin-bottom: 9px;
+                    font-weight: normal;
+                    display: inline-block;
+                    i{
+                        left: 0;
+                        top: 50%;
+                        font-size: 11px;
+                        color: #7036B6;
+                        position: absolute;
+                        transform: translate(0, -50%);
+                    }
+                }
+                .number-wallet{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    img{
+                        width: 18px;
+                        display: inline-block;
+                    }
+                    strong{
+                        margin: 0 5px;
+                        font-size: 14px;
+                        color: #2B1A4F;
+                        font-weight: 600;
+                        line-height: 18px;
+                        display: inline-block;
+                    }
+                    a{
+                        font-size: 14px;
+                        color: #7036B6;
+                        display: inline-block;
+                        transition: all 0.5s;
+                        &:hover{
+                            color: #2B1A4F;
+                        }
+                    }
+                }
+            }
+            .identification{
+                p{
+                    font-size: 14px;
+                    color: #2B1A4F;
+                    line-height: 21px;
+                    font-weight: normal;
+                    margin-bottom: 9px;
+                }
+                .inputs{
+                    margin-bottom: 16px;
+                }
+                .input{
+                    padding: 7px 10px;
+                    border-radius: 15px;
+                    margin-bottom: 10px;
+                    background: #F1EBF8;
+                    border: 1px solid rgba(112, 54, 182, 0.1);
+                    &:last-child{
+                        margin-bottom: 0;
+                        label{
+                            padding-right: 22px;
+                        }
+                    }
+                    label{
+                        font-size: 12px;
+                        color: #7036B6;
+                        line-height: 15px;
+                        margin-bottom: 5px;
+                        position: relative;
+                        font-weight: normal;
+                        display: inline-block;
+                        i{
+                            top: 45%;
+                            right: 0;
+                            cursor: pointer;
+                            font-size: 15px;
+                            color: #7036B6;
+                            position: absolute;
+                            transform: translate(0, -50%);
+                            transition: all 0.5s;
+                            &:hover{
+                                color: #2B1A4F;
+                            }
+                        }
+                    }
+                    input{
+                        width: 100%;
+                        height: 25px;
+                        border: none;
+                        font-size: 16px;
+                        color: #2B1A4F;
+                        font-weight: 600;
+                        line-height: 20px;
+                        text-align: center;
+                        background: transparent;
+                    }
+                    input::placeholder{
+                        color: #9999A5;
+                    }
+                }
+                button{
+                    width: 100%;
+                    height: 53px;
+                    font-size: 16px;
+                    color: #FFFFFF;
+                    font-weight: 500;
+                    line-height: 20px;
+                    text-align: center;
+                    border-radius: 11px;
+                    background: #7036B6;
+                    border: 2px solid #7036B6;
+                    transition: all 0.5s;
+                    &:hover{
+                        color: #7036B6;
+                        background: transparent;
+                    }
+                }
+            }
+        }
+        @media (min-width: 768px) {
+            .nickname-content{
+                width: 446px;
+                .wallet{
+                    padding: 19px 10px;
+                    margin-bottom: 70px;
+                    h3{
+                        font-size: 16px;
+                        line-height: 20px;
+                        margin-bottom: 10px;
+                        padding-left: 24px;
+                        i {
+                            font-size: 12px;
+                        }
+                    }
+                    .number-wallet {
+                        img{
+                            width: 24px;
+                        }
+                        strong{
+                            font-size: 16px;
+                            line-height: 20px;
+                            margin: 0 8px 0 10px;
+                        }
+                        a {
+                            font-size: 16px;
+                        }
+                    }
+                }
+                .identification {
+                    p {
+                        font-size: 16px;
+                        line-height: 24px;
+                        margin-bottom: 17px;
+                    }
+                    .inputs {
+                        margin-bottom: 21px;
+                    }
+                    .input {
+                        padding: 11px 10px;
+                        label {
+                            font-size: 14px;
+                            line-height: 18px;
+                            i {
+                                top: 50%;
+                                font-size: 16px;
+                            }
+                        }
+                        input {
+                            height: 26px;
+                            font-size: 18px;
+                            line-height: 20px;
+                        }
+                    }
+                    button {
+                        height: 62px;
+                        font-size: 20px;
+                        line-height: 24px;
+                    }
+                }
+            }
+        }
+        @media (min-width: 1024px) {
+            .nickname-content {
+                width: 452px;
+                .identification {
+                    p {
+                        margin-bottom: 20px;
+                    }
+                }
+            }
+        }
+        @media (min-width: 1320px) {
+            .nickname-content {
+                width: 402px;
+                .wallet {
+                    margin-bottom: 30px;
+                }
+            }
+        }
+        @media (min-width: 1600px) {
+            .nickname-content {
+                width: 586px;
+                .wallet {
+                    width: 400px;
+                    padding: 28px 20px;
+                    margin: 0 auto 61px;
+                    h3 {
+                        font-size: 18px;
+                        line-height: 24px;
+                        padding-left: 33px;
+                        margin-bottom: 15px;
+                        i {
+                            font-size: 16px;
+                        }
+                    }
+                    .number-wallet {
+                        strong {
+                            font-size: 18px;
+                            line-height: 24px;
+                            margin: 0 8px 0 10px;
+                        }
+                    }
+                }
+                .identification {
+                    p {
+                        padding: 0 50px;
+                        font-size: 18px;
+                        line-height: 27px;
+                        margin-bottom: 24px;
+                    }
+                    .inputs {
+                        margin-bottom: 29px;
+                    }
+                    .input {
+                        margin-bottom: 18px;
+                        input {
+                            height: 34px;
+                            font-size: 20px;
+                            line-height: 24px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .help{
+        left: 50%;
+        z-index: 2;
+        bottom: 19px;
+        font-size: 14px;
+        color: #CD2576;
+        font-weight: 500;
+        line-height: 17px;
+        padding-left: 22px;
+        position: absolute;
+        transform: translate(-50%, 0);
+        &:hover{
+            i{
+                transform: translate(0, -50%) rotate(360deg);
+            }
+        }
+        i{
+            left: 0;
+            top: 45%;
+            font-size: 18px;
+            color: #CD2576;
+            position: absolute;
+            transform: translate(0, -50%);
+            transition: all 0.6s;
+        }
+        @media (min-width: 768px) {
+            bottom: 30px;
+            font-size: 18px;
+            line-height: 22px;
+            padding-left: 32px;
+            i{
+                font-size: 24px;
+            }
+        }
+        @media (min-width: 1600px) {
+            bottom: 40px;
+        }
+    }
+}
+
+

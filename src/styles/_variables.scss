@@ -1,0 +1,48 @@
+//Main Colors
+$body-bg-color_desktop: #fbf7f6;
+
+$body-bg-color_mobile: #fff;
+
+$orange: #fb5734;
+$lightpink: #f8f1f0;
+$error-color: #d60a0a;
+
+//Text
+$black: #000;
+$lightblack: rgba(0, 0, 0, 0.7);
+$grey: rgba(0, 0, 0, 0.6);
+$lightgrey: rgba(0, 0, 0, 0.5);
+$white: #fff;
+
+//Time
+$time: (
+  slow: 0.5s,
+  normal: 0.35s,
+  fast: 0.15s
+);
+
+//Font Weight
+$font-weight: (
+  normal: 400,
+  medium: 500,
+  semibold: 600,
+  bold: 700
+);
+
+//Font Size
+$font-size: (
+  s: 14px,
+  m: 16px,
+  l: 18px,
+  xl: 24px,
+  xxl: 32px
+);
+
+//Media
+$media: (
+  xs: 576px,
+  s: 768px,
+  m: 1024px,
+  l: 1280px,
+  xl: 1440px
+);
