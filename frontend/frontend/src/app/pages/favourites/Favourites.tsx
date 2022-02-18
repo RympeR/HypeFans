@@ -21,6 +21,9 @@ export const Favourites = () => {
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
   const favourites = useSelector((state: RootState) => state.favourites.posts);
   const dispatch = useDispatch();
+  console.log(favourites);
+  debugger
+
   const myId = useSelector((state: RootState) => state.auth.pk);
   const [show, setShow] = useState<boolean>(false)
   useEffect(() => {
@@ -81,7 +84,7 @@ export const Favourites = () => {
                 </Slider>
               ) : (
                 <div className="profile__postIMG">
-                  {returnByFileType(item?.post.attachments[0]._file)}
+                  {returnByFileType(item?.post.attachments)}
                 </div>
               )}
               <div className="post__bottom" style={{ margin: "24px 24px" }}>

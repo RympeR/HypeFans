@@ -29,8 +29,6 @@ import logo from "../../../assets/images/logo.svg";
 import { Video } from "../../../app/pages/card/components/VideoPost";
 
 export const returnByFileType = (item: any) => {
-  console.log(item);
-
   switch (item?.file_type) {
     case 4:
       return <Video src={item?._file} />;
