@@ -89,7 +89,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="profile" style={{ maxHeight: "100vh" }}>
+    <div className="profile">
       <Modal
         show={subscribeShow}
         onHide={() => setSubscribeShow(false)}

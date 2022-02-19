@@ -60,6 +60,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
           src={item._file}
           alt="postIMG"
           className="profile"
+          style={{ maxHeight: "50vh" }}
         ></img>
       );
     }

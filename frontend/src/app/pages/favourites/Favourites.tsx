@@ -81,7 +81,7 @@ export const Favourites = () => {
                 </Slider>
               ) : (
                 <div className="profile__postIMG">
-                  {returnByFileType(item?.post.attachments[0]._file)}
+                  {returnByFileType(item?.post.attachments[0])}
                 </div>
               )}
               <div className="post__bottom" style={{ margin: "24px 24px" }}>
