@@ -80,7 +80,7 @@ export const PersonalSettings = () => {
 
     return (
         <>
-            <div className="profile">
+            <div className="profile" style={{ maxHeight: "100vh" }}>
                 <div
                     style={{
                         background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${backgroundUploadImg ?? background_photo})`,
