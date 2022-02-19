@@ -299,23 +299,23 @@ const Profile = () => {
                             onClick={() => {
                               item?.post.liked
                                 ? dispatch(
-                                    deletePostAction({
-                                      id: item?.post.like_id,
-                                      post_id: item?.post.pk,
-                                    })
-                                  )
+                                  deletePostAction({
+                                    id: item?.post.like_id,
+                                    post_id: item?.post.pk,
+                                  })
+                                )
                                 : dispatch(
-                                    createPostAction({
-                                      like: true,
-                                      comment: null,
-                                      donation_amount: 0,
-                                      user: myId,
-                                      parent: null,
-                                      date_time: null,
-                                      post: item?.post.pk,
-                                      id: null,
-                                    })
-                                  );
+                                  createPostAction({
+                                    like: true,
+                                    comment: null,
+                                    donation_amount: 0,
+                                    user: myId,
+                                    parent: null,
+                                    date_time: null,
+                                    post: item?.post.pk,
+                                    id: null,
+                                  })
+                                );
                             }}
                           >
                             <LikeIcon

@@ -2,15 +2,18 @@ import { Formik } from "formik";
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { chatAPI } from "../../api/chatAPI";
 import { RootState } from "../../redux/redux";
 
 export const NoDialog = () => {
   const [currentTab, setCurrentTab] = useState(0);
+  const history = useHistory()
   const userId = useSelector((state: RootState) => state.auth.pk);
   const createNewChat = async (data: any) => {
     await chatAPI.roomCreate(data);
     setCurrentTab(0);
+    history.push(`/chat/${data.data.id}`);
   };
 
   return (
