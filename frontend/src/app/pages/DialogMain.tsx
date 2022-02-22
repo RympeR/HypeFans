@@ -136,11 +136,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     };
   }, [lastUrl, uid]);
 
-  const { startRecording, stopRecording, mediaBlobUrl, clearBlobUrl } =
-    useReactMediaRecorder({
-      video: false,
-      audio: true,
-    });
+  const [audioMessage, setAudioMessage] = useState(null)
 
   useEffect(() => {
     if (!ws) return;
@@ -213,11 +209,11 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const sendMessage = async () => {
     setIsSendDisabled(true)
     const attachmentsIds: Array<number> = [];
-    if (mediaBlobUrl !== null) {
+    if (audioMessage !== null) {
       const data = await blogAPI.createAttachment(
-        new File([mediaBlobUrl], "media.mp3")
+        audioMessage
       );
-      clearBlobUrl();
+      setAudioMessage(null);
       attachmentsIds.push(data.data.id);
     }
     if (uploadedFiles.length > 0) {
@@ -637,10 +633,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <TipIcon />
           </div>
           <AudioRecorder
-            startRecording={startRecording}
-            stopRecording={stopRecording}
-            mediaBlobUrl={mediaBlobUrl}
-            clearBlobUrl={clearBlobUrl}
+            audioMessage={audioMessage}
+            setAudioMessage={setAudioMessage}
           />
           <div>
             <label
