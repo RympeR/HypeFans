@@ -317,7 +317,7 @@ export const Settings = () => {
         >
           <NotificationSidebarItem text="Цены" />
         </Link>
-        <Link
+        {/* <Link
           to="/settings/notifications"
           style={
             pathname === "/settings/notifications"
@@ -326,14 +326,18 @@ export const Settings = () => {
           }
         >
           <NotificationSidebarItem text="Уведомления" />
-        </Link>
+        </Link> */}
       </div>
     );
   };
 
   const NotificationsSidebar = () => {
     const user = useSelector((state: RootState) => state.auth);
-    const BackButton = () => <BackIcon onClick={() => history.push("/settings/account")} />;
+    const BackButton = () => <BackIcon onClick={() => {
+      if (history.location.pathname !== "/settings/account") {
+        history.push("/settings/account")
+      } else history.push("/home")
+    }} />;
     return (
       <div>
         <div className="notifications__header">
@@ -474,9 +478,9 @@ export const Settings = () => {
           <Link to="/settings/account/password">
             <NotificationSidebarItem text="Пароль" />
           </Link>
-          <Link to="/settings/account/sessions">
+          {/* <Link to="/settings/account/sessions">
             <NotificationSidebarItem text="Сеансы входа" />
-          </Link>
+          </Link> */}
           <h2
             className="notifications__settings_h2"
             style={{ paddingTop: "40px" }}
@@ -772,7 +776,7 @@ export const Settings = () => {
               <div>
                 <WithTabs tab={{ label: "Траты" }} index={0}>
                   <h5>Траты за месяц</h5>
-                  <h5>${spended}</h5>
+                  <h5>$Не нашел в схеме параметра</h5>
                 </WithTabs>
                 <WithTabs tab={{ label: "Зароботок" }} index={1}>
                   <h5>Зароботок за месяц</h5>
@@ -1216,9 +1220,9 @@ export const Settings = () => {
           <Link to="/settings/prices/subscribes">
             <NotificationSidebarItem text="Цена подписки" />
           </Link>
-          <Link to="/settings/prices/fans">
+          {/* <Link to="/settings/prices/fans">
             <NotificationSidebarItem text="Для фанатов" />
-          </Link>
+          </Link> */}
         </div>
       );
     };

@@ -141,14 +141,14 @@ export const Favourites = () => {
                   {item.post.likes_amount} лайков
                 </p>
 
-                <CommentComponent
-                  data={item.post.comments}
-                  postId={item.post.pk}
-                  show={show}
-                  setShow={setShow}
-                />
               </div>
             </div>
+            <CommentComponent
+              data={item.post.comments}
+              postId={item.post.pk}
+              show={show}
+              setShow={setShow}
+            />
           </div>
         );
       })}

@@ -142,11 +142,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     };
   }, [lastUrl, uid]);
 
-  const { startRecording, stopRecording, mediaBlobUrl, clearBlobUrl } =
-    useReactMediaRecorder({
-      video: false,
-      audio: true,
-    });
+  const [audioMessage, setAudioMessage] = useState(null)
 
   useEffect(() => {
     if (!ws) return;
@@ -219,11 +215,11 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const sendMessage = async () => {
     setIsSendDisabled(true);
     const attachmentsIds: Array<number> = [];
-    if (mediaBlobUrl !== null) {
+    if (audioMessage !== null) {
       const data = await blogAPI.createAttachment(
-        new File([mediaBlobUrl], "media.mp3")
+        audioMessage
       );
-      clearBlobUrl();
+      setAudioMessage(null);
       attachmentsIds.push(data.data.id);
     }
     if (uploadedFiles.length > 0) {
@@ -443,9 +439,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               Добавить участников
             </button>
           </div>
-          <div style={{ padding: "5px", fontSize: "11px" }}>
+          {/* <div style={{ padding: "5px", fontSize: "11px" }}>
             <button>Отключить уведомления</button>
-          </div>
+          </div> */}
           <div style={{ padding: "5px", fontSize: "11px" }}>
             <button>Посмотреть вложения</button>
           </div>
@@ -464,9 +460,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               Копировать ссылку на профиль
             </button>
           </div>
-          <div style={{ padding: "5px", fontSize: "11px" }}>
+          {/* <div style={{ padding: "5px", fontSize: "11px" }}>
             <button>Убрать из всех групп</button>
-          </div>
+          </div> */}
           <div style={{ padding: "5px", fontSize: "11px" }}>
             <button
               onClick={() =>
@@ -647,10 +643,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <TipIcon />
           </div>
           <AudioRecorder
-            startRecording={startRecording}
-            stopRecording={stopRecording}
-            mediaBlobUrl={mediaBlobUrl}
-            clearBlobUrl={clearBlobUrl}
+            audioMessage={audioMessage}
+            setAudioMessage={setAudioMessage}
           />
           <div>
             <label

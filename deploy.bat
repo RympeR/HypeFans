@@ -5,5 +5,7 @@ mv -Force build ../build
 cd ..
 python .\manage.py collectstatic --no-input
 git add .
-git commit -am "minor styles rebuild"
-git push origin main
+git commit -am "minor audio rebuild"
+git checkout main
+git merge
+git push origin

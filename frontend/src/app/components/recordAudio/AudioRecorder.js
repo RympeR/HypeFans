@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ReactComponent as MicIcon } from '../../../assets/images/micI.svg';
+import MicRecorder from "mic-recorder-to-mp3"
 
-export const AudioRecorder = ({ startRecording, stopRecording, mediaBlobUrl, clearBlobUrl }) => {
+export const AudioRecorder = ({ audioMessage, setAudioMessage }) => {
   const [isActive, setIsActive] = useState(false);
   const [counter, setCounter] = useState(0);
+
+  const [Mp3Recorder, setMp3Recorder] = useState(new MicRecorder({ bitRate: 128 }))
 
   useEffect(() => {
     let intervalId;
@@ -24,26 +27,35 @@ export const AudioRecorder = ({ startRecording, stopRecording, mediaBlobUrl, cle
 
   return (
     <div>
-      {!mediaBlobUrl ? (
+      {!audioMessage ? (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <MicIcon
             style={isActive ? { fill: 'red' } : {}}
             onClick={() => {
               if (!isActive) {
-                startRecording();
+                Mp3Recorder.start()
               } else {
-                stopRecording();
+                Mp3Recorder
+                  .stop()
+                  .getMp3().then(([buffer, blob]) => {
+                    setAudioMessage(new File(buffer, 'voiceMessage.mp3', {
+                      type: blob.type,
+                      lastModified: Date.now()
+                    }))
+                  }).catch((e) => {
+                    console.log(e);
+                  });
               }
 
               setIsActive(!isActive);
-              return console.log('fdsf');
+              return null
             }}
           />
         </div>
       ) : null}
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        {mediaBlobUrl !== null ? <audio src={mediaBlobUrl} controls /> : null}
-        {mediaBlobUrl ? (
+        {audioMessage !== null ? <audio src={URL.createObjectURL(audioMessage)} controls /> : null}
+        {audioMessage ? (
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <button
               style={{
@@ -59,7 +71,7 @@ export const AudioRecorder = ({ startRecording, stopRecording, mediaBlobUrl, cle
               }}
               onClick={() => {
                 stopTimer();
-                clearBlobUrl();
+                setAudioMessage(null);
               }}
             >
               x
