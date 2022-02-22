@@ -138,11 +138,11 @@ const Profile = () => {
                 <button>Избранные</button>
               </Link>
             </div>
-            <div style={{ padding: "5px" }}>
-              {myNick === nick ? null : (
+            {myNick === nick ? null : (
+              <div style={{ padding: "5px" }}>
                 <button onClick={() => writeMessage()}>Написать</button>
-              )}
-            </div>
+              </div>
+            )}
           </Popup>
         </div>
         <img src={profile.avatar ? profile.avatar : logo} alt="profile_photo" />

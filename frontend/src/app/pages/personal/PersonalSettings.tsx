@@ -113,7 +113,7 @@ export const PersonalSettings = () => {
                         />
                         <SettingsIcon
                             style={{ width: "35px", height: "35px" }}
-                            onClick={() => history.push("/settings/profileSettings")}
+                            onClick={() => history.push("/settings/account")}
                         />
                     </div>
                     <div className="personalSettings__changeAvatar" style={{

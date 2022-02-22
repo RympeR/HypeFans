@@ -38,9 +38,7 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
   setInterval(handleWindowResize, 1);
   // style={{ left: leftFixedPosition }}
   return (
-    <aside className="aside" >
-      <p className="aside__title">{currentLang.also}</p>
-
+    <aside className="aside">
       <Slider dots={true} arrows={false} autoplay={true} autoplaySpeed={2000}>
         {sliced_array.map((item, index) => {
           return (
@@ -52,7 +50,7 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
           );
         })}
       </Slider>
-    </aside>
+    </aside >
   );
 };
 
