@@ -38,18 +38,17 @@ export const AudioRecorder = ({ audioMessage, setAudioMessage }) => {
                 Mp3Recorder
                   .stop()
                   .getMp3().then(([buffer, blob]) => {
-                    setAudioMessage(new File(buffer, 'me-at-thevoice.mp3', {
+                    setAudioMessage(new File(buffer, 'voiceMessage.mp3', {
                       type: blob.type,
                       lastModified: Date.now()
                     }))
                   }).catch((e) => {
-                    alert('We could not retrieve your message');
                     console.log(e);
                   });
               }
 
               setIsActive(!isActive);
-              return console.log('fdsf');
+              return null
             }}
           />
         </div>
