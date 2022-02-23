@@ -555,7 +555,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           {item?.attachments.length > 0
                             ? item?.attachments.map(
                               (item: any, index: number) => {
-                                debugger
                                 if (item.file_type === 4) {
                                   return <Video src={item.file_url} />;
                                 } else if (item.file_type === 1) {
