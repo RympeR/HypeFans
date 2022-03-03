@@ -2,6 +2,12 @@
   display: flex;
   flex-direction: column;
 
+  &__attach_icon {
+    z-index: 3;
+    left: 83%;
+    position: fixed;
+  }
+
   &__chat_actions {
     margin: 0px 24px;
     margin-bottom: 8px;
@@ -128,36 +134,39 @@
   }
 
   &__input {
-    width: 100%;
+    width: 49%;
     display: flex;
     flex-direction: row;
     background: white;
     height: 60px;
     bottom: 0px;
     position: fixed;
-    z-index: 11;
+    z-index: 2;
+    bottom: 15.5%;
   }
 
   &__text {
     @media screen and (min-width : 500px) {
-      &+button.send{
+      &+button.send {
         position: fixed;
-        left: min( 88%, 1307px );
-        bottom: 15.5%;
+        left: min(86%, 1312px);
+        bottom: 18%;
       }
+
       padding: 17px 8px 17px 15px;
       display: flex;
       width: 49%;
       max-width: 628px;
-      bottom: 14%;
+      bottom: 17%;
       position: fixed;
       background: #fbdfcf;
       border-radius: 21px;
+
       button {
         width: 50px;
         height: 50px;
       }
-  
+
       input {
         width: 100%;
       }
@@ -484,7 +493,7 @@
     margin-left: 0.4375rem;
     margin-right: -0.5rem;
     margin-bottom: -0.5rem;
-    
+
     &>.message__time {
       font-size: .75rem;
       white-space: nowrap;

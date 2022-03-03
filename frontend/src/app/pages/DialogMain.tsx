@@ -108,7 +108,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const [amICreator, setCreator] = useState(false);
   const inputFileRef = useRef(null);
   const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false)
-
   // useEffect`s
 
   useEffect(() => {
@@ -555,7 +554,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           {item?.attachments.length > 0
                             ? item?.attachments.map(
                               (item: any, index: number) => {
-                                debugger
+                                // debugger
                                 if (item.file_type === 4) {
                                   return <Video src={item.file_url} />;
                                 } else if (item.file_type === 1) {
@@ -770,7 +769,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 }
                 case "audio": {
                   console.log(file);
-                  debugger
+                  // debugger
 
                   return (
                     <div

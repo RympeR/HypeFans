@@ -152,7 +152,7 @@ const Profile = () => {
           {profile?.posts.length} posts {profile.fans_amount} fans
         </h5>
       </div>
-      <p className="profile__status">{profile.bio}</p>
+      <pre className="profile__status">{profile.bio}</pre>
       {/* <p className="profile__statusFull">Читать больше...</p> */}
       <div
         style={{

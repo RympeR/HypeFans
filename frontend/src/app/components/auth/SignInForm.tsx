@@ -94,13 +94,13 @@ const SignInForm = ({ action }: { action: string }) => {
 
       <button className="auth__submit-btn">{currentLang.next}</button>
 
-      <p className="auth__through">{currentLang.enterTh}</p>
+      {/* <p className="auth__through">{currentLang.enterTh}</p>
 
       <div className="auth__social-medias">
         <Google className="auth__social-media-icon" />
         <Instagram className="auth__social-media-icon" />
         <Facebook className="auth__social-media-icon" />
-      </div>
+      </div> */}
 
       <div className="auth__conditions">
         <span>{currentLang.regLink1} </span>

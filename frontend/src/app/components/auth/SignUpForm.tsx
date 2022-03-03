@@ -118,13 +118,13 @@ const SignUpForm = ({ action }: { action: string }) => {
         {currentLang.next}
       </button>
 
-      <p className="auth__through">{currentLang.regThrough}</p>
+      {/* <p className="auth__through">{currentLang.regThrough}</p>
 
       <div className="auth__social-medias">
         <Google className="auth__social-media-icon" />
         <Instagram className="auth__social-media-icon" />
         <Facebook className="auth__social-media-icon" />
-      </div>
+      </div> */}
 
       <div className="auth__conditions">
         <span>{currentLang.regLink1} </span>
