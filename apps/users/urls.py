@@ -33,9 +33,11 @@ from .views import (
     UserChatSubscription,
     SpendStatsHistoryRetrieveAPI,
     RepheralHistoryRetrieveAPI,
+    UserChangePasswordAPI,
 )
 urlpatterns = [
     path('me/', UserMeRetrieveAPI.as_view()),
+    path('change-password/', UserChangePasswordAPI.as_view()),
     path('get-user/', UserRetrieveAPI.as_view()),
     path('user-search/', UserSearchRetrieveAPI.as_view()),
     path('get-settings/', UserSettingsRetrieveAPI.as_view()),

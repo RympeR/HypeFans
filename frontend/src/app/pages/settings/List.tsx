@@ -105,7 +105,7 @@ export const ListsComponent = () => {
             }
           >
             <div className="notifications__listText">
-              <h1>Последние донатеры</h1>
+              <h1>Заблокированные пользователи</h1>
               <h2>{lists.blocked_users.length} человек</h2>
             </div>
             <div>
@@ -259,7 +259,7 @@ export const ListsComponent = () => {
             <div>
               <ArrowLeft onClick={() => setCurrentTab("list")} />
             </div>
-            <div style={{ marginTop: "5px", marginLeft: "8px" }}>Избранное</div>
+            <div style={{ marginTop: "5px", marginLeft: "8px" }}>Заблокированные пользователи</div>
           </div>
           <div
             style={{

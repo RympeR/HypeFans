@@ -19,7 +19,7 @@ export const PersonalSettings = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const isLoading = useSelector((state: RootState) => state.blog.isLoading);
-    const [profileData, setProfileData] = useState({ first_name: "", username: "", bio: "", wallet: "" });
+    const [profileData, setProfileData] = useState({ first_name: "", email: "", username: "", bio: "", wallet: "" });
     const [background_photo, setBackground_photo] = useState<string>("")
     const [avatar, setAvatar] = useState<string>("")
     const avatarFileRef = useRef()
@@ -65,10 +65,10 @@ export const PersonalSettings = () => {
 
     useEffect(() => {
         const getData = async () => {
-            const { background_photo, avatar, first_name, username, bio, wallet } = await userAPI.getProfile();
+            const { background_photo, avatar, email,  first_name, username, bio, wallet } = await userAPI.getProfile();
             setAvatar(avatar)
             setBackground_photo(background_photo)
-            setProfileData({ first_name, username, bio, wallet })
+            setProfileData({ first_name, email, username, bio, wallet })
         }
         getData()
     }, [])
@@ -145,6 +145,7 @@ export const PersonalSettings = () => {
                         enableReinitialize
                         initialValues={{
                             first_name: profileData.first_name,
+                            email: profileData.email,
                             username: profileData.username,
                             bio: profileData.bio,
                             wallet: profileData.wallet,
@@ -160,6 +161,10 @@ export const PersonalSettings = () => {
                                     <div>
                                         <h3>Имя</h3>
                                         <input type="text" value={values.first_name} onChange={(val) => setFieldValue("first_name", val.target.value)} />
+                                    </div>
+                                    <div>
+                                        <h3>Почта</h3>
+                                        <input type="text" value={values.email} onChange={(val) => setFieldValue("email", val.target.value)} />
                                     </div>
                                     <div>
                                         <h3>Ник</h3>

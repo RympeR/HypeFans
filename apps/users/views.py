@@ -45,6 +45,20 @@ class UserMeRetrieveAPI(generics.RetrieveAPIView):
         return self.request.user
 
 
+class UserChangePasswordAPI(generics.GenericAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserMeSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def post(self, request):
+        user = request.user
+        user.set_password(request.data['password'])
+        user.save()
+        return api_accepted_202({})
+
+    
 class UserRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserOwnProfileGetSerializer
