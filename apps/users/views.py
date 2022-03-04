@@ -58,7 +58,7 @@ class UserChangePasswordAPI(generics.GenericAPIView):
         user.save()
         return api_accepted_202({})
 
-    
+
 class UserRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserOwnProfileGetSerializer
@@ -507,7 +507,8 @@ class PayStatsHistoryRetrieveAPI(APIView):
             datetime__date__month=current_month,
         ).order_by('-datetime')
 
-        donation_amount = sum((donation.amount for donation in donations))
+        donation_amount = sum(
+            (donation.amount * WithdrawPercentage.value() for donation in donations))
 
         chat_subscriptions = ChatSubscription.objects.filter(
             target=user,
@@ -521,23 +522,24 @@ class PayStatsHistoryRetrieveAPI(APIView):
             start_date__date__month=current_month,
         ).order_by('-start_date')
         subscription_amount = sum_by_attribute(
-            user, 'subscribtion_duration', subscriptions, True)
+            user, 'subscribtion_price', subscriptions, True)
 
         referral_payments = ReferralPayment.objects.filter(
             referrer=user,
         ).order_by('-date_time')
-        repherral_summ = sum((reph.amount for reph in referral_payments))
+        repherral_summ = sum((reph.amount * WithdrawPercentage.value()
+                             for reph in referral_payments))
 
         result_sum = subscription_amount + donation_amount + repherral_summ +\
             chat_subscription_amount
 
         result = sorted([
             *generate_pay_dict(donations,
-                               UnionDonationGetSerializer, 'donation'),
+                               UnionDonationGetSerializerCoefficients, 'donation'),
             *generate_pay_dict(subscriptions,
-                               UnionSubscriptionGetSerializer, 'subscription'),
+                               UnionSubscriptionGetSerializerCoefficients, 'subscription'),
             *generate_pay_dict(chat_subscriptions,
-                               UnionChatSubscriptionGetSerializer, 'chat_subscriptions'),
+                               UnionChatSubscriptionGetSerializerCoefficients, 'chat_subscriptions'),
             *generate_pay_dict(referral_payments,
                                UnionReferralPaymentGetSerializer, 'referral_payment'),
         ], key=lambda x: x['date_time'], reverse=True)
@@ -560,7 +562,8 @@ class RepheralHistoryRetrieveAPI(APIView):
             referrer=user,
             date_time__date__month=current_month,
         ).order_by('-date_time')
-        repherral_summ = sum((reph.amount for reph in referral_payments))
+        repherral_summ = sum((reph.amount * WithdrawPercentage.value()
+                             for reph in referral_payments))
 
         result = {
             'result_sum': repherral_summ,

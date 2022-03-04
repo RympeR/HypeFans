@@ -9,7 +9,7 @@ from rest_framework import serializers
 from apps.blog.models import Post
 from apps.users.dynamic_preferences_registry import (HostName,
                                                      ChatSubscriptionDuration,
-                                                     ReferralPercentage)
+                                                     ReferralPercentage, WithdrawPercentage)
 
 from .models import (Card, ChatSubscription, Donation, Payment, PendingUser,
                      Subscription, User, UserOnline, ReferralPayment)
@@ -641,10 +641,14 @@ class SubscriptionGetSerializer(serializers.ModelSerializer):
         return subscription.target.subscribtion_price
 
 
-class UnionDonationGetSerializer(serializers.ModelSerializer):
+class UnionDonationGetSerializerCoefficients(serializers.ModelSerializer):
     date_time = serializers.SerializerMethodField()
     source = serializers.SerializerMethodField()
     target = serializers.SerializerMethodField()
+    amount = serializers.SerializerMethodField()
+
+    def get_amount(self, ref_payment: ReferralPayment):
+        return ref_payment.amount * WithdrawPercentage.value()
 
     def get_date_time(self, donation: Donation):
         return donation.datetime.timestamp()
@@ -668,6 +672,62 @@ class UnionDonationGetSerializer(serializers.ModelSerializer):
             'source',
             'amount'
         )
+
+
+class UnionDonationGetSerializer(serializers.ModelSerializer):
+    date_time = serializers.SerializerMethodField()
+    source = serializers.SerializerMethodField()
+    target = serializers.SerializerMethodField()
+    amount = serializers.SerializerMethodField()
+
+    def get_amount(self, ref_payment: ReferralPayment):
+        return ref_payment.amount
+
+    def get_date_time(self, donation: Donation):
+        return donation.datetime.timestamp()
+
+    def get_source(self, donation: Donation):
+        return UserShortRetrieveSeriliazer(
+            instance=donation.sender
+        ).data
+
+    def get_target(self, donation: Donation):
+        return UserShortRetrieveSeriliazer(
+            instance=donation.reciever
+        ).data
+
+    class Meta:
+        model = Donation
+        fields = (
+            'id',
+            'date_time',
+            'target',
+            'source',
+            'amount'
+        )
+
+
+class UnionChatSubscriptionGetSerializerCoefficients(serializers.ModelSerializer):
+    date_time = serializers.SerializerMethodField()
+    target = UserShortRetrieveSeriliazer()
+    source = UserShortRetrieveSeriliazer()
+    amount = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ChatSubscription
+        fields = (
+            'id',
+            'date_time',
+            'target',
+            'source',
+            'amount'
+        )
+
+    def get_amount(self, chat_subscription: ChatSubscription):
+        return chat_subscription.target.subscribtion_price * WithdrawPercentage.value()
+
+    def get_date_time(self, chat_subscription: ChatSubscription):
+        return chat_subscription.start_date.timestamp()
 
 
 class UnionChatSubscriptionGetSerializer(serializers.ModelSerializer):
@@ -716,10 +776,37 @@ class UnionSubscriptionGetSerializer(serializers.ModelSerializer):
         return subscription.start_date.timestamp()
 
 
+class UnionSubscriptionGetSerializerCoefficients(serializers.ModelSerializer):
+    date_time = serializers.SerializerMethodField()
+    target = UserShortRetrieveSeriliazer()
+    source = UserShortRetrieveSeriliazer()
+    amount = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Subscription
+        fields = (
+            'id',
+            'date_time',
+            'target',
+            'source',
+            'amount'
+        )
+
+    def get_amount(self, subscription: Subscription):
+        return subscription.target.subscribtion_price * WithdrawPercentage.value()
+
+    def get_date_time(self, subscription: Subscription):
+        return subscription.start_date.timestamp()
+
+
 class UnionReferralPaymentGetSerializer(serializers.ModelSerializer):
     date_time = TimestampField()
     source = serializers.SerializerMethodField()
     target = serializers.SerializerMethodField()
+    amount = serializers.SerializerMethodField()
+
+    def get_amount(self, ref_payment: ReferralPayment):
+        return ref_payment.amount * WithdrawPercentage.value()
 
     def get_source(self, ref_payment: ReferralPayment):
         return UserShortRetrieveSeriliazer(
