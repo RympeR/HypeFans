@@ -10,7 +10,7 @@ export const Video = (item) => {
         item.src
       }
       muted
-      autoplay
+      autoPlay
       controls="controls"
       width = "240px"
       height = "180px"
