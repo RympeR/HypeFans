@@ -262,6 +262,9 @@
     padding-right: 8px;
     color: $grey;
     resize: none;
+    @media screen and (max-width: 450px){
+      font-size: 15px;
+    }
   }
 
   &__comment-amount::-webkit-scrollbar-track {

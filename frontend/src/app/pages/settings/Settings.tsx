@@ -473,9 +473,6 @@ export const Settings = () => {
       return (
         <div className="notifications__main">
           <h2 className="notifications__settings_h2">Информация</h2>
-          <Link to="/settings/account/nickname">
-            <NotificationSidebarItem text="Ник" />
-          </Link>
           <Link to="/settings/account/email">
             <NotificationSidebarItem text="Email" />
           </Link>
@@ -756,12 +753,8 @@ export const Settings = () => {
       const balance = useSelector(
         (state: RootState) => state.auth.credit_amount
       );
-      const earned = useSelector(
-        (state: RootState) => state.auth.earned_credits_amount
-      );
-      const spended = useSelector(
-        (state: RootState) => state.auth.earned_credits_amount
-      );
+      const earned = earns.result_sum;
+      const spended = spends.result_sum;
 
       const [isShow, setShow] = useState(false);
       const isLoading = useSelector((state: RootState) => state.blog.isLoading);

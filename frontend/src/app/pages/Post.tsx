@@ -96,7 +96,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div className="profile__postAgo">{time_diif}</div>
                 <button className="post__menu-dots">
-                  <MenuDots />
+                  {/* <MenuDots /> */}
                 </button>
               </div>
             </div>
