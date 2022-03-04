@@ -58,7 +58,7 @@ class UserChangePasswordAPI(generics.GenericAPIView):
         user.save()
         return api_accepted_202({})
 
-    
+
 class UserRetrieveAPI(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserOwnProfileGetSerializer

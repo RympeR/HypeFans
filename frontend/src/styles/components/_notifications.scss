@@ -512,8 +512,11 @@
     background-color: $white;
     padding-bottom: 26px;
     border-bottom-right-radius: 16px;
-    min-height: 80vh;
+    height: 71vh;
     overflow-x: hidden;
+    @media screen and (max-width: 500px) {
+      height: 77vh;
+    }
   }
 
   &__mainItem {

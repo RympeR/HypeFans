@@ -599,19 +599,35 @@ export const Settings = () => {
       setFieldValue,
       isDisabled,
     }: settingsValType) => {
+      const [password, setPassword] = useState("");
+      const [new_password, setNewPassword] = useState("");
+
       return (
         <div className="notifications__main">
-          <p style={{ padding: "16px 24px" }}>Новый пароль</p>
-          <input
-            className="notifications__input"
-            placeholder="Введите новый пароль..."
-          ></input>
-          <input
-            className="notifications__input"
-            style={{ marginTop: "16px" }}
-            placeholder="Подтвердите новый пароль..."
-          ></input>
-          <button className="notifications__settingBtn">Сохранить</button>
+          <form action="">
+            <p style={{ padding: "16px 24px" }}>Новый пароль</p>
+            <input
+              className="notifications__input"
+              placeholder="Введите новый пароль..."
+              value={password}
+              onChange={(val) => setPassword(val.target.value)}
+            />
+            <input
+              className="notifications__input"
+              style={{ marginTop: "16px" }}
+              placeholder="Подтвердите новый пароль..."
+              value={new_password}
+              onChange={(val) => setNewPassword(val.target.value)}
+            />
+            <button
+              className="notifications__settingBtn"
+              disabled={password !== new_password}
+              type="submit"
+              // onClick={() => handleSubmit()}
+            >
+              Сохранить
+            </button>
+          </form>
         </div>
       );
     };
