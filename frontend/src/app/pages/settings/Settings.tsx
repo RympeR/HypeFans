@@ -476,9 +476,9 @@ export const Settings = () => {
           <Link to="/settings/account/email">
             <NotificationSidebarItem text="Email" />
           </Link>
-          <Link to="/settings/account/phone">
+          {/* <Link to="/settings/account/phone">
             <NotificationSidebarItem text="Номер телефона" />
-          </Link>
+          </Link> */}
           <h2
             className="notifications__settings_h2"
             style={{ paddingTop: "40px" }}
