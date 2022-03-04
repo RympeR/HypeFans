@@ -142,7 +142,6 @@ migrations/
 logs/
 !static/media
 .parcel-cache/
-build/
 apidoc/
 core/
 docs/
