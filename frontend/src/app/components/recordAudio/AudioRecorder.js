@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Mic from './Mic';
-import { ReactComponent as MicIcon } from '../../../assets/images/micI.svg';
 import MicRecorder from "mic-recorder-to-mp3"
 
 export const AudioRecorder = ({ audioMessage, setAudioMessage }) => {

@@ -10,7 +10,8 @@ export const ListsComponent = () => {
     favourites: [],
     last_subs: [],
     friends: [],
-    last_donators: []
+    last_donators: [],
+    blocked_users: []
   });
   const [currentTab, setCurrentTab] = React.useState("list");
 
@@ -94,6 +95,22 @@ export const ListsComponent = () => {
             <div>
               {lists?.last_donators[0]?.avatar ? (
                 <img src={lists?.last_donators[0]?.avatar} alt="fff" />
+              ) : null}
+            </div>
+          </div>
+          <div
+            className="notifications__listItem"
+            onClick={() =>
+              lists.blocked_users.length > 0 ? setCurrentTab("blocked_users") : null
+            }
+          >
+            <div className="notifications__listText">
+              <h1>Последние донатеры</h1>
+              <h2>{lists.blocked_users.length} человек</h2>
+            </div>
+            <div>
+              {lists?.blocked_users[0]?.avatar ? (
+                <img src={lists?.blocked_users[0]?.avatar} alt="fff" />
               ) : null}
             </div>
           </div>
@@ -202,6 +219,67 @@ export const ListsComponent = () => {
             ></input>
           </div>
           {lists?.favourites
+            ?.filter(
+              (item) => inputValue === "" || item.username.includes(inputValue)
+            )
+            ?.map((item, index) => {
+              return (
+                <div
+                  className="notifications__walletChild"
+                  style={{ borderBottom: "0px" }}
+                  key={`${index} fav-list`}
+                >
+                  <div style={{ display: "flex" }}>
+                    <div>
+                      <Link to={`/profile/${item.username}`}>
+                        <img src={item.avatar || logo} alt="img" />
+                      </Link>
+                    </div>
+                    <div>
+                      <h3>{item.first_name ?? "Имя"}</h3>
+                      <h4>@{item.username ?? "nickname"}</h4>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+      ) : null}
+      {currentTab === "blocked_users" ? (
+        <div className="notifications__walletMain">
+          <div
+            style={{
+              fontWeight: "bold",
+              fontSize: "18px",
+              margin: "15px 16px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <ArrowLeft onClick={() => setCurrentTab("list")} />
+            </div>
+            <div style={{ marginTop: "5px", marginLeft: "8px" }}>Избранное</div>
+          </div>
+          <div
+            style={{
+              borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+              paddingLeft: "15px",
+              paddingTop: "16px",
+              paddingBottom: "21px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <SearchSvg />
+            <input
+              style={{ marginLeft: "16px", width: "80%" }}
+              placeholder="Найти людей:"
+              value={inputValue}
+              onChange={(val) => setInputValue(val.currentTarget.value)}
+            ></input>
+          </div>
+          {lists?.blocked_users
             ?.filter(
               (item) => inputValue === "" || item.username.includes(inputValue)
             )
