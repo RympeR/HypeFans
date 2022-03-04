@@ -8,7 +8,7 @@ export const Video = (item) => {
               item.src
             }
             muted
-            hideControls={['timer','playbackrates','fullscreen']}
+            controls
             width = "240px"
             height = "180px" 
           /> ;

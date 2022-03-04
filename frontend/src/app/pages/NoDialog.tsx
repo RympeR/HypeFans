@@ -5,15 +5,11 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { chatAPI } from "../../api/chatAPI";
 import { RootState } from "../../redux/redux";
-import CurrencyInput from "react-currency-input-field";
 
 export const NoDialog = () => {
   const [currentTab, setCurrentTab] = useState(0);
   const history = useHistory()
   const userId = useSelector((state: RootState) => state.auth.pk);
-  const [checked, setChecked] = useState<boolean>(false)
-  const [chatCost, setChatCost] = useState('')
-
   const createNewChat = async (data: any) => {
     await chatAPI.roomCreate(data);
     setCurrentTab(0);
@@ -102,26 +98,10 @@ export const NoDialog = () => {
                             type="checkbox"
                             className="notifications__toggle-button"
                             name="hide_online"
-                            checked={checked}
-                            onChange={() => {
-                              setChecked(!checked)
-                              setChatCost('')
-                            }}
+                            checked={false}
+                            disabled={false}
                           ></input>
                         </div>
-                        {checked ? <CurrencyInput
-                          prefix="$"
-                          style={{
-                            border: "1px solid rgba(0, 0, 0, 0.4)",
-                            boxSizing: "border-box",
-                            borderRadius: "8px",
-                            padding: "8px",
-                            margin: "16px 10px",
-                          }}
-                          value={chatCost}
-                          decimalsLimit={2}
-                          onValueChange={(value, name) => setChatCost(value)}
-                        /> : null}
                         <div
                           style={{
                             display: "flex",

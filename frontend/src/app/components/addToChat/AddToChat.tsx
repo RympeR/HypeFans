@@ -25,33 +25,34 @@ export const AddToChat = () => {
     search();
   }, []);
 
-
-  useEffect(() => {
-    if (typeof selectedItems[0]?.pk === "number") {
-      addToChat()
-    }
-  }, [selectedItems])
-
   const addToChat = async () => {
-    console.log(selectedItems.map((item) => item.pk));
+    console.log(selectedItems.map((item) => item.username));
     const data = await chatAPI.inviteUsers(
-      selectedItems.map((item) => item.pk),
+      selectedItems.map((item) => item.username),
       history.location.pathname.split("/")[
       history.location.pathname.split("/").length - 1
       ]
     );
+    console.log(data);
   };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", padding: "15px" }}>
       <h2>Добавить человека в беседу:</h2>
+      <button
+        className="notifications__settingBtn"
+        style={{ margin: "0px", width: "100%" }}
+        onClick={() => addToChat()}
+        disabled={selectedItems.length === 0}
+      >
+        Добавить
+      </button>
       <div
         style={{
           borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
           paddingLeft: "15px",
           paddingTop: "16px",
           paddingBottom: "21px",
-          marginBottom: "12px",
           display: "flex",
           alignItems: "center",
         }}

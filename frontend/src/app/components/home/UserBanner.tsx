@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../../assets/images/logo.svg';
-import profileLinkBg from '../../../assets/images/profile-link-bg.jpg';
+import profileLinkBg from '../../../assets/images/profile-link-bg.png';
 import { LangContext } from '../../utils/LangProvider';
 
 const UserBanner = ({ aside, profile }: { aside?: boolean; profile: any }) => {

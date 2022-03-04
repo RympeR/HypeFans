@@ -8,15 +8,20 @@
     position: fixed;
   }
 
+  &__audio_voice {
+    @media screen and (max-width : 500px) {
+      margin-bottom: -1.2em;
+    }
+  }
+
   &__chat_actions {
     margin: 0px 24px;
     margin-bottom: 8px;
     display: flex;
     flex-wrap: wrap;
 
-    @media screen and (max-width < 500px) {
+    @media screen and (max-width : 500px) {
       margin: -60px 14px 8px;
-
     }
   }
 
@@ -537,6 +542,9 @@
 
   &.own {
     align-items: flex-start;
+    .chat__audio_voice{
+      margin-bottom: -0.2em;
+    }
   }
 
   &__content {

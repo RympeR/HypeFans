@@ -28,6 +28,8 @@ import { CommentComponent } from "../components/CommentComponent";
 import { Preloader } from "../utils/Preloader";
 import { returnByFileType } from "../components/home/Post";
 import { chatAPI } from "../../api/chatAPI";
+import profileLinkBg from "../../assets/images/profile-link-bg.png";
+import fansIcon from "../../assets/images/icons_person.png";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -84,6 +86,21 @@ const Profile = () => {
     dispatch(deletePost({ id }));
   };
 
+  const sub_amount = (fans_amount: number) => {
+    if (fans_amount % 1000_000 == 0) {
+      return `${(fans_amount / 1000_000).toFixed(0)} m`;
+    } else if (fans_amount % 1000 == 0) {
+      return `${(fans_amount / 1000).toFixed(0)} k`;
+    } 
+    if (fans_amount >= 1000_000) {
+      return `${(fans_amount / 1000_000).toFixed(2)} m`;
+    } else if (fans_amount >= 1000) {
+      return `${(fans_amount / 1000).toFixed(2)} k`;
+    } else {
+      return fans_amount;
+    }
+  };
+
   const payForPost = ({ amount, post }: { amount: number; post: number }) => {
     dispatch(buyPost({ amount, post, user: myId, id: null }));
   };
@@ -116,7 +133,9 @@ const Profile = () => {
       </Modal>
       <div
         style={{
-          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${profile.background_photo})`,
+          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${
+            profile.background_photo || profileLinkBg
+          })`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% 210px",
         }}
@@ -145,11 +164,11 @@ const Profile = () => {
             )}
           </Popup>
         </div>
-        <img src={profile.avatar ? profile.avatar : logo} alt="profile_photo" />
+        <img className="profile_photo" src={profile.avatar ? profile.avatar : logo} alt="profile_photo" />
         <h3 className="profile__name">{profile.first_name}</h3>
         <h4 className="profile__nickname"> {`@${nick}`}</h4>
         <h5 className="profile__info">
-          {profile?.posts.length} posts {profile.fans_amount} fans
+          {profile?.posts.length} posts  <img className="sub_icon" src={fansIcon} /> {sub_amount(profile.fans_amount)}
         </h5>
       </div>
       <pre className="profile__status">{profile.bio}</pre>
@@ -299,23 +318,23 @@ const Profile = () => {
                             onClick={() => {
                               item?.post.liked
                                 ? dispatch(
-                                  deletePostAction({
-                                    id: item?.post.like_id,
-                                    post_id: item?.post.pk,
-                                  })
-                                )
+                                    deletePostAction({
+                                      id: item?.post.like_id,
+                                      post_id: item?.post.pk,
+                                    })
+                                  )
                                 : dispatch(
-                                  createPostAction({
-                                    like: true,
-                                    comment: null,
-                                    donation_amount: 0,
-                                    user: myId,
-                                    parent: null,
-                                    date_time: null,
-                                    post: item?.post.pk,
-                                    id: null,
-                                  })
-                                );
+                                    createPostAction({
+                                      like: true,
+                                      comment: null,
+                                      donation_amount: 0,
+                                      user: myId,
+                                      parent: null,
+                                      date_time: null,
+                                      post: item?.post.pk,
+                                      id: null,
+                                    })
+                                  );
                             }}
                           >
                             <LikeIcon
