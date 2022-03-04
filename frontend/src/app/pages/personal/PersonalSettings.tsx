@@ -19,7 +19,7 @@ export const PersonalSettings = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const isLoading = useSelector((state: RootState) => state.blog.isLoading);
-    const [profileData, setProfileData] = useState({ first_name: "", username: "", bio: "" });
+    const [profileData, setProfileData] = useState({ first_name: "", username: "", bio: "", wallet: "" });
     const [background_photo, setBackground_photo] = useState<string>("")
     const [avatar, setAvatar] = useState<string>("")
     const avatarFileRef = useRef()
@@ -65,10 +65,10 @@ export const PersonalSettings = () => {
 
     useEffect(() => {
         const getData = async () => {
-            const { background_photo, avatar, first_name, username, bio } = await userAPI.getProfile();
+            const { background_photo, avatar, first_name, username, bio, wallet } = await userAPI.getProfile();
             setAvatar(avatar)
             setBackground_photo(background_photo)
-            setProfileData({ first_name, username, bio })
+            setProfileData({ first_name, username, bio, wallet })
         }
         getData()
     }, [])
@@ -147,6 +147,7 @@ export const PersonalSettings = () => {
                             first_name: profileData.first_name,
                             username: profileData.username,
                             bio: profileData.bio,
+                            wallet: profileData.wallet,
                         }}
                         onSubmit={(val) => {
                             dispatch(changeSettings(val))
@@ -169,8 +170,8 @@ export const PersonalSettings = () => {
                                         <textarea value={values.bio} onChange={(val) => setFieldValue("bio", val.target.value)} />
                                     </div>
                                     <div>
-                                        <h3>Геолокация</h3>
-                                        <input />
+                                        <h3>Кошелек</h3>
+                                        <input type="text" value={values.wallet} onChange={(val) => setFieldValue("wallet", val.target.value)} />
                                     </div>
                                     <button
                                         className="notifications__settingBtn"

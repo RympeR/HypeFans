@@ -326,7 +326,7 @@ export const CommentComponent = ({
         }}
       </Formik>
       <button style={{ width: "200px" }} onClick={() => setShow(true)}>
-        <p style={{ fontSize: "16px", textAlign: "left" }}>
+        <p style={{ fontSize: "13px", textAlign: "left" }}>
           Показать комментарии
         </p>
       </button>

@@ -197,6 +197,11 @@ class LastMessageConsumer(WebsocketConsumer):
     def receive(self, text_data):
         message = Chat.objects.filter(
             room__pk=int(self.room_name)).order_by('-date').first()
+        is_payed = False
+        if message.price == 0:
+            is_payed = True
+        if is_payed:
+            message.text = ''
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {

@@ -27,7 +27,7 @@ const Home: React.FC = () => {
         <Preloader />
       ) : (
         <>
-          <StoryBlock />
+          {/* <StoryBlock /> */}
           <div className="post-list" id="postlist">
             <SearchBar />
             <Aside recommendations={recommendations} />

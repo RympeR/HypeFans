@@ -61,7 +61,7 @@ export const Favourites = () => {
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <div className="profile__postAgo">50 минут назад</div>
                     <button className="post__menu-dots">
-                      <MenuDots />
+                      {/* <MenuDots /> */}
                     </button>
                   </div>
                 </div>

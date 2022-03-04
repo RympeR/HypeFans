@@ -34,7 +34,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
+    margin-bottom: 10px;
+    
     &-left {
       display: flex;
       align-items: center;
@@ -254,13 +255,16 @@
   }
 
   &__comment-amount {
-    font-size: map-get($map: $font-size, $key: s);
+    font-size: map-get($map: $font-size, $key: l);
     margin-right: 10px;
     width: 100%;
     padding-top: 8px;
     padding-right: 8px;
     color: $grey;
     resize: none;
+    @media screen and (max-width: 450px){
+      font-size: 15px;
+    }
   }
 
   &__comment-amount::-webkit-scrollbar-track {

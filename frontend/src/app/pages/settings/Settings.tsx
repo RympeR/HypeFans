@@ -57,7 +57,7 @@ export const Settings = () => {
   const Text = ({ text }: { text: string }) => {
     const lastLocation =
       history.location.pathname.split("/")[
-      history.location.pathname.split("/").length - 1
+        history.location.pathname.split("/").length - 1
       ];
     return (
       <>
@@ -79,26 +79,35 @@ export const Settings = () => {
                   lastLocation === "lang"
                 ) {
                   history.push("/settings/profileSettings/mobileSidebar");
-                }
-                else if (
-                  lastLocation === "account" || lastLocation === "confidentiality" || lastLocation === "prices" || lastLocation === "notifications"
+                } else if (
+                  lastLocation === "account" ||
+                  lastLocation === "confidentiality" ||
+                  lastLocation === "prices" ||
+                  lastLocation === "notifications"
                 ) {
                   history.push("/settings/mobileSidebar");
-                }
-                else if (
-                  lastLocation === "nickname" || history.location.pathname === "/settings/account/email" || lastLocation === "phone" || lastLocation === "password" || lastLocation === "sessions" || lastLocation === "delete"
+                } else if (
+                  lastLocation === "nickname" ||
+                  history.location.pathname === "/settings/account/email" ||
+                  lastLocation === "phone" ||
+                  lastLocation === "password" ||
+                  lastLocation === "sessions" ||
+                  lastLocation === "delete"
                 ) {
-                  history.push("/settings/account")
-                }
-                else if (
-                  lastLocation === "messages" || lastLocation === "subscribes" || lastLocation === "fans"
+                  history.push("/settings/account");
+                } else if (
+                  lastLocation === "messages" ||
+                  lastLocation === "subscribes" ||
+                  lastLocation === "fans"
                 ) {
-                  history.push("/settings/prices")
-                }
-                else if (
-                  lastLocation === "push" || history.location.pathname === "/settings/notifications/email" || lastLocation === "page"
+                  history.push("/settings/prices");
+                } else if (
+                  lastLocation === "push" ||
+                  history.location.pathname ===
+                    "/settings/notifications/email" ||
+                  lastLocation === "page"
                 ) {
-                  history.push("/settings/notifications")
+                  history.push("/settings/notifications");
                 }
               }}
             />
@@ -145,12 +154,12 @@ export const Settings = () => {
 
   const ProfileSettingsSidebar = ({ showStyle }: { showStyle: boolean }) => {
     const history = useHistory();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const [show, setShow] = useState(false);
 
     const logoutFunc = async () => {
       Cookies?.set("token", null);
-      await dispatch(logout())
+      await dispatch(logout());
       history.push("/");
     };
 
@@ -234,7 +243,7 @@ export const Settings = () => {
         {show ? (
           <div
             className="card__logout-model"
-          // style={{ display: "flex", justifyContent: "center", width: "100%" }}
+            // style={{ display: "flex", justifyContent: "center", width: "100%" }}
           >
             <div
               // onClick={() => setShow(false)}
@@ -333,11 +342,15 @@ export const Settings = () => {
 
   const NotificationsSidebar = () => {
     const user = useSelector((state: RootState) => state.auth);
-    const BackButton = () => <BackIcon onClick={() => {
-      if (history.location.pathname !== "/settings/account") {
-        history.push("/settings/account")
-      } else history.push("/home")
-    }} />;
+    const BackButton = () => (
+      <BackIcon
+        onClick={() => {
+          if (history.location.pathname !== "/settings/account") {
+            history.push("/settings/account");
+          } else history.push("/home");
+        }}
+      />
+    );
     return (
       <div>
         <div className="notifications__header">
@@ -460,9 +473,6 @@ export const Settings = () => {
       return (
         <div className="notifications__main">
           <h2 className="notifications__settings_h2">Информация</h2>
-          <Link to="/settings/account/nickname">
-            <NotificationSidebarItem text="Ник" />
-          </Link>
           <Link to="/settings/account/email">
             <NotificationSidebarItem text="Email" />
           </Link>
@@ -743,12 +753,8 @@ export const Settings = () => {
       const balance = useSelector(
         (state: RootState) => state.auth.credit_amount
       );
-      const earned = useSelector(
-        (state: RootState) => state.auth.earned_credits_amount
-      );
-      const spended = useSelector(
-        (state: RootState) => state.auth.earned_credits_amount
-      );
+      const earned = earns.result_sum;
+      const spended = spends.result_sum;
 
       const [isShow, setShow] = useState(false);
       const isLoading = useSelector((state: RootState) => state.blog.isLoading);
@@ -776,7 +782,7 @@ export const Settings = () => {
               <div>
                 <WithTabs tab={{ label: "Траты" }} index={0}>
                   <h5>Траты за месяц</h5>
-                  <h5>$Не нашел в схеме параметра</h5>
+                  <h5>${spended}</h5>
                 </WithTabs>
                 <WithTabs tab={{ label: "Зароботок" }} index={1}>
                   <h5>Зароботок за месяц</h5>
@@ -838,13 +844,13 @@ export const Settings = () => {
                   flexDirection: "column",
                 }}
               >
-                <button
+                {/* <button
                   className="notifications__settingBtn"
                   style={{ marginLeft: "0px", marginRight: "0px" }}
                   onClick={() => setShow(true)}
                 >
                   Пополнить баланс
-                </button>
+                </button> */}
                 <Modal show={isShow} onHide={() => setShow(false)} centered>
                   <Modal.Body className="notifications__modal">
                     <div
@@ -939,13 +945,13 @@ export const Settings = () => {
                   flexDirection: "column",
                 }}
               >
-                <button
+                {/* <button
                   className="notifications__settingBtn"
                   style={{ marginLeft: "0px", marginRight: "0px" }}
                   onClick={() => setShow(true)}
                 >
                   Пополнить баланс
-                </button>
+                </button> */}
                 <Modal show={isShow} onHide={() => setShow(false)} centered>
                   <Modal.Body className="notifications__modal">
                     <div
@@ -1325,26 +1331,23 @@ export const Settings = () => {
               </div>
             )}
           </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              width: "100%",
-              flexDirection: "column",
-            }}
-          >
-            <button
-              className="notifications__settingBtn"
-              style={{ marginLeft: "0px", marginRight: "0px" }}
+          <Link to="/settings/profileSettings/stats" style={{ color: "white" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                flexDirection: "column",
+              }}
             >
-              <Link
-                to="/settings/profileSettings/stats"
-                style={{ color: "white" }}
+              <button
+                className="notifications__settingBtn"
+                style={{ marginLeft: "0px", marginRight: "0px" }}
               >
                 Мой счет
-              </Link>
-            </button>
-          </div>
+              </button>
+            </div>
+          </Link>
         </div>
       );
     };
