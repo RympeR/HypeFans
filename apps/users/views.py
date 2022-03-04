@@ -77,19 +77,17 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
                     instance=post, context={'request': request}).data
                 res_dict = {}
                 res_dict['post'] = post_data
-                if req_user.new_user:
-                    res_dict['post']['payed'] = True
-                else:
-                    if post.access_level == 1:
-                        if post.price_to_watch == 0:
-                            res_dict['post']['payed'] = True
-                        else:
-                            res_dict['post']['payed'] = (
-                                True if PostBought.objects.filter(
-                                    post=post, user=req_user).exists() else False
-                            )
+
+                if post.access_level == 1:
+                    if post.price_to_watch == 0:
+                        res_dict['post']['payed'] = True
                     else:
-                        res_dict['post']['payed'] = sub_check
+                        res_dict['post']['payed'] = (
+                            True if PostBought.objects.filter(
+                                post=post, user=req_user).exists() else False
+                        )
+                else:
+                    res_dict['post']['payed'] = sub_check
 
                 post_action_queryset = PostAction.objects.filter(
                     post=post, user=req_user)

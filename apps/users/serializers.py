@@ -280,6 +280,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
     validated_user = serializers.BooleanField(required=False)
     credit_amount = serializers.IntegerField(required=False)
     earned_credits_amount = serializers.IntegerField(required=False)
+    wallet = serializers.CharField(required=False)
 
     class Meta:
         model = User
@@ -310,6 +311,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'validated_user',
             'credit_amount',
             'earned_credits_amount',
+            'wallet',
         )
 
 
@@ -487,6 +489,7 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
             'is_online',
             'cards',
             'ref_link',
+            'wallet',
         )
 
 
