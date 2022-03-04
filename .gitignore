@@ -142,3 +142,10 @@ migrations/
 logs/
 !static/media
 .parcel-cache/
+build/
+apidoc/
+core/
+docs/
+mobile_version/
+static/
+templates/
