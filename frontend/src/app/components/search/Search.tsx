@@ -27,8 +27,15 @@ export const Search: React.FC = () => {
   }, []);
 
   return (
-    <div className="notifications__main">
-      <div className="notifications__walletMain">
+    <div>
+      <div
+        style={{
+          paddingTop: "2px",
+          backgroundColor: "white",
+          borderTopRightRadius: "30px",
+          borderTopLeftRadius: "30px",
+        }}
+      >
         <div
           style={{
             fontWeight: "bold",
@@ -64,41 +71,47 @@ export const Search: React.FC = () => {
             }}
           ></input>
         </div>
-        {users?.map((item, index) => {
-          return (
-            <div
-              className="notifications__walletChild"
-              style={{ borderBottom: "0px" }}
-              key={`${index} fav-list`}
-            >
-              <div style={{ display: "flex" }}>
-                <div>
-                  <Link to={`/profile/${item.username}`}>
-                    {!item.avatar ? (
-                      <Logo
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          margin: "12px",
-                        }}
-                      />
-                    ) : (
-                      <img
-                        src={item.avatar}
-                        alt="img"
-                        style={{ width: "50px", height: "50px" }}
-                      />
-                    )}
-                  </Link>
+      </div>
+      <div className="notifications__main">
+        <div className="notifications__walletMain">
+          <div className="user-search-block">
+            {users?.map((item, index) => {
+              return (
+                <div
+                  className="notifications__walletChild"
+                  style={{ borderBottom: "0px" }}
+                  key={`${index} fav-list`}
+                >
+                  <div style={{ display: "flex" }}>
+                    <div>
+                      <Link to={`/profile/${item.username}`}>
+                        {!item.avatar ? (
+                          <Logo
+                            style={{
+                              width: "50px",
+                              height: "50px",
+                              margin: "12px",
+                            }}
+                          />
+                        ) : (
+                          <img
+                            src={item.avatar}
+                            alt="img"
+                            style={{ width: "50px", height: "50px" }}
+                          />
+                        )}
+                      </Link>
+                    </div>
+                    <div>
+                      <h3>{item.first_name ?? "Имя"}</h3>
+                      <h4>@{item.username ?? "nickname"}</h4>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h3>{item.first_name ?? "Имя"}</h3>
-                  <h4>@{item.username ?? "nickname"}</h4>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );
