@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { useAlert } from "react-alert";
 import Modal from "react-bootstrap/Modal";
-import ReactAudioPlayer from "react-audio-player"
+import ReactAudioPlayer from "react-audio-player";
 import CurrencyInput from "react-currency-input-field";
 import { useReactMediaRecorder } from "react-media-recorder";
 import { useSelector } from "react-redux";
@@ -20,12 +20,12 @@ import { blogAPI } from "../../api/blogAPI";
 import { chatAPI } from "../../api/chatAPI";
 import { userAPI } from "../../api/userAPI";
 import { RootState } from "../../redux/redux";
-import { ReactComponent as BackIcon } from "../../assets/images/arrow-left.svg";
+import { ReactComponent as BackIcon } from "../../assets/images/arrow-left-chat.svg";
 import { ReactComponent as ImageIcn } from "../../assets/images/imageI.svg";
 import { ReactComponent as Readed } from "../../assets/images/messageIcon.svg";
 import { ReactComponent as NotReaded } from "../../assets/images/messageIconWhite.svg";
 import { ReactComponent as MicrIcon } from "../../assets/images/micI.svg";
-import { ReactComponent as More } from "../../assets/images/more-vertical.svg";
+import { ReactComponent as More } from "../../assets/images/more-vertical-chat.svg";
 import { ReactComponent as Vektor } from "../../assets/images/send.svg";
 import { ReactComponent as VektorDisabled } from "../../assets/images/sendDisabled.svg";
 import { ReactComponent as Tip } from "../../assets/images/tipI.svg";
@@ -46,11 +46,13 @@ const Input = ({
   messageText,
   isSendDisabled,
   setMessageText,
+  audio,
 }: {
   sendMessage: any;
   isSendDisabled: boolean;
   messageText: string;
   setMessageText: (text: string) => void;
+  audio: any;
 }) => {
   const VektorIcon = () => <Vektor />;
   const VektorIconDisabled = () => <VektorDisabled />;
@@ -64,16 +66,24 @@ const Input = ({
       </div>
       <button
         className="send"
-        disabled={(messageText.length < 0 && messageText.length > 255) || isSendDisabled}
+        disabled={
+          (messageText.length < 0 && messageText.length > 255) ||
+          isSendDisabled ||
+          audio == null
+        }
         onClick={() => {
-          if ((messageText.length > 0 && messageText.length < 255) || isSendDisabled) {
+          if (
+            (messageText.length > 0 && messageText.length < 255) ||
+            isSendDisabled
+          ) {
             return sendMessage();
           } else {
             return null;
           }
         }}
       >
-        {(messageText.length > 0 && messageText.length < 255) || isSendDisabled ? (
+        {(messageText.length > 0 && messageText.length < 255) ||
+        isSendDisabled ? (
           <VektorIcon />
         ) : (
           <VektorIconDisabled />
@@ -107,8 +117,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const uid = useSelector((state: RootState) => state.auth.pk);
   const [amICreator, setCreator] = useState(false);
   const inputFileRef = useRef(null);
-  const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false)
-
+  const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false);
   // useEffect`s
 
   useEffect(() => {
@@ -136,8 +145,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     };
   }, [lastUrl, uid]);
 
-  const [audioMessage, setAudioMessage] = useState(null)
-
+  const [audioMessage, setAudioMessage] = useState(null);
   useEffect(() => {
     if (!ws) return;
     ws.onmessage = (e: any) => {
@@ -207,12 +215,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   // Добавление файлов в сообщение
 
   const sendMessage = async () => {
-    setIsSendDisabled(true)
+    setIsSendDisabled(true);
     const attachmentsIds: Array<number> = [];
     if (audioMessage !== null) {
-      const data = await blogAPI.createAttachment(
-        audioMessage
-      );
+      const data = await blogAPI.createAttachment(audioMessage);
       setAudioMessage(null);
       attachmentsIds.push(data.data.id);
     }
@@ -239,7 +245,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     setMessageCost("0");
     setPaidModalShow(false);
     setUploadedFilesImg([]);
-    setIsSendDisabled(false)
+    setIsSendDisabled(false);
     setUploadedFiles([]);
     return setMessageText("");
   };
@@ -284,7 +290,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
   const [isShown, setShown] = useState(true);
-  const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false)
+  const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false);
 
   return (
     <div className="chat__dialogsMain">
@@ -367,7 +373,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         >
           <div
             className="chat__resp_icon chat__backNone"
-            style={{ marginRight: "14px", marginTop: "-20px" }}
+            style={{ marginRight: "14px", marginTop: "-6px" }}
           >
             <BackButton />
           </div>
@@ -378,16 +384,14 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                    (item: any) =>
-                      item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited?.avatar || logo
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited?.avatar || logo
                   : rooms.find(
-                    (item: any) =>
-                      item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.creator?.avatar || logo
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.creator?.avatar || logo
                 : rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.logo || logo
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.logo || logo
             }
             className="logo_site"
             alt="avatar"
@@ -405,20 +409,19 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 color: "#000000",
               }}
             >
-              @{" "}
               {typeof rooms.find(
                 (item: any) => item.room.room_info.id === Number(lastUrl)
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited?.username
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited?.username
                   : rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.creator?.username
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.creator?.username
                 : rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.name}
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.name}
             </h2>
           </div>
         </div>
@@ -430,7 +433,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           }
           position="bottom right"
         >
-          <div style={{ padding: "5px", fontSize: "11px" }}>
+          <div style={{ padding: "5px", fontSize: "14px" }}>
             <button onClick={() => setIsAddModalShow(true)}>
               Добавить участников
             </button>
@@ -438,27 +441,25 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           {/* <div style={{ padding: "5px", fontSize: "11px" }}>
             <button>Отключить уведомления</button>
           </div> */}
-          <div style={{ padding: "5px", fontSize: "11px" }}>
-            <button>Посмотреть вложения</button>
-          </div>
-          <div style={{ padding: "5px", fontSize: "11px" }}>
+          <div style={{ padding: "5px", fontSize: "14px" }}>
             <button
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `hype-fans.com/profile/${rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited.username
+                  `hype-fans.com/profile/${
+                    rooms.find(
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited.username
                   }`
                 );
               }}
             >
-              Копировать ссылку на профиль
+              Скопировать ссылку
             </button>
           </div>
           {/* <div style={{ padding: "5px", fontSize: "11px" }}>
             <button>Убрать из всех групп</button>
           </div> */}
-          <div style={{ padding: "5px", fontSize: "11px" }}>
+          <div style={{ padding: "5px", fontSize: "14px" }}>
             <button
               onClick={() =>
                 blockUser(
@@ -509,8 +510,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                   key={Math.random() + index + Math.random()}
                 >
                   {item.message_price !== 0 &&
-                    !item.is_payed &&
-                    item.user.pk !== uid ? (
+                  !item.is_payed &&
+                  item.user.pk !== uid ? (
                     <div
                       style={{
                         display: "flex",
@@ -542,9 +543,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           style={
                             item?.attachments.length > 0
                               ? {
-                                backgroundColor: "white",
-                                justifyContent: "flex-end",
-                              }
+                                  justifyContent: "flex-end",
+                                }
                               : {}
                           }
                         >
@@ -554,34 +554,40 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           ).toString(CryptoJS.enc.Utf8)}
                           {item?.attachments.length > 0
                             ? item?.attachments.map(
-                              (item: any, index: number) => {
-                                debugger
-                                if (item.file_type === 4) {
-                                  return <Video src={item.file_url} />;
-                                } else if (item.file_type === 1) {
-                                  return (
-                                    <a href={item.file_url} download>
-                                      Скачать{" "}
-                                      {
-                                        item.file_url.split("/")[
-                                        item.file_url.split("/").length - 1
-                                        ]
-                                      }
-                                    </a>
-                                  );
-                                } else if (item.file_type === 2) {
-                                  return <ReactAudioPlayer src={item.file_url} controls />;
-                                } else {
-                                  return (
-                                    <ChatImage
-                                      item={item}
-                                      index={index}
-                                      key={index + Math.random()}
-                                    />
-                                  );
+                                (item: any, index: number) => {
+                                  // debugger
+                                  if (item.file_type === 4) {
+                                    return <Video src={item.file_url} />;
+                                  } else if (item.file_type === 1) {
+                                    return (
+                                      <a href={item.file_url} download>
+                                        Скачать{" "}
+                                        {
+                                          item.file_url.split("/")[
+                                            item.file_url.split("/").length - 1
+                                          ]
+                                        }
+                                      </a>
+                                    );
+                                  } else if (item.file_type === 2) {
+                                    return (
+                                      <ReactAudioPlayer
+                                        src={item.file_url}
+                                        controls
+                                        className="chat__audio_voice"
+                                      />
+                                    );
+                                  } else {
+                                    return (
+                                      <ChatImage
+                                        item={item}
+                                        index={index}
+                                        key={index + Math.random()}
+                                      />
+                                    );
+                                  }
                                 }
-                              }
-                            )
+                              )
                             : null}
                           {item.user.pk === uid ? (
                             <span className="message__meta">
@@ -608,21 +614,24 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             })
           )}
         </div>
-        <div className="chat__input">
-          <button
-            className="chat__attach_icon"
-            onClick={() => {
-              setShowActions(!showActions);
-            }}
-          >
-            <AttachIcon style={{ width: "25px", height: "25px" }} />
-          </button>
-          <Input
-            sendMessage={sendMessage}
-            isSendDisabled={isSendDisabled}
-            messageText={messageText}
-            setMessageText={setMessageText}
-          />
+        <div className="chat__input_back">
+          <div className="chat__input">
+            <button
+              className="chat__attach_icon"
+              onClick={() => {
+                setShowActions(!showActions);
+              }}
+            >
+              <AttachIcon style={{ width: "22px", height: "22px" }} />
+            </button>
+            <Input
+              sendMessage={sendMessage}
+              isSendDisabled={isSendDisabled}
+              messageText={messageText}
+              setMessageText={setMessageText}
+              audio={audioMessage}
+            />
+          </div>
         </div>
         <div
           className={
@@ -642,7 +651,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               htmlFor="file-input"
               style={{ marginBottom: "15px" }}
             >
-              <VideoIcon />
+              <ImageIcon />
             </label>
             <input
               className="upload__file-input"
@@ -653,7 +662,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               multiple
             />
           </div>
-          <ImageIcon />
           <button
             style={{ marginBottom: "10px" }}
             onClick={() => setPaidModalShow(true)}
@@ -708,12 +716,16 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               <div style={{ width: "20px" }}></div>
               <h3
                 style={
-                  (messageText.length > 0 && messageText.length < 255) || isSendDisabled
+                  (messageText.length > 0 && messageText.length < 255) ||
+                  isSendDisabled
                     ? { color: "#FB5734" }
                     : { color: "grey" }
                 }
                 onClick={() => {
-                  if ((messageText.length > 0 && messageText.length < 255) || isSendDisabled) {
+                  if (
+                    (messageText.length > 0 && messageText.length < 255) ||
+                    isSendDisabled
+                  ) {
                     return sendMessage();
                   } else {
                     return null;
@@ -769,9 +781,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                   );
                 }
                 case "audio": {
-                  console.log(file);
-                  debugger
-
                   return (
                     <div
                       className="upload__img-wrapper"
@@ -870,9 +879,12 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               Отмена
             </h3>
             <div style={{ width: "20px" }}></div>
-            <h3 onClick={() => {
-              if (!isSendDisabled) sendMessage()
-            }} style={{ color: "#FB5734" }}>
+            <h3
+              onClick={() => {
+                if (!isSendDisabled) sendMessage();
+              }}
+              style={{ color: "#FB5734" }}
+            >
               Далее
             </h3>
           </div>

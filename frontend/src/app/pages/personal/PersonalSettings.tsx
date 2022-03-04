@@ -19,7 +19,7 @@ export const PersonalSettings = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const isLoading = useSelector((state: RootState) => state.blog.isLoading);
-    const [profileData, setProfileData] = useState({ first_name: "", username: "", bio: "", wallet: '' });
+    const [profileData, setProfileData] = useState({ first_name: "", username: "", bio: "", wallet: "" });
     const [background_photo, setBackground_photo] = useState<string>("")
     const [avatar, setAvatar] = useState<string>("")
     const avatarFileRef = useRef()
@@ -166,16 +166,12 @@ export const PersonalSettings = () => {
                                         <input type="text" value={values.username} onChange={(val) => setFieldValue("username", val.target.value)} />
                                     </div>
                                     <div>
-                                        <h3>Кошелек</h3>
-                                        <input type="text" value={values.wallet} onChange={(val) => setFieldValue("wallet", val.target.value)} />
-                                    </div>
-                                    <div>
                                         <h3>Био</h3>
                                         <textarea value={values.bio} onChange={(val) => setFieldValue("bio", val.target.value)} />
                                     </div>
                                     <div>
-                                        <h3>Геолокация</h3>
-                                        <input />
+                                        <h3>Кошелек</h3>
+                                        <input type="text" value={values.wallet} onChange={(val) => setFieldValue("wallet", val.target.value)} />
                                     </div>
                                     <button
                                         className="notifications__settingBtn"

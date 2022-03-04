@@ -126,10 +126,11 @@ const Post = ({
           <p className="post__time">{time_diif}</p>
 
           <button className="post__menu-dots">
-            <MenuDots />
+            {/* <MenuDots /> */}
           </button>
         </div>
       </div>
+      <UserBanner profile={post.user} />
       <p className="post__caption">
         {isWholeTextShowed
           ? post.post.description
@@ -147,7 +148,6 @@ const Post = ({
         {currentLang.readmore}
       </button>
 
-      <UserBanner profile={post.user} />
 
       {post.post?.attachments.length > 1 ? (
         <Slider dots={true} arrows={false} className="profile__postIMG">
@@ -263,7 +263,7 @@ const Post = ({
               style={{ alignItems: "center", padding: "0px" }}
             >
               <img
-                src={post.user.avatar ? post.user.avatar : logo}
+                src={post.user.avatar || logo}
                 alt="fdsfsdfsd"
               ></img>
               <div>

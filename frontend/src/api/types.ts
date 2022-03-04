@@ -136,7 +136,6 @@ export type getUserRT = {
   validated_user: boolean | null;
   credit_amount: number | null;
   earned_credits_amount: number | null;
-  wallet: string | null;
   posts: Array<any>;
 };
 

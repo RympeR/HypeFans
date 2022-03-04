@@ -16,6 +16,7 @@ import { ReactComponent as LikeIcon } from "../../../assets/images/heart.svg";
 import logo from "../../../assets/images/logo.svg";
 import { ReactComponent as CommentIcon } from "../../../assets/images/message-circle.svg";
 import { returnByFileType } from "../../../app/components/home/Post";
+import { Link } from "react-router-dom";
 
 export const Favourites = () => {
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
@@ -39,10 +40,12 @@ export const Favourites = () => {
               <div className="profile__postInfo">
                 <div className="profile__postUserInfo">
                   <div style={{ display: "flex" }}>
-                    <img
-                      src={item.user.avatar ? item.user.avatar : logo}
-                      alt="profile_photoPost"
-                    ></img>
+                  <Link to={`/profile/${item.user.username}`}>
+                      <img
+                        src={item.user.avatar || logo}
+                        alt="profile_photoPost"
+                      ></img>
+                    </Link>
                     <div>
                       <h3
                         className="profile__name"
@@ -61,7 +64,7 @@ export const Favourites = () => {
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <div className="profile__postAgo">50 минут назад</div>
                     <button className="post__menu-dots">
-                      <MenuDots />
+                      {/* <MenuDots /> */}
                     </button>
                   </div>
                 </div>

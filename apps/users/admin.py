@@ -60,6 +60,10 @@ class UserBaseAdmin(UserAdmin):
             'blocked_users',
             'my_subscribes',
         )}),
+        (_('Profile stats'), {'fields': (
+            'post_amount',
+            'fans_amount',
+        )}),
         (_('Money'), {'fields': (
             'subscribtion_price',
             'message_price',

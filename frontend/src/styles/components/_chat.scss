@@ -2,15 +2,26 @@
   display: flex;
   flex-direction: column;
 
+  &__attach_icon {
+    z-index: 3;
+    right: 15%;
+    position: fixed;
+  }
+
+  &__audio_voice {
+    @media screen and (max-width : 500px) {
+      margin-bottom: -1.2em;
+    }
+  }
+
   &__chat_actions {
     margin: 0px 24px;
     margin-bottom: 8px;
     display: flex;
     flex-wrap: wrap;
 
-    @media screen and (max-width < 500px) {
+    @media screen and (max-width : 500px) {
       margin: -60px 14px 8px;
-
     }
   }
 
@@ -128,36 +139,45 @@
   }
 
   &__input {
-    width: 100%;
+    width: 49%;
     display: flex;
     flex-direction: row;
-    background: white;
     height: 60px;
     bottom: 0px;
     position: fixed;
-    z-index: 11;
+    z-index: 2;
+    bottom: 15.5%;
   }
 
   &__text {
     @media screen and (min-width : 500px) {
-      &+button.send{
+      &+button.send {
         position: fixed;
-        left: min( 88%, 1307px );
-        bottom: 15.5%;
+        left: min(86%, 1312px);
+        bottom: 18%;
+        order: 2;
+        width: 50px;
+        height: 50px;
+        margin-top: 0.75%;
+        background-color: #fbdfcf;
+        border-radius: 45px;
+        margin-left: 2%;
       }
+
       padding: 17px 8px 17px 15px;
       display: flex;
       width: 49%;
       max-width: 628px;
-      bottom: 14%;
+      bottom: 17%;
       position: fixed;
       background: #fbdfcf;
       border-radius: 21px;
+
       button {
         width: 50px;
         height: 50px;
       }
-  
+
       input {
         width: 100%;
       }
@@ -217,7 +237,7 @@
         display: flex;
         z-index: 13;
         position: fixed;
-        bottom: -3px;
+        bottom: 6px;
         border-radius: 15px;
         background-color: white;
         height: 50px;
@@ -229,7 +249,30 @@
       }
     }
 
+    &__audio {
+      &.open {
+        z-index: 14;
+        position: fixed;
+        bottom: 8%;
+        margin-left: -10px;
+        background-color: #fbdfcf;
+        border-radius: 15px;
+        width: 81%;
+        visibility: visible !important;
+        left: 6%;
+      }
+    }
 
+    &__input_back {
+      height: 80px;
+      border-top: #fbdfcf solid 1px;
+      background: white;
+      z-index: 12;
+      width: 100%;
+      bottom: 0px;
+      position: fixed;
+      z-index: 13;
+    }
 
     display: flex;
     flex-direction: column;
@@ -289,9 +332,9 @@
         border-radius: 100%;
 
         &.logo_site {
-          width: 35px;
-          height: 35px;
-          margin-top: -7px;
+          width: 40px;
+          height: 40px;
+          margin-top: -5px;
         }
       }
     }
@@ -346,11 +389,11 @@
       position: fixed;
       background-color: white;
       padding-top: 5px;
-      margin-top: -9px;
+      margin-top: -10px;
       z-index: 11;
 
       &.inChat {
-        height: 36px;
+        height: 47px;
       }
     }
 
@@ -384,8 +427,8 @@
       order: 1;
       z-index: 12;
       position: absolute;
-      left: 77%;
-      top: 28%;
+      left: 72%;
+      top: 24%;
     }
 
     &__dialog {
@@ -397,9 +440,8 @@
       width: 100%;
       display: flex;
       flex-direction: row;
-      background: white;
       height: 60px;
-      bottom: 0px;
+      bottom: 7px;
       position: fixed;
       z-index: 11;
 
@@ -407,16 +449,22 @@
         order: 2;
         width: 50px;
         height: 50px;
-        margin-top: 1.5%;
+        margin-top: 0.75%;
+        background-color: #fbdfcf;
+        border-radius: 45px;
+        margin-left: 2%;
       }
     }
 
     &__text {
       padding: 17px 8px 17px 15px;
       display: flex;
-      width: 90%;
+      width: 82%;
       background: #fbdfcf;
       border-radius: 21px;
+      justify-content: center;
+      margin-left: 11px;
+      margin-bottom: 4px;
 
       input {
         width: 100%;
@@ -484,7 +532,7 @@
     margin-left: 0.4375rem;
     margin-right: -0.5rem;
     margin-bottom: -0.5rem;
-    
+
     &>.message__time {
       font-size: .75rem;
       white-space: nowrap;
@@ -494,6 +542,9 @@
 
   &.own {
     align-items: flex-start;
+    .chat__audio_voice{
+      margin-bottom: -0.2em;
+    }
   }
 
   &__content {

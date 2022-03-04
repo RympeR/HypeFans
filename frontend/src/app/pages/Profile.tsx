@@ -28,6 +28,7 @@ import { CommentComponent } from "../components/CommentComponent";
 import { Preloader } from "../utils/Preloader";
 import { returnByFileType } from "../components/home/Post";
 import { chatAPI } from "../../api/chatAPI";
+import profileLinkBg from "../../assets/images/profile-link-bg.png";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -116,7 +117,9 @@ const Profile = () => {
       </Modal>
       <div
         style={{
-          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${profile.background_photo})`,
+          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${
+            profile.background_photo || profileLinkBg
+          })`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% 210px",
         }}
@@ -152,7 +155,7 @@ const Profile = () => {
           {profile?.posts.length} posts {profile.fans_amount} fans
         </h5>
       </div>
-      <p className="profile__status">{profile.bio}</p>
+      <pre className="profile__status">{profile.bio}</pre>
       {/* <p className="profile__statusFull">Читать больше...</p> */}
       <div
         style={{
@@ -299,23 +302,23 @@ const Profile = () => {
                             onClick={() => {
                               item?.post.liked
                                 ? dispatch(
-                                  deletePostAction({
-                                    id: item?.post.like_id,
-                                    post_id: item?.post.pk,
-                                  })
-                                )
+                                    deletePostAction({
+                                      id: item?.post.like_id,
+                                      post_id: item?.post.pk,
+                                    })
+                                  )
                                 : dispatch(
-                                  createPostAction({
-                                    like: true,
-                                    comment: null,
-                                    donation_amount: 0,
-                                    user: myId,
-                                    parent: null,
-                                    date_time: null,
-                                    post: item?.post.pk,
-                                    id: null,
-                                  })
-                                );
+                                    createPostAction({
+                                      like: true,
+                                      comment: null,
+                                      donation_amount: 0,
+                                      user: myId,
+                                      parent: null,
+                                      date_time: null,
+                                      post: item?.post.pk,
+                                      id: null,
+                                    })
+                                  );
                             }}
                           >
                             <LikeIcon
