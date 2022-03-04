@@ -69,7 +69,7 @@ const Input = ({
         disabled={
           (messageText.length < 0 && messageText.length > 255) ||
           isSendDisabled ||
-          audio !== null
+          audio == null
         }
         onClick={() => {
           if (
@@ -146,7 +146,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   }, [lastUrl, uid]);
 
   const [audioMessage, setAudioMessage] = useState(null);
-
   useEffect(() => {
     if (!ws) return;
     ws.onmessage = (e: any) => {

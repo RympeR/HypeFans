@@ -150,6 +150,13 @@
         position: fixed;
         left: min(86%, 1312px);
         bottom: 18%;
+        order: 2;
+        width: 50px;
+        height: 50px;
+        margin-top: 0.75%;
+        background-color: #fbdfcf;
+        border-radius: 45px;
+        margin-left: 2%;
       }
 
       padding: 17px 8px 17px 15px;
