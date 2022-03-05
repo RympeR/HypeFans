@@ -14,6 +14,7 @@ import logo from "../../../assets/images/logo.svg";
 import { ReactComponent as CommentIcon } from "../../../assets/images/message-circle.svg";
 import { returnByFileType } from "../../../app/components/home/Post";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 export const FavouritePost = ({ item, index }: { item: any, index: number }) => {
     const myId = useSelector((state: RootState) => state.auth.pk);
@@ -48,7 +49,7 @@ export const FavouritePost = ({ item, index }: { item: any, index: number }) => 
                             </div>
                         </div>
                         <div style={{ display: "flex", alignItems: "center" }}>
-                            <div className="profile__postAgo">50 минут назад</div>
+                            <div className="profile__postAgo">{moment(item.post.publication_date).fromNow()}</div>
                             <button className="post__menu-dots">
                                 {/* <MenuDots /> */}
                             </button>

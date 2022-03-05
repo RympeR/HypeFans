@@ -9,6 +9,7 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { userAPI } from "../../api/userAPI";
 import { RootState } from "../../redux/redux";
+import moment from "moment";
 import {
   buyPost,
   createPostAction,
@@ -134,9 +135,8 @@ const Profile = () => {
       </Modal>
       <div
         style={{
-          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${
-            profile.background_photo || profileLinkBg
-          })`,
+          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${profile.background_photo || profileLinkBg
+            })`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% 210px",
         }}
@@ -268,7 +268,7 @@ const Profile = () => {
                           </div>
                         </div>
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          <div className="profile__postAgo">50 минут назад</div>
+                          <div className="profile__postAgo">{moment(item.post.publication_date).fromNow()}</div>
                           <Popup
                             trigger={
                               <button className="post__menu-dots">
@@ -325,23 +325,23 @@ const Profile = () => {
                             onClick={() => {
                               item?.post.liked
                                 ? dispatch(
-                                    deletePostAction({
-                                      id: item?.post.like_id,
-                                      post_id: item?.post.pk,
-                                    })
-                                  )
+                                  deletePostAction({
+                                    id: item?.post.like_id,
+                                    post_id: item?.post.pk,
+                                  })
+                                )
                                 : dispatch(
-                                    createPostAction({
-                                      like: true,
-                                      comment: null,
-                                      donation_amount: 0,
-                                      user: myId,
-                                      parent: null,
-                                      date_time: null,
-                                      post: item?.post.pk,
-                                      id: null,
-                                    })
-                                  );
+                                  createPostAction({
+                                    like: true,
+                                    comment: null,
+                                    donation_amount: 0,
+                                    user: myId,
+                                    parent: null,
+                                    date_time: null,
+                                    post: item?.post.pk,
+                                    id: null,
+                                  })
+                                );
                             }}
                           >
                             <LikeIcon
