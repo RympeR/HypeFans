@@ -30,6 +30,7 @@ import { returnByFileType } from "../components/home/Post";
 import { chatAPI } from "../../api/chatAPI";
 import profileLinkBg from "../../assets/images/profile-link-bg.png";
 import fansIcon from "../../assets/images/icons_person.png";
+import { toast } from "react-toastify";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -67,9 +68,9 @@ const Profile = () => {
     setSubscribeShow(false);
     if (data.status === 200) {
       setProfile({ ...profile, subscribed: true });
-      alert.success("Вы подписались");
+      toast.success("Вы подписались");
     } else {
-      alert.error("Ошибка подписки");
+      toast.error("Ошибка подписки");
     }
   };
 
@@ -91,7 +92,7 @@ const Profile = () => {
       return `${(fans_amount / 1000_000).toFixed(0)} m`;
     } else if (fans_amount % 1000 == 0) {
       return `${(fans_amount / 1000).toFixed(0)} k`;
-    } 
+    }
     if (fans_amount >= 1000_000) {
       return `${(fans_amount / 1000_000).toFixed(2)} m`;
     } else if (fans_amount >= 1000) {
@@ -164,11 +165,17 @@ const Profile = () => {
             )}
           </Popup>
         </div>
-        <img className="profile_photo" src={profile.avatar ? profile.avatar : logo} alt="profile_photo" />
+        <img
+          className="profile_photo"
+          src={profile.avatar ? profile.avatar : logo}
+          alt="profile_photo"
+        />
         <h3 className="profile__name">{profile.first_name}</h3>
         <h4 className="profile__nickname"> {`@${nick}`}</h4>
         <h5 className="profile__info">
-          {profile?.posts.length} posts  <img className="sub_icon" src={fansIcon} /> {sub_amount(profile.fans_amount)}
+          {profile?.posts.length} posts{" "}
+          <img className="sub_icon" src={fansIcon} />{" "}
+          {sub_amount(profile.fans_amount)}
         </h5>
       </div>
       <pre className="profile__status">{profile.bio}</pre>

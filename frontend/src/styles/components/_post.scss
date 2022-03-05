@@ -2,7 +2,8 @@
   max-width: 636px;
   border-radius: 0 0 16px 16px;
   overflow: hidden;
-
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
   @media (max-width: map-get($map: $media, $key: l)) {
     max-width: unset;
   }

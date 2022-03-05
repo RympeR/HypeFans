@@ -27,6 +27,7 @@ import { CommentComponent } from "../CommentComponent";
 import UserBanner from "./UserBanner";
 import logo from "../../../assets/images/logo.svg";
 import { Video } from "../../../app/pages/card/components/VideoPost";
+import { toast } from "react-toastify";
 
 export const returnByFileType = (item: any) => {
   console.log(item);
@@ -85,14 +86,14 @@ const Post = ({
       reciever: post.user.pk,
     });
     if (data.status === 200) {
-      alert.success("Донат отправлен");
+      toast.success("Донат отправлен");
       return setDonateShow(false);
     } else if (data.status === 451) {
       setDonateShow(false);
-      alert.error("Ошибка");
+      toast.error("Ошибка");
       return console.log("Не хватает средств");
     } else {
-      alert.error("Ошибка");
+      toast.error("Ошибка");
       return console.log("ошибка сервера");
     }
   };

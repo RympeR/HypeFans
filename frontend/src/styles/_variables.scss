@@ -15,34 +15,26 @@ $lightgrey: rgba(0, 0, 0, 0.5);
 $white: #fff;
 
 //Time
-$time: (
-  slow: 0.5s,
+$time: (slow: 0.5s,
   normal: 0.35s,
-  fast: 0.15s
-);
+  fast: 0.15s);
 
 //Font Weight
-$font-weight: (
-  normal: 400,
+$font-weight: (normal: 400,
   medium: 500,
   semibold: 600,
-  bold: 700
-);
+  bold: 700);
 
 //Font Size
-$font-size: (
-  s: 14px,
+$font-size: (s: 14px,
   m: 16px,
   l: 18px,
   xl: 24px,
-  xxl: 32px
-);
+  xxl: 32px);
 
 //Media
-$media: (
-  xs: 576px,
+$media: (xs: 576px,
   s: 768px,
   m: 1024px,
   l: 1280px,
-  xl: 1440px
-);
+  xl: 1440px);
