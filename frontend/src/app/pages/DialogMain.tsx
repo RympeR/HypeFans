@@ -40,7 +40,7 @@ import { ChatImage } from "./card/components/ChatImage";
 import { Video } from "./card/components/Video";
 import moment from "moment";
 import logo from "../../assets/images/logo.svg";
-
+import { toast } from "react-toastify";
 const Input = ({
   sendMessage,
   messageText,
@@ -118,6 +118,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const [amICreator, setCreator] = useState(false);
   const inputFileRef = useRef(null);
   const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false);
+
   // useEffect`s
 
   useEffect(() => {
@@ -257,14 +258,14 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       reciever,
     });
     if (data.status === 200) {
-      alert.success("Донат отправлен");
+      toast.success("Донат отправлен");
       return setShowTip(false);
     } else if (data.status === 451) {
       setShowTip(false);
-      alert.error("Ошибка");
+      toast.error("Ошибка");
       return console.log("Не хватает средств");
     } else {
-      alert.error("Ошибка");
+      toast.error("Ошибка");
       return console.log("ошибка сервера");
     }
   };

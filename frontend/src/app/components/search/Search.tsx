@@ -72,7 +72,7 @@ export const Search: React.FC = () => {
           ></input>
         </div>
       </div>
-      <div className="notifications__main">
+      <div className="notifications__main updated_height">
         <div className="notifications__walletMain">
           <div className="user-search-block">
             {users?.map((item, index) => {

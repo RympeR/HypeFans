@@ -838,7 +838,7 @@ export const Settings = () => {
                             marginRight: "12px",
                           }}
                         >
-                          {item.amount}$
+                          {item.amount.toFixed(1)}$
                         </div>
                       </div>
                     ) : null}
@@ -939,7 +939,7 @@ export const Settings = () => {
                             marginRight: "12px",
                           }}
                         >
-                          {item.amount}$
+                          {item.amount.toFixed(1)}$
                         </div>
                       </div>
                     ) : null}
@@ -1324,7 +1324,7 @@ export const Settings = () => {
                             marginRight: "12px",
                           }}
                         >
-                          {item.amount}$
+                          {item.amount.toFixed(1)}$
                         </div>
                       </div>
                     ) : null}
