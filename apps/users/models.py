@@ -160,6 +160,7 @@ class Subscription(models.Model):
                                related_name='target_user_subscribe', on_delete=models.CASCADE)
     start_date = models.DateTimeField('Время подписки', auto_now_add=True)
     end_date = models.DateTimeField('Время конца подписки')
+    finished = models.BooleanField('Завершена', default=False)
 
     def __str__(self):
         return f'{self.source}-{self.target}'
@@ -179,6 +180,7 @@ class ChatSubscription(models.Model):
         'Время конца подписки',
         default=datetime.datetime.now() + datetime.timedelta(7)
     )
+    finished = models.BooleanField('Завершена', default=False)
 
     class Meta:
         verbose_name = 'Подписка на  сообщение'

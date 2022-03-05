@@ -622,7 +622,7 @@ class ChatSubscriptionGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ChatSubscription
-        fields = '__all__'
+        exclude = 'finished',
 
 
 class SubscriptionGetSerializer(serializers.ModelSerializer):
@@ -635,7 +635,7 @@ class SubscriptionGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subscription
-        fields = '__all__'
+        exclude = 'finished',
 
     def get_price(self, subscription: Subscription):
         return subscription.target.subscribtion_price

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'silk',
     'mptt',
     'channels',
+    'django_celery_beat',
 
     'apps.chat',
     'apps.users',
@@ -99,6 +100,12 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_TIMEZONE = "Europe/London"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
 CACHES = {
     "default": {
