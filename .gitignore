@@ -141,11 +141,6 @@ media/
 migrations/
 logs/
 !static/media
+!build/static
 .parcel-cache/
-apidoc/
-core/
-docs/
 mobile_version/
-static/
-templates/
-apps/
