@@ -247,7 +247,7 @@ class UserCreationSerializer(serializers.Serializer):
 
 
 class UserBlockSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
     block = serializers.BooleanField()
 
 

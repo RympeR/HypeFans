@@ -386,15 +386,17 @@ class AddBlockedUserAPI(generics.GenericAPIView):
         return self.request.user
 
     def put(self, request, *args, **kwargs):
-        user = User.objects.get(pk=request.data['user'])
-        if request.data['block']:
-            self.request.user.blocked_users.add(user)
-        else:
-            self.request.user.blocked_users.remove(user)
+        print(request.data['user'])
+        for el in request.data['user']:
+            user = User.objects.get(pk=el)
+            if request.data.get('block', False):
+                self.request.user.blocked_users.add(user)
+            else:
+                self.request.user.blocked_users.remove(user)
         self.request.user.save()
         return Response({
-            'user': user.pk,
-            'block': request.data['block']
+            'user': request.data['user'],
+            'block': request.data.get('block', False)
         })
 
 
