@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 import { settingsAPI } from "../../../api/settingsAPI";
 import { ReactComponent as ArrowLeft } from "../../../assets/images/leftIcon.svg";
 import { ReactComponent as SearchSvg } from "../../../assets/images/search.svg";
-import logo from '../../../assets/images/logo.svg';
+import logo from "../../../assets/images/logo.svg";
+import { AddToChatItem } from "../../components/addToChat/AddToChatItem";
+import { AddToChatItemSelected } from "../../components/addToChat/AddToChatItemSelected";
+import { userAPI } from "../../../api/userAPI";
 
 export const ListsComponent = () => {
   const [lists, setLists] = React.useState({
@@ -11,10 +14,17 @@ export const ListsComponent = () => {
     last_subs: [],
     friends: [],
     last_donators: [],
-    blocked_users: []
+    blocked_users: [],
   });
   const [currentTab, setCurrentTab] = React.useState("list");
-
+  const [selectedItems, setSelectedItems] = React.useState<Array<any>>([]);
+  const unblockUsers = async () => {
+    console.log(selectedItems.map((item) => item.pk));
+    await userAPI.blockUser({
+      user: selectedItems.map((item) => item.pk),
+      block: false,
+    });
+  };
   React.useEffect(() => {
     const getLists = async () => {
       const data = await settingsAPI.getLists();
@@ -85,7 +95,9 @@ export const ListsComponent = () => {
           <div
             className="notifications__listItem"
             onClick={() =>
-              lists.last_donators.length > 0 ? setCurrentTab("last_donators") : null
+              lists.last_donators.length > 0
+                ? setCurrentTab("last_donators")
+                : null
             }
           >
             <div className="notifications__listText">
@@ -101,7 +113,9 @@ export const ListsComponent = () => {
           <div
             className="notifications__listItem"
             onClick={() =>
-              lists.blocked_users.length > 0 ? setCurrentTab("blocked_users") : null
+              lists.blocked_users.length > 0
+                ? setCurrentTab("blocked_users")
+                : null
             }
           >
             <div className="notifications__listText">
@@ -259,7 +273,9 @@ export const ListsComponent = () => {
             <div>
               <ArrowLeft onClick={() => setCurrentTab("list")} />
             </div>
-            <div style={{ marginTop: "5px", marginLeft: "8px" }}>Заблокированные пользователи</div>
+            <div style={{ marginTop: "5px", marginLeft: "8px" }}>
+              Заблокированные пользователи
+            </div>
           </div>
           <div
             style={{
@@ -271,37 +287,54 @@ export const ListsComponent = () => {
               alignItems: "center",
             }}
           >
-            <SearchSvg />
-            <input
-              style={{ marginLeft: "16px", width: "80%" }}
-              placeholder="Найти людей:"
-              value={inputValue}
-              onChange={(val) => setInputValue(val.currentTarget.value)}
-            ></input>
+            <div>
+              <SearchSvg />
+              <input
+                style={{ marginLeft: "16px", width: "80%" }}
+                placeholder="Найти людей:"
+                value={inputValue}
+                onChange={(val) => setInputValue(val.currentTarget.value)}
+              ></input>
+            </div>
           </div>
-          {lists?.blocked_users
+            <button
+              className="notifications__settingBtn"
+              style={{ margin: "0px", width: "100%" }}
+              onClick={() => unblockUsers()}
+              disabled={selectedItems.length === 0}
+            >
+              Разблокировать
+            </button>
+          {selectedItems
             ?.filter(
               (item) => inputValue === "" || item.username.includes(inputValue)
             )
             ?.map((item, index) => {
               return (
-                <div
-                  className="notifications__walletChild"
-                  style={{ borderBottom: "0px" }}
-                  key={`${index} fav-list`}
-                >
-                  <div style={{ display: "flex" }}>
-                    <div>
-                      <Link to={`/profile/${item.username}`}>
-                        <img src={item.avatar || logo} alt="img" />
-                      </Link>
-                    </div>
-                    <div>
-                      <h3>{item.first_name ?? "Имя"}</h3>
-                      <h4>@{item.username ?? "nickname"}</h4>
-                    </div>
-                  </div>
-                </div>
+                <AddToChatItemSelected
+                  item={item}
+                  index={index}
+                  items={selectedItems}
+                  setSelectedItems={setSelectedItems}
+                  key={index}
+                />
+              );
+            })}
+          {selectedItems.length > 0 ? <hr /> : null}
+          {lists?.blocked_users
+            ?.filter(
+              (item) => inputValue === "" || item.username.includes(inputValue)
+            )
+            ?.filter((item) => !selectedItems.includes(item))
+            ?.map((item, index) => {
+              return (
+                <AddToChatItem
+                  item={item}
+                  index={index}
+                  items={selectedItems}
+                  setSelectedItems={setSelectedItems}
+                  key={index}
+                />
               );
             })}
         </div>
@@ -320,7 +353,9 @@ export const ListsComponent = () => {
             <div>
               <ArrowLeft onClick={() => setCurrentTab("list")} />
             </div>
-            <div style={{ marginTop: "5px", marginLeft: "8px" }}>Последние донатеры</div>
+            <div style={{ marginTop: "5px", marginLeft: "8px" }}>
+              Последние донатеры
+            </div>
           </div>
           <div
             style={{

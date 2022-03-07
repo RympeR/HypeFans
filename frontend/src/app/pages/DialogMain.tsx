@@ -284,7 +284,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   };
 
   const blockUser = async (id: number) => {
-    await userAPI.blockUser({ user: id });
+    await userAPI.blockUser({ user: [id], block: true});
   };
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);

@@ -37,10 +37,10 @@ export const userAPI = {
         return response;
       });
   },
-  blockUser({ user }: { user: number }) {
+  blockUser({ user, block=true }: { user: Array<number>, block?: boolean }) {
     return instance
       .put('/user/block-user/', {
-        user
+        user, block
       })
       .then((response) => {
         return response;
