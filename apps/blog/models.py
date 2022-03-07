@@ -94,7 +94,7 @@ class PostAction(MPTTModel):
     class Meta:
         verbose_name = 'Публикация действие'
         verbose_name_plural = 'Публикации действия'
-        ordering = ['-post__publication_date']
+        # ordering = ['-post__publication_date']
 
     def __str__(self):
         return f"{self.pk}-{self.post}"
