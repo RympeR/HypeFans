@@ -28,7 +28,6 @@ export const CommentComponent = ({
   const [comments, setComments] = useState([]);
 
   const likeComment = async (val: any) => {
-    debugger
     await blogAPI
       .likeComment({
         like: val.like,
@@ -47,6 +46,7 @@ export const CommentComponent = ({
               return {
                 ...item,
                 like: res.like,
+                like_amount: res.like ? item.like_amount + 1 : item.like_amount - 1
               };
             } else return item;
           });
@@ -94,7 +94,6 @@ export const CommentComponent = ({
     const [parentID, setParentID] = useState(item.id);
     const [showAnswer, setShowAnswer] = useState(false);
     const [showComments, setShowComments] = useState(false);
-    const [likeAmount, setLikeAmount] = useState(item.likeAmount);
 
     const addComment = async (val: {
       user: number;
@@ -137,7 +136,7 @@ export const CommentComponent = ({
           </p>
           <div style={{ display: "flex" }}>
             <div style={{ marginRight: "10px" }}>2 мин.</div>
-            <div style={{ marginRight: "10px" }}>{likeAmount || 0} лайков</div>
+            <div style={{ marginRight: "10px" }}>{item.like_amount} лайков</div>
             <div
               style={{ marginRight: "10px" }}
               onClick={() => setShowAnswer(!showAnswer)}
@@ -179,7 +178,7 @@ export const CommentComponent = ({
                       <div style={{ display: "flex" }}>
                         <div style={{ marginRight: "10px" }}>2 мин.</div>
                         <div style={{ marginRight: "10px" }}>
-                          {likeAmount || 0} лайков
+                          {item.like_amount || 0} лайков
                         </div>
                         <div
                           style={{ marginRight: "10px" }}
@@ -194,10 +193,6 @@ export const CommentComponent = ({
                       fill={item.like ? "#C41E3A" : "none"}
                       strokeOpacity={item.like ? 0 : 0.6}
                       onClick={() => {
-                        setLikeAmount(
-                          likeAmount - 1 ? !item.like : likeAmount + 1
-                        );
-                        console.log('liked');
                         likeComment({
                           like: !item.like,
                           parent: item.id,
