@@ -158,11 +158,6 @@ const Profile = () => {
                 <button>Избранные</button>
               </Link>
             </div>
-            {myNick === nick ? null : (
-              <div style={{ padding: "5px" }}>
-                <button onClick={() => writeMessage()}>Написать</button>
-              </div>
-            )}
           </Popup>
         </div>
         <img
@@ -235,6 +230,15 @@ const Profile = () => {
                 Вы уже подписанны
               </p>
             )}
+            <div style={{ width: "100%" }}>
+              <button
+                className="notifications__settingBtn"
+                style={{ margin: "20px 0px", width: "100%" }}
+                onClick={() => writeMessage()}
+              >
+                Написать
+              </button>
+            </div>
           </div>
         ) : null}
       </div>
