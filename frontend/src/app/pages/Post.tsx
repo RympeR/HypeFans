@@ -29,7 +29,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
   const myId = useSelector((state: RootState) => state.auth.pk);
   const post = useSelector((state: RootState) => state.blog.post);
   const isLoading = useSelector((state: RootState) => state.blog.isPostLoading);
-  const [show, setShow] = useState<boolean>(false)
+  const [show, setShow] = useState<boolean>(false);
 
   if (isLoading) {
     return <div>Загрузка...</div>;
@@ -44,12 +44,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
     } else if (item.file_type === 1) {
       return (
         <a href={item._file} download>
-          Скачать{" "}
-          {
-            item._file.split("/")[
-            item._file.split("/").length - 1
-            ]
-          }
+          Скачать {item._file.split("/")[item._file.split("/").length - 1]}
         </a>
       );
     } else if (item.file_type === 2) {
@@ -60,12 +55,11 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
           src={item._file}
           alt="postIMG"
           className="profile"
-          style={{ maxHeight: "50vh" }}
+          // style={{ maxHeight: "50vh" }}
         ></img>
       );
     }
-
-  }
+  };
 
   return (
     <div>
@@ -108,17 +102,13 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
             <Slider className="profile__postIMG" dots={true} arrows={false}>
               {post.attachments.map((item: any, index: number) => {
                 return (
-                  <div key={`${index} slideMain`}>
-                    {getPostType(item)}
-                  </div>
+                  <div key={`${index} slideMain`}>{getPostType(item)}</div>
                 );
               })}
             </Slider>
           ) : (
             <div className="profile__postIMG">
-              {post?.attachments ? getPostType(post?.attachments[0]) : (
-                <></>
-              )}
+              {post?.attachments ? getPostType(post?.attachments[0]) : <></>}
             </div>
           )}
           <div className="post__bottom" style={{ margin: "24px 24px" }}>
@@ -129,23 +119,23 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                   onClick={() => {
                     post?.liked
                       ? dispatch(
-                        deletePostActionModal({
-                          id: post?.like_id,
-                          post_id: post?.id,
-                        })
-                      )
+                          deletePostActionModal({
+                            id: post?.like_id,
+                            post_id: post?.id,
+                          })
+                        )
                       : dispatch(
-                        createPostActionModal({
-                          like: true,
-                          comment: null,
-                          donation_amount: 0,
-                          parent: null,
-                          user: myId,
-                          date_time: null,
-                          post: post?.id,
-                          id: null,
-                        })
-                      );
+                          createPostActionModal({
+                            like: true,
+                            comment: null,
+                            donation_amount: 0,
+                            parent: null,
+                            user: myId,
+                            date_time: null,
+                            post: post?.id,
+                            id: null,
+                          })
+                        );
                   }}
                 >
                   <LikeIcon
@@ -156,7 +146,10 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                 </button>
 
                 <button className="post__action-btn">
-                  <CommentIcon className="post__action-icon" onClick={() => setShow(true)} />
+                  <CommentIcon
+                    className="post__action-icon"
+                    onClick={() => setShow(true)}
+                  />
                 </button>
               </div>
               <button
@@ -176,10 +169,15 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
 
             <p className="post__like-amount">{post?.likes_amount} лайков</p>
 
-            <CommentComponent data={post.comments} postId={post?.id} show={show} setShow={setShow} />
+            <CommentComponent
+              data={post.comments}
+              postId={post?.id}
+              show={show}
+              setShow={setShow}
+            />
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };

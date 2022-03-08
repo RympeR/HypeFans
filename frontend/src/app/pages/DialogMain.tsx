@@ -25,8 +25,6 @@ import { ReactComponent as Readed } from "../../assets/images/messageIcon.svg";
 import { ReactComponent as NotReaded } from "../../assets/images/messageIconWhite.svg";
 import { ReactComponent as MicrIcon } from "../../assets/images/micI.svg";
 import { ReactComponent as More } from "../../assets/images/more-vertical-chat.svg";
-import { ReactComponent as Vektor } from "../../assets/images/send.svg";
-import { ReactComponent as VektorDisabled } from "../../assets/images/sendDisabled.svg";
 import { ReactComponent as Tip } from "../../assets/images/tipI.svg";
 import { ReactComponent as VideoIcn } from "../../assets/images/videoI.svg";
 import { ReactComponent as CloseIcon } from "../../assets/images/x-circle.svg";
@@ -40,57 +38,7 @@ import { Video } from "./card/components/Video";
 import moment from "moment";
 import logo from "../../assets/images/logo.svg";
 import { toast } from "react-toastify";
-const Input = ({
-  sendMessage,
-  messageText,
-  isSendDisabled,
-  setMessageText,
-  audio,
-}: {
-  sendMessage: any;
-  isSendDisabled: boolean;
-  messageText: string;
-  setMessageText: (text: string) => void;
-  audio: any;
-}) => {
-  const VektorIcon = () => <Vektor />;
-  const VektorIconDisabled = () => <VektorDisabled />;
-  return (
-    <>
-      <div className="chat__text">
-        <input
-          value={messageText}
-          onChange={(val) => setMessageText(val.currentTarget.value)}
-        ></input>
-      </div>
-      <button
-        className="send"
-        disabled={
-          (messageText.length < 0 && messageText.length > 255) ||
-          isSendDisabled ||
-          audio == null
-        }
-        onClick={() => {
-          if (
-            (messageText.length > 0 && messageText.length < 255) ||
-            isSendDisabled
-          ) {
-            return sendMessage();
-          } else {
-            return null;
-          }
-        }}
-      >
-        {(messageText.length > 0 && messageText.length < 255) ||
-          isSendDisabled ? (
-          <VektorIcon />
-        ) : (
-          <VektorIconDisabled />
-        )}
-      </button>
-    </>
-  );
-};
+import { ChatInput } from "../components/chatInput/ChatInput";
 
 export const DialogMain = ({ rooms }: { rooms: any }) => {
   const history = useHistory();
@@ -165,8 +113,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   useEffect(() => {
     if (!wsRead) return;
-    wsRead.onmessage = (e: any) => {
-    };
+    wsRead.onmessage = (e: any) => {};
   }, [wsRead]);
 
   useEffect(() => {
@@ -213,7 +160,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   // Добавление файлов в сообщение
 
-  const sendMessage = async () => {
+  const sendMessage = async (messageMain: string | null) => {
+    // debugger
     setIsSendDisabled(true);
     const attachmentsIds: Array<number> = [];
     if (audioMessage !== null) {
@@ -228,10 +176,12 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     }
     ws.send(
       JSON.stringify({
-        text: !audioMessage ? CryptoJS.AES.encrypt(
-          messageText,
-          "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
-        ).toString() : "",
+        text: !audioMessage
+          ? CryptoJS.AES.encrypt(
+              messageMain,
+              "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+            ).toString()
+          : "",
         user: uid,
         is_payed: false,
         attachments: attachmentsIds,
@@ -260,10 +210,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       return setShowTip(false);
     } else if (data.status === 451) {
       setShowTip(false);
-      toast.error("Ошибка");
+      toast.error("Не хватает средств");
       return console.log("Не хватает средств");
     } else {
-      toast.error("Ошибка");
+      toast.error("ошибка сервера");
       return console.log("ошибка сервера");
     }
   };
@@ -284,12 +234,14 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   };
 
   const blockUser = async (id: number) => {
-    await userAPI.blockUser({ user: [id], block: true});
+    await userAPI.blockUser({ user: [id], block: true });
   };
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
   const [isShown, setShown] = useState(true);
   const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false);
+
+  console.log("rerender");
 
   return (
     <div className="chat__dialogsMain">
@@ -383,14 +335,14 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited?.avatar || logo
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited?.avatar || logo
                   : rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.creator?.avatar || logo
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.creator?.avatar || logo
                 : rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.logo || logo
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.logo || logo
             }
             className="logo_site"
             alt="avatar"
@@ -413,14 +365,14 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited?.username
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited?.username
                   : rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.creator?.username
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.creator?.username
                 : rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.name}
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.name}
             </h2>
           </div>
         </div>
@@ -444,9 +396,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `hype-fans.com/profile/${rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited.username
+                  `hype-fans.com/profile/${
+                    rooms.find(
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited.username
                   }`
                 );
               }}
@@ -508,8 +461,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                   key={Math.random() + index + Math.random()}
                 >
                   {item.message_price !== 0 &&
-                    !item.is_payed &&
-                    item.user.pk !== uid ? (
+                  !item.is_payed &&
+                  item.user.pk !== uid ? (
                     <div
                       style={{
                         display: "flex",
@@ -535,57 +488,71 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     </div>
                   ) : (
                     <div>
-                      <div className="message__content has-solid-background">
+                      <div
+                        className={
+                          "message__content " +
+                          (item?.attachments?.length > 0 &&
+                          item.attachments.filter(
+                            (el: any) => el.file_type === 1
+                          ).length == 0
+                            ? "no-background"
+                            : "has-solid-background")
+                        }
+                      >
                         <div
                           className="message__text_content"
                           style={
                             item?.attachments.length > 0
                               ? {
-                                justifyContent: "flex-end",
-                              }
+                                  justifyContent: "flex-end",
+                                }
                               : {}
                           }
                         >
-                          {!item?.attachments?.some((item: any) => item.file_type === 2) ? CryptoJS.AES.decrypt(
-                            item.text,
-                            "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
-                          ).toString(CryptoJS.enc.Utf8) : ""}
+                          {!item?.attachments?.some(
+                            (item: any) => item.file_type === 2
+                          )
+                            ? CryptoJS.AES.decrypt(
+                                item.text,
+                                "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+                              ).toString(CryptoJS.enc.Utf8)
+                            : ""}
                           {item?.attachments.length > 0
                             ? item?.attachments.map(
-                              (item: any, index: number) => {
-                                // debugger
-                                if (item.file_type === 4) {
-                                  return <Video src={item.file_url} />;
-                                } else if (item.file_type === 1) {
-                                  return (
-                                    <a href={item.file_url} download>
-                                      Скачать{" "}
-                                      {
-                                        item.file_url.split("/")[
-                                        item.file_url.split("/").length - 1
-                                        ]
-                                      }
-                                    </a>
-                                  );
-                                } else if (item.file_type === 2) {
-                                  return (
-                                    <ReactAudioPlayer
-                                      src={item.file_url}
-                                      controls
-                                      className="chat__audio_voice"
-                                    />
-                                  );
-                                } else {
-                                  return (
-                                    <ChatImage
-                                      item={item}
-                                      index={index}
-                                      key={index + Math.random()}
-                                    />
-                                  );
+                                (item: any, index: number) => {
+                                  // debugger
+                                  if (item.file_type === 4) {
+                                    return <Video src={item.file_url} />;
+                                  } else if (item.file_type === 1) {
+                                    return (
+                                      <a href={item.file_url} download>
+                                        Скачать{" "}
+                                        {
+                                          item.file_url.split("/")[
+                                            item.file_url.split("/").length - 1
+                                          ]
+                                        }
+                                      </a>
+                                    );
+                                  } else if (item.file_type === 2) {
+                                    return (
+                                      <ReactAudioPlayer
+                                        src={item.file_url}
+                                        controls
+                                        className="chat__audio_voice"
+                                      />
+                                    );
+                                  } else {
+                                    return (
+                                      <ChatImage
+                                        item={item}
+                                        index={index}
+                                        key={index + Math.random()}
+                                      />
+                                    );
+                                  }
                                 }
-                              }
-                            )
+                              )
                             : null}
                           {item.user.pk === uid ? (
                             <span className="message__meta">
@@ -622,11 +589,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             >
               <AttachIcon style={{ width: "22px", height: "22px" }} />
             </button>
-            <Input
+            <ChatInput
               sendMessage={sendMessage}
               isSendDisabled={isSendDisabled}
-              messageText={messageText}
-              setMessageText={setMessageText}
               audio={audioMessage}
             />
           </div>
@@ -715,16 +680,16 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               <h3
                 style={
                   (messageText.length > 0 && messageText.length < 255) ||
-                    isSendDisabled
+                  isSendDisabled
                     ? { color: "#FB5734" }
                     : { color: "grey" }
                 }
                 onClick={() => {
                   if (
-                    (messageText.length > 0 && messageText.length < 255) ||
+                    (messageText.length > 0 && messageText.length < 255) || audioMessage ||
                     isSendDisabled
                   ) {
-                    return sendMessage();
+                    return sendMessage(messageText);
                   } else {
                     return null;
                   }
@@ -879,7 +844,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <div style={{ width: "20px" }}></div>
             <h3
               onClick={() => {
-                if (!isSendDisabled) sendMessage();
+                if (!isSendDisabled) sendMessage(messageText);
               }}
               style={{ color: "#FB5734" }}
             >

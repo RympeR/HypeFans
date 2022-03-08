@@ -2,10 +2,30 @@
   display: flex;
   flex-direction: column;
 
+  &__audio {
+    &.open {
+      z-index: 14;
+      position: absolute;
+      bottom: 3.5em;
+      left: -10%;
+      margin-left: 4px;
+      padding: 8px;
+      background-color: #fbdfcf;
+      border-radius: 15px;
+      width: 140%;
+      visibility: visible !important;
+    }
+  }
+
   &__attach_icon {
-    z-index: 3;
-    right: 15%;
-    position: fixed;
+    order: 1;
+    background-color: #fbdfcf;
+    border-top-right-radius: 21px;
+    border-bottom-right-radius: 21px;
+    width: 25px;
+    padding-right: 3px;
+    margin-right: -2px;
+    padding-right: 30px;
   }
 
   &__audio_voice {
@@ -15,11 +35,25 @@
   }
 
   &__chat_actions {
+    visibility: hidden;
     margin: 0px 24px;
     margin-bottom: 8px;
     display: flex;
     flex-wrap: wrap;
-
+    &.chat__actions_open {
+      display: flex;
+      z-index: 13;
+      position: fixed;
+      bottom: 14.7%;
+      border-radius: 15px;
+      background-color: white;
+      height: 44px;
+      padding-top: 7px;
+      padding-right: 10px;
+      padding-left: 10px;
+      visibility: visible !important;
+      transition: 1s;
+    }
     @media screen and (max-width : 500px) {
       margin: -60px 14px 8px;
     }
@@ -73,12 +107,12 @@
     &::-webkit-scrollbar-track {
       background-color: rgba(248, 226, 194, 0.534);
     }
-  
+
     &::-webkit-scrollbar-thumb {
       box-shadow: inset 0 0 6px rgba(255, 145, 0, 0.575);
       border-radius: 15px;
     }
-  
+
     &::-webkit-scrollbar {
       width: 8px;
     }
@@ -153,39 +187,36 @@
   }
 
   &__input {
-    width: 49%;
+    width: 55%;
     display: flex;
     flex-direction: row;
-    height: 60px;
-    bottom: 0px;
+    height: 50px;
+    margin-bottom: -0.2em;
     position: fixed;
     z-index: 2;
     bottom: 15.5%;
+    margin-inline-start: 0.3em;
   }
 
   &__text {
-    @media screen and (min-width : 500px) {
+    @media screen and (min-width : 450px) {
       &+button.send {
-        position: fixed;
-        left: min(86%, 1312px);
-        bottom: 18%;
         order: 2;
         width: 50px;
-        height: 50px;
-        margin-top: 0.75%;
+        height: 47px;
         background-color: #fbdfcf;
         border-radius: 45px;
-        margin-left: 2%;
+        margin-left: 1%;
+        margin-top: 0.2em;
       }
 
       padding: 17px 8px 17px 15px;
       display: flex;
-      width: 49%;
-      max-width: 628px;
-      bottom: 17%;
-      position: fixed;
+      width: 85%;
+      max-width: 590px;
       background: #fbdfcf;
-      border-radius: 21px;
+      border-top-left-radius: 21px;
+      border-bottom-left-radius: 21px;
 
       button {
         width: 50px;
@@ -213,6 +244,7 @@
   border: 1px solid #cccccc;
   padding: 10px;
   overflow-y: scroll;
+
   &::-webkit-scrollbar-track {
     background-color: rgba(248, 226, 194, 0.534);
   }
@@ -263,14 +295,14 @@
         display: flex;
         z-index: 13;
         position: fixed;
-        bottom: 6px;
+        bottom: 3px;
         border-radius: 15px;
         background-color: white;
         height: 50px;
         padding-top: 9px;
         padding-right: 10px;
         padding-left: 10px;
-        visibility: visible;
+        visibility: visible!important;
         transition: 1s;
       }
     }
@@ -345,15 +377,16 @@
       overflow-y: scroll;
       overflow-x: hidden;
       height: 100%;
+
       &::-webkit-scrollbar-track {
         background-color: rgba(248, 226, 194, 0.534);
       }
-    
+
       &::-webkit-scrollbar-thumb {
         box-shadow: inset 0 0 6px rgba(255, 145, 0, 0.575);
         border-radius: 15px;
       }
-    
+
       &::-webkit-scrollbar {
         width: 8px;
       }
@@ -463,10 +496,10 @@
 
     &__attach_icon {
       order: 1;
-      z-index: 12;
-      position: absolute;
-      left: 72%;
-      top: 24%;
+      height: 56px;
+      width: 25px;
+      margin-left: -1px;
+      padding-right: 30px;
     }
 
     &__dialog {
@@ -497,13 +530,13 @@
     &__text {
       padding: 17px 8px 17px 15px;
       display: flex;
-      width: 82%;
+      width: 77%;
       background: #fbdfcf;
-      border-radius: 21px;
       justify-content: center;
-      margin-left: 11px;
+      margin-left: 2px;
       margin-bottom: 4px;
-
+      border-top-left-radius: 21px;
+      border-bottom-left-radius: 21px;
       input {
         width: 100%;
       }
@@ -524,15 +557,16 @@
     border: 1px solid #cccccc;
     padding: 10px;
     overflow-y: scroll;
+
     &::-webkit-scrollbar-track {
       background-color: rgba(248, 226, 194, 0.534);
     }
-  
+
     &::-webkit-scrollbar-thumb {
       box-shadow: inset 0 0 6px rgba(255, 145, 0, 0.575);
       border-radius: 15px;
     }
-  
+
     &::-webkit-scrollbar {
       width: 8px;
     }
@@ -611,6 +645,10 @@
     &.has-solid-background {
       padding: 0.3125rem 1rem 0.25rem 0.6rem;
       background: rgb(249 208 183 / 67%);
+      margin-bottom: 7px;
+    }
+    &.no-background {
+      padding: 0.3125rem 1rem 0.25rem 0.6rem;
       margin-bottom: 7px;
     }
   }
