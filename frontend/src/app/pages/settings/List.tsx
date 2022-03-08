@@ -15,6 +15,7 @@ export const ListsComponent = () => {
     friends: [],
     last_donators: [],
     blocked_users: [],
+    my_subs: [],
   });
   const [currentTab, setCurrentTab] = React.useState("list");
   const [selectedItems, setSelectedItems] = React.useState<Array<any>>([]);
@@ -125,6 +126,24 @@ export const ListsComponent = () => {
             <div>
               {lists?.blocked_users[0]?.avatar ? (
                 <img src={lists?.blocked_users[0]?.avatar} alt="fff" />
+              ) : null}
+            </div>
+          </div>
+          <div
+            className="notifications__listItem"
+            onClick={() =>
+              lists.my_subs.length > 0
+                ? setCurrentTab("my_subs")
+                : null
+            }
+          >
+            <div className="notifications__listText">
+              <h1>Мои подписки</h1>
+              <h2>{lists.my_subs.length} человек</h2>
+            </div>
+            <div>
+              {lists?.my_subs[0]?.avatar ? (
+                <img src={lists?.my_subs[0]?.avatar} alt="fff" />
               ) : null}
             </div>
           </div>
@@ -437,6 +456,67 @@ export const ListsComponent = () => {
             ></input>
           </div>
           {lists?.friends
+            ?.filter(
+              (item) => inputValue === "" || item.username.includes(inputValue)
+            )
+            ?.map((item, index) => {
+              return (
+                <div
+                  className="notifications__walletChild"
+                  style={{ borderBottom: "0px" }}
+                  key={`${index} fav-list`}
+                >
+                  <div style={{ display: "flex" }}>
+                    <div>
+                      <Link to={`/profile/${item.username}`}>
+                        <img src={item.avatar || logo} alt="img" />
+                      </Link>
+                    </div>
+                    <div>
+                      <h3>{item.first_name ?? "Имя"}</h3>
+                      <h4>@{item.username ?? "nickname"}</h4>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+      ) : null}
+      {currentTab === "my_subs" ? (
+        <div className="notifications__walletMain">
+          <div
+            style={{
+              fontWeight: "bold",
+              fontSize: "18px",
+              margin: "15px 16px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <ArrowLeft onClick={() => setCurrentTab("list")} />
+            </div>
+            <div style={{ marginTop: "5px", marginLeft: "8px" }}>Друзья</div>
+          </div>
+          <div
+            style={{
+              borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+              paddingLeft: "15px",
+              paddingTop: "16px",
+              paddingBottom: "21px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <SearchSvg />
+            <input
+              style={{ marginLeft: "16px", width: "80%" }}
+              placeholder="Найти людей:"
+              value={inputValue}
+              onChange={(val) => setInputValue(val.currentTarget.value)}
+            ></input>
+          </div>
+          {lists?.my_subs
             ?.filter(
               (item) => inputValue === "" || item.username.includes(inputValue)
             )
