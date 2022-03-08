@@ -25,8 +25,6 @@ import { ReactComponent as Readed } from "../../assets/images/messageIcon.svg";
 import { ReactComponent as NotReaded } from "../../assets/images/messageIconWhite.svg";
 import { ReactComponent as MicrIcon } from "../../assets/images/micI.svg";
 import { ReactComponent as More } from "../../assets/images/more-vertical-chat.svg";
-import { ReactComponent as Vektor } from "../../assets/images/send.svg";
-import { ReactComponent as VektorDisabled } from "../../assets/images/sendDisabled.svg";
 import { ReactComponent as Tip } from "../../assets/images/tipI.svg";
 import { ReactComponent as VideoIcn } from "../../assets/images/videoI.svg";
 import { ReactComponent as CloseIcon } from "../../assets/images/x-circle.svg";
@@ -40,57 +38,7 @@ import { Video } from "./card/components/Video";
 import moment from "moment";
 import logo from "../../assets/images/logo.svg";
 import { toast } from "react-toastify";
-const Input = ({
-  sendMessage,
-  messageText,
-  isSendDisabled,
-  setMessageText,
-  audio,
-}: {
-  sendMessage: any;
-  isSendDisabled: boolean;
-  messageText: string;
-  setMessageText: (text: string) => void;
-  audio: any;
-}) => {
-  const VektorIcon = () => <Vektor />;
-  const VektorIconDisabled = () => <VektorDisabled />;
-  return (
-    <>
-      <div className="chat__text">
-        <input
-          value={messageText}
-          onChange={(val) => setMessageText(val.currentTarget.value)}
-        ></input>
-      </div>
-      <button
-        className="send"
-        disabled={
-          (messageText.length < 0 && messageText.length > 255) ||
-          isSendDisabled ||
-          audio == null
-        }
-        onClick={() => {
-          if (
-            (messageText.length > 0 && messageText.length < 255) ||
-            isSendDisabled
-          ) {
-            return sendMessage();
-          } else {
-            return null;
-          }
-        }}
-      >
-        {(messageText.length > 0 && messageText.length < 255) ||
-          isSendDisabled ? (
-          <VektorIcon />
-        ) : (
-          <VektorIconDisabled />
-        )}
-      </button>
-    </>
-  );
-};
+import { ChatInput } from "../components/chatInput/ChatInput";
 
 export const DialogMain = ({ rooms }: { rooms: any }) => {
   const history = useHistory();
@@ -213,7 +161,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   // Добавление файлов в сообщение
 
-  const sendMessage = async () => {
+  const sendMessage = async (messageMain: string | null) => {
+    debugger
     setIsSendDisabled(true);
     const attachmentsIds: Array<number> = [];
     if (audioMessage !== null) {
@@ -229,7 +178,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     ws.send(
       JSON.stringify({
         text: !audioMessage ? CryptoJS.AES.encrypt(
-          messageText,
+          messageMain,
           "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
         ).toString() : "",
         user: uid,
@@ -284,12 +233,15 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   };
 
   const blockUser = async (id: number) => {
-    await userAPI.blockUser({ user: [id], block: true});
+    await userAPI.blockUser({ user: [id], block: true });
   };
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
   const [isShown, setShown] = useState(true);
   const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false);
+
+  console.log("rerender");
+
 
   return (
     <div className="chat__dialogsMain">
@@ -622,11 +574,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             >
               <AttachIcon style={{ width: "22px", height: "22px" }} />
             </button>
-            <Input
+            <ChatInput
               sendMessage={sendMessage}
               isSendDisabled={isSendDisabled}
-              messageText={messageText}
-              setMessageText={setMessageText}
               audio={audioMessage}
             />
           </div>
@@ -724,7 +674,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     (messageText.length > 0 && messageText.length < 255) ||
                     isSendDisabled
                   ) {
-                    return sendMessage();
+                    return sendMessage(messageText);
                   } else {
                     return null;
                   }
@@ -879,7 +829,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <div style={{ width: "20px" }}></div>
             <h3
               onClick={() => {
-                if (!isSendDisabled) sendMessage();
+                if (!isSendDisabled) sendMessage(messageText);
               }}
               style={{ color: "#FB5734" }}
             >
