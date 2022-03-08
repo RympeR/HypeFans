@@ -548,4 +548,8 @@ class GetUserLists(GenericAPIView):
         blocked_users = user.blocked_users.all()
         result['blocked_users'] = self.serializer_class(
             many=True, instance=blocked_users).data
+        my_subs = user.source_user_subscribe.filter(finished=False)
+        my_subs = list(set(map(lambda x: x.target, my_subs)))
+        result['my_subs'] = self.serializer_class(
+            many=True, instance=my_subs).data
         return Response(result)
