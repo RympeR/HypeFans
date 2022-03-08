@@ -496,7 +496,7 @@ export const ListsComponent = () => {
             <div>
               <ArrowLeft onClick={() => setCurrentTab("list")} />
             </div>
-            <div style={{ marginTop: "5px", marginLeft: "8px" }}>Друзья</div>
+            <div style={{ marginTop: "5px", marginLeft: "8px" }}>Мои подписки</div>
           </div>
           <div
             style={{
