@@ -309,4 +309,4 @@ post_save.connect(update_verification, sender=PendingUser)
 
 def sub_checker(user: User, source: User):
     return True if Subscription.objects.filter(
-        target=user, source=source, end_date__gte=datetime.datetime.now()).exists() else False
+        target=user, source=source, finished=False).exists() else False
