@@ -223,8 +223,13 @@
         height: 50px;
       }
 
-      input {
-        width: 100%;
+      textarea {
+        width: 98%;
+        &::-webkit-scrollbar {
+          width: 0px;
+        }
+        line-height: 12px;
+        resize: none;
       }
     }
   }
@@ -537,10 +542,14 @@
       margin-bottom: 4px;
       border-top-left-radius: 21px;
       border-bottom-left-radius: 21px;
-      input {
-        width: 100%;
+      textarea {
+        width: 98%;
+        resize: none;
+        line-height: 12px;
+        &::-webkit-scrollbar {
+          width: 0px;
+        }
       }
-
     }
 
   }
