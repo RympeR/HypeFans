@@ -62,14 +62,14 @@ const Chat: React.FC = () => {
           style={
             lastUrl !== item?.item?.room?.room_info?.id
               ? {
-                display: "flex",
-                borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
-              }
+                  display: "flex",
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                }
               : {
-                display: "flex",
-                borderBottom: "1px solid rgba(0, 0, 0, 0.2),",
-                backgroundColor: "#C41E3A",
-              }
+                  display: "flex",
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2),",
+                  backgroundColor: "#C41E3A",
+                }
           }
         >
           <div className="chat__sidebarItem">
@@ -108,16 +108,16 @@ const Chat: React.FC = () => {
                 {item.item.room?.message?.attachment
                   ? "Файл"
                   : item.item.room.message?.text
-                    ? CryptoJS.AES.decrypt(
+                  ? CryptoJS.AES.decrypt(
                       item?.item?.room?.message?.text,
                       "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
                     ).toString(CryptoJS.enc.Utf8)
-                    : null}
+                  : null}
               </p>
             </div>
           </div>
           <p className="chat__p">
-            {moment(item?.item?.room?.message?.time).fromNow()}
+            {/* {moment(item?.item?.room?.message?.time * 10000).fromNow()} */}
           </p>
         </div>
       </Link>
