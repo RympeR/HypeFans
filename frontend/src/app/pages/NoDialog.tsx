@@ -22,21 +22,22 @@ export const NoDialog = () => {
         style={{
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
           width: "62.5%",
-          paddingTop: "10%",
+          alignItems: "center"
         }}
         className="chat__inactive"
       >
-        <div style={{ textAlign: "center" }}>
-          Выберите диалог или создайте новый
-        </div>
-        <button
+        <p style={{ textAlign: "center", fontSize: "18px", backgroundColor: "#fbdfcf", borderRadius: "12px", padding: "5px", maxWidth: "50%" }}>
+          Выберите диалог чтоб начать общение
+        </p>
+        {/* <button
           className="notifications__settingBtn"
           style={{ marginTop: "20px" }}
           onClick={() => setCurrentTab(1)}
         >
           Новое сообщение
-        </button>
+        </button> */}
       </div>
       <Modal show={currentTab !== 0} onHide={() => setCurrentTab(0)} centered>
         <Modal.Body className="notifications__modal">
