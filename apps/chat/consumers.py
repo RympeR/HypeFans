@@ -38,6 +38,7 @@ class ChatConsumer(WebsocketConsumer):
             is_payed = text_data_json['is_payed']
             message_price = text_data_json['message_price']
             user = text_data_json['user']
+            date = text_data_json['date']
             message = text_data_json['text']
             _file = text_data_json['attachments']
 
@@ -55,7 +56,7 @@ class ChatConsumer(WebsocketConsumer):
                     'type': 'chat_message',
                     'attachments': _file,
                     'text': message,
-                    'date': chat.date,
+                    'date': chat.date.timestamp(),
                     'message_id': chat.pk,
                     'is_payed': is_payed,
                     'message_price': message_price,
