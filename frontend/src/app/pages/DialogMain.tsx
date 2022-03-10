@@ -320,7 +320,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       <div className="chat__dialogsHeader inChat">
         <div
           className="chat__sidebarItem"
-          style={{ alignItems: "center", paddingLeft: "0px" }}
+          style={{ alignItems: "center", paddingLeft: "0px", marginLeft: "8px" }}
         >
           <div
             className="chat__resp_icon chat__backNone"
@@ -494,7 +494,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                           (item?.attachments?.length > 0 &&
                           item.attachments.filter(
                             (el: any) => el.file_type === 1
-                          ).length == 0
+                          ).length === 0
                             ? "no-background"
                             : "has-solid-background")
                         }
@@ -556,7 +556,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                             : null}
                           {item.user.pk === uid ? (
                             <span className="message__meta">
-                              <div className="message__time">15:33</div>
+                              <div className="message__time">{moment(item.time).fromNow()}</div>
                               {item.readed ? <Readed /> : <NotReaded />}
                             </span>
                           ) : (

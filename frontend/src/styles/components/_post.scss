@@ -64,6 +64,7 @@
   &__brand {
     font-size: map-get($map: $font-size, $key: l);
     color: $black;
+    margin-bottom: 0rem;
 
     @media (max-width: map-get($map: $media, $key: s)) {
       font-size: map-get($map: $font-size, $key: s);
