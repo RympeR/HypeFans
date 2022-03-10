@@ -29,10 +29,12 @@ def generate_pay_dict(obj: QuerySet, serializer: ModelSerializer, _type: str) ->
 def online_check(user):
     try:
         if user.user_online and not user.hide_online:
-            if ((datetime.datetime.now() - user.user_online.last_action).seconds//60) % 60 < 1:
+            time_difference = (
+                (datetime.datetime.now() - user.user_online.last_action).seconds//60) % 60
+            if time_difference < 1:
                 return True
             else:
-                return ((datetime.datetime.now() - user.user_online.last_action).seconds//60) % 60
+                return time_difference
         return False
     except ObjectDoesNotExist:
         return False

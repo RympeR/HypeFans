@@ -295,22 +295,20 @@ class MainUserPage(GenericAPIView):
         limit = request.GET.get('limit', 50)
         offset = request.GET.get('offset', 0)
         results = {
-            'recommendations': [],
-            'posts': [],
-            'stories': []
+            'recommendations':0,
+            'posts': []
         }
         valid_profiles_id_list = User.objects.all().order_by(
             '-fans_amount').values_list('id', flat=True)
         random_users_id_list = sample(
             list(valid_profiles_id_list), min(len(valid_profiles_id_list), 9))
         qs = User.objects.filter(id__in=random_users_id_list)
-        results['recommendations'].append(
-            UserShortRetrieveSeriliazer(instance=qs, many=True, context={
-                                        'request': request}).data
-        )
+        results['recommendations'] = UserShortRetrieveSeriliazer(instance=qs, many=True, context={
+            'request': request}).data
+
         if data_compare == 0:
             for user_sub in user.my_subscribes.all():
-                for post in user_sub.user_post.filter(archived=False).order_by('-publication_date'):
+                for post in user_sub.user_post.filter(archived=False):
                     res_dict = {
                         'user': UserShortRetrieveSeriliazer(
                             instance=user_sub, context={'request': request}).data,
@@ -345,31 +343,23 @@ class MainUserPage(GenericAPIView):
                     else:
                         res_dict['post']['favourite'] = False
                     results['posts'].append(res_dict)
-            results['posts'] = results['posts'][offset:limit+offset]
 
-            valid_posts_id_list = Post.objects.filter(show_in_recomendations=True).order_by(
-                '-publication_date').values_list('id', flat=True)
+            valid_posts_id_list = Post.objects.filter(show_in_recomendations=True).values_list('id', flat=True)
             random_posts_id_list = sample(
                 list(valid_posts_id_list), min(len(valid_posts_id_list), 9))
             logging.warning(random_posts_id_list)
             qs = Post.objects.filter(id__in=random_posts_id_list)
-            for post in qs:
-                res_dict = {
+            results['posts'] = results['posts'][offset:limit+offset] + [
+                {
                     'user': UserShortRetrieveSeriliazer(
                         instance=post.user, context={'request': request}).data,
                     'post': PostGetShortSerializers(
                         instance=post, context={'request': request}).data
-                }
-                results['posts'].append(res_dict)
-
-            return Response(
-                {
-                    'recommendations': results['recommendations'],
-                    'posts': results['posts'],
-                }
-            )
+                } for post in qs
+            ]
+            return Response(results)
         for user_sub in user.my_subscribes.all():
-            for post in user_sub.user_post.filter(archived=False, publication_date__lte=data_compare).order_by('-publication_date'):
+            for post in user_sub.user_post.filter(archived=False, publication_date__lte=data_compare):
                 res_dict = {
                     'user': UserShortRetrieveSeriliazer(
                         instance=user_sub, context={'request': request}).data,
@@ -377,8 +367,7 @@ class MainUserPage(GenericAPIView):
                         instance=post, context={'request': request}).data
                 }
                 results['posts'].append(res_dict)
-            valid_posts_id_list = Post.objects.filter(show_in_recomendations=True).order_by(
-                '-publication_date').values_list('id', flat=True)
+            valid_posts_id_list = Post.objects.filter(show_in_recomendations=True).values_list('id', flat=True)
             random_posts_id_list = sample(
                 list(valid_profiles_id_list), min(len(valid_posts_id_list), 9))
             qs = Post.objects.filter(id__in=random_posts_id_list)

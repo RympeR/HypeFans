@@ -254,7 +254,7 @@ class PostGetShortSerializers(serializers.ModelSerializer):
         return obj.user_postaction.filter(Q(like=True) & Q(parent__isnull=True)).aggregate(Count('pk'))['pk__count']
 
     def get_comments_amount(self, obj: Post):
-        return obj.user_postaction.filter(~Q(comment__isnull=True)).aggregate(Count('pk'))['pk__count']
+        return obj.user_postaction.filter(comment__isnull=False).aggregate(Count('pk'))['pk__count']
 
     def get_favourites_amount(self, obj: Post):
         return obj.favourites.all().aggregate(Count('pk'))['pk__count']
@@ -287,7 +287,7 @@ class PostActionGetSerializer(serializers.ModelSerializer):
 
     def get_like_amount(self, post_action: PostAction):
         return PostAction.objects.filter(pk=post_action.pk, like=True).aggregate(Count('pk'))['pk__count']
-        
+
     def get_parent_liked(self, post_action: PostAction):
         user = self.context.get('request').user
         qs = PostAction.objects.filter(
