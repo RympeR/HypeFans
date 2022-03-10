@@ -14,6 +14,8 @@ from apps.users.serializers import UserShortRetrieveSeriliazer
 from .models import *
 from .serializers import *
 
+from silk.profiling.profiler import silk_profile
+
 
 class AttachmentCreateAPI(generics.CreateAPIView):
     queryset = Attachment.objects.all()
@@ -286,6 +288,7 @@ class MainUserPage(GenericAPIView):
     serializer_class = MainPageSerializer
     queryset = Post.objects.all()
 
+    @silk_profile(name='View Main Page')
     def get(self, request):
         user = request.user
         data_compare = request.GET.get('datetime', 0)
