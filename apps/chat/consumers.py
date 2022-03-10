@@ -55,6 +55,7 @@ class ChatConsumer(WebsocketConsumer):
                     'type': 'chat_message',
                     'attachments': _file,
                     'text': message,
+                    'date': chat.date,
                     'message_id': chat.pk,
                     'is_payed': is_payed,
                     'message_price': message_price,
@@ -73,6 +74,7 @@ class ChatConsumer(WebsocketConsumer):
             message = event['text']
             room = event['room_id']
             user = event['user']
+            date = event['date']
             is_payed = event['is_payed']
             attachments_info = []
             is_payed = False
@@ -109,6 +111,7 @@ class ChatConsumer(WebsocketConsumer):
             "room_id": room,
             "user": user,
             "text": message,
+            "date": date,
             "message_id": message_id,
             "is_payed": is_payed,
             "price": message_price,

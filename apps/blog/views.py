@@ -314,18 +314,15 @@ class MainUserPage(GenericAPIView):
                         'post': PostGetShortSerializers(
                             instance=post, context={'request': request}).data
                     }
-                    if user.new_user:
-                        res_dict['post']['payed'] = True
-                    else:
-                        if post.access_level == 1:
-                            if post.price_to_watch == 0:
-                                res_dict['post']['payed'] = True
-                            else:
-                                res_dict['post']['payed'] = check_post_bought(
-                                    post, user)
+                    if post.access_level == 1:
+                        if post.price_to_watch == 0:
+                            res_dict['post']['payed'] = True
                         else:
-                            res_dict['post']['payed'] = sub_checker(
-                                post.user, user)
+                            res_dict['post']['payed'] = check_post_bought(
+                                post, user)
+                    else:
+                        res_dict['post']['payed'] = sub_checker(
+                            post.user, user)
                     post_action_qs = PostAction.objects.filter(
                         post=post, user=user)
                     if post_action_qs.exists():
@@ -345,14 +342,6 @@ class MainUserPage(GenericAPIView):
                     else:
                         res_dict['post']['favourite'] = False
                     results['posts'].append(res_dict)
-                for story in user_sub.user_story.filter(archived=False, publication_date__lte=data_compare).order_by('-publication_date'):
-                    res_dict = {
-                        'user': UserShortRetrieveSeriliazer(
-                            instance=user_sub, context={'request': request}).data,
-                        'story': StoryShortSerializer(
-                            instance=story, context={'request': request}).data
-                    }
-                    results['posts'].append(res_dict)
             results['posts'] = results['posts'][offset:limit+offset]
 
             valid_posts_id_list = Post.objects.filter(show_in_recomendations=True).order_by(
@@ -361,7 +350,6 @@ class MainUserPage(GenericAPIView):
                 list(valid_posts_id_list), min(len(valid_posts_id_list), 9))
             logging.warning(random_posts_id_list)
             qs = Post.objects.filter(id__in=random_posts_id_list)
-            logging.warning(qs)
             for post in qs:
                 res_dict = {
                     'user': UserShortRetrieveSeriliazer(
@@ -375,7 +363,6 @@ class MainUserPage(GenericAPIView):
                 {
                     'recommendations': results['recommendations'],
                     'posts': results['posts'],
-                    'stories': []
                 }
             )
         for user_sub in user.my_subscribes.all():
@@ -385,15 +372,6 @@ class MainUserPage(GenericAPIView):
                         instance=user_sub, context={'request': request}).data,
                     'post': PostGetShortSerializers(
                         instance=post, context={'request': request}).data
-                }
-                results['posts'].append(res_dict)
-
-            for story in user_sub.user_story.filter(archived=False, publication_date__lte=data_compare).order_by('-publication_date'):
-                res_dict = {
-                    'user': UserShortRetrieveSeriliazer(
-                        instance=user_sub, context={'request': request}).data,
-                    'post': StoryShortSerializer(
-                        instance=story, context={'request': request}).data
                 }
                 results['posts'].append(res_dict)
             valid_posts_id_list = Post.objects.filter(show_in_recomendations=True).order_by(
@@ -414,7 +392,6 @@ class MainUserPage(GenericAPIView):
             {
                 'recommendations': results['recommendations'],
                 'posts': results['posts'][offset:limit+offset],
-                'stories': []
             }
         )
 
