@@ -450,7 +450,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       <div className="chat__dialogsHeader inChat">
         <div
           className="chat__sidebarItem"
-          style={{ alignItems: "center", paddingLeft: "0px" }}
+          style={{ alignItems: "center", paddingLeft: "0px", marginLeft: "8px" }}
         >
           <div
             className="chat__resp_icon chat__backNone"
