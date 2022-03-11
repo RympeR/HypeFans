@@ -9,6 +9,8 @@ from apps.users.serializers import UserShortRetrieveSeriliazer
 from .models import (Attachment, Post, PostAction, PostBought, Story,
                      WatchedStories, check_post_bought)
 
+from silk.profiling.profiler import silk_profile
+
 
 class UserFavouritesSerializer(serializers.Serializer):
     favourite = serializers.BooleanField()
@@ -302,6 +304,7 @@ class PostMainPageSerializers(serializers.ModelSerializer):
     def get_favourites_amount(self, obj: Post):
         return obj.favourites.all().aggregate(Count('pk'))['pk__count']
 
+    @silk_profile(name='Check post bought ser')
     def get_payed(self, post: Post):
         user = self.context.get('user')
         if post.show_in_recomendations and user.new_user:
@@ -315,6 +318,7 @@ class PostMainPageSerializers(serializers.ModelSerializer):
         else:
             return sub_checker(post.user, user)
 
+    @silk_profile(name='Check postAction ser')
     def get_like(self, obj: Post):
         el = PostAction.objects.filter(
             user=self.context.get('user'),
@@ -324,6 +328,7 @@ class PostMainPageSerializers(serializers.ModelSerializer):
         )
         return True if el.exists() else False
 
+    @silk_profile(name='Check postAction ser')
     def get_like_id(self, obj: Post):
         el = PostAction.objects.filter(
             user=self.context.get('user'),
@@ -333,6 +338,7 @@ class PostMainPageSerializers(serializers.ModelSerializer):
         )
         return el[0].pk if el.exists() else None
 
+    @silk_profile(name='Check favourite ser')
     def get_favourite(self, post: Post):
         if self.context.get('user').pk in post.favourites.all().values_list('id', flat=True):
             return True

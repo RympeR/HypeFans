@@ -557,8 +557,7 @@ class MainUserPageUpdated(APIView):
         return True if user.pk in post.favourites.all().values_list('id', flat=True) else False
 
     @silk_profile(name='get_sample_of_queryset')
-    def get_sample_of_queryset(self, qs, amount: int, model):
-        valid_id_list = qs.values_list('id', flat=True)
+    def get_sample_of_queryset(self, valid_id_list, amount: int, model):
         random_id_list = sample(
             list(valid_id_list), min(len(valid_id_list), amount))
         return model.objects.filter(id__in=random_id_list)
@@ -569,7 +568,7 @@ class MainUserPageUpdated(APIView):
         data_compare = request.GET.get('datetime', 0)
         limit = request.GET.get('limit', 30)
 
-        qs = User.objects.all().order_by('-fans_amount')
+        qs = User.objects.all().order_by('-fans_amount').values_list('id', flat=True)
         reccomendations = UserShortRetrieveSeriliazer(
             instance=self.get_sample_of_queryset(qs, 9, User),
             many=True,
@@ -591,7 +590,7 @@ class MainUserPageUpdated(APIView):
         qs = Post.objects.filter(
             show_in_recomendations=True).exclude(
             id__in=tuple(map(lambda x: x.id, posts))
-        )
+        ).values_list('id', flat=True)
         qs = self.get_sample_of_queryset(qs, 9, Post)
         posts.extend(qs)
         posts = posts[:limit]
