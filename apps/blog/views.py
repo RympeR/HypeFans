@@ -544,13 +544,13 @@ class MainUserPageUpdated(APIView):
 
     @silk_profile(name='Check postAction ')
     def check_postaction(self, post, user):
-        post_action_qs = PostAction.objects.filter(
-            post=post, user=user)
-        if post_action_qs.exists():
-            for action in post_action_qs:
-                if action.like and not action.parent:
-                    return [True, action.pk]
-        return [False, None]
+        qs = PostAction.objects.filter(
+            user=user,
+            post=post,
+            like=True,
+            parent__isnull=True
+        )
+        return (True, qs[0].pk if qs.exists() else False)
 
     @silk_profile(name='Check favourite ')
     def check_favourites(self, post, user):
@@ -599,8 +599,11 @@ class MainUserPageUpdated(APIView):
             {
                 'user': UserShortRetrieveSeriliazer(
                     instance=post.user, context={'request': request}).data,
-                'post': PostGetShortSerializers(
-                    instance=post, context={'request': request}).data
+                'post':
+                    PostMainPageSerializers(
+                        instance=post,
+                        context={'request': request, 'user': user}
+                ).data
             } for post in posts
         ]
         for post, qs_post in zip(result_posts, posts):

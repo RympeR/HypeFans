@@ -3,11 +3,11 @@ from apps.users.dynamic_preferences_registry import ReferralPercentage
 from django.db.models import Count, Q
 from rest_framework import serializers
 
-from apps.users.models import ReferralPayment, User
+from apps.users.models import ReferralPayment, User, sub_checker
 from apps.users.serializers import UserShortRetrieveSeriliazer
 
 from .models import (Attachment, Post, PostAction, PostBought, Story,
-                     WatchedStories)
+                     WatchedStories, check_post_bought)
 
 
 class UserFavouritesSerializer(serializers.Serializer):
@@ -273,6 +273,89 @@ class PostGetShortSerializers(serializers.ModelSerializer):
             'comments_amount',
             'favourites_amount',
             'attachments',
+        )
+
+
+class PostMainPageSerializers(serializers.ModelSerializer):
+
+    likes_amount = serializers.SerializerMethodField()
+
+    # payed = serializers.SerializerMethodField()
+    # like = serializers.SerializerMethodField()
+    # like_id = serializers.SerializerMethodField()
+    # favourite = serializers.SerializerMethodField()
+
+    comments_amount = serializers.SerializerMethodField()
+    favourites_amount = serializers.SerializerMethodField()
+    attachments = AttachmentSerializer(many=True)
+    likes_amount = serializers.SerializerMethodField()
+    comments_amount = serializers.SerializerMethodField()
+    favourites_amount = serializers.SerializerMethodField()
+    publication_date = TimestampField(required=False)
+
+    def get_likes_amount(self, obj: Post):
+        return obj.user_postaction.filter(Q(like=True) & Q(parent__isnull=True)).aggregate(Count('pk'))['pk__count']
+
+    def get_comments_amount(self, obj: Post):
+        return obj.user_postaction.filter(comment__isnull=False).aggregate(Count('pk'))['pk__count']
+
+    def get_favourites_amount(self, obj: Post):
+        return obj.favourites.all().aggregate(Count('pk'))['pk__count']
+
+    def get_payed(self, post: Post):
+        user = self.context.get('user')
+        if post.show_in_recomendations and user.new_user:
+            return True
+        if post.access_level == 1:
+            if post.price_to_watch == 0:
+                return True
+            else:
+                return check_post_bought(
+                    post, user)
+        else:
+            return sub_checker(post.user, user)
+
+    def get_like(self, obj: Post):
+        el = PostAction.objects.filter(
+            user=self.context.get('user'),
+            post=obj,
+            like=True,
+            parent__isnull=True
+        )
+        return True if el.exists() else False
+
+    def get_like_id(self, obj: Post):
+        el = PostAction.objects.filter(
+            user=self.context.get('user'),
+            post=obj,
+            like=True,
+            parent__isnull=True
+        )
+        return el[0].pk if el.exists() else None
+
+    def get_favourite(self, post: Post):
+        if self.context.get('user').pk in post.favourites.all().values_list('id', flat=True):
+            return True
+        return False
+
+    class Meta:
+        model = Post
+        fields = (
+            'pk',
+            'name',
+            'description',
+            'enabled_comments',
+            'price_to_watch',
+            'publication_date',
+            'reply_link',
+            'likes_amount',
+            'comments_amount',
+            'favourites_amount',
+            'attachments',
+            # 'payed',
+            # 'like',
+            # 'like_id',
+            # 'favourite',
         )
 
 
