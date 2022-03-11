@@ -5,6 +5,7 @@ from random import sample
 from core.utils.default_responses import api_block_by_policy_451
 from rest_framework import generics, permissions
 from rest_framework.generics import GenericAPIView
+from rest_framework.views import APIView
 from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin
 from rest_framework.response import Response
 
@@ -295,7 +296,7 @@ class MainUserPage(GenericAPIView):
         limit = request.GET.get('limit', 50)
         offset = request.GET.get('offset', 0)
         results = {
-            'recommendations':0,
+            'recommendations': 0,
             'posts': []
         }
         valid_profiles_id_list = User.objects.all().order_by(
@@ -344,7 +345,8 @@ class MainUserPage(GenericAPIView):
                         res_dict['post']['favourite'] = False
                     results['posts'].append(res_dict)
 
-            valid_posts_id_list = Post.objects.filter(show_in_recomendations=True).values_list('id', flat=True)
+            valid_posts_id_list = Post.objects.filter(
+                show_in_recomendations=True).values_list('id', flat=True)
             random_posts_id_list = sample(
                 list(valid_posts_id_list), min(len(valid_posts_id_list), 9))
             logging.warning(random_posts_id_list)
@@ -367,7 +369,8 @@ class MainUserPage(GenericAPIView):
                         instance=post, context={'request': request}).data
                 }
                 results['posts'].append(res_dict)
-            valid_posts_id_list = Post.objects.filter(show_in_recomendations=True).values_list('id', flat=True)
+            valid_posts_id_list = Post.objects.filter(
+                show_in_recomendations=True).values_list('id', flat=True)
             random_posts_id_list = sample(
                 list(valid_profiles_id_list), min(len(valid_posts_id_list), 9))
             qs = Post.objects.filter(id__in=random_posts_id_list)
@@ -522,3 +525,91 @@ class GetUserLists(GenericAPIView):
         result['my_subs'] = self.serializer_class(
             many=True, instance=my_subs).data
         return Response(result)
+
+
+class MainUserPageUpdated(APIView):
+
+    @silk_profile(name='Check post bought')
+    def check_post_bought(self, post: Post, user: User):
+        if post.show_in_recomendations and user.new_user:
+            return True
+        if post.access_level == 1:
+            if post.price_to_watch == 0:
+                return True
+            else:
+                return check_post_bought(
+                    post, user)
+        else:
+            return sub_checker(post.user, user)
+
+    @silk_profile(name='Check postAction ')
+    def check_postaction(self, post, user):
+        post_action_qs = PostAction.objects.filter(
+            post=post, user=user)
+        if post_action_qs.exists():
+            for action in post_action_qs:
+                if action.like and not action.parent:
+                    return [True, action.pk]
+        return [False, None]
+
+    @silk_profile(name='Check favourite ')
+    def check_favourites(self, post, user):
+        return True if user.pk in post.favourites.all().values_list('id', flat=True) else False
+
+    @silk_profile(name='get_sample_of_queryset')
+    def get_sample_of_queryset(self, qs, amount: int, model):
+        valid_id_list = qs.values_list('id', flat=True)
+        random_id_list = sample(
+            list(valid_id_list), min(len(valid_id_list), amount))
+        return model.objects.filter(id__in=random_id_list)
+
+    @silk_profile(name='View Updated Main Page')
+    def get(self, request):
+        user = request.user
+        data_compare = request.GET.get('datetime', 0)
+        limit = request.GET.get('limit', 30)
+
+        qs = User.objects.all().order_by('-fans_amount')
+        reccomendations = UserShortRetrieveSeriliazer(
+            instance=self.get_sample_of_queryset(qs, 9, User),
+            many=True,
+            context={'request': request}
+        ).data
+
+        user_subscriptions = user.my_subscribes.all()
+        posts = []
+        if data_compare == 0:
+            for user in user_subscriptions:
+                posts.extend(user.user_post.filter(archived=False))
+            posts = sorted(posts, key=lambda x: x.publication_date)
+        else:
+            for user in user_subscriptions:
+                posts.extend(user.user_post.filter(
+                    archived=False,
+                    ublication_date__lte=data_compare))
+            posts = sorted(posts, key=lambda x: x.publication_date)
+        qs = Post.objects.filter(
+            show_in_recomendations=True).exclude(
+            id__in=tuple(map(lambda x: x.id, posts))
+        )
+        qs = self.get_sample_of_queryset(qs, 9, Post)
+        posts.extend(qs)
+        posts = posts[:limit]
+        result_posts = [
+            {
+                'user': UserShortRetrieveSeriliazer(
+                    instance=post.user, context={'request': request}).data,
+                'post': PostGetShortSerializers(
+                    instance=post, context={'request': request}).data
+            } for post in posts
+        ]
+        for post, qs_post in zip(result_posts, posts):
+            post['payed'] = self.check_post_bought(qs_post, user)
+            post['like'], post['like_id'] = self.check_postaction(
+                qs_post, user)
+            post['favourite'] = self.check_favourites(qs_post, user)
+
+        return Response({
+            'reccomendations': reccomendations,
+            'posts': result_posts
+        })

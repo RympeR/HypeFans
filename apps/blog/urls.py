@@ -21,6 +21,7 @@ from .views import (
     MarkFavourite,
     GetUserLists,
     PostActionPartialUpdateAPI,
+    MainUserPageUpdated,
 )
 
 urlpatterns = [
@@ -42,6 +43,7 @@ urlpatterns = [
     path('create-story-action/', WatchedStoriesCreateAPI.as_view()),
     path('create-post-bought/', PostBoughtCreateAPI.as_view()),
     path('get-main-page/', MainUserPage.as_view()),
+    path('get-main-page-updated/', MainUserPageUpdated.as_view()),
     path('get-user-stories/', SubStories.as_view()),
     path('get-notifications/', UserNotifications.as_view()),
     path('get-users-lists/', GetUserLists.as_view()),
