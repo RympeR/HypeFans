@@ -549,8 +549,8 @@ class MainUserPageUpdated(APIView):
             post=post,
             like=True,
             parent__isnull=True
-        )
-        return (True, qs[0].pk if qs.exists() else False)
+        ).values_list('id', flat=True)
+        return (True, qs[0].pk if qs else False)
 
     @silk_profile(name='Check favourite ')
     def check_favourites(self, post, user):
@@ -606,11 +606,11 @@ class MainUserPageUpdated(APIView):
                 ).data
             } for post in posts
         ]
-        for post, qs_post in zip(result_posts, posts):
-            post['payed'] = self.check_post_bought(qs_post, user)
-            post['like'], post['like_id'] = self.check_postaction(
-                qs_post, user)
-            post['favourite'] = self.check_favourites(qs_post, user)
+        # for post, qs_post in zip(result_posts, posts):
+        #     post['payed'] = self.check_post_bought(qs_post, user)
+        #     post['like'], post['like_id'] = self.check_postaction(
+        #         qs_post, user)
+        #     post['favourite'] = self.check_favourites(qs_post, user)
 
         return Response({
             'reccomendations': reccomendations,

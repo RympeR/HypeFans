@@ -280,10 +280,10 @@ class PostMainPageSerializers(serializers.ModelSerializer):
 
     likes_amount = serializers.SerializerMethodField()
 
-    # payed = serializers.SerializerMethodField()
-    # like = serializers.SerializerMethodField()
-    # like_id = serializers.SerializerMethodField()
-    # favourite = serializers.SerializerMethodField()
+    payed = serializers.SerializerMethodField()
+    like = serializers.SerializerMethodField()
+    like_id = serializers.SerializerMethodField()
+    favourite = serializers.SerializerMethodField()
 
     comments_amount = serializers.SerializerMethodField()
     favourites_amount = serializers.SerializerMethodField()
@@ -352,10 +352,10 @@ class PostMainPageSerializers(serializers.ModelSerializer):
             'comments_amount',
             'favourites_amount',
             'attachments',
-            # 'payed',
-            # 'like',
-            # 'like_id',
-            # 'favourite',
+            'payed',
+            'like',
+            'like_id',
+            'favourite',
         )
 
 
