@@ -59,7 +59,6 @@ const MessageItem = React.memo(({ item, setMessages, messages, index, url }: { i
     }
   };
 
-  console.log("rerender");
   return (
     <div
       className={item.user.pk === uid ? "message" : "message own"}
@@ -180,7 +179,12 @@ const MessageItem = React.memo(({ item, setMessages, messages, index, url }: { i
       )}
     </div>
   )
-}, () => true)
+}, (prevProps, nextProps) => {
+  if (moment(prevProps.item.date * 1000).fromNow() === "a few seconds ago") return false
+  else {
+    return true
+  }
+})
 
 export const DialogMain = ({ rooms }: { rooms: any }) => {
   const history = useHistory();
@@ -209,6 +213,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false);
 
   // useEffect`s
+
 
   useEffect(() => {
     const wsReadClient = new WebSocket(
@@ -326,6 +331,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           : "",
         user: uid,
         is_payed: false,
+        date: 0,
         attachments: attachmentsIds,
         room_id: lastUrl,
         message_price: Number(messageCost),

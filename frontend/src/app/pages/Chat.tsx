@@ -13,15 +13,22 @@ import { DialogMain } from "./DialogMain";
 import { NoDialog } from "./NoDialog";
 import logo from "../../assets/images/logo.svg";
 
+
 const Chat: React.FC = () => {
   const userId = useSelector((state: RootState) => state.auth.pk);
   const history = useHistory();
+  const lastUrl = getLastUrlPoint(history.location.pathname);
   const BackButton = () => <BackIcon onClick={() => history.push("/chat")} />;
   const Plus = () => <PlusIcon />;
   const UserIcon = () => <UsersIcon />;
   const [rooms, setRooms] = useState([]);
   const [isSended, setSended] = useState(false);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
+  const [rerenderCount, setRerenderCount] = useState(0);
+
+  useEffect(() => {
+    return setRerenderCount(value => value + 1)
+  }, [lastUrl])
 
   if (isLoading) {
     return <Preloader />;
