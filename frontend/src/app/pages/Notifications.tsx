@@ -115,8 +115,9 @@ const Notifications: React.FC = () => {
       }
     }, []);
     const Main = ({ notifications }: { notifications: Array<any> }) => {
-      const [page, setPage] = useState<number>(2);
-
+      const [page, setPage] = useState<number>(1);
+    
+      console.log(notifications);
       const [data, setData] = useState([...notifications]);
 
       console.log([data]);

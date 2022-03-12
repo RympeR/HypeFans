@@ -125,7 +125,7 @@ export const CommentComponent = ({
     };
 
     return (
-      <div className="notifications__commentLink">
+      <div className="notifications__comment">
         <Link to={`/profile/${item?.user?.username}`}>
           <img
             src={item.user.avatar ? item.user.avatar : logo}
