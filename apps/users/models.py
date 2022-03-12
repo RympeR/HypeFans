@@ -28,7 +28,7 @@ class User(AbstractUser):
         upload_to=user_avatar,
         verbose_name='Аватар',
         null=True,
-        processors=[ResizeToFill(50, 50)],
+        processors=[ResizeToFill(160, 160)],
         format='JPEG',
         options={'quality': 80},
         blank=True
