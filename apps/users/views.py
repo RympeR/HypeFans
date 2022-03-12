@@ -81,8 +81,8 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
         user = User.objects.get(username=username)
         req_user = request.user
         data_compare = request.GET.get('datetime', 0)
-        limit = request.GET.get('limit', 50)
-        offset = request.GET.get('offset', 0)
+        limit = int(request.GET.get('limit', 50))
+        offset = int(request.GET.get('offset', 0))
         results = []
         sub_check = sub_checker(user, req_user)
         chat_sub_check = chat_sub_checker(user, req_user)

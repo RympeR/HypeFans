@@ -220,8 +220,8 @@ class UserNotifications(GenericAPIView):
     serializer_class = UserShortRetrieveSeriliazer
 
     def get(self, request):
-        limit = request.GET.get('limit', 50)
-        offset = request.GET.get('offset', 0)
+        limit = int(request.GET.get('limit', 50))
+        offset = int(request.GET.get('offset', 0))
         user = request.user
         comments_result = []
         likes_result = []
