@@ -8,7 +8,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_countries.fields import CountryField
 from unixtimestampfield.fields import UnixTimeStampField
-
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 from .dynamic_preferences_registry import ChatSubscriptionDuration
 
 
@@ -23,14 +24,20 @@ class User(AbstractUser):
         null=True,
         db_index=True
     )
-    avatar = models.ImageField(
+    avatar = ProcessedImageField(
         upload_to=user_avatar,
         verbose_name='Аватар',
         null=True,
+        processors=[ResizeToFill(50, 50)],
+        format='JPEG',
+        options={'quality': 80},
         blank=True
     )
-    background_photo = models.ImageField(
+    background_photo = ProcessedImageField(
         upload_to=user_avatar,
+        processors=[ResizeToFill(600, 120)],
+        format='JPEG',
+        options={'quality': 80},
         verbose_name='Фото заднего плана',
         null=True,
         blank=True
@@ -309,4 +316,9 @@ post_save.connect(update_verification, sender=PendingUser)
 
 def sub_checker(user: User, source: User):
     return True if Subscription.objects.filter(
+        target=user, source=source, finished=False).exists() else False
+
+
+def chat_sub_checker(user: User, source: User):
+    return True if ChatSubscription.objects.filter(
         target=user, source=source, finished=False).exists() else False

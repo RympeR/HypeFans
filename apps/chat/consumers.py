@@ -41,29 +41,52 @@ class ChatConsumer(WebsocketConsumer):
             date = text_data_json['date']
             message = text_data_json['text']
             _file = text_data_json['attachments']
+            room = Room.objects.get(pk=room)
+            user = User.objects.get(pk=user)
+            blocked = False
+            if 1 + len(room.invited.all()) == 2:
+                if user == room.creator:
+                    blocked = True if user in room.invited.first().blocked_users.all() else False
+                else:
+                    blocked = True if user in room.cretor.blocked_users.all() else False
+            if not blocked:
+                chat = Chat.objects.create(
+                    room=room,
+                    user=user,
+                    text=message,
+                    price=message_price,
+                )
+                chat.attachment.set(Attachment.objects.filter(pk__in=_file))
+                async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        'type': 'chat_message',
+                        'attachments': _file,
+                        'text': message,
+                        'date': chat.date.timestamp(),
+                        'message_id': chat.pk,
+                        'is_payed': is_payed,
+                        'message_price': message_price,
+                        'user': user,
+                        'room_id': room,
+                    }
+                )
+            else:
+                async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        'type': 'chat_message',
+                        'attachments': [],
+                        'text': '',
+                        'date': 0,
+                        'message_id': -1,
+                        'is_payed': False,
+                        'message_price': 0,
+                        'user': 0,
+                        'room_id': 0,
+                    }
+                )
 
-            chat = Chat.objects.create(
-                room=Room.objects.get(pk=room),
-                user=User.objects.get(pk=user),
-                text=message,
-                price=message_price,
-            )
-            chat.attachment.set(Attachment.objects.filter(pk__in=_file))
-
-            async_to_sync(self.channel_layer.group_send)(
-                self.room_group_name,
-                {
-                    'type': 'chat_message',
-                    'attachments': _file,
-                    'text': message,
-                    'date': chat.date.timestamp(),
-                    'message_id': chat.pk,
-                    'is_payed': is_payed,
-                    'message_price': message_price,
-                    'user': user,
-                    'room_id': room,
-                }
-            )
         except Exception as e:
             print(e)
             logging.error(e)
@@ -157,6 +180,7 @@ class ReadedConsumer(WebsocketConsumer):
                     user=User.objects.get(pk=user),
                     readed=False
                 )
+            logging.warning(f'Readed qs {readed_chat}')
             readed_chat.update(readed=True)
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,

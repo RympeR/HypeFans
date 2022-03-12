@@ -85,6 +85,7 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
         offset = request.GET.get('offset', 0)
         results = []
         sub_check = sub_checker(user, req_user)
+        chat_sub_check = chat_sub_checker(user, req_user)
         if data_compare == 0:
             for post in user.user_post.filter(archived=False).order_by('-publication_date'):
                 post_data = PostGetShortSerializers(
@@ -125,7 +126,8 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
         return api_accepted_202({
             **self.serializer_class(instance=user, context={'request': request}).data,
             **{'posts': results[offset:limit+offset]},
-            'subscribed': sub_check
+            'subscribed': sub_check,
+            'subscribed_chat': chat_sub_check,
         })
 
     def get_serializer_context(self):

@@ -598,11 +598,13 @@ class MainUserPageUpdated(APIView):
             {
                 'user': UserShortRetrieveSeriliazer(
                     instance=post.user, context={'request': request}).data,
-                'post':
-                    PostMainPageSerializers(
+                'post': {
+                    **PostMainPageSerializers(
                         instance=post,
                         context={'request': request, 'user': user}
-                ).data
+                    ).data,
+
+                }
             } for post in posts
         ]
         for post, qs_post in zip(result_posts, posts):
