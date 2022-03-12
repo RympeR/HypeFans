@@ -1,4 +1,4 @@
-import { instance } from './api';
+import { instance } from "./api";
 import {
   CardType,
   createCardRT,
@@ -19,28 +19,30 @@ import {
   userDonationRecievedRT,
   userGetCardListRT,
   userGetPaymentHistoryRT,
+  userSearchType,
   userStringType,
-  userValidateUserRT
-} from './types';
+  userValidateUserRT,
+} from "./types";
 
 export const userAPI = {
   createCard({ number, date_year, cvc, creator, user }: CardType) {
     return instance
-      .post<createCardRT>('/user/create-card/', {
+      .post<createCardRT>("/user/create-card/", {
         number,
         date_year,
         cvc,
         creator,
-        user
+        user,
       })
       .then((response) => {
         return response;
       });
   },
-  blockUser({ user, block=true }: { user: Array<number>, block?: boolean }) {
+  blockUser({ user, block = true }: { user: Array<number>; block?: boolean }) {
     return instance
-      .put('/user/block-user/', {
-        user, block
+      .put("/user/block-user/", {
+        user,
+        block,
       })
       .then((response) => {
         return response;
@@ -48,10 +50,10 @@ export const userAPI = {
   },
   createDonation({ amount, sender, reciever }: DonationType) {
     return instance
-      .post<createDonationRT>('/user/create-donation/', {
+      .post<createDonationRT>("/user/create-donation/", {
         amount,
         sender,
-        reciever
+        reciever,
       })
       .then((response) => {
         return response;
@@ -59,9 +61,9 @@ export const userAPI = {
   },
   createPayment({ amount, card }: PaymentType) {
     return instance
-      .post<createPaymentRT>('/user/create-payment/', {
+      .post<createPaymentRT>("/user/create-payment/", {
         amount,
-        card
+        card,
       })
       .then((response) => {
         return response;
@@ -69,9 +71,9 @@ export const userAPI = {
   },
   createSubscription({ source, target }: SubscriptionType) {
     return instance
-      .post<createSubscriptionRT>('/user/create-subscription/', {
+      .post<createSubscriptionRT>("/user/create-subscription/", {
         source,
-        target
+        target,
       })
       .then((response) => {
         return response;
@@ -79,14 +81,14 @@ export const userAPI = {
   },
   createUser({ email, username, password }: createUserT) {
     return instance
-      .post<createUserT>('/user/create-user/', {
+      .post<createUserT>("/user/create-user/", {
         email,
         username,
-        password
+        password,
       })
       .then((response) => {
         if (response.status !== 200) {
-          console.log('registration error');
+          console.log("registration error");
         }
         return response;
       });
@@ -97,32 +99,40 @@ export const userAPI = {
     });
   },
   getDonation({ id }: idType) {
-    return instance.get<getDonationRT>(`user/get-donation/${id}`).then((response) => {
-      return response.data;
-    });
+    return instance
+      .get<getDonationRT>(`user/get-donation/${id}`)
+      .then((response) => {
+        return response.data;
+      });
   },
   getPayment({ id }: idType) {
-    return instance.get<getPaymentRT>(`user/get-payment/${id}`).then((response) => {
-      return response.data;
-    });
-  },
-  searchUser({ user }: userStringType) {
-    return instance.get(`user/user-search/?username=${user}`).then((response) => {
-      if (response.status === 200 || 301) {
+    return instance
+      .get<getPaymentRT>(`user/get-payment/${id}`)
+      .then((response) => {
         return response.data;
-      } else {
-        throw new Error();
-      }
-    });
+      });
+  },
+  searchUser({ user, limit, offset }: userSearchType) {
+    return instance
+      .get(`user/user-search/?username=${user}&limit=${limit}&offset=${offset}`)
+      .then((response) => {
+        if (response.status === 200 || 301) {
+          return response.data;
+        } else {
+          throw new Error();
+        }
+      });
   },
   getUser({ user }: userStringType) {
-    return instance.get<getUserRT>(`user/get-profile/${user}`).then((response) => {
-      if (response.status === 200 || 301) {
-        return response.data;
-      } else {
-        throw new Error();
-      }
-    });
+    return instance
+      .get<getUserRT>(`user/get-profile/${user}`)
+      .then((response) => {
+        if (response.status === 200 || 301) {
+          return response.data;
+        } else {
+          throw new Error();
+        }
+      });
   },
   getProfile() {
     return instance.get(`/user/get-user/`).then((response) => {
@@ -130,24 +140,32 @@ export const userAPI = {
     });
   },
   onlineUserCreate({ user }: userStringType) {
-    return instance.post<userStringType>(`/user/online-user-create/`, { user }).then((response) => {
-      return response.data;
-    });
+    return instance
+      .post<userStringType>(`/user/online-user-create/`, { user })
+      .then((response) => {
+        return response.data;
+      });
   },
   onlineUserRetrieve() {
-    return instance.get<onlineUserRetrieveRT>(`/user/online-user-retrieve/`).then((response) => {
-      return response.data;
-    });
+    return instance
+      .get<onlineUserRetrieveRT>(`/user/online-user-retrieve/`)
+      .then((response) => {
+        return response.data;
+      });
   },
   onlineUserUpdatePut({ user }: userStringType) {
-    return instance.put<userStringType>(`/user/online-user-update/`, { user }).then((response) => {
-      return response.data;
-    });
+    return instance
+      .put<userStringType>(`/user/online-user-update/`, { user })
+      .then((response) => {
+        return response.data;
+      });
   },
   onlineUserUpdate({ user }: userStringType) {
-    return instance.patch<userStringType>(`/user/online-user-update/`, { user }).then((response) => {
-      return response.data;
-    });
+    return instance
+      .patch<userStringType>(`/user/online-user-update/`, { user })
+      .then((response) => {
+        return response.data;
+      });
   },
   particialUpdateCard({ number, date_year, cvc, creator, user }: createCardRT) {
     return instance
@@ -156,7 +174,7 @@ export const userAPI = {
         date_year,
         cvc,
         creator,
-        user
+        user,
       })
       .then((response) => {
         return response.data;
@@ -165,7 +183,7 @@ export const userAPI = {
   particialUpdateUser(props: getUserRT) {
     return instance
       .put<getUserRT>(`/user/particial-update-card/`, {
-        ...props
+        ...props,
       })
       .then((response) => {
         return response.data;
@@ -187,39 +205,61 @@ export const userAPI = {
     });
   },
   updateDeleteCard({ id }: idType) {
-    return instance.get<createCardRT>(`/user/update-delete-card/${id}`).then((response) => {
-      return response;
-    });
+    return instance
+      .get<createCardRT>(`/user/update-delete-card/${id}`)
+      .then((response) => {
+        return response;
+      });
   },
   updateDeleteCardPut(props: createCardRT) {
-    return instance.put<createCardRT>(`/user/update-delete-card/${props.id}`, props).then((response) => {
-      return response;
-    });
+    return instance
+      .put<createCardRT>(`/user/update-delete-card/${props.id}`, props)
+      .then((response) => {
+        return response;
+      });
   },
   updateDeleteCardPatch(props: createCardRT) {
-    return instance.patch<createCardRT>(`/user/update-delete-card/${props.id}`, props).then((response) => {
-      return response;
-    });
+    return instance
+      .patch<createCardRT>(`/user/update-delete-card/${props.id}`, props)
+      .then((response) => {
+        return response;
+      });
   },
   updateDeleteCardDelete({ id }: idType) {
-    return instance.delete(`/user/update-delete-card/${id}`).then((response) => {
-      return response;
-    });
+    return instance
+      .delete(`/user/update-delete-card/${id}`)
+      .then((response) => {
+        return response;
+      });
   },
   updateDeleteUser() {
-    return instance.get<createUserT>(`/user/update-delete-user/`).then((response) => {
-      return response;
-    });
+    return instance
+      .get<createUserT>(`/user/update-delete-user/`)
+      .then((response) => {
+        return response;
+      });
   },
   updateDeleteUserPut({ email, username, password }: createUserT) {
-    return instance.put<createUserT>(`/user/update-delete-user/`, { email, username, password }).then((response) => {
-      return response;
-    });
+    return instance
+      .put<createUserT>(`/user/update-delete-user/`, {
+        email,
+        username,
+        password,
+      })
+      .then((response) => {
+        return response;
+      });
   },
   updateDeleteUserPatch({ email, username, password }: createUserT) {
-    return instance.patch<createUserT>(`/user/update-delete-user/`, { email, username, password }).then((response) => {
-      return response;
-    });
+    return instance
+      .patch<createUserT>(`/user/update-delete-user/`, {
+        email,
+        username,
+        password,
+      })
+      .then((response) => {
+        return response;
+      });
   },
   updateDeleteUserDelete() {
     return instance.delete(`/user/update-delete-user/`).then((response) => {
@@ -288,14 +328,20 @@ export const userAPI = {
   },
   userSubscriptionUpdate({ id, email, username, password }: createUserT) {
     return instance
-      .put<createUserT>(`/user/user-subscription/${id}`, { email, username, password })
+      .put<createUserT>(`/user/user-subscription/${id}`, {
+        email,
+        username,
+        password,
+      })
       .then((response) => {
         return response;
       });
   },
   userValidateUser(user: number, verified: boolean) {
-    return instance.post<userValidateUserRT>(`/user/validate-user/`, { user, verified }).then((response) => {
-      return response;
-    });
-  }
+    return instance
+      .post<userValidateUserRT>(`/user/validate-user/`, { user, verified })
+      .then((response) => {
+        return response;
+      });
+  },
 };

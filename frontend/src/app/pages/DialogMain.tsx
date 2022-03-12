@@ -40,151 +40,157 @@ import logo from "../../assets/images/logo.svg";
 import { toast } from "react-toastify";
 import { ChatInput } from "../components/chatInput/ChatInput";
 
-const MessageItem = React.memo(({ item, setMessages, messages, index, url }: { item: any, setMessages: any, messages: any, index: number, url: number }) => {
-  const uid = useSelector((state: RootState) => state.auth.pk);
+const MessageItem = React.memo(
+  ({
+    item,
+    setMessages,
+    messages,
+    index,
+    url,
+  }: {
+    item: any;
+    setMessages: any;
+    messages: any;
+    index: number;
+    url: number;
+  }) => {
+    const uid = useSelector((state: RootState) => state.auth.pk);
 
-  const payForMessage = async (message_id: number, price: number) => {
-
-    const data = await blogAPI.buyMessage(uid, message_id, price);
-    if (data.status === 200) {
-      setMessages(
-        messages.map((item: any, index: number) => {
-          if (item.id === data.data.chat) {
-            return { ...item, payed: true };
-          } else {
-            return item;
-          }
-        })
-      );
-    }
-  };
-
-  return (
-    <div
-      className={item.user.pk === uid ? "message" : "message own"}
-      key={Math.random() + index + Math.random()}
-    >
-      {item.message_price !== 0 &&
-        !item.is_payed &&
-        item.user.pk !== uid ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            margin: "15px",
-            backgroundColor: "rgba(248, 241, 240, 0.4)",
-          }}
-        >
-          <button
-            style={{
-              background: "#FB5734",
-              borderRadius: "16px",
-              padding: "15px",
-              margin: "20px",
-            }}
-            onClick={() =>
-              payForMessage(item.id, item.message_price)
+    const payForMessage = async (message_id: number, price: number) => {
+      const data = await blogAPI.buyMessage(uid, message_id, price);
+      if (data.status === 200) {
+        setMessages(
+          messages.map((item: any, index: number) => {
+            if (item.id === data.data.chat) {
+              return { ...item, payed: true };
+            } else {
+              return item;
             }
-          >
-            Посмотреть за {item.message_price}$
-          </button>
-        </div>
-      ) : (
-        <div>
+          })
+        );
+      }
+    };
+
+    return (
+      <div
+        className={item.user.pk === uid ? "message" : "message own"}
+        key={Math.random() + index + Math.random()}
+      >
+        {item.message_price !== 0 && !item.is_payed && item.user.pk !== uid ? (
           <div
-            className={
-              "message__content " +
-              (item?.attachments?.length > 0 &&
-                item.attachments.filter(
-                  (el: any) => el.file_type === 1
-                ).length == 0
-                ? "no-background"
-                : "has-solid-background")
-            }
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              margin: "15px",
+              backgroundColor: "rgba(248, 241, 240, 0.4)",
+            }}
           >
+            <button
+              style={{
+                background: "#FB5734",
+                borderRadius: "16px",
+                padding: "15px",
+                margin: "20px",
+              }}
+              onClick={() => payForMessage(item.id, item.message_price)}
+            >
+              Посмотреть за {item.message_price}$
+            </button>
+          </div>
+        ) : (
+          <div>
             <div
-              className="message__text_content"
-              style={
-                item?.attachments.length > 0
-                  ? {
-                    justifyContent: "flex-end",
-                  }
-                  : {}
+              className={
+                "message__content " +
+                (item?.attachments?.length > 0 &&
+                item.attachments.filter((el: any) => el.file_type === 1)
+                  .length == 0
+                  ? "no-background"
+                  : "has-solid-background")
               }
             >
-              {!item?.attachments?.some(
-                (item: any) => item.file_type === 2
-              )
-                ? CryptoJS.AES.decrypt(
-                  item.text,
-                  "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
-                ).toString(CryptoJS.enc.Utf8)
-                : ""}
-              {item?.attachments.length > 0
-                ? item?.attachments.map(
-                  (item: any, index: number) => {
-                    if (item.file_type === 4) {
-                      return <Video src={item.file_url} />;
-                    } else if (item.file_type === 1) {
-                      return (
-                        <a href={item.file_url} download>
-                          Скачать{" "}
-                          {
-                            item.file_url.split("/")[
-                            item.file_url.split("/").length - 1
-                            ]
-                          }
-                        </a>
-                      );
-                    } else if (item.file_type === 2) {
-                      return (
-                        <ReactAudioPlayer
-                          src={item.file_url}
-                          controls
-                          className="chat__audio_voice"
-                        />
-                      );
-                    } else {
-                      return (
-                        <ChatImage
-                          item={item}
-                          index={index}
-                          key={index + Math.random()}
-                        />
-                      );
-                    }
-                  }
-                )
-                : null}
-              {item.user.pk === uid ? (
-                <span className="message__meta">
-                  <div className="message__time">15:33</div>
-                  {item.readed ? <Readed /> : <NotReaded />}
-                </span>
-              ) : (
-                <></>
-              )}
+              <div
+                className="message__text_content"
+                style={
+                  item?.attachments.length > 0
+                    ? {
+                        justifyContent: "flex-end",
+                      }
+                    : {}
+                }
+              >
+                {!item?.attachments?.some((item: any) => item.file_type === 2)
+                  ? CryptoJS.AES.decrypt(
+                      item.text,
+                      "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+                    ).toString(CryptoJS.enc.Utf8)
+                  : ""}
+                {item?.attachments.length > 0
+                  ? item?.attachments.map((item: any, index: number) => {
+                      if (item.file_type === 4) {
+                        return <Video src={item.file_url} />;
+                      } else if (item.file_type === 1) {
+                        return (
+                          <a href={item.file_url} download>
+                            Скачать{" "}
+                            {
+                              item.file_url.split("/")[
+                                item.file_url.split("/").length - 1
+                              ]
+                            }
+                          </a>
+                        );
+                      } else if (item.file_type === 2) {
+                        return (
+                          <ReactAudioPlayer
+                            src={item.file_url}
+                            controls
+                            className="chat__audio_voice"
+                          />
+                        );
+                      } else {
+                        return (
+                          <ChatImage
+                            item={item}
+                            index={index}
+                            key={index + Math.random()}
+                          />
+                        );
+                      }
+                    })
+                  : null}
+                {item.user.pk === uid ? (
+                  <span className="message__meta">
+                    <div className="message__time">15:33</div>
+                    {item.readed ? <Readed /> : <NotReaded />}
+                  </span>
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
+            {index === 0 ? (
+              <div className="time-text">
+                {" "}
+                {moment(item?.item?.room?.message?.time).fromNow()}
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
-          {index === 0 ? (
-            <div className="time-text">
-              {" "}
-              {moment(item?.item?.room?.message?.time).fromNow()}
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}, (prevProps, nextProps) => {
-  if (moment(prevProps.item.date * 1000).fromNow() === "a few seconds ago") return false
-  else {
-    return true
+        )}
+      </div>
+    );
+  },
+  (prevProps, nextProps) => {
+    if (moment(prevProps.item.date * 1000).fromNow() === "a few seconds ago")
+      return false;
+    else {
+      return true;
+    }
   }
-})
+);
 
 export const DialogMain = ({ rooms }: { rooms: any }) => {
   const history = useHistory();
@@ -213,7 +219,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false);
 
   // useEffect`s
-
 
   useEffect(() => {
     const wsReadClient = new WebSocket(
@@ -260,7 +265,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   useEffect(() => {
     if (!wsRead) return;
-    wsRead.onmessage = (e: any) => { };
+    wsRead.onmessage = (e: any) => {};
   }, [wsRead]);
 
   useEffect(() => {
@@ -276,6 +281,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   useEffect(() => {
     const recieveChatMessages = async () => {
       const response = await chatAPI.getChatMessages(Number(lastUrl));
+      console.warn(response);
       setMessages(response);
       setIsMessagesLoading(false);
     };
@@ -325,9 +331,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       JSON.stringify({
         text: !audioMessage
           ? CryptoJS.AES.encrypt(
-            messageMain,
-            "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
-          ).toString()
+              messageMain,
+              "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+            ).toString()
           : "",
         user: uid,
         is_payed: false,
@@ -450,7 +456,11 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       <div className="chat__dialogsHeader inChat">
         <div
           className="chat__sidebarItem"
-          style={{ alignItems: "center", paddingLeft: "0px", marginLeft: "8px" }}
+          style={{
+            alignItems: "center",
+            paddingLeft: "0px",
+            marginLeft: "8px",
+          }}
         >
           <div
             className="chat__resp_icon chat__backNone"
@@ -458,26 +468,46 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           >
             <BackButton />
           </div>
-          <img
-            src={
+          <Link
+            to={`/profile/${
               typeof rooms.find(
                 (item: any) => item.room.room_info.id === Number(lastUrl)
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited?.avatar || logo
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited?.username
                   : rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.creator?.avatar || logo
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.creator?.username
                 : rooms.find(
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.username
+            }`}
+          >
+            <img
+              src={
+                typeof rooms.find(
                   (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.logo || logo
-            }
-            className="logo_site"
-            alt="avatar"
-            onClick={() => setInvitedModalShown(true)}
-          ></img>
+                )?.room?.room_info?.invited !== "number"
+                  ? amICreator
+                    ? rooms.find(
+                        (item: any) =>
+                          item.room.room_info.id === Number(lastUrl)
+                      )?.room?.room_info?.invited?.avatar || logo
+                    : rooms.find(
+                        (item: any) =>
+                          item.room.room_info.id === Number(lastUrl)
+                      )?.room?.room_info?.creator?.avatar || logo
+                  : rooms.find(
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.logo || logo
+              }
+              className="logo_site"
+              alt="avatar"
+              // onClick={() => setInvitedModalShown(true)}
+            ></img>
+          </Link>
           <div>
             <h2
               style={{
@@ -495,14 +525,14 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited?.username
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited?.username
                   : rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.creator?.username
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.creator?.username
                 : rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.name}
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.name}
             </h2>
           </div>
         </div>
@@ -526,9 +556,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `hype-fans.com/profile/${rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited.username
+                  `hype-fans.com/profile/${
+                    rooms.find(
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited.username
                   }`
                 );
               }}
@@ -585,7 +616,13 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           ) : (
             messages.map((item, index) => {
               return (
-                <MessageItem item={item} index={index} setMessages={setMessages} messages={messages} url={Number(lastUrl)} />
+                <MessageItem
+                  item={item}
+                  index={index}
+                  setMessages={setMessages}
+                  messages={messages}
+                  url={Number(lastUrl)}
+                />
               );
             })
           )}
@@ -691,13 +728,14 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               <h3
                 style={
                   (messageText.length > 0 && messageText.length < 255) ||
-                    isSendDisabled
+                  isSendDisabled
                     ? { color: "#FB5734" }
                     : { color: "grey" }
                 }
                 onClick={() => {
                   if (
-                    (messageText.length > 0 && messageText.length < 255) || audioMessage ||
+                    (messageText.length > 0 && messageText.length < 255) ||
+                    audioMessage ||
                     isSendDisabled
                   ) {
                     return sendMessage(messageText);

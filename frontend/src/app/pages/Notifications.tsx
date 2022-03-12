@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import "react-phone-input-2/lib/style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, useHistory } from "react-router-dom";
-import { getNotifications, updateNotifications } from "../../redux/notificationsReducer";
+import {
+  getNotifications,
+  updateNotifications,
+} from "../../redux/notificationsReducer";
 import { RootState } from "../../redux/redux";
 import { ReactComponent as BackIcon } from "../../assets/images/arrow-left.svg";
 import { ReactComponent as BellIcon } from "../../assets/images/bell.svg";
@@ -28,7 +31,6 @@ const Notifications: React.FC = () => {
     (state: RootState) => state.notifications.isLoading
   );
 
-
   useEffect(() => {
     dispatch(getNotifications());
   }, [dispatch]);
@@ -36,7 +38,6 @@ const Notifications: React.FC = () => {
   if (isLoading) {
     return <Preloader />;
   }
-
 
   const articles = [
     {
@@ -114,29 +115,32 @@ const Notifications: React.FC = () => {
       }
     }, []);
     const Main = ({ notifications }: { notifications: Array<any> }) => {
+      const [page, setPage] = useState<number>(2);
 
-      const [page, setPage] = useState<number>(2)
-
-      const [data, setData] = useState([...notifications])
+      const [data, setData] = useState([...notifications]);
 
       console.log([data]);
 
-
-
       const onScrollList = async (event: any) => {
-        const scrollBottom = event.target.scrollTop +
-          event.target.offsetHeight === event.target.scrollHeight;
+        const scrollBottom =
+          event.target.scrollTop + event.target.offsetHeight ===
+          event.target.scrollHeight;
 
         if (scrollBottom) {
-          const response = await blogAPI.getNotifications({ limit: 5, offset: page })
-          setData([...data, ...response.data])
-          setPage(page + 1)
+          const response = await blogAPI.getNotifications({
+            limit: 5,
+            offset: page * 5,
+          });
+          setData([...data, ...response.data]);
+          setPage(page + 1);
         }
-      }
-
+      };
 
       return (
-        <div className="notifications__main" onScroll={event => onScrollList(event)}>
+        <div
+          className="notifications__main"
+          onScroll={(event) => onScrollList(event)}
+        >
           {data.length > 0 ? (
             <>
               {data.map((item, i) => {
@@ -232,8 +236,8 @@ const Notifications: React.FC = () => {
                     article.text === "Все"
                       ? notifications
                       : notifications.filter(
-                        (item) => item.type === article.type
-                      )
+                          (item) => item.type === article.type
+                        )
                   }
                 />
               )}

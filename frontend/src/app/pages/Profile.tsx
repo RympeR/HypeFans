@@ -272,7 +272,7 @@ const Profile = () => {
                           </div>
                         </div>
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          <div className="profile__postAgo">{moment(item.post.publication_date).fromNow()}</div>
+                          <div className="profile__postAgo">{moment(item.post.publication_date * 1000).fromNow()}</div>
                           <Popup
                             trigger={
                               <button className="post__menu-dots">

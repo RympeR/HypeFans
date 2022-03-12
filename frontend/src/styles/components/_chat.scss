@@ -523,15 +523,15 @@
       width: 100%;
       display: flex;
       flex-direction: row;
-      height: 50px;
+      height: 44px;
       bottom: 11px;
       position: fixed;
       z-index: 11;
 
       button.send {
         order: 2;
-        width: 46px;
-        height: 46px;
+        width: 44px;
+        height: 44px;
         margin-top: 0.2%;
         background-color: #fbdfcf;
         border-radius: 45px;
@@ -540,7 +540,7 @@
     }
 
     &__text {
-      padding: 17px 8px 17px 15px;
+      padding: 10px 8px 8px 15px;
       display: flex;
       width: 77%;
       background: #fbdfcf;
@@ -549,6 +549,7 @@
       margin-bottom: 4px;
       border-top-left-radius: 21px;
       border-bottom-left-radius: 21px;
+      min-height: 44px;
 
       textarea {
         width: 98%;

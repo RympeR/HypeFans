@@ -28,6 +28,7 @@ import UserBanner from "./UserBanner";
 import logo from "../../../assets/images/logo.svg";
 import { Video } from "../../../app/pages/card/components/VideoPost";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 export const returnByFileType = (item: any) => {
   console.log(item);
@@ -124,7 +125,7 @@ const Post = ({
           </div>
         </div>
         <div className="post__top-right">
-          <p className="post__time">{time_diif}</p>
+          <p className="post__time">{moment(parseFloat(post?.post.publication_date) * 1000).fromNow()}</p>
 
           <button className="post__menu-dots">
             {/* <MenuDots /> */}

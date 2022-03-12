@@ -13,13 +13,17 @@ export const AddToChat = () => {
   const [selectedItems, setSelectedItems] = useState<Array<any>>([]);
 
   const searchUsers = async () => {
-    const data = await userAPI.searchUser({ user: inputValue });
+    const data = await userAPI.searchUser({
+      user: inputValue,
+      limit: 50,
+      offset: 0,
+    });
     setUsers(data.results);
   };
 
   useEffect(() => {
     const search = async () => {
-      const data = await userAPI.searchUser({ user: "" });
+      const data = await userAPI.searchUser({ user: "", limit: 50, offset: 0 });
       setUsers(data.results);
     };
     search();
@@ -30,7 +34,7 @@ export const AddToChat = () => {
     const data = await chatAPI.inviteUsers(
       selectedItems.map((item) => item.username),
       history.location.pathname.split("/")[
-      history.location.pathname.split("/").length - 1
+        history.location.pathname.split("/").length - 1
       ]
     );
     console.log(data);
