@@ -51,6 +51,11 @@ const notificationsReducer = (state = initialState, action: AllActionsType): Ini
         ...state,
         notifications: action.data
       };
+    case 'UPDATE_NOTIFICATIONS':
+      return {
+        ...state,
+        notifications: [...state.notifications, ...action.data]
+      };
     case 'IS_LOADING':
       return {
         ...state,
@@ -72,6 +77,12 @@ const actions = {
       data: data
     } as const;
   },
+  updateNotificationsData: (data: any) => {
+    return {
+      type: 'UPDATE_NOTIFICATIONS',
+      data: data
+    } as const;
+  },
   isLoading: () => {
     return {
       type: 'IS_LOADING'
@@ -86,9 +97,17 @@ const actions = {
 
 export const getNotifications = (): Thunk => async (dispatch) => {
   dispatch(actions.isLoading());
-  const notificationsData = await blogAPI.getNotifications({ limit: 10, offset: 10 });
+  const notificationsData = await blogAPI.getNotifications({ limit: 5, offset: 1 });
   dispatch(actions.setNotificationsData(notificationsData.data));
   dispatch(actions.isntLoading());
+};
+
+
+export const updateNotifications = ({ offset }: { offset: number }): Thunk => async (dispatch) => {
+  // dispatch(actions.isLoading());
+  const notificationsData = await blogAPI.getNotifications({ limit: 5, offset });
+  dispatch(actions.updateNotificationsData(notificationsData.data));
+  // dispatch(actions.isntLoading());
 };
 
 //  Types

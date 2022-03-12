@@ -15,11 +15,12 @@ export const CommentComponent = ({
   data,
   postId,
   show,
-  setShow
+  setShow,
 }: {
   data: any;
   postId: number;
-  show: boolean; setShow: (bool: boolean) => void
+  show: boolean;
+  setShow: (bool: boolean) => void;
 }) => {
   const userID = useSelector((state: RootState) => state.auth.pk);
   const user = useSelector((state: RootState) => state.auth);
@@ -46,7 +47,9 @@ export const CommentComponent = ({
               return {
                 ...item,
                 like: res.like,
-                like_amount: res.like ? item.like_amount + 1 : item.like_amount - 1
+                like_amount: res.like
+                  ? item.like_amount + 1
+                  : item.like_amount - 1,
               };
             } else return item;
           });
@@ -122,7 +125,7 @@ export const CommentComponent = ({
     };
 
     return (
-      <div className="notifications__comment">
+      <div className="notifications__commentLink">
         <Link to={`/profile/${item?.user?.username}`}>
           <img
             src={item.user.avatar ? item.user.avatar : logo}
@@ -147,7 +150,10 @@ export const CommentComponent = ({
           {comments.filter((i) => i.parent === item.id).length === 0 ? (
             <div></div>
           ) : (
-            <p style={{ color: "$grey" }} onClick={() => setShowComments(!showComments)}>
+            <p
+              style={{ color: "$grey" }}
+              onClick={() => setShowComments(!showComments)}
+            >
               {showComments ? " —Скрыть ответы" : " —Показать ответы"}
             </p>
           )}
@@ -227,14 +233,14 @@ export const CommentComponent = ({
                     style={
                       showAnswer
                         ? {
-                          display: 'flex',
-                          padding: '10px',
-                          backgroundColor: '#d6d6d6',
-                          borderRadius: '16px',
-                          height: '55px',
-                          margin: '7px'
-                        }
-                        : { display: 'none' }
+                            display: "flex",
+                            padding: "10px",
+                            backgroundColor: "#d6d6d6",
+                            borderRadius: "16px",
+                            height: "55px",
+                            margin: "7px",
+                          }
+                        : { display: "none" }
                     }
                   >
                     <textarea
@@ -306,7 +312,7 @@ export const CommentComponent = ({
                 name="comment"
                 onChange={(val) => {
                   setComment(val.currentTarget.value);
-                  setFieldValue('user', userID);
+                  setFieldValue("user", userID);
                 }}
               ></textarea>
               <button

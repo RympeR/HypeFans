@@ -142,6 +142,11 @@ export type getUserRT = {
 export type userStringType = {
   user: string | null;
 };
+export type userSearchType = {
+  user: string | null;
+  limit: number | null;
+  offset: number | null;
+};
 export type onlineUserRetrieveRT = {
   user: string | null;
   last_action: string;
