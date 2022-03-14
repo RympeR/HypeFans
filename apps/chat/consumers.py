@@ -5,7 +5,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
 from apps.blog.models import Attachment
-from apps.users.models import User
+from apps.users.models import User, chat_sub_checker
 from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
                                     UserShortSocketRetrieveSeriliazer)
 
@@ -50,27 +50,48 @@ class ChatConsumer(WebsocketConsumer):
                 else:
                     blocked = True if user in room.cretor.blocked_users.all() else False
             if not blocked:
-                chat = Chat.objects.create(
-                    room=room,
-                    user=user,
-                    text=message,
-                    price=message_price,
-                )
-                chat.attachment.set(Attachment.objects.filter(pk__in=_file))
-                async_to_sync(self.channel_layer.group_send)(
-                    self.room_group_name,
-                    {
-                        'type': 'chat_message',
-                        'attachments': _file,
-                        'text': message,
-                        'date': chat.date.timestamp(),
-                        'message_id': chat.pk,
-                        'is_payed': is_payed,
-                        'message_price': message_price,
-                        'user': user,
-                        'room_id': room,
-                    }
-                )
+                chat_sub_check = True
+                if user != room.creator:
+                    chat_sub_check = chat_sub_checker(user, room.creator)
+                if chat_sub_check:
+                    chat = Chat.objects.create(
+                        room=room,
+                        user=user,
+                        text=message,
+                        price=message_price,
+                    )
+                    chat.attachment.set(
+                        Attachment.objects.filter(pk__in=_file))
+                    async_to_sync(self.channel_layer.group_send)(
+                        self.room_group_name,
+                        {
+                            'type': 'chat_message',
+                            'attachments': _file,
+                            'text': message,
+                            'date': chat.date.timestamp(),
+                            'message_id': chat.pk,
+                            'is_payed': is_payed,
+                            'message_price': message_price,
+                            'user': user,
+                            'room_id': room,
+                        }
+                    )
+                else:
+                    async_to_sync(self.channel_layer.group_send)(
+                        self.room_group_name,
+                        {
+                            'type': 'chat_message',
+                            'attachments': [],
+                            'text': 'need tio resubscribe',
+                            'date': 0,
+                            'message_id': -2,
+                            'is_payed': False,
+                            'message_price': 0,
+                            'user': user,
+                            'room_id': room,
+                        }
+                    )
+
             else:
                 async_to_sync(self.channel_layer.group_send)(
                     self.room_group_name,
