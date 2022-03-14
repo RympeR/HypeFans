@@ -1,5 +1,6 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
+import { boolean } from 'yup';
 import { authAPI } from '../api/authAPI';
 import { blogAPI } from '../api/blogAPI';
 import {
@@ -21,6 +22,7 @@ import { isLoading, isntLoading } from './blogReducer';
 import { InferActionsTypes, RootState } from './redux';
 
 const initialState = {
+  subscribed_chat: false,
   subscribtion_price: null as number | null,
   subscribed: false,
   pk: null as number | null,
@@ -168,6 +170,7 @@ const actions = {
     } as const;
   },
   setProfileData: (
+    subscribed_chat: boolean,
     subscribtion_price: number | null,
     pk: number | null,
     email: string | null,
@@ -201,6 +204,7 @@ const actions = {
     return {
       type: 'SET_PROFILE_DATA',
       payload: {
+        subscribed_chat,
         subscribtion_price,
         pk,
         email,
@@ -237,71 +241,71 @@ const actions = {
 
 export const createPostAction =
   ({ like, comment, donation_amount, user, post, parent }: createPostActionRT): Thunk =>
-  async (dispatch) => {
-    const data = await blogAPI.createPostAction({
-      like,
-      comment,
-      donation_amount,
-      user,
-      post,
-      parent,
-      date_time: null,
-      id: null
-    });
-    dispatch(actions.setPostsData(post, true, data.id, null));
-  };
+    async (dispatch) => {
+      const data = await blogAPI.createPostAction({
+        like,
+        comment,
+        donation_amount,
+        user,
+        post,
+        parent,
+        date_time: null,
+        id: null
+      });
+      dispatch(actions.setPostsData(post, true, data.id, null));
+    };
 
 export const deletePostAction =
   ({ id, post_id }: { id: number; post_id: number }): Thunk =>
-  async (dispatch) => {
-    await blogAPI.deletePostAction({
-      id
-    });
-    dispatch(actions.setPostsData(post_id, false, null, null));
-  };
+    async (dispatch) => {
+      await blogAPI.deletePostAction({
+        id
+      });
+      dispatch(actions.setPostsData(post_id, false, null, null));
+    };
 
 export const updateEmailConfirm =
   (new_email: string, uid: number): Thunk =>
-  async (dispatch) => {
-    await authAPI.resetEmailConfirm({ new_email, uid });
-  };
+    async (dispatch) => {
+      await authAPI.resetEmailConfirm({ new_email, uid });
+    };
 
 export const createCard =
   ({ number, date_year, cvc, creator, user }: CardType): Thunk =>
-  async (dispatch) => {
-    await userAPI.createCard({ number, date_year, cvc, creator, user });
-  };
+    async (dispatch) => {
+      await userAPI.createCard({ number, date_year, cvc, creator, user });
+    };
 
 export const deletePost =
   ({ id }: idType): Thunk =>
-  async (dispatch) => {
-    const data = await blogAPI.deletePost({
-      id
-    });
-    if (data.status === 204) {
-      dispatch(actions.deletePost(id));
-    }
-  };
+    async (dispatch) => {
+      const data = await blogAPI.deletePost({
+        id
+      });
+      if (data.status === 204) {
+        dispatch(actions.deletePost(id));
+      }
+    };
 export const buyPost =
   ({ user, amount, post }: createPostBoughtRT): Thunk =>
-  async (dispatch) => {
-    const data = await blogAPI.createPostBought({ user, amount, post, id: null });
-    if (data.status === 200) {
-      dispatch(actions.buyPost(post));
-    }
-  };
+    async (dispatch) => {
+      const data = await blogAPI.createPostBought({ user, amount, post, id: null });
+      if (data.status === 200) {
+        dispatch(actions.buyPost(post));
+      }
+    };
 
 export const createDonation =
   ({ amount, sender, reciever }: DonationType): Thunk =>
-  async (dispatch) => {
-    await userAPI.createDonation({ amount, sender, reciever });
-  };
+    async (dispatch) => {
+      await userAPI.createDonation({ amount, sender, reciever });
+    };
 
 export const createPayment =
   ({ amount, card }: PaymentType): Thunk =>
-  async (dispatch) => {
-    await userAPI.createPayment({ amount, card });
-  };
+    async (dispatch) => {
+      await userAPI.createPayment({ amount, card });
+    };
 
 // export const createSubscription = ({ end_date, source, target }: SubscriptionType): Thunk => async (dispatch) => {
 //   await userAPI.createSubscription({ end_date, source, target });
@@ -309,67 +313,36 @@ export const createPayment =
 
 export const createUser =
   ({ email, username, password }: createUserT): Thunk =>
-  async (dispatch) => {
-    await userAPI.createUser({ email, username, password, id: null });
-  };
+    async (dispatch) => {
+      await userAPI.createUser({ email, username, password, id: null });
+    };
 
 export const getCard =
   ({ id }: idType): Thunk =>
-  async (dispatch) => {
-    await userAPI.getCard({ id });
-  };
+    async (dispatch) => {
+      await userAPI.getCard({ id });
+    };
 
 export const getDonation =
   ({ id }: idType): Thunk =>
-  async (dispatch) => {
-    await userAPI.getDonation({ id });
-  };
+    async (dispatch) => {
+      await userAPI.getDonation({ id });
+    };
 
 export const getPayment =
   ({ id }: idType): Thunk =>
-  async (dispatch) => {
-    await userAPI.getPayment({ id });
-  };
+    async (dispatch) => {
+      await userAPI.getPayment({ id });
+    };
 
 export const getUser =
   ({ username }: { username: string }): Thunk =>
-  async (dispatch) => {
-    dispatch(isLoading());
-    const data = await userAPI.getUser({ user: username });
-    if (data) {
-      const {
-        subscribtion_price,
-        pk,
-        email,
-        avatar,
-        background_photo,
-        username,
-        first_name,
-        bio,
-        birthday_date,
-        location,
-        message_price,
-        post_amount,
-        fans_amount,
-        ref_link,
-        repheral_users,
-        blocked_users,
-        email_notifications,
-        push_notifications,
-        hide_online,
-        allow_comments,
-        show_post_amount,
-        subscribed,
-        show_fans_amount,
-        show_watermark,
-        validated_email,
-        validated_user,
-        credit_amount,
-        earned_credits_amount,
-        posts
-      } = data;
-      dispatch(
-        actions.setProfileData(
+    async (dispatch) => {
+      dispatch(isLoading());
+      const data = await userAPI.getUser({ user: username });
+      if (data) {
+        const {
+          subscribed_chat,
           subscribtion_price,
           pk,
           email,
@@ -380,7 +353,6 @@ export const getUser =
           bio,
           birthday_date,
           location,
-          subscribed,
           message_price,
           post_amount,
           fans_amount,
@@ -392,6 +364,7 @@ export const getUser =
           hide_online,
           allow_comments,
           show_post_amount,
+          subscribed,
           show_fans_amount,
           show_watermark,
           validated_email,
@@ -399,17 +372,50 @@ export const getUser =
           credit_amount,
           earned_credits_amount,
           posts
-        )
-      );
-    }
-    dispatch(isntLoading());
-  };
+        } = data;
+        dispatch(
+          actions.setProfileData(
+            subscribed_chat,
+            subscribtion_price,
+            pk,
+            email,
+            avatar,
+            background_photo,
+            username,
+            first_name,
+            bio,
+            birthday_date,
+            location,
+            subscribed,
+            message_price,
+            post_amount,
+            fans_amount,
+            ref_link,
+            repheral_users,
+            blocked_users,
+            email_notifications,
+            push_notifications,
+            hide_online,
+            allow_comments,
+            show_post_amount,
+            show_fans_amount,
+            show_watermark,
+            validated_email,
+            validated_user,
+            credit_amount,
+            earned_credits_amount,
+            posts
+          )
+        );
+      }
+      dispatch(isntLoading());
+    };
 
 export const onlineUserCreate =
   ({ user }: userStringType): Thunk =>
-  async (dispatch) => {
-    await userAPI.onlineUserCreate({ user });
-  };
+    async (dispatch) => {
+      await userAPI.onlineUserCreate({ user });
+    };
 
 export const onlineUserRetrieve = (): Thunk => async (dispatch) => {
   await userAPI.onlineUserRetrieve();
@@ -417,58 +423,58 @@ export const onlineUserRetrieve = (): Thunk => async (dispatch) => {
 
 export const setFavorite =
   (postId: number, favourite: boolean): Thunk =>
-  async (dispatch) => {
-    const data = await blogAPI.setFavorite(postId, favourite);
-    dispatch(actions.setPostsData(data.data.post_id, null, null, data.data.favourite));
-  };
+    async (dispatch) => {
+      const data = await blogAPI.setFavorite(postId, favourite);
+      dispatch(actions.setPostsData(data.data.post_id, null, null, data.data.favourite));
+    };
 
 export const onlineUserUpdatePut =
   ({ user }: userStringType): Thunk =>
-  async (dispatch) => {
-    await userAPI.onlineUserUpdatePut({ user });
-  };
+    async (dispatch) => {
+      await userAPI.onlineUserUpdatePut({ user });
+    };
 
 export const onlineUserUpdate =
   ({ user }: userStringType): Thunk =>
-  async (dispatch) => {
-    await userAPI.onlineUserUpdate({ user });
-  };
+    async (dispatch) => {
+      await userAPI.onlineUserUpdate({ user });
+    };
 
 export const particialUpdateCard =
   ({ number, date_year, cvc, creator, user }: createCardRT): Thunk =>
-  async (dispatch) => {
-    await userAPI.particialUpdateCard({ number, date_year, cvc, creator, user, id: null });
-  };
+    async (dispatch) => {
+      await userAPI.particialUpdateCard({ number, date_year, cvc, creator, user, id: null });
+    };
 
 export const particialUpdateuser =
   (props: getUserRT): Thunk =>
-  async (dispatch) => {
-    await userAPI.particialUpdateUser(props);
-  };
+    async (dispatch) => {
+      await userAPI.particialUpdateUser(props);
+    };
 
 export const updateDeleteCard =
   ({ id }: idType): Thunk =>
-  async (dispatch) => {
-    await userAPI.updateDeleteCard({ id });
-  };
+    async (dispatch) => {
+      await userAPI.updateDeleteCard({ id });
+    };
 
 export const updateDeleteCardPut =
   (props: createCardRT): Thunk =>
-  async (dispatch) => {
-    await userAPI.updateDeleteCardPut(props);
-  };
+    async (dispatch) => {
+      await userAPI.updateDeleteCardPut(props);
+    };
 
 export const updateDeleteCardPatch =
   (props: createCardRT): Thunk =>
-  async (dispatch) => {
-    await userAPI.updateDeleteCardPatch(props);
-  };
+    async (dispatch) => {
+      await userAPI.updateDeleteCardPatch(props);
+    };
 
 export const updateDeleteCardDelete =
   ({ id }: idType): Thunk =>
-  async (dispatch) => {
-    await userAPI.updateDeleteCardDelete({ id });
-  };
+    async (dispatch) => {
+      await userAPI.updateDeleteCardDelete({ id });
+    };
 
 export const updateDeleteUser = (): Thunk => async (dispatch) => {
   await userAPI.updateDeleteUser();
@@ -476,15 +482,15 @@ export const updateDeleteUser = (): Thunk => async (dispatch) => {
 
 export const updateDeleteUserPut =
   ({ email, username, password }: createUserT): Thunk =>
-  async (dispatch) => {
-    await userAPI.updateDeleteUserPut({ email, username, password, id: null });
-  };
+    async (dispatch) => {
+      await userAPI.updateDeleteUserPut({ email, username, password, id: null });
+    };
 
 export const updateDeleteUserPatch =
   ({ email, username, password }: createUserT): Thunk =>
-  async (dispatch) => {
-    await userAPI.updateDeleteUserPatch({ email, username, password, id: null });
-  };
+    async (dispatch) => {
+      await userAPI.updateDeleteUserPatch({ email, username, password, id: null });
+    };
 
 export const updateDeleteUserDelete = (): Thunk => async (dispatch) => {
   await userAPI.updateDeleteUserDelete();
@@ -533,15 +539,15 @@ export const userSubscriptionUpdate = (): Thunk => async (dispatch) => {
 
 export const userValidateUser =
   (user: number, verified: boolean): Thunk =>
-  async (dispatch) => {
-    await userAPI.userValidateUser(user, verified);
-  };
+    async (dispatch) => {
+      await userAPI.userValidateUser(user, verified);
+    };
 
 export const changePassword =
   (user: number, verified: boolean): Thunk =>
-  async (dispatch) => {
-    await userAPI.userValidateUser(user, verified);
-  };
+    async (dispatch) => {
+      await userAPI.userValidateUser(user, verified);
+    };
 
 //  Types
 

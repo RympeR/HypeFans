@@ -107,6 +107,7 @@ export type getPaymentRT = {
   amount: number;
 };
 export type getUserRT = {
+  subscribed_chat: boolean,
   subscribtion_price: number | null;
   pk: number | null;
   email: string | null;
