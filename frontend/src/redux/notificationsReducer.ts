@@ -97,7 +97,7 @@ const actions = {
 
 export const getNotifications = (): Thunk => async (dispatch) => {
   dispatch(actions.isLoading());
-  const notificationsData = await blogAPI.getNotifications({ limit: 5, offset: 1 });
+  const notificationsData = await blogAPI.getNotifications({ limit: 15, offset: 0 });
   dispatch(actions.setNotificationsData(notificationsData.data));
   dispatch(actions.isntLoading());
 };

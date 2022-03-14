@@ -116,7 +116,7 @@ const Notifications: React.FC = () => {
     }, []);
     const Main = ({ notifications }: { notifications: Array<any> }) => {
       const [page, setPage] = useState<number>(1);
-    
+
       console.log(notifications);
       const [data, setData] = useState([...notifications]);
 
@@ -129,7 +129,7 @@ const Notifications: React.FC = () => {
 
         if (scrollBottom) {
           const response = await blogAPI.getNotifications({
-            limit: 5,
+            limit: 15,
             offset: page * 5,
           });
           setData([...data, ...response.data]);
@@ -183,17 +183,17 @@ const Notifications: React.FC = () => {
           >
             {isShown ? (
               <div style={{ marginLeft: "5px" }}>
-                <Link
+                <div
                   className={
                     history.location.pathname === "/notifications"
                       ? "nav__icon_notifications_active "
                       : "nav__icon_notifications_inactive "
                   }
-                  to="/notifications"
-                  onClick={() => setShown(true)}
+                  // to="/notifications"
+                  onClick={() => setShown(false)}
                 >
                   <BellIcon />
-                </Link>
+                </div>
               </div>
             ) : (
               <div

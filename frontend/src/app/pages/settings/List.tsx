@@ -132,9 +132,7 @@ export const ListsComponent = () => {
           <div
             className="notifications__listItem"
             onClick={() =>
-              lists.my_subs.length > 0
-                ? setCurrentTab("my_subs")
-                : null
+              lists.my_subs.length > 0 ? setCurrentTab("my_subs") : null
             }
           >
             <div className="notifications__listText">
@@ -190,31 +188,34 @@ export const ListsComponent = () => {
               onChange={(val) => setInputValue(val.currentTarget.value)}
             ></input>
           </div>
-          {lists?.last_subs
-            ?.filter(
-              (item) => inputValue === "" || item.username.includes(inputValue)
-            )
-            ?.map((item, index) => {
-              return (
-                <div
-                  className="notifications__walletChild"
-                  style={{ borderBottom: "0px" }}
-                  key={`${index} fav-list`}
-                >
-                  <div style={{ display: "flex" }}>
-                    <div>
-                      <Link to={`/profile/${item.username}`}>
-                        <img src={item.avatar || logo} alt="img" />
-                      </Link>
-                    </div>
-                    <div>
-                      <h3>{item.first_name ?? "Имя"}</h3>
-                      <h4>@{item.username ?? "nickname"}</h4>
+          <div style={{ overflowY: "scroll" }}>
+            {lists?.last_subs
+              ?.filter(
+                (item) =>
+                  inputValue === "" || item.username.includes(inputValue)
+              )
+              ?.map((item, index) => {
+                return (
+                  <div
+                    className="notifications__walletChild"
+                    style={{ borderBottom: "0px" }}
+                    key={`${index} fav-list`}
+                  >
+                    <div style={{ display: "flex" }}>
+                      <div>
+                        <Link to={`/profile/${item.username}`}>
+                          <img src={item.avatar || logo} alt="img" />
+                        </Link>
+                      </div>
+                      <div>
+                        <h3>{item.first_name ?? "Имя"}</h3>
+                        <h4>@{item.username ?? "nickname"}</h4>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+          </div>
         </div>
       ) : null}
       {currentTab === "favourites" ? (
@@ -251,31 +252,34 @@ export const ListsComponent = () => {
               onChange={(val) => setInputValue(val.currentTarget.value)}
             ></input>
           </div>
-          {lists?.favourites
-            ?.filter(
-              (item) => inputValue === "" || item.username.includes(inputValue)
-            )
-            ?.map((item, index) => {
-              return (
-                <div
-                  className="notifications__walletChild"
-                  style={{ borderBottom: "0px" }}
-                  key={`${index} fav-list`}
-                >
-                  <div style={{ display: "flex" }}>
-                    <div>
-                      <Link to={`/profile/${item.username}`}>
-                        <img src={item.avatar || logo} alt="img" />
-                      </Link>
-                    </div>
-                    <div>
-                      <h3>{item.first_name ?? "Имя"}</h3>
-                      <h4>@{item.username ?? "nickname"}</h4>
+          <div style={{ overflowY: "scroll" }}>
+            {lists?.favourites
+              ?.filter(
+                (item) =>
+                  inputValue === "" || item.username.includes(inputValue)
+              )
+              ?.map((item, index) => {
+                return (
+                  <div
+                    className="notifications__walletChild"
+                    style={{ borderBottom: "0px" }}
+                    key={`${index} fav-list`}
+                  >
+                    <div style={{ display: "flex" }}>
+                      <div>
+                        <Link to={`/profile/${item.username}`}>
+                          <img src={item.avatar || logo} alt="img" />
+                        </Link>
+                      </div>
+                      <div>
+                        <h3>{item.first_name ?? "Имя"}</h3>
+                        <h4>@{item.username ?? "nickname"}</h4>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+          </div>
         </div>
       ) : null}
       {currentTab === "blocked_users" ? (
@@ -316,46 +320,50 @@ export const ListsComponent = () => {
               ></input>
             </div>
           </div>
-            <button
-              className="notifications__settingBtn"
-              style={{ margin: "0px", width: "100%" }}
-              onClick={() => unblockUsers()}
-              disabled={selectedItems.length === 0}
-            >
-              Разблокировать
-            </button>
-          {selectedItems
-            ?.filter(
-              (item) => inputValue === "" || item.username.includes(inputValue)
-            )
-            ?.map((item, index) => {
-              return (
-                <AddToChatItemSelected
-                  item={item}
-                  index={index}
-                  items={selectedItems}
-                  setSelectedItems={setSelectedItems}
-                  key={index}
-                />
-              );
-            })}
-          {selectedItems.length > 0 ? <hr /> : null}
-          {lists?.blocked_users
-            ?.filter(
-              (item) => inputValue === "" || item.username.includes(inputValue)
-            )
-            ?.filter((item) => !selectedItems.includes(item))
-            ?.map((item, index) => {
-              return (
-                <AddToChatItem
-                  item={item}
-                  index={index}
-                  items={selectedItems}
-                  setSelectedItems={setSelectedItems}
-                  key={index}
-                />
-              );
-            })}
+          <button
+            className="notifications__settingBtn"
+            style={{ margin: "0px", width: "100%" }}
+            onClick={() => unblockUsers()}
+            disabled={selectedItems.length === 0}
+          >
+            Разблокировать
+          </button>
+          <div style={{ overflowY: "scroll" }}>
+            {selectedItems
+              ?.filter(
+                (item) =>
+                  inputValue === "" || item.username.includes(inputValue)
+              )
+              ?.map((item, index) => {
+                return (
+                  <AddToChatItemSelected
+                    item={item}
+                    index={index}
+                    items={selectedItems}
+                    setSelectedItems={setSelectedItems}
+                    key={index}
+                  />
+                );
+              })}
+            {selectedItems.length > 0 ? <hr /> : null}
+            {lists?.blocked_users
+              ?.filter(
+                (item) =>
+                  inputValue === "" || item.username.includes(inputValue)
+              )
+              ?.filter((item) => !selectedItems.includes(item))
+              ?.map((item, index) => {
+                return (
+                  <AddToChatItem
+                    item={item}
+                    index={index}
+                    items={selectedItems}
+                    setSelectedItems={setSelectedItems}
+                    key={index}
+                  />
+                );
+              })}
+          </div>
         </div>
       ) : null}
       {currentTab === "last_donators" ? (
@@ -394,31 +402,34 @@ export const ListsComponent = () => {
               onChange={(val) => setInputValue(val.currentTarget.value)}
             ></input>
           </div>
-          {lists?.last_donators
-            ?.filter(
-              (item) => inputValue === "" || item.username.includes(inputValue)
-            )
-            ?.map((item, index) => {
-              return (
-                <div
-                  className="notifications__walletChild"
-                  style={{ borderBottom: "0px" }}
-                  key={`${index} fav-list`}
-                >
-                  <div style={{ display: "flex" }}>
-                    <div>
-                      <Link to={`/profile/${item.username}`}>
-                        <img src={item.avatar || logo} alt="img" />
-                      </Link>
-                    </div>
-                    <div>
-                      <h3>{item.first_name ?? "Имя"}</h3>
-                      <h4>@{item.username ?? "nickname"}</h4>
+          <div style={{ overflowY: "scroll" }}>
+            {lists?.last_donators
+              ?.filter(
+                (item) =>
+                  inputValue === "" || item.username.includes(inputValue)
+              )
+              ?.map((item, index) => {
+                return (
+                  <div
+                    className="notifications__walletChild"
+                    style={{ borderBottom: "0px" }}
+                    key={`${index} fav-list`}
+                  >
+                    <div style={{ display: "flex" }}>
+                      <div>
+                        <Link to={`/profile/${item.username}`}>
+                          <img src={item.avatar || logo} alt="img" />
+                        </Link>
+                      </div>
+                      <div>
+                        <h3>{item.first_name ?? "Имя"}</h3>
+                        <h4>@{item.username ?? "nickname"}</h4>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+          </div>
         </div>
       ) : null}
       {currentTab === "friends" ? (
@@ -455,31 +466,34 @@ export const ListsComponent = () => {
               onChange={(val) => setInputValue(val.currentTarget.value)}
             ></input>
           </div>
-          {lists?.friends
-            ?.filter(
-              (item) => inputValue === "" || item.username.includes(inputValue)
-            )
-            ?.map((item, index) => {
-              return (
-                <div
-                  className="notifications__walletChild"
-                  style={{ borderBottom: "0px" }}
-                  key={`${index} fav-list`}
-                >
-                  <div style={{ display: "flex" }}>
-                    <div>
-                      <Link to={`/profile/${item.username}`}>
-                        <img src={item.avatar || logo} alt="img" />
-                      </Link>
-                    </div>
-                    <div>
-                      <h3>{item.first_name ?? "Имя"}</h3>
-                      <h4>@{item.username ?? "nickname"}</h4>
+          <div style={{ overflowY: "scroll" }}>
+            {lists?.friends
+              ?.filter(
+                (item) =>
+                  inputValue === "" || item.username.includes(inputValue)
+              )
+              ?.map((item, index) => {
+                return (
+                  <div
+                    className="notifications__walletChild"
+                    style={{ borderBottom: "0px" }}
+                    key={`${index} fav-list`}
+                  >
+                    <div style={{ display: "flex" }}>
+                      <div>
+                        <Link to={`/profile/${item.username}`}>
+                          <img src={item.avatar || logo} alt="img" />
+                        </Link>
+                      </div>
+                      <div>
+                        <h3>{item.first_name ?? "Имя"}</h3>
+                        <h4>@{item.username ?? "nickname"}</h4>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+          </div>
         </div>
       ) : null}
       {currentTab === "my_subs" ? (
@@ -496,7 +510,9 @@ export const ListsComponent = () => {
             <div>
               <ArrowLeft onClick={() => setCurrentTab("list")} />
             </div>
-            <div style={{ marginTop: "5px", marginLeft: "8px" }}>Мои подписки</div>
+            <div style={{ marginTop: "5px", marginLeft: "8px" }}>
+              Мои подписки
+            </div>
           </div>
           <div
             style={{
@@ -516,31 +532,34 @@ export const ListsComponent = () => {
               onChange={(val) => setInputValue(val.currentTarget.value)}
             ></input>
           </div>
-          {lists?.my_subs
-            ?.filter(
-              (item) => inputValue === "" || item.username.includes(inputValue)
-            )
-            ?.map((item, index) => {
-              return (
-                <div
-                  className="notifications__walletChild"
-                  style={{ borderBottom: "0px" }}
-                  key={`${index} fav-list`}
-                >
-                  <div style={{ display: "flex" }}>
-                    <div>
-                      <Link to={`/profile/${item.username}`}>
-                        <img src={item.avatar || logo} alt="img" />
-                      </Link>
-                    </div>
-                    <div>
-                      <h3>{item.first_name ?? "Имя"}</h3>
-                      <h4>@{item.username ?? "nickname"}</h4>
+          <div style={{ overflowY: "scroll" }}>
+            {lists?.my_subs
+              ?.filter(
+                (item) =>
+                  inputValue === "" || item.username.includes(inputValue)
+              )
+              ?.map((item, index) => {
+                return (
+                  <div
+                    className="notifications__walletChild"
+                    style={{ borderBottom: "0px" }}
+                    key={`${index} fav-list`}
+                  >
+                    <div style={{ display: "flex" }}>
+                      <div>
+                        <Link to={`/profile/${item.username}`}>
+                          <img src={item.avatar || logo} alt="img" />
+                        </Link>
+                      </div>
+                      <div>
+                        <h3>{item.first_name ?? "Имя"}</h3>
+                        <h4>@{item.username ?? "nickname"}</h4>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+          </div>
         </div>
       ) : null}
     </div>
