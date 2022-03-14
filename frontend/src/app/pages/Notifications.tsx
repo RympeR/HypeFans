@@ -14,6 +14,7 @@ import { ReactComponent as CommentIcon } from "../../assets/images/message-circl
 import { ReactComponent as SettingsIcon } from "../../assets/images/settings.svg";
 import { ReactComponent as DonateIcon } from "../../assets/images/tip.svg";
 import { ReactComponent as UnlockIcon } from "../../assets/images/unlock.svg";
+import loader from '../../assets/loaders/Spinner-1s-200px.gif';
 import { DefaultSidebar } from "../components/notificationsComponents/DefaultSidebar";
 import { SidebarText } from "../components/notificationsComponents/SidebarText";
 import { Preloader } from "../utils/Preloader";
@@ -120,6 +121,8 @@ const Notifications: React.FC = () => {
       console.log(notifications);
       const [data, setData] = useState([...notifications]);
 
+      const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false)
+
       console.log([data]);
 
       const onScrollList = async (event: any) => {
@@ -127,13 +130,17 @@ const Notifications: React.FC = () => {
           event.target.scrollTop + event.target.offsetHeight ===
           event.target.scrollHeight;
 
-        if (scrollBottom) {
-          const response = await blogAPI.getNotifications({
-            limit: 15,
+        if (scrollBottom && !isUpdateLoading) {
+          setIsUpdateLoading(true)
+          await blogAPI.getNotifications({
+            limit: 5,
             offset: page * 5,
-          });
-          setData([...data, ...response.data]);
-          setPage(page + 1);
+          }).then((res) => {
+            setData([...data, ...res.data]);
+          }).finally(() => {
+            setPage(page + 1);
+            setIsUpdateLoading(false)
+          })
         }
       };
 
@@ -147,6 +154,9 @@ const Notifications: React.FC = () => {
               {data.map((item, i) => {
                 return <Notification key={`notification ${i}`} item={item} />;
               })}
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                {isUpdateLoading ? <img src={loader} alt="loading..." /> : null}
+              </div>
             </>
           ) : (
             <div
@@ -237,8 +247,8 @@ const Notifications: React.FC = () => {
                     article.text === "Все"
                       ? notifications
                       : notifications.filter(
-                          (item) => item.type === article.type
-                        )
+                        (item) => item.type === article.type
+                      )
                   }
                 />
               )}
