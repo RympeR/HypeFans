@@ -372,7 +372,12 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     }
   };
   const blockUser = async (id: number) => {
-    await userAPI.blockUser({ user: [id], block: true });
+    const response = await userAPI.blockUser({ user: [id], block: true });
+    if (response.status < 300) {
+      toast.success("Blocked user");
+    } else {
+      toast.error("Block user failed");
+    }
   };
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
