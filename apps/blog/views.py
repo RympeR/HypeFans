@@ -453,7 +453,7 @@ class GetFavouritePosts(generics.GenericAPIView):
 
     def get(self, request):
         limit = int(request.GET.get('limit', 20))
-        offset = int(request.GET.get('offset', 0))
+        offset = 0 #int(request.GET.get('offset', 0))
         user = request.user
         qs = user.user_favourites.all()[offset:offset+limit]
         data = [{'post': self.get_serializer(
