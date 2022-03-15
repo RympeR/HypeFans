@@ -120,7 +120,7 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
 
 class UserIdRetrieveSeriliazer(serializers.ModelSerializer):
-        class Meta:
+    class Meta:
         model = User
         fields = (
             'pk',
