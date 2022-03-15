@@ -12,7 +12,7 @@ export const ChatInput = ({
   isSendDisabled: any;
   audio: any;
 }) => {
-  const [height, setHeight] = useState<number>(70)
+  const [height, setHeight] = useState<number>(30)
   const VektorIcon = () => <Vektor />;
   const VektorIconDisabled = () => <VektorDisabled />;
   const handleChange = (event: any) => {
