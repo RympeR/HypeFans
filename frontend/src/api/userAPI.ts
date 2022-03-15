@@ -25,6 +25,16 @@ import {
 } from "./types";
 
 export const userAPI = {
+  chatSubscribe({ source, target }: SubscriptionType) {
+    return instance
+      .post<createSubscriptionRT>("/user/create-subscription/", {
+        source,
+        target,
+      })
+      .then((response) => {
+        return response;
+      });
+  },
   createCard({ number, date_year, cvc, creator, user }: CardType) {
     return instance
       .post<createCardRT>("/user/create-card/", {
