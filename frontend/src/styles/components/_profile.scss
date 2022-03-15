@@ -19,7 +19,7 @@
     height: 700px;
     background-color: black !important;
     @media screen and (max-width: 500px) {
-      height: 500px;
+      height: auto;
       width: 380px;
     }
   }

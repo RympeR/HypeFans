@@ -126,8 +126,8 @@ export const blogAPI = {
       return response;
     });
   },
-  getFavourites({ limit = 10, offset = 10 }: { limit: number; offset: number }) {
-    return instance.get('/blog/get-favourite-posts/').then((response) => {
+  getFavourites({ limit = 10, offset = 0 }: { limit: number; offset: number }) {
+    return instance.get(`/blog/get-favourite-posts/?limit=${limit}&offset=${offset}`).then((response) => {
       return response;
     });
   },
