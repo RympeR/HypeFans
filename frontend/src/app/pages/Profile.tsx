@@ -47,6 +47,7 @@ const Profile = () => {
   const { pathname } = useLocation();
   const location = pathname.split("/");
   const nick = location[location.length - 1];
+  const [chatSubscribeModalShown, setChatSubscribeModalShown] = useState<boolean>(false)
   useEffect(() => {
     dispatch(getUser({ username: nick }));
   }, [nick, dispatch]);
@@ -74,6 +75,20 @@ const Profile = () => {
       toast.error("Ошибка подписки");
     }
   };
+
+  const subscribeOnChat = async () => {
+    const data = await userAPI.chatSubscribe({
+      source: myId,
+      target: profile.pk,
+    });
+    setChatSubscribeModalShown(false);
+    if (data.status === 200) {
+      setProfile({ ...profile, subscribed_chat: true });
+      toast.success("Вы подписались на чат");
+    } else {
+      toast.error("Ошибка подписки  на чат");
+    }
+  }
 
   const writeMessage = async () => {
     const data = await chatAPI.roomCreate({
@@ -117,7 +132,7 @@ const Profile = () => {
       >
         <Modal.Body className="notifications__modal">
           {" "}
-          <h2 style={{ marginBottom: "0px" }}>Вы уверенны?</h2>
+          <h2 style={{ marginBottom: "0px" }}>Цена подписки {profile.message_price}$</h2>
           <div
             style={{
               display: "flex",
@@ -128,6 +143,30 @@ const Profile = () => {
             <h3 onClick={() => setSubscribeShow(false)}>Нет</h3>
             <div style={{ width: "20px" }}></div>
             <h3 onClick={subscribe} style={{ color: "#FB5734" }}>
+              Да
+            </h3>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        show={chatSubscribeModalShown}
+        onHide={() => setChatSubscribeModalShown(false)}
+        centered
+        size="sm"
+      >
+        <Modal.Body className="notifications__modal">
+          {" "}
+          <h2 style={{ marginBottom: "0px" }}>Подписатся на чат?</h2>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "15px",
+            }}
+          >
+            <h3 onClick={() => setSubscribeShow(false)}>Нет</h3>
+            <div style={{ width: "20px" }}></div>
+            <h3 onClick={subscribeOnChat} style={{ color: "#FB5734" }}>
               Да
             </h3>
           </div>
@@ -230,15 +269,28 @@ const Profile = () => {
                 Вы уже подписанны
               </p>
             )}
-            <div style={{ width: "100%" }}>
-              <button
-                className="notifications__settingBtn"
-                style={{ margin: "20px 0px", width: "100%" }}
-                onClick={() => writeMessage()}
-              >
-                Написать
-              </button>
-            </div>
+            {profile.subscribed && profile.subscribed_chat ? (
+              <div style={{ width: "100%" }}>
+                <button
+                  className="notifications__settingBtn"
+                  style={{ margin: "20px 0px", width: "100%" }}
+                  onClick={() => writeMessage()}
+                >
+                  Написать
+                </button>
+              </div>
+            ) : null}
+            {profile.subscribed && !profile.subscribed_chat ? (
+              <div style={{ width: "100%" }}>
+                <button
+                  className="notifications__settingBtn"
+                  style={{ margin: "20px 0px", width: "100%" }}
+                  onClick={() => setChatSubscribeModalShown(true)}
+                >
+                  Подписаться на чат
+                </button>
+              </div>
+            ) : null}
           </div>
         ) : null}
       </div>

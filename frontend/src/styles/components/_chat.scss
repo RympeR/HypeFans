@@ -192,7 +192,7 @@
     width: 55%;
     display: flex;
     flex-direction: row;
-    height: 50px;
+    min-height: 50px;
     margin-bottom: -0.2em;
     margin-top: 0.2em;
     position: absolute;
@@ -232,7 +232,7 @@
           width: 0px;
         }
 
-        line-height: 12px;
+        line-height: 15px;
         resize: none;
       }
     }
@@ -304,7 +304,7 @@
         display: flex;
         z-index: 13;
         position: fixed;
-        bottom: 8px;
+        bottom: 2px;
         border-radius: 15px;
         background-color: white;
         height: 38px;
@@ -549,12 +549,12 @@
       margin-bottom: 4px;
       border-top-left-radius: 21px;
       border-bottom-left-radius: 21px;
-      min-height: 44px;
+      min-height: 46px;
 
       textarea {
         width: 98%;
         resize: none;
-        line-height: 12px;
+        line-height: 15px;
 
         &::-webkit-scrollbar {
           width: 0px;
