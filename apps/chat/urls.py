@@ -15,6 +15,7 @@ from .views import (
     ChatPartialUpdateAPI,
     ReadChatMessages,
     ChatBoughtCreateAPI,
+    RoomRetrieveUsersAPI,
     index,
     room
 )
@@ -24,6 +25,7 @@ urlpatterns = [
     # path('<int:room_name>/', room, name='room'),
     path('room-create/', RoomCreateAPI.as_view(), name=''),
     path('room-retrieve/<int:pk>', RoomRetrieveAPI.as_view(), name=''),
+    path('room-user-list/<int:pk>', RoomRetrieveUsersAPI.as_view(), name=''),
     path('room-update/<int:pk>', RoomUpdateAPI.as_view(), name=''),
     path('invite-user/<int:pk>', InviteUserAPI.as_view()),
     path('room-delete/<int:pk>', RoomDestroyAPI.as_view(), name=''),

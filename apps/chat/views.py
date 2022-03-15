@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
-                                    UserShortRetrieveSeriliazer)
+                                    UserShortRetrieveSeriliazer, UserIdRetrieveSeriliazer)
 
 from .models import *
 from .serializers import *
@@ -58,6 +58,17 @@ class RoomCreateAPI(generics.CreateAPIView):
 class RoomRetrieveAPI(generics.RetrieveAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomGetSerializer
+
+
+class RoomRetrieveUsersAPI(generics.GenericAPIView):
+    queryset = Room.objects.all()
+    serializer_class = UserIdRetrieveSeriliazer
+
+    def get(self, request, pk):
+        room = Room.objects.get(pk=pk)
+        return Response(
+            self.serializer_class(instance=room.invited.all(), many=True).data,
+        )
 
 
 class RoomUpdateAPI(generics.UpdateAPIView):
