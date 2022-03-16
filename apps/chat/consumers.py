@@ -34,11 +34,9 @@ class ChatConsumer(WebsocketConsumer):
         try:
             text_data_json = json.loads(text_data)
             room = text_data_json['room_id']
-            message_id = text_data_json['message_id']
             is_payed = text_data_json['is_payed']
             message_price = text_data_json['message_price']
             user = text_data_json['user']
-            date = text_data_json['date']
             message = text_data_json['text']
             _file = text_data_json['attachments']
             room = Room.objects.get(pk=room)
@@ -83,7 +81,7 @@ class ChatConsumer(WebsocketConsumer):
                         {
                             'type': 'chat_message',
                             'attachments': [],
-                            'text': 'need tio resubscribe',
+                            'text': 'need to resubscribe',
                             'date': 0,
                             'message_id': -2,
                             'is_payed': False,
@@ -145,10 +143,6 @@ class ChatConsumer(WebsocketConsumer):
                             )
                     except Exception as e:
                         print(e)
-        except Exception as e:
-            print(e)
-            logging.error(e)
-        try:
             user = UserShortChatRetrieveSeriliazer(
                 instance=User.objects.get(pk=user)).data
         except Exception as e:
