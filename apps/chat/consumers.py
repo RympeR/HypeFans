@@ -153,6 +153,7 @@ class ChatConsumer(WebsocketConsumer):
                 instance=User.objects.get(pk=user)).data
         except Exception as e:
             user = 0
+            logging.error(e)
 
         self.send(text_data=json.dumps({
             "room_id": room,
