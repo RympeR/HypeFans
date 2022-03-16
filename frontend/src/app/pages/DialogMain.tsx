@@ -396,7 +396,13 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
   const [isShown, setShown] = useState(true);
+  const [usersInChat, setUsersInChat] = useState([])
   const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false);
+
+  const getChatUsers = async () => {
+    const usersList = await chatAPI.getChatMembers(Number(lastUrl))
+    setUsersInChat([...usersList?.invited, ...usersList?.all])
+  }
 
   return (
     <div className="chat__dialogsMain">
@@ -428,48 +434,31 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           borderBottomRightRadius: "16px",
         }}
       >
-        <Modal.Body className="notifications__modal" style={{ padding: "0px" }}>
-          {/* <div
-            className="notifications__walletChild"
-            style={{ borderBottom: "0px" }}
-            key={`fav-list`}
-          >
-            {rooms.find(
-              (item: any) => item.room.room_info.id === Number(lastUrl).room.room_info.creator
-  }
-            <div style={{ display: "flex" }}>
-              <div>
-                <Link to={`/profile/${item.username}`}>
-                  {item.avatar ? (
-                    <img
-                      src={item.avatar}
-                      alt="img"
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "100%",
-                        marginLeft: "12px",
-                      }}
-                    />
-                  ) : (
-                    <Logo style={{ width: "50px", height: "50px", margin: "12px" }} />
-                  )}
-                </Link>
-              </div>
-              <div>
-                <h3>{item.first_name ?? "Имя"}</h3>
-                <h4>@{item.username ?? "nickname"}</h4>
-              </div>
+        <Modal.Body className="notifications__modal" style={{ padding: "0px", minHeight: "30vh" }}>
+          {usersInChat.length === 0 ? (
+            <Preloader />
+          ) : (
+            <div style={{ padding: "15px" }}>
+              <h1 style={{ textAlign: "center" }}>Участники</h1>
+              {usersInChat.map((item, key) => {
+                console.log(usersInChat);
+                console.log(item);
+
+
+                return (
+                  <div className="chat__invitedUsersItem">
+                    <Link to={`/profile/${item.username}`}>
+                      <img src={item.avatar !== "" ? item.avatar : logo} alt="avatar" />
+                    </Link>
+                    <div style={{ marginLeft: "15px" }}>
+                      <h3 style={{ textAlign: "start" }}>@{item.username}</h3>
+                      <h5>{item.first_name}</h5>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
-            <div
-              style={{
-                width: "30px",
-                height: "30px",
-                borderRadius: "100%",
-                backgroundColor: "green",
-              }}
-            ></div>
-          </div> */}
+          )}
         </Modal.Body>
       </Modal>
       <div className="chat__dialogsHeader inChat">
@@ -487,7 +476,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           >
             <BackButton />
           </div>
-          <Link
+          {/* <Link
             to={`/profile/${typeof rooms.find(
               (item: any) => item.room.room_info.id === Number(lastUrl)
             )?.room?.room_info?.invited !== "number"
@@ -502,30 +491,33 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 (item: any) => item.room.room_info.id === Number(lastUrl)
               )?.room?.room_info?.username
               }`}
-          >
-            <img
-              src={
-                typeof rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.invited !== "number"
-                  ? amICreator
-                    ? rooms.find(
-                      (item: any) =>
-                        item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.invited?.avatar || logo
-                    : rooms.find(
-                      (item: any) =>
-                        item.room.room_info.id === Number(lastUrl)
-                    )?.room?.room_info?.creator?.avatar || logo
+          > */}
+          <img
+            src={
+              typeof rooms.find(
+                (item: any) => item.room.room_info.id === Number(lastUrl)
+              )?.room?.room_info?.invited !== "number"
+                ? amICreator
+                  ? rooms.find(
+                    (item: any) =>
+                      item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.invited?.avatar || logo
                   : rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.logo || logo
-              }
-              className="logo_site"
-              alt="avatar"
-            // onClick={() => setInvitedModalShown(true)}
-            ></img>
-          </Link>
+                    (item: any) =>
+                      item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.creator?.avatar || logo
+                : rooms.find(
+                  (item: any) => item.room.room_info.id === Number(lastUrl)
+                )?.room?.room_info?.logo || logo
+            }
+            className="logo_site"
+            alt="avatar"
+            onClick={() => {
+              getChatUsers()
+              setInvitedModalShown(true)
+            }}
+          ></img>
+          {/* </Link> */}
           <div>
             <h2
               style={{
@@ -1063,6 +1055,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           </Formik>
         </Modal.Body>
       </Modal>
-    </div>
+    </div >
   );
 };
