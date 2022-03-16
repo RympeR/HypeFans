@@ -1,3 +1,4 @@
+from apps.users.models import ChatSubscription, chat_sub_checker
 from core.utils.default_responses import (api_block_by_policy_451,
                                           api_locked_423, api_not_found_404,
                                           api_used_226)
@@ -16,6 +17,7 @@ from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
 
 from .models import *
 from .serializers import *
+from django.db.models import Subquery
 
 
 class ChatBoughtCreateAPI(generics.CreateAPIView):
@@ -62,13 +64,27 @@ class RoomRetrieveAPI(generics.RetrieveAPIView):
 
 class RoomRetrieveUsersAPI(generics.GenericAPIView):
     queryset = Room.objects.all()
-    serializer_class = UserIdRetrieveSeriliazer
+    serializer_class = UserShortChatRetrieveSeriliazer
 
     def get(self, request, pk):
         room = Room.objects.get(pk=pk)
-        return Response(
-            self.serializer_class(instance=room.invited.all(), many=True).data,
+        user = request.user
+        invited = self.serializer_class(
+            instance=room.invited.all(), many=True).data
+        unfinished_subscriptions = ChatSubscription.objects.filter(
+            target=user, finished=False)
+
+        qs_possible = User.objects.filter(
+            pk__in=Subquery(unfinished_subscriptions.values_list(
+                'target__pk', flat=True))
         )
+
+        all_possible = self.serializer_class(
+            instance=qs_possible, many=True).data
+        return Response({
+            'invited': invited,
+            'all': all_possible
+        })
 
 
 class RoomUpdateAPI(generics.UpdateAPIView):
