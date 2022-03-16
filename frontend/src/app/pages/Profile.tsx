@@ -38,6 +38,7 @@ const Profile = () => {
   const alert = useAlert();
   const history = useHistory();
   const [subscribeShow, setSubscribeShow] = useState(false);
+  const [removePostShow, setRemovePostShow] = useState(false);
   const [show, setShow] = useState<boolean>(false);
   const profileData = useSelector((state: RootState) => state.user);
   const [profile, setProfile] = useState(profileData);
@@ -47,7 +48,8 @@ const Profile = () => {
   const { pathname } = useLocation();
   const location = pathname.split("/");
   const nick = location[location.length - 1];
-  const [chatSubscribeModalShown, setChatSubscribeModalShown] = useState<boolean>(false)
+  const [chatSubscribeModalShown, setChatSubscribeModalShown] =
+    useState<boolean>(false);
   useEffect(() => {
     dispatch(getUser({ username: nick }));
   }, [nick, dispatch]);
@@ -88,7 +90,7 @@ const Profile = () => {
     } else {
       toast.error("Ошибка подписки  на чат");
     }
-  }
+  };
 
   const writeMessage = async () => {
     const data = await chatAPI.roomCreate({
@@ -105,14 +107,14 @@ const Profile = () => {
 
   const sub_amount = (fans_amount: number) => {
     if (fans_amount % 1000_000 == 0) {
-      return `${(fans_amount / 1000_000).toFixed(0)} m`;
+      return `${(fans_amount / 1000_000).toFixed(0)}m`;
     } else if (fans_amount % 1000 == 0) {
-      return `${(fans_amount / 1000).toFixed(0)} k`;
+      return `${(fans_amount / 1000).toFixed(0)}k`;
     }
     if (fans_amount >= 1000_000) {
-      return `${(fans_amount / 1000_000).toFixed(2)} m`;
+      return `${(fans_amount / 1000_000).toFixed(2)}m`;
     } else if (fans_amount >= 1000) {
-      return `${(fans_amount / 1000).toFixed(2)} k`;
+      return `${(fans_amount / 1000).toFixed(2)}k`;
     } else {
       return fans_amount;
     }
@@ -132,7 +134,9 @@ const Profile = () => {
       >
         <Modal.Body className="notifications__modal">
           {" "}
-          <h2 style={{ marginBottom: "0px" }}>Цена подписки {profile.message_price}$</h2>
+          <h2 style={{ marginBottom: "0px" }}>
+            Цена подписки {profile.message_price}$
+          </h2>
           <div
             style={{
               display: "flex",
@@ -174,8 +178,9 @@ const Profile = () => {
       </Modal>
       <div
         style={{
-          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${profile.background_photo || profileLinkBg
-            })`,
+          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${
+            profile.background_photo || profileLinkBg
+          })`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% 210px",
         }}
@@ -324,23 +329,61 @@ const Profile = () => {
                           </div>
                         </div>
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          <div className="profile__postAgo">{moment(item.post.publication_date * 1000).fromNow()}</div>
-                          <Popup
-                            trigger={
-                              <button className="post__menu-dots">
-                                <MenuDots />
-                              </button>
-                            }
-                            position="bottom right"
-                          >
-                            <div style={{ padding: "5px" }}>
-                              {profile.pk === myId ? (
-                                <button onClick={() => delPost(item?.post.pk)}>
+                          <div className="profile__postAgo">
+                            {moment(
+                              item.post.publication_date * 1000
+                            ).fromNow()}
+                          </div>
+                          {profile.pk === myId ? (
+                            <Popup
+                              trigger={
+                                <button className="post__menu-dots">
+                                  <MenuDots />
+                                </button>
+                              }
+                              position="bottom right"
+                            >
+                              <div style={{ padding: "5px" }}>
+                                <button onClick={() => setRemovePostShow(true)}>
                                   Удалить пост
                                 </button>
-                              ) : null}
-                            </div>
-                          </Popup>
+                              </div>
+                            </Popup>
+                          ) : null}
+                          <Modal
+                            show={removePostShow}
+                            onHide={() => setRemovePostShow(false)}
+                            centered
+                            size="sm"
+                          >
+                            <Modal.Body className="notifications__modal">
+                              {" "}
+                              <h2 style={{ marginBottom: "0px" }}>
+                                Удалить пост
+                              </h2>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  marginTop: "15px",
+                                }}
+                              >
+                                <h3 onClick={() => setRemovePostShow(false)}>
+                                  Нет
+                                </h3>
+                                <div style={{ width: "20px" }}></div>
+                                <h3
+                                  onClick={() => {
+                                    delPost(item?.post.pk);
+                                    setRemovePostShow(false);
+                                  }}
+                                  style={{ color: "#FB5734" }}
+                                >
+                                  Да
+                                </h3>
+                              </div>
+                            </Modal.Body>
+                          </Modal>
                         </div>
                       </div>
                       <div className="profile__postText">
@@ -381,23 +424,23 @@ const Profile = () => {
                             onClick={() => {
                               item?.post.liked
                                 ? dispatch(
-                                  deletePostAction({
-                                    id: item?.post.like_id,
-                                    post_id: item?.post.pk,
-                                  })
-                                )
+                                    deletePostAction({
+                                      id: item?.post.like_id,
+                                      post_id: item?.post.pk,
+                                    })
+                                  )
                                 : dispatch(
-                                  createPostAction({
-                                    like: true,
-                                    comment: null,
-                                    donation_amount: 0,
-                                    user: myId,
-                                    parent: null,
-                                    date_time: null,
-                                    post: item?.post.pk,
-                                    id: null,
-                                  })
-                                );
+                                    createPostAction({
+                                      like: true,
+                                      comment: null,
+                                      donation_amount: 0,
+                                      user: myId,
+                                      parent: null,
+                                      date_time: null,
+                                      post: item?.post.pk,
+                                      id: null,
+                                    })
+                                  );
                             }}
                           >
                             <LikeIcon
