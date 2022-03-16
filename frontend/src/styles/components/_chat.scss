@@ -2,6 +2,17 @@
   display: flex;
   flex-direction: column;
 
+  &__invitedUsersItem {
+    display: flex;
+    margin-bottom: 25px;
+    align-items: center;
+    img {
+      width: 80px;
+      height: 80px;
+      border-radius: 100%;
+    }
+  }
+
   &__audio {
     &.open {
       z-index: 14;

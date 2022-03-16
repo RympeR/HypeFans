@@ -8,6 +8,13 @@ export const chatAPI = {
         return response.data;
       });
   },
+  getChatMembers(chat_id: number) {
+    return instance
+      .get(`/chat/room-user-list/${chat_id}`)
+      .then((response) => {
+        return response.data;
+      });
+  },
   getUserDialogs() {
     return instance.post(`get-user-dialogs/`).then((response) => {
       return response.data;
