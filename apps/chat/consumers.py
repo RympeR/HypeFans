@@ -72,8 +72,9 @@ class ChatConsumer(WebsocketConsumer):
                             'message_id': chat.pk,
                             'is_payed': is_payed,
                             'message_price': message_price,
-                            'user': user,
-                            'room_id': room,
+                            'user': UserShortChatRetrieveSeriliazer(
+                                instance=user).data,
+                            'room_id': room.pk,
                         }
                     )
                 else:
@@ -87,8 +88,9 @@ class ChatConsumer(WebsocketConsumer):
                             'message_id': -2,
                             'is_payed': False,
                             'message_price': 0,
-                            'user': user,
-                            'room_id': room,
+                            'user': UserShortChatRetrieveSeriliazer(
+                                instance=user).data,
+                            'room_id': room.pk,
                         }
                     )
 
