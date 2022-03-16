@@ -49,8 +49,8 @@ class ChatConsumer(WebsocketConsumer):
             #         blocked = True if user in room.cretor.blocked_users.all() else False
             if not blocked:
                 chat_sub_check = True
-                if user != room.creator:
-                    chat_sub_check = chat_sub_checker(user, room.creator)
+                # if user != room.creator:
+                #     chat_sub_check = chat_sub_checker(user, room.creator)
                 if chat_sub_check:
                     chat = Chat.objects.create(
                         room=room,
