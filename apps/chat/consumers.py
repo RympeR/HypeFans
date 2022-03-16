@@ -42,55 +42,55 @@ class ChatConsumer(WebsocketConsumer):
             room = Room.objects.get(pk=room)
             user = User.objects.get(pk=user)
             blocked = False
-            if 1 + len(room.invited.all()) == 2:
-                if user == room.creator:
-                    blocked = True if user in room.invited.first().blocked_users.all() else False
-                else:
-                    blocked = True if user in room.cretor.blocked_users.all() else False
-            # if not blocked:
-            #     chat_sub_check = True
-            #     if user != room.creator:
-            #         chat_sub_check = chat_sub_checker(user, room.creator)
-            #     if chat_sub_check:
-            #         chat = Chat.objects.create(
-            #             room=room,
-            #             user=user,
-            #             text=message,
-            #             price=message_price,
-            #         )
-            #         chat.attachment.set(
-            #             Attachment.objects.filter(pk__in=_file))
-            #         async_to_sync(self.channel_layer.group_send)(
-            #             self.room_group_name,
-            #             {
-            #                 'type': 'chat_message',
-            #                 'attachments': _file,
-            #                 'text': message,
-            #                 'date': chat.date.timestamp(),
-            #                 'message_id': chat.pk,
-            #                 'is_payed': is_payed,
-            #                 'message_price': message_price,
-            #                 'user': UserShortChatRetrieveSeriliazer(
-            #                     instance=user).data,
-            #                 'room_id': room.pk,
-            #             }
-            #         )
+            # if 1 + len(room.invited.all()) == 2:
+            #     if user == room.creator:
+            #         blocked = True if user in room.invited.first().blocked_users.all() else False
             #     else:
-            #         async_to_sync(self.channel_layer.group_send)(
-            #             self.room_group_name,
-            #             {
-            #                 'type': 'chat_message',
-            #                 'attachments': [],
-            #                 'text': 'need to resubscribe',
-            #                 'date': 0,
-            #                 'message_id': -2,
-            #                 'is_payed': False,
-            #                 'message_price': 0,
-            #                 'user': UserShortChatRetrieveSeriliazer(
-            #                     instance=user).data,
-            #                 'room_id': room.pk,
-            #             }
-            #         )
+            #         blocked = True if user in room.cretor.blocked_users.all() else False
+            if not blocked:
+                chat_sub_check = True
+                if user != room.creator:
+                    chat_sub_check = chat_sub_checker(user, room.creator)
+                if chat_sub_check:
+                    chat = Chat.objects.create(
+                        room=room,
+                        user=user,
+                        text=message,
+                        price=message_price,
+                    )
+                    chat.attachment.set(
+                        Attachment.objects.filter(pk__in=_file))
+                    async_to_sync(self.channel_layer.group_send)(
+                        self.room_group_name,
+                        {
+                            'type': 'chat_message',
+                            'attachments': _file,
+                            'text': message,
+                            'date': chat.date.timestamp(),
+                            'message_id': chat.pk,
+                            'is_payed': is_payed,
+                            'message_price': message_price,
+                            'user': UserShortChatRetrieveSeriliazer(
+                                instance=user).data,
+                            'room_id': room.pk,
+                        }
+                    )
+                else:
+                    async_to_sync(self.channel_layer.group_send)(
+                        self.room_group_name,
+                        {
+                            'type': 'chat_message',
+                            'attachments': [],
+                            'text': 'need to resubscribe',
+                            'date': 0,
+                            'message_id': -2,
+                            'is_payed': False,
+                            'message_price': 0,
+                            'user': UserShortChatRetrieveSeriliazer(
+                                instance=user).data,
+                            'room_id': room.pk,
+                        }
+                    )
 
             else:
                 async_to_sync(self.channel_layer.group_send)(
