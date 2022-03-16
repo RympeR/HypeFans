@@ -74,7 +74,7 @@ const MessageItem = React.memo(
     return (
       <div
         className={item.user.pk === uid ? "message" : "message own"}
-        key={Math.random() + index + Math.random()}
+        key={`${index} messageTextItem`}
       >
         {item.message_price !== 0 && !item.is_payed && item.user.pk !== uid ? (
           <div
@@ -184,7 +184,7 @@ const MessageItem = React.memo(
     );
   },
   (prevProps, nextProps) => {
-    if (moment(prevProps.item.date * 1000).fromNow() === "a few seconds ago")
+    if (prevProps.item.id !== nextProps.item.id)
       return false;
     else {
       return true;
@@ -237,7 +237,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       );
     };
     wsReadClient.onclose = () => console.log("ws closed read");
-    wsClient.onclose = () => console.log("ws closed");
+    wsClient.onclose = () => {
+      setIsMessagesLoading(true)
+      console.log("ws closed")
+    };
 
     return () => {
       wsClient.close();
@@ -327,6 +330,22 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         attachmentsIds.push(data.data.id);
       }
     }
+    console.log(JSON.stringify({
+      text: !audioMessage
+        ? CryptoJS.AES.encrypt(
+          messageMain,
+          "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+        ).toString()
+        : "",
+      user: uid,
+      is_payed: false,
+      date: 0,
+      attachments: attachmentsIds,
+      room_id: lastUrl,
+      message_price: Number(messageCost),
+      message_id: 0,
+    }));
+
     ws.send(
       JSON.stringify({
         text: !audioMessage
@@ -776,7 +795,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                   return (
                     <div
                       className="upload__img-wrapper"
-                      key={Math.random() + Math.random() + index}
+                      key={"fileWrapper" + index}
                     >
                       <img
                         className="upload__img"
@@ -794,7 +813,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                   return (
                     <div
                       className="upload__img-wrapper"
-                      key={Math.random() + Math.random() + index}
+                      key={"fileWrapper" + index}
                     >
                       <ReactAudioPlayer src={file} controls />
                     </div>
