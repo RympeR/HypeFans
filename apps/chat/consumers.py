@@ -42,15 +42,19 @@ class ChatConsumer(WebsocketConsumer):
             room = Room.objects.get(pk=room)
             user = User.objects.get(pk=user)
             blocked = False
-            # if 1 + len(room.invited.all()) == 2:
-            #     if user == room.creator:
-            #         blocked = True if user in room.invited.first().blocked_users.all() else False
-            #     else:
-            #         blocked = True if user in room.cretor.blocked_users.all() else False
+            logging.info(f"Received json {text_data_json}")
+            if 1 + len(room.invited.all()) == 2:
+                logging.info(f"compared")
+                if user == room.creator:
+                    blocked = True if user in room.invited.first().blocked_users.all() else False
+                else:
+                    blocked = True if user in room.cretor.blocked_users.all() else False
+                logging.info(f"block logic {blocked}")
             if not blocked:
                 chat_sub_check = True
-                # if user != room.creator:
-                #     chat_sub_check = chat_sub_checker(user, room.creator)
+                if user != room.creator:
+                    chat_sub_check = chat_sub_checker(user, room.creator)
+                logging.info(f"chat saub checker logic {chat_sub_check}")
                 if chat_sub_check:
                     chat = Chat.objects.create(
                         room=room,
@@ -60,6 +64,7 @@ class ChatConsumer(WebsocketConsumer):
                     )
                     chat.attachment.set(
                         Attachment.objects.filter(pk__in=_file))
+                    logging.info(f"created chat {chat.pk}")
                     async_to_sync(self.channel_layer.group_send)(
                         self.room_group_name,
                         {
