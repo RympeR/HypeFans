@@ -29,6 +29,7 @@ import logo from "../../../assets/images/logo.svg";
 import { Video } from "../../../app/pages/card/components/VideoPost";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { ReadMore } from "../readMore/ReadMore";
 
 export const returnByFileType = (item: any) => {
   console.log(item);
@@ -133,22 +134,7 @@ const Post = ({
         </div>
       </div>
       <UserBanner profile={post.user} />
-      <p className="post__caption">
-        {isWholeTextShowed
-          ? post.post.description
-          : showVisibleText(post.post.description, LENTGH_OF_VISIBLE_CAPTION)}
-      </p>
-
-      <button
-        className={
-          isWholeTextShowed
-            ? "post__read-more-btn post__read-more-btn_hidden"
-            : "post__read-more-btn"
-        }
-        onClick={() => setIsWholeTextShowed(true)}
-      >
-        {currentLang.readmore}
-      </button>
+      <ReadMore text={post.post.description} />
 
 
       {post.post?.attachments.length > 1 ? (

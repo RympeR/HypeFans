@@ -24,7 +24,6 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
     const dispatch = useDispatch();
     const profileData = useSelector((state: RootState) => state.user);
     const myId = useSelector((state: RootState) => state.auth.pk);
-    const [profile, setProfile] = useState(profileData);
     const delPost = (id: number) => {
         dispatch(deletePost({ id }));
     };
@@ -36,7 +35,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                     <div className="profile__postUserInfo">
                         <div style={{ display: "flex" }}>
                             <img
-                                src={profile.avatar ? profile.avatar : logo}
+                                src={profileData.avatar ? profileData.avatar : logo}
                                 alt="profile_photoPost"
                             ></img>
                             <div>
@@ -44,7 +43,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                                     className="profile__name"
                                     style={{ margin: "5px 8px", marginBottom: "0px" }}
                                 >
-                                    {profile.first_name}
+                                    {profileData.first_name}
                                 </h3>
                                 <h4
                                     className="profile__nickname"
@@ -60,7 +59,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                                     item.post.publication_date * 1000
                                 ).fromNow()}
                             </div>
-                            {profile.pk === myId ? (
+                            {profileData.pk === myId ? (
                                 <Popup
                                     trigger={
                                         <button className="post__menu-dots">
