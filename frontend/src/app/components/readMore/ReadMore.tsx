@@ -9,7 +9,7 @@ export const ReadMore = ({ text }: { text: string }) => {
     }, [text])
 
     return (
-        <>
+        <div style={{ margin: "10px 0px" }}>
             <p className="post__caption">
                 {isWholeTextShowed ? text : `${text?.slice(0, 40)}...`}
             </p>
@@ -24,6 +24,6 @@ export const ReadMore = ({ text }: { text: string }) => {
             >
                 {isWholeTextShowed ? "Скрыть" : "Прочитать больше..."}
             </button>
-        </>
+        </div>
     )
 }

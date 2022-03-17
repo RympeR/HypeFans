@@ -35,7 +35,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   if (
-    refLink !== "" ||
     pathname === `/${NAV_LINKS.SIGNIN}` ||
     pathname === `/${NAV_LINKS.SIGNUP}`
   ) {
