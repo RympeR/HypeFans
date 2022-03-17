@@ -21,6 +21,7 @@ import profileLinkBg from "../../assets/images/profile-link-bg.png";
 import fansIcon from "../../assets/images/icons_person.png";
 import { toast } from "react-toastify";
 import { ProfilePagePost } from "../components/post/ProfilePagePost";
+import { ReadMore } from "../components/readMore/ReadMore";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -199,8 +200,7 @@ const Profile = () => {
           {sub_amount(profile.fans_amount)}
         </h5>
       </div>
-      <pre className="profile__status">{profile.bio}</pre>
-      {/* <p className="profile__statusFull">Читать больше...</p> */}
+      <pre className="profile__status"><ReadMore text={profile.bio} /></pre>
       <div
         style={{
           width: "100%",

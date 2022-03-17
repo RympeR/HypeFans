@@ -14,6 +14,7 @@ import { returnByFileType } from '../home/Post';
 import { createPostAction, deletePost, deletePostAction, setFavorite } from '../../../redux/userReducer';
 import { CommentComponent } from '../CommentComponent';
 import { ReactComponent as CommentIcon } from "../../../assets/images/message-circle.svg";
+import { ReadMore } from '../readMore/ReadMore';
 
 export const ProfilePagePost = ({ item, index }: { item: any, index: number }) => {
     const [removePostShow, setRemovePostShow] = useState(false);
@@ -112,7 +113,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                         </div>
                     </div>
                     <div className="profile__postText">
-                        {item?.post.description}
+                        <ReadMore text={item?.post.description} />
                     </div>
                 </div>
             </div>
