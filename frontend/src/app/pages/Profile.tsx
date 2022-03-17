@@ -4,42 +4,29 @@ import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router";
 import { Link } from "react-router-dom";
-import Slider from "react-slick";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { userAPI } from "../../api/userAPI";
 import { RootState } from "../../redux/redux";
-import moment from "moment";
 import {
   buyPost,
-  createPostAction,
-  deletePost,
-  deletePostAction,
   getUser,
-  setFavorite,
 } from "../../redux/userReducer";
-import { ReactComponent as MenuDots } from "../../assets/images/3dots.svg";
 import { ReactComponent as MenuDotsWhite } from "../../assets/images/3dotsWhite.svg";
 import { ReactComponent as BackButton } from "../../assets/images/arrow-leftWhite.svg";
-import { ReactComponent as SaveIcon } from "../../assets/images/bookmark.svg";
-import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
 import logo from "../../assets/images/logo.svg";
-import { ReactComponent as CommentIcon } from "../../assets/images/message-circle.svg";
-import { CommentComponent } from "../components/CommentComponent";
 import { Preloader } from "../utils/Preloader";
-import { returnByFileType } from "../components/home/Post";
 import { chatAPI } from "../../api/chatAPI";
 import profileLinkBg from "../../assets/images/profile-link-bg.png";
 import fansIcon from "../../assets/images/icons_person.png";
 import { toast } from "react-toastify";
+import { ProfilePagePost } from "../components/post/ProfilePagePost";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
   const history = useHistory();
   const [subscribeShow, setSubscribeShow] = useState(false);
-  const [removePostShow, setRemovePostShow] = useState(false);
-  const [show, setShow] = useState<boolean>(false);
   const profileData = useSelector((state: RootState) => state.user);
   const [profile, setProfile] = useState(profileData);
   const myNick = useSelector((state: RootState) => state.auth.username);
@@ -99,10 +86,6 @@ const Profile = () => {
     });
     console.log(data.data);
     history.push(`/chat/${data.data.id}`);
-  };
-
-  const delPost = (id: number) => {
-    dispatch(deletePost({ id }));
   };
 
   const sub_amount = (fans_amount: number) => {
@@ -178,9 +161,8 @@ const Profile = () => {
       </Modal>
       <div
         style={{
-          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${
-            profile.background_photo || profileLinkBg
-          })`,
+          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${profile.background_photo || profileLinkBg
+            })`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% 210px",
         }}
@@ -304,187 +286,7 @@ const Profile = () => {
           {profile?.posts.length > 0 ? (
             profile?.posts.map((item, index) => {
               return myNick === nick || item.post.payed ? (
-                <div className="profile__post" key={`${index}_post`}>
-                  <div className="profile__postHeader">
-                    <div className="profile__postInfo">
-                      <div className="profile__postUserInfo">
-                        <div style={{ display: "flex" }}>
-                          <img
-                            src={profile.avatar ? profile.avatar : logo}
-                            alt="profile_photoPost"
-                          ></img>
-                          <div>
-                            <h3
-                              className="profile__name"
-                              style={{ margin: "5px 8px", marginBottom: "0px" }}
-                            >
-                              {profile.first_name}
-                            </h3>
-                            <h4
-                              className="profile__nickname"
-                              style={{ marginLeft: "8px" }}
-                            >
-                              {`@${nick}`}
-                            </h4>
-                          </div>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <div className="profile__postAgo">
-                            {moment(
-                              item.post.publication_date * 1000
-                            ).fromNow()}
-                          </div>
-                          {profile.pk === myId ? (
-                            <Popup
-                              trigger={
-                                <button className="post__menu-dots">
-                                  <MenuDots />
-                                </button>
-                              }
-                              position="bottom right"
-                            >
-                              <div style={{ padding: "5px" }}>
-                                <button onClick={() => setRemovePostShow(true)}>
-                                  Удалить пост
-                                </button>
-                              </div>
-                            </Popup>
-                          ) : null}
-                          <Modal
-                            show={removePostShow}
-                            onHide={() => setRemovePostShow(false)}
-                            centered
-                            size="sm"
-                          >
-                            <Modal.Body className="notifications__modal">
-                              {" "}
-                              <h2 style={{ marginBottom: "0px" }}>
-                                Удалить пост
-                              </h2>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  marginTop: "15px",
-                                }}
-                              >
-                                <h3 onClick={() => setRemovePostShow(false)}>
-                                  Нет
-                                </h3>
-                                <div style={{ width: "20px" }}></div>
-                                <h3
-                                  onClick={() => {
-                                    delPost(item?.post.pk);
-                                    setRemovePostShow(false);
-                                  }}
-                                  style={{ color: "#FB5734" }}
-                                >
-                                  Да
-                                </h3>
-                              </div>
-                            </Modal.Body>
-                          </Modal>
-                        </div>
-                      </div>
-                      <div className="profile__postText">
-                        {item?.post.description}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="profile__postMain">
-                    {item?.post?.attachments?.length > 1 ? (
-                      <Slider
-                        className="profile__postIMG"
-                        arrows={false}
-                        dots={true}
-                      >
-                        {item?.post.attachments.map(
-                          (item: any, index: number) => {
-                            return (
-                              <div key={`${index} slideMain`}>
-                                {returnByFileType(item)}
-                              </div>
-                            );
-                          }
-                        )}
-                      </Slider>
-                    ) : (
-                      <div className="profile__postIMG">
-                        {returnByFileType(item?.post.attachments[0])}
-                      </div>
-                    )}
-                    <div
-                      className="post__bottom"
-                      style={{ margin: "24px 24px" }}
-                    >
-                      <div className="post__actions">
-                        <div className="post__actions-left">
-                          <button
-                            className="post__action-btn"
-                            onClick={() => {
-                              item?.post.liked
-                                ? dispatch(
-                                    deletePostAction({
-                                      id: item?.post.like_id,
-                                      post_id: item?.post.pk,
-                                    })
-                                  )
-                                : dispatch(
-                                    createPostAction({
-                                      like: true,
-                                      comment: null,
-                                      donation_amount: 0,
-                                      user: myId,
-                                      parent: null,
-                                      date_time: null,
-                                      post: item?.post.pk,
-                                      id: null,
-                                    })
-                                  );
-                            }}
-                          >
-                            <LikeIcon
-                              className="post__action-icon"
-                              fill={item?.post.liked ? "#C41E3A" : "none"}
-                              strokeOpacity={item?.post.liked ? 0 : 0.6}
-                            />
-                          </button>
-
-                          <button className="post__action-btn">
-                            <CommentIcon
-                              className="post__action-icon"
-                              onClick={() => setShow(true)}
-                            />
-                          </button>
-                        </div>
-                        <button
-                          className="post__action-btn"
-                          onClick={() => {
-                            return dispatch(
-                              setFavorite(item?.post.pk, !item?.post.favourite)
-                            );
-                          }}
-                        >
-                          <SaveIcon
-                            className="post__action-icon"
-                            fill={item?.post.favourite ? "black" : "none"}
-                          />
-                        </button>
-                      </div>
-
-                      <p className="post__like-amount">
-                        {item?.post.likes_amount} лайков
-                      </p>
-
-                      <CommentComponent
-                        data={item?.post.comments}
-                        postId={item?.post.pk}
-                        show={show}
-                        setShow={setShow}
-                      />
-                    </div>
-                  </div>
-                </div>
+                <ProfilePagePost item={item} index={index} />
               ) : (
                 <div className="profile__post" key={`${index}_post`}>
                   <div className="profile__noPost">
