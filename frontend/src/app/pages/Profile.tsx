@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAlert } from "react-alert";
+// import { useAlert } from "react-alert";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router";
@@ -25,7 +25,7 @@ import { ReadMore } from "../components/readMore/ReadMore";
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const alert = useAlert();
+  // const alert = useAlert();
   const history = useHistory();
   const [subscribeShow, setSubscribeShow] = useState(false);
   const profileData = useSelector((state: RootState) => state.user);
@@ -90,9 +90,9 @@ const Profile = () => {
   };
 
   const sub_amount = (fans_amount: number) => {
-    if (fans_amount % 1000_000 == 0) {
+    if (fans_amount % 1000_000 === 0) {
       return `${(fans_amount / 1000_000).toFixed(0)}m`;
-    } else if (fans_amount % 1000 == 0) {
+    } else if (fans_amount % 1000 === 0) {
       return `${(fans_amount / 1000).toFixed(0)}k`;
     }
     if (fans_amount >= 1000_000) {
