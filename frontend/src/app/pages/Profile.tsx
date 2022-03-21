@@ -22,6 +22,7 @@ import fansIcon from "../../assets/images/icons_person.png";
 import { toast } from "react-toastify";
 import { ProfilePagePost } from "../components/post/ProfilePagePost";
 import { ReadMore } from "../components/readMore/ReadMore";
+import { GoToTopBtn } from "../components/goToTopButton/GoToTopBtn";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -110,6 +111,7 @@ const Profile = () => {
 
   return (
     <div className="profile">
+      <GoToTopBtn />
       <Modal
         show={subscribeShow}
         onHide={() => setSubscribeShow(false)}
@@ -162,7 +164,7 @@ const Profile = () => {
       </Modal>
       <div
         style={{
-          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${profile.background_photo || profileLinkBg
+          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${profile.background_photo ?? profileLinkBg
             })`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% 210px",
