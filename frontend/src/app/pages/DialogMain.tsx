@@ -217,6 +217,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const [amICreator, setCreator] = useState(false);
   const inputFileRef = useRef(null);
   const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false);
+  const wrapperRef = useRef()
 
   // useEffect`s
 
@@ -602,6 +603,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       <div className="chat__dialog">
         <div className="message-wrap">
           <div
+            ref={wrapperRef}
             style={{
               fontFamily: "Factor A",
               fontStyle: "normal",
@@ -655,6 +657,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               sendMessage={sendMessage}
               isSendDisabled={isSendDisabled}
               audio={audioMessage}
+              wrapperRef={wrapperRef}
             />
           </div>
         </div>

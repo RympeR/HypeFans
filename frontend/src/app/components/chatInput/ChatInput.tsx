@@ -7,10 +7,12 @@ export const ChatInput = ({
   sendMessage,
   isSendDisabled,
   audio,
+  wrapperRef
 }: {
   sendMessage: any;
   isSendDisabled: any;
   audio: any;
+  wrapperRef: any;
 }) => {
   const [height, setHeight] = useState<number>(30)
   const VektorIcon = () => <Vektor />;
@@ -54,6 +56,9 @@ export const ChatInput = ({
                 onChange={(event: any) => {
                   setFieldValue("messageFormikText", event.target.value)
                   handleChange(event)
+                }}
+                onBlur={() => {
+                  wrapperRef.current.scrollIntoView({ behavior: "smooth" });
                 }}
                 onKeyDown={(e: any) => {
                   if (e.key === "Enter") {
