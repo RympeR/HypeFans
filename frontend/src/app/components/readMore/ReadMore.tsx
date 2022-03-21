@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 
 export const ReadMore = ({ text }: { text: string }) => {
 
+    console.log(text);
+
+
     const [isWholeTextShowed, setIsWholeTextShowed] = useState<boolean>(false)
 
     useEffect(() => {
@@ -10,13 +13,13 @@ export const ReadMore = ({ text }: { text: string }) => {
 
     return (
         <div style={{ margin: "10px 0px" }}>
-            <p className="post__caption">
+            {text !== null ? <p className="post__caption">
                 {isWholeTextShowed ? text : `${text?.slice(0, 40)}...`}
-            </p>
+            </p> : null}
 
             <button
                 className={
-                    text?.length <= 40
+                    text === null || text?.length <= 40
                         ? "post__read-more-btn post__read-more-btn_hidden"
                         : "post__read-more-btn"
                 }
