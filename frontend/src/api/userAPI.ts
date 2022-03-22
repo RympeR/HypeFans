@@ -27,12 +27,15 @@ import {
 export const userAPI = {
   chatSubscribe({ source, target }: SubscriptionType) {
     return instance
-      .post<createSubscriptionRT>("/user/create-subscription/", {
+      .post<createSubscriptionRT>(`/user/user-chat-subscription/${target}`, {
         source,
         target,
       })
       .then((response) => {
         return response;
+      })
+      .catch((error) => {
+        return error;
       });
   },
   createCard({ number, date_year, cvc, creator, user }: CardType) {

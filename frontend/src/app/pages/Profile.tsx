@@ -73,10 +73,12 @@ const Profile = () => {
       target: profile.pk,
     });
     setChatSubscribeModalShown(false);
+    console.log(data);
     if (data.status === 200) {
       setProfile({ ...profile, subscribed_chat: true });
       toast.success("Вы подписались на чат");
-    } else {
+    } 
+    else {
       toast.error("Ошибка подписки  на чат");
     }
   };
