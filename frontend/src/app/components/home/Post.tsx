@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+  import React, { useContext, useEffect, useState } from "react";
 import { useAlert } from "react-alert";
 import Modal from "react-bootstrap/Modal";
 import CurrencyInput from "react-currency-input-field";
@@ -29,6 +29,7 @@ import logo from "../../../assets/images/logo.svg";
 import { Video } from "../../../app/pages/card/components/VideoPost";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { ReadMore } from "../readMore/ReadMore";
 
 export const returnByFileType = (item: any) => {
   console.log(item);
@@ -125,31 +126,15 @@ const Post = ({
           </div>
         </div>
         <div className="post__top-right">
-          <p className="post__time">{moment(parseFloat(post?.post.publication_date) * 1000).fromNow()}</p>
+          <p className="post__time">
+            {moment(parseFloat(post?.post.publication_date) * 1000).fromNow()}
+          </p>
 
-          <button className="post__menu-dots">
-            {/* <MenuDots /> */}
-          </button>
+          <button className="post__menu-dots">{/* <MenuDots /> */}</button>
         </div>
       </div>
       <UserBanner profile={post.user} />
-      <p className="post__caption">
-        {isWholeTextShowed
-          ? post.post.description
-          : showVisibleText(post.post.description, LENTGH_OF_VISIBLE_CAPTION)}
-      </p>
-
-      <button
-        className={
-          isWholeTextShowed
-            ? "post__read-more-btn post__read-more-btn_hidden"
-            : "post__read-more-btn"
-        }
-        onClick={() => setIsWholeTextShowed(true)}
-      >
-        {currentLang.readmore}
-      </button>
-
+      <ReadMore text={post.post.description} />
 
       {post.post?.attachments.length > 1 ? (
         <Slider dots={true} arrows={false} className="profile__postIMG">
@@ -175,23 +160,23 @@ const Post = ({
               onClick={() => {
                 post.post.liked
                   ? dispatch(
-                    deletePostAction({
-                      id: post.post.like_id,
-                      post_id: post.post.pk,
-                    })
-                  )
+                      deletePostAction({
+                        id: post.post.like_id,
+                        post_id: post.post.pk,
+                      })
+                    )
                   : dispatch(
-                    createPostAction({
-                      like: true,
-                      comment: null,
-                      donation_amount: 0,
-                      parent: null,
-                      user: user_id,
-                      date_time: null,
-                      post: post.post.pk,
-                      id: null,
-                    })
-                  );
+                      createPostAction({
+                        like: true,
+                        comment: null,
+                        donation_amount: 0,
+                        parent: null,
+                        user: user_id,
+                        date_time: null,
+                        post: post.post.pk,
+                        id: null,
+                      })
+                    );
               }}
             >
               <LikeIcon
@@ -264,10 +249,7 @@ const Post = ({
               className="chat__sidebarItem"
               style={{ alignItems: "center", padding: "0px" }}
             >
-              <img
-                src={post.user.avatar || logo}
-                alt="fdsfsdfsd"
-              ></img>
+              <img src={post.user.avatar || logo} alt="fdsfsdfsd"></img>
               <div>
                 <h2>{post.user.first_name}</h2>
                 <h2

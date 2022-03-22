@@ -10,6 +10,7 @@ import React, {
 import CurrencyInput from "react-currency-input-field";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { toast } from "react-toastify";
 import { useTextInput } from "../../../app/utils/useTextInput";
 import { BREAKPOINTS, NAV_LINKS } from "../../../app/utils/utilities";
 import { useViewport } from "../../../app/utils/ViewportProvider";
@@ -86,6 +87,7 @@ const Upload = () => {
     setPostCost("0");
     setAccessType("1");
     setUploadedFilesImg([]);
+    toast.success("Post created");
   };
 
   return (

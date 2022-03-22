@@ -117,7 +117,7 @@ export const PersonalSettings = () => {
                         />
                     </div>
                     <div className="personalSettings__changeAvatar" style={{
-                        backgroundImage: `url(${avatarUploadImg ?? avatar ?? logo})`,
+                        backgroundImage: `url(${avatarUploadImg || avatar || logo})`,
                         backgroundRepeat: "no-repeat",
                         backgroundSize: "150px 150px"
                     }}>
@@ -136,6 +136,7 @@ export const PersonalSettings = () => {
                                 type="file"
                                 onChange={(val) => onAvatarChange(val)}
                                 multiple={false}
+
                             />
                         </div>
                     </div>

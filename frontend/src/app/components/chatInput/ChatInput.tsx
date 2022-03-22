@@ -7,12 +7,15 @@ export const ChatInput = ({
   sendMessage,
   isSendDisabled,
   audio,
+  wrapperRef
 }: {
   sendMessage: any;
   isSendDisabled: any;
   audio: any;
+  wrapperRef: any;
 }) => {
   const [height, setHeight] = useState<number>(30)
+  const [bottom, setBottom] = useState<number>(30)
   const VektorIcon = () => <Vektor />;
   const VektorIconDisabled = () => <VektorDisabled />;
   const handleChange = (event: any) => {
@@ -22,8 +25,7 @@ export const ChatInput = ({
     // const trows = Math.ceil(height / rowHeight) - 1;
     setHeight(event.target.scrollHeight)
     console.log(height, event.target.scrollHeight);
-
-
+    console.log(height, event.target.scrollHeight);
   }
 
   return (
@@ -55,9 +57,13 @@ export const ChatInput = ({
                   setFieldValue("messageFormikText", event.target.value)
                   handleChange(event)
                 }}
+                onBlur={() => {
+                  wrapperRef.current.scrollIntoView({ behavior: "smooth" });
+                }}
                 onKeyDown={(e: any) => {
+                  console.log(e.key);
                   if (e.key === "Enter") {
-                    handleSubmit();
+                    // handleSubmit();
                   }
                 }}
               ></Field>

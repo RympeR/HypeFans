@@ -94,7 +94,6 @@ export const CommentComponent = ({
 
   const Comment = ({ item, index }: { item: any; index: number }) => {
     const [answer, setAnswer] = useState("");
-    const [parentID, setParentID] = useState(item.id);
     const [showAnswer, setShowAnswer] = useState(false);
     const [showComments, setShowComments] = useState(false);
 
@@ -139,7 +138,7 @@ export const CommentComponent = ({
           </p>
           <div style={{ display: "flex" }}>
             <div style={{ marginRight: "10px" }}>2 мин.</div>
-            <div style={{ marginRight: "10px" }}>{item.like_amount} лайков</div>
+            <div style={{ marginRight: "10px" }}>{item.like_amount || 0} лайков</div>
             <div
               style={{ marginRight: "10px" }}
               onClick={() => setShowAnswer(!showAnswer)}
@@ -221,7 +220,7 @@ export const CommentComponent = ({
                 comment: "",
                 user: userID,
                 post: postId,
-                parent: parentID,
+                parent: item.id,
               }}
               onSubmit={(val) => {
                 addComment(val);
@@ -233,13 +232,13 @@ export const CommentComponent = ({
                     style={
                       showAnswer
                         ? {
-                            display: "flex",
-                            padding: "10px",
-                            backgroundColor: "#d6d6d6",
-                            borderRadius: "16px",
-                            height: "55px",
-                            margin: "7px",
-                          }
+                          display: "flex",
+                          padding: "10px",
+                          backgroundColor: "#d6d6d6",
+                          borderRadius: "16px",
+                          height: "55px",
+                          margin: "7px",
+                        }
                         : { display: "none" }
                     }
                   >
