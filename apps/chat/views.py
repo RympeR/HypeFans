@@ -70,7 +70,7 @@ class RoomRetrieveUsersAPI(generics.GenericAPIView):
         room = Room.objects.get(pk=pk)
         user = request.user
         invited = self.serializer_class(
-            instance=room.invited.all(), many=True).data
+            instance=[*room.invited.all(), room.creator], many=True).data
         unfinished_subscriptions = ChatSubscription.objects.filter(
             target=user, finished=False)
 
