@@ -74,7 +74,7 @@ const Profile = () => {
     });
     setChatSubscribeModalShown(false);
     console.log(data);
-    if (data.status === 200) {
+    if (data.status === 202) {
       setProfile({ ...profile, subscribed_chat: true });
       toast.success("Вы подписались на чат");
     } 

@@ -34,9 +34,6 @@ export const userAPI = {
       .then((response) => {
         return response;
       })
-      .catch((error) => {
-        return error;
-      });
   },
   createCard({ number, date_year, cvc, creator, user }: CardType) {
     return instance
