@@ -138,7 +138,7 @@ export const CommentComponent = ({
           </p>
           <div style={{ display: "flex" }}>
             <div style={{ marginRight: "10px" }}>2 мин.</div>
-            <div style={{ marginRight: "10px" }}>{item.like_amount} лайков</div>
+            <div style={{ marginRight: "10px" }}>{item.like_amount || 0} лайков</div>
             <div
               style={{ marginRight: "10px" }}
               onClick={() => setShowAnswer(!showAnswer)}
