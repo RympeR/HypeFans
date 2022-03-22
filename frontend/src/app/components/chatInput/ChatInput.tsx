@@ -24,8 +24,8 @@ export const ChatInput = ({
     // const rowHeight = 15;
     // const trows = Math.ceil(height / rowHeight) - 1;
     setHeight(event.target.scrollHeight)
-    console.log(height, event.target.scrollHeight);
-    console.log(height, event.target.scrollHeight);
+    // console.log(height, event.target.scrollHeight);
+    // console.log(height, event.target.scrollHeight);
   }
 
   return (

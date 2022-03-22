@@ -25,7 +25,7 @@ const Chat: React.FC = () => {
   const [isSended, setSended] = useState(false);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
   const [rerenderCount, setRerenderCount] = useState(0);
-  console.log(rerenderCount);
+  // console.log(rerenderCount);
 
 
   useEffect(() => {
