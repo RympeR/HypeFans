@@ -1,5 +1,7 @@
 import { Field, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { getLastUrlPoint } from "src/app/utils/utilities";
 import { ReactComponent as Vektor } from "../../../assets/images/send.svg";
 import { ReactComponent as VektorDisabled } from "../../../assets/images/sendDisabled.svg";
 
@@ -14,6 +16,8 @@ export const ChatInput = ({
   audio: any;
   wrapperRef: any;
 }) => {
+  const history = useHistory();
+  const lastUrl = getLastUrlPoint(history.location.pathname);
   const [height, setHeight] = useState<number>(30)
   const [bottom, setBottom] = useState<number>(30)
   const VektorIcon = () => <Vektor />;
@@ -27,6 +31,10 @@ export const ChatInput = ({
     // console.log(height, event.target.scrollHeight);
     // console.log(height, event.target.scrollHeight);
   }
+
+  useEffect(() => {
+    wrapperRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [lastUrl, wrapperRef])
 
   return (
     <Formik
