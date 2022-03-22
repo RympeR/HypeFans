@@ -1,7 +1,7 @@
 import { Field, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { getLastUrlPoint } from "src/app/utils/utilities";
+import { getLastUrlPoint } from "../../../app/utils/utilities";
 import { ReactComponent as Vektor } from "../../../assets/images/send.svg";
 import { ReactComponent as VektorDisabled } from "../../../assets/images/sendDisabled.svg";
 
