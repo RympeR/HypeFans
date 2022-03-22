@@ -305,7 +305,7 @@ class UserChatSubscription(GenericAPIView):
     def post(self, request, pk):
         user = request.user
         subscribe_target = get_object_or_404(User, pk=pk)
-        if user.credit_amount > subscribe_target.subscribtion_price:
+        if user.credit_amount >= subscribe_target.message_price:
             user.my_subscribes.add(subscribe_target)
             subscribe_target.fans_amount += 1
             if subscribe_target.withdraw_percentage == 0:
@@ -317,7 +317,7 @@ class UserChatSubscription(GenericAPIView):
             user.save()
             referrer = subscribe_target.referrer
             if referrer:
-                amount = subscribe_target.subscribtion_price * \
+                amount = subscribe_target.message_price * \
                     ReferralPercentage.value()
                 referrer.earned_credits_amount += amount * percentage
                 referrer.save()
@@ -343,7 +343,7 @@ class UserChatSubscription(GenericAPIView):
             )
         return api_payment_required_402(
             {
-                "need_to_pay":  subscribe_target.subscribtion_price - user.credit_amount
+                "need_to_pay":  subscribe_target.message_price - user.credit_amount
             }
         )
 
