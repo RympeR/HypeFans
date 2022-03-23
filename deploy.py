@@ -7,13 +7,14 @@ if sys.platform == 'win32':
         'cd D:\develop\pypr\HypeFans',
         'venv\Scripts\activate',
         'cd frontend',
-        'yarn build',
-        'rmdir -r ../build',
-        'mv -Force build ../build',
+        # 'yarn build',
+        # 'rmdir -r ../build',
+        'mv -Force ./build ../build',
         'cd ..',
-        'cp ./bundle.min.css ./build/static/css/bundle.min.css',
-        'update ./build/index.html bundle.min.css',
         'python manage.py collectstatic --no-input',
+        'git add .',
+        '''git commit -am "main branch rebuild"''',
+        'git push origin'
     ]
     for command in comands:
         print(command)

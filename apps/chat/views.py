@@ -69,10 +69,11 @@ class RoomRetrieveUsersAPI(generics.GenericAPIView):
     def get(self, request, pk):
         room = Room.objects.get(pk=pk)
         user = request.user
+        invited_qs=room.invited.all()
         invited = self.serializer_class(
-            instance=[*room.invited.all(), room.creator], many=True).data
+            instance=[*invited_qs, room.creator], many=True).data
         unfinished_subscriptions = ChatSubscription.objects.filter(
-            target=user, finished=False)
+            target=user, finished=False).exclude(target__in=invited_qs)
 
         qs_possible = User.objects.filter(
             pk__in=Subquery(unfinished_subscriptions.values_list(
