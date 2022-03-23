@@ -184,11 +184,10 @@ const MessageItem = React.memo(
     );
   },
   (prevProps, nextProps) => {
-    if (prevProps.item.id !== nextProps.item.id)
-      return false;
-    else {
-      return true;
-    }
+    console.log(prevProps.messages.length);
+    console.log(nextProps.messages.length);
+
+    return !(typeof prevProps.messages[nextProps.index - 1] === "undefined");
   }
 );
 
@@ -331,21 +330,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         attachmentsIds.push(data.data.id);
       }
     }
-    console.log(JSON.stringify({
-      text: !audioMessage
-        ? CryptoJS.AES.encrypt(
-          messageMain,
-          "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
-        ).toString()
-        : "",
-      user: uid,
-      is_payed: false,
-      date: 0,
-      attachments: attachmentsIds,
-      room_id: lastUrl,
-      message_price: Number(messageCost),
-      message_id: 0,
-    }));
 
     ws.send(
       JSON.stringify({
