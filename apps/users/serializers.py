@@ -260,7 +260,7 @@ class UserBlockSerializer(serializers.Serializer):
 
 
 class UserPartialSerializer(serializers.ModelSerializer):
-    location = CountryField(country_dict=True, required=False)
+    location = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
     avatar = serializers.ImageField(required=False)
     background_photo = serializers.ImageField(required=False)
