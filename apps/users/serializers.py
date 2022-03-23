@@ -261,7 +261,7 @@ class UserBlockSerializer(serializers.Serializer):
 
 
 class UserPartialSerializer(serializers.ModelSerializer):
-    location = serializers.CharField(required=False, allow_blank=True)
+    location = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     city = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
     avatar = serializers.ImageField(required=False)
