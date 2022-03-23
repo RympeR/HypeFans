@@ -302,6 +302,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'bio',
             'birthday_date',
             'location',
+            'country',
             'post_amount',
             'fans_amount',
             'reph_link',
