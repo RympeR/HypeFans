@@ -261,7 +261,7 @@ class UserBlockSerializer(serializers.Serializer):
 
 class UserPartialSerializer(serializers.ModelSerializer):
     location = serializers.CharField(required=False)
-    country = serializers.CharField(required=False)
+    city = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
     avatar = serializers.ImageField(required=False)
     background_photo = serializers.ImageField(required=False)
@@ -302,7 +302,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'bio',
             'birthday_date',
             'location',
-            'country',
+            'city',
             'post_amount',
             'fans_amount',
             'reph_link',
@@ -323,7 +323,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'earned_credits_amount',
             'wallet',
         )
-        optional_fields = ['location', 'country']
+        optional_fields = ['location', 'city']
 
 class SettingsSerializer(serializers.ModelSerializer):
     is_online = serializers.SerializerMethodField()
