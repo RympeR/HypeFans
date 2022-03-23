@@ -47,12 +47,14 @@ const MessageItem = React.memo(
     messages,
     index,
     url,
+    wrapperRef
   }: {
     item: any;
     setMessages: any;
     messages: any;
     index: number;
     url: number;
+    wrapperRef: any;
   }) => {
     const uid = useSelector((state: RootState) => state.auth.pk);
 
@@ -70,6 +72,10 @@ const MessageItem = React.memo(
         );
       }
     };
+
+    useEffect(() => {
+      wrapperRef.current.scrollIntoView({ behavior: "smooth" });
+    }, [url, wrapperRef])
 
     return (
       <div
@@ -184,10 +190,15 @@ const MessageItem = React.memo(
     );
   },
   (prevProps, nextProps) => {
-    console.log(prevProps.messages.length);
-    console.log(nextProps.messages.length);
+    // console.log(nextProps.item.id);
+    // console.log(nextProps.messages.length);
+    // debugger
 
-    return !(typeof prevProps.messages[nextProps.index - 1] === "undefined");
+    console.log(nextProps.item.id + " " + prevProps.item.id);
+
+    debugger
+
+    return false;
   }
 );
 
@@ -348,13 +359,13 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         message_id: 0,
       })
     );
-    setMessageCost("0");
-    setPaidModalShow(false);
-    setUploadedFilesImg([]);
-    setIsSendDisabled(false);
-    setUploadedFiles([]);
-    setAudioMessage(null);
-    return setMessageText("");
+    // setMessageCost("0");
+    // setPaidModalShow(false);
+    // setUploadedFilesImg([]);
+    // setIsSendDisabled(false);
+    // setUploadedFiles([]);
+    // setAudioMessage(null);
+    // return setMessageText("");
   };
 
   const sendTip = async (amount: number, reciever: number) => {
@@ -391,8 +402,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   const getChatUsers = async () => {
     const usersList = await chatAPI.getChatMembers(Number(lastUrl))
-    setUsersInChat([...usersList?.invited, ...usersList?.all])
+    setUsersInChat([...usersList?.all])
   }
+
+  debugger
 
   return (
     <div className="chat__dialogsMain">
@@ -622,6 +635,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                   setMessages={setMessages}
                   messages={messages}
                   url={Number(lastUrl)}
+                  wrapperRef={wrapperRef}
                 />
               );
             })
