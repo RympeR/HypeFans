@@ -126,7 +126,7 @@ class UserIdRetrieveSeriliazer(serializers.ModelSerializer):
             'pk',
         )
 
-        
+
 class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
 
     avatar = serializers.SerializerMethodField()
@@ -255,7 +255,8 @@ class UserCreationSerializer(serializers.Serializer):
 
 
 class UserBlockSerializer(serializers.Serializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), many=True)
     block = serializers.BooleanField()
 
 
@@ -324,6 +325,12 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'wallet',
         )
         optional_fields = ['location', 'city']
+
+    def get_validation_exclusions(self):
+        exclusions = super(UserPartialSerializer,
+                           self).get_validation_exclusions()
+        return exclusions + ['location']
+
 
 class SettingsSerializer(serializers.ModelSerializer):
     is_online = serializers.SerializerMethodField()
