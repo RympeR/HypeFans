@@ -50,7 +50,7 @@ class User(AbstractUser):
     bio = models.TextField(verbose_name='БИО профиля', null=True, blank=True)
     birthday_date = UnixTimeStampField(
         verbose_name='День рождения', null=True, blank=True)
-    location = models.CharField('Страна', null=True, blank=True, max_length=80)
+    location = models.CharField('Страна', null=True, blank=True, max_length=80, default='')
     city = models.CharField('Город', null=True, blank=True, max_length=80)
     subscribtion_price = models.IntegerField(
         verbose_name='Цена подписки', default=0)
