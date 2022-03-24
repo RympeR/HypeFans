@@ -72,7 +72,7 @@ class ChatConsumer(WebsocketConsumer):
                             'attachments': _file,
                             'text': message,
                             'date': chat.date.timestamp(),
-                            'message_id': chat.pk,
+                            'id': chat.pk,
                             'is_payed': is_payed,
                             'message_price': message_price,
                             'user': UserShortChatRetrieveSeriliazer(
@@ -88,7 +88,7 @@ class ChatConsumer(WebsocketConsumer):
                             'attachments': [],
                             'text': 'need to resubscribe',
                             'date': 0,
-                            'message_id': -2,
+                            'id': -2,
                             'is_payed': False,
                             'message_price': 0,
                             'user': UserShortChatRetrieveSeriliazer(
@@ -105,7 +105,7 @@ class ChatConsumer(WebsocketConsumer):
                         'attachments': [],
                         'text': '',
                         'date': 0,
-                        'message_id': -1,
+                        'id': -1,
                         'is_payed': False,
                         'message_price': 0,
                         'user': 0,
@@ -121,7 +121,7 @@ class ChatConsumer(WebsocketConsumer):
         print('chat_message')
         try:
             message_price = event['message_price']
-            message_id = event['message_id']
+            id = event['id']
             message = event['text']
             room = event['room_id']
             user = event['user']
@@ -159,7 +159,7 @@ class ChatConsumer(WebsocketConsumer):
             "user": user,
             "text": message,
             "date": date,
-            "message_id": message_id,
+            "id": id,
             "is_payed": is_payed,
             "price": message_price,
             "attachments": attachments_info
@@ -191,7 +191,7 @@ class ReadedConsumer(WebsocketConsumer):
             text_data_json = json.loads(text_data)
             room = text_data_json['room_id']
             user = text_data_json['user']
-            message = text_data_json['message_id']
+            message = text_data_json['id']
             if message == 0:
                 readed_chat = UserMessage.objects.filter(
                     user=User.objects.get(pk=user),
@@ -209,7 +209,7 @@ class ReadedConsumer(WebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'chat_message',
-                    'message_id': message,
+                    'id': message,
                     'user': user,
                     'room_id': room,
                 }
@@ -218,14 +218,14 @@ class ReadedConsumer(WebsocketConsumer):
             logging.error(e)
 
     def chat_message(self, event):
-        message = event['message_id']
+        message = event['id']
         room = event['room_id']
         user = event['user']
 
         self.send(text_data=json.dumps({
             "room_id": room,
             "user": user,
-            'message_id': message,
+            'id': message,
         }))
 
 
