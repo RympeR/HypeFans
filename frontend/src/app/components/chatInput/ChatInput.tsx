@@ -32,10 +32,6 @@ export const ChatInput = ({
     // console.log(height, event.target.scrollHeight);
   }
 
-  useEffect(() => {
-    wrapperRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [lastUrl, wrapperRef])
-
   return (
     <Formik
       initialValues={{
