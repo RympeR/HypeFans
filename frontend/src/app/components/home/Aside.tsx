@@ -25,13 +25,13 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
     return () => window.removeEventListener('resize', handleWindowResize);
   }, []);
 
-  if (recommendations.length < 5) {
+  if (recommendations?.length < 5) {
     return null;
   }
 
   const sliced_array = [];
 
-  for (let i = 0; i < recommendations.length; i += 3) {
+  for (let i = 0; i < recommendations?.length; i += 3) {
     sliced_array.push(recommendations.slice(i, i + 3));
   }
 
