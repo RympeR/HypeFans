@@ -52,8 +52,13 @@ class ChatConsumer(WebsocketConsumer):
                 logging.info(f"block logic {blocked}")
             if not blocked:
                 chat_sub_check = True
-                if user != room.creator:
-                    chat_sub_check = chat_sub_checker(user, room.creator)
+                if len(room.invited.all()) + 1 == 2:
+                    if user == room.creator:
+                        chat_sub_check = chat_sub_checker(user, room.invited.first())
+                else:
+                    if user != room.creator:
+                        chat_sub_check = chat_sub_checker(user, room.creator)
+
                 logging.info(f"chat saub checker logic {chat_sub_check}")
                 if chat_sub_check:
                     chat = Chat.objects.create(
