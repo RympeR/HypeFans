@@ -55,7 +55,8 @@ class ChatConsumer(WebsocketConsumer):
                 chat_sub_check = True
                 if users_len == 2:
                     if user == room.creator:
-                        chat_sub_check = chat_sub_checker(user, room.invited.first())
+                        chat_sub_check = chat_sub_checker(
+                            user, room.invited.first())
                 else:
                     if user != room.creator:
                         chat_sub_check = chat_sub_checker(user, room.creator)

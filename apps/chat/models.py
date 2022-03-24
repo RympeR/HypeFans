@@ -52,7 +52,7 @@ class Chat(models.Model):
         Attachment, related_name='chat_attachment', blank=True)
     date = UnixTimeStampField(
         "Send datetime", auto_now_add=True, null=True, blank=True)
-    price = models.IntegerField(
+    price = models.FloatField(
         verbose_name='Цена сообщения', blank=True, default=0)
 
     def __str__(self):
