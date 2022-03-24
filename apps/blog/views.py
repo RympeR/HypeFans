@@ -504,7 +504,8 @@ class GetUserLists(GenericAPIView):
         now = datetime.now()
         result = {}
 
-        subs = user.target_user_subscribe.filter(finished=False).order_by('-start_date')
+        subs = user.target_user_subscribe.filter(
+            finished=False).order_by('-start_date')
         for sub in user.source_user_subscribe.filter(finished=False):
             temp_subs = sub.target.target_user_subscribe.filter(finished=False)
             if user in list(map(lambda x: x.source, temp_subs)):
