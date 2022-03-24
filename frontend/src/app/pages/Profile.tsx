@@ -164,7 +164,7 @@ const Profile = () => {
       </Modal>
       <div
         style={{
-          background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${profile.background_photo})`,
+          backgroundImage: `url(${profile.background_photo})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% 210px",
         }}
