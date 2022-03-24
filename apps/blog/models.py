@@ -62,6 +62,8 @@ class Post(models.Model):
     archived = models.BooleanField(verbose_name='Архивировано', default=False)
     show_in_recomendations = models.BooleanField(
         verbose_name='Показывать в рекомендациях', default=False)
+    validated = models.BooleanField(
+        verbose_name='Проверен', default=False)
 
     class Meta:
         verbose_name = 'Публикация'
@@ -178,11 +180,28 @@ class PostBought(models.Model):
         return f"{self.user}-{self.post}"
 
 
+class RecommendationValidationPost(models.Model):
+    post = models.ForeignKey(Post, related_name='post_validation',
+                             on_delete=models.CASCADE, verbose_name='Публикация на валидацию')
+    validated = models.BooleanField('Прошел валидацию', default=False)
+
+    class Meta:
+        verbose_name = 'Пост на валидацию'
+        verbose_name_plural = 'Посты на валидацию'
+
+    def __str__(self):
+        return f"{self.post}"
+
+
 @receiver(post_save, sender=Post, dispatch_uid='user_post_amount_update_signal')
 def create_post(sender: Post, instance: Post, created: bool, **kwargs):
     if created:
         instance.user.post_amount += 1
         instance.user.save()
+        if instance.show_in_recomendations:
+            RecommendationValidationPost.objects.create(
+                post=instance
+            )
 
 
 def check_post_bought(post: Post, user: User):

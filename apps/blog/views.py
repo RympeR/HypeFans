@@ -346,7 +346,7 @@ class MainUserPage(GenericAPIView):
                     results['posts'].append(res_dict)
 
             valid_posts_id_list = Post.objects.filter(
-                show_in_recomendations=True).values_list('id', flat=True)
+                show_in_recomendations=True, validated=True).values_list('id', flat=True)
             random_posts_id_list = sample(
                 list(valid_posts_id_list), min(len(valid_posts_id_list), 9))
             logging.warning(random_posts_id_list)
@@ -370,7 +370,7 @@ class MainUserPage(GenericAPIView):
                 }
                 results['posts'].append(res_dict)
             valid_posts_id_list = Post.objects.filter(
-                show_in_recomendations=True).values_list('id', flat=True)
+                show_in_recomendations=True, validated=True).values_list('id', flat=True)
             random_posts_id_list = sample(
                 list(valid_profiles_id_list), min(len(valid_posts_id_list), 9))
             qs = Post.objects.filter(id__in=random_posts_id_list)
@@ -453,7 +453,7 @@ class GetFavouritePosts(generics.GenericAPIView):
 
     def get(self, request):
         limit = int(request.GET.get('limit', 20))
-        offset = 0 #int(request.GET.get('offset', 0))
+        offset = 0  # int(request.GET.get('offset', 0))
         user = request.user
         qs = user.user_favourites.all()[offset:offset+limit]
         data = [{'post': self.get_serializer(
@@ -531,7 +531,7 @@ class MainUserPageUpdated(APIView):
 
     @silk_profile(name='Check post bought')
     def check_post_bought(self, post: Post, user: User):
-        if post.show_in_recomendations and user.new_user:
+        if post.show_in_recomendations and user.new_user and post.validated:
             return True
         if post.access_level == 1:
             if post.price_to_watch == 0:
@@ -588,7 +588,7 @@ class MainUserPageUpdated(APIView):
                     ublication_date__lte=data_compare))
             posts = sorted(posts, key=lambda x: x.publication_date)
         qs = Post.objects.filter(
-            show_in_recomendations=True).exclude(
+            show_in_recomendations=True, validated=True).exclude(
             id__in=tuple(map(lambda x: x.id, posts))
         ).values_list('id', flat=True)
         qs = self.get_sample_of_queryset(qs, 9, Post)

@@ -9,7 +9,38 @@ from .models import (
     Story,
     WatchedStories,
     PostBought,
+    RecommendationValidationPost,
 )
+
+
+@admin.register(RecommendationValidationPost)
+class RecommendationValidationPostAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'post', 'validated'
+    )
+    search_fields = ['user__username', 'post__title']
+
+    actions_row = actions_detail = 'confirm_post', 'reject_post',
+
+    def confirm_post(self, request, pk):
+        pending_post = RecommendationValidationPost.objects.get(pk=pk)
+        post = pending_post.post
+        pending_post.validated = True
+        post.validated = True
+        post.save()
+        pending_post.save()
+
+    confirm_post.short_description = 'Confirm'
+
+    def reject_post(self, request, pk):
+        pending_post = RecommendationValidationPost.objects.get(pk=pk)
+        post = pending_post.post
+        pending_post.validated = False
+        post.validated = False
+        post.save()
+        pending_post.save()
+
+    reject_post.short_description = 'Reject'
 
 
 @admin.register(PostBought)
@@ -64,7 +95,9 @@ class PostActionAdmin(DraggableMPTTAdmin):
         ('parent', TreeRelatedFieldListFilter),
     )
 
+
 admin.site.register(PostAction, PostActionAdmin)
+
 
 @admin.register(Story)
 class StoryAdmin(admin.ModelAdmin):
