@@ -84,8 +84,8 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
         limit = int(request.GET.get('limit', 50))
         offset = int(request.GET.get('offset', 0))
         results = []
-        sub_check = sub_checker(req_user, user)
-        chat_sub_check = chat_sub_checker(req_user, user)
+        sub_check = sub_checker(user, req_user)
+        chat_sub_check = chat_sub_checker(user, req_user)
         if data_compare == 0:
             for post in user.user_post.filter(archived=False).order_by('-publication_date'):
                 post_data = PostGetShortSerializers(
