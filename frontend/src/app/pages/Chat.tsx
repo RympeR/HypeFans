@@ -24,13 +24,7 @@ const Chat: React.FC = () => {
   const [rooms, setRooms] = useState([]);
   const [isSended, setSended] = useState(false);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
-  const [rerenderCount, setRerenderCount] = useState(0);
   // console.log(rerenderCount);
-
-
-  useEffect(() => {
-    return setRerenderCount(value => value + 1)
-  }, [history])
 
   if (isLoading) {
     return <Preloader />;
