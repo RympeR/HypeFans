@@ -54,6 +54,7 @@ class ChatConsumer(WebsocketConsumer):
             if not blocked:
                 chat_sub_check = True
                 logging.warning(f"creator logic")
+                
                 if users_len == 2 and user == room.creator:
                     logging.warning(f"is creator")
                     chat_sub_check = chat_sub_checker(
