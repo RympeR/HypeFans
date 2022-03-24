@@ -7,7 +7,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useAlert } from "react-alert";
 import Modal from "react-bootstrap/Modal";
 import ReactAudioPlayer from "react-audio-player";
 import CurrencyInput from "react-currency-input-field";
@@ -23,10 +22,8 @@ import { ReactComponent as BackIcon } from "../../assets/images/arrow-left-chat.
 import { ReactComponent as ImageIcn } from "../../assets/images/imageI.svg";
 import { ReactComponent as Readed } from "../../assets/images/messageIcon.svg";
 import { ReactComponent as NotReaded } from "../../assets/images/messageIconWhite.svg";
-import { ReactComponent as MicrIcon } from "../../assets/images/micI.svg";
 import { ReactComponent as More } from "../../assets/images/more-vertical-chat.svg";
 import { ReactComponent as Tip } from "../../assets/images/tipI.svg";
-import { ReactComponent as VideoIcn } from "../../assets/images/videoI.svg";
 import { ReactComponent as CloseIcon } from "../../assets/images/x-circle.svg";
 import { ReactComponent as AttachIcon } from "../../assets/images/attachment.svg";
 import { AddToChat } from "../components/addToChat/AddToChat";
@@ -40,8 +37,8 @@ import logo from "../../assets/images/logo.svg";
 import { toast } from "react-toastify";
 import { ChatInput } from "../components/chatInput/ChatInput";
 
-const MessageItem = React.memo(
-  ({
+const MessageItem =
+  React.memo(({
     item,
     setMessages,
     messages,
@@ -111,7 +108,7 @@ const MessageItem = React.memo(
                 "message__content " +
                 (item?.attachments?.length > 0 &&
                   item.attachments.filter((el: any) => el.file_type === 1)
-                    .length == 0
+                    .length === 0
                   ? "no-background"
                   : "has-solid-background")
               }
@@ -135,10 +132,10 @@ const MessageItem = React.memo(
                 {item?.attachments.length > 0
                   ? item?.attachments.map((item: any, index: number) => {
                     if (item.file_type === 4) {
-                      return <Video src={item.file_url} />;
+                      return <Video src={item.file_url} key={index + "ChatImage"} />;
                     } else if (item.file_type === 1) {
                       return (
-                        <a href={item.file_url} download>
+                        <a href={item.file_url} download key={index + "ChatImage"}>
                           Скачать{" "}
                           {
                             item.file_url.split("/")[
@@ -153,6 +150,7 @@ const MessageItem = React.memo(
                           src={item.file_url}
                           controls
                           className="chat__audio_voice"
+                          key={index + "ChatImage"}
                         />
                       );
                     } else {
@@ -160,7 +158,7 @@ const MessageItem = React.memo(
                         <ChatImage
                           item={item}
                           index={index}
-                          key={index + Math.random()}
+                          key={index + "ChatImage"}
                         />
                       );
                     }
@@ -188,30 +186,22 @@ const MessageItem = React.memo(
         )}
       </div>
     );
-  },
-  (prevProps, nextProps) => {
-    // console.log(nextProps.item.id);
-    // console.log(nextProps.messages.length);
-    // debugger
+  }, (prevProps, nextProps) => {
+    // console.log(!(nextProps.item.id !== prevProps.messages[nextProps.index - 1]?.id));
 
-    console.log(nextProps.item.id + " " + prevProps.item.id);
+    // return !(nextProps.item.id !== prevProps.messages[nextProps.index - 1]?.id)
+    return false
+  })
 
-    debugger
-
-    return false;
-  }
-);
 
 export const DialogMain = ({ rooms }: { rooms: any }) => {
   const history = useHistory();
   const lastUrl = getLastUrlPoint(history.location.pathname);
-  const alert = useAlert();
   const BackButton = () => <BackIcon onClick={history.goBack} />;
   const uid = useSelector((state: RootState) => state.auth.pk);
   const MoreIcon = () => <More />;
   const [isMessagesLoading, setIsMessagesLoading] = useState(true);
   const TipIcon = () => <Tip />;
-  const VideoIcon = () => <VideoIcn />;
   const ImageIcon = () => <ImageIcn />;
   const [ws, setWs] = useState(null);
   const [wsRead, setWsRead] = useState(null);
@@ -396,7 +386,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   };
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
-  const [isShown, setShown] = useState(true);
   const [usersInChat, setUsersInChat] = useState([])
   const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false);
 
@@ -404,8 +393,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     const usersList = await chatAPI.getChatMembers(Number(lastUrl))
     setUsersInChat([...usersList?.all])
   }
-
-  debugger
 
   return (
     <div className="chat__dialogsMain">
@@ -444,12 +431,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <div style={{ padding: "15px" }}>
               <h1 style={{ textAlign: "center" }}>Участники</h1>
               {usersInChat.map((item, key) => {
-                console.log(usersInChat);
-                console.log(item);
-
-
                 return (
-                  <div className="chat__invitedUsersItem">
+                  <div className="chat__invitedUsersItem" key={key + " usersInChat"}>
                     <Link to={`/profile/${item.username}`}>
                       <img src={item.avatar !== "" ? item.avatar : logo} alt="avatar" />
                     </Link>
@@ -821,7 +804,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                   return (
                     <div
                       className="upload__img-wrapper"
-                      key={Math.random() + Math.random() + index}
+                      key={"imgWrapper" + index}
                     >
                       <video className="upload__img">
                         <source src={file} />
@@ -837,7 +820,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                   return (
                     <div
                       className="upload__img-wrapper"
-                      key={Math.random() + Math.random() + index}
+                      key={"imgWrapper " + index}
                     >
                       <img
                         className="upload__img"
