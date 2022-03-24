@@ -275,6 +275,19 @@ class UserNotifications(GenericAPIView):
                 }
                 res_dict['type'] = 'subscription'
                 subscriptions_result.append(res_dict)
+
+        for subscription in user.target_user_chat_subscribe.all().order_by('-start_date').distinct():
+            if user != subscription.source:
+                res_dict = {}
+                res_dict['user'] = self.serializer_class(
+                    instance=subscription.source, context={'request': request}).data
+                res_dict['subscription'] = {
+                    'amount': user.subscribtion_price,
+                    'start_date': subscription.start_date.timestamp() if subscription.start_date else None,
+                    'end_date': subscription.end_date.timestamp() if subscription.end_date else None
+                }
+                res_dict['type'] = 'subscription'
+                subscriptions_result.append(res_dict)
         result = [
             *comments_result,
             *likes_result,
@@ -491,32 +504,29 @@ class GetUserLists(GenericAPIView):
         now = datetime.now()
         result = {}
 
-        subs = user.target_user_subscribe.filter(start_date__gte=(
-            now - timedelta(days=30))).order_by('-start_date')
-        for sub in user.source_user_subscribe.filter(end_date__gte=now):
-            temp_subs = sub.target.target_user_subscribe.filter(
-                end_date__gte=now)
+        subs = user.target_user_subscribe.filter(finished=False).order_by('-start_date')
+        for sub in user.source_user_subscribe.filter(finished=False):
+            temp_subs = sub.target.target_user_subscribe.filter(finished=False)
             if user in list(map(lambda x: x.source, temp_subs)):
                 friends.append(sub.target)
 
-        # result['last_subs_amount'] = len(subs)
-        subs = list(map(lambda x: x.source, subs[:3]))
+        subs = list(map(lambda x: x.source, subs))
 
         result['last_subs'] = self.serializer_class(
             many=True, instance=subs).data
 
         result['friends'] = self.serializer_class(
-            many=True, instance=friends[:10]).data
+            many=True, instance=friends).data
         favourite_post = user.user_favourites.all()
         favourite_post_users = list(set(map(lambda x: x.user, favourite_post)))
         result['favourites'] = self.serializer_class(
-            many=True, instance=favourite_post_users[:10]).data
+            many=True, instance=favourite_post_users).data
 
         last_donators = user.recieved_user.filter(
             datetime__date__month=now.month)
         last_donators = list(set(map(lambda x: x.sender, last_donators)))
         result['last_donators'] = self.serializer_class(
-            many=True, instance=last_donators[:10]).data
+            many=True, instance=last_donators).data
         blocked_users = user.blocked_users.all()
         result['blocked_users'] = self.serializer_class(
             many=True, instance=blocked_users).data
