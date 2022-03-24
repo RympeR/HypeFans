@@ -1,6 +1,9 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin import DateFieldListFilter, BooleanFieldListFilter
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from mptt.admin import TreeRelatedFieldListFilter
+from admin_actions.admin import ActionsModelAdmin
 from mptt.admin import DraggableMPTTAdmin, TreeRelatedFieldListFilter, MPTTModelAdmin
 from .models import (
     Attachment,
@@ -14,33 +17,52 @@ from .models import (
 
 
 @admin.register(RecommendationValidationPost)
-class RecommendationValidationPostAdmin(admin.ModelAdmin):
+class RecommendationValidationPostAdmin(ActionsModelAdmin):
     list_display = (
         'pk', 'post', 'validated'
     )
-    search_fields = ['user__username', 'post__title']
-
-    actions_row = actions_detail = 'confirm_post', 'reject_post',
+    search_fields = ['post__title']
+    list_filter = 'validated',
+    actions_list = ('confirm_post', 'reject_post', )
+    actions_row = ('confirm_post', 'reject_post', )
+    actions_detail = ('confirm_post', 'reject_post', )
 
     def confirm_post(self, request, pk):
-        pending_post = RecommendationValidationPost.objects.get(pk=pk)
-        post = pending_post.post
-        pending_post.validated = True
-        post.validated = True
-        post.save()
-        pending_post.save()
 
+        pending_post = RecommendationValidationPost.objects.get(pk=pk)
+        if pending_post.validated:
+            messages.error(
+                request, 'Пост уже валидирован')
+            return HttpResponseRedirect(reverse_lazy('admin:blog_recommendationvalidationpost_changelist'), request)
+        else:
+            messages.success(
+                request, 'Пост принят')
+            post = pending_post.post
+            pending_post.validated = True
+            post.validated = True
+            post.save()
+            pending_post.save()
+            return HttpResponseRedirect(reverse_lazy('admin:blog_recommendationvalidationpost_changelist'), request)
     confirm_post.short_description = 'Confirm'
+    confirm_post.url_path = 'confirm-post'
 
     def reject_post(self, request, pk):
         pending_post = RecommendationValidationPost.objects.get(pk=pk)
-        post = pending_post.post
-        pending_post.validated = False
-        post.validated = False
-        post.save()
-        pending_post.save()
-
+        if not pending_post.validated:
+            messages.error(
+                request, 'Пост уже отклонен')
+            return HttpResponseRedirect(reverse_lazy('admin:blog_recommendationvalidationpost_changelist'), request)
+        else:
+            messages.success(
+                request, 'Пост отклонен')
+            post = pending_post.post
+            pending_post.validated = False
+            post.validated = False
+            post.save()
+            pending_post.save()
+            return HttpResponseRedirect(reverse_lazy('admin:blog_recommendationvalidationpost_changelist'), request)
     reject_post.short_description = 'Reject'
+    reject_post.url_path = 'reject-post'
 
 
 @admin.register(PostBought)

@@ -15,6 +15,7 @@ from .models import (
     ReferralPayment,
 )
 from django.utils.translation import gettext, gettext_lazy as _
+from admin_actions.admin import ActionsModelAdmin
 
 
 @admin.register(UserOnline)
@@ -172,7 +173,7 @@ class PaymentAdmin(admin.ModelAdmin):
 
 
 @admin.register(PendingUser)
-class PendingUserAdmin(admin.ModelAdmin):
+class PendingUserAdmin(ActionsModelAdmin):
     list_display = [
         'pk', 'user', 'verified'
     ]

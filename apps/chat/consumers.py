@@ -150,8 +150,6 @@ class ChatConsumer(WebsocketConsumer):
                             )
                     except Exception as e:
                         print(e)
-            # user = UserShortChatRetrieveSeriliazer(
-            #     instance=User.objects.get(pk=user['pk'])).data
         except Exception as e:
             user = 0
             logging.error(e)
