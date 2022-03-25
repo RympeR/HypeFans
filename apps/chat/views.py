@@ -212,7 +212,7 @@ class InviteUserAPI(GenericAPIView, UpdateModelMixin):
     def put(self, request, *args, **kwargs):
         if request.user == self.get_object().creator:
             user_list = []
-            for username in request.data.getlist('username'):
+            for username in request.data.get('username'):
                 user_list.append(
                     User.objects.get(username=username)
                 )
