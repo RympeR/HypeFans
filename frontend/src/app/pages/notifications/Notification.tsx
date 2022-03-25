@@ -29,6 +29,12 @@ export const Notification = ({ item }: any) => {
             подписался(лась) на ваш <br></br>профиль!
           </>
         );
+      case "chat_subscription":
+        return (
+          <>
+            подписался(лась) на чат с вами!
+          </>
+        );
     }
   };
   return (

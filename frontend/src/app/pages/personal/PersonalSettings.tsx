@@ -127,7 +127,7 @@ export const PersonalSettings = () => {
             />
             <SettingsIcon
               style={{ width: "35px", height: "35px" }}
-              onClick={() => history.push("/settings/account")}
+              onClick={() => history.push("/settings/profileSettings")}
             />
           </div>
           <div

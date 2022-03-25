@@ -188,6 +188,11 @@ const Profile = () => {
                 <button>Избранные</button>
               </Link>
             </div>
+            <div style={{ padding: "5px" }}>
+              <Link to="/settings/profileSettings">
+                <button>Настройки</button>
+              </Link>
+            </div>
           </Popup>
         </div>
         <img
