@@ -270,6 +270,7 @@ class UserNotifications(GenericAPIView):
                     instance=subscription.source, context={'request': request}).data
                 res_dict['subscription'] = {
                     'amount': user.subscribtion_price,
+                    'length': user.subscribtion_price,
                     'start_date': subscription.start_date.timestamp() if subscription.start_date else None,
                     'end_date': subscription.end_date.timestamp() if subscription.end_date else None
                 }
@@ -286,7 +287,7 @@ class UserNotifications(GenericAPIView):
                     'start_date': subscription.start_date.timestamp() if subscription.start_date else None,
                     'end_date': subscription.end_date.timestamp() if subscription.end_date else None
                 }
-                res_dict['type'] = 'subscription'
+                res_dict['type'] = 'chat_subscription'
                 subscriptions_result.append(res_dict)
         result = [
             *comments_result,
@@ -625,6 +626,6 @@ class MainUserPageUpdated(APIView):
             post['favourite'] = self.check_favourites(qs_post, user)
 
         return Response({
-            'reccomendations': reccomendations,
+            'recommendations': reccomendations,
             'posts': result_posts
         })
