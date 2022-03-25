@@ -38,7 +38,7 @@ const Chat: React.FC = () => {
     });
     setShowChatCreate(false);
     console.log(data);
-    if (data.status === 202) {
+    if (data.status < 300) {
       toast.success("Беседа создана");
     } else {
       toast.error("Ошибка создания беседы");
@@ -164,7 +164,9 @@ const Chat: React.FC = () => {
         <div className="chat__row">
           <div
             className="chat__resp_icon"
-            onClick={()=>{setShowChatCreate(true)}}
+            onClick={() => {
+              setShowChatCreate(true);
+            }}
           >
             <Plus />
           </div>
@@ -182,7 +184,12 @@ const Chat: React.FC = () => {
         <Modal.Body className="notifications__modal">
           {" "}
           <h2 style={{ marginBottom: "0px" }}>Создать беседу?</h2>
-          <input type="text" value={roomName} onChange={(e)=>setRoomName(e.target.value)}/>
+          <input
+            type="text"
+            className="chat__input_create_room"
+            value={roomName}
+            onChange={(e) => setRoomName(e.target.value)}
+          />
           <div
             style={{
               display: "flex",
