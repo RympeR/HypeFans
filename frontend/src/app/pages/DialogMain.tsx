@@ -684,6 +684,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       <Modal
         show={isPaidModalShown}
         onHide={() => {
+          setMessageCost("")
           setPaidModalShow(false);
         }}
         centered
@@ -723,28 +724,21 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 marginTop: "15px",
               }}
             >
-              <h3 onClick={() => setShowTip(false)}>Отмена</h3>
+              <h3 onClick={() => {
+                setMessageCost("")
+                setPaidModalShow(false)
+              }}>Отмена</h3>
               <div style={{ width: "20px" }}></div>
               <h3
                 style={
-                  (messageText.length > 0 && messageText.length < 255) ||
-                    isSendDisabled
-                    ? { color: "#FB5734" }
-                    : { color: "grey" }
+                  { color: "#FB5734" }
                 }
                 onClick={() => {
-                  if (
-                    (messageText.length > 0 && messageText.length < 255) ||
-                    audioMessage ||
-                    isSendDisabled
-                  ) {
-                    return sendMessage(messageText);
-                  } else {
-                    return null;
-                  }
+                  toast.success("Цена соощения сохранена");
+                  setPaidModalShow(false)
                 }}
               >
-                Отправить
+                Сохранить цену
               </h3>
             </div>
           </div>
