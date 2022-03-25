@@ -57,6 +57,8 @@ const MessageItem =
 
     const payForMessage = async (message_id: number, price: number) => {
       const data = await blogAPI.buyMessage(uid, message_id, price);
+      console.log(data);
+
       if (data.status === 200) {
         setMessages(
           messages.map((item: any, index: number) => {
@@ -349,13 +351,13 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         message_id: 0,
       })
     );
-    // setMessageCost("0");
-    // setPaidModalShow(false);
-    // setUploadedFilesImg([]);
-    // setIsSendDisabled(false);
-    // setUploadedFiles([]);
-    // setAudioMessage(null);
-    // return setMessageText("");
+    setMessageCost("0");
+    setPaidModalShow(false);
+    setUploadedFilesImg([]);
+    setIsSendDisabled(false);
+    setUploadedFiles([]);
+    setAudioMessage(null);
+    return setMessageText("");
   };
 
   const sendTip = async (amount: number, reciever: number) => {
