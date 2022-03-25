@@ -1,6 +1,14 @@
 .chat {
   display: flex;
   flex-direction: column;
+  
+  &__input_create_room {
+    height: 40px;
+    background-color: #fbdfcf;
+    border-radius: 15px;
+    padding-left: 5px;
+    width: 100%;
+  }
 
   &__invitedUsersItem {
     display: flex;

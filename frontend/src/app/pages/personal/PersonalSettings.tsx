@@ -127,7 +127,7 @@ export const PersonalSettings = () => {
             />
             <SettingsIcon
               style={{ width: "35px", height: "35px" }}
-              onClick={() => history.push("/settings/account")}
+              onClick={() => history.push("/settings/profileSettings")}
             />
           </div>
           <div
@@ -183,6 +183,7 @@ export const PersonalSettings = () => {
                       onChange={(val) =>
                         setFieldValue("first_name", val.target.value)
                       }
+                      required
                     />
                   </div>
                   <div>
@@ -193,6 +194,7 @@ export const PersonalSettings = () => {
                       onChange={(val) =>
                         setFieldValue("email", val.target.value)
                       }
+                      required
                     />
                   </div>
                   <div>
@@ -203,6 +205,7 @@ export const PersonalSettings = () => {
                       onChange={(val) =>
                         setFieldValue("username", val.target.value)
                       }
+                      required
                     />
                   </div>
                   <div>
@@ -210,6 +213,7 @@ export const PersonalSettings = () => {
                     <textarea
                       value={values.bio}
                       onChange={(val) => setFieldValue("bio", val.target.value)}
+                      required
                     />
                   </div>
                   <div>
@@ -220,6 +224,7 @@ export const PersonalSettings = () => {
                       onChange={(val) =>
                         setFieldValue("wallet", val.target.value)
                       }
+                      required
                     />
                   </div>
                   <button

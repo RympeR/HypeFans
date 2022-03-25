@@ -37,14 +37,14 @@ import logo from "../../assets/images/logo.svg";
 import { toast } from "react-toastify";
 import { ChatInput } from "../components/chatInput/ChatInput";
 
-const MessageItem =
-  React.memo(({
+const MessageItem = React.memo(
+  ({
     item,
     setMessages,
     messages,
     index,
     url,
-    wrapperRef
+    wrapperRef,
   }: {
     item: any;
     setMessages: any;
@@ -72,7 +72,7 @@ const MessageItem =
 
     useEffect(() => {
       wrapperRef.current.scrollIntoView({ behavior: "smooth" });
-    }, [url, wrapperRef])
+    }, [url, wrapperRef]);
 
     return (
       <div
@@ -107,8 +107,8 @@ const MessageItem =
               className={
                 "message__content " +
                 (item?.attachments?.length > 0 &&
-                  item.attachments.filter((el: any) => el.file_type === 1)
-                    .length === 0
+                item.attachments.filter((el: any) => el.file_type === 1)
+                  .length === 0
                   ? "no-background"
                   : "has-solid-background")
               }
@@ -118,51 +118,60 @@ const MessageItem =
                 style={
                   item?.attachments.length > 0
                     ? {
-                      justifyContent: "flex-end",
-                    }
+                        justifyContent: "flex-end",
+                      }
                     : {}
                 }
               >
                 {!item?.attachments?.some((item: any) => item.file_type === 2)
                   ? CryptoJS.AES.decrypt(
-                    item.text,
-                    "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
-                  ).toString(CryptoJS.enc.Utf8)
+                      item.text,
+                      "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+                    ).toString(CryptoJS.enc.Utf8)
                   : ""}
                 {item?.attachments.length > 0
                   ? item?.attachments.map((item: any, index: number) => {
-                    if (item.file_type === 4) {
-                      return <Video src={item.file_url} key={index + "ChatImage"} />;
-                    } else if (item.file_type === 1) {
-                      return (
-                        <a href={item.file_url} download key={index + "ChatImage"}>
-                          Скачать{" "}
-                          {
-                            item.file_url.split("/")[
-                            item.file_url.split("/").length - 1
-                            ]
-                          }
-                        </a>
-                      );
-                    } else if (item.file_type === 2) {
-                      return (
-                        <ReactAudioPlayer
-                          src={item.file_url}
-                          controls
-                          className="chat__audio_voice"
-                          key={index + "ChatImage"}
-                        />
-                      );
-                    } else {
-                      return (
-                        <ChatImage
-                          item={item}
-                          index={index}
-                          key={index + "ChatImage"}
-                        />
-                      );
-                    }
-                  })
+                      if (item.file_type === 4) {
+                        return (
+                          <Video
+                            src={item.file_url}
+                            key={index + "ChatImage"}
+                          />
+                        );
+                      } else if (item.file_type === 1) {
+                        return (
+                          <a
+                            href={item.file_url}
+                            download
+                            key={index + "ChatImage"}
+                          >
+                            Скачать{" "}
+                            {
+                              item.file_url.split("/")[
+                                item.file_url.split("/").length - 1
+                              ]
+                            }
+                          </a>
+                        );
+                      } else if (item.file_type === 2) {
+                        return (
+                          <ReactAudioPlayer
+                            src={item.file_url}
+                            controls
+                            className="chat__audio_voice"
+                            key={index + "ChatImage"}
+                          />
+                        );
+                      } else {
+                        return (
+                          <ChatImage
+                            item={item}
+                            index={index}
+                            key={index + "ChatImage"}
+                          />
+                        );
+                      }
+                    })
                   : null}
                 {item.user.pk === uid ? (
                   <span className="message__meta">
@@ -186,13 +195,14 @@ const MessageItem =
         )}
       </div>
     );
-  }, (prevProps, nextProps) => {
+  },
+  (prevProps, nextProps) => {
     // console.log(!(nextProps.item.id !== prevProps.messages[nextProps.index - 1]?.id));
 
     // return !(nextProps.item.id !== prevProps.messages[nextProps.index - 1]?.id)
-    return false
-  })
-
+    return false;
+  }
+);
 
 export const DialogMain = ({ rooms }: { rooms: any }) => {
   const history = useHistory();
@@ -217,7 +227,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const [amICreator, setCreator] = useState(false);
   const inputFileRef = useRef(null);
   const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false);
-  const wrapperRef = useRef()
+  const wrapperRef = useRef();
 
   // useEffect`s
 
@@ -239,8 +249,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     };
     wsReadClient.onclose = () => console.log("ws closed read");
     wsClient.onclose = () => {
-      setIsMessagesLoading(true)
-      console.log("ws closed")
+      setIsMessagesLoading(true);
+      console.log("ws closed");
     };
 
     return () => {
@@ -269,7 +279,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   useEffect(() => {
     if (!wsRead) return;
-    wsRead.onmessage = (e: any) => { };
+    wsRead.onmessage = (e: any) => {};
   }, [wsRead]);
 
   useEffect(() => {
@@ -336,9 +346,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       JSON.stringify({
         text: !audioMessage
           ? CryptoJS.AES.encrypt(
-            messageMain,
-            "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
-          ).toString()
+              messageMain,
+              "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+            ).toString()
           : "",
         user: uid,
         is_payed: false,
@@ -386,13 +396,13 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   };
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
-  const [usersInChat, setUsersInChat] = useState([])
+  const [usersInChat, setUsersInChat] = useState([]);
   const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false);
 
   const getChatUsers = async () => {
-    const usersList = await chatAPI.getChatMembers(Number(lastUrl))
-    setUsersInChat([...usersList?.all])
-  }
+    const usersList = await chatAPI.getChatMembers(Number(lastUrl));
+    setUsersInChat([...usersList?.all]);
+  };
 
   return (
     <div className="chat__dialogsMain">
@@ -424,7 +434,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           borderBottomRightRadius: "16px",
         }}
       >
-        <Modal.Body className="notifications__modal" style={{ padding: "0px", minHeight: "30vh" }}>
+        <Modal.Body
+          className="notifications__modal"
+          style={{ padding: "0px", minHeight: "30vh" }}
+        >
           {usersInChat.length === 0 ? (
             <Preloader />
           ) : (
@@ -432,16 +445,22 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               <h1 style={{ textAlign: "center" }}>Участники</h1>
               {usersInChat.map((item, key) => {
                 return (
-                  <div className="chat__invitedUsersItem" key={key + " usersInChat"}>
+                  <div
+                    className="chat__invitedUsersItem"
+                    key={key + " usersInChat"}
+                  >
                     <Link to={`/profile/${item.username}`}>
-                      <img src={item.avatar !== "" ? item.avatar : logo} alt="avatar" />
+                      <img
+                        src={item.avatar !== "" ? item.avatar : logo}
+                        alt="avatar"
+                      />
                     </Link>
                     <div style={{ marginLeft: "15px" }}>
                       <h3 style={{ textAlign: "start" }}>@{item.username}</h3>
                       <h5>{item.first_name}</h5>
                     </div>
                   </div>
-                )
+                );
               })}
             </div>
           )}
@@ -485,22 +504,20 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                    (item: any) =>
-                      item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited?.avatar || logo
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited?.avatar || logo
                   : rooms.find(
-                    (item: any) =>
-                      item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.creator?.avatar || logo
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.creator?.avatar || logo
                 : rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.logo || logo
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.logo || logo
             }
             className="logo_site"
             alt="avatar"
             onClick={() => {
-              getChatUsers()
-              setInvitedModalShown(true)
+              getChatUsers();
+              setInvitedModalShown(true);
             }}
           ></img>
           {/* </Link> */}
@@ -521,14 +538,14 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               )?.room?.room_info?.invited !== "number"
                 ? amICreator
                   ? rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited?.username
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited?.username
                   : rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.creator?.username
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.creator?.username
                 : rooms.find(
-                  (item: any) => item.room.room_info.id === Number(lastUrl)
-                )?.room?.room_info?.name}
+                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                  )?.room?.room_info?.name}
             </h2>
           </div>
         </div>
@@ -552,9 +569,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `hype-fans.com/profile/${rooms.find(
-                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                  )?.room?.room_info?.invited.username
+                  `hype-fans.com/profile/${
+                    rooms.find(
+                      (item: any) => item.room.room_info.id === Number(lastUrl)
+                    )?.room?.room_info?.invited.username
                   }`
                 );
               }}
@@ -726,7 +744,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               <h3
                 style={
                   (messageText.length > 0 && messageText.length < 255) ||
-                    isSendDisabled
+                  isSendDisabled
                     ? { color: "#FB5734" }
                     : { color: "grey" }
                 }
@@ -938,39 +956,45 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     <img
                       src={
                         typeof rooms.find(
-                          (item: any) => item.room.room_info.id === Number(lastUrl)
+                          (item: any) =>
+                            item.room.room_info.id === Number(lastUrl)
                         )?.room?.room_info?.invited !== "number"
                           ? amICreator
                             ? rooms.find(
-                              (item: any) =>
-                                item.room.room_info.id === Number(lastUrl)
-                            )?.room?.room_info?.invited?.avatar || logo
+                                (item: any) =>
+                                  item.room.room_info.id === Number(lastUrl)
+                              )?.room?.room_info?.invited?.avatar || logo
                             : rooms.find(
+                                (item: any) =>
+                                  item.room.room_info.id === Number(lastUrl)
+                              )?.room?.room_info?.creator?.avatar || logo
+                          : rooms.find(
                               (item: any) =>
                                 item.room.room_info.id === Number(lastUrl)
-                            )?.room?.room_info?.creator?.avatar || logo
-                          : rooms.find(
-                            (item: any) => item.room.room_info.id === Number(lastUrl)
-                          )?.room?.room_info?.logo || logo
+                            )?.room?.room_info?.logo || logo
                       }
                       alt="donateAvatar"
-                    // onClick={() => setInvitedModalShown(true)}
+                      // onClick={() => setInvitedModalShown(true)}
                     ></img>
                     <div>
                       <h2>
                         {typeof rooms.find(
-                          (item: any) => item.room.room_info.id === Number(lastUrl)
+                          (item: any) =>
+                            item.room.room_info.id === Number(lastUrl)
                         )?.room?.room_info?.invited !== "number"
                           ? amICreator
                             ? rooms.find(
-                              (item: any) => item.room.room_info.id === Number(lastUrl)
-                            )?.room?.room_info?.invited?.first_name
+                                (item: any) =>
+                                  item.room.room_info.id === Number(lastUrl)
+                              )?.room?.room_info?.invited?.first_name
                             : rooms.find(
-                              (item: any) => item.room.room_info.id === Number(lastUrl)
-                            )?.room?.room_info?.creator?.first_name
+                                (item: any) =>
+                                  item.room.room_info.id === Number(lastUrl)
+                              )?.room?.room_info?.creator?.first_name
                           : rooms.find(
-                            (item: any) => item.room.room_info.id === Number(lastUrl)
-                          )?.room?.room_info?.first_name}
+                              (item: any) =>
+                                item.room.room_info.id === Number(lastUrl)
+                            )?.room?.room_info?.first_name}
                       </h2>
                       <h2
                         style={{
@@ -984,18 +1008,22 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                       >
                         @
                         {typeof rooms.find(
-                          (item: any) => item.room.room_info.id === Number(lastUrl)
+                          (item: any) =>
+                            item.room.room_info.id === Number(lastUrl)
                         )?.room?.room_info?.invited !== "number"
                           ? amICreator
                             ? rooms.find(
-                              (item: any) => item.room.room_info.id === Number(lastUrl)
-                            )?.room?.room_info?.invited?.username
+                                (item: any) =>
+                                  item.room.room_info.id === Number(lastUrl)
+                              )?.room?.room_info?.invited?.username
                             : rooms.find(
-                              (item: any) => item.room.room_info.id === Number(lastUrl)
-                            )?.room?.room_info?.creator?.username
+                                (item: any) =>
+                                  item.room.room_info.id === Number(lastUrl)
+                              )?.room?.room_info?.creator?.username
                           : rooms.find(
-                            (item: any) => item.room.room_info.id === Number(lastUrl)
-                          )?.room?.room_info?.name}
+                              (item: any) =>
+                                item.room.room_info.id === Number(lastUrl)
+                            )?.room?.room_info?.name}
                       </h2>
                     </div>
                   </div>
@@ -1044,6 +1072,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           </Formik>
         </Modal.Body>
       </Modal>
-    </div >
+    </div>
   );
 };
