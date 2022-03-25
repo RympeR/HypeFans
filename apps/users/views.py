@@ -80,7 +80,7 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
     def retrieve(self, request, username):
         user = User.objects.get(username=username)
         req_user = request.user
-        data_compare = request.GET.get('datetime', 0)
+        data_compare = int(request.GET.get('datetime', 0))
         limit = int(request.GET.get('limit', 50))
         offset = int(request.GET.get('offset', 0))
         results = []

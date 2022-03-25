@@ -267,9 +267,9 @@ class UserPartialSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=False)
     avatar = serializers.ImageField(required=False)
     background_photo = serializers.ImageField(required=False)
-    username = serializers.CharField(required=False)
-    first_name = serializers.CharField(required=False)
-    bio = serializers.CharField(required=False)
+    username = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    first_name = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    bio = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     birthday_date = serializers.DateTimeField(required=False)
     post_amount = serializers.IntegerField(required=False)
     fans_amount = serializers.IntegerField(required=False)
@@ -291,7 +291,7 @@ class UserPartialSerializer(serializers.ModelSerializer):
     validated_user = serializers.BooleanField(required=False)
     credit_amount = serializers.IntegerField(required=False)
     earned_credits_amount = serializers.IntegerField(required=False)
-    wallet = serializers.CharField(required=False)
+    wallet = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = User

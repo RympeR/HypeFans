@@ -100,7 +100,7 @@ class User(AbstractUser):
     creator = models.BooleanField(
         'Создатель', default=False)
     wallet = models.CharField(
-        'Кошелек вывода', null=True, max_length=200)
+        'Кошелек вывода', null=True, blank=True, max_length=200)
     agency = models.ForeignKey(
         Agency, blank=True, null=True, verbose_name='Агенство', related_name='agency_model', on_delete=models.SET_NULL)
     withdraw_percentage = models.FloatField(
