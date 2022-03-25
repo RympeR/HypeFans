@@ -303,7 +303,9 @@ class ChatRoomsConsumer(WebsocketConsumer):
             used_ids = []
             for room in rooms_creator:
                 if not room.pk in used_ids:
-                    blocked = True if user in room.invited.first().blocked_users.all() else False
+                    blocked = False
+                    if room.invited.exists() and user in room.invited.first().blocked_users.all():
+                        blocked = True
                     used_ids.append(room.pk)
                     result.append(
                         {
