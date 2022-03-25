@@ -43,7 +43,7 @@ class ChatAdmin(admin.ModelAdmin):
 @admin.register(UserMessage)
 class UserMessageAdmin(admin.ModelAdmin):
     list_display = (
-        'pk', 'message', 'user'
+        'pk', 'message', 'user', 'readed'
     )
     search_fields = 'user__username',
     ordering = '-pk',
