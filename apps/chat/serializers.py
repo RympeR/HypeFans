@@ -65,24 +65,25 @@ class RoomCreationSerializer(serializers.ModelSerializer):
         exclude = 'date',
 
     def validate(self, attrs):
-        creator = Room.objects.filter(
-            creator=attrs['creator'],
-            invited=attrs['invited'][0]
-        )
-        invited = Room.objects.filter(
-            invited=attrs['creator'],
-            creator=attrs['invited'][0]
-        )
-        if attrs['creator'] == attrs['invited'][0]:
-            raise serializers.ValidationError
-        if creator.exists():
-            for el in creator:
-                if len(el.invited.all()) == 1:
-                    raise ValueError(el.pk)
-        if invited.exists():
-            for el in invited:
-                if len(el.invited.all()) == 1:
-                    raise ValueError(el.pk)
+        if attrs.get('invited'):
+            creator = Room.objects.filter(
+                creator=attrs['creator'],
+                invited=attrs['invited'][0]
+            )
+            invited = Room.objects.filter(
+                invited=attrs['creator'],
+                creator=attrs['invited'][0]
+            )
+            if attrs['creator'] == attrs['invited'][0]:
+                raise serializers.ValidationError
+            if creator.exists():
+                for el in creator:
+                    if len(el.invited.all()) == 1:
+                        raise ValueError(el.pk)
+            if invited.exists():
+                for el in invited:
+                    if len(el.invited.all()) == 1:
+                        raise ValueError(el.pk)
         return attrs
 
 
