@@ -282,7 +282,7 @@ class UserNotifications(GenericAPIView):
                 res_dict = {}
                 res_dict['user'] = self.serializer_class(
                     instance=subscription.source, context={'request': request}).data
-                res_dict['subscription'] = {
+                res_dict['chat_subscription'] = {
                     'amount': user.subscribtion_price,
                     'start_date': subscription.start_date.timestamp() if subscription.start_date else None,
                     'end_date': subscription.end_date.timestamp() if subscription.end_date else None
