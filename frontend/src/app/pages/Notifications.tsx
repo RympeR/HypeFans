@@ -14,7 +14,6 @@ import { ReactComponent as CommentIcon } from "../../assets/images/message-circl
 import { ReactComponent as SettingsIcon } from "../../assets/images/settings.svg";
 import { ReactComponent as DonateIcon } from "../../assets/images/tip.svg";
 import { ReactComponent as UnlockIcon } from "../../assets/images/unlock.svg";
-import { ReactComponent as ChatIcon } from "../../assets/images/message-circle.svg";
 import loader from '../../assets/loaders/Spinner-1s-200px.gif';
 import { DefaultSidebar } from "../components/notificationsComponents/DefaultSidebar";
 import { SidebarText } from "../components/notificationsComponents/SidebarText";
@@ -62,13 +61,6 @@ const Notifications: React.FC = () => {
       exact: true,
       type: "subscription",
       icon: <UnlockIcon />,
-    },
-    {
-      path: "/notifications/chat_subscription",
-      text: "Подписки на чат",
-      exact: true,
-      type: "chat_subscription",
-      icon: <ChatIcon />,
     },
     {
       path: "/notifications/likes",
@@ -124,7 +116,7 @@ const Notifications: React.FC = () => {
       }
     }, []);
     const Main = ({ notifications }: { notifications: Array<any> }) => {
-      const [page, setPage] = useState<number>(0);
+      const [page, setPage] = useState<number>(1);
       const [data, setData] = useState([...notifications]);
 
       const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false)

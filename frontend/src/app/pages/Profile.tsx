@@ -47,7 +47,7 @@ const Profile = () => {
     setProfile(profileData);
   }, [profileData]);
 
-  // console.log(profile);
+  console.log(profile);
 
   if (isLoading) {
     return <Preloader />;
@@ -73,12 +73,10 @@ const Profile = () => {
       target: profile.pk,
     });
     setChatSubscribeModalShown(false);
-    console.log(data);
-    if (data.status === 202) {
+    if (data.status === 200) {
       setProfile({ ...profile, subscribed_chat: true });
       toast.success("Вы подписались на чат");
-    } 
-    else {
+    } else {
       toast.error("Ошибка подписки  на чат");
     }
   };
@@ -123,7 +121,7 @@ const Profile = () => {
         <Modal.Body className="notifications__modal">
           {" "}
           <h2 style={{ marginBottom: "0px" }}>
-            Цена подписки {profile.message_price}$
+            Цена подписки {profile.subscribtion_price}$
           </h2>
           <div
             style={{
@@ -148,7 +146,7 @@ const Profile = () => {
       >
         <Modal.Body className="notifications__modal">
           {" "}
-          <h2 style={{ marginBottom: "0px" }}>Подписатся на чат?</h2>
+          <h2 style={{ marginBottom: "0px" }}>Подписатся на чат за {profile.message_price}$?</h2>
           <div
             style={{
               display: "flex",
@@ -186,11 +184,6 @@ const Profile = () => {
             <div style={{ padding: "5px" }}>
               <Link to="/favourites">
                 <button>Избранные</button>
-              </Link>
-            </div>
-            <div style={{ padding: "5px" }}>
-              <Link to="/settings/profileSettings">
-                <button>Настройки</button>
               </Link>
             </div>
           </Popup>
@@ -282,7 +275,7 @@ const Profile = () => {
                   style={{ margin: "20px 0px", width: "100%" }}
                   onClick={() => setChatSubscribeModalShown(true)}
                 >
-                  Подписаться на чат
+                  Подписаться на чат за {profile.message_price}$
                 </button>
               </div>
             ) : null}
@@ -293,6 +286,8 @@ const Profile = () => {
         <div className="profile__posts">
           {profile?.posts.length > 0 ? (
             profile?.posts.map((item, index) => {
+              console.log(item.post);
+
               return myNick === nick || item.post.payed ? (
                 <ProfilePagePost item={item} index={index} />
               ) : (

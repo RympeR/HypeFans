@@ -117,7 +117,7 @@ export const chatAPI = {
   roomCreate(data: any) {
     return instance.post(`/chat/room-create/`, data).then((response) => {
       console.log(response.status);
-      if (response.status < 300) {
+      if (response.status == 226) {
         return response;
       }
       return response;
