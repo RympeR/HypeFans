@@ -1,4 +1,4 @@
-venv/Scrizpts/activate
+venv\Scripts\activate
 cd frontend
 yarn build
 rmdir -r ../build
