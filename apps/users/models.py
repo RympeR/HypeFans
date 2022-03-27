@@ -36,9 +36,9 @@ class User(AbstractUser):
     )
     background_photo = ProcessedImageField(
         upload_to=user_avatar,
-        processors=[ResizeToFill(600, 120)],
+        # processors=[ResizeToFill(600, 120)],
         format='JPEG',
-        options={'quality': 80},
+        # options={'quality': 80},
         verbose_name='Фото заднего плана',
         null=True,
         blank=True

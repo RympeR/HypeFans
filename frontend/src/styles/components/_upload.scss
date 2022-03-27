@@ -1,7 +1,13 @@
 .upload {
   background: #fff;
   border-radius: 16px;
-
+  &__aply {
+    position: absolute;
+    bottom: 27%;
+    background-color: white;
+    border-radius: 45px;
+    min-width: 50px;
+  }
   &__top {
     padding: 24px;
 
