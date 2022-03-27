@@ -50,6 +50,7 @@
     "react-copy-to-clipboard": "^5.0.4",
     "react-currency-input-field": "^3.4.2",
     "react-dom": "^17.0.1",
+    "react-easy-crop": "^4.1.4",
     "react-google-recaptcha": "^2.1.0",
     "react-hook-form": "^7.7.1",
     "react-hookstore": "^1.5.1",
