@@ -179,7 +179,7 @@ export const PersonalSettings = () => {
                 image={imageBackground}
                 crop={cropBackground}
                 zoom={zoomBackground}
-                aspect={3 / 1}
+                aspect={4 / 1}
                 onCropChange={setCropBackground}
                 onCropComplete={onCropCompleteBackground}
                 onZoomChange={setZoomBackground}
@@ -187,7 +187,7 @@ export const PersonalSettings = () => {
                 cropShape="rect"
               />
               <button
-                style={{ position: "absolute", bottom: "25%" }}
+                className="upload__aply"
                 onClick={onCropBackground}
               >
                 Apply
@@ -253,7 +253,7 @@ export const PersonalSettings = () => {
                     cropShape="round"
                   />
                   <button
-                    style={{ position: "absolute", bottom: "25%" }}
+                    className="upload__aply"
                     onClick={onCrop}
                   >
                     Apply
