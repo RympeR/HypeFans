@@ -165,8 +165,6 @@ const Profile = () => {
       <div
         style={{
           backgroundImage: `url(${profile.background_photo})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "100% 210px",
         }}
         className="profile__header"
       >
