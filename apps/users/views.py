@@ -166,7 +166,7 @@ class UserLoginAPI(generics.GenericAPIView):
     authentication_classes = []
 
     def post(self, request):
-        email = request.data['email']
+        email = request.data['email'].lower()
         password = request.data['password']
         user = authenticate(username=email, password=password)
         if user is not None:
@@ -194,7 +194,7 @@ class UserCreateAPI(generics.GenericAPIView):
                 ref_user = None
             username = request.data['username']
             user, created = User.objects.get_or_create(
-                email=request.data['email'],
+                email=request.data['email'].lower(),
                 username=username,
                 ref_link=create_ref_link(username),
                 referrer=ref_user

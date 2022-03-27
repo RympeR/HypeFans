@@ -562,7 +562,7 @@ class MainUserPageUpdated(APIView):
             like=True,
             parent__isnull=True
         ).values_list('id', flat=True)
-        return (True, qs[0].pk if qs else False)
+        return (True, qs[0] if qs else False)
 
     @silk_profile(name='Check favourite ')
     def check_favourites(self, post, user):
