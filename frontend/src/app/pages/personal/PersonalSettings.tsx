@@ -25,6 +25,7 @@ import {
 import { userAPI } from "../../../api/userAPI";
 import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop/types";
+import getCroppedImg from "./cropimage";
 
 export const PersonalSettings = () => {
   const dispatch = useDispatch();
@@ -45,43 +46,88 @@ export const PersonalSettings = () => {
   const [backgroundUploadImg, setBackgroundUploadImg] = useState<string>(null);
   const [avatarUpload, setAvatarUpload] = useState<any>(null);
   const [avatarUploadImg, setAvatarUploadImg] = useState<string>(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [show, setShow] = useState(false);
 
-  // const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-  //     console.log(croppedArea, croppedAreaPixels)
-  //     // const formData = new FormData();
-  //     // formData.append("avatar", avatarUpload);
-  //     // dispatch(changeAvatar(formData));
-  //   }, [])
-  const onCropComplete = useCallback(
-      (croppedArea: Area, croppedAreaPixels: Area) => {
-          console.log(croppedArea, croppedAreaPixels);
-          setShow(false);
-    },
-    []
-  );
+  // const triggerFileSelectPopup = () => avatarFileRef.current.click();
+
+  const [image, setImage] = React.useState(null);
+  const [croppedArea, setCroppedArea] = React.useState(null);
+  const [crop, setCrop] = React.useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = React.useState(1);
+  const [show, setShow] = React.useState(false);
+
+  const [imageBackground, setImageBackground] = React.useState(null);
+  const [croppedAreaBackground, setCroppedAreaBackground] =
+    React.useState(null);
+  const [cropBackground, setCropBackground] = React.useState({ x: 0, y: 0 });
+  const [zoomBackground, setZoomBackground] = React.useState(1);
+  const [showBackground, setShowBackground] = React.useState(false);
+
+  const onCropBackground = async () => {
+    const croppedImage = await getCroppedImg(
+      imageBackground,
+      croppedAreaBackground
+    );
+    setBackgroundUpload(croppedImage);
+    setBackgroundUploadImg(URL.createObjectURL(croppedImage));
+    setShowBackground(false);
+  };
+
+  const onCrop = async () => {
+    const croppedImage = await getCroppedImg(image, croppedArea);
+    setAvatarUpload(croppedImage);
+    setAvatarUploadImg(URL.createObjectURL(croppedImage));
+    setShow(false);
+  };
+
+  const onCropComplete = (
+    croppedAreaPercentage: any,
+    croppedAreaPixels: any
+  ) => {
+    setCroppedArea(croppedAreaPixels);
+  };
+
+  const onCropCompleteBackground = (
+    croppedAreaPercentage: any,
+    croppedAreaPixels: any
+  ) => {
+    setCroppedAreaBackground(croppedAreaPixels);
+  };
+
+  const onSelectFileBackground = (event: any) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.addEventListener("load", () => {
+        setImageBackground(reader.result);
+      });
+      setShowBackground(true);
+    }
+  };
+
+  const onSelectFile = (event: any) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.addEventListener("load", () => {
+        setImage(reader.result);
+      });
+      setShow(true);
+    }
+  };
+
   const setNewAvatar = async () => {
     const formData = new FormData();
-    formData.append("avatar", avatarUpload);
+    var file = new File([avatarUpload], "avatar.jpeg");
+    formData.append("avatar", file);
     await dispatch(changeAvatar(formData));
   };
 
   const setNewBackground = async () => {
+    console.log(backgroundUpload);
     const formData = new FormData();
-    formData.append("background_photo", backgroundUpload);
+    var file = new File([backgroundUpload], "background_photo.jpeg");
+    formData.append("background_photo", file);
     await dispatch(changeBackground(formData));
-  };
-
-  const onAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAvatarUpload(e?.target?.files[0]);
-    setAvatarUploadImg(URL.createObjectURL(e?.target?.files[0]));
-  };
-
-  const onBackgroundChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setBackgroundUpload(e?.target?.files[0]);
-    setBackgroundUploadImg(URL.createObjectURL(e?.target?.files[0]));
   };
 
   useEffect(() => {
@@ -127,6 +173,29 @@ export const PersonalSettings = () => {
           }}
           className="profile__header"
         >
+          {showBackground ? (
+            <>
+              <Cropper
+                image={imageBackground}
+                crop={cropBackground}
+                zoom={zoomBackground}
+                aspect={3 / 1}
+                onCropChange={setCropBackground}
+                onCropComplete={onCropCompleteBackground}
+                onZoomChange={setZoomBackground}
+                showGrid
+                cropShape="rect"
+              />
+              <button
+                style={{ position: "absolute", bottom: "25%" }}
+                onClick={onCropBackground}
+              >
+                Apply
+              </button>
+            </>
+          ) : (
+            <></>
+          )}
           <div className="personalSettings__changeBackground">
             <label
               className="upload__file-input-label"
@@ -140,7 +209,7 @@ export const PersonalSettings = () => {
               id="file-input"
               ref={backgroundFileRef}
               type="file"
-              onChange={(val) => onBackgroundChange(val)}
+              onChange={onSelectFileBackground}
               multiple={false}
             />
           </div>
@@ -167,32 +236,40 @@ export const PersonalSettings = () => {
                 className="upload__file-input-label"
                 htmlFor="file-inputAvatar"
                 style={{ marginBottom: "15px" }}
-                onClick={() => setShow(true)}
               >
                 <PhotoIcon className="personalSettings__changeAvatarBtn" />
               </label>
               {show ? (
-                <Cropper
-                  image={avatar}
-                  crop={crop}
-                  zoom={zoom}
-                  aspect={4 / 3}
-                  onCropChange={setCrop}
-                  onCropComplete={onCropComplete}
-                  onZoomChange={setZoom}
-                />
+                <>
+                  <Cropper
+                    image={image}
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={1 / 1}
+                    onCropChange={setCrop}
+                    onCropComplete={onCropComplete}
+                    onZoomChange={setZoom}
+                    showGrid
+                    cropShape="round"
+                  />
+                  <button
+                    style={{ position: "absolute", bottom: "25%" }}
+                    onClick={onCrop}
+                  >
+                    Apply
+                  </button>
+                </>
               ) : (
                 <></>
               )}
-              {/* <input
-                                className="upload__file-input"
-                                id="file-inputAvatar"
-                                ref={avatarFileRef}
-                                type="file"
-                                onChange={(val) => onAvatarChange(val)}
-                                multiple={false}
-
-                            /> */}
+              <input
+                className="upload__file-input"
+                id="file-inputAvatar"
+                ref={avatarFileRef}
+                type="file"
+                onChange={onSelectFile}
+                multiple={false}
+              />
             </div>
           </div>
         </div>
