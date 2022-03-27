@@ -298,7 +298,8 @@ class UserPartialSerializer(serializers.ModelSerializer):
         required=False, allow_blank=True, allow_null=True)
 
     def validate(self, attrs):
-        attrs['email'] = attrs['email'].lower()
+        if attrs.get('email'):
+            attrs['email'] = attrs['email'].lower()
         return attrs
 
     class Meta:
