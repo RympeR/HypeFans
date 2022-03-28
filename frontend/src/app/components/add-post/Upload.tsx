@@ -77,6 +77,7 @@ const Upload = () => {
       user: id,
       name: "post",
       description: value,
+      access_level: accessType,
       price_to_watch: postCost,
       show_in_recomendations: showInRecommendations,
     };
