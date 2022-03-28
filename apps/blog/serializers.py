@@ -271,6 +271,7 @@ class PostGetShortSerializers(serializers.ModelSerializer):
             'price_to_watch',
             'publication_date',
             'reply_link',
+            'access_level',
             'likes_amount',
             'comments_amount',
             'favourites_amount',
