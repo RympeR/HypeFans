@@ -7,24 +7,6 @@ import UserBanner from './UserBanner';
 const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
   const { currentLang } = useContext(LangContext);
 
-  const [leftFixedPosition, setLeftFixedPosition] = useState<number>(0);
-
-  const handleWindowResize = async () => {
-    const leftPosition = (await getComputedLeftPosition(47)) as number;
-    setLeftFixedPosition(leftPosition);
-  };
-
-  useEffect(() => {
-    const asyncHandle = async () => {
-      await handleWindowResize();
-      window.addEventListener('resize', handleWindowResize);
-    };
-
-    asyncHandle();
-
-    return () => window.removeEventListener('resize', handleWindowResize);
-  }, []);
-
   if (recommendations?.length < 5) {
     return null;
   }
@@ -35,7 +17,7 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
     sliced_array.push(recommendations.slice(i, i + 3));
   }
 
-  setInterval(handleWindowResize, 1);
+  // setInterval(handleWindowResize, 1);
   // style={{ left: leftFixedPosition }}
   return (
     <aside className="aside">
