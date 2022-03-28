@@ -113,7 +113,9 @@ class User(AbstractUser):
         max_length=255, verbose_name='Рефералка', null=True, blank=True, unique=True)
     referrer = models.ForeignKey('self', verbose_name='Пригласивший пользователь',
                                  on_delete=models.SET_NULL, null=True, blank=True)
-
+    private_profile = models.BooleanField(
+        'Приватный профиль', default=False
+    )
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
         'username'

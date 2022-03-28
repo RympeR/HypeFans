@@ -441,6 +441,7 @@ class UserGetSerializer(serializers.ModelSerializer):
             'earned_credits_amount',
             'is_online',
             'ref_link',
+            'private_profile',
         )
 
 
@@ -517,6 +518,7 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
             'cards',
             'ref_link',
             'wallet',
+            'private_profile',
         )
 
 
