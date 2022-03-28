@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.eac90b6b.css",
-    "main.js": "/static/js/main.eca408b8.js",
+    "main.js": "/static/js/main.a552322f.js",
     "static/media/sign-in-bg.jpg": "/static/media/sign-in-bg.baad8d0a3cefccbb5e4c.jpg",
     "static/media/elise-wilcox-bmbGUfd7y-I-unsplash.jpg": "/static/media/elise-wilcox-bmbGUfd7y-I-unsplash.8e371d10859f7fd15eb5.jpg",
     "static/media/boxed-water-is-better-zuj2m7qxDA0-unsplash.jpg": "/static/media/boxed-water-is-better-zuj2m7qxDA0-unsplash.4e5d9b0f993795d62d9d.jpg",
@@ -79,10 +79,10 @@
     "static/media/arrow-left-mobile.svg": "/static/media/arrow-left-mobile.2d743aa0ee7183dbcbfa59f4f1750e98.svg",
     "static/media/leftIcon.svg": "/static/media/leftIcon.8570736da78871456bcf4a7b23b88ede.svg",
     "main.eac90b6b.css.map": "/static/css/main.eac90b6b.css.map",
-    "main.eca408b8.js.map": "/static/js/main.eca408b8.js.map"
+    "main.a552322f.js.map": "/static/js/main.a552322f.js.map"
   },
   "entrypoints": [
     "static/css/main.eac90b6b.css",
-    "static/js/main.eca408b8.js"
+    "static/js/main.a552322f.js"
   ]
 }
