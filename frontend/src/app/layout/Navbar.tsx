@@ -36,7 +36,7 @@ const Navbar = () => {
 
   if (
     pathname === `/${NAV_LINKS.SIGNIN}` ||
-    pathname === `/${NAV_LINKS.SIGNUP}`
+    pathname === `/${NAV_LINKS.SIGNUP}` || pathname === `/`
   ) {
     return null;
   }

@@ -284,8 +284,6 @@ const Profile = () => {
         <div className="profile__posts">
           {profile?.posts.length > 0 ? (
             profile?.posts.map((item, index) => {
-              console.log(item.post);
-
               return myNick === nick || item.post.payed ? (
                 <ProfilePagePost item={item} index={index} />
               ) : (
