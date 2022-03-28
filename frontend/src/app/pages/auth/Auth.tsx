@@ -41,10 +41,10 @@ const Auth = () => {
           <Logo className="auth__logo" />
           <h1 className="auth__logo-title">HypeFans</h1>
         </div>
-        {pathname === `/${NAV_LINKS.SIGNUP}` || refLink !== "" ? (
-          <SignUpForm action="signup" />
-        ) : (
+        {pathname === `/${NAV_LINKS.SIGNIN}` || refLink !== "" ? (
           <SignInForm action="signin" />
+        ) : (
+          <SignUpForm action="signup" />
         )}
       </div>
     </div>

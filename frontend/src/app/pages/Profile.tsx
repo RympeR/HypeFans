@@ -8,6 +8,9 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { userAPI } from "../../api/userAPI";
 import { RootState } from "../../redux/redux";
+import { ReactComponent as SaveIcon } from "../../assets/images/bookmark.svg";
+import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
+import { ReactComponent as CommentIcon } from "../../assets/images/message-circle.svg";
 import {
   buyPost,
   getUser,
@@ -23,6 +26,7 @@ import { toast } from "react-toastify";
 import { ProfilePagePost } from "../components/post/ProfilePagePost";
 import { ReadMore } from "../components/readMore/ReadMore";
 import { GoToTopBtn } from "../components/goToTopButton/GoToTopBtn";
+import moment from "moment";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -47,8 +51,6 @@ const Profile = () => {
     setProfile(profileData);
   }, [profileData]);
 
-  console.log(profile);
-
   if (isLoading) {
     return <Preloader />;
   }
@@ -60,7 +62,15 @@ const Profile = () => {
     });
     setSubscribeShow(false);
     if (data.status === 200) {
-      setProfile({ ...profile, subscribed: true });
+      setProfile({
+        ...profile, subscribed: true, posts: profile.posts.map((item) => {
+          if (item.post.access_level === 2) {
+            return {
+              ...item, post: { ...item.post, payed: true }
+            }
+          } else return item
+        })
+      });
       toast.success("Вы подписались");
     } else {
       toast.error("Ошибка подписки");
@@ -86,7 +96,6 @@ const Profile = () => {
       creator: myId,
       invited: [profile.pk],
     });
-    console.log(data.data);
     history.push(`/chat/${data.data.id}`);
   };
 
@@ -284,12 +293,47 @@ const Profile = () => {
         <div className="profile__posts">
           {profile?.posts.length > 0 ? (
             profile?.posts.map((item, index) => {
-              console.log(item.post);
-
+              debugger
               return myNick === nick || item.post.payed ? (
                 <ProfilePagePost item={item} index={index} />
               ) : (
-                <div className="profile__post" key={`${index}_post`}>
+                <div className="profile__postMain profile__post" key={`${index}_post`}>
+                  <div className="profile__postHeader">
+                    <div className="profile__postInfo">
+                      <div className="profile__postUserInfo">
+                        <div style={{ display: "flex" }}>
+                          <img
+                            src={profileData.avatar ? profileData.avatar : logo}
+                            alt="profile_photoPost"
+                          ></img>
+                          <div>
+                            <h3
+                              className="profile__name"
+                              style={{ margin: "5px 8px", marginBottom: "0px" }}
+                            >
+                              {profileData.first_name}
+                            </h3>
+                            <h4
+                              className="profile__nickname"
+                              style={{ marginLeft: "8px" }}
+                            >
+                              {`@${nick}`}
+                            </h4>
+                          </div>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <div className="profile__postAgo">
+                            {moment(
+                              item.post.publication_date * 1000
+                            ).fromNow()}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="profile__postText">
+                        <ReadMore text={item?.post.description} />
+                      </div>
+                    </div>
+                  </div>
                   <div className="profile__noPost">
                     <button
                       style={{
@@ -299,15 +343,58 @@ const Profile = () => {
                         margin: "20px",
                         color: "white",
                       }}
-                      onClick={() =>
-                        payForPost({
-                          amount: item.post.price_to_watch,
-                          post: item.post.pk,
-                        })
+                      onClick={() => {
+                        if (item.post.access_level !== 1) {
+                          setSubscribeShow(true)
+                        } else {
+                          payForPost({
+                            amount: item.post.price_to_watch,
+                            post: item.post.pk,
+                          })
+                        }
+                      }
                       }
                     >
-                      Посмотреть за {item.post.price_to_watch}$
+                      {item.post.access_level !== 1 ? `Подпишитесь чтоб посмотреть` : `Посмотреть за ${item.post.price_to_watch}$`}
                     </button>
+                  </div>
+                  <div
+                    className="post__bottom"
+                    style={{ margin: "24px 24px" }}
+                  >
+                    <div className="post__actions">
+                      <div className="post__actions-left">
+                        <button
+                          className="post__action-btn"
+                          disabled
+                        >
+                          <LikeIcon
+                            className="post__action-icon"
+                            fill="none"
+                            strokeOpacity={item?.post.liked ? 0 : 0.6}
+                          />
+                        </button>
+
+                        <button className="post__action-btn" disabled>
+                          <CommentIcon
+                            className="post__action-icon"
+                          />
+                        </button>
+                      </div>
+                      <button
+                        className="post__action-btn"
+                        disabled
+                      >
+                        <SaveIcon
+                          className="post__action-icon"
+                          fill={item?.post.favourite ? "black" : "none"}
+                        />
+                      </button>
+                    </div>
+
+                    <p className="post__like-amount">
+                      {item?.post.likes_amount} лайков
+                    </p>
                   </div>
                 </div>
               );
@@ -326,7 +413,7 @@ const Profile = () => {
           )}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
