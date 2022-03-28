@@ -132,7 +132,7 @@ export const blogAPI = {
       return response;
     });
   },
-  getNotifications({ limit = 10, offset = 10 }: { limit: number; offset: number }) {
+  getNotifications({ limit = 10, offset = 0 }: { limit: number; offset: number }) {
     return instance.get(`/blog/get-notifications/?limit=${limit}&offset=${offset}`).then((response) => {
       return response;
     });
