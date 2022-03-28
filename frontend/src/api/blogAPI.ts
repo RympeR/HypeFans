@@ -26,7 +26,8 @@ export const blogAPI = {
     });
   },
   buyMessage(user: number, message_id: number, price: number) {
-    return instance.post('/chat/message-bought-create/', { user, chat: message_id, amount: 10 }).then((res) => {
+    console.log({ user, chat: message_id, amount: price })
+    return instance.post('/chat/message-bought-create/', { user, chat: message_id, amount: price }).then((res) => {
       return res;
     });
   },

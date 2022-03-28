@@ -53,17 +53,21 @@ const MessageItem =
     url: number;
     wrapperRef: any;
   }) => {
+    console.log(item);
+
     const uid = useSelector((state: RootState) => state.auth.pk);
 
     const payForMessage = async (message_id: number, price: number) => {
       const data = await blogAPI.buyMessage(uid, message_id, price);
       console.log(data);
+      debugger
 
       if (data.status === 200) {
         setMessages(
           messages.map((item: any, index: number) => {
             if (item.id === data.data.chat) {
-              return { ...item, payed: true };
+              debugger
+              return { ...item, is_payed: true };
             } else {
               return item;
             }
