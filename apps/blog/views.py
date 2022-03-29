@@ -562,6 +562,7 @@ class MainUserPageUpdated(APIView):
             like=True,
             parent__isnull=True
         ).values_list('id', flat=True)
+        logging.warning(f'QS post action {qs} post - {post.pk}')
         return (True if qs else False, qs[0] if qs else False)
 
     @silk_profile(name='Check favourite ')
