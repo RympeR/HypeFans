@@ -6,11 +6,17 @@ import { ReactComponent as SearchSvg } from "../../../assets/images/search.svg";
 import { AddToChatItem } from "./AddToChatItem";
 import { AddToChatItemSelected } from "./AddToChatItemSelected";
 
-export const AddToChat = () => {
-  const [users, setUsers] = useState([]);
+export const AddToChat = ({
+  usersList,
+  invitedUsers,
+}: {
+  usersList: any[];
+  invitedUsers: any[];
+}) => {
+  const [users, setUsers] = useState(usersList.filter((item) => !invitedUsers.includes(item)));
   const [inputValue, setInputValue] = useState("");
   const history = useHistory();
-  const [selectedItems, setSelectedItems] = useState<Array<any>>([]);
+  const [selectedItems, setSelectedItems] = useState<Array<any>>(invitedUsers);
 
   const searchUsers = async () => {
     const data = await userAPI.searchUser({
@@ -22,11 +28,11 @@ export const AddToChat = () => {
   };
 
   useEffect(() => {
-    const search = async () => {
-      const data = await userAPI.searchUser({ user: "", limit: 50, offset: 0 });
-      setUsers(data.results);
-    };
-    search();
+    // const search = async () => {
+    //   const data = await userAPI.searchUser({ user: "", limit: 50, offset: 0 });
+    //   setUsers(data.results);
+    // };
+    // search();
   }, []);
 
   const addToChat = async () => {
