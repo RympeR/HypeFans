@@ -93,6 +93,12 @@ class User(AbstractUser):
     show_watermark = models.BooleanField(
         'Показывать вотермарку', default=False)
 
+    show_comment_notifications = models.BooleanField('Показывать уведомления комментариев', default=False)
+    show_chat_subscribption_notifications = models.BooleanField('Показывать уведомления подписок на чаты', default=False)
+    show_subscribption_notifications = models.BooleanField('Показывать уведомления подписок', default=False)
+    show_donate_notifications = models.BooleanField('Показывать уведомления пожертвований', default=False)
+    show_like_notifications = models.BooleanField('Показывать уведомления лайков', default=False)
+
     validated_email = models.BooleanField(
         'Подтвержденная почта', default=False)
     validated_user = models.BooleanField(

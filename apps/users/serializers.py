@@ -296,6 +296,12 @@ class UserPartialSerializer(serializers.ModelSerializer):
     earned_credits_amount = serializers.IntegerField(required=False)
     wallet = serializers.CharField(
         required=False, allow_blank=True, allow_null=True)
+    show_comment_notifications = serializers.BooleanField(required=False)
+    show_chat_subscribption_notifications = serializers.BooleanField(
+        required=False)
+    show_subscribption_notifications = serializers.BooleanField(required=False)
+    show_donate_notifications = serializers.BooleanField(required=False)
+    show_like_notifications = serializers.BooleanField(required=False)
 
     def validate(self, attrs):
         if attrs.get('email'):
@@ -333,6 +339,11 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'credit_amount',
             'earned_credits_amount',
             'wallet',
+            'show_comment_notifications',
+            'show_chat_subscribption_notifications',
+            'show_subscribption_notifications',
+            'show_donate_notifications',
+            'show_like_notifications',
         )
         optional_fields = ['location', 'city']
 
@@ -364,6 +375,11 @@ class SettingsSerializer(serializers.ModelSerializer):
             'credit_amount',
             'earned_credits_amount',
             'is_online',
+            'show_comment_notifications',
+            'show_chat_subscribption_notifications',
+            'show_subscribption_notifications',
+            'show_donate_notifications',
+            'show_like_notifications',
         )
 
 
@@ -442,6 +458,11 @@ class UserGetSerializer(serializers.ModelSerializer):
             'is_online',
             'ref_link',
             'private_profile',
+            'show_comment_notifications',
+            'show_chat_subscribption_notifications',
+            'show_subscribption_notifications',
+            'show_donate_notifications',
+            'show_like_notifications',
         )
 
 
@@ -519,6 +540,11 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
             'ref_link',
             'wallet',
             'private_profile',
+            'show_comment_notifications',
+            'show_chat_subscribption_notifications',
+            'show_subscribption_notifications',
+            'show_donate_notifications',
+            'show_like_notifications',
         )
 
 

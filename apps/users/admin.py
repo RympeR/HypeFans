@@ -60,6 +60,7 @@ class UserBaseAdmin(UserAdmin):
             'repheral_users',
             'blocked_users',
             'my_subscribes',
+            
         )}),
         (_('Profile stats'), {'fields': (
             'post_amount',
@@ -76,6 +77,7 @@ class UserBaseAdmin(UserAdmin):
             'wallet'
         )}),
         (_('Confidence'), {'fields': (
+            'private_profile',
             'email_notifications',
             'push_notifications',
             'hide_online',
@@ -83,6 +85,11 @@ class UserBaseAdmin(UserAdmin):
             'show_post_amount',
             'show_fans_amount',
             'show_watermark',
+            'show_comment_notifications',
+            'show_chat_subscribption_notifications',
+            'show_subscribption_notifications',
+            'show_donate_notifications',
+            'show_like_notifications',
         )}),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),

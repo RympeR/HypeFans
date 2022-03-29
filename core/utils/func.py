@@ -34,7 +34,7 @@ def online_check(user):
             if time_difference < 1:
                 return True
             else:
-                return time_difference
+                return False
         return False
     except ObjectDoesNotExist:
         return False
