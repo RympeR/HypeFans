@@ -18,34 +18,37 @@ const Navbar = () => {
   const refLink = pathname.split("/").slice(2, 4).join("/");
 
   const nick = useSelector((state: RootState) => state.auth.username);
-  const uid = useSelector((state: RootState) => state.auth.pk)
-
-  // const ws = new WebSocket('ws://hype-fans.com/chat/get-chat-messages/');
-
-  // console.log(ws);
+  const uid = useSelector((state: RootState) => state.auth.pk);
+  const [ws, setWs] = useState(null);
 
   const [newMessages, setNewMessages] = useState(0);
-
+  const wsClient = new WebSocket(
+    `wss://hype-fans.com/ws/api/chat-rooms/${uid ? uid : 0}/`
+  );
+  wsClient.onopen = () => {
+    setWs(wsClient);
+  };
   useEffect(() => {
-    const id = setInterval(
-      () => {
-        return authAPI.onlineUpdate(uid)
-      },
-      5000
-    );
-    return () => clearInterval(id);
+    if (uid) {
+      const chat_id = setInterval(() => {
+        ws.send(JSON.stringify({}));
+        return authAPI.onlineUpdate(uid);
+      }, 5000);
+      return () => clearInterval(chat_id);
+    }
   }, []);
 
   const dispatch = useDispatch();
 
   if (
     pathname === `/${NAV_LINKS.SIGNIN}` ||
-    pathname === `/${NAV_LINKS.SIGNUP}` || pathname === `/`
+    pathname === `/${NAV_LINKS.SIGNUP}` ||
+    pathname === `/`
   ) {
     return null;
   }
 
-  if (Cookies?.get('token')?.length > 5) {
+  if (Cookies?.get("token")?.length > 5) {
     dispatch(getUserData());
   }
 
