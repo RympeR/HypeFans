@@ -556,11 +556,7 @@ class MainUserPageUpdated(APIView):
 
     @silk_profile(name='Check postAction ')
     def check_postaction(self, post, user):
-        qs = PostAction.objects.filter(
-            user=user,
-            post=post,
-            like=True,
-            # parent__isnull=True
+        qs = PostAction.objects.filter(user=user,post=post,like=True,parent__isnull=True
         )
         logging.warning(f'QS post action {qs} post - {post.pk}')
         return (True if qs.exists() else False, qs.values_list('id', flat=True)[0] if qs.exists() else False)
@@ -577,7 +573,8 @@ class MainUserPageUpdated(APIView):
 
     @silk_profile(name='View Updated Main Page')
     def get(self, request):
-        user = request.user
+ 
+        req_user = request.user
         data_compare = request.GET.get('datetime', 0)
         limit = request.GET.get('limit', 30)
 
@@ -589,7 +586,7 @@ class MainUserPageUpdated(APIView):
             context={'request': request}
         ).data
 
-        user_subscriptions = user.my_subscribes.all()
+        user_subscriptions = req_user.my_subscribes.all()
         posts = []
         if data_compare == 0:
             for user in user_subscriptions:
@@ -615,17 +612,17 @@ class MainUserPageUpdated(APIView):
                 'post': {
                     **PostMainPageSerializers(
                         instance=post,
-                        context={'request': request, 'user': user}
+                        context={'request': request, 'user': req_user}
                     ).data,
 
                 }
             } for post in posts
         ]
         for post, qs_post in zip(result_posts, posts):
-            post['post']['payed'] = self.check_post_bought(qs_post, user)
+            post['post']['payed'] = self.check_post_bought(qs_post, req_user)
             post['post']['liked'], post['post']['like_id'] = self.check_postaction(
-                qs_post, user)
-            post['post']['favourite'] = self.check_favourites(qs_post, user)
+                qs_post, req_user)
+            post['post']['favourite'] = self.check_favourites(qs_post, req_user)
 
         return Response({
             'recommendations': reccomendations,
