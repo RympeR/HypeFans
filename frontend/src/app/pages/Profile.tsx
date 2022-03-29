@@ -11,11 +11,7 @@ import { RootState } from "../../redux/redux";
 import { ReactComponent as SaveIcon } from "../../assets/images/bookmark.svg";
 import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
 import { ReactComponent as CommentIcon } from "../../assets/images/message-circle.svg";
-import {
-  buyPost,
-  clearUserData,
-  getUser,
-} from "../../redux/userReducer";
+import { buyPost, clearUserData, getUser } from "../../redux/userReducer";
 import { ReactComponent as MenuDotsWhite } from "../../assets/images/3dotsWhite.svg";
 import { ReactComponent as BackButton } from "../../assets/images/arrow-leftWhite.svg";
 import logo from "../../assets/images/logo.svg";
@@ -45,7 +41,7 @@ const Profile = () => {
   const [chatSubscribeModalShown, setChatSubscribeModalShown] =
     useState<boolean>(false);
   useEffect(() => {
-    dispatch(clearUserData())
+    dispatch(clearUserData());
     dispatch(getUser({ username: nick }));
   }, [nick, dispatch]);
 
@@ -65,13 +61,16 @@ const Profile = () => {
     setSubscribeShow(false);
     if (data.status === 200) {
       setProfile({
-        ...profile, subscribed: true, posts: profile.posts.map((item) => {
+        ...profile,
+        subscribed: true,
+        posts: profile.posts.map((item) => {
           if (item.post.access_level === 2) {
             return {
-              ...item, post: { ...item.post, payed: true }
-            }
-          } else return item
-        })
+              ...item,
+              post: { ...item.post, payed: true },
+            };
+          } else return item;
+        }),
       });
       toast.success("Вы подписались");
     } else {
@@ -101,19 +100,26 @@ const Profile = () => {
     history.push(`/chat/${data.data.id}`);
   };
 
-  const sub_amount = (fans_amount: number) => {
-    if (fans_amount % 1000_000 === 0) {
-      return `${(fans_amount / 1000_000).toFixed(0)}m`;
-    } else if (fans_amount % 1000 === 0) {
-      return `${(fans_amount / 1000).toFixed(0)}k`;
-    }
-    if (fans_amount >= 1000_000) {
-      return `${(fans_amount / 1000_000).toFixed(2)}m`;
-    } else if (fans_amount >= 1000) {
-      return `${(fans_amount / 1000).toFixed(2)}k`;
-    } else {
-      return fans_amount;
-    }
+  const sub_amount = (num: number, digits: number) => {
+    const lookup = [
+      { value: 1, symbol: "" },
+      { value: 1e3, symbol: "k" },
+      { value: 1e6, symbol: "M" },
+      { value: 1e9, symbol: "G" },
+      { value: 1e12, symbol: "T" },
+      { value: 1e15, symbol: "P" },
+      { value: 1e18, symbol: "E" },
+    ];
+    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    var item = lookup
+      .slice()
+      .reverse()
+      .find(function (item) {
+        return num >= item.value;
+      });
+    return item
+      ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol
+      : "0";
   };
 
   const payForPost = ({ amount, post }: { amount: number; post: number }) => {
@@ -158,7 +164,9 @@ const Profile = () => {
       >
         <Modal.Body className="notifications__modal">
           {" "}
-          <h2 style={{ marginBottom: "0px" }}>Подписатся на чат за {profile.message_price}$?</h2>
+          <h2 style={{ marginBottom: "0px" }}>
+            Подписатся на чат за {profile.message_price}$?
+          </h2>
           <div
             style={{
               display: "flex",
@@ -212,11 +220,13 @@ const Profile = () => {
         <h4 className="profile__nickname"> {`@${nick}`}</h4>
         <h5 className="profile__info">
           {profile?.posts.length} posts{" "}
+          {sub_amount(profile.fans_amount, 1)}
           <img className="sub_icon" src={fansIcon} />{" "}
-          {sub_amount(profile.fans_amount)}
         </h5>
       </div>
-      <pre className="profile__status"><ReadMore text={profile.bio} /></pre>
+      <pre className="profile__status">
+        <ReadMore text={profile.bio} />
+      </pre>
       <div
         style={{
           width: "100%",
@@ -305,7 +315,10 @@ const Profile = () => {
               return myNick === nick || item.post.payed ? (
                 <ProfilePagePost item={item} index={index} />
               ) : (
-                <div className="profile__postMain profile__post" key={`${index}_post`}>
+                <div
+                  className="profile__postMain profile__post"
+                  key={`${index}_post`}
+                >
                   <div className="profile__postHeader">
                     <div className="profile__postInfo">
                       <div className="profile__postUserInfo">
@@ -353,29 +366,24 @@ const Profile = () => {
                       }}
                       onClick={() => {
                         if (item.post.access_level !== 1) {
-                          setSubscribeShow(true)
+                          setSubscribeShow(true);
                         } else {
                           payForPost({
                             amount: item.post.price_to_watch,
                             post: item.post.pk,
-                          })
+                          });
                         }
-                      }
-                      }
+                      }}
                     >
-                      {item.post.access_level !== 1 ? `Подпишитесь чтоб посмотреть` : `Посмотреть за ${item.post.price_to_watch}$`}
+                      {item.post.access_level !== 1
+                        ? `Подпишитесь чтоб посмотреть`
+                        : `Посмотреть за ${item.post.price_to_watch}$`}
                     </button>
                   </div>
-                  <div
-                    className="post__bottom"
-                    style={{ margin: "24px 24px" }}
-                  >
+                  <div className="post__bottom" style={{ margin: "24px 24px" }}>
                     <div className="post__actions">
                       <div className="post__actions-left">
-                        <button
-                          className="post__action-btn"
-                          disabled
-                        >
+                        <button className="post__action-btn" disabled>
                           <LikeIcon
                             className="post__action-icon"
                             fill="none"
@@ -384,15 +392,10 @@ const Profile = () => {
                         </button>
 
                         <button className="post__action-btn" disabled>
-                          <CommentIcon
-                            className="post__action-icon"
-                          />
+                          <CommentIcon className="post__action-icon" />
                         </button>
                       </div>
-                      <button
-                        className="post__action-btn"
-                        disabled
-                      >
+                      <button className="post__action-btn" disabled>
                         <SaveIcon
                           className="post__action-icon"
                           fill={item?.post.favourite ? "black" : "none"}
@@ -421,7 +424,7 @@ const Profile = () => {
           )}
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
