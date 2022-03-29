@@ -209,7 +209,10 @@ const Profile = () => {
           alt="profile_photo"
         />
         <h3 className="profile__name">{profile.first_name}</h3>
-        <h4 className="profile__nickname"> {`@${nick}`}</h4>
+        <div style={{ display: "flex" }}>
+          <h4 className="profile__nickname"> {`@${nick}`}</h4>
+          <div className="is_online" style={profile.is_online ? {} : { backgroundColor: '#C0C0C0' }}></div>
+        </div>
         <h5 className="profile__info">
           {profile?.posts.length} posts{" "}
           <img className="sub_icon" src={fansIcon} />{" "}
@@ -301,7 +304,6 @@ const Profile = () => {
         <div className="profile__posts">
           {profile?.posts.length > 0 ? (
             profile?.posts.map((item, index) => {
-              // debugger
               return myNick === nick || item.post.payed ? (
                 <ProfilePagePost item={item} index={index} />
               ) : (

@@ -29,9 +29,7 @@ const Navbar = () => {
   useEffect(() => {
     const id = setInterval(
       () => {
-        if (uid) {
-          return authAPI.onlineUpdate(uid)
-        }
+        return authAPI.onlineUpdate(uid)
       },
       5000
     );

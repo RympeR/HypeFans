@@ -22,6 +22,7 @@ import { isLoading, isntLoading } from './blogReducer';
 import { InferActionsTypes, RootState } from './redux';
 
 const initialState = {
+  is_online: false,
   subscribed_chat: false,
   subscribtion_price: null as number | null,
   subscribed: false,
@@ -170,6 +171,7 @@ const actions = {
     } as const;
   },
   setProfileData: (
+    is_online: boolean,
     subscribed_chat: boolean,
     subscribtion_price: number | null,
     pk: number | null,
@@ -340,6 +342,7 @@ export const clearUserData = (): Thunk => async (dispatch) => {
   dispatch(
     actions.setProfileData(
       false,
+      false,
       null,
       null,
       null,
@@ -381,6 +384,7 @@ export const getUser =
       const data = await userAPI.getUser({ user: username });
       if (data) {
         const {
+          is_online,
           subscribed_chat,
           subscribtion_price,
           pk,
@@ -414,6 +418,7 @@ export const getUser =
         } = data;
         dispatch(
           actions.setProfileData(
+            is_online,
             subscribed_chat,
             subscribtion_price,
             pk,
