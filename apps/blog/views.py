@@ -621,10 +621,10 @@ class MainUserPageUpdated(APIView):
             } for post in posts
         ]
         for post, qs_post in zip(result_posts, posts):
-            post['payed'] = self.check_post_bought(qs_post, user)
-            post['like'], post['like_id'] = self.check_postaction(
+            post['post']['payed'] = self.check_post_bought(qs_post, user)
+            post['post']['like'], post['post']['like_id'] = self.check_postaction(
                 qs_post, user)
-            post['favourite'] = self.check_favourites(qs_post, user)
+            post['post']['favourite'] = self.check_favourites(qs_post, user)
 
         return Response({
             'recommendations': reccomendations,
