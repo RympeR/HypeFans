@@ -463,8 +463,7 @@ class UserOnlineCreateAPI(generics.GenericAPIView):
             return api_bad_request_400({"status": "bad request"})
         user_online = UserOnline.objects.update_or_create(
             user=request.user
-        )
-        logging.warning(user_online)
+        )[0]
         return Response({**serializer.data, 'last_action': user_online.last_action})
 
 
