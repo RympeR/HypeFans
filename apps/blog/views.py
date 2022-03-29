@@ -622,7 +622,7 @@ class MainUserPageUpdated(APIView):
         ]
         for post, qs_post in zip(result_posts, posts):
             post['post']['payed'] = self.check_post_bought(qs_post, user)
-            post['post']['like'], post['post']['like_id'] = self.check_postaction(
+            post['post']['liked'], post['post']['like_id'] = self.check_postaction(
                 qs_post, user)
             post['post']['favourite'] = self.check_favourites(qs_post, user)
 
