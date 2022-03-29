@@ -560,7 +560,7 @@ class MainUserPageUpdated(APIView):
             user=user,
             post=post,
             like=True,
-            parent__isnull=True
+            # parent__isnull=True
         ).values_list('id', flat=True)
         logging.warning(f'QS post action {qs} post - {post.pk}')
         return (True if qs else False, qs[0] if qs else False)
