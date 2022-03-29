@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { RootState } from "../../redux/redux";
@@ -11,12 +11,14 @@ import NavLink from "../components/home/NavLink";
 import { NAV_LINKS } from "../utils/utilities";
 import { getUserData } from "../../redux/authReducer";
 import Cookies from "js-cookie";
+import { authAPI } from "../../api/authAPI";
 
 const Navbar = () => {
   const { pathname } = useLocation();
   const refLink = pathname.split("/").slice(2, 4).join("/");
 
   const nick = useSelector((state: RootState) => state.auth.username);
+  const uid = useSelector((state: RootState) => state.auth.pk)
 
   // const ws = new WebSocket('ws://hype-fans.com/chat/get-chat-messages/');
 
@@ -24,13 +26,17 @@ const Navbar = () => {
 
   const [newMessages, setNewMessages] = useState(0);
 
-  // useEffect(() => {
-  //   const id = setInterval(
-  //     () => chatAPI.getNewMessagesCount().then((res) => setNewMessages(res.newMessagesCount)),
-  //     3000
-  //   );
-  //   return () => clearInterval(id);
-  // }, []);
+  useEffect(() => {
+    const id = setInterval(
+      () => {
+        if (uid) {
+          return authAPI.onlineUpdate(uid)
+        }
+      },
+      5000
+    );
+    return () => clearInterval(id);
+  }, []);
 
   const dispatch = useDispatch();
 

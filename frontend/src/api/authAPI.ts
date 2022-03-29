@@ -195,6 +195,11 @@ export const authAPI = {
       return response.data;
     });
   },
+  onlineUpdate(id: string | number) {
+    return instance.post(`/user/online-user-create/`, { user: id }).then((response) => {
+      return response.data;
+    });
+  },
 };
 
 // getProfile() {
@@ -206,7 +211,7 @@ export const authAPI = {
 //   });
 // },
 // deleteUser() {
-//   return instance.delete(`user/update-delete-user/`).then((response) => {
+//   return instance.delete(`user / update - delete -user / `).then((response) => {
 //     if (response.status !== 204) {
 //       console.log('Cant delete');
 //     }
@@ -240,7 +245,7 @@ export const authAPI = {
 //   };
 //   console.log('FormData');
 //   console.log(formData);
-//   return instance.put(`user/partial-update-user/`, formData, config).then((response) => {
+//   return instance.put(`user / partial - update - user / `, formData, config).then((response) => {
 //     console.log(response);
 //     if (response.status !== 200) {
 //       console.log('Error!');
@@ -249,7 +254,7 @@ export const authAPI = {
 //   });
 // },
 // deleteCard(id: number) {
-//   return instance.delete(`user/update-delete-card/${id}`).then((response) => {
+//   return instance.delete(`user / update - delete -card / ${ id }`).then((response) => {
 //     if (response.status !== 204) {
 //       console.log('Can not delete the card!');
 //     }

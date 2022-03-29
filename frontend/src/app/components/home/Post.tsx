@@ -1,4 +1,4 @@
-  import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useAlert } from "react-alert";
 import Modal from "react-bootstrap/Modal";
 import CurrencyInput from "react-currency-input-field";
@@ -111,6 +111,9 @@ const Post = ({
     currentLang
   );
 
+  console.log(post);
+
+
   return (
     <article className="post">
       <div className="post__top">
@@ -160,23 +163,23 @@ const Post = ({
               onClick={() => {
                 post.post.liked
                   ? dispatch(
-                      deletePostAction({
-                        id: post.post.like_id,
-                        post_id: post.post.pk,
-                      })
-                    )
+                    deletePostAction({
+                      id: post.post.like_id,
+                      post_id: post.post.pk,
+                    })
+                  )
                   : dispatch(
-                      createPostAction({
-                        like: true,
-                        comment: null,
-                        donation_amount: 0,
-                        parent: null,
-                        user: user_id,
-                        date_time: null,
-                        post: post.post.pk,
-                        id: null,
-                      })
-                    );
+                    createPostAction({
+                      like: true,
+                      comment: null,
+                      donation_amount: 0,
+                      parent: null,
+                      user: user_id,
+                      date_time: null,
+                      post: post.post.pk,
+                      id: null,
+                    })
+                  );
               }}
             >
               <LikeIcon
