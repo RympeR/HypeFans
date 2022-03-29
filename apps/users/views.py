@@ -464,6 +464,7 @@ class UserOnlineCreateAPI(generics.GenericAPIView):
         user_online = UserOnline.objects.update_or_create(
             user=request.user
         )
+        logging.warning(user_online)
         return Response({**serializer.data, 'last_action': user_online.last_action})
 
 
