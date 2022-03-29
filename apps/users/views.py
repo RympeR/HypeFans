@@ -461,10 +461,10 @@ class UserOnlineCreateAPI(generics.GenericAPIView):
             serializer.is_valid(raise_exception=True)
         except AssertionError:
             return api_bad_request_400({"status": "bad request"})
-        UserOnline.objects.create_or_update(
+        user_online = UserOnline.objects.create_or_update(
             user=request.user
         )
-        return Response(serializer.data)
+        return Response({**serializer.data, 'last_action': user_online.last_action})
 
 
 class DonationPayedUserRetrieveAPI(generics.ListAPIView):
