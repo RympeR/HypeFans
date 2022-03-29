@@ -561,9 +561,9 @@ class MainUserPageUpdated(APIView):
             post=post,
             like=True,
             # parent__isnull=True
-        ).values_list('id', flat=True)
+        )
         logging.warning(f'QS post action {qs} post - {post.pk}')
-        return (True if qs else False, qs[0] if qs else False)
+        return (True if qs.exists() else False, qs.values_list('id', flat=True)[0] if qs.exists() else False)
 
     @silk_profile(name='Check favourite ')
     def check_favourites(self, post, user):
