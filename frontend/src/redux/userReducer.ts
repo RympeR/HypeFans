@@ -333,7 +333,46 @@ export const getPayment =
   ({ id }: idType): Thunk =>
     async (dispatch) => {
       await userAPI.getPayment({ id });
+
     };
+
+export const clearUserData = (): Thunk => async (dispatch) => {
+  dispatch(
+    actions.setProfileData(
+      false,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      [],
+      [],
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      null,
+      null,
+      [],
+    )
+  )
+};
+
 
 export const getUser =
   ({ username }: { username: string }): Thunk =>

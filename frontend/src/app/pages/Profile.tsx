@@ -13,6 +13,7 @@ import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
 import { ReactComponent as CommentIcon } from "../../assets/images/message-circle.svg";
 import {
   buyPost,
+  clearUserData,
   getUser,
 } from "../../redux/userReducer";
 import { ReactComponent as MenuDotsWhite } from "../../assets/images/3dotsWhite.svg";
@@ -44,6 +45,7 @@ const Profile = () => {
   const [chatSubscribeModalShown, setChatSubscribeModalShown] =
     useState<boolean>(false);
   useEffect(() => {
+    dispatch(clearUserData())
     dispatch(getUser({ username: nick }));
   }, [nick, dispatch]);
 
