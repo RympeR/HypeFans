@@ -16,7 +16,7 @@ export const AddToChatItem = ({
   return (
     <div
       className="notifications__walletChild"
-      style={{ borderBottom: '0px' }}
+      style={{ borderBottom: '0px', paddingTop: "10px", paddingBottom: "10px" }}
       key={`${index} fav-list`}
       onClick={() => setSelectedItems([...items, item])}
     >

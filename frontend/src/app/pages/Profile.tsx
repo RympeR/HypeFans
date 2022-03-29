@@ -116,6 +116,7 @@ const Profile = () => {
 
   const payForPost = ({ amount, post }: { amount: number; post: number }) => {
     dispatch(buyPost({ amount, post, user: myId, id: null }));
+    toast.success("Пост куплен");
   };
 
   return (
@@ -191,6 +192,11 @@ const Profile = () => {
             <div style={{ padding: "5px" }}>
               <Link to="/favourites">
                 <button>Избранные</button>
+              </Link>
+            </div>
+            <div style={{ padding: "5px" }}>
+              <Link to="/settings/profileSettings">
+                <button>Настройки</button>
               </Link>
             </div>
           </Popup>
@@ -293,7 +299,7 @@ const Profile = () => {
         <div className="profile__posts">
           {profile?.posts.length > 0 ? (
             profile?.posts.map((item, index) => {
-              debugger
+              // debugger
               return myNick === nick || item.post.payed ? (
                 <ProfilePagePost item={item} index={index} />
               ) : (

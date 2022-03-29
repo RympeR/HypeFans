@@ -393,11 +393,13 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   const [isAddModalShown, setIsAddModalShow] = useState<boolean>(false);
   const [usersInChat, setUsersInChat] = useState([])
+  const [invitedUsers, setInvitedUsers] = useState([])
   const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false);
 
   const getChatUsers = async () => {
     const usersList = await chatAPI.getChatMembers(Number(lastUrl))
     setUsersInChat([...usersList?.all])
+    setInvitedUsers([...usersList?.invited])
   }
 
   return (
@@ -415,7 +417,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         }}
       >
         <Modal.Body className="notifications__modal" style={{ padding: "0px" }}>
-          <AddToChat />
+          <AddToChat
+            usersList={usersInChat}
+            invitedUsers={invitedUsers}
+          />
         </Modal.Body>
       </Modal>
       <Modal
@@ -436,7 +441,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           ) : (
             <div style={{ padding: "15px" }}>
               <h1 style={{ textAlign: "center" }}>Участники</h1>
-              {usersInChat.map((item, key) => {
+              {invitedUsers.map((item, key) => {
                 return (
                   <div className="chat__invitedUsersItem" key={key + " usersInChat"}>
                     <Link to={`/profile/${item.username}`}>
