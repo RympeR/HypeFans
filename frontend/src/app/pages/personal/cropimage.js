@@ -11,12 +11,7 @@ function getRadianAngle(degreeValue) {
   return (degreeValue * Math.PI) / 180;
 }
 
-/**
- * This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
- * @param {File} image - Image File url
- * @param {Object} pixelCrop - pixelCrop Object provided by react-easy-crop
- * @param {number} rotation - optional rotation parameter
- */
+
 export default async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
   const image = await createImage(imageSrc);
   const canvas = document.createElement("canvas");
@@ -65,3 +60,35 @@ export default async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
     }, "image/jpeg");
   });
 }
+
+// export default async function getCroppedImg(image, crop, fileName) {
+// 	const canvas = document.createElement('canvas');
+// 	const scaleX = image.naturalWidth / image.width;
+// 	const scaleY = image.naturalHeight / image.height;
+// 	canvas.width = crop.width;
+// 	canvas.height = crop.height;
+// 	const ctx = canvas.getContext('2d');
+
+// 	ctx.drawImage(
+// 		image,
+// 		crop.x * scaleX,
+// 		crop.y * scaleY,
+// 		crop.width * scaleX,
+// 		crop.height * scaleY,
+// 		0,
+// 		0,
+// 		crop.width,
+// 		crop.height
+// 	);
+
+// 	return new Promise((resolve, reject) => {
+// 		canvas.toBlob(
+// 			blob => {
+// 				blob.name = fileName;
+// 				resolve(blob);
+// 			},
+// 			'image/png',    // changed to png
+// 			1
+// 		);
+// 	});
+// };
