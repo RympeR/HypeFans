@@ -22,21 +22,21 @@ const Navbar = () => {
   const [ws, setWs] = useState(null);
 
   const [newMessages, setNewMessages] = useState(0);
-  const wsClient = new WebSocket(
-    `wss://hype-fans.com/ws/api/chat-rooms/${uid ? uid : 0}/`
-  );
-  wsClient.onopen = () => {
-    setWs(wsClient);
-  };
-  useEffect(() => {
-    if (uid) {
-      const chat_id = setInterval(() => {
-        ws.send(JSON.stringify({}));
-        return authAPI.onlineUpdate(uid);
-      }, 5000);
-      return () => clearInterval(chat_id);
-    }
-  }, []);
+  // const wsClient = new WebSocket(
+  //   `wss://hype-fans.com/ws/api/chat-rooms/${uid ? uid : 0}/`
+  // );
+  // wsClient.onopen = () => {
+  //   setWs(wsClient);
+  // };
+  // useEffect(() => {
+  //   if (uid) {
+  //     const chat_id = setInterval(() => {
+  //       ws.send(JSON.stringify({}));
+  //       return authAPI.onlineUpdate(uid);
+  //     }, 5000);
+  //     return () => clearInterval(chat_id);
+  //   }
+  // }, []);
 
   const dispatch = useDispatch();
 
