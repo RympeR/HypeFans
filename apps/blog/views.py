@@ -9,8 +9,8 @@ from rest_framework.views import APIView
 from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin
 from rest_framework.response import Response
 
-from apps.users.models import User
-from apps.users.serializers import UserShortRetrieveSeriliazer
+from apps.users.models import ChatSubscription, Donation, Subscription, User
+from apps.users.serializers import ChatSubscriptionNotificationSerializer, DonationNotificationSerializer, SubscriptionNotificationSerializer, UserShortRetrieveSeriliazer
 
 from .models import *
 from .serializers import *
@@ -556,8 +556,8 @@ class MainUserPageUpdated(APIView):
 
     @silk_profile(name='Check postAction ')
     def check_postaction(self, post, user):
-        qs = PostAction.objects.filter(user=user,post=post,like=True,parent__isnull=True
-        )
+        qs = PostAction.objects.filter(user=user, post=post, like=True, parent__isnull=True
+                                       )
         logging.warning(f'QS post action {qs} post - {post.pk}')
         return (True if qs.exists() else False, qs.values_list('id', flat=True)[0] if qs.exists() else False)
 
@@ -573,7 +573,7 @@ class MainUserPageUpdated(APIView):
 
     @silk_profile(name='View Updated Main Page')
     def get(self, request):
- 
+
         req_user = request.user
         data_compare = request.GET.get('datetime', 0)
         limit = request.GET.get('limit', 30)
@@ -581,7 +581,7 @@ class MainUserPageUpdated(APIView):
         qs = User.objects.all().order_by('-fans_amount').values_list('id', flat=True)
         reccomendations = UserShortRetrieveSeriliazer(
             instance=self.get_sample_of_queryset(qs, 9, User)
-                .order_by('-fans_amount').order_by('-post_amount'),
+            .order_by('-fans_amount').order_by('-post_amount'),
             many=True,
             context={'request': request}
         ).data
@@ -622,9 +622,93 @@ class MainUserPageUpdated(APIView):
             post['post']['payed'] = self.check_post_bought(qs_post, req_user)
             post['post']['liked'], post['post']['like_id'] = self.check_postaction(
                 qs_post, req_user)
-            post['post']['favourite'] = self.check_favourites(qs_post, req_user)
+            post['post']['favourite'] = self.check_favourites(
+                qs_post, req_user)
 
         return Response({
             'recommendations': reccomendations,
             'posts': result_posts
+        })
+
+
+class UserAlertNotificatitons(APIView):
+
+    @silk_profile(name='View Composite notifications')
+    def get(self, request):
+        user = request.user
+        last_action = user.user_online.last_action
+        result_notifications = []
+
+        if user.show_chat_subscribption_notifications:
+            chat_subscriptions = ChatSubscription.objects.filter(
+                target=user,
+                start_date__gte=last_action
+            )
+            result_notifications.extend(ChatSubscriptionNotificationSerializer(
+                instance=chat_subscriptions,
+                many=True,
+                context={'request': request}
+            ).data)
+
+        if user.show_subscribption_notifications:
+            subscriptions = Subscription.objects.filter(
+                target=user,
+                start_date__gte=last_action
+            )
+            result_notifications.extend(SubscriptionNotificationSerializer(
+                instance=subscriptions,
+                many=True,
+                context={'request': request}
+            ).data)
+        if user.show_like_notifications:
+            post_action_like = PostAction.objects.filter(
+                post__user=user,
+                date_time__gte=last_action.timestamp(),
+                like=True,
+                parent__isnull=True
+            )
+            post_comment_action_like = PostAction.objects.filter(
+                post__user=user,
+                date_time__gte=last_action.timestamp(),
+                like=True,
+                parent__isnull=False
+            )
+            result_notifications.extend(PostActionNotificationSerializer(
+                instance=[*post_action_like, *post_comment_action_like],
+                many=True,
+                context={'request': request}
+            ).data)
+        if user.show_comment_notifications:
+            post_action_comment = PostAction.objects.filter(
+                post__user=user,
+                date_time__gte=last_action.timestamp(),
+                like=False,
+                comment__isnull=False,
+                parent__isnull=True
+            )
+            post_action_comment_comment = PostAction.objects.filter(
+                post__user=user,
+                date_time__gte=last_action.timestamp(),
+                like=False,
+                comment__isnull=False,
+                parent__isnull=False
+            )
+            result_notifications.extend(PostActionNotificationSerializer(
+                instance=[*post_action_comment, *post_action_comment_comment],
+                many=True,
+                context={'request': request}
+            ).data)
+
+        if user.show_donate_notifications:
+            donation_notifications = Donation.objects.filter(
+                reciever=user,
+                datetime__gte=last_action,
+            )
+            result_notifications.extend(DonationNotificationSerializer(
+                instance=donation_notifications,
+                many=True,
+                context={'request': request}
+            ).data)
+        return Response({
+            "result": result_notifications
         })

@@ -15,6 +15,75 @@ from .models import (Card, ChatSubscription, Donation, Payment, PendingUser,
                      Subscription, User, UserOnline, ReferralPayment)
 
 
+class ChatSubscriptionNotificationSerializer(serializers.ModelSerializer):
+    source_info = serializers.SerializerMethodField()
+    notification_type = serializers.SerializerMethodField()
+    additional_info = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ChatSubscription
+        fields = 'source_info', 'notification_type', 'additional_info'
+
+    def get_additional_info(self, chat_subscription: ChatSubscription):
+        return {}
+
+    def get_notification_type(self, chat_subscription: ChatSubscription):
+        return 'chat_subscription'
+
+    def get_source_info(self, chat_subscription: ChatSubscription):
+        username = chat_subscription.target.username
+        return {
+            'username': username,
+            'link': f'https://hype-fans.com/profile/{username}',
+        }
+
+
+class SubscriptionNotificationSerializer(serializers.ModelSerializer):
+    source_info = serializers.SerializerMethodField()
+    notification_type = serializers.SerializerMethodField()
+    additional_info = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Subscription
+        fields = 'source_info', 'notification_type', 'additional_info'
+
+    def get_additional_info(self, subscription: Subscription):
+        return {}
+
+    def get_notification_type(self, subscription: Subscription):
+        return 'subscription'
+
+    def get_source_info(self, subscription: Subscription):
+        username = subscription.target.username
+        return {
+            'username': username,
+            'link': f'https://hype-fans.com/profile/{username}',
+        }
+
+
+class DonationNotificationSerializer(serializers.ModelSerializer):
+    source_info = serializers.SerializerMethodField()
+    notification_type = serializers.SerializerMethodField()
+    additional_info = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Donation
+        fields = 'source_info', 'notification_type', 'additional_info'
+
+    def get_additional_info(self, donation: Donation):
+        return {'amount': donation.amount}
+
+    def get_notification_type(self, donation: Donation):
+        return 'donation'
+
+    def get_source_info(self, donation: Donation):
+        username = donation.sender.username
+        return {
+            'username': username,
+            'link': f'https://hype-fans.com/profile/{username}',
+        }
+
+
 class UserMeSerializer(serializers.ModelSerializer):
 
     class Meta:

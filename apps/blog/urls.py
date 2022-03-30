@@ -22,6 +22,7 @@ from .views import (
     GetUserLists,
     PostActionPartialUpdateAPI,
     MainUserPageUpdated,
+    UserAlertNotificatitons
 )
 
 urlpatterns = [
@@ -47,5 +48,6 @@ urlpatterns = [
     path('get-main-page/', MainUserPageUpdated.as_view()),
     path('get-user-stories/', SubStories.as_view()),
     path('get-notifications/', UserNotifications.as_view()),
+    path('get-notifications-alerts/', UserAlertNotificatitons.as_view()),
     path('get-users-lists/', GetUserLists.as_view()),
 ]
