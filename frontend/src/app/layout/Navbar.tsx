@@ -12,6 +12,8 @@ import { NAV_LINKS } from "../utils/utilities";
 import { getUserData } from "../../redux/authReducer";
 import Cookies from "js-cookie";
 import { authAPI } from "../../api/authAPI";
+import { blogAPI } from "../../api/blogAPI";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -23,20 +25,26 @@ const Navbar = () => {
 
   const [newMessages, setNewMessages] = useState(0);
   // const wsClient = new WebSocket(
-  //   `wss://hype-fans.com/ws/api/chat-rooms/${uid ? uid : 0}/`
+  //   `wss://hype-fans.com/ws/api/chat-rooms/${uid ?? 0}/`
   // );
   // wsClient.onopen = () => {
   //   setWs(wsClient);
   // };
-  // useEffect(() => {
-  //   if (uid) {
-  //     const chat_id = setInterval(() => {
-  //       ws.send(JSON.stringify({}));
-  //       return authAPI.onlineUpdate(uid);
-  //     }, 5000);
-  //     return () => clearInterval(chat_id);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (uid) {
+      const chat_id = setInterval(() => {
+        // ws.send(JSON.stringify({}));
+        const asyncData = async () => {
+          const data = await blogAPI.getPushNotif().then((res) => {
+            // return toast.success("Уведомление")
+          })
+          return authAPI.onlineUpdate(uid);
+        }
+        asyncData()
+      }, 5000);
+      return () => clearInterval(chat_id);
+    }
+  }, [pathname, uid]);
 
   const dispatch = useDispatch();
 

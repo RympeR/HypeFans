@@ -12,6 +12,7 @@ import { getLastUrlPoint } from "../utils/utilities";
 import { DialogMain } from "./DialogMain";
 import { NoDialog } from "./NoDialog";
 import logo from "../../assets/images/logo.svg";
+import { CreateDialog } from "./CreateDialog";
 
 
 const Chat: React.FC = () => {
@@ -143,7 +144,7 @@ const Chat: React.FC = () => {
         </div>
         <div className="chat__row">
           <div className="chat__resp_icon">
-            <Plus />
+            <CreateDialog />
           </div>
           <div className="chat__resp_icon" style={{ marginLeft: "40px" }}>
             <UserIcon />
