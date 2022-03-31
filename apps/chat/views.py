@@ -1,3 +1,4 @@
+import logging
 from core.utils.customFilters import UserFilter
 from core.utils.default_responses import (api_block_by_policy_451,
                                           api_locked_423, api_not_found_404,
@@ -99,12 +100,15 @@ class ChatSubUsersAPI(generics.ListAPIView):
         user = self.request.user
         unfinished_subscriptions = ChatSubscription.objects.filter(
             target=user, finished=False)
-
-        return User.objects.filter(
+        logging.warning(unfinished_subscriptions)
+        logging.warning(users)
+        users =  User.objects.filter(
             pk__in=Subquery(unfinished_subscriptions.values_list(
                 'target__pk', flat=True))
-        ).exclude(username=user.username)
-
+        )
+        users = users.exclude(username=user.username)
+        logging.warning(users)
+        return users
 
 class RoomUpdateAPI(generics.UpdateAPIView):
     queryset = Room.objects.all()
