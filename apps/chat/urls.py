@@ -17,6 +17,7 @@ from .views import (
     ChatBoughtCreateAPI,
     RoomRetrieveUsersAPI,
     index,
+    ChatSubUsersAPI,
     room
 )
 
@@ -40,6 +41,7 @@ urlpatterns = [
     path('get-chat-messages/', GetChatMessages.as_view(), name=''),
     path('chat-read-messages/', ReadChatMessages.as_view(), name=''),
     path('get-user-dialogs/', GetDialogs.as_view(), name=''),
+    path('get-possible-invited/', ChatSubUsersAPI.as_view(), name=''),
     path('get-unreaded-messages-amount/',
          GetUnreadedMessagesAmount.as_view(), name='get-unreaded-messages-amount'),
 ]

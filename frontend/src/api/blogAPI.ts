@@ -133,14 +133,9 @@ export const blogAPI = {
     });
   },
   getNotifications({ limit = 10, offset = 0 }: { limit: number; offset: number }) {
-    console.log("Notifiaction");
     if (Notification.permission !== 'granted'){
       Notification.requestPermission();
     };
-    new Notification("dude", {
-      icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
-      body: 'Hey there! You\'ve been notified!',
-     });
     return instance.get(`/blog/get-notifications/?limit=${limit}&offset=${offset}`).then((response) => {
       return response;
     });

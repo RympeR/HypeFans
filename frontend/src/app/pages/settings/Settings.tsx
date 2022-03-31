@@ -57,7 +57,7 @@ export const Settings = () => {
   const Text = ({ text }: { text: string }) => {
     const lastLocation =
       history.location.pathname.split("/")[
-        history.location.pathname.split("/").length - 1
+      history.location.pathname.split("/").length - 1
       ];
     return (
       <>
@@ -104,7 +104,7 @@ export const Settings = () => {
                 } else if (
                   lastLocation === "push" ||
                   history.location.pathname ===
-                    "/settings/notifications/email" ||
+                  "/settings/notifications/email" ||
                   lastLocation === "page"
                 ) {
                   history.push("/settings/notifications");
@@ -243,7 +243,7 @@ export const Settings = () => {
         {show ? (
           <div
             className="card__logout-model"
-            // style={{ display: "flex", justifyContent: "center", width: "100%" }}
+          // style={{ display: "flex", justifyContent: "center", width: "100%" }}
           >
             <div
               // onClick={() => setShow(false)}
@@ -511,7 +511,7 @@ export const Settings = () => {
           </div>
           <div className="notifications__listBlock">
             <Recaptcha
-              sitekey="6Lep7U8cAAAAABG9Qppk743EBuVmeXxml7F4Umr3"
+              sitekey="6LdzuS0fAAAAABCIE_gjSPuxuJoQeqwgm3KmnsAQ"
               size="normal"
               onChange={() => setIsRobot(false)}
             />
@@ -623,7 +623,7 @@ export const Settings = () => {
               className="notifications__settingBtn"
               disabled={password !== new_password}
               type="submit"
-              // onClick={() => handleSubmit()}
+            // onClick={() => handleSubmit()}
             >
               Сохранить
             </button>

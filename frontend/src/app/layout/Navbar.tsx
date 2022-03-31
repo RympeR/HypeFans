@@ -28,15 +28,15 @@ const Navbar = () => {
   // wsClient.onopen = () => {
   //   setWs(wsClient);
   // };
-  useEffect(() => {
-    if (uid) {
-      const chat_id = setInterval(() => {
-        // ws.send(JSON.stringify({}));
-        return authAPI.onlineUpdate(uid);
-      }, 5000);
-      return () => clearInterval(chat_id);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (uid) {
+  //     const chat_id = setInterval(() => {
+  //       ws.send(JSON.stringify({}));
+  //       return authAPI.onlineUpdate(uid);
+  //     }, 5000);
+  //     return () => clearInterval(chat_id);
+  //   }
+  // }, []);
 
   const dispatch = useDispatch();
 
