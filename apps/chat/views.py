@@ -80,7 +80,7 @@ class RoomRetrieveUsersAPI(generics.GenericAPIView):
 
         qs_possible = User.objects.filter(
             pk__in=Subquery(unfinished_subscriptions.values_list(
-                'target__pk', flat=True))
+                'source__pk', flat=True))
         ).exclude(username=user.username)
 
         all_possible = self.serializer_class(
@@ -100,15 +100,11 @@ class ChatSubUsersAPI(generics.ListAPIView):
         user = self.request.user
         unfinished_subscriptions = ChatSubscription.objects.filter(
             target=user, finished=False)
-        logging.warning(unfinished_subscriptions)
-        users =  User.objects.filter(
+        return User.objects.filter(
             pk__in=Subquery(unfinished_subscriptions.values_list(
-                'target__pk', flat=True))
+                'source__pk', flat=True))
         )
-        logging.warning(users)
-        users = users.exclude(username=user.username)
-        logging.warning(users)
-        return users
+        
 
 class RoomUpdateAPI(generics.UpdateAPIView):
     queryset = Room.objects.all()
