@@ -101,11 +101,11 @@ class ChatSubUsersAPI(generics.ListAPIView):
         unfinished_subscriptions = ChatSubscription.objects.filter(
             target=user, finished=False)
         logging.warning(unfinished_subscriptions)
-        logging.warning(users)
         users =  User.objects.filter(
             pk__in=Subquery(unfinished_subscriptions.values_list(
                 'target__pk', flat=True))
         )
+        logging.warning(users)
         users = users.exclude(username=user.username)
         logging.warning(users)
         return users
