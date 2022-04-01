@@ -55,7 +55,7 @@ export const CreateDialog = () => {
                             invited: []
                         }}
                         onSubmit={(val) => {
-                            createNewChat({ ...val, invited: val.invited.map((item) => item.username) });
+                            createNewChat({ ...val, invited: val.invited.map((item) => item.pk) });
                         }}
                     >
                         {({ values, handleSubmit, setFieldValue }) => {
