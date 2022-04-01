@@ -8,10 +8,12 @@ import { AddToChatItemSelected } from "./AddToChatItemSelected";
 
 export const AddToChatCreate = ({
   selectedUsers,
-  setSelectedItems
+  setSelectedItems,
+  handleSubmit
 }: {
   selectedUsers: any[];
   setSelectedItems: any
+  handleSubmit: any
 }) => {
   const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -42,7 +44,6 @@ export const AddToChatCreate = ({
       history.location.pathname.split("/").length - 1
       ]
     );
-    console.log(data);
   };
 
   return (
@@ -50,7 +51,7 @@ export const AddToChatCreate = ({
       <button
         className="notifications__settingBtn"
         style={{ margin: "0px", width: "100%" }}
-        onClick={() => addToChat()}
+        onClick={() => handleSubmit()}
         disabled={selectedUsers.length === 0}
       >
         Создать чат
@@ -84,6 +85,7 @@ export const AddToChatCreate = ({
             items={selectedUsers}
             setSelectedItems={setSelectedItems}
             key={index}
+            isChat={true}
           />
         );
       })}
@@ -98,6 +100,7 @@ export const AddToChatCreate = ({
               items={selectedUsers}
               setSelectedItems={setSelectedItems}
               key={index}
+              isChat={true}
             />
           );
         })}

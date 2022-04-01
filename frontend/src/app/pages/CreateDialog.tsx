@@ -49,14 +49,13 @@ export const CreateDialog = () => {
                     <Formik
                         initialValues={{
                             creator: userId,
-                            invited: [38],
                             paid: false,
                             chatCost: 0,
                             chatName: "",
-                            invitedUsers: []
+                            invited: []
                         }}
                         onSubmit={(val) => {
-                            createNewChat(val);
+                            createNewChat({ ...val, invited: val.invited.map((item) => item.username) });
                         }}
                     >
                         {({ values, handleSubmit, setFieldValue }) => {
@@ -195,8 +194,9 @@ export const CreateDialog = () => {
                                         <>
                                             <h2 style={{ marginBottom: "0px" }}>Участники</h2>
                                             <AddToChatCreate
-                                                selectedUsers={values.invitedUsers}
+                                                selectedUsers={values.invited}
                                                 setSelectedItems={setFieldValue}
+                                                handleSubmit={handleSubmit}
                                             />
                                             <div
                                                 style={{

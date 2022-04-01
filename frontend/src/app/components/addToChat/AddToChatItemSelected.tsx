@@ -7,19 +7,26 @@ export const AddToChatItemSelected = ({
   index,
   items,
   setSelectedItems,
+  isChat
 }: {
   item: any;
   index: number;
   items: any;
   setSelectedItems: any;
+  isChat: boolean;
 }) => {
   return (
     <div
       className="notifications__walletChild"
       style={{ borderBottom: "0px", paddingTop: "10px", paddingBottom: "10px" }}
       key={`${index} fav-list`}
-      onClick={() =>
-        setSelectedItems(items.filter((filterItem: any) => filterItem !== item))
+      onClick={() => {
+        if (isChat) {
+          return setSelectedItems("invited", items.filter((filterItem: any) => filterItem !== item))
+        } else {
+          return setSelectedItems(items.filter((filterItem: any) => filterItem !== item))
+        }
+      }
       }
     >
       <div style={{ display: "flex" }}>

@@ -40,7 +40,7 @@ export const AddToChat = ({
     const data = await chatAPI.inviteUsers(
       selectedItems.map((item) => item.username),
       history.location.pathname.split("/")[
-        history.location.pathname.split("/").length - 1
+      history.location.pathname.split("/").length - 1
       ]
     );
     console.log(data);
@@ -86,6 +86,7 @@ export const AddToChat = ({
             items={selectedItems}
             setSelectedItems={setSelectedItems}
             key={index}
+            isChat={false}
           />
         );
       })}
@@ -100,6 +101,7 @@ export const AddToChat = ({
               items={selectedItems}
               setSelectedItems={setSelectedItems}
               key={index}
+              isChat={false}
             />
           );
         })}
