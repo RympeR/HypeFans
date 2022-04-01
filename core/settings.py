@@ -268,7 +268,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'apps', 'emails')
 DJOSER = {
     'SET_PASSWORD_RETYPE': True,
-    'LOGOUT_ON_PASSWORD_CHANGE': True,
+    'LOGOUT_ON_PASSWORD_CHANGE': False,
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',

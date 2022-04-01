@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime, timedelta
+from django.urls import reverse
 
 import requests
 from core.utils.customFilters import UserFilter
@@ -24,17 +25,22 @@ from apps.users.dynamic_preferences_registry import ReferralPercentage, Withdraw
 
 from .models import *
 from .serializers import *
+from djoser.conf import django_settings
 
 
-class UserActivationView(APIView):
-    def get(self, request, uid, token):
-        protocol = 'https://' if request.is_secure() else 'http://'
-        web_url = protocol + request.get_host()
-        post_url = web_url + "/auth/users/activate/"
-        post_data = {'uid': uid, 'token': token}
-        result = requests.post(post_url, data=post_data)
-        content = result.text
-        return Response(content)
+class ActivateUserByGet(APIView):
+
+    def get(self, request, uid, token, format=None):
+        payload = {'uid': uid, 'token': token}
+
+        url = '{0}://{1}{2}'.format(django_settings.PROTOCOL,
+                                    django_settings.DOMAIN, reverse('user-activate'))
+        response = requests.post(url, data=payload)
+
+        if response.status_code == 204:
+            return Response({'detail': 'all good sir'})
+        else:
+            return Response(response.json())
 
 
 class UserMeRetrieveAPI(generics.RetrieveAPIView):

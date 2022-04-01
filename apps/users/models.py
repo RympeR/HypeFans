@@ -11,7 +11,11 @@ from django_countries.fields import CountryField
 from unixtimestampfield.fields import UnixTimeStampField
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
-from .dynamic_preferences_registry import ChatSubscriptionDuration
+from .dynamic_preferences_registry import ChatSubscriptionDuration, FreeDays
+
+
+AUTH_PROVIDERS = {'facebook': 'facebook', 'google': 'google',
+                  'twitter': 'twitter', 'email': 'email'}
 
 
 class User(AbstractUser):
@@ -122,6 +126,10 @@ class User(AbstractUser):
     private_profile = models.BooleanField(
         'Приватный профиль', default=False
     )
+    auth_provider = models.CharField(
+        max_length=255, blank=False,
+        null=False, default=AUTH_PROVIDERS.get('email'))
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
         'username'
@@ -160,7 +168,7 @@ class User(AbstractUser):
 
     @property
     def new_user(self):
-        if datetime.datetime.now() - datetime.timedelta(ChatSubscriptionDuration.value()) < self.date_joined:
+        if datetime.datetime.now() - datetime.timedelta(FreeDays.value()) < self.date_joined:
             return True
         return False
 

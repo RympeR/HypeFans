@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     AddBlockedUserAPI,
-    UserActivationView,
+    ActivateUserByGet,
     UserRetrieveAPI,
     UserCreateAPI,
     UserAPI,
@@ -35,7 +35,13 @@ from .views import (
     RepheralHistoryRetrieveAPI,
     UserChangePasswordAPI,
 )
+from .authentication_views import *
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+)
+
 urlpatterns = [
+    path('activate/<str:uid>/<str:token>/', ActivateUserByGet.as_view()),
     path('me/', UserMeRetrieveAPI.as_view()),
     path('change-password/', UserChangePasswordAPI.as_view()),
     path('get-user/', UserRetrieveAPI.as_view()),
@@ -69,4 +75,19 @@ urlpatterns = [
     path('spend-stats-history/', SpendStatsHistoryRetrieveAPI.as_view()),
     path('block-user/', AddBlockedUserAPI.as_view(), name='BlockUser'),
     path('block-user-list/', UserBlockedListAPI.as_view(), name='BlockUserList'),
+
+
+    path('register/', RegisterView.as_view(), name="register"),
+    path('login/', LoginAPIView.as_view(), name="login"),
+    path('logout/', LogoutAPIView.as_view(), name="logout"),
+    path('email-verify/', VerifyEmail.as_view(), name="email-verify"),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('request-reset-email/', RequestPasswordResetEmail.as_view(),
+         name="request-reset-email"),
+    path('request-restore-email/', RequestPasswordRestoreEmail.as_view(),
+         name="request-restore-email"),
+    path('password-reset/<uidb64>/<token>/',
+         PasswordTokenCheckAPI.as_view(), name='password-action-confirm'),
+    path('password-reset-complete/', SetNewPasswordAPIView.as_view(),
+         name='password-reset-complete')
 ]
