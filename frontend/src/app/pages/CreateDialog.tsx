@@ -18,9 +18,9 @@ export const CreateDialog = () => {
     const history = useHistory()
     const userId = useSelector((state: RootState) => state.auth.pk);
     const createNewChat = async (data: any) => {
-        await chatAPI.roomCreate(data);
+        const response = await chatAPI.roomCreate(data);
         setCurrentTab(0);
-        history.push(`/chat/${data.data.id}`);
+        history.push(`/chat/${response.data.id}`);
     };
 
     const [chatImg, setChatImg] = useState<string | null>(null)
