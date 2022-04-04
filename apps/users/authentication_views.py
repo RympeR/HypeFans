@@ -94,12 +94,12 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
 
 
 class PasswordTokenCheckAPI(generics.GenericAPIView):
-    serializer_class = SetNewPasswordSerializer
+    permission_classes = permissions.AllowAny,
 
     def post(self, request):
         uidb64 = request.data.get('uidb64', '')
         token = request.data.get('token', '')
-        token = request.password.get('token', '')
+        password = request.password.get('token', '')
 
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
@@ -109,6 +109,8 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
                 return Response({"auth_token": None}, status=status.HTTP_200_OK)
             else:
                 token, created = Token.objects.get_or_create(user=user)
+                user.set_password(password)
+                user.save()
                 return Response({"auth_token": str(token)}, status=status.HTTP_200_OK)
 
         except DjangoUnicodeDecodeError as identifier:
