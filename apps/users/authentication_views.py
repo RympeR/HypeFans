@@ -106,12 +106,12 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
             user = User.objects.get(id=id)
 
             if not PasswordResetTokenGenerator().check_token(user, token):
-                return Response({"auth_token": None}, status=status.HTTP_200_OK)
+                return Response({"auth_token": None}, status=status.HTTP_423_LOCKED)
             else:
                 token, created = Token.objects.get_or_create(user=user)
                 user.set_password(password)
                 user.save()
-                return Response({"auth_token": str(token)}, status=status.HTTP_423_LOCKED)
+                return Response({"auth_token": str(token)}, status=status.HTTP_200_OK)
 
         except Exception:
             return Response({"auth_token": None}, status=status.HTTP_423_LOCKED)
