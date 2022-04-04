@@ -111,15 +111,10 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
                 token, created = Token.objects.get_or_create(user=user)
                 user.set_password(password)
                 user.save()
-                return Response({"auth_token": str(token)}, status=status.HTTP_200_OK)
+                return Response({"auth_token": str(token)}, status=status.HTTP_423_LOCKED)
 
-        except DjangoUnicodeDecodeError as identifier:
-            try:
-                if not PasswordResetTokenGenerator().check_token(user):
-                    return CustomRedirect('https://hype-fans.com/')
-
-            except UnboundLocalError as e:
-                return Response({'error': 'Token is not valid, please request a new one'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response({"auth_token": str(token)}, status=status.HTTP_423_LOCKED)
 
 
 class SetNewPasswordAPIView(generics.GenericAPIView):
