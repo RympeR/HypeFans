@@ -22,6 +22,7 @@ const Navbar = () => {
   const nick = useSelector((state: RootState) => state.auth.username);
   const uid = useSelector((state: RootState) => state.auth.pk);
   const [ws, setWs] = useState(null);
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth)
 
   const [newMessages, setNewMessages] = useState(0);
   // const wsClient = new WebSocket(
@@ -49,9 +50,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   if (
-    pathname === `/${NAV_LINKS.SIGNIN}` ||
-    pathname === `/${NAV_LINKS.SIGNUP}` ||
-    pathname === `/` || pathname === "/forgotPassword"
+    !isAuth
   ) {
     return null;
   }

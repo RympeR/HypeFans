@@ -1,22 +1,19 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import { Preloader } from "../../../app/utils/Preloader";
 import { NAV_LINKS } from "../../../app/utils/utilities";
 import { RootState } from "../../../redux/redux";
 import { ReactComponent as Logo } from "../../../assets/images/sign-in-logo.svg";
-import { ReactComponent as EyeIcon } from "../../../assets/images/eye.svg";
-import { ReactComponent as EyeOffIcon } from "../../../assets/images/eye-off.svg";
-import { useForm } from "react-hook-form";
-import ISignInData from "../../../app/types/ISignInData";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { Field, Form, Formik } from "formik";
+import { authAPI } from "../../../api/authAPI";
+import { toast } from "react-toastify";
 
 export const ForgotPass = () => {
 
     const isAuth = useSelector((state: RootState) => state.auth.isAuth);
     const isLoading = useSelector((state: RootState) => state.blog.isLoading);
+    const history = useHistory()
     const [isRequesting, setIsRequesting] = useState<boolean>(false)
     const dispatch = useDispatch()
     const back_classes = [
@@ -45,17 +42,11 @@ export const ForgotPass = () => {
     }
 
 
-    // const onSubmit = async (data: ISignInData) => {
-    //     setIsRequesting(true);
-    //     try {
-    //         await dispatch(login(data));
-    //         toast.success('Login Successfully');
-    //     } catch {
-    //         toast.error('Invaild credentials');
-    //     }
-    //     setIsRequesting(false);
-    //     reset(initialValues);
-    // };
+    const changeRequest = async (email: string) => {
+        const data = await authAPI.requestRestore(email)
+        toast.success(data.success)
+        history.push("/")
+    }
 
     return (
         <div
@@ -74,12 +65,19 @@ export const ForgotPass = () => {
                             <div style={{ color: "#FB5734" }}>Register</div>
                         </Link>
                     </div>
-                    <Formik initialValues={{}} onSubmit={() => console.log("fd")}>
-                        <Form>
-                            <Field className="auth__input" placeholder="Email..." name="email" />
-                        </Form>
+                    <Formik initialValues={{ email: "" }} onSubmit={(val) => {
+                        debugger
+                        changeRequest(val.email)
+                    }}>
+                        {({ values }) => {
+                            return (
+                                <Form>
+                                    <Field className="auth__input" placeholder="Email..." name="email" />
+                                    <button className="auth__submit-btn" onClick={() => changeRequest(values.email)}>Отправить</button>
+                                </Form>
+                            )
+                        }}
                     </Formik>
-                    <button className="auth__submit-btn">Отправить</button>
                 </form>
             </div>
         </div >

@@ -13,6 +13,15 @@ export const authAPI = {
         return response;
       });
   },
+  changePasswordAuth(password: string, uidb64: string, token: string) {
+    return instance
+      .post("/user/password-reset/", {
+        uidb64, password, token
+      })
+      .then((response) => {
+        return response;
+      });
+  },
   jwtRefresh(refresh: string) {
     return instance
       .post("/auth/jwt/refresh/", {
@@ -189,6 +198,18 @@ export const authAPI = {
       .then((response) => {
         return response.data;
       });
+  },
+  restorePassword({ password, repeat, token }: { password: string, repeat: string, token: string }) {
+    return instance.post(`/user/request-restore-email/`, { password, repeat, token }).then((response) => {
+      debugger
+      return response.data;
+    });
+  },
+  requestRestore(email: string) {
+    return instance.post(`/user/request-restore-email/`, { email }).then((response) => {
+      debugger
+      return response.data;
+    });
   },
   deleteUser(id: string | number) {
     return instance.delete(`/auth/users/${id}/`).then((response) => {

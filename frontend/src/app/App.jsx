@@ -25,6 +25,7 @@ import MetaTags from 'react-meta-tags';
 import { ToastContainer } from "react-toastify";
 import { PersonalSettings } from './pages/personal/PersonalSettings';
 import { ForgotPass } from './pages/forgotPass/ForgotPass';
+import { RestorePassword } from './pages/restorePassword/RestorePassword';
 
 const options = {
   timeout: 5000,
@@ -50,6 +51,7 @@ const App = () => {
               <Switch>
                 <Route path="/signin" component={Auth} />
                 <Route exact path="/forgotPassword" component={ForgotPass} />
+                <Route path="/restore-password" component={RestorePassword} />
                 <Route exact path="/" component={Auth} />
                 <Main>
                   <Route path="/home" component={Home} />
