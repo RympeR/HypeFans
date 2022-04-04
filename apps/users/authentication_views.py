@@ -99,7 +99,7 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
     def post(self, request):
         uidb64 = request.data.get('uidb64', '')
         token = request.data.get('token', '')
-        password = request.data.get('token', '')
+        password = request.data.get('password', '')
 
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
