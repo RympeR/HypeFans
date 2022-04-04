@@ -101,22 +101,26 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
         uidb64 = request.data.get('uidb64', '')
         token = request.data.get('token', '')
         password = request.data.get('password', '')
-
+        print(request.data)
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(id=id)
 
             if not PasswordResetTokenGenerator().check_token(user, token):
+                print('here')
                 return Response({"auth_token": None}, status=status.HTTP_423_LOCKED)
             else:
                 token, created = Token.objects.get_or_create(user=user)
                 logging.warning(password)
                 logging.warning(user.email)
+                print(password)
+                print(user.email)
                 user.set_password(password)
                 user.save()
                 return Response({"auth_token": str(token)}, status=status.HTTP_200_OK)
 
-        except Exception:
+        except Exception as e:
+            print(e)
             return Response({"auth_token": None}, status=status.HTTP_423_LOCKED)
 
 

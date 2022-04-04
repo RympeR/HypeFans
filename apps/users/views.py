@@ -1,8 +1,9 @@
 import logging
 from datetime import datetime, timedelta
 from django.urls import reverse
-
+from django.contrib.sites.shortcuts import get_current_site
 import requests
+from core.utils.customClasses import Util
 from core.utils.customFilters import UserFilter
 from core.utils.default_responses import (api_accepted_202,
                                           api_bad_request_400,
@@ -212,6 +213,17 @@ class UserCreateAPI(generics.GenericAPIView):
 
             user.save()
             token, created = Token.objects.get_or_create(user=user)
+            current_site = get_current_site(request).domain
+            relativeLink = reverse('email-verify')
+            absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
+            email_body = 'Hi '+user.username + \
+                ' Use the link below to verify your email \n' + absurl
+            # email_body = render_to_string(html_template, { 'context': context, })
+
+            data = {'email_body': email_body, 'to_email': user.email,
+                    'email_subject': 'Verify your email'}
+
+            Util.send_email(data)
             return api_created_201({"auth_token": str(token)})
         except Exception as e:
             logging.error(e)
