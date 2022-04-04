@@ -114,7 +114,7 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
                 return Response({"auth_token": str(token)}, status=status.HTTP_423_LOCKED)
 
         except Exception:
-            return Response({"auth_token": str(token)}, status=status.HTTP_423_LOCKED)
+            return Response({"auth_token": None}, status=status.HTTP_423_LOCKED)
 
 
 class SetNewPasswordAPIView(generics.GenericAPIView):
