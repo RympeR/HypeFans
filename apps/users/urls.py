@@ -49,7 +49,7 @@ urlpatterns = [
     path('user-search/', UserSearchRetrieveAPI.as_view()),
     path('get-settings/', UserSettingsRetrieveAPI.as_view()),
     path('create-user/', UserCreateAPI.as_view()),
-    path('login-user/', UserLoginAPI.as_view()),
+    path('login-user/', UserLoginAPI.as_view(), name="login"),
     path('delete-user/', UserAPI.as_view()),
     path('partial-update-user/', UserPartialUpdateAPI.as_view()),
     path('user-subscription/<int:pk>', UserSubscription.as_view()),
@@ -77,16 +77,13 @@ urlpatterns = [
     path('block-user-list/', UserBlockedListAPI.as_view(), name='BlockUserList'),
 
 
-    path('register/', RegisterView.as_view(), name="register"),
-    path('login/', LoginAPIView.as_view(), name="login"),
-    path('logout/', LogoutAPIView.as_view(), name="logout"),
     path('email-verify/', VerifyEmail.as_view(), name="email-verify"),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('request-reset-email/', RequestPasswordResetEmail.as_view(),
          name="request-reset-email"),
     path('request-restore-email/', RequestPasswordRestoreEmail.as_view(),
          name="request-restore-email"),
-    path('password-reset/<uidb64>/<token>/',
+    path('password-reset/',
          PasswordTokenCheckAPI.as_view(), name='password-action-confirm'),
     path('password-reset-complete/', SetNewPasswordAPIView.as_view(),
          name='password-reset-complete')
