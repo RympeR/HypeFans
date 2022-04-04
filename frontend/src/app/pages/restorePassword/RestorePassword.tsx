@@ -13,7 +13,7 @@ import { ReactComponent as EyeOffIcon } from "../../../assets/images/eye-off.svg
 import { getAuthUserData } from "../../../redux/authReducer";
 import { toast } from "react-toastify";
 import IRestorePasswordData from "../../../app/types/IRestorePasswordData";
-import { setAuthToken } from "src/api/api";
+import { setAuthToken } from "../../../api/api";
 
 const initialValues: IRestorePasswordData = {
     password: "",
