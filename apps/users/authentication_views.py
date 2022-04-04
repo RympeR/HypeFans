@@ -1,3 +1,4 @@
+import logging
 import os
 
 from core.utils.customClasses import Util
@@ -109,6 +110,7 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
                 return Response({"auth_token": None}, status=status.HTTP_423_LOCKED)
             else:
                 token, created = Token.objects.get_or_create(user=user)
+                logging.warning(password)
                 user.set_password(password)
                 user.save()
                 return Response({"auth_token": str(token)}, status=status.HTTP_200_OK)
