@@ -111,6 +111,7 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
             else:
                 token, created = Token.objects.get_or_create(user=user)
                 logging.warning(password)
+                logging.warning(user.email)
                 user.set_password(password)
                 user.save()
                 return Response({"auth_token": str(token)}, status=status.HTTP_200_OK)
