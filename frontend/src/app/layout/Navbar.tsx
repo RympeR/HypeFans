@@ -36,8 +36,10 @@ const Navbar = () => {
       const chat_id = setInterval(() => {
         // ws.send(JSON.stringify({}));
         const asyncData = async () => {
-          const data = await blogAPI.getPushNotif().then((res) => {
-            // return toast.success("Уведомление")
+          await blogAPI.getPushNotif().then((res) => {
+            if (res.result.length > 1) {
+              toast.success("Уведомление")
+            }
           })
           return authAPI.onlineUpdate(uid);
         }
