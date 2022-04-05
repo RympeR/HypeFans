@@ -66,15 +66,14 @@ const Navbar = () => {
           })
         }
         const asyncData = async () => {
-          await blogAPI.getPushNotif().then((res) => {
-            if (res.result.length > 1 && res.result.length < 5) {
-              res.result.forEach((item: any) => {
-                showNotifications(item)
-              })
-            } else if (res.result.length > 5) {
-              newNotifications()
-            }
-          })
+          const data = await blogAPI.getPushNotif()
+          if (data.result.length > 1 && data.result.length < 5) {
+            data.result.forEach((item: any) => {
+              showNotifications(item)
+            })
+          } else if (data.result.length === 5) {
+            newNotifications()
+          }
           return authAPI.onlineUpdate(uid);
         }
         asyncData()
