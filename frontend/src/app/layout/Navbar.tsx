@@ -31,14 +31,48 @@ const Navbar = () => {
   // wsClient.onopen = () => {
   //   setWs(wsClient);
   // };
+
+  const getNotificationText = (item: any) => {
+    switch (item.notification_type) {
+      case "donation":
+        return `${item.source_info.username} задонатил вам`
+      case "subscription":
+        return `${item.source_info.username} подписался на вас`
+      case "chat_subscription":
+        return `${item.source_info.username} подписался на чат с вами`
+      case "comment_like":
+        return `${item.source_info.username} понравился ваш комментарий`
+      case "like":
+        return `${item.source_info.username} понравилась ваша публикация`
+      case "comment_comment":
+        return `${item.source_info.username} прокомментировал ваш комментарий`
+      default:
+        return `${item.source_info.username} прокомментировал вашу публикацию`
+    }
+  }
+
   useEffect(() => {
     if (uid) {
       const chat_id = setInterval(() => {
         // ws.send(JSON.stringify({}));
+        const showNotifications = (item: any) => {
+          const notification = new Notification("Уведомление", {
+            body: getNotificationText(item)
+          })
+        }
+        const newNotifications = () => {
+          const notification = new Notification("Уведомление", {
+            body: `У вас новые уведомления`
+          })
+        }
         const asyncData = async () => {
           await blogAPI.getPushNotif().then((res) => {
-            if (res.result.length > 1) {
-              toast.success("Уведомление")
+            if (res.result.length > 1 && res.result.length < 5) {
+              res.result.forEach((item: any) => {
+                showNotifications(item)
+              })
+            } else if (res.result.length > 5) {
+              newNotifications()
             }
           })
           return authAPI.onlineUpdate(uid);
