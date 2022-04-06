@@ -10,15 +10,11 @@ import { ReactComponent as ProfileIcon } from "../../assets/images/user.svg";
 import NavLink from "../components/home/NavLink";
 import { NAV_LINKS } from "../utils/utilities";
 import { getUserData } from "../../redux/authReducer";
-import Cookies from "js-cookie";
 import { authAPI } from "../../api/authAPI";
 import { blogAPI } from "../../api/blogAPI";
-import { toast } from "react-toastify";
 
 const Navbar = () => {
   const { pathname } = useLocation();
-  const refLink = pathname.split("/").slice(2, 4).join("/");
-
   const nick = useSelector((state: RootState) => state.auth.username);
   const uid = useSelector((state: RootState) => state.auth.pk);
   const [ws, setWs] = useState(null);
@@ -90,7 +86,7 @@ const Navbar = () => {
     return null;
   }
 
-  if (Cookies?.get("token")?.length > 5) {
+  if (localStorage.getItem("hypefansToken")?.length > 5) {
     dispatch(getUserData());
   }
 

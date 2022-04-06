@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import React from 'react';
 import { positions, Provider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
@@ -34,7 +33,7 @@ const options = {
 
 const App = () => {
   const dispatch = useDispatch();
-  if (Cookies?.get('token')?.length > 5) {
+  if (localStorage.getItem("hypefansToken")?.length > 5) {
     dispatch(getUserData());
   }
 

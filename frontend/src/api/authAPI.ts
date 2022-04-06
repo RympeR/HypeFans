@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import { instance, setAuthToken } from "./api";
 
 export let token: number | null;
@@ -52,7 +51,7 @@ export const authAPI = {
           console.log("login error");
         }
         console.log(response.data.auth_token);
-        Cookies?.set("token", response.data.auth_token);
+        localStorage.setItem('hypefansToken', response.data.auth_token)
         setAuthToken(response.data.auth_token);
         return response.data.auth_token;
       });
@@ -77,12 +76,11 @@ export const authAPI = {
     password: string,
     ref_link: string
   ) {
-    console.log({ username, email, password, ref_link });
     return instance
       .post("/user/create-user/", { username, email, password, ref_link })
       .then((response) => {
         setAuthToken(response.data.auth_token);
-        Cookies?.set("token", response.data.auth_token);
+        localStorage.setItem('hypefansToken', response.data.auth_token)
         return response.data;
       });
   },
