@@ -8,13 +8,10 @@ import userReducer from "./userReducer";
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
-
 const persistConfig = {
   key: 'root',
   storage,
 }
-
-
 
 const reducers = combineReducers({
   auth: authReducer,
@@ -40,7 +37,7 @@ const middlewares = [thunkMiddleware];
 
 const store = createStore(persistedReducer, compose(applyMiddleware(...middlewares)));
 
-export const persistor = persistStore(store)  
+export const persistor = persistStore(store)
 
 
 export default store;

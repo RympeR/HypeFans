@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { Redirect } from 'react-router-dom';
 
 const Main = ({ children }: { children: ReactNode }) => {
-  if (localStorage.getItem("hypefansToken")?.length < 5) {
+  if (localStorage.getItem("hypefansToken") === null) {
     return <Redirect to="/" />;
   }
   return (

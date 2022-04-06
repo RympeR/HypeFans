@@ -24,11 +24,11 @@ const Auth = () => {
   const refLink = pathname.split("/").slice(2, 4).join("/");
   console.log(refLink);
 
-  if (isLoading) {
+  if (isLoading && localStorage.getItem("hypefansToken") !== null) {
     return <Preloader />;
   }
 
-  if (isAuth) {
+  if (isAuth && localStorage.getItem("hypefansToken") !== null) {
     return <Redirect to="/home" />;
   }
 

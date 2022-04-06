@@ -81,7 +81,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   if (
-    !isAuth
+    !isAuth || localStorage.getItem("hypefansToken") === null
   ) {
     return null;
   }

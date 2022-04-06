@@ -33,9 +33,13 @@ const options = {
 
 const App = () => {
   const dispatch = useDispatch();
-  if (localStorage.getItem("hypefansToken")?.length > 5) {
+  if (localStorage.getItem("hypefansToken") !== null) {
     dispatch(getUserData());
   }
+
+  console.log(localStorage.getItem("hypefansToken"));
+
+  debugger
 
   return (
     <>

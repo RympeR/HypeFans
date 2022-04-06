@@ -10,8 +10,10 @@ instance.interceptors.response.use(
   (error) => {
     if (error.response.status === 401) {
       console.log("error handled");
-      localStorage.removeItem('hypefansToken')
-      window.location.href = "/";
+      if (localStorage.getItem("hypefansToken") !== null) {
+        localStorage.removeItem('hypefansToken')
+        window.location.href = "/";
+      }
     }
     return error;
   }
