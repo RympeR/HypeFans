@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { LangContext } from "../../../app/utils/LangProvider";
 import { chatAPI } from "../../../api/chatAPI";
 import { userAPI } from "../../../api/userAPI";
 import { ReactComponent as SearchSvg } from "../../../assets/images/search.svg";
@@ -18,6 +19,7 @@ export const AddToChatCreate = ({
   const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const history = useHistory();
+  const { currentLang } = useContext(LangContext);
 
   const searchUsers = async () => {
     const data = await chatAPI.searchUserChatCreate({
@@ -54,7 +56,7 @@ export const AddToChatCreate = ({
         onClick={() => handleSubmit()}
         disabled={selectedUsers.length === 0}
       >
-        Создать чат
+        {currentLang.createChat}
       </button>
       <div
         style={{

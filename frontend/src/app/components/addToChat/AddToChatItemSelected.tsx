@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { LangContext } from "../../../app/utils/LangProvider";
 import { ReactComponent as Logo } from "../../../assets/images/logo.svg";
 
 export const AddToChatItemSelected = ({
@@ -15,6 +16,7 @@ export const AddToChatItemSelected = ({
   setSelectedItems: any;
   isChat: boolean;
 }) => {
+  const { currentlang } = useContext(LangContext);
   return (
     <div
       className="notifications__walletChild"
@@ -49,7 +51,7 @@ export const AddToChatItemSelected = ({
           </Link>
         </div>
         <div>
-          <h3>{item.first_name ?? "Имя"}</h3>
+          <h3>{item.first_name ?? currentlang.name}</h3>
           <h4>@{item.username ?? "nickname"}</h4>
         </div>
       </div>

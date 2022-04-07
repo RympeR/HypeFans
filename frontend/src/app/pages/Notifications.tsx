@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "react-phone-input-2/lib/style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, useHistory } from "react-router-dom";
@@ -21,10 +21,12 @@ import { Preloader } from "../utils/Preloader";
 import { Notification } from "./notifications/Notification";
 import axios from "axios";
 import { blogAPI } from "../../api/blogAPI";
+import { LangContext } from "../utils/LangProvider";
 
 const Notifications: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { currentLang } = useContext(LangContext);
   const notifications = useSelector(
     (state: RootState) => state.notifications.notifications
   );
@@ -43,28 +45,28 @@ const Notifications: React.FC = () => {
   const articles = [
     {
       path: "/notifications",
-      text: "Все",
+      text: currentLang.allRef,
       exact: true,
       type: "all",
       icon: <DonateIcon />,
     },
     {
       path: "/notifications/donations",
-      text: "Донаты",
+      text: currentLang.donuts,
       exact: true,
       type: "donation",
       icon: <DonateIcon />,
     },
     {
       path: "/notifications/subscriptions",
-      text: "Подписки",
+      text: currentLang.subscribs,
       exact: true,
       type: "subscription",
       icon: <UnlockIcon />,
     },
     {
       path: "/notifications/likes",
-      text: "Лайки",
+      text: currentLang.likes,
       exact: true,
       type: "like",
       icon: <LikeIcon />,
@@ -165,7 +167,7 @@ const Notifications: React.FC = () => {
                 marginTop: "70px",
               }}
             >
-              Нет уведомлений
+              {currentLang.noNotifications}
             </div>
           )}
         </div>

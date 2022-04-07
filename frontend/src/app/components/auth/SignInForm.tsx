@@ -95,7 +95,7 @@ const SignInForm = ({ action }: { action: string }) => {
         />
       )}
       <p className="auth__input-error">{errors.password?.message}</p>
-      {isCorrect ? null : <div onClick={() => history.push("/forgotPassword")}>Забыли пароль?</div>}
+      {isCorrect ? null : <div onClick={() => history.push("/forgotPassword")}>{currentLang.forgetPass}</div>}
 
       <button className="auth__submit-btn">{currentLang.next}</button>
 

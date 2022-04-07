@@ -199,13 +199,11 @@ export const authAPI = {
   },
   restorePassword({ password, repeat, token }: { password: string, repeat: string, token: string }) {
     return instance.post(`/user/request-restore-email/`, { password, repeat, token }).then((response) => {
-      debugger
       return response.data;
     });
   },
   requestRestore(email: string) {
     return instance.post(`/user/request-restore-email/`, { email }).then((response) => {
-      debugger
       return response.data;
     });
   },

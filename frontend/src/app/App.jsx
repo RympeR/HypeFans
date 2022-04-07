@@ -36,11 +36,6 @@ const App = () => {
   if (localStorage.getItem("hypefansToken") !== null) {
     dispatch(getUserData());
   }
-
-  console.log(localStorage.getItem("hypefansToken"));
-
-  debugger
-
   return (
     <>
       <MetaTags>

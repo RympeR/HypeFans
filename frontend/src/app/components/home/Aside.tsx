@@ -11,6 +11,7 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
     return null;
   }
 
+
   const sliced_array = [];
 
   for (let i = 0; i < recommendations?.length; i += 3) {
@@ -21,14 +22,14 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
   // style={{ left: leftFixedPosition }}
   return (
     <aside className="aside">
-      <Slider dots={true} arrows={false} autoplay={true} autoplaySpeed={2000}>
+      <Slider dots={true} arrows={false} autoplay={false} autoplaySpeed={2000}>
         {sliced_array.map((item, index) => {
           return (
-            <div key={`${index} slideMain`}>
+            <>
               {item.map((slide, i) => {
                 return <UserBanner aside key={`${index + i} slideItem`} profile={slide} />;
               })}
-            </div>
+            </>
           );
         })}
       </Slider>

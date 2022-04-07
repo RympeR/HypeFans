@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Redirect, useHistory } from "react-router-dom";
 import { Preloader } from "../../../app/utils/Preloader";
@@ -8,6 +8,7 @@ import { ReactComponent as Logo } from "../../../assets/images/sign-in-logo.svg"
 import { Field, Form, Formik } from "formik";
 import { authAPI } from "../../../api/authAPI";
 import { toast } from "react-toastify";
+import { LangContext } from "../../../app/utils/LangProvider";
 
 export const ForgotPass = () => {
 
@@ -15,6 +16,7 @@ export const ForgotPass = () => {
     const isLoading = useSelector((state: RootState) => state.blog.isLoading);
     const history = useHistory()
     const [isRequesting, setIsRequesting] = useState<boolean>(false)
+    const { currentLang } = useContext(LangContext);
     const dispatch = useDispatch()
     const back_classes = [
         "auth__main-slide",
@@ -58,22 +60,21 @@ export const ForgotPass = () => {
                     <h1 className="auth__logo-title">HypeFans</h1>
                 </div>
                 <form action="" className="auth__form" onSubmit={() => console.log("fd")}>
-                    <h2 className="auth__form-name">Забыли пароль?</h2>
+                    <h2 className="auth__form-name">{currentLang.forgetPass}</h2>
 
                     <div className="auth__status">
                         <Link to={`/${NAV_LINKS.SIGNUP}`}>
-                            <div style={{ color: "#FB5734" }}>Register</div>
+                            <div style={{ color: "#FB5734" }}>{currentLang.reg}</div>
                         </Link>
                     </div>
                     <Formik initialValues={{ email: "" }} onSubmit={(val) => {
-                        debugger
                         changeRequest(val.email)
                     }}>
                         {({ values }) => {
                             return (
                                 <Form>
                                     <Field className="auth__input" placeholder="Email..." name="email" />
-                                    <button className="auth__submit-btn" onClick={() => changeRequest(values.email)}>Отправить</button>
+                                    <button className="auth__submit-btn" onClick={() => changeRequest(values.email)}>{currentLang.send}</button>
                                 </Form>
                             )
                         }}
