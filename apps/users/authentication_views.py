@@ -57,7 +57,6 @@ class RequestPasswordRestoreEmail(generics.GenericAPIView):
             uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
             current_site = get_current_site(
                 request=request).domain
-            redirect_url = 'hype-fans.com/'
             absurl = 'http://' + current_site + 'restore-password/'
             email_body = 'Hello, \n Use link below to restore your password  \n' + \
                 absurl+"?token=" + token + '&uidb64=' + uidb64
