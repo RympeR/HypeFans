@@ -1,5 +1,4 @@
 import { Formik } from "formik";
-import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -158,7 +157,7 @@ export const Settings = () => {
     const [show, setShow] = useState(false);
 
     const logoutFunc = async () => {
-      Cookies?.set("token", null);
+      localStorage.removeItem("hypefansToken")
       await dispatch(logout());
       history.push("/");
     };

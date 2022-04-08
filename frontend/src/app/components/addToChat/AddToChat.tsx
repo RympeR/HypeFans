@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { LangContext } from "../../../app/utils/LangProvider";
 import { chatAPI } from "../../../api/chatAPI";
 import { userAPI } from "../../../api/userAPI";
 import { ReactComponent as SearchSvg } from "../../../assets/images/search.svg";
@@ -17,6 +18,7 @@ export const AddToChat = ({
   const [inputValue, setInputValue] = useState("");
   const history = useHistory();
   const [selectedItems, setSelectedItems] = useState<Array<any>>(invitedUsers);
+  const { currentLang } = useContext(LangContext);
 
   const searchUsers = async () => {
     const data = await userAPI.searchUser({
@@ -40,22 +42,21 @@ export const AddToChat = ({
     const data = await chatAPI.inviteUsers(
       selectedItems.map((item) => item.username),
       history.location.pathname.split("/")[
-        history.location.pathname.split("/").length - 1
+      history.location.pathname.split("/").length - 1
       ]
     );
-    console.log(data);
   };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", padding: "15px" }}>
-      <h2>Добавить человека в беседу:</h2>
+      <h2>{currentLang.addToChat}:</h2>
       <button
         className="notifications__settingBtn"
         style={{ margin: "0px", width: "100%" }}
         onClick={() => addToChat()}
         disabled={selectedItems.length === 0}
       >
-        Добавить
+        {currentLang.add}
       </button>
       <div
         style={{
@@ -70,7 +71,7 @@ export const AddToChat = ({
         <SearchSvg />
         <input
           style={{ marginLeft: "16px", width: "80%" }}
-          placeholder="Найти людей:"
+          placeholder={`${currentLang.findPeoples}:`}
           value={inputValue}
           onChange={(val) => {
             setInputValue(val.currentTarget.value);
@@ -86,6 +87,7 @@ export const AddToChat = ({
             items={selectedItems}
             setSelectedItems={setSelectedItems}
             key={index}
+            isChat={false}
           />
         );
       })}
@@ -100,6 +102,7 @@ export const AddToChat = ({
               items={selectedItems}
               setSelectedItems={setSelectedItems}
               key={index}
+              isChat={false}
             />
           );
         })}

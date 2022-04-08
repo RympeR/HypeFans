@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import { instance, setAuthToken } from "./api";
 
 export let token: number | null;
@@ -8,6 +7,15 @@ export const authAPI = {
       .post<{ email: string; password: string }>("/auth/jwt/create/", {
         email,
         password,
+      })
+      .then((response) => {
+        return response;
+      });
+  },
+  changePasswordAuth(password: string, uidb64: string, token: string) {
+    return instance
+      .post("/user/password-reset/", {
+        uidb64, password, token
       })
       .then((response) => {
         return response;
@@ -43,7 +51,7 @@ export const authAPI = {
           console.log("login error");
         }
         console.log(response.data.auth_token);
-        Cookies?.set("token", response.data.auth_token);
+        localStorage.setItem('hypefansToken', response.data.auth_token)
         setAuthToken(response.data.auth_token);
         return response.data.auth_token;
       });
@@ -68,12 +76,11 @@ export const authAPI = {
     password: string,
     ref_link: string
   ) {
-    console.log({ username, email, password, ref_link });
     return instance
       .post("/user/create-user/", { username, email, password, ref_link })
       .then((response) => {
         setAuthToken(response.data.auth_token);
-        Cookies?.set("token", response.data.auth_token);
+        localStorage.setItem('hypefansToken', response.data.auth_token)
         return response.data;
       });
   },
@@ -189,6 +196,16 @@ export const authAPI = {
       .then((response) => {
         return response.data;
       });
+  },
+  restorePassword({ password, repeat, token }: { password: string, repeat: string, token: string }) {
+    return instance.post(`/user/request-restore-email/`, { password, repeat, token }).then((response) => {
+      return response.data;
+    });
+  },
+  requestRestore(email: string) {
+    return instance.post(`/user/request-restore-email/`, { email }).then((response) => {
+      return response.data;
+    });
   },
   deleteUser(id: string | number) {
     return instance.delete(`/auth/users/${id}/`).then((response) => {

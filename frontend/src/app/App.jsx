@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import React from 'react';
 import { positions, Provider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
@@ -24,6 +23,8 @@ import { ViewportProvider } from './utils/ViewportProvider';
 import MetaTags from 'react-meta-tags';
 import { ToastContainer } from "react-toastify";
 import { PersonalSettings } from './pages/personal/PersonalSettings';
+import { ForgotPass } from './pages/forgotPass/ForgotPass';
+import { RestorePassword } from './pages/restorePassword/RestorePassword';
 
 const options = {
   timeout: 5000,
@@ -32,10 +33,9 @@ const options = {
 
 const App = () => {
   const dispatch = useDispatch();
-  if (Cookies?.get('token')?.length > 5) {
+  if (localStorage.getItem("hypefansToken") !== null) {
     dispatch(getUserData());
   }
-
   return (
     <>
       <MetaTags>
@@ -48,6 +48,8 @@ const App = () => {
             <LangProvider>
               <Switch>
                 <Route path="/signin" component={Auth} />
+                <Route exact path="/forgotPassword" component={ForgotPass} />
+                <Route path="/restore-password" component={RestorePassword} />
                 <Route exact path="/" component={Auth} />
                 <Main>
                   <Route path="/home" component={Home} />

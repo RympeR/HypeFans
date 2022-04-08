@@ -342,6 +342,7 @@ export const ListsComponent = () => {
                     items={selectedItems}
                     setSelectedItems={setSelectedItems}
                     key={index}
+                    isChat={false}
                   />
                 );
               })}
@@ -360,6 +361,7 @@ export const ListsComponent = () => {
                     items={selectedItems}
                     setSelectedItems={setSelectedItems}
                     key={index}
+                    isChat={false}
                   />
                 );
               })}
