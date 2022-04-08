@@ -1,3 +1,4 @@
+from typing import Dict
 from core.utils.customFields import TimestampField
 from apps.users.dynamic_preferences_registry import ReferralPercentage
 from django.db.models import Count, Q
@@ -21,10 +22,10 @@ class PostActionNotificationSerializer(serializers.ModelSerializer):
         model = PostAction
         fields = 'source_info', 'notification_type', 'additional_info'
 
-    def get_additional_info(self, post_action: PostAction):
+    def get_additional_info(self, post_action: PostAction) -> dict:
         return {}
 
-    def get_notification_type(self, post_action: PostAction):
+    def get_notification_type(self, post_action: PostAction) -> str:
         if post_action.like:
             if post_action.parent:
                 return 'comment_like'
@@ -34,7 +35,7 @@ class PostActionNotificationSerializer(serializers.ModelSerializer):
                 return 'comment_comment'
         return 'comment'
 
-    def get_source_info(self, post_action: PostAction):
+    def get_source_info(self, post_action: PostAction) -> Dict[str, str]:
         username = post_action.user.username
         return {
             'username': username,
