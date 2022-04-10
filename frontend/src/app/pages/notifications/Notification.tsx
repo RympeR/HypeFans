@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { getPost } from "../../../redux/blogReducer";
 import { PostModal } from "../Post";
 import logo from '../../../assets/images/logo.svg';
+import { LangContext } from "../../../app/utils/LangProvider";
 
 export const Notification = ({ item }: any) => {
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const { currentlang } = useContext(LangContext)
   const dispatch = useDispatch();
   const closeModal = () => {
     setIsModalOpened(false);
@@ -18,17 +20,13 @@ export const Notification = ({ item }: any) => {
   const getTitle = (type: string) => {
     switch (type) {
       case "like":
-        return "понравился ваш пост";
+        return currentlang.noteLike;
       case "comment":
-        return "Оставил(а) комментарий";
+        return currentlang.noteComment;
       case "donation":
-        return `Задонатил(а) ${item.donation.amount} $`;
+        return `${currentlang.noteDonut}${item.donation.amount} $`;
       case "subscription":
-        return (
-          <>
-            подписался(лась) на ваш <br></br>профиль!
-          </>
-        );
+        return currentlang.noteSubscribe
     }
   };
   return (
@@ -60,7 +58,7 @@ export const Notification = ({ item }: any) => {
       ) : null}
       {item.type === "subscription" ? (
         <div className="notifications__donationAmount">
-          {item.subscription.amount} месяца
+          {item.subscription.amount}{currentlang.months}
         </div>
       ) : null}
       <Modal

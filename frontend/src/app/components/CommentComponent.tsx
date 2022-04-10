@@ -309,7 +309,7 @@ export const CommentComponent = ({
           return (
             <div style={{ display: "flex" }}>
               <textarea
-                placeholder={currentlang?.leftComment}
+                placeholder={currentlang?.leftComment ?? "left comment"}
                 className="post__comment-amount"
                 name="comment"
                 onChange={(val) => {

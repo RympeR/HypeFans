@@ -73,7 +73,7 @@ const Notifications: React.FC = () => {
     },
     {
       path: "/notifications/comments",
-      text: "Комментарии",
+      text: currentLang.comments,
       exact: true,
       type: "comment",
       icon: <CommentIcon />,
@@ -82,6 +82,7 @@ const Notifications: React.FC = () => {
 
   const NotificationsSidebar = () => {
     const SettingsButton = () => <SettingsIcon />;
+    const { currentLang } = useContext(LangContext);
 
     return (
       <div>
@@ -93,7 +94,7 @@ const Notifications: React.FC = () => {
           <div className="notifications__headingText">
             <Route
               path="/notifications"
-              render={() => <SidebarText text="Уведомления" />}
+              render={() => <SidebarText text={currentLang.notif} />}
             />
           </div>
           <div className="notifications__settings">
@@ -218,7 +219,7 @@ const Notifications: React.FC = () => {
               </div>
             )}
             {articles.map((item, key) => {
-              if (item.text === "Все") return null;
+              if (item.text === currentLang.all) return null;
               return (
                 <Link
                   className={
@@ -244,7 +245,7 @@ const Notifications: React.FC = () => {
               render={() => (
                 <Main
                   notifications={
-                    article.text === "Все"
+                    article.text === currentLang.all
                       ? notifications
                       : notifications.filter(
                         (item) => item.type === article.type
