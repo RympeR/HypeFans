@@ -18,7 +18,7 @@
 </style>
 
 <body>
-    <div class="editable_div" editable></div>
+    <div class="editable_div" editable="true"></div>
 </body>
 <script>
     var editable = document.querySelector('.editable_div');
@@ -26,9 +26,6 @@
     var possible_margin_top = windowHeight * 0.5;
     editable.style.marginTop = possible_margin_top + 'px';
     console.log(windowHeight);
-    editable.addEventListener('click', function () {
-        editable.contentEditable = true;
-    });
     editable.addEventListener('keydown', function (e) {
         if (e.keyCode === 13 && e.shiftKey) {
             var editableHeight = editable.offsetHeight;
@@ -36,8 +33,8 @@
             editable.style.height = editable.scrollHeight + 'px';
             editable.style.marginTop = (possible_margin_top - editableHeight) + 'px';
         }
-        if (e.keyCode === 13) {
-            console.log(editable.innerHTML);
+        else if (e.keyCode === 13) {
+            console.log(editable.innerHTML.replace('<br>', '\n'));
             editable.contentEditable = false;
             editable.innerHTML = '';
             editable.style.height = 'auto';
