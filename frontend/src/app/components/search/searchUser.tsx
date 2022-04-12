@@ -5,7 +5,7 @@ import { LangContext } from "../../../app/utils/LangProvider";
 import { ReactComponent as Logo } from "../../../assets/images/logo.svg";
 
 export const UserItem = ({ item }: { item: any }) => {
-  const { currentlang } = useContext(LangContext);
+  const { currentLang } = useContext(LangContext);
 
   return (
     <div
@@ -33,7 +33,7 @@ export const UserItem = ({ item }: { item: any }) => {
           </Link>
         </div>
         <div>
-          <h3>{item.first_name ?? currentlang.name}</h3>
+          <h3>{item.first_name ?? currentLang.name}</h3>
           <h4>@{item.username ?? "nickname"}</h4>
         </div>
       </div>

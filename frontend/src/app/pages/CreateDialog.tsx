@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useContext, useRef, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -12,9 +12,11 @@ import { toast } from "react-toastify";
 import CurrencyInput from "react-currency-input-field";
 import { AddToChat } from "../components/addToChat/AddToChat";
 import { AddToChatCreate } from "../components/addToChat/AddToChatCreate";
+import { LangContext } from "../utils/LangProvider";
 
 export const CreateDialog = () => {
     const [currentTab, setCurrentTab] = useState(0);
+    const { currentLang } = useContext(LangContext)
     const history = useHistory()
     const userId = useSelector((state: RootState) => state.auth.pk);
     const createNewChat = async (data: any) => {
@@ -63,7 +65,7 @@ export const CreateDialog = () => {
                                 <>
                                     {currentTab === 1 ? (
                                         <>
-                                            <h2 style={{ marginBottom: "0px" }}>Создание беседы</h2>
+                                            <h2 style={{ marginBottom: "0px" }}>{currentLang.createChat}</h2>
                                             <div style={{ display: "flex", alignItems: "center", marginTop: "20px", justifyContent: "space-around" }}>
                                                 <div
                                                     className="personalSettings__changeAvatar"
@@ -107,27 +109,27 @@ export const CreateDialog = () => {
                                                 }}
                                             >
                                                 <h3 onClick={() => setCurrentTab(currentTab - 1)}>
-                                                    Отмена
+                                                    {currentLang.cancel}
                                                 </h3>
                                                 <div style={{ width: "20px" }}></div>
                                                 <h3
                                                     onClick={() => {
                                                         if (values.chatName.length === 0) {
-                                                            return toast.error("Введите название чата")
+                                                            return toast.error(currentLang.chatPls)
                                                         } else {
                                                             return setCurrentTab(currentTab + 1)
                                                         }
                                                     }}
                                                     style={{ color: "#FB5734" }}
                                                 >
-                                                    Далее
+                                                    {currentLang.next}
                                                 </h3>
                                             </div>
                                         </>
                                     ) : null}
                                     {currentTab === 2 ? (
                                         <>
-                                            <h2 style={{ marginBottom: "0px" }}>Создание беседы</h2>
+                                            <h2 style={{ marginBottom: "0px" }}>{currentLang.createChat}</h2>
                                             <div
                                                 style={{
                                                     display: "flex",
@@ -143,7 +145,7 @@ export const CreateDialog = () => {
                                                         width: "100%",
                                                     }}
                                                 >
-                                                    <p>Цена за вход</p>
+                                                    <p>{currentLang.enterPrice}</p>
                                                     <input
                                                         type="checkbox"
                                                         className="notifications__toggle-button"
@@ -165,7 +167,7 @@ export const CreateDialog = () => {
                                                         marginBottom: "10px"
                                                     }}
                                                     value={values.chatCost}
-                                                    placeholder="$ цена сообщения..."
+                                                    placeholder={currentLang.msgPrice}
                                                     decimalsLimit={2}
                                                     onValueChange={(value, name) => setFieldValue("chatCost", value)}
                                                 /> : null}
@@ -177,14 +179,14 @@ export const CreateDialog = () => {
                                                     }}
                                                 >
                                                     <h3 onClick={() => setCurrentTab(currentTab - 1)}>
-                                                        Отмена
+                                                        {currentLang.cancel}
                                                     </h3>
                                                     <div style={{ width: "20px" }}></div>
                                                     <h3
                                                         onClick={() => setCurrentTab(currentTab + 1)}
                                                         style={{ color: "#FB5734" }}
                                                     >
-                                                        Далее
+                                                        {currentLang.next}
                                                     </h3>
                                                 </div>
                                             </div>
@@ -192,7 +194,7 @@ export const CreateDialog = () => {
                                     ) : null}
                                     {currentTab === 3 ? (
                                         <>
-                                            <h2 style={{ marginBottom: "0px" }}>Участники</h2>
+                                            <h2 style={{ marginBottom: "0px" }}>{currentLang.members}</h2>
                                             <AddToChatCreate
                                                 selectedUsers={values.invited}
                                                 setSelectedItems={setFieldValue}
@@ -206,14 +208,14 @@ export const CreateDialog = () => {
                                                 }}
                                             >
                                                 <h3 onClick={() => setCurrentTab(currentTab - 1)}>
-                                                    Отмена
+                                                    {currentLang.cancel}
                                                 </h3>
                                                 <div style={{ width: "20px" }}></div>
                                                 <h3
                                                     onClick={() => handleSubmit()}
                                                     style={{ color: "#FB5734" }}
                                                 >
-                                                    Далее
+                                                    {currentLang.next}
                                                 </h3>
                                             </div>
                                         </>

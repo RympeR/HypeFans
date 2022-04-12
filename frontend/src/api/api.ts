@@ -19,13 +19,13 @@ instance.interceptors.response.use(
   }
 );
 export const setAuthToken = (token: string) => {
-  if (token === "") {
+  if (token === null) {
     instance.defaults.headers.common["Auth"] = ``;
     return (instance.defaults.headers.common["Authorization"] = ``);
+  } else if (token !== null) {
+    instance.defaults.headers.common["Authorization"] = `token ${token}`;
+    instance.defaults.headers.common["Auth"] = `token ${token}`;
   }
-  // instance.defaults.headers.common['Access-Control-Allow-Headers'] = '*';
-  instance.defaults.headers.common["Authorization"] = `token ${token}`;
-  instance.defaults.headers.common["Auth"] = `token ${token}`;
 };
 (function () {
   if (localStorage.getItem('hypefansToken')?.length < 5) {

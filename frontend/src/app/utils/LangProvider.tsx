@@ -4,7 +4,7 @@ import langData from "../../assets/text/index.json";
 export const LangContext = createContext(null);
 
 export const LangProvider = ({ children }: { children: ReactNode }) => {
-  const [currentLang, setCurrentLang] = useState<any>(langData.EN);
+  const [currentLang, setCurrentLang] = useState<any>(langData.UA);
 
   return (
     <LangContext.Provider value={{ currentLang, setCurrentLang }}>

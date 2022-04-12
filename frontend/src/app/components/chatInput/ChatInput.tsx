@@ -9,7 +9,7 @@ export const ChatInput = ({
   sendMessage,
   isSendDisabled,
   audio,
-  wrapperRef
+  wrapperRef,
 }: {
   sendMessage: any;
   isSendDisabled: any;
@@ -17,9 +17,13 @@ export const ChatInput = ({
   wrapperRef: any;
 }) => {
   const history = useHistory();
+  const windowHeight = window.innerHeight;
+  const [possibleMarginTop, setPossibleMarginTop] = useState(
+    windowHeight * 0.5
+  );
   const lastUrl = getLastUrlPoint(history.location.pathname);
-  const [height, setHeight] = useState<number>(30)
-  const [bottom, setBottom] = useState<number>(30)
+  const [height, setHeight] = useState<number>(30);
+  const [bottom, setBottom] = useState<number>(30);
   const VektorIcon = () => <Vektor />;
   const VektorIconDisabled = () => <VektorDisabled />;
   const handleChange = (event: any) => {
@@ -27,10 +31,10 @@ export const ChatInput = ({
     // const rows = event.target.rows;
     // const rowHeight = 15;
     // const trows = Math.ceil(height / rowHeight) - 1;
-    setHeight(event.target.scrollHeight)
+    setHeight(event.target.scrollHeight);
     // console.log(height, event.target.scrollHeight);
     // console.log(height, event.target.scrollHeight);
-  }
+  };
 
   return (
     <Formik
@@ -45,7 +49,12 @@ export const ChatInput = ({
       {({ values, handleSubmit, setFieldValue }) => {
         return (
           <>
-            <div className="chat__text">
+            <div
+              className="chat__text"
+              style={{
+                marginTop: possibleMarginTop + "px",
+              }}
+            >
               <Field
                 key="input-message"
                 name="messageFormikText"
@@ -54,12 +63,12 @@ export const ChatInput = ({
                   padding: "3px",
                   maxHeight: "80px",
                   background: "#fbdfcf",
-                  borderRadius: "21px"
+                  borderRadius: "21px",
                 }}
                 as="textarea"
                 onChange={(event: any) => {
-                  setFieldValue("messageFormikText", event.target.value)
-                  handleChange(event)
+                  setFieldValue("messageFormikText", event.target.value);
+                  handleChange(event);
                 }}
                 onBlur={() => {
                   wrapperRef.current.scrollIntoView({ behavior: "smooth" });
@@ -80,8 +89,8 @@ export const ChatInput = ({
             >
               {(values.messageFormikText.length > 0 &&
                 values.messageFormikText.length < 255) ||
-                isSendDisabled ||
-                audio ? (
+              isSendDisabled ||
+              audio ? (
                 <VektorIcon />
               ) : (
                 <VektorIconDisabled />
@@ -90,6 +99,6 @@ export const ChatInput = ({
           </>
         );
       }}
-    </Formik >
+    </Formik>
   );
 };

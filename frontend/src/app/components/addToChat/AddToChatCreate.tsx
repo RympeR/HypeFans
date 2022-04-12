@@ -71,7 +71,7 @@ export const AddToChatCreate = ({
         <SearchSvg />
         <input
           style={{ marginLeft: "16px", width: "80%" }}
-          placeholder="Найти людей:"
+          placeholder={currentLang.findPeoples}
           value={inputValue}
           onChange={(val) => {
             setInputValue(val.currentTarget.value);

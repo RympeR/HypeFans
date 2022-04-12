@@ -7,6 +7,7 @@ import logo from "../../../assets/images/logo.svg";
 import { AddToChatItem } from "../../components/addToChat/AddToChatItem";
 import { AddToChatItemSelected } from "../../components/addToChat/AddToChatItemSelected";
 import { userAPI } from "../../../api/userAPI";
+import { LangContext } from "../../../app/utils/LangProvider";
 
 export const ListsComponent = () => {
   const [lists, setLists] = React.useState({
@@ -17,6 +18,7 @@ export const ListsComponent = () => {
     blocked_users: [],
     my_subs: [],
   });
+  const { currentLang } = React.useContext(LangContext)
   const [currentTab, setCurrentTab] = React.useState("list");
   const [selectedItems, setSelectedItems] = React.useState<Array<any>>([]);
   const unblockUsers = async () => {
@@ -52,8 +54,8 @@ export const ListsComponent = () => {
             }
           >
             <div className="notifications__listText">
-              <h1>Избранные</h1>
-              <h2>{lists.favourites.length} человек</h2>
+              <h1>{currentLang.scecial}</h1>
+              <h2>{lists.favourites.length}{currentLang.man1}</h2>
             </div>
             <div>
               {lists?.favourites[0]?.avatar ? (
@@ -68,8 +70,8 @@ export const ListsComponent = () => {
             }
           >
             <div className="notifications__listText">
-              <h1>Друзья</h1>
-              <h2>{lists.friends.length} человек</h2>
+              <h1>{currentLang.friends}</h1>
+              <h2>{lists.friends.length}{currentLang.man1}</h2>
             </div>
             <div>
               {lists?.friends[0]?.avatar ? (
@@ -84,8 +86,8 @@ export const ListsComponent = () => {
             }
           >
             <div className="notifications__listText">
-              <h1>Последние подписчики</h1>
-              <h2>{lists.last_donators.length} человек</h2>
+              <h1>{currentLang.newSubscribers}</h1>
+              <h2>{lists.last_donators.length}{currentLang.man1}</h2>
             </div>
             <div>
               {lists?.last_subs[0]?.avatar ? (
@@ -102,8 +104,8 @@ export const ListsComponent = () => {
             }
           >
             <div className="notifications__listText">
-              <h1>Последние донатеры</h1>
-              <h2>{lists.last_donators.length} человек</h2>
+              <h1>{currentLang.newDonuts}</h1>
+              <h2>{lists.last_donators.length}{currentLang.man1}</h2>
             </div>
             <div>
               {lists?.last_donators[0]?.avatar ? (
@@ -120,8 +122,8 @@ export const ListsComponent = () => {
             }
           >
             <div className="notifications__listText">
-              <h1>Заблокированные пользователи</h1>
-              <h2>{lists.blocked_users.length} человек</h2>
+              <h1>{currentLang.blockAccounts}</h1>
+              <h2>{lists.blocked_users.length}{currentLang.man1}</h2>
             </div>
             <div>
               {lists?.blocked_users[0]?.avatar ? (
@@ -136,8 +138,8 @@ export const ListsComponent = () => {
             }
           >
             <div className="notifications__listText">
-              <h1>Мои подписки</h1>
-              <h2>{lists.my_subs.length} человек</h2>
+              <h1>{currentLang.mySubscriptions}</h1>
+              <h2>{lists.my_subs.length}{currentLang.man1}</h2>
             </div>
             <div>
               {lists?.my_subs[0]?.avatar ? (
@@ -167,7 +169,7 @@ export const ListsComponent = () => {
               />
             </div>
             <div style={{ marginTop: "5px", marginLeft: "8px" }}>
-              Последние подписчики
+              {currentLang.recentSubs}
             </div>
           </div>
           <div
@@ -183,7 +185,7 @@ export const ListsComponent = () => {
             <SearchSvg />
             <input
               style={{ marginLeft: "16px", width: "80%" }}
-              placeholder="Найти людей:"
+              placeholder={currentLang.findPeoples}
               value={inputValue}
               onChange={(val) => setInputValue(val.currentTarget.value)}
             ></input>
@@ -208,7 +210,7 @@ export const ListsComponent = () => {
                         </Link>
                       </div>
                       <div>
-                        <h3>{item.first_name ?? "Имя"}</h3>
+                        <h3>{item.first_name ?? currentLang.name}</h3>
                         <h4>@{item.username ?? "nickname"}</h4>
                       </div>
                     </div>
@@ -232,7 +234,7 @@ export const ListsComponent = () => {
             <div>
               <ArrowLeft onClick={() => setCurrentTab("list")} />
             </div>
-            <div style={{ marginTop: "5px", marginLeft: "8px" }}>Избранное</div>
+            <div style={{ marginTop: "5px", marginLeft: "8px" }}>{currentLang.scecial}</div>
           </div>
           <div
             style={{
@@ -247,7 +249,7 @@ export const ListsComponent = () => {
             <SearchSvg />
             <input
               style={{ marginLeft: "16px", width: "80%" }}
-              placeholder="Найти людей:"
+              placeholder={currentLang.findPeoples}
               value={inputValue}
               onChange={(val) => setInputValue(val.currentTarget.value)}
             ></input>
@@ -272,7 +274,7 @@ export const ListsComponent = () => {
                         </Link>
                       </div>
                       <div>
-                        <h3>{item.first_name ?? "Имя"}</h3>
+                        <h3>{item.first_name ?? currentLang.name}</h3>
                         <h4>@{item.username ?? "nickname"}</h4>
                       </div>
                     </div>
@@ -297,7 +299,7 @@ export const ListsComponent = () => {
               <ArrowLeft onClick={() => setCurrentTab("list")} />
             </div>
             <div style={{ marginTop: "5px", marginLeft: "8px" }}>
-              Заблокированные пользователи
+              {currentLang.blockAccounts}
             </div>
           </div>
           <div
@@ -314,7 +316,7 @@ export const ListsComponent = () => {
               <SearchSvg />
               <input
                 style={{ marginLeft: "16px", width: "80%" }}
-                placeholder="Найти людей:"
+                placeholder={currentLang.findPeoples}
                 value={inputValue}
                 onChange={(val) => setInputValue(val.currentTarget.value)}
               ></input>
@@ -326,7 +328,7 @@ export const ListsComponent = () => {
             onClick={() => unblockUsers()}
             disabled={selectedItems.length === 0}
           >
-            Разблокировать
+            {currentLang.unblock}
           </button>
           <div style={{ overflowY: "scroll" }}>
             {selectedItems
@@ -383,7 +385,7 @@ export const ListsComponent = () => {
               <ArrowLeft onClick={() => setCurrentTab("list")} />
             </div>
             <div style={{ marginTop: "5px", marginLeft: "8px" }}>
-              Последние донатеры
+              {currentLang.recentDonuters}
             </div>
           </div>
           <div
@@ -399,7 +401,7 @@ export const ListsComponent = () => {
             <SearchSvg />
             <input
               style={{ marginLeft: "16px", width: "80%" }}
-              placeholder="Найти людей:"
+              placeholder={currentLang.findPeoples}
               value={inputValue}
               onChange={(val) => setInputValue(val.currentTarget.value)}
             ></input>
@@ -424,7 +426,7 @@ export const ListsComponent = () => {
                         </Link>
                       </div>
                       <div>
-                        <h3>{item.first_name ?? "Имя"}</h3>
+                        <h3>{item.first_name ?? currentLang.name}</h3>
                         <h4>@{item.username ?? "nickname"}</h4>
                       </div>
                     </div>
@@ -448,7 +450,7 @@ export const ListsComponent = () => {
             <div>
               <ArrowLeft onClick={() => setCurrentTab("list")} />
             </div>
-            <div style={{ marginTop: "5px", marginLeft: "8px" }}>Друзья</div>
+            <div style={{ marginTop: "5px", marginLeft: "8px" }}>{currentLang.friends}</div>
           </div>
           <div
             style={{
@@ -463,7 +465,7 @@ export const ListsComponent = () => {
             <SearchSvg />
             <input
               style={{ marginLeft: "16px", width: "80%" }}
-              placeholder="Найти людей:"
+              placeholder={currentLang.findPeoples}
               value={inputValue}
               onChange={(val) => setInputValue(val.currentTarget.value)}
             ></input>
@@ -488,7 +490,7 @@ export const ListsComponent = () => {
                         </Link>
                       </div>
                       <div>
-                        <h3>{item.first_name ?? "Имя"}</h3>
+                        <h3>{item.first_name ?? currentLang.name}</h3>
                         <h4>@{item.username ?? "nickname"}</h4>
                       </div>
                     </div>
@@ -513,7 +515,7 @@ export const ListsComponent = () => {
               <ArrowLeft onClick={() => setCurrentTab("list")} />
             </div>
             <div style={{ marginTop: "5px", marginLeft: "8px" }}>
-              Мои подписки
+              {currentLang.mySubscriptions}
             </div>
           </div>
           <div
@@ -529,7 +531,7 @@ export const ListsComponent = () => {
             <SearchSvg />
             <input
               style={{ marginLeft: "16px", width: "80%" }}
-              placeholder="Найти людей:"
+              placeholder={currentLang.findPeoples}
               value={inputValue}
               onChange={(val) => setInputValue(val.currentTarget.value)}
             ></input>
@@ -554,7 +556,7 @@ export const ListsComponent = () => {
                         </Link>
                       </div>
                       <div>
-                        <h3>{item.first_name ?? "Имя"}</h3>
+                        <h3>{item.first_name ?? currentLang.name}</h3>
                         <h4>@{item.username ?? "nickname"}</h4>
                       </div>
                     </div>
