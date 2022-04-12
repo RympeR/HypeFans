@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { RootState } from "../../redux/redux";
@@ -12,6 +12,7 @@ import { NAV_LINKS } from "../utils/utilities";
 import { getUserData } from "../../redux/authReducer";
 import { authAPI } from "../../api/authAPI";
 import { blogAPI } from "../../api/blogAPI";
+import { LangContext } from "../utils/LangProvider";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -19,6 +20,7 @@ const Navbar = () => {
   const uid = useSelector((state: RootState) => state.auth.pk);
   const [ws, setWs] = useState(null);
   const isAuth = useSelector((state: RootState) => state.auth.isAuth)
+  const { currentLang } = useContext(LangContext)
 
   const [newMessages, setNewMessages] = useState(0);
   // const wsClient = new WebSocket(
@@ -31,19 +33,19 @@ const Navbar = () => {
   const getNotificationText = (item: any) => {
     switch (item.notification_type) {
       case "donation":
-        return `${item.source_info.username} задонатил вам`
+        return `${item.source_info.username} ${currentLang.donatedU}`
       case "subscription":
-        return `${item.source_info.username} подписался на вас`
+        return `${item.source_info.username} ${currentLang.subscribedU}`
       case "chat_subscription":
-        return `${item.source_info.username} подписался на чат с вами`
+        return `${item.source_info.username} ${currentLang.chatSubscribedU}`
       case "comment_like":
-        return `${item.source_info.username} понравился ваш комментарий`
+        return `${item.source_info.username} ${currentLang.likedUrComment}`
       case "like":
-        return `${item.source_info.username} понравилась ваша публикация`
+        return `${item.source_info.username} ${currentLang.likedUrPost}`
       case "comment_comment":
-        return `${item.source_info.username} прокомментировал ваш комментарий`
+        return `${item.source_info.username} ${currentLang.commentUrComment}`
       default:
-        return `${item.source_info.username} прокомментировал вашу публикацию`
+        return `${item.source_info.username} ${currentLang.commentUrPost}`
     }
   }
 

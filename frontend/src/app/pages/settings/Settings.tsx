@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import CurrencyInput from "react-currency-input-field";
@@ -44,8 +44,11 @@ import {
   SettingsSidebarItem,
 } from "../notifications/NotificationSidebarItem";
 import { ListsComponent } from "./List";
+import { LangContext } from "../../../app/utils/LangProvider";
+import langData from "../../../assets/text/index.json";
 
 export const Settings = () => {
+  const { currentLang, setCurrentLang } = useContext(LangContext)
   const history = useHistory();
   const { pathname } = useLocation();
   const settings = useSelector((state: RootState) => state.auth);
@@ -122,17 +125,12 @@ export const Settings = () => {
       <div className="notifications__main">
         <div
           style={{ padding: "16px 24px", fontSize: "20px", display: "flex" }}
+          onClick={() => setCurrentLang(langData.UA)}
         >
           Українська
-        </div>
-        <div
-          style={{
-            padding: "16px 24px",
-            fontSize: "20px",
-            borderTop: "1px solid grey",
-          }}
-        >
-          English
+          {currentLang.langBtn === "UA" ? <div style={{ marginLeft: "5px" }}>
+            <Readed />
+          </div> : null}
         </div>
         <div
           style={{
@@ -141,11 +139,26 @@ export const Settings = () => {
             borderTop: "1px solid grey",
             display: "flex",
           }}
+          onClick={() => setCurrentLang(langData.EN)}
+        >
+          English
+          {currentLang.langBtn === "ENG" ? <div style={{ marginLeft: "5px" }}>
+            <Readed />
+          </div> : null}
+        </div>
+        <div
+          style={{
+            padding: "16px 24px",
+            fontSize: "20px",
+            borderTop: "1px solid grey",
+            display: "flex",
+          }}
+          onClick={() => setCurrentLang(langData.RU)}
         >
           Русский
-          <div style={{ marginLeft: "5px" }}>
+          {currentLang.langBtn === "RUS" ? <div style={{ marginLeft: "5px" }}>
             <Readed />
-          </div>
+          </div> : null}
         </div>
       </div>
     );

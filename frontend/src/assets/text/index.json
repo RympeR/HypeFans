@@ -249,7 +249,14 @@
     "notEnough": "Not enough credits",
     "showComments": "Show comments",
     "setPrice": "Set price",
-    "msgPriceSaved": "Message price saved"
+    "msgPriceSaved": "Message price saved",
+    "donatedU": "задонатил(a) вам",
+    "subscribedU": "подписался(ась) на вас",
+    "chatSubscribedU": "подписался(ась) на чат с вами",
+    "likedUrComment": "понравился ваш комментарий",
+    "likedUrPost": "понравилась ваша публикация",
+    "commentUrComment": "прокомментировал(а) ваш комментарий",
+    "commentUrPost": "прокомментировал(а) вашу публикацию"
   },
   "RU": {
     "langBtn": "RUS",
@@ -470,6 +477,13 @@
     "apply": "Принять",
     "geoPlc": "Выберете вашу геопозицию...",
     "site": "Сайт",
+    "donatedU": "задонатил(a) вам",
+    "subscribedU": "подписался(ась) на вас",
+    "chatSubscribedU": "подписался(ась) на чат с вами",
+    "likedUrComment": "понравился ваш комментарий",
+    "likedUrPost": "понравилась ваша публикация",
+    "commentUrComment": "прокомментировал(а) ваш комментарий",
+    "commentUrPost": "прокомментировал(а) вашу публикацию", 
     "sitePlh": "Введите ссылку на ваш сайт...",
     "msgCost": "Цена сообщений",
     "msgCostDescr": "Пользователь сможет общаться с вами, только заплатив определенную сумму.",
@@ -750,6 +764,13 @@
     "hide": "Згорнути",
     "sendDonut": "Надіслати Донат",
     "setPrice": "Встановити ціну",
-    "msgPriceSaved": "Ціна повідомлення збережена"
+    "msgPriceSaved": "Ціна повідомлення збережена",
+    "donatedU": "задонатил(a) вам",
+    "subscribedU": "подписался(ась) на вас",
+    "chatSubscribedU": "подписался(ась) на чат с вами",
+    "likedUrComment": "понравился ваш комментарий",
+    "likedUrPost": "понравилась ваша публикация",
+    "commentUrComment": "прокомментировал(а) ваш комментарий",
+    "commentUrPost": "прокомментировал(а) вашу публикацию"
   }
 }
