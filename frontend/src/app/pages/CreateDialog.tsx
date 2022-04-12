@@ -16,7 +16,7 @@ import { LangContext } from "../utils/LangProvider";
 
 export const CreateDialog = () => {
     const [currentTab, setCurrentTab] = useState(0);
-    const { currentlang } = useContext(LangContext)
+    const { currentLang } = useContext(LangContext)
     const history = useHistory()
     const userId = useSelector((state: RootState) => state.auth.pk);
     const createNewChat = async (data: any) => {
@@ -65,7 +65,7 @@ export const CreateDialog = () => {
                                 <>
                                     {currentTab === 1 ? (
                                         <>
-                                            <h2 style={{ marginBottom: "0px" }}>{currentlang.createChat}</h2>
+                                            <h2 style={{ marginBottom: "0px" }}>{currentLang.createChat}</h2>
                                             <div style={{ display: "flex", alignItems: "center", marginTop: "20px", justifyContent: "space-around" }}>
                                                 <div
                                                     className="personalSettings__changeAvatar"
@@ -109,27 +109,27 @@ export const CreateDialog = () => {
                                                 }}
                                             >
                                                 <h3 onClick={() => setCurrentTab(currentTab - 1)}>
-                                                    {currentlang.cancel}
+                                                    {currentLang.cancel}
                                                 </h3>
                                                 <div style={{ width: "20px" }}></div>
                                                 <h3
                                                     onClick={() => {
                                                         if (values.chatName.length === 0) {
-                                                            return toast.error(currentlang.chatPls)
+                                                            return toast.error(currentLang.chatPls)
                                                         } else {
                                                             return setCurrentTab(currentTab + 1)
                                                         }
                                                     }}
                                                     style={{ color: "#FB5734" }}
                                                 >
-                                                    {currentlang.next}
+                                                    {currentLang.next}
                                                 </h3>
                                             </div>
                                         </>
                                     ) : null}
                                     {currentTab === 2 ? (
                                         <>
-                                            <h2 style={{ marginBottom: "0px" }}>{currentlang.createChat}</h2>
+                                            <h2 style={{ marginBottom: "0px" }}>{currentLang.createChat}</h2>
                                             <div
                                                 style={{
                                                     display: "flex",
@@ -145,7 +145,7 @@ export const CreateDialog = () => {
                                                         width: "100%",
                                                     }}
                                                 >
-                                                    <p>{currentlang.enterPrice}</p>
+                                                    <p>{currentLang.enterPrice}</p>
                                                     <input
                                                         type="checkbox"
                                                         className="notifications__toggle-button"
@@ -167,7 +167,7 @@ export const CreateDialog = () => {
                                                         marginBottom: "10px"
                                                     }}
                                                     value={values.chatCost}
-                                                    placeholder={currentlang.msgPrice}
+                                                    placeholder={currentLang.msgPrice}
                                                     decimalsLimit={2}
                                                     onValueChange={(value, name) => setFieldValue("chatCost", value)}
                                                 /> : null}
@@ -179,14 +179,14 @@ export const CreateDialog = () => {
                                                     }}
                                                 >
                                                     <h3 onClick={() => setCurrentTab(currentTab - 1)}>
-                                                        {currentlang.cancel}
+                                                        {currentLang.cancel}
                                                     </h3>
                                                     <div style={{ width: "20px" }}></div>
                                                     <h3
                                                         onClick={() => setCurrentTab(currentTab + 1)}
                                                         style={{ color: "#FB5734" }}
                                                     >
-                                                        {currentlang.next}
+                                                        {currentLang.next}
                                                     </h3>
                                                 </div>
                                             </div>
@@ -194,7 +194,7 @@ export const CreateDialog = () => {
                                     ) : null}
                                     {currentTab === 3 ? (
                                         <>
-                                            <h2 style={{ marginBottom: "0px" }}>{currentlang.members}</h2>
+                                            <h2 style={{ marginBottom: "0px" }}>{currentLang.members}</h2>
                                             <AddToChatCreate
                                                 selectedUsers={values.invited}
                                                 setSelectedItems={setFieldValue}
@@ -208,14 +208,14 @@ export const CreateDialog = () => {
                                                 }}
                                             >
                                                 <h3 onClick={() => setCurrentTab(currentTab - 1)}>
-                                                    {currentlang.cancel}
+                                                    {currentLang.cancel}
                                                 </h3>
                                                 <div style={{ width: "20px" }}></div>
                                                 <h3
                                                     onClick={() => handleSubmit()}
                                                     style={{ color: "#FB5734" }}
                                                 >
-                                                    {currentlang.next}
+                                                    {currentLang.next}
                                                 </h3>
                                             </div>
                                         </>

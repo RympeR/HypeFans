@@ -29,7 +29,11 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
     const delPost = (id: number) => {
         dispatch(deletePost({ id }));
     };
-    const { currentlang } = useContext(LangContext);
+    const { currentLang } = useContext(LangContext);
+
+    console.log(currentLang)
+
+    debugger
 
     return (
         <div className="profile__post" key={`${index}_post`}>
@@ -73,7 +77,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                                 >
                                     <div style={{ padding: "5px" }}>
                                         <button onClick={() => setRemovePostShow(true)}>
-                                            {currentlang.delPost}
+                                            {currentLang.delPost}
                                         </button>
                                     </div>
                                 </Popup>
@@ -87,7 +91,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                                 <Modal.Body className="notifications__modal">
                                     {" "}
                                     <h2 style={{ marginBottom: "0px" }}>
-                                        {currentlang.delPost}
+                                        {currentLang.delPost}
                                     </h2>
                                     <div
                                         style={{
@@ -97,7 +101,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                                         }}
                                     >
                                         <h3 onClick={() => setRemovePostShow(false)}>
-                                            {currentlang.no}
+                                            {currentLang.no}
                                         </h3>
                                         <div style={{ width: "20px" }}></div>
                                         <h3
@@ -107,7 +111,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                                             }}
                                             style={{ color: "#FB5734" }}
                                         >
-                                            {currentlang.yes}
+                                            {currentLang.yes}
                                         </h3>
                                     </div>
                                 </Modal.Body>
@@ -201,7 +205,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                     </div>
 
                     <p className="post__like-amount">
-                        {item?.post.likes_amount} {currentlang.liks1}
+                        {item?.post.likes_amount} {currentLang.liks1}
                     </p>
 
                     <CommentComponent

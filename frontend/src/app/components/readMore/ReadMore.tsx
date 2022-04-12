@@ -4,7 +4,7 @@ import { LangContext } from '../../../app/utils/LangProvider';
 export const ReadMore = ({ text }: { text: string }) => {
 
     const [isWholeTextShowed, setIsWholeTextShowed] = useState<boolean>(false)
-    const { currentlang } = useContext(LangContext);
+    const { currentLang } = useContext(LangContext);
 
     useEffect(() => {
         setIsWholeTextShowed(text?.length <= 40)
@@ -24,7 +24,7 @@ export const ReadMore = ({ text }: { text: string }) => {
                 }
                 onClick={() => setIsWholeTextShowed(!isWholeTextShowed)}
             >
-                {isWholeTextShowed ? currentlang?.hide : currentlang?.readmore}
+                {isWholeTextShowed ? currentLang.hide : currentLang.readmore}
             </button>
         </div>
     )

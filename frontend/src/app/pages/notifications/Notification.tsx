@@ -11,7 +11,7 @@ import { LangContext } from "../../../app/utils/LangProvider";
 
 export const Notification = ({ item }: any) => {
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const { currentlang } = useContext(LangContext)
+  const { currentLang } = useContext(LangContext)
   const dispatch = useDispatch();
   const closeModal = () => {
     setIsModalOpened(false);
@@ -20,13 +20,13 @@ export const Notification = ({ item }: any) => {
   const getTitle = (type: string) => {
     switch (type) {
       case "like":
-        return currentlang.noteLike;
+        return currentLang.noteLike;
       case "comment":
-        return currentlang.noteComment;
+        return currentLang.noteComment;
       case "donation":
-        return `${currentlang.noteDonut}${item.donation.amount} $`;
+        return `${currentLang.noteDonut}${item.donation.amount} $`;
       case "subscription":
-        return currentlang.noteSubscribe
+        return currentLang.noteSubscribe
     }
   };
   return (
@@ -58,7 +58,7 @@ export const Notification = ({ item }: any) => {
       ) : null}
       {item.type === "subscription" ? (
         <div className="notifications__donationAmount">
-          {item.subscription.amount}{currentlang.months}
+          {item.subscription.amount}{currentLang.months}
         </div>
       ) : null}
       <Modal

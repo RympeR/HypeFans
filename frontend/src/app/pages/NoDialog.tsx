@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { LangContext } from "../utils/LangProvider";
 
 export const NoDialog = () => {
-  const { currentlang } = useContext(LangContext)
+  const { currentLang } = useContext(LangContext)
 
   return (
     <>
@@ -17,7 +17,7 @@ export const NoDialog = () => {
         className="chat__inactive"
       >
         <p style={{ textAlign: "center", fontSize: "18px", backgroundColor: "#fbdfcf", borderRadius: "12px", padding: "5px", maxWidth: "50%" }}>
-          {currentlang.chooseDialog}
+          {currentLang.chooseDialog}
         </p>
       </div>
     </>

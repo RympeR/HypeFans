@@ -55,7 +55,7 @@ const MessageItem =
     url: number;
     wrapperRef: any;
   }) => {
-    const { currentlang } = useContext(LangContext)
+    const { currentLang } = useContext(LangContext)
 
     const uid = useSelector((state: RootState) => state.auth.pk);
 
@@ -103,7 +103,7 @@ const MessageItem =
               }}
               onClick={() => payForMessage(item.id, item.message_price)}
             >
-              {currentlang.lookFor} {item.message_price}$
+              {currentLang.lookFor} {item.message_price}$
             </button>
           </div>
         ) : (
@@ -141,7 +141,7 @@ const MessageItem =
                     } else if (item.file_type === 1) {
                       return (
                         <a href={item.file_url} download key={index + "ChatImage"}>
-                          {currentlang.download}
+                          {currentLang.download}
                           {
                             item.file_url.split("/")[
                             item.file_url.split("/").length - 1
@@ -223,7 +223,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const inputFileRef = useRef(null);
   const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false);
   const wrapperRef = useRef()
-  const { currentlang } = useContext(LangContext)
+  const { currentLang } = useContext(LangContext)
 
   // useEffect`s
 
@@ -371,23 +371,23 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       reciever,
     });
     if (data.status === 200) {
-      toast.success(currentlang.donutSended);
+      toast.success(currentLang.donutSended);
       return setShowTip(false);
     } else if (data.status === 451) {
       setShowTip(false);
-      toast.error(currentlang.notEnough);
-      return console.log(currentlang.notEnough);
+      toast.error(currentLang.notEnough);
+      return console.log(currentLang.notEnough);
     } else {
-      toast.error(currentlang.servError);
-      return console.log(currentlang.servError);
+      toast.error(currentLang.servError);
+      return console.log(currentLang.servError);
     }
   };
   const blockUser = async (id: number) => {
     const response = await userAPI.blockUser({ user: [id], block: true });
     if (response.status < 300) {
-      toast.success(currentlang.success);
+      toast.success(currentLang.success);
     } else {
-      toast.error(currentlang.error);
+      toast.error(currentLang.error);
     }
   };
 
@@ -440,7 +440,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <Preloader />
           ) : (
             <div style={{ padding: "15px" }}>
-              <h1 style={{ textAlign: "center" }}>{currentlang.members}</h1>
+              <h1 style={{ textAlign: "center" }}>{currentLang.members}</h1>
               {invitedUsers.map((item, key) => {
                 return (
                   <div className="chat__invitedUsersItem" key={key + " usersInChat"}>
@@ -553,7 +553,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         >
           <div style={{ padding: "5px", fontSize: "14px" }}>
             <button onClick={() => setIsAddModalShow(true)}>
-              {currentlang.addToChat}
+              {currentLang.addToChat}
             </button>
           </div>
           {/* <div style={{ padding: "5px", fontSize: "11px" }}>
@@ -570,7 +570,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 );
               }}
             >
-              {currentlang.copy}
+              {currentLang.copy}
             </button>
           </div>
           {/* <div style={{ padding: "5px", fontSize: "11px" }}>
@@ -586,7 +586,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 )
               }
             >
-              {currentlang.ban}
+              {currentLang.ban}
             </button>
           </div>
         </Popup>
@@ -607,8 +607,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             {messages.filter((item) => item.user.pk === uid)[
               messages.filter((item) => item.user.pk === uid).length - 1
             ]?.readed
-              ? currentlang.readed
-              : currentlang.notReaded}
+              ? currentLang.readed
+              : currentLang.notReaded}
           </div>
           {isMessagesLoading ? (
             <div
@@ -686,7 +686,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             style={{ marginBottom: "10px" }}
             onClick={() => setPaidModalShow(true)}
           >
-            {currentlang.setPrice}
+            {currentLang.setPrice}
           </button>
         </div>
       </div>
@@ -711,7 +711,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               padding: "15px",
             }}
           >
-            <h2>{currentlang.msgPrice}</h2>
+            <h2>{currentLang.msgPrice}</h2>
             <CurrencyInput
               prefix="$"
               style={{
@@ -722,7 +722,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 marginTop: "16px",
               }}
               value={messageCost}
-              placeholder={currentlang.enterSumm}
+              placeholder={currentLang.enterSumm}
               decimalsLimit={2}
               onValueChange={(value, name) => setMessageCost(value)}
             />
@@ -736,18 +736,18 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               <h3 onClick={() => {
                 setMessageCost("")
                 setPaidModalShow(false)
-              }}>{currentlang.cancel}</h3>
+              }}>{currentLang.cancel}</h3>
               <div style={{ width: "20px" }}></div>
               <h3
                 style={
                   { color: "#FB5734" }
                 }
                 onClick={() => {
-                  toast.success(currentlang.msgPriceSaved);
+                  toast.success(currentLang.msgPriceSaved);
                   setPaidModalShow(false)
                 }}
               >
-                {currentlang.save}
+                {currentLang.save}
               </h3>
             </div>
           </div>
@@ -851,7 +851,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               htmlFor="file-input"
               style={{ marginBottom: "15px" }}
             >
-              {currentlang.add}
+              {currentLang.add}
             </label>
             <input
               className="upload__file-input"
@@ -873,7 +873,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               marginTop: "16px",
             }}
             value={messageCost}
-            placeholder={currentlang.msgPrice}
+            placeholder={currentLang.msgPrice}
             decimalsLimit={2}
             onValueChange={(value, name) => setMessageCost(value)}
           />
@@ -891,7 +891,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 setUploadedFilesImg([]);
               }}
             >
-              {currentlang.cancel}
+              {currentLang.cancel}
             </h3>
             <div style={{ width: "20px" }}></div>
             <h3
@@ -900,7 +900,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               }}
               style={{ color: "#FB5734" }}
             >
-              {currentlang.next}
+              {currentLang.next}
             </h3>
           </div>
         </Modal.Body>
@@ -935,7 +935,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     padding: "15px",
                   }}
                 >
-                  <h2>{currentlang.sendDonut}</h2>
+                  <h2>{currentLang.sendDonut}</h2>
                   <div
                     className="chat__sidebarItem"
                     style={{ alignItems: "center", padding: "0px" }}
@@ -1015,7 +1015,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     }}
                     name="donation_amount"
                     value={values.donation_amount}
-                    placeholder={currentlang.enterSumm}
+                    placeholder={currentLang.enterSumm}
                     decimalsLimit={2}
                     onValueChange={(value, name) => setFieldValue(name, value)}
                   />
@@ -1026,7 +1026,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                       marginTop: "15px",
                     }}
                   >
-                    <h3 onClick={() => setShowTip(false)}>{currentlang.cancel}</h3>
+                    <h3 onClick={() => setShowTip(false)}>{currentLang.cancel}</h3>
                     <div style={{ width: "20px" }}></div>
                     <h3
                       style={{ color: "#FB5734" }}
@@ -1040,7 +1040,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                         )
                       }
                     >
-                      {currentlang.send}
+                      {currentLang.send}
                     </h3>
                   </div>
                 </div>

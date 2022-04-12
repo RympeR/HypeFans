@@ -22,7 +22,7 @@ import { Preloader } from "../utils/Preloader";
 
 export const PostModal = ({ post_id }: { post_id: number }) => {
   const dispatch = useDispatch();
-  const { currentlang } = useContext(LangContext)
+  const { currentLang } = useContext(LangContext)
 
 
   //? Дебагер попросил добавть зависимости
@@ -171,7 +171,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
               </button>
             </div>
 
-            <p className="post__like-amount">{post?.likes_amount}{currentlang.liks1}</p>
+            <p className="post__like-amount">{post?.likes_amount}{currentLang.liks1}</p>
 
             <CommentComponent
               data={post.comments}

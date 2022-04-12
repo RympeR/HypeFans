@@ -30,7 +30,7 @@ import getCroppedImg from "./cropimage";
 import { LangContext } from "../../../app/utils/LangProvider";
 
 export const PersonalSettings = () => {
-  const { currentlang } = useContext(LangContext)
+  const { currentLang } = useContext(LangContext)
   const dispatch = useDispatch();
   const history = useHistory();
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
@@ -192,7 +192,7 @@ export const PersonalSettings = () => {
                 className="upload__aply"
                 onClick={onCropBackground}
               >
-                {currentlang.apply}
+                {currentLang.apply}
               </button>
             </>
           ) : (
@@ -258,7 +258,7 @@ export const PersonalSettings = () => {
                     className="upload__aply"
                     onClick={onCrop}
                   >
-                    {currentlang.apply}
+                    {currentLang.apply}
                   </button>
                 </>
               ) : (
@@ -294,7 +294,7 @@ export const PersonalSettings = () => {
               return (
                 <div className="personalSettings">
                   <div>
-                    <h3>{currentlang.name}</h3>
+                    <h3>{currentLang.name}</h3>
                     <input
                       type="text"
                       value={values.first_name}
@@ -304,7 +304,7 @@ export const PersonalSettings = () => {
                     />
                   </div>
                   <div>
-                    <h3>{currentlang.mail}</h3>
+                    <h3>{currentLang.mail}</h3>
                     <input
                       type="text"
                       value={values.email}
@@ -314,7 +314,7 @@ export const PersonalSettings = () => {
                     />
                   </div>
                   <div>
-                    <h3>{currentlang.nick}</h3>
+                    <h3>{currentLang.nick}</h3>
                     <input
                       type="text"
                       value={values.username}
@@ -324,14 +324,14 @@ export const PersonalSettings = () => {
                     />
                   </div>
                   <div>
-                    <h3>{currentlang.bio}</h3>
+                    <h3>{currentLang.bio}</h3>
                     <textarea
                       value={values.bio}
                       onChange={(val) => setFieldValue("bio", val.target.value)}
                     />
                   </div>
                   <div>
-                    <h3>{currentlang.wallet}</h3>
+                    <h3>{currentLang.wallet}</h3>
                     <input
                       type="text"
                       value={values.wallet}
@@ -349,7 +349,7 @@ export const PersonalSettings = () => {
                     type="submit"
                     onClick={() => handleSubmit()}
                   >
-                    {currentlang.save}
+                    {currentLang.save}
                   </button>
                 </div>
               );
@@ -366,13 +366,13 @@ export const PersonalSettings = () => {
           }}
         >
           <Link to="/settings/prices/messages">
-            <NotificationSidebarItem text={currentlang.msgPrice} />
+            <NotificationSidebarItem text={currentLang.msgPrice} />
           </Link>
           <Link to="/settings/prices/subscribes">
-            <NotificationSidebarItem text={currentlang.price} />
+            <NotificationSidebarItem text={currentLang.price} />
           </Link>
           <Link to="/settings/prices/fans">
-            <NotificationSidebarItem text={currentlang.forFun} />
+            <NotificationSidebarItem text={currentLang.forFun} />
           </Link>
         </div>
       </div>
