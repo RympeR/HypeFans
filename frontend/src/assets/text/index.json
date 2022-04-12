@@ -256,7 +256,13 @@
     "likedUrComment": "понравился ваш комментарий",
     "likedUrPost": "понравилась ваша публикация",
     "commentUrComment": "прокомментировал(а) ваш комментарий",
-    "commentUrPost": "прокомментировал(а) вашу публикацию"
+    "commentUrPost": "прокомментировал(а) вашу публикацию",
+    "prices": "Prices",
+    "changePhone": "Change phone number",
+    "change": "Change",
+    "uDonatedTo": "You donated ",
+    "uSubscribedToChat": "You subscribed to chat with ",
+    "uSubscribedTo": "You subscribed to "
   },
   "RU": {
     "langBtn": "RUS",
@@ -515,7 +521,16 @@
     "hide": "Свернуть",
     "recentSubs": "Последние подписчики",
     "sendDonut": "Отправить донат",
-    "donutSended": "Донат отправлен"
+    "donutSended": "Донат отправлен",
+    "prices": "Цены",
+    "changePhone": "Изменить номер телефона",
+    "change": "Изменить",
+    "uDonatedTo": "Вы задонатили ",
+    "uSubscribedToChat": "Вы подписались на чат с ",
+    "uSubscribedTo": "Вы подписались на ",
+    "referralBonus": "Реферальный бонус ",
+    "spendsMonth": "Траты за месяц",
+    "earnMonth": "Зароботок за месяц"
   },
   "UA": {
     "langBtn": "UA",
@@ -771,6 +786,12 @@
     "likedUrComment": "понравился ваш комментарий",
     "likedUrPost": "понравилась ваша публикация",
     "commentUrComment": "прокомментировал(а) ваш комментарий",
-    "commentUrPost": "прокомментировал(а) вашу публикацию"
+    "commentUrPost": "прокомментировал(а) вашу публикацию",
+    "prices": "Ціни",
+    "changePhone": "Зменити номер телефону",
+    "change": "Зменити",
+    "uDonatedTo": "Ви задонатили ",
+    "uSubscribedToChat": "Ви підписалися на чат з ",
+    "uSubscribedTo": "Ви підписались на "
   }
 }
