@@ -19,7 +19,7 @@ instance.interceptors.response.use(
   }
 );
 export const setAuthToken = (token: string) => {
-  if (token === "") {
+  if (token === null) {
     instance.defaults.headers.common["Auth"] = ``;
     return (instance.defaults.headers.common["Authorization"] = ``);
   }
