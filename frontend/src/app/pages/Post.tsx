@@ -1,4 +1,4 @@
-import { default as React, useEffect, useState } from "react";
+import { default as React, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
 import "reactjs-popup/dist/index.css";
@@ -17,9 +17,13 @@ import { ReactComponent as CommentIcon } from "../../assets/images/message-circl
 import { CommentComponent } from "../components/CommentComponent";
 import { prepareDateDiffStr, timeAgoTimestamp } from "../utils/utilities";
 import { Video } from "./card/components/Video";
+import { LangContext } from "../utils/LangProvider";
+import { Preloader } from "../utils/Preloader";
 
 export const PostModal = ({ post_id }: { post_id: number }) => {
   const dispatch = useDispatch();
+  const { currentLang } = useContext(LangContext)
+
 
   //? Дебагер попросил добавть зависимости
   useEffect(() => {
@@ -32,7 +36,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
   const [show, setShow] = useState<boolean>(false);
 
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return <Preloader />;
   }
   const time_diif = prepareDateDiffStr(
     timeAgoTimestamp(parseFloat(post?.publication_date))
@@ -55,7 +59,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
           src={item._file}
           alt="postIMG"
           className="profile"
-          // style={{ maxHeight: "50vh" }}
+        // style={{ maxHeight: "50vh" }}
         ></img>
       );
     }
@@ -119,23 +123,23 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                   onClick={() => {
                     post?.liked
                       ? dispatch(
-                          deletePostActionModal({
-                            id: post?.like_id,
-                            post_id: post?.id,
-                          })
-                        )
+                        deletePostActionModal({
+                          id: post?.like_id,
+                          post_id: post?.id,
+                        })
+                      )
                       : dispatch(
-                          createPostActionModal({
-                            like: true,
-                            comment: null,
-                            donation_amount: 0,
-                            parent: null,
-                            user: myId,
-                            date_time: null,
-                            post: post?.id,
-                            id: null,
-                          })
-                        );
+                        createPostActionModal({
+                          like: true,
+                          comment: null,
+                          donation_amount: 0,
+                          parent: null,
+                          user: myId,
+                          date_time: null,
+                          post: post?.id,
+                          id: null,
+                        })
+                      );
                   }}
                 >
                   <LikeIcon
@@ -167,7 +171,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
               </button>
             </div>
 
-            <p className="post__like-amount">{post?.likes_amount} лайков</p>
+            <p className="post__like-amount">{post?.likes_amount}{currentLang.liks1}</p>
 
             <CommentComponent
               data={post.comments}

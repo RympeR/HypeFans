@@ -1,6 +1,5 @@
 import { Formik } from "formik";
-import Cookies from "js-cookie";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import CurrencyInput from "react-currency-input-field";
@@ -45,8 +44,11 @@ import {
   SettingsSidebarItem,
 } from "../notifications/NotificationSidebarItem";
 import { ListsComponent } from "./List";
+import { LangContext } from "../../../app/utils/LangProvider";
+import langData from "../../../assets/text/index.json";
 
 export const Settings = () => {
+  const { currentLang, setCurrentLang } = useContext(LangContext)
   const history = useHistory();
   const { pathname } = useLocation();
   const settings = useSelector((state: RootState) => state.auth);
@@ -57,7 +59,7 @@ export const Settings = () => {
   const Text = ({ text }: { text: string }) => {
     const lastLocation =
       history.location.pathname.split("/")[
-        history.location.pathname.split("/").length - 1
+      history.location.pathname.split("/").length - 1
       ];
     return (
       <>
@@ -104,7 +106,7 @@ export const Settings = () => {
                 } else if (
                   lastLocation === "push" ||
                   history.location.pathname ===
-                    "/settings/notifications/email" ||
+                  "/settings/notifications/email" ||
                   lastLocation === "page"
                 ) {
                   history.push("/settings/notifications");
@@ -123,17 +125,12 @@ export const Settings = () => {
       <div className="notifications__main">
         <div
           style={{ padding: "16px 24px", fontSize: "20px", display: "flex" }}
+          onClick={() => setCurrentLang(langData.UA)}
         >
           Українська
-        </div>
-        <div
-          style={{
-            padding: "16px 24px",
-            fontSize: "20px",
-            borderTop: "1px solid grey",
-          }}
-        >
-          English
+          {currentLang.langBtn === "UA" ? <div style={{ marginLeft: "5px" }}>
+            <Readed />
+          </div> : null}
         </div>
         <div
           style={{
@@ -142,11 +139,26 @@ export const Settings = () => {
             borderTop: "1px solid grey",
             display: "flex",
           }}
+          onClick={() => setCurrentLang(langData.EN)}
+        >
+          English
+          {currentLang.langBtn === "ENG" ? <div style={{ marginLeft: "5px" }}>
+            <Readed />
+          </div> : null}
+        </div>
+        <div
+          style={{
+            padding: "16px 24px",
+            fontSize: "20px",
+            borderTop: "1px solid grey",
+            display: "flex",
+          }}
+          onClick={() => setCurrentLang(langData.RU)}
         >
           Русский
-          <div style={{ marginLeft: "5px" }}>
+          {currentLang.langBtn === "RUS" ? <div style={{ marginLeft: "5px" }}>
             <Readed />
-          </div>
+          </div> : null}
         </div>
       </div>
     );
@@ -158,7 +170,7 @@ export const Settings = () => {
     const [show, setShow] = useState(false);
 
     const logoutFunc = async () => {
-      Cookies?.set("token", null);
+      localStorage.removeItem("hypefansToken")
       await dispatch(logout());
       history.push("/");
     };
@@ -178,7 +190,7 @@ export const Settings = () => {
               : {}
           }
         >
-          <SettingsSidebarItem text="Реферальная ссылка">
+          <SettingsSidebarItem text={currentLang.refLink}>
             <RefSvg />
           </SettingsSidebarItem>
         </Link>
@@ -191,7 +203,7 @@ export const Settings = () => {
               : {}
           }
         >
-          <SettingsSidebarItem text="Списки">
+          <SettingsSidebarItem text={currentLang.lists}>
             <ListSvg />
           </SettingsSidebarItem>
         </Link>
@@ -203,7 +215,7 @@ export const Settings = () => {
               : {}
           }
         >
-          <SettingsSidebarItem text="Статистика">
+          <SettingsSidebarItem text={currentLang.stats}>
             <BarSvg />
           </SettingsSidebarItem>
         </Link>
@@ -215,7 +227,7 @@ export const Settings = () => {
               : {}
           }
         >
-          <SettingsSidebarItem text="Редактирование профиля">
+          <SettingsSidebarItem text={currentLang.editProfile}>
             <PhotoIcon />
           </SettingsSidebarItem>
         </Link>
@@ -227,7 +239,7 @@ export const Settings = () => {
               : {}
           }
         >
-          <SettingsSidebarItem text="Язык">
+          <SettingsSidebarItem text={currentLang.lang}>
             <EditSvg />
           </SettingsSidebarItem>
         </Link>
@@ -236,14 +248,14 @@ export const Settings = () => {
             setShow(true);
           }}
         >
-          <ExitItem text="Выйти">
+          <ExitItem text={currentLang.exit}>
             <LogOutSvg />
           </ExitItem>
         </div>
         {show ? (
           <div
             className="card__logout-model"
-            // style={{ display: "flex", justifyContent: "center", width: "100%" }}
+          // style={{ display: "flex", justifyContent: "center", width: "100%" }}
           >
             <div
               // onClick={() => setShow(false)}
@@ -256,7 +268,7 @@ export const Settings = () => {
               }}
             >
               <h5 style={{ padding: "5px", textAlign: "center" }}>
-                Вы уверены, что хотите выйти из аккаунта?
+                {currentLang.exitConfirm}
               </h5>
               <div
                 style={{
@@ -266,10 +278,10 @@ export const Settings = () => {
                 }}
               >
                 <h6 style={{ color: "#FB5734" }} onClick={() => setShow(false)}>
-                  Отмена
+                  {currentLang.cancel}
                 </h6>
                 <div style={{ width: "20px" }}></div>
-                <h6 onClick={() => logoutFunc()}>Продолжить</h6>
+                <h6 onClick={() => logoutFunc()}>{currentLang.next}</h6>
               </div>
             </div>
           </div>
@@ -290,12 +302,12 @@ export const Settings = () => {
       >
         <div className="notifications__displayMobile">
           <Link to="/settings/profileSettings/mobileSidebar">
-            <NotificationSidebarItem text="Профиль" />
+            <NotificationSidebarItem text={currentLang.profile} />
           </Link>
         </div>
         <div className="notifications__none">
           <Link to="/settings/profileSettings">
-            <NotificationSidebarItem text="Профиль" />
+            <NotificationSidebarItem text={currentLang.profile} />
           </Link>
         </div>
         <Link
@@ -306,7 +318,7 @@ export const Settings = () => {
               : {}
           }
         >
-          <NotificationSidebarItem text="Аккаунт" />
+          <NotificationSidebarItem text={currentLang.account} />
         </Link>
         <Link
           to="/settings/confidentiality"
@@ -316,7 +328,7 @@ export const Settings = () => {
               : {}
           }
         >
-          <NotificationSidebarItem text="Конфеденциальность" />
+          <NotificationSidebarItem text={currentLang.security} />
         </Link>
         <Link
           to="/settings/prices"
@@ -324,7 +336,7 @@ export const Settings = () => {
             pathname === "/settings/prices" ? { background: selectedColor } : {}
           }
         >
-          <NotificationSidebarItem text="Цены" />
+          <NotificationSidebarItem text={currentLang.prices} />
         </Link>
         {/* <Link
           to="/settings/notifications"
@@ -402,7 +414,7 @@ export const Settings = () => {
                 if (
                   history.location.pathname.split("/")[2] !== "profileSettings"
                 ) {
-                  return <Text text="Настройки" />;
+                  return <Text text={currentLang.settings} />;
                 }
               }}
             />
@@ -449,7 +461,7 @@ export const Settings = () => {
       return (
         <div className="notifications__main">
           <div className="notifications__listBlock">
-            <p>Push-уведомления</p>
+            <p>{currentLang.pushNotf}</p>
             <input
               type="checkbox"
               className="notifications__toggle-button"
@@ -463,8 +475,7 @@ export const Settings = () => {
             ></input>
           </div>
           <p className="notifications__listText">
-            Получайте push-уведомления, чтобы узнать, что происходит, когда вы
-            не находитесь на HypeFans. Вы можете выключить их в любое время.
+            {currentLang.pushDescr}
           </p>
         </div>
       );
@@ -476,10 +487,10 @@ export const Settings = () => {
             className="notifications__settings_h2"
             style={{ paddingTop: "40px" }}
           >
-            Безопасность
+            {currentLang.secur1}
           </h2>
           <Link to="/settings/account/password">
-            <NotificationSidebarItem text="Пароль" />
+            <NotificationSidebarItem text={currentLang.changePass} />
           </Link>
           {/* <Link to="/settings/account/sessions">
             <NotificationSidebarItem text="Сеансы входа" />
@@ -488,10 +499,10 @@ export const Settings = () => {
             className="notifications__settings_h2"
             style={{ paddingTop: "40px" }}
           >
-            Действия
+            {currentLang.actions}
           </h2>
           <Link to="/settings/notifications/account/delete">
-            <NotificationSidebarItem text="Удалить аккаунт" />
+            <NotificationSidebarItem text={currentLang.dellAcc} />
           </Link>
         </div>
       );
@@ -507,32 +518,28 @@ export const Settings = () => {
       return (
         <div className="notifications__main">
           <div className="notifications__listBlock">
-            <p>Подтверждение</p>
+            <p>{currentLang.confirm1}</p>
           </div>
           <div className="notifications__listBlock">
             <Recaptcha
-              sitekey="6Lep7U8cAAAAABG9Qppk743EBuVmeXxml7F4Umr3"
+              sitekey="6LdzuS0fAAAAABCIE_gjSPuxuJoQeqwgm3KmnsAQ"
               size="normal"
               onChange={() => setIsRobot(false)}
             />
           </div>
           <h2 style={{ fontSize: "18px", textAlign: "center" }}>
-            Аккаунт будет удален
-          </h2>
-          <h2 style={{ fontSize: "18px", textAlign: "center" }}>
-            безвозвратно!
+            {currentLang.delDescr}
           </h2>
           <button
             className="notifications__settingBtn"
             onClick={() => setDeleteShow(true)}
             disabled={isRobot}
           >
-            Удалить
+            {currentLang.delBtn}
           </button>
           <Modal show={deleteShow} onHide={() => setDeleteShow(false)} centered>
             <Modal.Body className="notifications__modal">
-              <h2 style={{ marginBottom: "0px" }}>Вы уверены, что хотите</h2>
-              <h2> удалить аккаунт?</h2>
+              <h2>{currentLang.areSure}</h2>
               <div
                 style={{
                   display: "flex",
@@ -544,10 +551,10 @@ export const Settings = () => {
                   onClick={() => setDeleteShow(false)}
                   style={{ color: "#FB5734" }}
                 >
-                  Отмена
+                  {currentLang.cancel}
                 </h3>
                 <div style={{ width: "20px" }}></div>
-                <h3 onClick={() => setDeleteShow(false)}>Продолжить</h3>
+                <h3 onClick={() => setDeleteShow(false)}>{currentLang.next}</h3>
               </div>
             </Modal.Body>
           </Modal>
@@ -577,7 +584,7 @@ export const Settings = () => {
       const username = useSelector((state: RootState) => state.auth.username);
       return (
         <div className="notifications__main">
-          <p style={{ padding: "16px 24px" }}>Ник</p>
+          <p style={{ padding: "16px 24px" }}>{currentLang.nick}</p>
           <input
             className="notifications__input"
             value={values.username}
@@ -588,7 +595,7 @@ export const Settings = () => {
             onClick={() => submit()}
             disabled={username === values.username ? true : false}
           >
-            Сохранить
+            {currentLang.save}
           </button>
         </div>
       );
@@ -605,17 +612,17 @@ export const Settings = () => {
       return (
         <div className="notifications__main">
           <form action="">
-            <p style={{ padding: "16px 24px" }}>Новый пароль</p>
+            <p style={{ padding: "16px 24px" }}>{currentLang.newPass}</p>
             <input
               className="notifications__input"
-              placeholder="Введите новый пароль..."
+              placeholder={currentLang.newPass}
               value={password}
               onChange={(val) => setPassword(val.target.value)}
             />
             <input
               className="notifications__input"
               style={{ marginTop: "16px" }}
-              placeholder="Подтвердите новый пароль..."
+              placeholder={currentLang.repeatNew}
               value={new_password}
               onChange={(val) => setNewPassword(val.target.value)}
             />
@@ -623,9 +630,9 @@ export const Settings = () => {
               className="notifications__settingBtn"
               disabled={password !== new_password}
               type="submit"
-              // onClick={() => handleSubmit()}
+            // onClick={() => handleSubmit()}
             >
-              Сохранить
+              {currentLang.save}
             </button>
           </form>
         </div>
@@ -640,7 +647,7 @@ export const Settings = () => {
     }: settingsValType) => {
       return (
         <div className="notifications__main">
-          <p style={{ padding: "16px 24px" }}> Изменить номер телефона</p>
+          <p style={{ padding: "16px 24px" }}> {currentLang.changePhone}</p>
           <div style={{ display: "flex", alignItems: "center" }}>
             <div style={{ margin: "16px 24px", marginRight: "0px" }}>
               <PhoneInput
@@ -655,7 +662,7 @@ export const Settings = () => {
               onClick={() => submit()}
               disabled={isDisabled}
             >
-              Изменить
+              {currentLang.change}
             </button>
           </div>
         </div>
@@ -689,10 +696,10 @@ export const Settings = () => {
       }, []);
       const { Tabs, WithTabs } = useTabs([
         {
-          label: "Траты",
+          label: currentLang.spend,
         },
         {
-          label: "Зароботок",
+          label: currentLang.earn,
         },
       ]);
       const formatDateTime = (timestamp: number) => {
@@ -704,21 +711,21 @@ export const Settings = () => {
           case "donation":
             return (
               <div>
-                <h3>Вы задонатили @{item.target.username}</h3>
+                <h3>{currentLang.uDonatedTo}@{item.target.username}</h3>
                 <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
           case "chat_subscription":
             return (
               <div>
-                <h3>Вы подписались на чат с @{item.target.username}</h3>
+                <h3>{currentLang.uSubscribedToChat}@{item.target.username}</h3>
                 <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
           default: {
             return (
               <div>
-                <h3>Вы подписались на @{item.target.username}</h3>
+                <h3>{currentLang.uSubscribedTo}@{item.target.username}</h3>
                 <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
@@ -730,28 +737,28 @@ export const Settings = () => {
           case "donation":
             return (
               <div>
-                <h3>Вам задонатили @{item.target.username}</h3>
+                <h3>{currentLang.donatedU}@{item.target.username}</h3>
                 <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
           case "referral_payment":
             return (
               <div>
-                <h3>Реферальный бонус @{item.target.username}</h3>
+                <h3>{currentLang.referralBonus}@{item.target.username}</h3>
                 <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
           case "chat_subscription":
             return (
               <div>
-                <h3>На вас чат с @{item.target.username}</h3>
+                <h3>{currentLang.chatSubscribedU}@{item.target.username}</h3>
                 <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
           default: {
             return (
               <div>
-                <h3>На вас подписался @{item.target.username}</h3>
+                <h3>{currentLang.subscribedU}@{item.target.username}</h3>
                 <h4>{formatDateTime(item.date_time)}</h4>
               </div>
             );
@@ -785,30 +792,30 @@ export const Settings = () => {
           >
             <div className="notifications__wallet">
               <div style={{ paddingBottom: "10px" }}>
-                <h5>Ваш балланс</h5>
+                <h5>{currentLang.balance2}</h5>
                 <h5>${balance}</h5>
               </div>
               <div>
-                <WithTabs tab={{ label: "Траты" }} index={0}>
-                  <h5>Траты за месяц</h5>
+                <WithTabs tab={{ label: currentLang.spend }} index={0}>
+                  <h5>{currentLang.spendsMonth}</h5>
                   <h5>${spended}</h5>
                 </WithTabs>
-                <WithTabs tab={{ label: "Зароботок" }} index={1}>
-                  <h5>Зароботок за месяц</h5>
+                <WithTabs tab={{ label: currentLang.earn }} index={1}>
+                  <h5>{currentLang.earnsMonth}</h5>
                   <h5>${earned}</h5>
                 </WithTabs>
               </div>
             </div>
             <div className="notifications__walletUnder">
-              <h5>История</h5>
+              <h5>{currentLang.history}</h5>
               {spends.actions.length > 9 ? (
                 <h6 onClick={() => setSpendsShow(!spendsShow)}>
-                  {spendsShow ? "Скрыть" : "Все"}
+                  {spendsShow ? currentLang.hide : currentLang.all}
                 </h6>
               ) : null}
             </div>
           </div>
-          <WithTabs tab={{ label: "Траты" }} index={0}>
+          <WithTabs tab={{ label: currentLang.spend }} index={0}>
             <div className="notifications__walletMain">
               {spends.actions.map((item, key) => {
                 return (
@@ -858,7 +865,7 @@ export const Settings = () => {
                   style={{ marginLeft: "0px", marginRight: "0px" }}
                   onClick={() => setShow(true)}
                 >
-                  Пополнить баланс
+                  {currentLang.refilBtn} баланс
                 </button> */}
                 <Modal show={isShow} onHide={() => setShow(false)} centered>
                   <Modal.Body className="notifications__modal">
@@ -869,7 +876,7 @@ export const Settings = () => {
                         padding: "15px",
                       }}
                     >
-                      <h2>Пополнение балланса</h2>
+                      <h2>{currentLang.refilling}</h2>
 
                       <CurrencyInput
                         prefix="$"
@@ -881,7 +888,7 @@ export const Settings = () => {
                           marginTop: "16px",
                         }}
                         name="donation_amount"
-                        placeholder="$ Введите сумму..."
+                        placeholder={currentLang.setPrice}
                         decimalsLimit={2}
                         onValueChange={(value, name) => {
                           return null;
@@ -894,13 +901,13 @@ export const Settings = () => {
                           marginTop: "15px",
                         }}
                       >
-                        <h3 onClick={() => setShow(false)}>Отмена</h3>
+                        <h3 onClick={() => setShow(false)}>{currentLang.cancel}</h3>
                         <div style={{ width: "20px" }}></div>
                         <h3
                           style={{ color: "#FB5734" }}
                           onClick={() => setShow(false)}
                         >
-                          Пополнить
+                          {currentLang.refilBtn}
                         </h3>
                       </div>
                     </div>
@@ -909,7 +916,7 @@ export const Settings = () => {
               </div>
             </div>
           </WithTabs>
-          <WithTabs tab={{ label: "Зароботок" }} index={1}>
+          <WithTabs tab={{ label: currentLang.earn }} index={1}>
             <div className="notifications__walletMain">
               {earns.actions.map((item, key) => {
                 return (
@@ -959,7 +966,7 @@ export const Settings = () => {
                   style={{ marginLeft: "0px", marginRight: "0px" }}
                   onClick={() => setShow(true)}
                 >
-                  Пополнить баланс
+                  {currentLang.refilBtn} баланс
                 </button> */}
                 <Modal show={isShow} onHide={() => setShow(false)} centered>
                   <Modal.Body className="notifications__modal">
@@ -970,7 +977,7 @@ export const Settings = () => {
                         padding: "15px",
                       }}
                     >
-                      <h2>Пополнение балланса</h2>
+                      <h2>{currentLang.refilling}</h2>
 
                       <CurrencyInput
                         prefix="$"
@@ -982,7 +989,7 @@ export const Settings = () => {
                           marginTop: "16px",
                         }}
                         name="donation_amount"
-                        placeholder="$ Введите сумму..."
+                        placeholder={currentLang.setPrice}
                         decimalsLimit={2}
                         onValueChange={(value, name) => {
                           return null;
@@ -995,13 +1002,13 @@ export const Settings = () => {
                           marginTop: "15px",
                         }}
                       >
-                        <h3 onClick={() => setShow(false)}>Отмена</h3>
+                        <h3 onClick={() => setShow(false)}>{currentLang.cancel}</h3>
                         <div style={{ width: "20px" }}></div>
                         <h3
                           style={{ color: "#FB5734" }}
                           onClick={() => setShow(false)}
                         >
-                          Пополнить
+                          {currentLang.refilBtn}
                         </h3>
                       </div>
                     </div>
@@ -1042,7 +1049,7 @@ export const Settings = () => {
             }}
             disabled={email === values.email ? true : false}
           >
-            Изменить Email
+            {currentLang.change} Email
           </button>
 
           <Modal
@@ -1051,9 +1058,8 @@ export const Settings = () => {
             centered
           >
             <Modal.Body className="notifications__modal">
-              <h2>Письмо подтверждения</h2>
-              <h2> отправлено на данный Email</h2>
-              <h3 onClick={() => setEmailModalShow(false)}>Понятно!</h3>
+              <h2>{currentLang.sentDescr}</h2>
+              <h3 onClick={() => setEmailModalShow(false)}>{currentLang.clear}</h3>
             </Modal.Body>
           </Modal>
         </div>
@@ -1071,7 +1077,7 @@ export const Settings = () => {
             className="notifications__longList"
             style={{ borderBottom: "1px solid #bbc1e1" }}
           >
-            <p>Показывать статус активности </p>
+            <p>{currentLang.activeStatus}</p>
             <input
               type="checkbox"
               className="notifications__toggle-button"
@@ -1088,7 +1094,7 @@ export const Settings = () => {
             className="notifications__longList"
             style={{ borderBottom: "1px solid #bbc1e1" }}
           >
-            <p>Показывать количество подписчиков</p>
+            <p>{currentLang.showSubs}</p>
             <input
               type="checkbox"
               className="notifications__toggle-button"
@@ -1105,7 +1111,7 @@ export const Settings = () => {
             className="notifications__longList"
             style={{ borderBottom: "1px solid #bbc1e1" }}
           >
-            <p>Показывать количество постов </p>
+            <p>{currentLang.showPostCount}</p>
             <input
               type="checkbox"
               className="notifications__toggle-button"
@@ -1130,7 +1136,7 @@ export const Settings = () => {
       return (
         <div className="notifications__main">
           <div className="notifications__listBlock">
-            <p>Уведомления электронной почты </p>
+            <p>{currentLang.emailNotf}</p>
             <input
               type="checkbox"
               name="email_notifications"
@@ -1144,8 +1150,7 @@ export const Settings = () => {
             ></input>
           </div>
           <p className="notifications__listText">
-            Получайте электронные письма, чтобы узнать, что происходит, когда вы
-            не находитесь на HypeFans. Вы можете выключить их в любое время.
+            {currentLang.emailDescr1}
           </p>
         </div>
       );
@@ -1162,7 +1167,7 @@ export const Settings = () => {
             className="notifications__longList"
             style={{ borderBottom: "1px solid #bbc1e1" }}
           >
-            <p>Новые комментарии </p>
+            <p>{currentLang.newComments}</p>
             <input
               type="checkbox"
               name="email_notifications"
@@ -1179,7 +1184,7 @@ export const Settings = () => {
             className="notifications__longList"
             style={{ borderBottom: "1px solid #bbc1e1" }}
           >
-            <p>Новые лайки </p>
+            <p>{currentLang.newLikes}</p>
             <input
               type="checkbox"
               className="notifications__toggle-button"
@@ -1190,7 +1195,7 @@ export const Settings = () => {
             className="notifications__longList"
             style={{ borderBottom: "1px solid #bbc1e1" }}
           >
-            <p>Новые подписки </p>
+            <p>{currentLang.newSubs}</p>
             <input
               type="checkbox"
               className="notifications__toggle-button"
@@ -1201,7 +1206,7 @@ export const Settings = () => {
             className="notifications__longList"
             style={{ borderBottom: "1px solid #bbc1e1" }}
           >
-            <p>Новые донаты </p>
+            <p>{currentLang.newDonuts}</p>
             <input
               type="checkbox"
               className="notifications__toggle-button"
@@ -1215,13 +1220,13 @@ export const Settings = () => {
       return (
         <div className="notifications__main">
           <Link to="/settings/notifications/push">
-            <NotificationSidebarItem text="Push-уведомления" />
+            <NotificationSidebarItem text={currentLang.pushNotf} />
           </Link>
           <Link to="/settings/notifications/email">
-            <NotificationSidebarItem text="Email-уведомления" />
+            <NotificationSidebarItem text={currentLang.emailNotf} />
           </Link>
           <Link to="/settings/notifications/page">
-            <NotificationSidebarItem text="Уведомления на сайте" />
+            <NotificationSidebarItem text={currentLang.siteNotf} />
           </Link>
         </div>
       );
@@ -1230,10 +1235,10 @@ export const Settings = () => {
       return (
         <div className="notifications__main">
           <Link to="/settings/prices/messages">
-            <NotificationSidebarItem text="Цена сообщения" />
+            <NotificationSidebarItem text={currentLang.msgPrice} />
           </Link>
           <Link to="/settings/prices/subscribes">
-            <NotificationSidebarItem text="Цена подписки" />
+            <NotificationSidebarItem text={currentLang.price} />
           </Link>
           {/* <Link to="/settings/prices/fans">
             <NotificationSidebarItem text="Для фанатов" />
@@ -1259,11 +1264,10 @@ export const Settings = () => {
       return (
         <div className="notifications__main" style={{ padding: "16px 24px" }}>
           <h2 style={{ fontWeight: "bold", fontSize: "14px" }}>
-            Пригласите друга - получите 5% от его дохода
+            {currentLang.refDescr}
           </h2>
           <h3 style={{ fontSize: "14px", fontWeight: "normal" }}>
-            Когда новый пользователь зарегестрируется на HypeFans и начнет
-            зарабатывать, 5% от его дохода будет приходить на Ваш счет
+            {currentLang.refDescr2}
           </h3>
           <div
             style={{ marginTop: "20px", display: "flex", alignItems: "center" }}
@@ -1288,9 +1292,9 @@ export const Settings = () => {
             className="notifications__walletUnder"
             style={{ marginRight: "0px", marginLeft: "10px" }}
           >
-            <h5>Ваши накопления:</h5>
+            <h5>{currentLang.urCapt}</h5>
             {referrals.referral_payments.length > 9 ? (
-              <h6 onClick={() => setShow(!show)}>{show ? "Скрыть" : "Все"}</h6>
+              <h6 onClick={() => setShow(!show)}>{show ? "Скрыть" : currentLang.all}</h6>
             ) : null}
           </div>
           <div className="notifications__walletMain">
@@ -1336,7 +1340,7 @@ export const Settings = () => {
                 className="notifications__walletChild"
                 style={{ border: "none", marginLeft: "20px" }}
               >
-                Пока пусто
+                {currentLang.emptyList}
               </div>
             )}
           </div>
@@ -1353,7 +1357,7 @@ export const Settings = () => {
                 className="notifications__settingBtn"
                 style={{ marginLeft: "0px", marginRight: "0px" }}
               >
-                Мой счет
+                {currentLang.myCount}
               </button>
             </div>
           </Link>
@@ -1371,11 +1375,10 @@ export const Settings = () => {
         <div className="notifications__main">
           <div className="notifications__pricesHeader">
             <p>
-              Пользователь сможет общаться с вами, только заплатив определенную
-              сумму.
+              {currentLang.msgCostDescr}
             </p>
             <div className="notifications__free">
-              <h2>Бесплатно</h2>
+              <h2>{currentLang.free}</h2>
               <input
                 type="checkbox"
                 className="notifications__toggle-button"
@@ -1394,13 +1397,13 @@ export const Settings = () => {
             </div>
           </div>
           <div style={{ borderTop: "1px solid rgba(0, 0, 0, 0.2)" }}>
-            <p className="notifications__priceText">Цена за 1 месяц</p>
+            <p className="notifications__priceText">{currentLang.monthCost}</p>
             <CurrencyInput
               className="notifications__input"
               prefix="$"
               name="message_price"
               value={values.message_price}
-              placeholder="$ Введите сумму..."
+              placeholder={currentLang.setPrice}
               decimalsLimit={2}
               disabled={values.message_price === 0}
               onValueChange={(value, name) => setFieldValue(name, value)}
@@ -1420,7 +1423,7 @@ export const Settings = () => {
         <div className="notifications__main">
           <div className="notifications__pricesHeader">
             <div className="notifications__free" style={{ marginTop: "0px" }}>
-              <h2>Бесплатно</h2>
+              <h2>{currentLang.free}</h2>
               <input
                 type="checkbox"
                 className="notifications__toggle-button"
@@ -1439,13 +1442,13 @@ export const Settings = () => {
             </div>
           </div>
           <div style={{ borderTop: "1px solid rgba(0, 0, 0, 0.2)" }}>
-            <p className="notifications__priceText">Цена за 1 месяц</p>
+            <p className="notifications__priceText">{currentLang.monthCost}</p>
             <CurrencyInput
               className="notifications__input"
               prefix="$"
               name="subscribtion_price"
               value={values.subscribtion_price}
-              placeholder="$ Введите сумму..."
+              placeholder={currentLang.setPrice}
               decimalsLimit={2}
               disabled={values.subscribtion_price === 0}
               onValueChange={(value, name) => setFieldValue(name, value)}
@@ -1465,7 +1468,7 @@ export const Settings = () => {
         <div className="notifications__main">
           <div className="notifications__pricesHeader">
             <div className="notifications__free" style={{ marginTop: "0px" }}>
-              <h2>1 месяц беспланой подписки</h2>
+              <h2>{currentLang.forFunSw}</h2>
               <input
                 type="checkbox"
                 className="notifications__toggle-button"
@@ -1476,23 +1479,7 @@ export const Settings = () => {
               className="notifications__priceText"
               style={{ marginLeft: "0px", marginBottom: "0px" }}
             >
-              Ваши фанаты смогут делиться ссылкой вашего профиля и за каждого
-            </p>
-            <p
-              className="notifications__priceText"
-              style={{
-                marginLeft: "0px",
-                marginTop: "0px",
-                marginBottom: "0px",
-              }}
-            >
-              нового подписчика, который подписался по этой ссылке, фанаты будут
-            </p>
-            <p
-              className="notifications__priceText"
-              style={{ marginLeft: "0px", marginTop: "0px" }}
-            >
-              получать месяц бесплатной подписки на 1 месяц.
+              {currentLang.forFunDescr}
             </p>
           </div>
         </div>
@@ -1505,107 +1492,107 @@ export const Settings = () => {
           {/* Заголовок*/}
           <Route
             path="/settings/profileSettings"
-            render={() => <Text text="Реферальная ссылка    " />}
+            render={() => <Text text={currentLang.refLink} />}
             exact
           />
           <Route
             path="/settings/account"
-            render={() => <Text text="Аккаунт" />}
+            render={() => <Text text={currentLang.account} />}
             exact
           />
           <Route
             path="/settings/profileSettings/card"
-            render={() => <Text text="Карта" />}
+            render={() => <Text text={currentLang.card} />}
             exact
           />
           <Route
             path="/settings/profileSettings/lists"
-            render={() => <Text text="Списки" />}
+            render={() => <Text text={currentLang.list} />}
             exact
           />
           <Route
             path="/settings/profileSettings/stats"
-            render={() => <Text text="Статистика" />}
+            render={() => <Text text={currentLang.stats} />}
             exact
           />
           <Route
             path="/settings/profileSettings/lang"
-            render={() => <Text text="Язык" />}
+            render={() => <Text text={currentLang.lang} />}
             exact
           />
           <Route
             path="/settings/confidentiality"
-            render={() => <Text text="Конфеденциальность" />}
+            render={() => <Text text={currentLang.security} />}
             exact
           />
           <Route
             path="/settings/account/sessions"
-            render={() => <Text text="Сеансы входа" />}
+            render={() => <Text text={currentLang.sessions} />}
             exact
           />
           <Route
             path="/settings/notifications/push"
-            render={() => <Text text="Push-уведомления" />}
+            render={() => <Text text={currentLang.pushNotf} />}
             exact
           />
           <Route
             path="/settings/account/phone"
-            render={() => <Text text="Номер телефона" />}
+            render={() => <Text text={currentLang.phone} />}
             exact
           />
           <Route
             path="/settings/notifications/email"
-            render={() => <Text text="Email-уведомления" />}
+            render={() => <Text text={currentLang.emailNotf} />}
             exact
           />
           <Route
             path="/settings/notifications/page"
-            render={() => <Text text="Уведомления на сайте" />}
+            render={() => <Text text={currentLang.siteNotf} />}
             exact
           />
           <Route
             path="/settings/notifications"
-            render={() => <Text text="Уведомления" />}
+            render={() => <Text text={currentLang.notifications} />}
             exact
           />
           <Route
             path="/settings/prices"
-            render={() => <Text text="Цены" />}
+            render={() => <Text text={currentLang.prices} />}
             exact
           />
           <Route
             path="/settings/notifications/account/delete"
-            render={() => <Text text="Удалить аккаунт" />}
+            render={() => <Text text={currentLang.dellAcc} />}
             exact
           />
           <Route
             path="/settings/account/email"
-            render={() => <Text text="Изменить Email" />}
+            render={() => <Text text={currentLang.changeEmail} />}
             exact
           />
           <Route
             path="/settings/account/password"
-            render={() => <Text text="Изменить пароль" />}
+            render={() => <Text text={currentLang.changePass} />}
             exact
           />
           <Route
             path="/settings/prices/messages"
-            render={() => <Text text="Цена сообщения" />}
+            render={() => <Text text={currentLang.msgPrice} />}
             exact
           />
           <Route
             path="/settings/prices/subscribes"
-            render={() => <Text text="Цена подписки" />}
+            render={() => <Text text={currentLang.price} />}
             exact
           />
           <Route
             path="/settings/prices/fans"
-            render={() => <Text text="Для фанатов" />}
+            render={() => <Text text={currentLang.forFun} />}
             exact
           />
           <Route
             path="/settings/account/nickname"
-            render={() => <Text text="Изменить ник" />}
+            render={() => <Text text={currentLang.changeNick} />}
             exact
           />
           {/* Заголовок(конец)*/}
@@ -1642,7 +1629,7 @@ export const Settings = () => {
                   render={() => {
                     return (
                       <div>
-                        <Text text="Настройки" />
+                        <Text text={currentLang.settings} />
                         <SettingsSidebar showStyle={true} />
                       </div>
                     );

@@ -169,6 +169,22 @@ export const getAuthScheme = (currentLang: any, action: string) => {
     password: yup.string(),
   });
 };
+export const getChangePasswordScheme = (currentLang: any, action: string) => {
+  if (action === "signup") {
+    return yup.object().shape({
+      password: yup.string(),
+      repeat: yup.string()
+        .oneOf([yup.ref('password'), null], 'Passwords must match')
+      // password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
+    });
+  }
+
+  return yup.object().shape({
+    username: yup.string().min(4, currentLang.nameWarn),
+    // password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
+    password: yup.string(),
+  });
+};
 
 //Debugging styles
 export const debugStyles = {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { RootState } from "../../redux/redux";
@@ -10,45 +10,85 @@ import { ReactComponent as ProfileIcon } from "../../assets/images/user.svg";
 import NavLink from "../components/home/NavLink";
 import { NAV_LINKS } from "../utils/utilities";
 import { getUserData } from "../../redux/authReducer";
-import Cookies from "js-cookie";
 import { authAPI } from "../../api/authAPI";
+import { blogAPI } from "../../api/blogAPI";
+import { LangContext } from "../utils/LangProvider";
 
 const Navbar = () => {
   const { pathname } = useLocation();
-  const refLink = pathname.split("/").slice(2, 4).join("/");
-
   const nick = useSelector((state: RootState) => state.auth.username);
   const uid = useSelector((state: RootState) => state.auth.pk);
-  // const [ws, setWs] = useState(null);
+  const [ws, setWs] = useState(null);
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth)
+  const { currentLang } = useContext(LangContext)
 
   const [newMessages, setNewMessages] = useState(0);
   // const wsClient = new WebSocket(
-  //   `wss://hype-fans.com/ws/api/chat-rooms/${uid ? uid : 0}/`
+  //   `wss://hype-fans.com/ws/api/chat-rooms/${uid ?? 0}/`
   // );
   // wsClient.onopen = () => {
   //   setWs(wsClient);
   // };
+
+  const getNotificationText = (item: any) => {
+    switch (item.notification_type) {
+      case "donation":
+        return `${item.source_info.username} ${currentLang.donatedU}`
+      case "subscription":
+        return `${item.source_info.username} ${currentLang.subscribedU}`
+      case "chat_subscription":
+        return `${item.source_info.username} ${currentLang.chatSubscribedU}`
+      case "comment_like":
+        return `${item.source_info.username} ${currentLang.likedUrComment}`
+      case "like":
+        return `${item.source_info.username} ${currentLang.likedUrPost}`
+      case "comment_comment":
+        return `${item.source_info.username} ${currentLang.commentUrComment}`
+      default:
+        return `${item.source_info.username} ${currentLang.commentUrPost}`
+    }
+  }
+
   useEffect(() => {
     if (uid) {
       const chat_id = setInterval(() => {
         // ws.send(JSON.stringify({}));
-        return authAPI.onlineUpdate(uid);
+        const showNotifications = (item: any) => {
+          const notification = new Notification("Уведомление", {
+            body: getNotificationText(item)
+          })
+        }
+        const newNotifications = () => {
+          const notification = new Notification("Уведомление", {
+            body: `У вас новые уведомления`
+          })
+        }
+        const asyncData = async () => {
+          const data = await blogAPI.getPushNotif()
+          if (data.result.length > 1 && data.result.length < 5) {
+            data.result.forEach((item: any) => {
+              showNotifications(item)
+            })
+          } else if (data.result.length === 5) {
+            newNotifications()
+          }
+          return authAPI.onlineUpdate(uid);
+        }
+        asyncData()
       }, 5000);
       return () => clearInterval(chat_id);
     }
-  }, []);
+  }, [pathname, uid]);
 
   const dispatch = useDispatch();
 
   if (
-    pathname === `/${NAV_LINKS.SIGNIN}` ||
-    pathname === `/${NAV_LINKS.SIGNUP}` ||
-    pathname === `/`
+    !isAuth || localStorage.getItem("hypefansToken") === null
   ) {
     return null;
   }
 
-  if (Cookies?.get("token")?.length > 5) {
+  if (localStorage.getItem("hypefansToken")?.length > 5) {
     dispatch(getUserData());
   }
 

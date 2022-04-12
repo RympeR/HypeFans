@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Modal from "react-bootstrap/Modal";
@@ -9,12 +9,13 @@ import logo from "../../../assets/images/logo.svg";
 import { ReactComponent as SaveIcon } from "../../../assets/images/bookmark.svg";
 import { ReactComponent as LikeIcon } from "../../../assets/images/heart.svg";
 import { ReactComponent as MenuDots } from "../../../assets/images/3dots.svg";
-import { RootState } from 'src/redux/redux';
+import { RootState } from '../../../redux/redux';
 import { returnByFileType } from '../home/Post';
 import { createPostAction, deletePost, deletePostAction, setFavorite } from '../../../redux/userReducer';
 import { CommentComponent } from '../CommentComponent';
 import { ReactComponent as CommentIcon } from "../../../assets/images/message-circle.svg";
 import { ReadMore } from '../readMore/ReadMore';
+import { LangContext } from '../../../app/utils/LangProvider';
 
 export const ProfilePagePost = ({ item, index }: { item: any, index: number }) => {
     const [removePostShow, setRemovePostShow] = useState(false);
@@ -28,6 +29,11 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
     const delPost = (id: number) => {
         dispatch(deletePost({ id }));
     };
+    const { currentLang } = useContext(LangContext);
+
+    console.log(currentLang)
+
+    debugger
 
     return (
         <div className="profile__post" key={`${index}_post`}>
@@ -71,7 +77,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                                 >
                                     <div style={{ padding: "5px" }}>
                                         <button onClick={() => setRemovePostShow(true)}>
-                                            Удалить пост
+                                            {currentLang.delPost}
                                         </button>
                                     </div>
                                 </Popup>
@@ -85,7 +91,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                                 <Modal.Body className="notifications__modal">
                                     {" "}
                                     <h2 style={{ marginBottom: "0px" }}>
-                                        Удалить пост
+                                        {currentLang.delPost}
                                     </h2>
                                     <div
                                         style={{
@@ -95,7 +101,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                                         }}
                                     >
                                         <h3 onClick={() => setRemovePostShow(false)}>
-                                            Нет
+                                            {currentLang.no}
                                         </h3>
                                         <div style={{ width: "20px" }}></div>
                                         <h3
@@ -105,7 +111,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                                             }}
                                             style={{ color: "#FB5734" }}
                                         >
-                                            Да
+                                            {currentLang.yes}
                                         </h3>
                                     </div>
                                 </Modal.Body>
@@ -199,7 +205,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                     </div>
 
                     <p className="post__like-amount">
-                        {item?.post.likes_amount} лайков
+                        {item?.post.likes_amount} {currentLang.liks1}
                     </p>
 
                     <CommentComponent

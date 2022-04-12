@@ -199,7 +199,7 @@ const Upload = () => {
           </div>
           <div className="upload__bottom">
             <div>
-              Цена поста:
+              {currentLang.postPrice}:
               <CurrencyInput
                 prefix="$"
                 style={{
@@ -215,7 +215,7 @@ const Upload = () => {
               />
             </div>
             <div style={{ marginBottom: "25px" }}>
-              Уровень доступа:
+              {currentLang.accesslevel}
               <select
                 className="post__access__select"
                 value={accessType}
@@ -224,15 +224,15 @@ const Upload = () => {
                 id="acess_type"
               >
                 <option className="post__access__select__option" value="1">
-                  Покупка
+                  {currentLang.accessLevelBuy}
                 </option>
                 <option className="post__access__select__option" value="2">
-                  Подписка
+                  {currentLang.accessLevelSub}
                 </option>
               </select>
             </div>
             <div style={{ marginBottom: "25px" }}>
-              Показывать в рекомендациях:
+              {currentLang.showInRecs}
               <input
                 type="checkbox"
                 className="notifications__toggle-button"

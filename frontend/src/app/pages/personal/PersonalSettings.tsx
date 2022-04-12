@@ -1,6 +1,7 @@
 import React, {
   ChangeEvent,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -26,8 +27,10 @@ import { userAPI } from "../../../api/userAPI";
 import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop/types";
 import getCroppedImg from "./cropimage";
+import { LangContext } from "../../../app/utils/LangProvider";
 
 export const PersonalSettings = () => {
+  const { currentLang } = useContext(LangContext)
   const dispatch = useDispatch();
   const history = useHistory();
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
@@ -165,9 +168,8 @@ export const PersonalSettings = () => {
       <div className="profile">
         <div
           style={{
-            background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${
-              backgroundUploadImg ?? background_photo
-            })`,
+            background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${backgroundUploadImg ?? background_photo
+              })`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "100% 210px",
           }}
@@ -190,7 +192,7 @@ export const PersonalSettings = () => {
                 className="upload__aply"
                 onClick={onCropBackground}
               >
-                Apply
+                {currentLang.apply}
               </button>
             </>
           ) : (
@@ -256,7 +258,7 @@ export const PersonalSettings = () => {
                     className="upload__aply"
                     onClick={onCrop}
                   >
-                    Apply
+                    {currentLang.apply}
                   </button>
                 </>
               ) : (
@@ -292,7 +294,7 @@ export const PersonalSettings = () => {
               return (
                 <div className="personalSettings">
                   <div>
-                    <h3>Имя</h3>
+                    <h3>{currentLang.name}</h3>
                     <input
                       type="text"
                       value={values.first_name}
@@ -302,7 +304,7 @@ export const PersonalSettings = () => {
                     />
                   </div>
                   <div>
-                    <h3>Почта</h3>
+                    <h3>{currentLang.mail}</h3>
                     <input
                       type="text"
                       value={values.email}
@@ -312,7 +314,7 @@ export const PersonalSettings = () => {
                     />
                   </div>
                   <div>
-                    <h3>Ник</h3>
+                    <h3>{currentLang.nick}</h3>
                     <input
                       type="text"
                       value={values.username}
@@ -322,14 +324,14 @@ export const PersonalSettings = () => {
                     />
                   </div>
                   <div>
-                    <h3>Био</h3>
+                    <h3>{currentLang.bio}</h3>
                     <textarea
                       value={values.bio}
                       onChange={(val) => setFieldValue("bio", val.target.value)}
                     />
                   </div>
                   <div>
-                    <h3>Кошелек</h3>
+                    <h3>{currentLang.wallet}</h3>
                     <input
                       type="text"
                       value={values.wallet}
@@ -347,7 +349,7 @@ export const PersonalSettings = () => {
                     type="submit"
                     onClick={() => handleSubmit()}
                   >
-                    Сохранить изменения
+                    {currentLang.save}
                   </button>
                 </div>
               );
@@ -364,13 +366,13 @@ export const PersonalSettings = () => {
           }}
         >
           <Link to="/settings/prices/messages">
-            <NotificationSidebarItem text="Цена сообщения" />
+            <NotificationSidebarItem text={currentLang.msgPrice} />
           </Link>
           <Link to="/settings/prices/subscribes">
-            <NotificationSidebarItem text="Цена подписки" />
+            <NotificationSidebarItem text={currentLang.price} />
           </Link>
           <Link to="/settings/prices/fans">
-            <NotificationSidebarItem text="Для фанатов" />
+            <NotificationSidebarItem text={currentLang.forFun} />
           </Link>
         </div>
       </div>

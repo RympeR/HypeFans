@@ -3,6 +3,7 @@ import { Formik } from "formik";
 import React, {
   ChangeEvent,
   MouseEvent,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -36,6 +37,7 @@ import moment from "moment";
 import logo from "../../assets/images/logo.svg";
 import { toast } from "react-toastify";
 import { ChatInput } from "../components/chatInput/ChatInput";
+import { LangContext } from "../utils/LangProvider";
 
 const MessageItem =
   React.memo(({
@@ -53,20 +55,17 @@ const MessageItem =
     url: number;
     wrapperRef: any;
   }) => {
-    console.log(item);
+    const { currentLang } = useContext(LangContext)
 
     const uid = useSelector((state: RootState) => state.auth.pk);
 
     const payForMessage = async (message_id: number, price: number) => {
       const data = await blogAPI.buyMessage(uid, message_id, price);
-      console.log(data);
-      debugger
 
       if (data.status === 200) {
         setMessages(
           messages.map((item: any, index: number) => {
             if (item.id === data.data.chat) {
-              debugger
               return { ...item, is_payed: true };
             } else {
               return item;
@@ -104,7 +103,7 @@ const MessageItem =
               }}
               onClick={() => payForMessage(item.id, item.message_price)}
             >
-              Посмотреть за {item.message_price}$
+              {currentLang.lookFor} {item.message_price}$
             </button>
           </div>
         ) : (
@@ -142,7 +141,7 @@ const MessageItem =
                     } else if (item.file_type === 1) {
                       return (
                         <a href={item.file_url} download key={index + "ChatImage"}>
-                          Скачать{" "}
+                          {currentLang.download}
                           {
                             item.file_url.split("/")[
                             item.file_url.split("/").length - 1
@@ -224,6 +223,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const inputFileRef = useRef(null);
   const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false);
   const wrapperRef = useRef()
+  const { currentLang } = useContext(LangContext)
 
   // useEffect`s
 
@@ -371,23 +371,23 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       reciever,
     });
     if (data.status === 200) {
-      toast.success("Донат отправлен");
+      toast.success(currentLang.donutSended);
       return setShowTip(false);
     } else if (data.status === 451) {
       setShowTip(false);
-      toast.error("Не хватает средств");
-      return console.log("Не хватает средств");
+      toast.error(currentLang.notEnough);
+      return console.log(currentLang.notEnough);
     } else {
-      toast.error("ошибка сервера");
-      return console.log("ошибка сервера");
+      toast.error(currentLang.servError);
+      return console.log(currentLang.servError);
     }
   };
   const blockUser = async (id: number) => {
     const response = await userAPI.blockUser({ user: [id], block: true });
     if (response.status < 300) {
-      toast.success("Blocked user");
+      toast.success(currentLang.success);
     } else {
-      toast.error("Block user failed");
+      toast.error(currentLang.error);
     }
   };
 
@@ -440,7 +440,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             <Preloader />
           ) : (
             <div style={{ padding: "15px" }}>
-              <h1 style={{ textAlign: "center" }}>Участники</h1>
+              <h1 style={{ textAlign: "center" }}>{currentLang.members}</h1>
               {invitedUsers.map((item, key) => {
                 return (
                   <div className="chat__invitedUsersItem" key={key + " usersInChat"}>
@@ -553,7 +553,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         >
           <div style={{ padding: "5px", fontSize: "14px" }}>
             <button onClick={() => setIsAddModalShow(true)}>
-              Добавить участников
+              {currentLang.addToChat}
             </button>
           </div>
           {/* <div style={{ padding: "5px", fontSize: "11px" }}>
@@ -570,7 +570,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 );
               }}
             >
-              Скопировать ссылку
+              {currentLang.copy}
             </button>
           </div>
           {/* <div style={{ padding: "5px", fontSize: "11px" }}>
@@ -586,7 +586,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 )
               }
             >
-              Заблокировать
+              {currentLang.ban}
             </button>
           </div>
         </Popup>
@@ -607,8 +607,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             {messages.filter((item) => item.user.pk === uid)[
               messages.filter((item) => item.user.pk === uid).length - 1
             ]?.readed
-              ? "Прочитанно"
-              : "Не прочитанно"}
+              ? currentLang.readed
+              : currentLang.notReaded}
           </div>
           {isMessagesLoading ? (
             <div
@@ -686,7 +686,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             style={{ marginBottom: "10px" }}
             onClick={() => setPaidModalShow(true)}
           >
-            Установить цену
+            {currentLang.setPrice}
           </button>
         </div>
       </div>
@@ -711,7 +711,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               padding: "15px",
             }}
           >
-            <h2>Цена сообщения</h2>
+            <h2>{currentLang.msgPrice}</h2>
             <CurrencyInput
               prefix="$"
               style={{
@@ -722,7 +722,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 marginTop: "16px",
               }}
               value={messageCost}
-              placeholder="$ Введите сумму..."
+              placeholder={currentLang.enterSumm}
               decimalsLimit={2}
               onValueChange={(value, name) => setMessageCost(value)}
             />
@@ -736,18 +736,18 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               <h3 onClick={() => {
                 setMessageCost("")
                 setPaidModalShow(false)
-              }}>Отмена</h3>
+              }}>{currentLang.cancel}</h3>
               <div style={{ width: "20px" }}></div>
               <h3
                 style={
                   { color: "#FB5734" }
                 }
                 onClick={() => {
-                  toast.success("Цена соощения сохранена");
+                  toast.success(currentLang.msgPriceSaved);
                   setPaidModalShow(false)
                 }}
               >
-                Сохранить цену
+                {currentLang.save}
               </h3>
             </div>
           </div>
@@ -851,7 +851,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               htmlFor="file-input"
               style={{ marginBottom: "15px" }}
             >
-              Добавить
+              {currentLang.add}
             </label>
             <input
               className="upload__file-input"
@@ -873,7 +873,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               marginTop: "16px",
             }}
             value={messageCost}
-            placeholder="$ цена сообщения..."
+            placeholder={currentLang.msgPrice}
             decimalsLimit={2}
             onValueChange={(value, name) => setMessageCost(value)}
           />
@@ -891,7 +891,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 setUploadedFilesImg([]);
               }}
             >
-              Отмена
+              {currentLang.cancel}
             </h3>
             <div style={{ width: "20px" }}></div>
             <h3
@@ -900,7 +900,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
               }}
               style={{ color: "#FB5734" }}
             >
-              Далее
+              {currentLang.next}
             </h3>
           </div>
         </Modal.Body>
@@ -935,7 +935,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     padding: "15px",
                   }}
                 >
-                  <h2>Отправить донат</h2>
+                  <h2>{currentLang.sendDonut}</h2>
                   <div
                     className="chat__sidebarItem"
                     style={{ alignItems: "center", padding: "0px" }}
@@ -1015,7 +1015,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     }}
                     name="donation_amount"
                     value={values.donation_amount}
-                    placeholder="$ Введите сумму..."
+                    placeholder={currentLang.enterSumm}
                     decimalsLimit={2}
                     onValueChange={(value, name) => setFieldValue(name, value)}
                   />
@@ -1026,7 +1026,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                       marginTop: "15px",
                     }}
                   >
-                    <h3 onClick={() => setShowTip(false)}>Отмена</h3>
+                    <h3 onClick={() => setShowTip(false)}>{currentLang.cancel}</h3>
                     <div style={{ width: "20px" }}></div>
                     <h3
                       style={{ color: "#FB5734" }}
@@ -1040,7 +1040,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                         )
                       }
                     >
-                      Отправить
+                      {currentLang.send}
                     </h3>
                   </div>
                 </div>

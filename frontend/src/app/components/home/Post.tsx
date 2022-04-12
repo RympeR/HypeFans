@@ -247,7 +247,7 @@ const Post = ({
               padding: "15px",
             }}
           >
-            <h2>Отправить донат</h2>
+            <h2>{currentLang.sendDonut}</h2>
             <div
               className="chat__sidebarItem"
               style={{ alignItems: "center", padding: "0px" }}
@@ -306,7 +306,7 @@ const Post = ({
                   }
                 }}
               >
-                Отправить
+                {currentLang.send}
               </h3>
             </div>
           </div>

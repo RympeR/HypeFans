@@ -20,6 +20,11 @@ export const blogAPI = {
         return response.data;
       });
   },
+  getPushNotif() {
+    return instance.get('/blog/get-notifications-alerts/').then((res) => {
+      return res.data;
+    });
+  },
   setFavorite(post_id: number, favourite: boolean) {
     return instance.put('/blog/mark-favourite/', { post_id: post_id, favourite: favourite }).then((res) => {
       return res;
@@ -134,13 +139,13 @@ export const blogAPI = {
   },
   getNotifications({ limit = 10, offset = 0 }: { limit: number; offset: number }) {
     console.log("Notifiaction");
-    if (Notification.permission !== 'granted'){
+    if (Notification.permission !== 'granted') {
       Notification.requestPermission();
     };
     new Notification("dude", {
       icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
       body: 'Hey there! You\'ve been notified!',
-     });
+    });
     return instance.get(`/blog/get-notifications/?limit=${limit}&offset=${offset}`).then((response) => {
       return response;
     });
