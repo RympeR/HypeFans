@@ -20,9 +20,10 @@ export const CreateDialog = () => {
     const history = useHistory()
     const userId = useSelector((state: RootState) => state.auth.pk);
     const createNewChat = async (data: any) => {
-        const response = await chatAPI.roomCreate(data);
+        debugger
+        // const response = await chatAPI.roomCreate(data);
         setCurrentTab(0);
-        history.push(`/chat/${response.data.id}`);
+        // history.push(`/chat/${response.data.id}`);
     };
 
     const [chatImg, setChatImg] = useState<string | null>(null)
@@ -99,7 +100,7 @@ export const CreateDialog = () => {
                                                         />
                                                     </div>
                                                 </div>
-                                                <input style={{ borderBottom: "1px solid grey " }} value={values.chatName} onChange={(val) => setFieldValue("chatName", val.target.value)} />
+                                                <input placeholder={currentLang.chatPls} style={{ borderBottom: "1px solid grey " }} value={values.chatName} onChange={(val) => setFieldValue("chatName", val.target.value)} />
                                             </div>
                                             <div
                                                 style={{
