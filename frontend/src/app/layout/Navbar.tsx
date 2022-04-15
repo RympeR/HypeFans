@@ -65,11 +65,11 @@ const Navbar = () => {
         }
         const asyncData = async () => {
           const data = await blogAPI.getPushNotif()
-          if (data.result.length > 1 && data.result.length < 5) {
-            data.result.forEach((item: any) => {
+          if (data?.result?.length > 1 && data?.result?.length < 5) {
+            data?.result?.forEach((item: any) => {
               showNotifications(item)
             })
-          } else if (data.result.length === 5) {
+          } else if (data?.result?.length === 5) {
             newNotifications()
           }
           return authAPI.onlineUpdate(uid);

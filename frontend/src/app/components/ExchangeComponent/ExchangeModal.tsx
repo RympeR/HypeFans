@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import QRCode from "react-qr-code";
+import { LangContext } from "../../../app/utils/LangProvider";
 // import { toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 import { SettingsSidebarItem } from "../../../app/pages/notifications/NotificationSidebarItem";
@@ -10,12 +11,13 @@ import { ReactComponent as PlusSvg } from "../../../assets/images/plus.svg";
 // import './style.scss';
 
 export const ExchangeModal = () => {
+  const { currentLang } = useContext(LangContext)
   const [show, setShow] = useState(false);
 
   return (
     <>
       <div onClick={() => setShow(!show)}>
-        <SettingsSidebarItem text="Мой счёт">
+        <SettingsSidebarItem text={currentLang.balance}>
           <CardSvg />
         </SettingsSidebarItem>
       </div>
@@ -52,9 +54,9 @@ export const ExchangeModal = () => {
               <p>Какая то ссылка</p>
               <div
                 className="copy"
-                // onClick={(e) => {
-                //   return toast.success('The link was copied');
-                // }}
+              // onClick={(e) => {
+              //   return toast.success('The link was copied');
+              // }}
               >
                 <CopySvg />
               </div>

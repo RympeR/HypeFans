@@ -26,6 +26,7 @@ export const ChatInput = ({
   const [bottom, setBottom] = useState<number>(30);
   const VektorIcon = () => <Vektor />;
   const VektorIconDisabled = () => <VektorDisabled />;
+  const contentEditable = React.createRef();
   const handleChange = (event: any) => {
     // const height = event.target.scrollHeight;
     // const rows = event.target.rows;
@@ -35,7 +36,6 @@ export const ChatInput = ({
     // console.log(height, event.target.scrollHeight);
     // console.log(height, event.target.scrollHeight);
   };
-
   return (
     <Formik
       initialValues={{
@@ -52,35 +52,23 @@ export const ChatInput = ({
             <div
               className="chat__text"
               style={{
-                marginTop: possibleMarginTop + "px",
+                marginTop: 0 + "px",
               }}
-            >
-              <Field
-                key="input-message"
-                name="messageFormikText"
-                style={{
-                  height: `${height}px`,
-                  padding: "3px",
-                  maxHeight: "80px",
-                  background: "#fbdfcf",
-                  borderRadius: "21px",
-                }}
-                as="textarea"
-                onChange={(event: any) => {
-                  setFieldValue("messageFormikText", event.target.value);
-                  handleChange(event);
-                }}
-                onBlur={() => {
-                  wrapperRef.current.scrollIntoView({ behavior: "smooth" });
-                }}
-                onKeyDown={(e: any) => {
-                  console.log(e.key);
-                  if (e.key === "Enter") {
-                    // handleSubmit();
-                  }
-                }}
-              ></Field>
-            </div>
+              contentEditable="true"
+              onChange={(event: any) => {
+                setFieldValue("messageFormikText", event.target.value);
+                handleChange(event);
+              }}
+              onBlur={() => {
+                wrapperRef.current.scrollIntoView({ behavior: "smooth" });
+              }}
+              onKeyDown={(e: any) => {
+                console.log(e.key);
+                if (e.key === "Enter") {
+                  // handleSubmit();
+                }
+              }}
+            ></div>
             <button
               className="send"
               onClick={() => {

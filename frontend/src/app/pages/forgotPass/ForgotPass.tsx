@@ -46,7 +46,7 @@ export const ForgotPass = () => {
 
     const changeRequest = async (email: string) => {
         const data = await authAPI.requestRestore(email)
-        toast.success(data.success)
+        toast.success(currentLang.sentDescr)
         history.push("/")
     }
 

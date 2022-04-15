@@ -54,10 +54,10 @@ export const CreateDialog = () => {
                             paid: false,
                             chatCost: 0,
                             chatName: "",
-                            invited: []
+                            invited: [],
                         }}
                         onSubmit={(val) => {
-                            createNewChat({ ...val, invited: val.invited.map((item) => item.pk) });
+                            createNewChat({ ...val, invited: val.invited.map((item) => item.pk), logo: chatImgFile });
                         }}
                     >
                         {({ values, handleSubmit, setFieldValue }) => {
@@ -99,7 +99,7 @@ export const CreateDialog = () => {
                                                         />
                                                     </div>
                                                 </div>
-                                                <input style={{ borderBottom: "1px solid grey " }} value={values.chatName} onChange={(val) => setFieldValue("chatName", val.target.value)} />
+                                                <input placeholder={currentLang.chatPls} style={{ borderBottom: "1px solid grey " }} value={values.chatName} onChange={(val) => setFieldValue("chatName", val.target.value)} />
                                             </div>
                                             <div
                                                 style={{
