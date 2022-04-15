@@ -20,10 +20,9 @@ export const CreateDialog = () => {
     const history = useHistory()
     const userId = useSelector((state: RootState) => state.auth.pk);
     const createNewChat = async (data: any) => {
-        debugger
-        // const response = await chatAPI.roomCreate(data);
+        const response = await chatAPI.roomCreate(data);
         setCurrentTab(0);
-        // history.push(`/chat/${response.data.id}`);
+        history.push(`/chat/${response.data.id}`);
     };
 
     const [chatImg, setChatImg] = useState<string | null>(null)
@@ -55,10 +54,10 @@ export const CreateDialog = () => {
                             paid: false,
                             chatCost: 0,
                             chatName: "",
-                            invited: []
+                            invited: [],
                         }}
                         onSubmit={(val) => {
-                            createNewChat({ ...val, invited: val.invited.map((item) => item.pk) });
+                            createNewChat({ ...val, invited: val.invited.map((item) => item.pk), logo: chatImgFile });
                         }}
                     >
                         {({ values, handleSubmit, setFieldValue }) => {
