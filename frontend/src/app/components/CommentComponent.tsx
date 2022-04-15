@@ -85,13 +85,13 @@ export const CommentComponent = ({
   };
 
   useEffect(() => {
-    if (postId === null || postId === undefined) return;
+    if (postId === null || postId === undefined || !show) return;
     async function fetch() {
       const data = await getPostActionList({ id: postId });
       setComments([...data.data.filter((item: any) => item.comment !== null)]);
     }
     fetch();
-  }, [postId]);
+  }, [postId, show]);
 
   const Comment = ({ item, index }: { item: any; index: number }) => {
     const { currentLang } = useContext(LangContext);
