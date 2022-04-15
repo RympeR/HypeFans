@@ -22,6 +22,9 @@
 </body>
 <script>
     var editable = document.querySelector('.editable_div');
+    editable.onclick = function() {
+        editable.contentEditable = true;
+    }
     var windowHeight = window.innerHeight;
     var possible_margin_top = windowHeight * 0.5;
     editable.style.marginTop = possible_margin_top + 'px';
