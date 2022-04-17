@@ -107,6 +107,8 @@ export type getPaymentRT = {
   amount: number;
 };
 export type getUserRT = {
+  is_online: boolean,
+  subscribed_chat: boolean,
   subscribtion_price: number | null;
   pk: number | null;
   email: string | null;
@@ -141,6 +143,11 @@ export type getUserRT = {
 
 export type userStringType = {
   user: string | null;
+};
+export type userSearchType = {
+  user: string | null;
+  limit: number | null;
+  offset: number | null;
 };
 export type onlineUserRetrieveRT = {
   user: string | null;

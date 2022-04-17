@@ -1,5 +1,3 @@
-import Cookies from "js-cookie";
-import { useHistory } from "react-router-dom";
 import { instance, setAuthToken } from "./api";
 
 export let token: number | null;
@@ -9,6 +7,15 @@ export const authAPI = {
       .post<{ email: string; password: string }>("/auth/jwt/create/", {
         email,
         password,
+      })
+      .then((response) => {
+        return response;
+      });
+  },
+  changePasswordAuth(password: string, uidb64: string, token: string) {
+    return instance
+      .post("/user/password-reset/", {
+        uidb64, password, token
       })
       .then((response) => {
         return response;
@@ -40,17 +47,18 @@ export const authAPI = {
       })
       .then((response) => {
         console.log("here");
-        if (response.status !== 200) {
+        if (response.status !== 200 && response.status !== 201) {
           console.log("login error");
         }
+        console.log(response.data.auth_token);
+        localStorage.setItem('hypefansToken', response.data.auth_token)
         setAuthToken(response.data.auth_token);
-        Cookies?.set("token", response.data.auth_token);
         return response.data.auth_token;
       });
   },
   logout() {
     return instance.post("/auth/token/logout/").then((response) => {
-      setAuthToken("")
+      setAuthToken(null);
       if (response.status !== 204) {
         console.log("logout error");
       }
@@ -68,12 +76,11 @@ export const authAPI = {
     password: string,
     ref_link: string
   ) {
-    console.log({ username, email, password, ref_link });
     return instance
       .post("/user/create-user/", { username, email, password, ref_link })
       .then((response) => {
         setAuthToken(response.data.auth_token);
-        Cookies?.set("token", response.data.auth_token);
+        localStorage.setItem('hypefansToken', response.data.auth_token)
         return response.data;
       });
   },
@@ -98,17 +105,9 @@ export const authAPI = {
     return instance
       .get<{ username: "string"; id: number; email: number }>("/auth/users/me/")
       .then((response) => {
-        console.log("here");
         if (response.status === 200) {
           return response;
         }
-      })
-      .catch((error) => {
-        console.log(error);
-        // const history = useHistory();
-        // Cookies?.set("token", "");
-        // history.push("/");
-        return error;
       });
   },
   meUpdate(data: any) {
@@ -198,8 +197,23 @@ export const authAPI = {
         return response.data;
       });
   },
+  restorePassword({ password, repeat, token }: { password: string, repeat: string, token: string }) {
+    return instance.post(`/user/request-restore-email/`, { password, repeat, token }).then((response) => {
+      return response.data;
+    });
+  },
+  requestRestore(email: string) {
+    return instance.post(`/user/request-restore-email/`, { email }).then((response) => {
+      return response.data;
+    });
+  },
   deleteUser(id: string | number) {
     return instance.delete(`/auth/users/${id}/`).then((response) => {
+      return response.data;
+    });
+  },
+  onlineUpdate(id: string | number) {
+    return instance.post(`/user/online-user-create/`, { user: id }).then((response) => {
       return response.data;
     });
   },
@@ -214,7 +228,7 @@ export const authAPI = {
 //   });
 // },
 // deleteUser() {
-//   return instance.delete(`user/update-delete-user/`).then((response) => {
+//   return instance.delete(`user / update - delete -user / `).then((response) => {
 //     if (response.status !== 204) {
 //       console.log('Cant delete');
 //     }
@@ -248,7 +262,7 @@ export const authAPI = {
 //   };
 //   console.log('FormData');
 //   console.log(formData);
-//   return instance.put(`user/partial-update-user/`, formData, config).then((response) => {
+//   return instance.put(`user / partial - update - user / `, formData, config).then((response) => {
 //     console.log(response);
 //     if (response.status !== 200) {
 //       console.log('Error!');
@@ -257,7 +271,7 @@ export const authAPI = {
 //   });
 // },
 // deleteCard(id: number) {
-//   return instance.delete(`user/update-delete-card/${id}`).then((response) => {
+//   return instance.delete(`user / update - delete -card / ${ id }`).then((response) => {
 //     if (response.status !== 204) {
 //       console.log('Can not delete the card!');
 //     }

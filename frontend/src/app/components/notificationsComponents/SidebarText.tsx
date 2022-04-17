@@ -10,7 +10,13 @@ export const SidebarText = ({ text }: { text: string }) => {
       <p className="notifications__none">{text}</p>
       <div className="notifications__sidebarItemPhone">
         <div style={{ marginBottom: '5px', marginRight: '17px' }}>
-          <ArrowLeft onClick={history.goBack} />
+          <ArrowLeft onClick={() => {
+            if (history.location.pathname === "/settings/notifications" || "/settings/account" || "/settings/prices" || "/settings/confidentiality") {
+              history.push("/notifications")
+            } else {
+              return history.push("/settings/notifications")
+            }
+          }} />
         </div>
         <div style={{ marginTop: '4px' }}>{text}</div>
         <div className="notifications__none">

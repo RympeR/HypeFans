@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import ISignInData from "../../../app/types/ISignInData";
 import { LangContext } from "../../../app/utils/LangProvider";
 import { getAuthScheme, NAV_LINKS } from "../../../app/utils/utilities";
@@ -22,6 +22,7 @@ const initialValues: ISignInData = {
 const SignInForm = ({ action }: { action: string }) => {
   const dispatch = useDispatch();
   const { currentLang } = useContext(LangContext);
+  const history = useHistory()
 
   const signInScheme = getAuthScheme(currentLang, action);
   const [passwordShown, setPasswordShown] = useState(false);
@@ -40,13 +41,16 @@ const SignInForm = ({ action }: { action: string }) => {
 
   const [isSigningIn, setIsSigningIn] = useState(false);
 
+  const [isCorrect, setIsCorrect] = useState<boolean>(true)
+
   const onSubmit = async (data: ISignInData) => {
     setIsSigningIn(true);
-    try{
+    try {
       await dispatch(login(data));
       toast.success('Login Successfully');
     } catch {
       toast.error('Invaild credentials');
+      setIsCorrect(false)
     }
     setIsSigningIn(false);
     reset(initialValues);
@@ -91,16 +95,17 @@ const SignInForm = ({ action }: { action: string }) => {
         />
       )}
       <p className="auth__input-error">{errors.password?.message}</p>
+      {isCorrect ? null : <div onClick={() => history.push("/forgotPassword")}>{currentLang.forgetPass}</div>}
 
       <button className="auth__submit-btn">{currentLang.next}</button>
 
-      <p className="auth__through">{currentLang.enterTh}</p>
+      {/* <p className="auth__through">{currentLang.enterTh}</p>
 
       <div className="auth__social-medias">
         <Google className="auth__social-media-icon" />
         <Instagram className="auth__social-media-icon" />
         <Facebook className="auth__social-media-icon" />
-      </div>
+      </div> */}
 
       <div className="auth__conditions">
         <span>{currentLang.regLink1} </span>

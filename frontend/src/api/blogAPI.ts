@@ -20,20 +20,25 @@ export const blogAPI = {
         return response.data;
       });
   },
+  getPushNotif() {
+    return instance.get('/blog/get-notifications-alerts/').then((res) => {
+      return res.data;
+    });
+  },
   setFavorite(post_id: number, favourite: boolean) {
     return instance.put('/blog/mark-favourite/', { post_id: post_id, favourite: favourite }).then((res) => {
       return res;
     });
   },
   buyMessage(user: number, message_id: number, price: number) {
-    return instance.post('/chat/message-bought-create/', { user, chat: message_id, amount: 10 }).then((res) => {
+    console.log({ user, chat: message_id, amount: price })
+    return instance.post('/chat/message-bought-create/', { user, chat: message_id, amount: price }).then((res) => {
       return res;
     });
   },
   createAttachment(file: any) {
     console.log(file);
     console.log(file.name.split('.')[1] === 'mp3');
-    // debugger;
     if (!file) return;
     const formData = new FormData();
     formData.append('_file', file);
@@ -127,13 +132,21 @@ export const blogAPI = {
       return response;
     });
   },
-  getFavourites({ limit = 10, offset = 10 }: { limit: number; offset: number }) {
-    return instance.get('/blog/get-favourite-posts/').then((response) => {
+  getFavourites({ limit = 10, offset = 0 }: { limit: number; offset: number }) {
+    return instance.get(`/blog/get-favourite-posts/?limit=${limit}&offset=${offset}`).then((response) => {
       return response;
     });
   },
-  getNotifications({ limit = 10, offset = 10 }: { limit: number; offset: number }) {
-    return instance.get(`/blog/get-notifications/`).then((response) => {
+  getNotifications({ limit = 10, offset = 0 }: { limit: number; offset: number }) {
+    console.log("Notifiaction");
+    if (Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    };
+    new Notification("dude", {
+      icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
+      body: 'Hey there! You\'ve been notified!',
+    });
+    return instance.get(`/blog/get-notifications/?limit=${limit}&offset=${offset}`).then((response) => {
       return response;
     });
   },

@@ -27,18 +27,26 @@ import { CommentComponent } from "../CommentComponent";
 import UserBanner from "./UserBanner";
 import logo from "../../../assets/images/logo.svg";
 import { Video } from "../../../app/pages/card/components/VideoPost";
-
+import { toast } from "react-toastify";
+import moment from "moment";
+import { ReadMore } from "../readMore/ReadMore";
 
 export const returnByFileType = (item: any) => {
-  switch (item.file_type) {
+  console.log(item);
+
+  switch (item?.file_type) {
     case 4:
-      return (
-        <Video src={item._file} />
-      )
+      return <Video src={item?._file} />;
     default:
-      return <img src={item._file} alt="postIMG" className="profile__post_image"></img>
+      return (
+        <img
+          src={item?._file}
+          alt="postIMG"
+          className="profile__post_image"
+        ></img>
+      );
   }
-}
+};
 
 const Post = ({
   post,
@@ -68,6 +76,8 @@ const Post = ({
 
   const [donateValue, setDonateValue] = useState("0");
 
+  const [show, setShow] = useState<boolean>(false);
+
   const [isWholeTextShowed, setIsWholeTextShowed] = useState<boolean>(true);
   const dispatch = useDispatch();
 
@@ -78,14 +88,14 @@ const Post = ({
       reciever: post.user.pk,
     });
     if (data.status === 200) {
-      alert.success("Донат отправлен");
+      toast.success("Донат отправлен");
       return setDonateShow(false);
     } else if (data.status === 451) {
       setDonateShow(false);
-      alert.error("Ошибка");
+      toast.error("Ошибка");
       return console.log("Не хватает средств");
     } else {
-      alert.error("Ошибка");
+      toast.error("Ошибка");
       return console.log("ошибка сервера");
     }
   };
@@ -99,7 +109,10 @@ const Post = ({
   const time_diif = prepareDateDiffStrLanguage(
     timeAgoTimestamp(parseFloat(post?.post.publication_date)),
     currentLang
-  )
+  );
+
+  console.log(post);
+
 
   return (
     <article className="post">
@@ -116,31 +129,15 @@ const Post = ({
           </div>
         </div>
         <div className="post__top-right">
-          <p className="post__time">{time_diif}</p>
+          <p className="post__time">
+            {moment(parseFloat(post?.post.publication_date) * 1000).fromNow()}
+          </p>
 
-          <button className="post__menu-dots">
-            <MenuDots />
-          </button>
+          <button className="post__menu-dots">{/* <MenuDots /> */}</button>
         </div>
       </div>
-      <p className="post__caption">
-        {isWholeTextShowed
-          ? post.post.description
-          : showVisibleText(post.post.description, LENTGH_OF_VISIBLE_CAPTION)}
-      </p>
-
-      <button
-        className={
-          isWholeTextShowed
-            ? "post__read-more-btn post__read-more-btn_hidden"
-            : "post__read-more-btn"
-        }
-        onClick={() => setIsWholeTextShowed(true)}
-      >
-        {currentLang.readmore}
-      </button>
-
       <UserBanner profile={post.user} />
+      <ReadMore text={post.post.description} />
 
       {post.post?.attachments.length > 1 ? (
         <Slider dots={true} arrows={false} className="profile__postIMG">
@@ -188,11 +185,15 @@ const Post = ({
               <LikeIcon
                 className="post__action-icon"
                 fill={post.post.liked ? "#C41E3A" : "none"}
+                strokeOpacity={post.post.liked ? 0 : 0.6}
               />
             </button>
 
             <button className="post__action-btn">
-              <CommentIcon className="post__action-icon" />
+              <CommentIcon
+                className="post__action-icon"
+                onClick={() => setShow(true)}
+              />
             </button>
 
             <button
@@ -219,7 +220,12 @@ const Post = ({
           {post.post.likes_amount} {currentLang.liks1}
         </p>
 
-        <CommentComponent data={post.post.comments} postId={post.post.pk} />
+        <CommentComponent
+          data={post.post.comments}
+          postId={post.post.pk}
+          show={show}
+          setShow={setShow}
+        />
       </div>
       <Modal
         show={donateShow}
@@ -241,15 +247,12 @@ const Post = ({
               padding: "15px",
             }}
           >
-            <h2>Отправить донат</h2>
+            <h2>{currentLang.sendDonut}</h2>
             <div
               className="chat__sidebarItem"
               style={{ alignItems: "center", padding: "0px" }}
             >
-              <img
-                src={post.user.avatar ? post.user.avatar : logo}
-                alt="fdsfsdfsd"
-              ></img>
+              <img src={post.user.avatar || logo} alt="fdsfsdfsd"></img>
               <div>
                 <h2>{post.user.first_name}</h2>
                 <h2
@@ -303,7 +306,7 @@ const Post = ({
                   }
                 }}
               >
-                Отправить
+                {currentLang.send}
               </h3>
             </div>
           </div>

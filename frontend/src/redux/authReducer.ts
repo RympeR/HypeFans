@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { authAPI } from "../api/authAPI";
-import { userAPI } from "./../api/userAPI";
+import { userAPI } from "../api/userAPI";
 import { isLoading, isntLoading } from "./blogReducer";
 import { InferActionsTypes, RootState } from "./redux";
 
@@ -290,7 +290,31 @@ export const changeSettings =
       delete obj.ref_link;
       dispatch(isSettingsDisabled());
       const response = await authAPI.meUpdate(obj);
-      const data = await authAPI.meGet();
+      await authAPI.meGet();
+      if (response) {
+        dispatch(getAuthUserData());
+      }
+      dispatch(isntSettingsDisabled());
+    };
+
+export const changeAvatar =
+  (obj: any): Thunk =>
+    async (dispatch) => {
+      dispatch(isSettingsDisabled());
+      const response = await authAPI.meUpdate(obj);
+      await authAPI.meGet();
+      if (response) {
+        dispatch(getAuthUserData());
+      }
+      dispatch(isntSettingsDisabled());
+    };
+
+export const changeBackground =
+  (obj: any): Thunk =>
+    async (dispatch) => {
+      dispatch(isSettingsDisabled());
+      const response = await authAPI.meUpdate(obj);
+      await authAPI.meGet();
       if (response) {
         dispatch(getAuthUserData());
       }

@@ -1,4 +1,4 @@
-import { default as React, useEffect } from "react";
+import { default as React, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
 import "reactjs-popup/dist/index.css";
@@ -17,9 +17,13 @@ import { ReactComponent as CommentIcon } from "../../assets/images/message-circl
 import { CommentComponent } from "../components/CommentComponent";
 import { prepareDateDiffStr, timeAgoTimestamp } from "../utils/utilities";
 import { Video } from "./card/components/Video";
+import { LangContext } from "../utils/LangProvider";
+import { Preloader } from "../utils/Preloader";
 
 export const PostModal = ({ post_id }: { post_id: number }) => {
   const dispatch = useDispatch();
+  const { currentLang } = useContext(LangContext)
+
 
   //? Дебагер попросил добавть зависимости
   useEffect(() => {
@@ -29,13 +33,38 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
   const myId = useSelector((state: RootState) => state.auth.pk);
   const post = useSelector((state: RootState) => state.blog.post);
   const isLoading = useSelector((state: RootState) => state.blog.isPostLoading);
+  const [show, setShow] = useState<boolean>(false);
 
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return <Preloader />;
   }
   const time_diif = prepareDateDiffStr(
     timeAgoTimestamp(parseFloat(post?.publication_date))
   );
+
+  const getPostType = (item: any) => {
+    if (item.file_type === 4) {
+      return <Video src={item._file} />;
+    } else if (item.file_type === 1) {
+      return (
+        <a href={item._file} download>
+          Скачать {item._file.split("/")[item._file.split("/").length - 1]}
+        </a>
+      );
+    } else if (item.file_type === 2) {
+      return <audio src={item._file} />;
+    } else if (item.file_type === 3) {
+      return (
+        <img
+          src={item._file}
+          alt="postIMG"
+          className="profile"
+        // style={{ maxHeight: "50vh" }}
+        ></img>
+      );
+    }
+  };
+
   return (
     <div>
       <div className="profile__post" key={`${Math.random()}_post`}>
@@ -65,7 +94,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div className="profile__postAgo">{time_diif}</div>
                 <button className="post__menu-dots">
-                  <MenuDots />
+                  {/* <MenuDots /> */}
                 </button>
               </div>
             </div>
@@ -73,79 +102,17 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
           </div>
         </div>
         <div className="profile__postMain">
-          {post?.attachments.length > 1 ? (
+          {post?.attachments?.length > 1 ? (
             <Slider className="profile__postIMG" dots={true} arrows={false}>
               {post.attachments.map((item: any, index: number) => {
                 return (
-                  <div key={`${index} slideMain`}>
-                    {item?.attachments.length > 0
-                      ? item?.attachments.map((item: any, index: number) => {
-                        console.log(item.file_type);
-                        if (item.file_type === 4) {
-                          return <Video src={item.file_url} />;
-                        } else if (item.file_type === 1) {
-                          return (
-                            <a href={item.file_url} download>
-                              Скачать{" "}
-                              {
-                                item.file_url.split("/")[
-                                item.file_url.split("/").length - 1
-                                ]
-                              }
-                            </a>
-                          );
-                        } else if (item.file_type === 2) {
-                          console.log(item.file_url);
-                          return <audio src={item.file_url} />;
-                        } else {
-                          return (
-                            <img
-                              src={item._file}
-                              alt="postIMG"
-                              className="profile"
-                            ></img>
-                          );
-                        }
-                      })
-                      : null}
-                  </div>
+                  <div key={`${index} slideMain`}>{getPostType(item)}</div>
                 );
               })}
             </Slider>
           ) : (
             <div className="profile__postIMG">
-              {post?.attachments ? (
-                () => {
-                  console.log(post?.attachments[0].file_type);
-                  if (post?.attachments[0].file_type === 4) {
-                    return <Video src={post?.attachments[0]._file} />;
-                  } else if (post?.attachments[0].file_type === 1) {
-                    return (
-                      <a href={post?.attachments[0]._file} download>
-                        Скачать{" "}
-                        {
-                          post?.attachments[0]._file.split("/")[
-                          post?.attachments[0]._file.split("/").length - 1
-                          ]
-                        }
-                      </a>
-                    );
-                  } else if (post?.attachments[0].file_type === 2) {
-                    console.log(post?.attachments[0]._file);
-                    return <audio src={post?.attachments[0]._file} />;
-                  } else {
-                    return (
-                      <img
-                        src={post?.attachments[0]._file}
-                        alt="postIMG"
-                        className="profile"
-                      ></img>
-                    );
-                  }
-                }
-              ) : (
-                <></>
-              )}
+              {post?.attachments ? getPostType(post?.attachments[0]) : <></>}
             </div>
           )}
           <div className="post__bottom" style={{ margin: "24px 24px" }}>
@@ -178,12 +145,15 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                   <LikeIcon
                     className="post__action-icon"
                     fill={post.liked ? "#C41E3A" : "none"}
+                    strokeOpacity={post.liked ? 0 : 0.6}
                   />
                 </button>
 
                 <button className="post__action-btn">
-                  <CommentIcon className="post__action-icon" />
-                  <CommentComponent data={post.comments} postId={post?.id} />
+                  <CommentIcon
+                    className="post__action-icon"
+                    onClick={() => setShow(true)}
+                  />
                 </button>
               </div>
               <button
@@ -201,9 +171,14 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
               </button>
             </div>
 
-            <p className="post__like-amount">{post?.likes_amount} лайков</p>
+            <p className="post__like-amount">{post?.likes_amount}{currentLang.liks1}</p>
 
-            <CommentComponent data={post.comments} postId={post?.id} />
+            <CommentComponent
+              data={post.comments}
+              postId={post?.id}
+              show={show}
+              setShow={setShow}
+            />
           </div>
         </div>
       </div>

@@ -2,7 +2,8 @@
   max-width: 636px;
   border-radius: 0 0 16px 16px;
   overflow: hidden;
-
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
   @media (max-width: map-get($map: $media, $key: l)) {
     max-width: unset;
   }
@@ -34,7 +35,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
+    margin-bottom: 10px;
+    
     &-left {
       display: flex;
       align-items: center;
@@ -62,6 +64,7 @@
   &__brand {
     font-size: map-get($map: $font-size, $key: l);
     color: $black;
+    margin-bottom: 0rem;
 
     @media (max-width: map-get($map: $media, $key: s)) {
       font-size: map-get($map: $font-size, $key: s);
@@ -97,6 +100,9 @@
     font-size: map-get($map: $font-size, $key: s);
     line-height: 150%;
     margin: 24px 0 16px;
+    width: 80%;
+    word-break: break-all;
+    white-space: pre-line;
     color: $black;
 
     @media (max-width: map-get($map: $media, $key: s)) {
@@ -254,13 +260,16 @@
   }
 
   &__comment-amount {
-    font-size: map-get($map: $font-size, $key: s);
+    font-size: map-get($map: $font-size, $key: l);
     margin-right: 10px;
     width: 100%;
     padding-top: 8px;
     padding-right: 8px;
     color: $grey;
     resize: none;
+    @media screen and (max-width: 450px){
+      font-size: 15px;
+    }
   }
 
   &__comment-amount::-webkit-scrollbar-track {

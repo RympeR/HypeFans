@@ -6,19 +6,27 @@ export const AddToChatItem = ({
   item,
   index,
   items,
-  setSelectedItems
+  setSelectedItems,
+  isChat
 }: {
   item: any;
   index: number;
   items: any;
   setSelectedItems: any;
+  isChat: boolean
 }) => {
   return (
     <div
       className="notifications__walletChild"
-      style={{ borderBottom: '0px' }}
+      style={{ borderBottom: '0px', paddingTop: "10px", paddingBottom: "10px" }}
       key={`${index} fav-list`}
-      onClick={() => setSelectedItems([...items, item])}
+      onClick={() => {
+        if (isChat) {
+          return setSelectedItems("invited", [...items, item])
+        } else {
+          setSelectedItems([...items, item])
+        }
+      }}
     >
       <div style={{ display: 'flex' }}>
         <div>
@@ -40,6 +48,6 @@ export const AddToChatItem = ({
         </div>
       </div>
       <div style={{ width: '30px', height: '30px', borderRadius: '100%', backgroundColor: 'rgba(0, 0, 0, 0.7)' }}></div>
-    </div>
+    </div >
   );
 };

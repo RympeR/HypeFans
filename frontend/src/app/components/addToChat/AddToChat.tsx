@@ -1,28 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { LangContext } from "../../../app/utils/LangProvider";
 import { chatAPI } from "../../../api/chatAPI";
 import { userAPI } from "../../../api/userAPI";
 import { ReactComponent as SearchSvg } from "../../../assets/images/search.svg";
 import { AddToChatItem } from "./AddToChatItem";
 import { AddToChatItemSelected } from "./AddToChatItemSelected";
 
-export const AddToChat = () => {
-  const [users, setUsers] = useState([]);
+export const AddToChat = ({
+  usersList,
+  invitedUsers,
+}: {
+  usersList: any[];
+  invitedUsers: any[];
+}) => {
+  const [users, setUsers] = useState(usersList.filter((item) => !invitedUsers.includes(item)));
   const [inputValue, setInputValue] = useState("");
   const history = useHistory();
-  const [selectedItems, setSelectedItems] = useState<Array<any>>([]);
+  const [selectedItems, setSelectedItems] = useState<Array<any>>(invitedUsers);
+  const { currentLang } = useContext(LangContext);
 
   const searchUsers = async () => {
-    const data = await userAPI.searchUser({ user: inputValue });
+    const data = await userAPI.searchUser({
+      user: inputValue,
+      limit: 50,
+      offset: 0,
+    });
     setUsers(data.results);
   };
 
   useEffect(() => {
-    const search = async () => {
-      const data = await userAPI.searchUser({ user: "" });
-      setUsers(data.results);
-    };
-    search();
+    // const search = async () => {
+    //   const data = await userAPI.searchUser({ user: "", limit: 50, offset: 0 });
+    //   setUsers(data.results);
+    // };
+    // search();
   }, []);
 
   const addToChat = async () => {
@@ -30,15 +42,22 @@ export const AddToChat = () => {
     const data = await chatAPI.inviteUsers(
       selectedItems.map((item) => item.username),
       history.location.pathname.split("/")[
-        history.location.pathname.split("/").length - 1
+      history.location.pathname.split("/").length - 1
       ]
     );
-    console.log(data);
   };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", padding: "15px" }}>
-      <h2>Добавить человека в беседу:</h2>
+      <h2>{currentLang.addToChat}:</h2>
+      <button
+        className="notifications__settingBtn"
+        style={{ margin: "0px", width: "100%" }}
+        onClick={() => addToChat()}
+        disabled={selectedItems.length === 0}
+      >
+        {currentLang.add}
+      </button>
       <div
         style={{
           borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
@@ -49,16 +68,10 @@ export const AddToChat = () => {
           alignItems: "center",
         }}
       >
-        <button
-          style={{ width: "50px", height: "50px" }}
-          onClick={() => addToChat()}
-        >
-          Add to chat
-        </button>
         <SearchSvg />
         <input
           style={{ marginLeft: "16px", width: "80%" }}
-          placeholder="Найти людей:"
+          placeholder={`${currentLang.findPeoples}:`}
           value={inputValue}
           onChange={(val) => {
             setInputValue(val.currentTarget.value);
@@ -74,6 +87,7 @@ export const AddToChat = () => {
             items={selectedItems}
             setSelectedItems={setSelectedItems}
             key={index}
+            isChat={false}
           />
         );
       })}
@@ -88,6 +102,7 @@ export const AddToChat = () => {
               items={selectedItems}
               setSelectedItems={setSelectedItems}
               key={index}
+              isChat={false}
             />
           );
         })}

@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 export enum NAV_LINKS {
-  SIGNIN = "",
+  SIGNIN = "signin",
   SIGNUP = "signup",
   HOME = "home",
   NOTIFICATIONS = "notifications",
@@ -85,7 +85,7 @@ export const prepareDateDiffStr = (time_diff: any) => {
   return result_str + " назад";
 };
 
-export const prepareDateDiffStrLanguage = (time_diff: any, currentLang:any) => {
+export const prepareDateDiffStrLanguage = (time_diff: any, currentLang: any) => {
   let result_str = "";
   if (time_diff.days > 0) {
     result_str += time_diff.days + " " + currentLang.timeAgo.days + ' ';
@@ -145,11 +145,11 @@ export const getComputedLeftPosition = async (marginLeft = 47) => {
 
 //Show text of provided length, if the text is bigger, than it returns text + ...
 export const showVisibleText = (text: string, lengthOfVisibleText: number) => {
-  if(text){
+  if (text) {
     if (text?.length === lengthOfVisibleText) return text;
     return `${text.slice(0, lengthOfVisibleText)}...`;
   }
-  return '' 
+  return ''
 };
 
 //Return validation scheme depending on provided auth method
@@ -159,6 +159,22 @@ export const getAuthScheme = (currentLang: any, action: string) => {
       username: yup.string().min(4, currentLang.nameWarn),
       email: yup.string().email(currentLang.emailWarn),
       password: yup.string(),
+      // password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
+    });
+  }
+
+  return yup.object().shape({
+    username: yup.string().min(4, currentLang.nameWarn),
+    // password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
+    password: yup.string(),
+  });
+};
+export const getChangePasswordScheme = (currentLang: any, action: string) => {
+  if (action === "signup") {
+    return yup.object().shape({
+      password: yup.string(),
+      repeat: yup.string()
+        .oneOf([yup.ref('password'), null], 'Passwords must match')
       // password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
     });
   }

@@ -12,16 +12,20 @@ import { getLastUrlPoint } from "../utils/utilities";
 import { DialogMain } from "./DialogMain";
 import { NoDialog } from "./NoDialog";
 import logo from "../../assets/images/logo.svg";
+import { CreateDialog } from "./CreateDialog";
+
 
 const Chat: React.FC = () => {
   const userId = useSelector((state: RootState) => state.auth.pk);
   const history = useHistory();
-  const BackButton = () => <BackIcon onClick={history.goBack} />;
+  const lastUrl = getLastUrlPoint(history.location.pathname);
+  const BackButton = () => <BackIcon onClick={() => history.push("/chat")} />;
   const Plus = () => <PlusIcon />;
   const UserIcon = () => <UsersIcon />;
   const [rooms, setRooms] = useState([]);
   const [isSended, setSended] = useState(false);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
+  // console.log(rerenderCount);
 
   if (isLoading) {
     return <Preloader />;
@@ -85,18 +89,16 @@ const Chat: React.FC = () => {
                 alt="logo"
               ></img>
             ) : (
-              <Link to={`/profile/${item?.item?.room_info?.invited?.avatar}`}>
-                <img
-                  src={
-                    typeof item?.item?.room?.room_info?.invited !== "number"
-                      ? amICreator
-                        ? item?.item?.room?.room_info?.invited?.avatar || logo
-                        : item?.item?.room?.room_info?.creator?.avatar || logo
-                      : item?.item?.room?.room_info?.logo || logo
-                  }
-                  alt="logo"
-                ></img>
-              </Link>
+              <img
+                src={
+                  typeof item?.item?.room?.room_info?.invited !== "number"
+                    ? amICreator
+                      ? item?.item?.room?.room_info?.invited?.avatar || logo
+                      : item?.item?.room?.room_info?.creator?.avatar || logo
+                    : item?.item?.room?.room_info?.logo || logo
+                }
+                alt="logo"
+              ></img>
             )}
             <div>
               <h2>
@@ -119,7 +121,7 @@ const Chat: React.FC = () => {
             </div>
           </div>
           <p className="chat__p">
-            {moment(item?.item?.room?.message?.time).fromNow()}
+            {/* {moment(item?.item?.room?.message?.time * 10000).fromNow()} */}
           </p>
         </div>
       </Link>
@@ -142,7 +144,7 @@ const Chat: React.FC = () => {
         </div>
         <div className="chat__row">
           <div className="chat__resp_icon">
-            <Plus />
+            <CreateDialog />
           </div>
           <div className="chat__resp_icon" style={{ marginLeft: "40px" }}>
             <UserIcon />

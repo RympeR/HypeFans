@@ -1,9 +1,8 @@
-import Cookies from 'js-cookie';
 import React, { ReactNode } from 'react';
 import { Redirect } from 'react-router-dom';
 
 const Main = ({ children }: { children: ReactNode }) => {
-  if (Cookies?.get('token')?.length < 5) {
+  if (localStorage.getItem("hypefansToken") === null) {
     return <Redirect to="/" />;
   }
   return (

@@ -2,15 +2,73 @@
   display: flex;
   flex-direction: column;
 
+  &__invitedUsersItem {
+    display: flex;
+    margin-bottom: 25px;
+    align-items: center;
+    img {
+      width: 80px;
+      height: 80px;
+      border-radius: 100%;
+    }
+  }
+
+  &__audio {
+    &.open {
+      z-index: 14;
+      position: absolute;
+      bottom: 3.5em;
+      left: -10%;
+      margin-left: 4px;
+      padding: 8px;
+      background-color: #fbdfcf;
+      border-radius: 15px;
+      width: 140%;
+      visibility: visible !important;
+    }
+  }
+
+  &__attach_icon {
+    order: 1;
+    background-color: #fbdfcf;
+    border-top-right-radius: 21px;
+    border-bottom-right-radius: 21px;
+    width: 25px;
+    padding-right: 3px;
+    margin-right: -2px;
+    padding-right: 30px;
+  }
+
+  &__audio_voice {
+    @media screen and (max-width : 500px) {
+      margin-bottom: -1.2em;
+    }
+  }
+
   &__chat_actions {
+    visibility: hidden;
     margin: 0px 24px;
     margin-bottom: 8px;
     display: flex;
     flex-wrap: wrap;
 
-    @media screen and (max-width < 500px) {
-      margin: -60px 14px 8px;
+    &.chat__actions_open {
+      display: flex;
+      z-index: 13;
+      position: fixed;
+      bottom: 14.7%;
+      border-radius: 15px;
+      background-color: white;
+      height: 44px;
+      padding-top: 7px;
+      padding-right: 10px;
+      padding-left: 10px;
+      visibility: visible !important;
+      transition: 1s;
+    }
 
+    @media screen and (max-width : 500px) {
+      margin: -60px 14px 8px;
     }
   }
 
@@ -56,7 +114,21 @@
     border-right: 1px solid rgba(0, 0, 0, 0.2);
     width: 37.5%;
     overflow-y: scroll;
+    overflow-x: hidden;
     height: 73vh;
+
+    &::-webkit-scrollbar-track {
+      background-color: rgba(248, 226, 194, 0.534);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      box-shadow: inset 0 0 6px rgba(255, 145, 0, 0.575);
+      border-radius: 15px;
+    }
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
   }
 
   &__sidebarItem {
@@ -128,38 +200,51 @@
   }
 
   &__input {
-    width: 100%;
+    width: 55%;
     display: flex;
     flex-direction: row;
-    background: white;
-    height: 60px;
-    bottom: 0px;
-    position: fixed;
-    z-index: 11;
+    min-height: 50px;
+    margin-bottom: -0.2em;
+    margin-top: 0.2em;
+    // position: absolute;
+    z-index: 2;
+    margin-inline-start: 0.3em;
   }
 
   &__text {
-    @media screen and (min-width : 500px) {
-      &+button.send{
-        position: fixed;
-        left: min( 88%, 1307px );
-        bottom: 15.5%;
+    @media screen and (min-width : 450px) {
+      &+button.send {
+        order: 2;
+        width: 50px;
+        height: 47px;
+        background-color: #fbdfcf;
+        border-radius: 45px;
+        margin-left: 1%;
+        margin-top: 0.2em;
       }
+
       padding: 17px 8px 17px 15px;
       display: flex;
-      width: 49%;
-      max-width: 628px;
-      bottom: 11%;
-      position: fixed;
+      width: 85%;
+      max-width: 590px;
       background: #fbdfcf;
-      border-radius: 21px;
+      border-top-left-radius: 21px;
+      border-bottom-left-radius: 21px;
+
       button {
         width: 50px;
         height: 50px;
       }
-  
-      input {
-        width: 100%;
+
+      textarea {
+        width: 98%;
+
+        &::-webkit-scrollbar {
+          width: 0px;
+        }
+
+        line-height: 15px;
+        resize: none;
       }
     }
   }
@@ -174,11 +259,23 @@
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-end;
-  min-height: 115%;
-  max-height: 115%;
+  height: 115%;
   border: 1px solid #cccccc;
   padding: 10px;
   overflow-y: scroll;
+
+  &::-webkit-scrollbar-track {
+    background-color: rgba(248, 226, 194, 0.534);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px rgba(255, 145, 0, 0.575);
+    border-radius: 15px;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
 }
 
 .text-wrapp {
@@ -217,19 +314,42 @@
         display: flex;
         z-index: 13;
         position: fixed;
-        bottom: -3px;
+        bottom: 2px;
         border-radius: 15px;
         background-color: white;
-        height: 50px;
-        padding-top: 9px;
+        height: 38px;
+        padding-top: 2px;
         padding-right: 10px;
         padding-left: 10px;
-        visibility: visible;
+        visibility: visible !important;
         transition: 1s;
       }
     }
 
+    &__audio {
+      &.open {
+        z-index: 14;
+        position: fixed;
+        bottom: 8%;
+        margin-left: -10px;
+        background-color: #fbdfcf;
+        border-radius: 15px;
+        width: 81%;
+        visibility: visible !important;
+        left: 6%;
+      }
+    }
 
+    &__input_back {
+      min-height: 64px;
+      border-top: #fbdfcf solid 1px;
+      background: white;
+      z-index: 12;
+      width: 100%;
+      bottom: 0px;
+      position: fixed;
+      z-index: 13;
+    }
 
     display: flex;
     flex-direction: column;
@@ -276,6 +396,19 @@
       overflow-y: scroll;
       overflow-x: hidden;
       height: 100%;
+
+      &::-webkit-scrollbar-track {
+        background-color: rgba(248, 226, 194, 0.534);
+      }
+
+      &::-webkit-scrollbar-thumb {
+        box-shadow: inset 0 0 6px rgba(255, 145, 0, 0.575);
+        border-radius: 15px;
+      }
+
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
     }
 
     &__sidebarItem {
@@ -289,9 +422,9 @@
         border-radius: 100%;
 
         &.logo_site {
-          width: 35px;
-          height: 35px;
-          margin-top: -7px;
+          width: 40px;
+          height: 40px;
+          margin-top: -5px;
         }
       }
     }
@@ -325,8 +458,11 @@
       font-family: Factor A;
       font-style: normal;
       font-weight: normal;
+      position: absolute;
       font-size: 12px;
       line-height: 13px;
+      right: 20px;
+      margin-top: 5px;
       display: flex;
       align-items: center;
       text-align: center;
@@ -346,11 +482,11 @@
       position: fixed;
       background-color: white;
       padding-top: 5px;
-      margin-top: -9px;
+      margin-top: -10px;
       z-index: 11;
 
       &.inChat {
-        height: 36px;
+        height: 47px;
       }
     }
 
@@ -382,10 +518,10 @@
 
     &__attach_icon {
       order: 1;
-      z-index: 12;
-      position: absolute;
-      left: 77%;
-      top: 28%;
+      min-height: 46px;
+      width: 25px;
+      margin-left: -1px;
+      padding-right: 28px;
     }
 
     &__dialog {
@@ -397,31 +533,43 @@
       width: 100%;
       display: flex;
       flex-direction: row;
-      background: white;
-      height: 60px;
-      bottom: 0px;
+      height: 44px;
+      bottom: 11px;
       position: fixed;
       z-index: 11;
 
       button.send {
         order: 2;
-        width: 50px;
-        height: 50px;
-        margin-top: 1.5%;
+        width: 44px;
+        height: 44px;
+        margin-top: 0.2%;
+        background-color: #fbdfcf;
+        border-radius: 45px;
+        margin-left: 1%;
       }
     }
 
     &__text {
-      padding: 17px 8px 17px 15px;
+      padding: 10px 8px 8px 15px;
       display: flex;
-      width: 90%;
+      width: 77%;
       background: #fbdfcf;
-      border-radius: 21px;
+      justify-content: left;
+      margin-left: 2px;
+      margin-bottom: 4px;
+      border-top-left-radius: 21px;
+      border-bottom-left-radius: 21px;
+      min-height: 50px;
 
-      input {
-        width: 100%;
+      textarea {
+        width: 98%;
+        resize: none;
+        line-height: 15px;
+
+        &::-webkit-scrollbar {
+          width: 0px;
+        }
       }
-
     }
 
   }
@@ -438,6 +586,19 @@
     border: 1px solid #cccccc;
     padding: 10px;
     overflow-y: scroll;
+
+    &::-webkit-scrollbar-track {
+      background-color: rgba(248, 226, 194, 0.534);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      box-shadow: inset 0 0 6px rgba(255, 145, 0, 0.575);
+      border-radius: 15px;
+    }
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
   }
 
   .text-wrapp {
@@ -477,13 +638,13 @@
     display: flex;
     align-items: center;
     position: relative;
-    top: 0.375rem;
     bottom: auto !important;
     float: right;
     line-height: 1.35;
     height: calc(21px + 1rem);
     margin-left: 0.4375rem;
     margin-right: -0.5rem;
+    margin-bottom: -0.5rem;
 
     &>.message__time {
       font-size: .75rem;
@@ -494,6 +655,10 @@
 
   &.own {
     align-items: flex-start;
+
+    .chat__audio_voice {
+      margin-bottom: -0.2em;
+    }
   }
 
   &__content {
@@ -509,6 +674,11 @@
     &.has-solid-background {
       padding: 0.3125rem 1rem 0.25rem 0.6rem;
       background: rgb(249 208 183 / 67%);
+      margin-bottom: 7px;
+    }
+
+    &.no-background {
+      padding: 0.3125rem 1rem 0.25rem 0.6rem;
       margin-bottom: 7px;
     }
   }

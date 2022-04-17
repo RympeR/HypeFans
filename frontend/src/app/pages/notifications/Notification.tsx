@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { getPost } from "../../../redux/blogReducer";
 import { PostModal } from "../Post";
 import logo from '../../../assets/images/logo.svg';
+import { LangContext } from "../../../app/utils/LangProvider";
 
 export const Notification = ({ item }: any) => {
-  console.log(item);
-  
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const { currentLang } = useContext(LangContext)
   const dispatch = useDispatch();
   const closeModal = () => {
     setIsModalOpened(false);
@@ -20,17 +20,13 @@ export const Notification = ({ item }: any) => {
   const getTitle = (type: string) => {
     switch (type) {
       case "like":
-        return "понравился ваш пост";
+        return currentLang.noteLike;
       case "comment":
-        return "Оставил(а) комментарий";
+        return currentLang.noteComment;
       case "donation":
-        return `Задонатил(а) ${item.donation.amount} $`;
+        return `${currentLang.noteDonut}${item.donation.amount} $`;
       case "subscription":
-        return (
-          <>
-            подписался(лась) на ваш <br></br>профиль!
-          </>
-        );
+        return currentLang.noteSubscribe
     }
   };
   return (
@@ -62,7 +58,7 @@ export const Notification = ({ item }: any) => {
       ) : null}
       {item.type === "subscription" ? (
         <div className="notifications__donationAmount">
-          {item.subscription.amount} месяца
+          {item.subscription.amount}{currentLang.months}
         </div>
       ) : null}
       <Modal
@@ -71,7 +67,7 @@ export const Notification = ({ item }: any) => {
           closeModal();
         }}
         centered
-        size="xl"
+        size="lg"
       >
         <Modal.Body className="notifications__modal">
           <PostModal post_id={item?.post?.post?.pk} />

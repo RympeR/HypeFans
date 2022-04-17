@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import React from 'react';
 import { positions, Provider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
@@ -23,6 +22,9 @@ import { ViewportProvider } from './utils/ViewportProvider';
 // require('swiper/swiper-bundle.css');
 import MetaTags from 'react-meta-tags';
 import { ToastContainer } from "react-toastify";
+import { PersonalSettings } from './pages/personal/PersonalSettings';
+import { ForgotPass } from './pages/forgotPass/ForgotPass';
+import { RestorePassword } from './pages/restorePassword/RestorePassword';
 
 const options = {
   timeout: 5000,
@@ -31,22 +33,23 @@ const options = {
 
 const App = () => {
   const dispatch = useDispatch();
-  if (Cookies?.get('token')?.length > 5) {
+  if (localStorage.getItem("hypefansToken") !== null) {
     dispatch(getUserData());
   }
-
   return (
     <>
-    <MetaTags>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    </MetaTags>
+      <MetaTags>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+      </MetaTags>
       <Provider template={AlertTemplate} {...options}>
         <BrowserRouter>
-          <ToastContainer/>
+          <ToastContainer />
           <ViewportProvider>
             <LangProvider>
               <Switch>
-                <Route path="/signup" component={Auth} />
+                <Route path="/signin" component={Auth} />
+                <Route exact path="/forgotPassword" component={ForgotPass} />
+                <Route path="/restore-password" component={RestorePassword} />
                 <Route exact path="/" component={Auth} />
                 <Main>
                   <Route path="/home" component={Home} />
@@ -56,6 +59,7 @@ const App = () => {
                   <Route path="/profile" component={Profile} />
                   <Route path="/settings" component={Settings} />
                   <Route path="/favourites" component={Favourites} />
+                  <Route path="/personalSettings" component={PersonalSettings} />
                   <Route path="/search" component={Search} />
                 </Main>
               </Switch>

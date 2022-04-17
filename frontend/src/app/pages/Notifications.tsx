@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "react-phone-input-2/lib/style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, useHistory } from "react-router-dom";
-import { getNotifications } from "../../redux/notificationsReducer";
+import {
+  getNotifications,
+  updateNotifications,
+} from "../../redux/notificationsReducer";
 import { RootState } from "../../redux/redux";
 import { ReactComponent as BackIcon } from "../../assets/images/arrow-left.svg";
 import { ReactComponent as BellIcon } from "../../assets/images/bell.svg";
@@ -11,23 +14,30 @@ import { ReactComponent as CommentIcon } from "../../assets/images/message-circl
 import { ReactComponent as SettingsIcon } from "../../assets/images/settings.svg";
 import { ReactComponent as DonateIcon } from "../../assets/images/tip.svg";
 import { ReactComponent as UnlockIcon } from "../../assets/images/unlock.svg";
+import loader from '../../assets/loaders/Spinner-1s-200px.gif';
 import { DefaultSidebar } from "../components/notificationsComponents/DefaultSidebar";
 import { SidebarText } from "../components/notificationsComponents/SidebarText";
 import { Preloader } from "../utils/Preloader";
 import { Notification } from "./notifications/Notification";
+import axios from "axios";
+import { blogAPI } from "../../api/blogAPI";
+import { LangContext } from "../utils/LangProvider";
 
 const Notifications: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { currentLang } = useContext(LangContext);
   const notifications = useSelector(
     (state: RootState) => state.notifications.notifications
   );
   const isLoading = useSelector(
     (state: RootState) => state.notifications.isLoading
   );
+
   useEffect(() => {
     dispatch(getNotifications());
   }, [dispatch]);
+
   if (isLoading) {
     return <Preloader />;
   }
@@ -35,35 +45,35 @@ const Notifications: React.FC = () => {
   const articles = [
     {
       path: "/notifications",
-      text: "Все",
+      text: currentLang.allRef,
       exact: true,
       type: "all",
       icon: <DonateIcon />,
     },
     {
       path: "/notifications/donations",
-      text: "Донаты",
+      text: currentLang.donuts,
       exact: true,
       type: "donation",
       icon: <DonateIcon />,
     },
     {
       path: "/notifications/subscriptions",
-      text: "Подписки",
+      text: currentLang.subscribs,
       exact: true,
       type: "subscription",
       icon: <UnlockIcon />,
     },
     {
       path: "/notifications/likes",
-      text: "Лайки",
+      text: currentLang.likes,
       exact: true,
       type: "like",
       icon: <LikeIcon />,
     },
     {
       path: "/notifications/comments",
-      text: "Комментарии",
+      text: currentLang.comments,
       exact: true,
       type: "comment",
       icon: <CommentIcon />,
@@ -72,19 +82,19 @@ const Notifications: React.FC = () => {
 
   const NotificationsSidebar = () => {
     const SettingsButton = () => <SettingsIcon />;
-    const BackButton = () => <BackIcon onClick={history.goBack} />;
+    const { currentLang } = useContext(LangContext);
 
     return (
       <div>
         <div className="notifications__header">
           <div className="notifications__back">
-            <BackButton />
+            <BackIcon onClick={() => history.push("/home")} />
           </div>
 
           <div className="notifications__headingText">
             <Route
               path="/notifications"
-              render={() => <SidebarText text="Уведомления" />}
+              render={() => <SidebarText text={currentLang.notif} />}
             />
           </div>
           <div className="notifications__settings">
@@ -109,12 +119,46 @@ const Notifications: React.FC = () => {
       }
     }, []);
     const Main = ({ notifications }: { notifications: Array<any> }) => {
+      const [page, setPage] = useState<number>(1);
+      const [data, setData] = useState([...notifications]);
+
+      const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false)
+
+      console.log([data]);
+
+      const onScrollList = async (event: any) => {
+        const scrollBottom =
+          event.target.scrollTop + event.target.offsetHeight ===
+          event.target.scrollHeight;
+
+        if (scrollBottom && !isUpdateLoading) {
+          setIsUpdateLoading(true)
+          await blogAPI.getNotifications({
+            limit: 5,
+            offset: page * 5,
+          }).then((res) => {
+            setData([...data, ...res.data]);
+          }).finally(() => {
+            setPage(page + 1);
+            setIsUpdateLoading(false)
+          })
+        }
+      };
+
       return (
-        <div className="notifications__main">
-          {notifications.length > 0 ? (
-            notifications.map((item, i) => {
-              return <Notification key={`notification ${i}`} item={item} />;
-            })
+        <div
+          className="notifications__main"
+          onScroll={(event) => onScrollList(event)}
+        >
+          {data.length > 0 ? (
+            <>
+              {data.map((item, i) => {
+                return <Notification key={`notification ${i}`} item={item} />;
+              })}
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                {isUpdateLoading ? <img src={loader} alt="loading..." /> : null}
+              </div>
+            </>
           ) : (
             <div
               style={{
@@ -124,7 +168,7 @@ const Notifications: React.FC = () => {
                 marginTop: "70px",
               }}
             >
-              Нет уведомлений
+              {currentLang.noNotifications}
             </div>
           )}
         </div>
@@ -150,17 +194,17 @@ const Notifications: React.FC = () => {
           >
             {isShown ? (
               <div style={{ marginLeft: "5px" }}>
-                <Link
+                <div
                   className={
                     history.location.pathname === "/notifications"
                       ? "nav__icon_notifications_active "
                       : "nav__icon_notifications_inactive "
                   }
-                  to="/notifications"
-                  onClick={() => setShown(true)}
+                  // to="/notifications"
+                  onClick={() => setShown(false)}
                 >
                   <BellIcon />
-                </Link>
+                </div>
               </div>
             ) : (
               <div
@@ -175,7 +219,7 @@ const Notifications: React.FC = () => {
               </div>
             )}
             {articles.map((item, key) => {
-              if (item.text === "Все") return null;
+              if (item.text === currentLang.all) return null;
               return (
                 <Link
                   className={
@@ -201,11 +245,11 @@ const Notifications: React.FC = () => {
               render={() => (
                 <Main
                   notifications={
-                    article.text === "Все"
+                    article.text === currentLang.all
                       ? notifications
                       : notifications.filter(
-                          (item) => item.type === article.type
-                        )
+                        (item) => item.type === article.type
+                      )
                   }
                 />
               )}

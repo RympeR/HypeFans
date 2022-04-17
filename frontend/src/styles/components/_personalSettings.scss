@@ -1,0 +1,79 @@
+#goToTop {
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    position: fixed; /* Fixed/sticky position */
+    bottom: 90px; /* Place the button at the bottom of the page */
+    right: 40px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: $orange; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 15px; /* Some padding */
+    border-radius: 100%; /* Rounded corners */
+    font-size: 50px;
+    width: 50px;
+    height: 50px;
+    transition: 1s;
+    font-size: 18px; /* Increase font size */
+  }
+  
+  #goToTop:hover {
+      transition: 1s;
+    background-color: rgb(195, 125, 79); /* Add a dark-grey background on hover */
+  }
+
+.personalSettings {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    h3 {
+        font-size: 17px;
+    }
+    input {
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        width: 100%;
+        height: 46px;
+        padding: 4px;
+        margin-bottom: 24px;
+        margin-top: 8px;
+    }
+    textarea {
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        width: 100%;
+        height: 300px;
+        margin-bottom: 24px;
+        padding: 4px;
+        margin-top: 8px;
+        resize: none;
+    }
+    &__changeBackground {
+        position: absolute;
+        margin-top: 50px;
+        font-size: 20px;
+    }
+
+    &__changeAvatar {
+        width: 160px;
+        background-color: $white;
+        height: 160px;
+        border: 4px solid $white;
+        border-radius: 100%;
+        margin-top: 70px;
+    }
+    &__changeAvatarBtn {
+        position: absolute;
+        margin-left: 50px;
+        margin-top: 50px;
+        svg {
+            path {
+                stroke:"black";
+                stroke-opacity:"1";
+            }
+        }
+    }
+}

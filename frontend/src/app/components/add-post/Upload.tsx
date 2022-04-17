@@ -10,6 +10,7 @@ import React, {
 import CurrencyInput from "react-currency-input-field";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { toast } from "react-toastify";
 import { useTextInput } from "../../../app/utils/useTextInput";
 import { BREAKPOINTS, NAV_LINKS } from "../../../app/utils/utilities";
 import { useViewport } from "../../../app/utils/ViewportProvider";
@@ -76,6 +77,7 @@ const Upload = () => {
       user: id,
       name: "post",
       description: value,
+      access_level: accessType,
       price_to_watch: postCost,
       show_in_recomendations: showInRecommendations,
     };
@@ -86,6 +88,7 @@ const Upload = () => {
     setPostCost("0");
     setAccessType("1");
     setUploadedFilesImg([]);
+    toast.success("Post created");
   };
 
   return (
@@ -191,11 +194,12 @@ const Upload = () => {
               type="file"
               onChange={onFileChange}
               multiple
+              accept="image/*, video/*"
             />
           </div>
           <div className="upload__bottom">
             <div>
-              Цена поста:
+              {currentLang.postPrice}:
               <CurrencyInput
                 prefix="$"
                 style={{
@@ -211,7 +215,7 @@ const Upload = () => {
               />
             </div>
             <div style={{ marginBottom: "25px" }}>
-              Уровень доступа:
+              {currentLang.accesslevel}
               <select
                 className="post__access__select"
                 value={accessType}
@@ -220,15 +224,15 @@ const Upload = () => {
                 id="acess_type"
               >
                 <option className="post__access__select__option" value="1">
-                  Покупка
+                  {currentLang.accessLevelBuy}
                 </option>
                 <option className="post__access__select__option" value="2">
-                  Подписка
+                  {currentLang.accessLevelSub}
                 </option>
               </select>
             </div>
             <div style={{ marginBottom: "25px" }}>
-              Показывать в рекомендациях:
+              {currentLang.showInRecs}
               <input
                 type="checkbox"
                 className="notifications__toggle-button"

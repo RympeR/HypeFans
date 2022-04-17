@@ -1,25 +1,48 @@
-import { instance } from './api';
+import { instance } from "./api";
+import { userSearchType } from "./types";
 
 export const chatAPI = {
   getChatMessages(room_id: number) {
-    return instance.post(`/chat/get-chat-messages/`, { room_id }).then((response) => {
-      return response.data;
-    });
+    return instance
+      .post(`/chat/get-chat-messages/`, { room_id })
+      .then((response) => {
+        return response.data;
+      });
+  },
+  getChatMembers(chat_id: number) {
+    return instance
+      .get(`/chat/room-user-list/${chat_id}`)
+      .then((response) => {
+        return response.data;
+      });
   },
   getUserDialogs() {
     return instance.post(`get-user-dialogs/`).then((response) => {
       return response.data;
     });
   },
+  searchUserChatCreate({ user, limit, offset }: userSearchType) {
+    return instance
+      .get(`/chat/get-possible-invited/?username=${user}&limit=${limit}&offset=${offset}`)
+      .then((response) => {
+        if (response.status === 200 || 301) {
+          return response.data;
+        } else {
+          throw new Error();
+        }
+      });
+  },
   inviteUsers(username: Array<any>, chat_id: string | number) {
     console.log(chat_id);
-    return instance.patch(`/chat/invite-user/${chat_id}`, { username }).then((response) => {
-      return response;
-    });
+    return instance
+      .put(`/chat/invite-user/${chat_id}`, { username })
+      .then((response) => {
+        return response;
+      });
   },
   inviteUserPut(id: number, username: string, data: any) {
     const dataSend: any = {
-      username
+      username,
     };
     for (const key in data) {
       dataSend[key] = data[key];
@@ -30,7 +53,7 @@ export const chatAPI = {
   },
   inviteUser(id: number, username: string, data: any) {
     const dataSend: any = {
-      username
+      username,
     };
     for (const key in data) {
       dataSend[key] = data[key];
@@ -39,18 +62,23 @@ export const chatAPI = {
       return response;
     });
   },
-  messageCreate(room_id: number, text: string, attachments: number[], data: any) {
+  messageCreate(
+    room_id: number,
+    text: string,
+    attachments: number[],
+    data: any
+  ) {
     const dataSend: any = {
       room_id,
       text,
-      attachments
+      attachments,
     };
     for (const key in data) {
       dataSend[key] = data[key];
     }
     return instance.post(`/chat/message-create/`, data).then((response) => {
       if (response.status !== 202) {
-        console.log('Error');
+        console.log("Error");
       }
       return response;
     });
@@ -61,29 +89,48 @@ export const chatAPI = {
     });
   },
   getNewMessagesCount() {
-    return instance.get(`/chat/get-unreaded-messages-amount/`).then((response) => {
-      return response.data;
-    });
+    return instance
+      .get(`/chat/get-unreaded-messages-amount/`)
+      .then((response) => {
+        return response.data;
+      });
   },
   messageRetrieve(id: number) {
     return instance.get(`/chat/message-retrieve/${id}`).then((response) => {
       return response.data;
     });
   },
-  messageUpdatePut(text: string, room: number, id: number, attachments: number[], user: number) {
-    return instance.put(`/chat/message-update/${id}`, { text, room, user, attachments }).then((response) => {
-      return response;
-    });
+  messageUpdatePut(
+    text: string,
+    room: number,
+    id: number,
+    attachments: number[],
+    user: number
+  ) {
+    return instance
+      .put(`/chat/message-update/${id}`, { text, room, user, attachments })
+      .then((response) => {
+        return response;
+      });
   },
-  messageUpdate(text: string, room: number, id: number, attachments: number[], user: number) {
-    return instance.patch(`/chat/message-update/${id}`, { text, room, user, attachments }).then((response) => {
-      return response;
-    });
+  messageUpdate(
+    text: string,
+    room: number,
+    id: number,
+    attachments: number[],
+    user: number
+  ) {
+    return instance
+      .patch(`/chat/message-update/${id}`, { text, room, user, attachments })
+      .then((response) => {
+        return response;
+      });
   },
   roomCreate(data: any) {
     return instance.post(`/chat/room-create/`, data).then((response) => {
-      if (response.status !== 202) {
-        console.log('Error!');
+      console.log(response.status);
+      if (response.status == 226) {
+        return response;
       }
       return response;
     });
@@ -100,7 +147,7 @@ export const chatAPI = {
   },
   roomUpdate(id: number, invited: number[], data: any) {
     const dataSend: any = {
-      invited
+      invited,
     };
     for (const key in data) {
       dataSend[key] = data[key];
@@ -108,5 +155,5 @@ export const chatAPI = {
     return instance.get(`/chat/room-update/${id}`, data).then((response) => {
       return response;
     });
-  }
+  },
 };

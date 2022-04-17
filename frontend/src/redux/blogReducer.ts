@@ -238,7 +238,7 @@ export const getMainPageData = (): Thunk => async (dispatch) => {
   const mainPageData = await blogAPI.getMainPage({ limit: 10, offset: 10 });
   if (mainPageData.data) {
     const posts = mainPageData.data.posts;
-    const recommendations = mainPageData.data.recommendations[0];
+    const recommendations = mainPageData.data.recommendations;
     const stories = [{}];
     dispatch(actions.setMainPageData(posts, recommendations, stories));
     dispatch(actions.isntLoading());
