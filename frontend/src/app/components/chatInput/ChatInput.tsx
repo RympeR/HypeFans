@@ -1,5 +1,5 @@
 import { Field, Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { getLastUrlPoint } from "../../../app/utils/utilities";
 import { ReactComponent as Vektor } from "../../../assets/images/send.svg";
@@ -18,15 +18,16 @@ export const ChatInput = ({
 }) => {
   const history = useHistory();
   const windowHeight = window.innerHeight;
+  const inputRef = useRef(null);
   const [possibleMarginTop, setPossibleMarginTop] = useState(
     windowHeight * 0.5
   );
   const lastUrl = getLastUrlPoint(history.location.pathname);
   const [height, setHeight] = useState<number>(30);
   const [bottom, setBottom] = useState<number>(30);
+  const [editableText, setEditableText] = useState<string>("");
   const VektorIcon = () => <Vektor />;
   const VektorIconDisabled = () => <VektorDisabled />;
-  const contentEditable = React.createRef();
   const handleChange = (event: any) => {
     // const height = event.target.scrollHeight;
     // const rows = event.target.rows;
@@ -42,7 +43,8 @@ export const ChatInput = ({
         messageFormikText: "",
       }}
       onSubmit={async (obj, actions) => {
-        await sendMessage(obj.messageFormikText);
+        const temp_var = editableText.replace(/(\s+)/g, '');
+        await sendMessage(temp_var);
         actions.resetForm();
       }}
     >
@@ -54,18 +56,35 @@ export const ChatInput = ({
               style={{
                 marginTop: 0 + "px",
               }}
+              ref={inputRef}
               contentEditable="true"
               onChange={(event: any) => {
-                setFieldValue("messageFormikText", event.target.value);
                 handleChange(event);
               }}
               onBlur={() => {
                 wrapperRef.current.scrollIntoView({ behavior: "smooth" });
               }}
+              dangerouslySetInnerHTML={{ __html: editableText }}
               onKeyDown={(e: any) => {
+                setEditableText(e.target.innerText);
+                const text_arr = inputRef.current.innerText.split('\n');
+                const element_length = text_arr.length;
+                const last_row_length = text_arr[element_length - 1].length;
+                console.log(last_row_length);
+                console.log(inputRef.current.style);
+                
                 console.log(e.key);
-                if (e.key === "Enter") {
-                  // handleSubmit();
+                if (e.keyCode === 13 && e.shiftKey) {
+                  // var editableHeight = editable.offsetHeight;
+                  // console.log(editableHeight);
+                  // editable.style.height = editable.style.height + 21 + 'px';
+                  //editable.style.marginTop = (possible_margin_top - editableHeight) + 'px';
+                } else if (e.keyCode === 13) {
+                  // console.log(editable.innerHTML.replace('<br>', '\n'));
+                  // editable.contentEditable = false;
+                  // editable.innerHTML = '';
+                  // editable.style.height = 'auto';
+                  // editable.style.marginTop = possible_margin_top + 'px';
                 }
               }}
             ></div>
@@ -75,8 +94,8 @@ export const ChatInput = ({
                 return handleSubmit();
               }}
             >
-              {(values.messageFormikText.length > 0 &&
-                values.messageFormikText.length < 255) ||
+              {(editableText &&
+                editableText.length < 255) ||
               isSendDisabled ||
               audio ? (
                 <VektorIcon />
