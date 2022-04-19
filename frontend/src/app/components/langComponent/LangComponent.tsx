@@ -9,7 +9,10 @@ export const LangComponent = () => {
         <div className="notifications__main">
             <div
                 style={{ padding: "16px 24px", fontSize: "20px", display: "flex" }}
-                onClick={() => setCurrentLang(langData.UA)}
+                onClick={() => {
+                    localStorage.setItem("hypefansLang", "UA")
+                    setCurrentLang(langData.UA)
+                }}
             >
                 Українська
                 {currentLang.langBtn === "UA" ? <div style={{ marginLeft: "5px" }}>
@@ -23,7 +26,10 @@ export const LangComponent = () => {
                     borderTop: "1px solid grey",
                     display: "flex",
                 }}
-                onClick={() => setCurrentLang(langData.EN)}
+                onClick={() => {
+                    localStorage.setItem("hypefansLang", "EN")
+                    setCurrentLang(langData.EN)
+                }}
             >
                 English
                 {currentLang.langBtn === "ENG" ? <div style={{ marginLeft: "5px" }}>
@@ -37,7 +43,10 @@ export const LangComponent = () => {
                     borderTop: "1px solid grey",
                     display: "flex",
                 }}
-                onClick={() => setCurrentLang(langData.RU)}
+                onClick={() => {
+                    localStorage.setItem("hypefansLang", "RU")
+                    setCurrentLang(langData.RU)
+                }}
             >
                 Русский
                 {currentLang.langBtn === "RUS" ? <div style={{ marginLeft: "5px" }}>
