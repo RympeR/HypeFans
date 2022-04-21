@@ -150,7 +150,7 @@ const Notifications: React.FC = () => {
           className="notifications__main"
           onScroll={(event) => onScrollList(event)}
         >
-          {data.length > 0 ? (
+          {data.length > 0 && typeof data[0]?.user?.first_name === "string" ? (
             <>
               {data.map((item, i) => {
                 return <Notification key={`notification ${i}`} item={item} />;
