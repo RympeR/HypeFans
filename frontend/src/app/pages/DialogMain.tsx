@@ -210,6 +210,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   const ImageIcon = () => <ImageIcn />;
   const [ws, setWs] = useState(null);
   const [wsRead, setWsRead] = useState(null);
+  const [isDonating, setIsDonating] = useState<boolean>(false)
   const [showTip, setShowTip] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [isPaidModalShown, setPaidModalShow] = useState(false);
@@ -365,11 +366,13 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
   };
 
   const sendTip = async (amount: number, reciever: number) => {
+    setIsDonating(true)
     const data = await userAPI.createDonation({
       amount,
       sender: uid,
       reciever,
     });
+    setIsDonating(false)
     if (data.status === 200) {
       toast.success(currentLang.donutSended);
       return setShowTip(false);
@@ -1030,15 +1033,17 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     <div style={{ width: "20px" }}></div>
                     <h3
                       style={{ color: "#FB5734" }}
-                      onClick={() =>
-                        sendTip(
-                          values.donation_amount,
-                          rooms.find(
-                            (item: any) =>
-                              item.room.room_info.id === Number(lastUrl)
-                          )?.room?.user?.pk
-                        )
-                      }
+                      onClick={() => {
+                        if (!isDonating) {
+                          sendTip(
+                            values.donation_amount,
+                            rooms.find(
+                              (item: any) =>
+                                item.room.room_info.id === Number(lastUrl)
+                            )?.room?.user?.pk
+                          )
+                        }
+                      }}
                     >
                       {currentLang.send}
                     </h3>

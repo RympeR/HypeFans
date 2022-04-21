@@ -132,15 +132,14 @@ export const FavouritePost = ({ item, index }: { item: any, index: number }) => 
                     <p className="post__like-amount">
                         {item.post.likes_amount}{currentLang.liks1}
                     </p>
-
+                    <CommentComponent
+                        data={item.post.comments}
+                        postId={item.post.pk}
+                        show={show}
+                        setShow={setShow}
+                    />
                 </div>
             </div>
-            <CommentComponent
-                data={item.post.comments}
-                postId={item.post.pk}
-                show={show}
-                setShow={setShow}
-            />
         </div>
     )
 }
