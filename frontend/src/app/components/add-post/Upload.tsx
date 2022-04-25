@@ -11,6 +11,7 @@ import CurrencyInput from "react-currency-input-field";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { toast } from "react-toastify";
+import { useHeicMultiple } from "../../../app/hooks/useHeicMultiple";
 import { useTextInput } from "../../../app/utils/useTextInput";
 import { BREAKPOINTS, NAV_LINKS } from "../../../app/utils/utilities";
 import { useViewport } from "../../../app/utils/ViewportProvider";
@@ -36,8 +37,6 @@ const Upload = () => {
   const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
   const [uploadedFilesImg, setUploadedFilesImg] = useState<string[]>([]);
 
-  const [files, setFiles] = useState([]);
-
   const { value, onChangeHandler, clearInput } = useTextInput("");
 
   const inputFileRef = useRef(null);
@@ -46,15 +45,8 @@ const Upload = () => {
 
   const windowDimensions = useViewport();
 
-  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const lastIndex = e.target.files.length - 1;
-    setFiles([...files, inputFileRef.current.value]);
-    // console.log(e.target.files[lastIndex]);
-    setUploadedFiles([...uploadedFiles, e.target.files[lastIndex]]);
-    setUploadedFilesImg([
-      ...uploadedFilesImg,
-      URL.createObjectURL(e.target.files[lastIndex]),
-    ]);
+  const useFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    useHeicMultiple(e, setUploadedFilesImg, setUploadedFiles)
   };
 
   const deleteImg = (e: MouseEvent<HTMLOrSVGElement>, index: number) => {
@@ -192,7 +184,7 @@ const Upload = () => {
               id="file-input"
               ref={inputFileRef}
               type="file"
-              onChange={onFileChange}
+              onChange={useFileChange}
               multiple
               accept="image/*, video/*"
             />
