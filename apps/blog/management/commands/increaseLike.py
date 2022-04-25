@@ -18,4 +18,3 @@ class Command(BaseCommand):
                 like=True
             )
         self.stdout.write(self.style.SUCCESS('Successfully created'))
-        self.stdout.write(self.style.SUCCESS(f'{args[0]} like post actions'))
