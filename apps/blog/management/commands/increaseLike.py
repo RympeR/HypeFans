@@ -7,15 +7,13 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('like_amount', nargs='+', type=int)
         parser.add_argument('post_id', nargs='+', type=int)
-    
-    def handle(self, *args, **options):
-        
 
+    def handle(self, *args, **options):
         # Create like post action object in range of passed argument for args
-        for _ in range(int(**options['like_amount'])):
+        for _ in range(int(options['like_amount'])):
             PostAction.objects.create(
                 user=User.objects.get(pk=1),
-                post=Post.objects.get(pk=int(**options['post_id'])),
+                post=Post.objects.get(pk=int(options['post_id'])),
                 like=True
             )
         self.stdout.write(self.style.SUCCESS('Successfully created'))
