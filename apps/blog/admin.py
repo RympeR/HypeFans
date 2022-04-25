@@ -96,7 +96,7 @@ class PostActionAdmin(DraggableMPTTAdmin):
     filter_fields = ['like']
     list_filter = (
         ('parent', TreeRelatedFieldListFilter),
-        LikeIncreaser
+        # LikeIncreaser
     )
 
 
