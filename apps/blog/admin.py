@@ -77,10 +77,7 @@ class PostAdmin(admin.ModelAdmin):
     ]
     search_fields = ['user__username', 'name']
     ordering = '-pk',
-    list_filter = (
-        ('publication_date', DateFieldListFilter),
-        ('name', LikeIncreaser)
-    )
+    list_filter = 'publication_date', LikeIncreaser
 
 
 # @admin.register(PostAction)
