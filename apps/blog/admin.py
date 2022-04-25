@@ -1,3 +1,4 @@
+import logging
 from django.contrib import admin, messages
 from django.contrib.admin import DateFieldListFilter, BooleanFieldListFilter
 from django.http import HttpResponseRedirect
@@ -5,6 +6,8 @@ from django.urls import reverse_lazy
 from mptt.admin import TreeRelatedFieldListFilter
 from admin_actions.admin import ActionsModelAdmin
 from mptt.admin import DraggableMPTTAdmin, TreeRelatedFieldListFilter, MPTTModelAdmin
+
+from apps.users.models import User
 from .models import (
     Attachment,
     Post,
@@ -14,6 +17,33 @@ from .models import (
     PostBought,
     RecommendationValidationPost,
 )
+
+
+class LikeIncreaser(admin.SimpleListFilter):
+
+    title = 'Like increaser'
+    parameter_name = 'donation_amount'
+    template = 'admin/like_increaser.html'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('Yes', 'Yes'),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        like_amount, post_id = value().split(':')
+        try:
+            if value:
+                for _ in range(int(like_amount)):
+                    PostAction.objects.create(
+                        user=User.objects.get(pk=1),
+                        post=Post.objects.get(pk=int(post_id)),
+                        like=True
+                    )
+        except Exception as e:
+            logging.error('#####ERROR{}' .format(e))
+        return queryset
 
 
 @admin.register(PostBought)
@@ -66,6 +96,7 @@ class PostActionAdmin(DraggableMPTTAdmin):
     filter_fields = ['like']
     list_filter = (
         ('parent', TreeRelatedFieldListFilter),
+        LikeIncreaser
     )
 
 
@@ -152,4 +183,3 @@ class RecommendationValidationPostAdmin(ActionsModelAdmin):
             return HttpResponseRedirect(reverse_lazy('admin:blog_recommendationvalidationpost_changelist'), request)
     reject_post.short_description = 'Reject'
     reject_post.url_path = 'reject-post'
-

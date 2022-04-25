@@ -1,0 +1,49 @@
+{% load i18n %}
+{% load filter_range %}
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+    var lowerRange = {% lower %};
+    var upperRange = {% upper %};   
+
+    $( function() {
+      $( "#slider-range" ).slider({
+        range: true,
+        min: lowerRange,
+        max: upperRange,
+        values: [ lowerRange, upperRange ],
+        slide: function( event, ui ) {
+            if(ui.values[ 0 ] === ui.values[ 1 ])
+            {
+                return false;
+            }
+            $( "#usdt_balance" ).val( ui.values[ 0 ] + "-" + ui.values[ 1 ] );
+        }
+      });
+      $( "#usdt_balance" ).val( $( "#slider-range" ).slider( "values", 0 )+
+        "-" + $( "#slider-range" ).slider( "values", 1 ));
+    } );
+
+    
+</script>
+
+{% block content %}
+<h3>{{ Title }}</h3>
+<ul>
+    <li>
+        <form >
+
+            <p>
+                <label >Usdt balance</label>
+                <div id="slider-range"></div>
+                <label style="font-weight: bold;">Filter：</label>
+                {% comment %} <input type="hidden" id="usdt_balance" name="usdt_balance" /> {% endcomment %}
+                <input type="submit" id="usdt_balance" name="usdt_balance" style="margin:5px; text-align:center; background-color:#79aec8; cursor:pointer; border:0; color:#f7f5f3; font-weight:bold;">
+            </p>            
+        </form>
+    </li>
+</ul>
+{% endblock content %}
