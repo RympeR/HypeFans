@@ -22,7 +22,7 @@ from .models import (
 class LikeIncreaser(admin.SimpleListFilter):
 
     title = 'Like increaser'
-    parameter_name = 'donation_amount'
+    parameter_name = 'name'
     template = 'admin/like_increaser.html'
 
     def lookups(self, request, model_admin):
@@ -79,6 +79,7 @@ class PostAdmin(admin.ModelAdmin):
     ordering = '-pk',
     list_filter = (
         ('publication_date', DateFieldListFilter),
+        ('name', LikeIncreaser)
     )
 
 
@@ -96,7 +97,6 @@ class PostActionAdmin(DraggableMPTTAdmin):
     filter_fields = ['like']
     list_filter = (
         ('parent', TreeRelatedFieldListFilter),
-        LikeIncreaser
     )
 
 
