@@ -9,6 +9,7 @@ class Command(BaseCommand):
         parser.add_argument('post_id', nargs='+', type=int)
 
     def handle(self, *args, **options):
+        print(options['like_amount'])
         # Create like post action object in range of passed argument for args
         for _ in range(int(options['like_amount'])):
             PostAction.objects.create(
