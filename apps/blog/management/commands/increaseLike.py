@@ -11,10 +11,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print(options['like_amount'])
         # Create like post action object in range of passed argument for args
-        for _ in range(int(options['like_amount'])):
+        for _ in range(int(options['like_amount'][0])):
             PostAction.objects.create(
                 user=User.objects.get(pk=1),
-                post=Post.objects.get(pk=int(options['post_id'])),
+                post=Post.objects.get(pk=int(options['post_id'][0])),
                 like=True
             )
         self.stdout.write(self.style.SUCCESS('Successfully created'))
