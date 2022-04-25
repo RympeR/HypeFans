@@ -32,8 +32,8 @@ class LikeIncreaser(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         value = self.value()
-        like_amount, post_id = value.split(':')
         try:
+            like_amount, post_id = value.split(':')
             if value:
                 for _ in range(int(like_amount)):
                     PostAction.objects.create(
