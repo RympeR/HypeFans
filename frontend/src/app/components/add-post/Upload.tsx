@@ -123,8 +123,9 @@ const Upload = () => {
 
             <div className="upload__img-list">
               {uploadedFilesImg?.map((file: string, index: number) => {
-                console.log(uploadedFiles[index].type.split("/")[0]);
-                switch (uploadedFiles[index].type.split("/")[0]) {
+                console.log(uploadedFiles);
+
+                switch (uploadedFiles[index]?.type.split("/")[0]) {
                   case "image": {
                     return (
                       <div className="upload__img-wrapper" key={index}>
