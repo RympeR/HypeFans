@@ -272,9 +272,9 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                     heif_file.mode,
                     heif_file.stride,
                 )
-                img.resize((160, 160))
+                img.thumbnail((160, 160))
                 img_byte_arr = io.BytesIO()
-                img.save(img_byte_arr, format='JPEG')
+                img.save(img_byte_arr, format='JPEG', quality=80)
                 img_byte_arr = ContentFile(img_byte_arr.getvalue())
                 logging.warning(img)
                 data['avatar'] = InMemoryUploadedFile(
@@ -298,26 +298,48 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                     name=new_name
                 )
             logging.warning(data['avatar'])
-        if str(request.data.get('background_photo')).lower().endswith('heic'):
-            print(request.data.get('background_photo').content_type)
+
+        if request.data.get('background_photo').content_type == 'image/heic':
             new_name = str(
                 request.data.get('background_photo')
             ).lower().replace('.heic', '.jpg')
-            # img = WandImage(blob=request.data.get('background_photo').file)
-            # img.format = 'jpg'
-            # img.width = 160
-            # img.height = 160
-            data_image = Image.open(
-                io.BytesIO(
-                    request.data.get('background_photo').file.make_blob("jpg")
+            try:
+                import pyheif
+                heif_file = pyheif.read_heif(
+                    request.data.get('background_photo').file)
+                logging.warning(heif_file)
+                img = Image.frombytes(
+                    heif_file.mode,
+                    heif_file.size,
+                    heif_file.data,
+                    "raw",
+                    heif_file.mode,
+                    heif_file.stride,
                 )
-            ).convert('RGB')
-            rgb_im = data_image.convert("RGB")
-            data['background_photo'] = File(
-                rgb_im,
-                name=new_name
-            )
-            logging.warning(data['background_photo'])
+                img_byte_arr = io.BytesIO()
+                img.save(img_byte_arr, format='JPEG', quality=80)
+                img_byte_arr = ContentFile(img_byte_arr.getvalue())
+                logging.warning(img)
+                data['background_photo'] = InMemoryUploadedFile(
+                    img_byte_arr,       # file
+                    None,               # field_name
+                    new_name,           # file name
+                    'image/jpeg',       # content_type
+                    len(img_byte_arr),   # size
+                    None)               # content_type_extra
+            except Exception as e:
+                logging.error(e)
+                img = WandImage(blob=request.data.get('background_photo').file)
+                img.format = 'jpg'
+                img.width = 160
+                img.height = 160
+
+                data['background_photo'] = File(
+                    io.BytesIO(
+                        img.make_blob("jpg")
+                    ),
+                    name=new_name
+                )
 
         serializer = self.get_serializer(
             instance, data=data, partial=partial)
