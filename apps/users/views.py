@@ -256,25 +256,41 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
         data = dict(request.data)
         img = None
         if request.data.get('avatar').content_type == 'image/heic':
-            print(request.FILES)
             new_name = str(
                 request.data.get('avatar')
             ).lower().replace('.heic', '.jpg')
-            data_image = Image.open(
-                # io.BytesIO(
-                request.FILES['avatar']
-                # )
-            ).convert('RGB')
-            # img = WandImage(blob=request.data.get('avatar').file)
-            # img.format = 'jpg'
-            # img.width = 160
-            # img.height = 160
-            # data['avatar'] = File(
-            #     io.BytesIO(
-            #         img.make_blob("jpg")
-            #     ),
-            #     name=new_name
-            # )
+            try:
+                import pyheif
+                heif_file = pyheif.read_heif(request.data.get('avatar').file)
+                logging.warning(heif_file)
+                img = Image.frombytes(
+                    heif_file.mode,
+                    (160, 160),
+                    heif_file.data,
+                    "raw",
+                    heif_file.mode,
+                    heif_file.stride,
+                )
+                logging.warning(img)
+                data['avatar'] = File(
+                    io.BytesIO(
+                        img.make_blob("jpg")
+                    ),
+                    name=new_name
+                )
+            except Exception as e:
+                img = WandImage(blob=request.data.get('avatar').file)
+                img.format = 'jpg'
+                img.width = 160
+                img.height = 160
+
+                data['avatar'] = File(
+                    io.BytesIO(
+                        img.make_blob("jpg")
+                    ),
+                    name=new_name
+                )
+
             data['avatar'] = File(
                 rgb_im,
                 name=new_name
