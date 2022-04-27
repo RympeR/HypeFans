@@ -251,95 +251,62 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     queryset = User.objects.all()
     serializer_class = UserPartialSerializer
 
+    def process_image(self, request, data, param_name, quality, resize=None):
+        new_name = str(
+            request.data.get(param_name)
+        ).lower().replace('.heic', '.jpg')
+        try:
+            import pyheif
+            heif_file = pyheif.read_heif(
+                request.data.get(param_name).file)
+            logging.warning(heif_file)
+            img = Image.frombytes(
+                heif_file.mode,
+                heif_file.size,
+                heif_file.data,
+                "raw",
+                heif_file.mode,
+                heif_file.stride,
+            )
+            if resize:
+                img.thumbnail(resize)
+            img_byte_arr = io.BytesIO()
+            img.save(img_byte_arr, format='JPEG', quality=quality)
+            img_byte_arr = ContentFile(img_byte_arr.getvalue())
+            logging.warning(img)
+            data[param_name] = InMemoryUploadedFile(
+                img_byte_arr,       # file
+                None,               # field_name
+                new_name,           # file name
+                'image/jpeg',       # content_type
+                len(img_byte_arr),   # size
+                None)               # content_type_extra
+        except Exception as e:
+            logging.error(e)
+            img = WandImage(blob=request.data.get(
+                param_name).file)
+            img.format = 'jpg'
+            data[param_name] = File(
+                io.BytesIO(
+                    img.make_blob("jpg")
+                ),
+                name=new_name
+            )
+        return data
+
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         data = dict(request.data)
         img = None
-        if request.data.get('avatar').content_type == 'image/heic':
-            new_name = str(
-                request.data.get('avatar')
-            ).lower().replace('.heic', '.jpg')
-            try:
-                import pyheif
-                heif_file = pyheif.read_heif(request.data.get('avatar').file)
-                logging.warning(heif_file)
-                img = Image.frombytes(
-                    heif_file.mode,
-                    heif_file.size,
-                    heif_file.data,
-                    "raw",
-                    heif_file.mode,
-                    heif_file.stride,
-                )
-                img.thumbnail((160, 160))
-                img_byte_arr = io.BytesIO()
-                img.save(img_byte_arr, format='JPEG', quality=80)
-                img_byte_arr = ContentFile(img_byte_arr.getvalue())
-                logging.warning(img)
-                data['avatar'] = InMemoryUploadedFile(
-                    img_byte_arr,       # file
-                    None,               # field_name
-                    new_name,           # file name
-                    'image/jpeg',       # content_type
-                    len(img_byte_arr),   # size
-                    None)               # content_type_extra
-            except Exception as e:
-                logging.error(e)
-                img = WandImage(blob=request.data.get('avatar').file)
-                img.format = 'jpg'
-                img.width = 160
-                img.height = 160
-
-                data['avatar'] = File(
-                    io.BytesIO(
-                        img.make_blob("jpg")
-                    ),
-                    name=new_name
-                )
-            logging.warning(data['avatar'])
-
-        if request.data.get('background_photo').content_type == 'image/heic':
-            new_name = str(
-                request.data.get('background_photo')
-            ).lower().replace('.heic', '.jpg')
-            try:
-                import pyheif
-                heif_file = pyheif.read_heif(
-                    request.data.get('background_photo').file)
-                logging.warning(heif_file)
-                img = Image.frombytes(
-                    heif_file.mode,
-                    heif_file.size,
-                    heif_file.data,
-                    "raw",
-                    heif_file.mode,
-                    heif_file.stride,
-                )
-                img_byte_arr = io.BytesIO()
-                img.save(img_byte_arr, format='JPEG', quality=80)
-                img_byte_arr = ContentFile(img_byte_arr.getvalue())
-                logging.warning(img)
-                data['background_photo'] = InMemoryUploadedFile(
-                    img_byte_arr,       # file
-                    None,               # field_name
-                    new_name,           # file name
-                    'image/jpeg',       # content_type
-                    len(img_byte_arr),   # size
-                    None)               # content_type_extra
-            except Exception as e:
-                logging.error(e)
-                img = WandImage(blob=request.data.get('background_photo').file)
-                img.format = 'jpg'
-                img.width = 160
-                img.height = 160
-
-                data['background_photo'] = File(
-                    io.BytesIO(
-                        img.make_blob("jpg")
-                    ),
-                    name=new_name
-                )
+        if request.data.get('avatar'):
+            if request.data.get('avatar').content_type == 'image/heic':
+                data = self.process_image(
+                    request, data, 'avatar', 80, (160, 160))
+        if request.data.get('background_photo'):
+            if request.data.get('background_photo').content_type == 'image/heic':
+                data = self.process_image(
+                    request, data, 'background_photo', 80)
 
         serializer = self.get_serializer(
             instance, data=data, partial=partial)
