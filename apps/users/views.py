@@ -242,6 +242,45 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     queryset = User.objects.all()
     serializer_class = UserPartialSerializer
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        print(request.data.get('avatar').file)
+        if str(request.data.get('avatar')).lower().endswith('heic'):
+            data = dict(request.data)
+            try:
+                from PIL import Image
+                import pyheif
+
+                def conv(image_bytes):
+                    heif_file = pyheif.read_heif(image_bytes)
+                    data = Image.frombytes(
+                        heif_file.mode,
+                        heif_file.size,
+                        heif_file.data,
+                        "raw",
+                        heif_file.mode,
+                        heif_file.stride,
+                    )
+                    return data
+
+                data['avatar'] = conv(request.data.get('avatar').file)
+                logging.warning(data['avatar'])
+
+            except Exception as e:
+                logging.warning(f'No pyheif {e}')
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
     def get_object(self):
         return self.request.user
 

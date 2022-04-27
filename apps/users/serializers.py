@@ -334,8 +334,8 @@ class UserPartialSerializer(serializers.ModelSerializer):
         required=False, allow_blank=True, allow_null=True)
     city = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
-    avatar = serializers.ImageField(required=False)
-    background_photo = serializers.ImageField(required=False)
+    avatar = serializers.FileField(required=False)
+    background_photo = serializers.FileField(required=False)
     username = serializers.CharField(
         required=False, allow_blank=True, allow_null=True)
     first_name = serializers.CharField(
@@ -373,6 +373,8 @@ class UserPartialSerializer(serializers.ModelSerializer):
     show_like_notifications = serializers.BooleanField(required=False)
 
     def validate(self, attrs):
+        if attrs.get('avatar'):
+            print(attrs.get('avatar'))
         if attrs.get('email'):
             attrs['email'] = attrs['email'].lower()
         return attrs
