@@ -271,9 +271,12 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                     heif_file.mode,
                     heif_file.stride,
                 )
+                img_byte_arr = io.BytesIO()
+                img.save(img_byte_arr, format='JPG')
+                img_byte_arr = img_byte_arr.getvalue()
                 logging.warning(img)
                 data['avatar'] = File(
-                    img,
+                    img_byte_arr,
                     name=new_name
                 )
             except Exception as e:
