@@ -276,7 +276,6 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                 img.save(img_byte_arr, format='JPEG')
 
                 img_byte_arr = ContentFile(img_byte_arr.getvalue())
-                logging.warning(img_byte_arr[:40])
                 logging.warning(img)
                 data['avatar'] = InMemoryUploadedFile(
                     img_byte_arr,       # file
