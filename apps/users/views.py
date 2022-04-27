@@ -271,7 +271,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                     "raw",
                     heif_file.mode,
                     heif_file.stride,
-                ).convert("RGB")
+                )
                 img_byte_arr = io.BytesIO()
                 img.save(img_byte_arr, format='JPEG')
 
@@ -282,7 +282,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                     None,               # field_name
                     new_name,           # file name
                     'image/jpeg',       # content_type
-                    img_byte_arr.tell,  # size
+                    img_byte_arr.len,   # size
                     None)               # content_type_extra
             except Exception as e:
                 logging.error(e)
