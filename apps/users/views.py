@@ -263,6 +263,45 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
             img.format = 'jpg'
             img.width = 160
             img.height = 160
+            data['avatar'] = File(
+                io.BytesIO(
+                    img.make_blob("jpg")
+                ),
+                name=new_name
+            )
+            logging.warning(data['avatar'])
+        if str(request.data.get('background_photo')).lower().endswith('heic'):
+            new_name = str(
+                request.data.get('background_photo')
+            ).lower().replace('.heic', '.jpg')
+            img = WandImage(blob=request.data.get('background_photo').file)
+            img.format = 'jpg'
+            img.width = 160
+            img.height = 160
+            data['background_photo'] = File(
+                io.BytesIO(
+                    img.make_blob("jpg")
+                ),
+                name=new_name
+            )
+            logging.warning(data['background_photo'])
+
+        serializer = self.get_serializer(
+            instance, data=data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+        if img:
+            img.close()
+        return Response(serializer.data)
+
+    def get_object(self):
+        return self.request.user
+
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
             # data_image = Image.open(
             #     io.BytesIO(
             #         img.make_blob("jpg")
@@ -283,31 +322,6 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
             #         img.make_blob("jpg")
             #     )
             # )
-            data['avatar'] = File(
-                io.BytesIO(
-                    img.make_blob("jpg")
-                ),
-                name=new_name
-            )
-            logging.warning(data['avatar'])
-
-        serializer = self.get_serializer(
-            instance, data=data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            instance._prefetched_objects_cache = {}
-        if img:
-            img.close()
-        return Response(serializer.data)
-
-    def get_object(self):
-        return self.request.user
-
-    def put(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
 
 class CreateSubscriptioAPI(generics.CreateAPIView):
     queryset = User.objects.all()
