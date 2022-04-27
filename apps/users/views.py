@@ -245,6 +245,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
+        logging.warning(request.data)
         logging.warning(request.data.get('avatar'))
         if str(request.data.get('avatar')).lower().endswith('heic'):
             logging.warning(request.data.get('avatar').file)
