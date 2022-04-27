@@ -282,7 +282,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                     None,               # field_name
                     new_name,           # file name
                     'image/jpeg',       # content_type
-                    img_byte_arr.len,   # size
+                    len(img_byte_arr),   # size
                     None)               # content_type_extra
             except Exception as e:
                 logging.error(e)
