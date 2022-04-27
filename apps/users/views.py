@@ -246,9 +246,9 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         logging.warning(request.data.get('avatar'))
-        logging.warning(request.data.get('avatar').file)
-        logging.warning(request.data.get('avatar').lower())
         if str(request.data.get('avatar')).lower().endswith('heic'):
+            logging.warning(request.data.get('avatar').file)
+            logging.warning(request.data.get('avatar').lower())
             data = dict(request.data)
             try:
                 from PIL import Image
