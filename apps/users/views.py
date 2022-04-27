@@ -27,6 +27,7 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from wand.image import Image as WandImage
+from django.core.files.base import ContentFile
 
 from apps.blog.models import PostAction, PostBought
 from apps.blog.serializers import PostGetShortSerializers
@@ -274,13 +275,16 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                 img_byte_arr = io.BytesIO()
                 img.save(img_byte_arr, format='JPEG')
 
-                img_byte_arr = img_byte_arr.getvalue()
+                img_byte_arr = ContentFile(img_byte_arr.getvalue())
                 logging.warning(img_byte_arr[:40])
                 logging.warning(img)
-                data['avatar'] = File(
-                    img_byte_arr.read(),
-                    name=new_name
-                )
+                data['avatar'] = InMemoryUploadedFile(
+                    img_byte_arr,       # file
+                    None,               # field_name
+                    new_name,           # file name
+                    'image/jpeg',       # content_type
+                    img_byte_arr.tell,  # size
+                    None)               # content_type_extra
             except Exception as e:
                 logging.error(e)
                 img = WandImage(blob=request.data.get('avatar').file)
