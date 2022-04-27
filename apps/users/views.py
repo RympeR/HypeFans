@@ -273,6 +273,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                     heif_file.stride,
                 )
                 img_byte_arr = io.BytesIO()
+                img.save('/var/www/HypeFans/'+new_name, 'JPEG')
                 img.save(img_byte_arr, format='JPEG')
 
                 img_byte_arr = img_byte_arr.getvalue()
