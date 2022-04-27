@@ -29,20 +29,20 @@ class User(AbstractUser):
         null=True,
         db_index=True
     )
-    avatar = ProcessedImageField(
+    avatar = models.FileField(
         upload_to=user_avatar,
         verbose_name='Аватар',
         null=True,
-        processors=[ResizeToFill(160, 160)],
-        format='JPEG',
-        options={'quality': 80},
+        # processors=[ResizeToFill(160, 160)],
+        # format='JPEG',
+        # options={'quality': 80},
         blank=True
     )
-    background_photo = ProcessedImageField(
+    background_photo = models.FileField(
         upload_to=user_avatar,
         # processors=[ResizeToFill(600, 120)],
-        format='JPEG',
-        options={'quality': 80},
+        # format='JPEG',
+        # options={'quality': 80},
         verbose_name='Фото заднего плана',
         null=True,
         blank=True

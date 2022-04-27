@@ -1,7 +1,7 @@
+import io
 import logging
 from datetime import datetime, timedelta
-from django.urls import reverse
-from django.contrib.sites.shortcuts import get_current_site
+
 import requests
 from core.utils.customClasses import Util
 from core.utils.customFilters import UserFilter
@@ -10,23 +10,31 @@ from core.utils.default_responses import (api_accepted_202,
                                           api_block_by_policy_451,
                                           api_created_201,
                                           api_payment_required_402)
-from core.utils.func import create_ref_link, generate_pay_dict, sum_by_attribute
+from core.utils.func import (create_ref_link, generate_pay_dict,
+                             sum_by_attribute)
 from django.contrib.auth import authenticate
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from djoser.conf import django_settings
+from django.core.files import File
+from PIL import Image, ImageFilter
 from rest_framework import generics, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from wand.image import Image as WandImage
 
 from apps.blog.models import PostAction, PostBought
 from apps.blog.serializers import PostGetShortSerializers
-from apps.users.dynamic_preferences_registry import ReferralPercentage, WithdrawPercentage
+from apps.users.dynamic_preferences_registry import (ReferralPercentage,
+                                                     WithdrawPercentage)
 
 from .models import *
 from .serializers import *
-from djoser.conf import django_settings
 
 
 class ActivateUserByGet(APIView):
@@ -245,41 +253,53 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
+        data = dict(request.data)
+        img = None
         if str(request.data.get('avatar')).lower().endswith('heic'):
-            logging.warning(request.data.get('avatar').file)
-            data = dict(request.data)
-            try:
-                from PIL import Image
-                import pyheif
+            new_name = str(
+                request.data.get('avatar')
+            ).lower().replace('.heic', '.jpg')
+            img = WandImage(blob=request.data.get('avatar').file)
+            img.format = 'jpg'
+            img.width = 160
+            img.height = 160
+            # data_image = Image.open(
+            #     io.BytesIO(
+            #         img.make_blob("jpg")
+            #     )
+            # ).convert('RGB')
+            # data_image.resize((160, 160))
+            # print(data_image)
+            # data_image = InMemoryUploadedFile(
+            #     data_image,         # file
+            #     None,               # field_name
+            #     new_name,           # file name
+            #     'image/jpeg',       # content_type
+            #     data_image.tell,    # size
+            #     None
+            # )
+            # File(
+            #     io.BytesIO(
+            #         img.make_blob("jpg")
+            #     )
+            # )
+            data['avatar'] = File(
+                io.BytesIO(
+                    img.make_blob("jpg")
+                ),
+                name=new_name
+            )
+            logging.warning(data['avatar'])
 
-                def conv(image_bytes):
-                    heif_file = pyheif.read_heif(image_bytes)
-                    data = Image.frombytes(
-                        heif_file.mode,
-                        heif_file.size,
-                        heif_file.data,
-                        "raw",
-                        heif_file.mode,
-                        heif_file.stride,
-                    )
-                    return data
-
-                logging.warning(request.data.get('avatar'))
-                data['avatar'] = conv(request.data.get('avatar').file)
-                logging.warning(data['avatar'])
-
-            except Exception as e:
-                logging.warning(f'No pyheif {e}')
         serializer = self.get_serializer(
-            instance, data=request.data, partial=partial)
+            instance, data=data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
         if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
-
+        if img:
+            img.close()
         return Response(serializer.data)
 
     def get_object(self):
