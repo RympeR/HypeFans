@@ -245,7 +245,6 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        print(request.data.get('avatar').file)
         if str(request.data.get('avatar')).lower().endswith('heic'):
             data = dict(request.data)
             try:
@@ -264,6 +263,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                     )
                     return data
 
+                logging.warning(request.data.get('avatar'))
                 data['avatar'] = conv(request.data.get('avatar').file)
                 logging.warning(data['avatar'])
 
