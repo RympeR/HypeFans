@@ -277,6 +277,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                     name=new_name
                 )
             except Exception as e:
+                logging.error(e)
                 img = WandImage(blob=request.data.get('avatar').file)
                 img.format = 'jpg'
                 img.width = 160
