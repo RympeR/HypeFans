@@ -278,7 +278,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                 logging.warning(img_byte_arr[:40])
                 logging.warning(img)
                 data['avatar'] = File(
-                    img_byte_arr,
+                    img_byte_arr.read(),
                     name=new_name
                 )
             except Exception as e:
