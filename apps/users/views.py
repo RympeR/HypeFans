@@ -19,7 +19,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from djoser.conf import django_settings
 from django.core.files import File
-from PIL import Image, ImageFilter
+from PIL import Image
 from rest_framework import generics, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.generics import GenericAPIView
@@ -257,9 +257,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
         ).lower().replace('.heic', '.jpg')
         try:
             import pyheif
-            heif_file = pyheif.read_heif(
-                request.data.get(param_name).file)
-            logging.warning(heif_file)
+            heif_file = pyheif.read_heif(data[param_name].file)
             img = Image.frombytes(
                 heif_file.mode,
                 heif_file.size,
@@ -273,14 +271,14 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
             img_byte_arr = io.BytesIO()
             img.save(img_byte_arr, format='JPEG', quality=quality)
             img_byte_arr = ContentFile(img_byte_arr.getvalue())
-            logging.warning(img)
             data[param_name] = InMemoryUploadedFile(
                 img_byte_arr,       # file
                 None,               # field_name
                 new_name,           # file name
                 'image/jpeg',       # content_type
-                len(img_byte_arr),   # size
-                None)               # content_type_extra
+                len(img_byte_arr),  # size
+                None                # content_type_extra
+            )
         except Exception as e:
             logging.error(e)
             img = WandImage(blob=request.data.get(
@@ -298,7 +296,6 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         data = dict(request.data)
-        img = None
         if request.data.get('avatar'):
             if request.data.get('avatar').content_type == 'image/heic':
                 data = self.process_image(
@@ -315,8 +312,6 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
 
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
-        if img:
-            img.close()
         return Response(serializer.data)
 
     def get_object(self):
@@ -324,26 +319,6 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
-        # data_image = Image.open(
-        #     io.BytesIO(
-        #         img.make_blob("jpg")
-        #     )
-        # ).convert('RGB')
-        # data_image.resize((160, 160))
-        # print(data_image)
-        # data_image = InMemoryUploadedFile(
-        #     data_image,         # file
-        #     None,               # field_name
-        #     new_name,           # file name
-        #     'image/jpeg',       # content_type
-        #     data_image.tell,    # size
-        #     None
-        # )
-        # File(
-        #     io.BytesIO(
-        #         img.make_blob("jpg")
-        #     )
-        # )
 
 
 class CreateSubscriptioAPI(generics.CreateAPIView):
