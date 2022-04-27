@@ -33,7 +33,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
 
     console.log(currentLang)
 
-    debugger
+    //debugger
 
     return (
         <div className="profile__post" key={`${index}_post`}>

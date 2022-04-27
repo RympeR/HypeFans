@@ -43,7 +43,7 @@ export const ChatInput = ({
         messageFormikText: "",
       }}
       onSubmit={async (obj, actions) => {
-        const temp_var = editableText.replace(/(\s+)/g, '');
+        const temp_var = editableText.replace(/(\s+)/g, "");
         await sendMessage(temp_var);
         actions.resetForm();
       }}
@@ -67,13 +67,16 @@ export const ChatInput = ({
               dangerouslySetInnerHTML={{ __html: editableText }}
               onKeyDown={(e: any) => {
                 setEditableText(e.target.innerText);
-                const text_arr = inputRef.current.innerText.split('\n');
+                const text_arr = inputRef.current.innerText.split("\n");
                 const element_length = text_arr.length;
                 const last_row_length = text_arr[element_length - 1].length;
                 console.log(last_row_length);
-                console.log(inputRef.current.style);
-                
-                console.log(e.key);
+                const element_width = inputRef.current.clientWidth / 10;
+                console.log(element_width);
+                if (last_row_length > 1) {
+                  /* move html content to element new line */
+                  inputRef.current.innerHTML = inputRef.current.innerHTML + "<br>";
+                }
                 if (e.keyCode === 13 && e.shiftKey) {
                   // var editableHeight = editable.offsetHeight;
                   // console.log(editableHeight);
@@ -94,8 +97,7 @@ export const ChatInput = ({
                 return handleSubmit();
               }}
             >
-              {(editableText &&
-                editableText.length < 255) ||
+              {(editableText && editableText.length < 255) ||
               isSendDisabled ||
               audio ? (
                 <VektorIcon />
