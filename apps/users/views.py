@@ -266,7 +266,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                 logging.warning(heif_file)
                 img = Image.frombytes(
                     heif_file.mode,
-                    (160, 160),
+                    heif_file.size, 
                     heif_file.data,
                     "raw",
                     heif_file.mode,
@@ -276,7 +276,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                 img.save('/var/www/HypeFans/'+new_name, 'JPEG')
                 img.save(img_byte_arr, format='JPEG')
 
-                img_byte_arr = img_byte_arr.getvalue()
+                img_byte_arr = ContentFile(img_byte_arr.getvalue())
                 logging.warning(img)
                 data['avatar'] = InMemoryUploadedFile(
                     img_byte_arr,       # file
