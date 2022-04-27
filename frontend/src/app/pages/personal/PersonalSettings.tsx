@@ -126,7 +126,6 @@ export const PersonalSettings = () => {
   };
 
   const setNewBackground = async () => {
-    console.log(backgroundUpload);
     const formData = new FormData();
     var file = new File([backgroundUpload], "background_photo.jpeg");
     formData.append("background_photo", file);

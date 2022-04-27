@@ -31,6 +31,7 @@
     "cookies": "^0.8.0",
     "crypto-js": "^4.1.1",
     "formik": "^2.2.9",
+    "heic2any": "^0.0.3",
     "i18next": "^19.8.9",
     "inversify-hooks": "^2.1.6",
     "joi": "^17.4.0",
