@@ -289,11 +289,6 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                     ),
                     name=new_name
                 )
-
-            data['avatar'] = File(
-                rgb_im,
-                name=new_name
-            )
             logging.warning(data['avatar'])
         if str(request.data.get('background_photo')).lower().endswith('heic'):
             print(request.data.get('background_photo').content_type)
