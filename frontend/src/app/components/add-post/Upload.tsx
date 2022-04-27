@@ -30,6 +30,8 @@ const Upload = () => {
 
   const id = useSelector((state: RootState) => state.auth.pk);
 
+  const [isHeicCompiling, setIsHeicCompiling] = useState<boolean>(false)
+
   const [postCost, setPostCost] = useState("0");
   const [accessType, setAccessType] = useState("1");
   const [showInRecommendations, setShowInRecommendations] = useState(false);
@@ -46,7 +48,7 @@ const Upload = () => {
   const windowDimensions = useViewport();
 
   const useFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    useHeicMultiple(e, setUploadedFilesImg, setUploadedFiles)
+    useHeicMultiple(e, setUploadedFilesImg, setUploadedFiles, setIsHeicCompiling)
   };
 
   const deleteImg = (e: MouseEvent<HTMLOrSVGElement>, index: number) => {
@@ -239,11 +241,12 @@ const Upload = () => {
             </div>
             <button
               className={
-                uploadedFiles.length || value
+                (uploadedFiles.length || value) && !isHeicCompiling
                   ? "upload__submit-btn upload__submit-btn_active"
                   : "upload__submit-btn"
               }
               type="submit"
+              disabled={isHeicCompiling}
             >
               {currentLang.public}
             </button>
