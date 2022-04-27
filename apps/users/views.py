@@ -274,7 +274,7 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
                 logging.warning(img)
                 data['avatar'] = File(
                     io.BytesIO(
-                        img.make_blob("jpg")
+                        img
                     ),
                     name=new_name
                 )
