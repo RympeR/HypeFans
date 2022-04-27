@@ -255,33 +255,48 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
         instance = self.get_object()
         data = dict(request.data)
         img = None
-        if str(request.data.get('avatar')).lower().endswith('heic'):
+        if request.data.get('avatar').content_type == 'image/heic':
+            print(request.FILES)
             new_name = str(
                 request.data.get('avatar')
             ).lower().replace('.heic', '.jpg')
-            img = WandImage(blob=request.data.get('avatar').file)
-            img.format = 'jpg'
-            img.width = 160
-            img.height = 160
+            data_image = Image.open(
+                # io.BytesIO(
+                request.FILES['avatar']
+                # )
+            ).convert('RGB')
+            # img = WandImage(blob=request.data.get('avatar').file)
+            # img.format = 'jpg'
+            # img.width = 160
+            # img.height = 160
+            # data['avatar'] = File(
+            #     io.BytesIO(
+            #         img.make_blob("jpg")
+            #     ),
+            #     name=new_name
+            # )
             data['avatar'] = File(
-                io.BytesIO(
-                    img.make_blob("jpg")
-                ),
+                rgb_im,
                 name=new_name
             )
             logging.warning(data['avatar'])
         if str(request.data.get('background_photo')).lower().endswith('heic'):
+            print(request.data.get('background_photo').content_type)
             new_name = str(
                 request.data.get('background_photo')
             ).lower().replace('.heic', '.jpg')
-            img = WandImage(blob=request.data.get('background_photo').file)
-            img.format = 'jpg'
-            img.width = 160
-            img.height = 160
-            data['background_photo'] = File(
+            # img = WandImage(blob=request.data.get('background_photo').file)
+            # img.format = 'jpg'
+            # img.width = 160
+            # img.height = 160
+            data_image = Image.open(
                 io.BytesIO(
-                    img.make_blob("jpg")
-                ),
+                    request.data.get('background_photo').file.make_blob("jpg")
+                )
+            ).convert('RGB')
+            rgb_im = data_image.convert("RGB")
+            data['background_photo'] = File(
+                rgb_im,
                 name=new_name
             )
             logging.warning(data['background_photo'])
@@ -302,26 +317,27 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
-            # data_image = Image.open(
-            #     io.BytesIO(
-            #         img.make_blob("jpg")
-            #     )
-            # ).convert('RGB')
-            # data_image.resize((160, 160))
-            # print(data_image)
-            # data_image = InMemoryUploadedFile(
-            #     data_image,         # file
-            #     None,               # field_name
-            #     new_name,           # file name
-            #     'image/jpeg',       # content_type
-            #     data_image.tell,    # size
-            #     None
-            # )
-            # File(
-            #     io.BytesIO(
-            #         img.make_blob("jpg")
-            #     )
-            # )
+        # data_image = Image.open(
+        #     io.BytesIO(
+        #         img.make_blob("jpg")
+        #     )
+        # ).convert('RGB')
+        # data_image.resize((160, 160))
+        # print(data_image)
+        # data_image = InMemoryUploadedFile(
+        #     data_image,         # file
+        #     None,               # field_name
+        #     new_name,           # file name
+        #     'image/jpeg',       # content_type
+        #     data_image.tell,    # size
+        #     None
+        # )
+        # File(
+        #     io.BytesIO(
+        #         img.make_blob("jpg")
+        #     )
+        # )
+
 
 class CreateSubscriptioAPI(generics.CreateAPIView):
     queryset = User.objects.all()
