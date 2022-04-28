@@ -14,11 +14,12 @@ from core.utils.func import (create_ref_link, generate_pay_dict,
                              sum_by_attribute)
 from django.contrib.auth import authenticate
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.files import File
+from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from djoser.conf import django_settings
-from django.core.files import File
 from PIL import Image
 from rest_framework import generics, permissions
 from rest_framework.authtoken.models import Token
@@ -27,7 +28,6 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from wand.image import Image as WandImage
-from django.core.files.base import ContentFile
 
 from apps.blog.models import PostAction, PostBought
 from apps.blog.serializers import PostGetShortSerializers
