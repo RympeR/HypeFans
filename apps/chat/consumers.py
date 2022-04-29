@@ -57,12 +57,14 @@ class ChatConsumer(WebsocketConsumer):
 
                 if users_len == 2 and user == room.creator:
                     logging.warning(f"is creator")
-                    chat_sub_check = chat_sub_checker(
-                        room.invited.first(), user
-                    )
+                    chat_sub_check = True
                 else:
                     if user != room.creator:
                         chat_sub_check = chat_sub_checker(user, room.creator)
+                    logging.warning(user)
+                    logging.warning(room.creator)
+                    logging.warning(
+                        f"Chat sub checker logic {chat_sub_checker(user, room.creator)}")
 
                 logging.warning(f"chat saub checker logic {chat_sub_check}")
                 if chat_sub_check:
