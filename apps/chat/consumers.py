@@ -64,7 +64,7 @@ class ChatConsumer(WebsocketConsumer):
                     logging.warning(user)
                     logging.warning(room.creator)
 
-                logging.warning(f"chat saub checker logic {chat_sub_check}")
+                logging.warning(f"chat sub checker logic {chat_sub_check}")
                 if chat_sub_check:
                     chat = Chat.objects.create(
                         room=room,
