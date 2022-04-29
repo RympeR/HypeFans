@@ -21,7 +21,9 @@ export const ChatInput = ({
   const inputRef = useRef(null);
   const lastUrl = getLastUrlPoint(history.location.pathname);
   const [height, setHeight] = useState<number>(56);
+  const [marginTop, setMarginTop] = useState<number>(0);
   const [editableText, setEditableText] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
   const VektorIcon = () => <Vektor />;
   const VektorIconDisabled = () => <VektorDisabled />;
   return (
@@ -30,8 +32,9 @@ export const ChatInput = ({
         messageFormikText: "",
       }}
       onSubmit={async (obj, actions) => {
-        const temp_var = editableText.replace(/(\s+)/g, "");
-        await sendMessage(temp_var);
+        // const temp_var = editableText.replace(/(\s+)/g, "");
+        console.warn(message);
+        await sendMessage(message);
         actions.resetForm();
       }}
     >
@@ -41,7 +44,7 @@ export const ChatInput = ({
             <div
               className="chat__text"
               style={{
-                marginTop: "0px",
+                marginTop: marginTop + "px",
                 overflow: "hidden",
                 transitionDuration: "152ms",
                 height: height,
@@ -53,33 +56,55 @@ export const ChatInput = ({
               }}
               dangerouslySetInnerHTML={{ __html: editableText }}
               onKeyDown={(e: any) => {
-                const text_arr = inputRef.current.innerText.split('\n').filter((el: string) => el.trim().length > 0);
-                // console.log(text_arr);
+                setMessage(e.target.innerHTML.replace("<br>", "\n"));
+                let text_arr: any = Array.from(inputRef.current.childNodes);
+                text_arr = text_arr.filter((item: any) => {
+                  return item.nodeName != "BR";
+                });
+                console.log(text_arr);
                 const element_length = text_arr?.length || 0;
                 console.log(element_length);
-                const last_row_length = text_arr[element_length - 1]?.length;
-                if (last_row_length > 10) {
+                const last_row_length =
+                  text_arr[element_length - 1]?.nodeValue?.length || 0;
+                if (element_length >= 2) {
+                  setMarginTop(-21 * (element_length - 1));
+                }
+                if (last_row_length > 30) {
                   console.log(inputRef.current.innerHTML);
-                  e.target.innerHTML += '<br>';
+                  inputRef.current.appendChild(document.createElement("br"));
                   setHeight(56 + 21 * element_length);
+                  setMarginTop(-21 * element_length);
+                  const sel = window.getSelection();
+                  const range = document.createRange();
+                  console.log(inputRef.current.childNodes[element_length]);
+                  console.log(last_row_length);
+                  console.log(inputRef.current.childNodes);
+                  // range.setStart(
+                  //   inputRef.current.childNodes[element_length],
+                  //   0
+                  // );
+                  // range.collapse(true);
+                  // sel.removeAllRanges();
+                  // sel.addRange(range);
                 }
                 //check if cntrl + backspace is pressed
-                if (e.key === "Backspace" || (e.key === "Backspace" && e.ctrlKey)) {
+                if (
+                  e.key === "Backspace" ||
+                  (e.key === "Backspace" && e.ctrlKey)
+                ) {
                   setHeight(56 + 21 * element_length);
                 }
                 if (e.keyCode === 13 && e.shiftKey) {
                   setHeight(height + 21);
+                  setMarginTop(-21 * element_length);
                   // var editableHeight = editable.offsetHeight;
                   // console.log(editableHeight);
                   // editable.style.height = editable.style.height + 21 + 'px';
                   //editable.style.marginTop = (possible_margin_top - editableHeight) + 'px';
                 } else if (e.keyCode === 13) {
-                  setEditableText(e.target.innerHTML);
-                  // console.log(editable.innerHTML.replace('<br>', '\n'));
-                  // editable.contentEditable = false;
-                  // editable.innerHTML = '';
-                  // editable.style.height = 'auto';
-                  // editable.style.marginTop = possible_margin_top + 'px';
+                  setMessage(e.target.innerHTML.replace("<br>", "\n"));
+                  setMarginTop(0);
+                  setHeight(height);
                 }
               }}
             ></div>
@@ -89,10 +114,9 @@ export const ChatInput = ({
                 return handleSubmit();
               }}
             >
-              {(editableText &&
-                editableText.length < 255) ||
-                isSendDisabled ||
-                audio ? (
+              {(message && message.length < 255) ||
+              isSendDisabled ||
+              audio ? (
                 <VektorIcon />
               ) : (
                 <VektorIconDisabled />
