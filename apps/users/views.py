@@ -373,7 +373,7 @@ class UserSubscription(GenericAPIView):
                 start_date=subscription_datetime.timestamp(),
                 end_date=subscription_datetime + timedelta(
                     days=subscribe_target.subscribtion_duration
-                ).timestamp()
+                )
             ).save()
             return api_accepted_202(
                 {
