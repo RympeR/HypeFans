@@ -60,7 +60,7 @@ class ChatConsumer(WebsocketConsumer):
                     chat_sub_check = True
                 else:
                     if user != room.creator:
-                        chat_sub_check = chat_sub_checker(room.creator, user)
+                        chat_sub_check = chat_sub_checker(user, room.creator)
                     logging.warning(user)
                     logging.warning(room.creator)
 
