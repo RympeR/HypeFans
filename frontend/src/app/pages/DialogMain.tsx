@@ -276,7 +276,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
   useEffect(() => {
     if (!wsRead) return;
-    wsRead.onmessage = (e: any) => { };
+    wsRead.onmessage = (e: any) => {
+      console.log(e);
+      debugger
+    };
   }, [wsRead]);
 
   useEffect(() => {
@@ -295,6 +298,17 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
       console.warn(response);
       setMessages(response);
       setIsMessagesLoading(false);
+      response.forEach((item: any) => {
+        if (!item.readed && item.creator !== uid) {
+          wsRead.send(
+            JSON.stringify({
+              room_id: lastUrl,
+              user: uid,
+              message_id: item.message_id,
+            })
+          );
+        }
+      });
     };
     recieveChatMessages();
   }, [lastUrl]);
