@@ -1,22 +1,21 @@
-import { Formik } from "formik";
-import React, { ChangeEvent, useContext, useRef, useState } from "react";
+import {Formik} from "formik";
+import React, {ChangeEvent, useContext, useRef, useState} from "react";
 import Modal from "react-bootstrap/Modal";
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { chatAPI } from "../../api/chatAPI";
-import { ReactComponent as Plus } from "../../assets/images/plus.svg";
-import { RootState } from "../../redux/redux";
+import {useSelector} from "react-redux";
+import {useHistory} from "react-router-dom";
+import {chatAPI} from "../../api/chatAPI";
+import {ReactComponent as Plus} from "../../assets/images/plus.svg";
+import {RootState} from "../../redux/redux";
 import logo from "../../assets/images/logo.svg";
-import { ReactComponent as PhotoIcon } from "../../assets/images/camera.svg";
-import { toast } from "react-toastify";
+import {ReactComponent as PhotoIcon} from "../../assets/images/camera.svg";
+import {toast} from "react-toastify";
 import CurrencyInput from "react-currency-input-field";
-import { AddToChat } from "../components/addToChat/AddToChat";
-import { AddToChatCreate } from "../components/addToChat/AddToChatCreate";
-import { LangContext } from "../utils/LangProvider";
+import {AddToChatCreate} from "../components/addToChat/AddToChatCreate";
+import {LangContext} from "../utils/LangProvider";
 
 export const CreateDialog = () => {
     const [currentTab, setCurrentTab] = useState(0);
-    const { currentLang } = useContext(LangContext)
+    const {currentLang} = useContext(LangContext)
     const history = useHistory()
     const userId = useSelector((state: RootState) => state.auth.pk);
     const createNewChat = async (data: any) => {
@@ -40,11 +39,10 @@ export const CreateDialog = () => {
     };
 
 
-
     return (
         <>
             <div className="chat__resp_icon" onClick={() => setCurrentTab(1)}>
-                <Plus />
+                <Plus/>
             </div>
             <Modal show={currentTab !== 0} onHide={() => setCurrentTab(0)} centered>
                 <Modal.Body className="notifications__modal">
@@ -57,16 +55,21 @@ export const CreateDialog = () => {
                             invited: [],
                         }}
                         onSubmit={(val) => {
-                            createNewChat({ ...val, invited: val.invited.map((item) => item.pk), logo: chatImgFile });
+                            createNewChat({...val, invited: val.invited.map((item) => item.pk), logo: chatImgFile});
                         }}
                     >
-                        {({ values, handleSubmit, setFieldValue }) => {
+                        {({values, handleSubmit, setFieldValue}) => {
                             return (
                                 <>
                                     {currentTab === 1 ? (
                                         <>
-                                            <h2 style={{ marginBottom: "0px" }}>{currentLang.createChat}</h2>
-                                            <div style={{ display: "flex", alignItems: "center", marginTop: "20px", justifyContent: "space-around" }}>
+                                            <h2 style={{marginBottom: "0px"}}>{currentLang.createChat}</h2>
+                                            <div style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                marginTop: "20px",
+                                                justifyContent: "space-around"
+                                            }}>
                                                 <div
                                                     className="personalSettings__changeAvatar"
                                                     style={{
@@ -82,12 +85,13 @@ export const CreateDialog = () => {
                                                         <label
                                                             className="upload__file-input-label"
                                                             htmlFor="file-inputAvatar"
-                                                            style={{ marginBottom: "15px" }}
+                                                            style={{marginBottom: "15px"}}
                                                         >
-                                                            <PhotoIcon className="personalSettings__changeAvatarBtn" style={{
-                                                                marginLeft: "23px",
-                                                                marginTop: "23px"
-                                                            }} />
+                                                            <PhotoIcon className="personalSettings__changeAvatarBtn"
+                                                                       style={{
+                                                                           marginLeft: "23px",
+                                                                           marginTop: "23px"
+                                                                       }}/>
                                                         </label>
                                                         <input
                                                             className="upload__file-input"
@@ -96,10 +100,13 @@ export const CreateDialog = () => {
                                                             type="file"
                                                             onChange={onImageChange}
                                                             multiple={false}
+                                                            accept="image/*"
                                                         />
                                                     </div>
                                                 </div>
-                                                <input placeholder={currentLang.chatPls} style={{ borderBottom: "1px solid grey " }} value={values.chatName} onChange={(val) => setFieldValue("chatName", val.target.value)} />
+                                                <input placeholder={currentLang.chatPls}
+                                                       style={{borderBottom: '1px solid grey '}} value={values.chatName}
+                                                       onChange={(val) => setFieldValue("chatName", val.target.value)}/>
                                             </div>
                                             <div
                                                 style={{
@@ -111,7 +118,7 @@ export const CreateDialog = () => {
                                                 <h3 onClick={() => setCurrentTab(currentTab - 1)}>
                                                     {currentLang.cancel}
                                                 </h3>
-                                                <div style={{ width: "20px" }}></div>
+                                                <div style={{width: "20px"}}></div>
                                                 <h3
                                                     onClick={() => {
                                                         if (values.chatName.length === 0) {
@@ -120,7 +127,7 @@ export const CreateDialog = () => {
                                                             return setCurrentTab(currentTab + 1)
                                                         }
                                                     }}
-                                                    style={{ color: "#FB5734" }}
+                                                    style={{color: "#FB5734"}}
                                                 >
                                                     {currentLang.next}
                                                 </h3>
@@ -128,96 +135,13 @@ export const CreateDialog = () => {
                                         </>
                                     ) : null}
                                     {currentTab === 2 ? (
-                                        <>
-                                            <h2 style={{ marginBottom: "0px" }}>{currentLang.createChat}</h2>
-                                            <div
-                                                style={{
-                                                    display: "flex",
-                                                    flexDirection: "column",
-                                                    marginTop: "15px",
-                                                }}
-                                            >
-                                                <div
-                                                    className="notifications__longList"
-                                                    style={{
-                                                        display: "flex",
-                                                        justifyContent: "space-between",
-                                                        width: "100%",
-                                                    }}
-                                                >
-                                                    <p>{currentLang.enterPrice}</p>
-                                                    <input
-                                                        type="checkbox"
-                                                        className="notifications__toggle-button"
-                                                        name="hide_online"
-                                                        checked={false}
-                                                        onChange={() => setFieldValue("paid", !values.paid)}
-                                                        disabled={false}
-                                                    ></input>
-                                                </div>
-                                                {values.paid ? <CurrencyInput
-                                                    prefix="$"
-                                                    style={{
-                                                        border: "1px solid rgba(0, 0, 0, 0.4)",
-                                                        boxSizing: "border-box",
-                                                        borderRadius: "8px",
-                                                        padding: "8px",
-                                                        margin: "10px",
-                                                        marginTop: "16px",
-                                                        marginBottom: "10px"
-                                                    }}
-                                                    value={values.chatCost}
-                                                    placeholder={currentLang.msgPrice}
-                                                    decimalsLimit={2}
-                                                    onValueChange={(value, name) => setFieldValue("chatCost", value)}
-                                                /> : null}
-                                                <div
-                                                    style={{
-                                                        display: "flex",
-                                                        justifyContent: "flex-end",
-                                                        marginRight: "19px",
-                                                    }}
-                                                >
-                                                    <h3 onClick={() => setCurrentTab(currentTab - 1)}>
-                                                        {currentLang.cancel}
-                                                    </h3>
-                                                    <div style={{ width: "20px" }}></div>
-                                                    <h3
-                                                        onClick={() => setCurrentTab(currentTab + 1)}
-                                                        style={{ color: "#FB5734" }}
-                                                    >
-                                                        {currentLang.next}
-                                                    </h3>
-                                                </div>
-                                            </div>
-                                        </>
-                                    ) : null}
-                                    {currentTab === 3 ? (
-                                        <>
-                                            <h2 style={{ marginBottom: "0px" }}>{currentLang.members}</h2>
+                                         <>
+                                            <h2 style={{marginBottom: "0px"}}>{currentLang.members}</h2>
                                             <AddToChatCreate
                                                 selectedUsers={values.invited}
                                                 setSelectedItems={setFieldValue}
                                                 handleSubmit={handleSubmit}
                                             />
-                                            <div
-                                                style={{
-                                                    display: "flex",
-                                                    justifyContent: "center",
-                                                    marginTop: "15px",
-                                                }}
-                                            >
-                                                <h3 onClick={() => setCurrentTab(currentTab - 1)}>
-                                                    {currentLang.cancel}
-                                                </h3>
-                                                <div style={{ width: "20px" }}></div>
-                                                <h3
-                                                    onClick={() => handleSubmit()}
-                                                    style={{ color: "#FB5734" }}
-                                                >
-                                                    {currentLang.next}
-                                                </h3>
-                                            </div>
                                         </>
                                     ) : null}
                                 </>
