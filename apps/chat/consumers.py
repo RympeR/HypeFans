@@ -204,6 +204,7 @@ class ReadedConsumer(WebsocketConsumer):
             if message == 0:
                 readed_chat = UserMessage.objects.filter(
                     user__pk=user,
+                    message__chat__room__pk=int(self.room_name),
                     readed=False
                 )
             else:
