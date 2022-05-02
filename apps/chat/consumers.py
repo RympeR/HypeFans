@@ -214,7 +214,6 @@ class ReadedConsumer(WebsocketConsumer):
                     readed=False
                 )
             logging.warning(f'Readed qs {readed_chat}')
-            print(f'Readed qs {readed_chat}')
             readed_chat.update(readed=True)
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
@@ -226,7 +225,6 @@ class ReadedConsumer(WebsocketConsumer):
             )
         except Exception as e:
             logging.error(e)
-            print(e)
 
     def chat_message(self, event):
         message = event['id']

@@ -104,7 +104,7 @@ class ChatSubUsersAPI(generics.ListAPIView):
             pk__in=Subquery(unfinished_subscriptions.values_list(
                 'source__pk', flat=True))
         )
-        
+
 
 class RoomUpdateAPI(generics.UpdateAPIView):
     queryset = Room.objects.all()
@@ -172,7 +172,7 @@ class GetChatMessages(GenericAPIView):
         else:
             objects = Chat.objects.filter(
                 room=room
-            ).order_by('-date')
+            ).order_by('-date')[:50]
         results = []
         domain = request.get_host()
 
@@ -277,6 +277,8 @@ class GetDialogs(GenericAPIView):
     serializer_class = RetrieveChatsSerializer
 
     def post(self, request):
+        limit = request.data.get('limit', 40)
+        offset = request.data.get('offset', 0)
         user = request.user
         rooms_creator = user.user_creator.all()
         rooms_invited = user.invited_users.all()
@@ -314,7 +316,13 @@ class GetDialogs(GenericAPIView):
                 {
                     "room": {
                         "id": room_obj['room'].id,
-                        "user": UserShortRetrieveSeriliazer(instance=user_obj, context={'request': request}).data if user_obj else UserShortRetrieveSeriliazer(instance=room_obj['room'].creator, context={'request': request}).data,
+                        "user": UserShortRetrieveSeriliazer(
+                            instance=user_obj,
+                            context={'request': request}
+                        ).data if user_obj else UserShortRetrieveSeriliazer(
+                            instance=room_obj['room'].creator,
+                            context={'request': request}
+                        ).data,
                         "message": {
                             'id': message_obj.id,
                             'time': message_obj.date.timestamp(),
@@ -325,8 +333,6 @@ class GetDialogs(GenericAPIView):
                     }
                 }
             )
-        limit = request.data.get('limit', 40)
-        offset = request.data.get('offset', 0)
         return Response(filtered_results[offset:limit])
 
 

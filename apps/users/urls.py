@@ -1,44 +1,23 @@
 from django.urls import path
-from .views import (
-    AddBlockedUserAPI,
-    ActivateUserByGet,
-    UserRetrieveAPI,
-    UserCreateAPI,
-    UserAPI,
-    UserPartialUpdateAPI,
-    UserSubscription,
-    CardRetrieveAPI,
-    CardCreateAPI,
-    CardAPI,
-    CardPartialUpdateAPI,
-    DonationRetrieveAPI,
-    DonationCreateAPI,
-    PaymentRetrieveAPI,
-    PaymentCreateAPI,
-    PendingUserCreateAPI,
-    UserOnlineRetrieveAPI,
-    UserOnlineCreateAPI,
-    UserCardListAPI,
-    DonationPayedUserRetrieveAPI,
-    DonationPayedUserToRetrieveAPI,
-    CreateSubscriptioAPI,
-    PaymentUserHistoryRetrieveAPI,
-    UserProfileRetrieveAPI,
-    UserSettingsRetrieveAPI,
-    UserBlockedListAPI,
-    PayStatsHistoryRetrieveAPI,
-    UserSearchRetrieveAPI,
-    UserLoginAPI,
-    UserMeRetrieveAPI,
-    UserChatSubscription,
-    SpendStatsHistoryRetrieveAPI,
-    RepheralHistoryRetrieveAPI,
-    UserChangePasswordAPI,
-)
+from rest_framework_simplejwt.views import TokenRefreshView
+
 from .authentication_views import *
-from rest_framework_simplejwt.views import (
-    TokenRefreshView,
-)
+from .views import (ActivateUserByGet, AddBlockedUserAPI, CardAPI,
+                    CardCreateAPI, CardPartialUpdateAPI, CardRetrieveAPI,
+                    CreateSubscriptioAPI, DonationCreateAPI,
+                    DonationPayedUserRetrieveAPI,
+                    DonationPayedUserToRetrieveAPI, DonationRetrieveAPI,
+                    PaymentCreateAPI, PaymentRetrieveAPI,
+                    PaymentUserHistoryRetrieveAPI, PayStatsHistoryRetrieveAPI,
+                    PendingUserCreateAPI, RepheralHistoryRetrieveAPI,
+                    SpendStatsHistoryRetrieveAPI, UserAPI, UserBlockedListAPI,
+                    UserCardListAPI, UserChangePasswordAPI,
+                    UserChatSubscription, UserCreateAPI, UserLoginAPI,
+                    UserMeRetrieveAPI, UserOnlineCreateAPI,
+                    UserOnlineRetrieveAPI, UserPartialUpdateAPI,
+                    UserProfileRetrieveAPI, UserRetrieveAPI,
+                    UserSearchRetrieveAPI, UserSettingsRetrieveAPI,
+                    UserSubscription)
 
 urlpatterns = [
     path('activate/<str:uid>/<str:token>/', ActivateUserByGet.as_view()),

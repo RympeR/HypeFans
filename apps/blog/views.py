@@ -50,8 +50,8 @@ class PostListAPI(generics.GenericAPIView):
     queryset = Post.objects.all()
 
     def get(self, request, username):
-        limit = request.query_params.get('limit', 20)
-        offset = request.query_params.get('offset', 0)
+        limit = int(request.query_params.get('limit', 20))
+        offset = int(request.query_params.get('offset', 0))
         page_user = User.objects.get(username=username)
         user = request.user
         qs = Post.objects.filter(
@@ -306,9 +306,9 @@ class MainUserPage(GenericAPIView):
     @silk_profile(name='View Main Page')
     def get(self, request):
         user = request.user
-        data_compare = request.GET.get('datetime', 0)
-        limit = request.GET.get('limit', 50)
-        offset = request.GET.get('offset', 0)
+        data_compare = request.query_params.get('datetime', 0)
+        limit = int(request.query_params.get('limit', 50))
+        offset = int(request.query_params.get('offset', 0))
         results = {
             'recommendations': 0,
             'posts': []
@@ -467,7 +467,7 @@ class GetFavouritePosts(generics.GenericAPIView):
 
     def get(self, request):
         limit = int(request.GET.get('limit', 20))
-        offset = 0  # int(request.GET.get('offset', 0))
+        offset = int(request.GET.get('offset', 0))
         user = request.user
         qs = user.user_favourites.all()[offset:offset+limit]
         data = [{'post': self.get_serializer(
@@ -575,8 +575,8 @@ class MainUserPageUpdated(APIView):
     def get(self, request):
 
         req_user = request.user
-        data_compare = request.GET.get('datetime', 0)
-        limit = request.GET.get('limit', 30)
+        data_compare = int(request.GET.get('datetime', 0))
+        limit = int(request.GET.get('limit', 30))
 
         qs = User.objects.all().order_by('-fans_amount').values_list('id', flat=True)
         reccomendations = UserShortRetrieveSeriliazer(
