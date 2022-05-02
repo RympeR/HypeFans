@@ -1,28 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 // import { useAlert } from "react-alert";
 import Modal from "react-bootstrap/Modal";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router";
-import { Link } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {useHistory, useLocation} from "react-router";
+import {Link} from "react-router-dom";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { userAPI } from "../../api/userAPI";
-import { RootState } from "../../redux/redux";
-import { ReactComponent as SaveIcon } from "../../assets/images/bookmark.svg";
-import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
-import { ReactComponent as CommentIcon } from "../../assets/images/message-circle.svg";
-import { buyPost, clearUserData, getUser } from "../../redux/userReducer";
-import { ReactComponent as MenuDotsWhite } from "../../assets/images/3dotsWhite.svg";
-import { ReactComponent as BackButton } from "../../assets/images/arrow-leftWhite.svg";
+import {userAPI} from "../../api/userAPI";
+import {RootState} from "../../redux/redux";
+import {ReactComponent as SaveIcon} from "../../assets/images/bookmark.svg";
+import {ReactComponent as LikeIcon} from "../../assets/images/heart.svg";
+import {ReactComponent as CommentIcon} from "../../assets/images/message-circle.svg";
+import {buyPost, clearUserData, getUser} from "../../redux/userReducer";
+import {ReactComponent as MenuDotsWhite} from "../../assets/images/3dotsWhite.svg";
+import {ReactComponent as BackButton} from "../../assets/images/arrow-leftWhite.svg";
 import logo from "../../assets/images/logo.svg";
-import { Preloader } from "../utils/Preloader";
-import { chatAPI } from "../../api/chatAPI";
-import profileLinkBg from "../../assets/images/profile-link-bg.png";
+import {Preloader} from "../utils/Preloader";
+import {chatAPI} from "../../api/chatAPI";
 import fansIcon from "../../assets/images/icons_person.png";
-import { toast } from "react-toastify";
-import { ProfilePagePost } from "../components/post/ProfilePagePost";
-import { ReadMore } from "../components/readMore/ReadMore";
-import { GoToTopBtn } from "../components/goToTopButton/GoToTopBtn";
+import {toast} from "react-toastify";
+import {ProfilePagePost} from "../components/post/ProfilePagePost";
+import {ReadMore} from "../components/readMore/ReadMore";
+import {GoToTopBtn} from "../components/goToTopButton/GoToTopBtn";
 import moment from "moment";
 
 const Profile = () => {
@@ -59,7 +58,7 @@ const Profile = () => {
       target: profile.pk,
     });
     setSubscribeShow(false);
-    if (data.status === 200) {
+    if (data.status === 202) {
       setProfile({
         ...profile,
         subscribed: true,
@@ -84,7 +83,7 @@ const Profile = () => {
       target: profile.pk,
     });
     setChatSubscribeModalShown(false);
-    if (data.status === 200) {
+    if (data.status === 202) {
       setProfile({ ...profile, subscribed_chat: true });
       toast.success("Вы подписались на чат");
     } else {

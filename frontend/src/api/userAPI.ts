@@ -1,4 +1,4 @@
-import { instance } from "./api";
+import {instance} from "./api";
 import {
   CardType,
   createCardRT,
@@ -27,7 +27,7 @@ import {
 export const userAPI = {
   chatSubscribe({ source, target }: SubscriptionType) {
     return instance
-      .post<createSubscriptionRT>("/user/create-subscription/", {
+      .post<createSubscriptionRT>(`/user/user-chat-subscription/${target}`, {
         source,
         target,
       })
@@ -81,7 +81,7 @@ export const userAPI = {
   },
   createSubscription({ source, target }: SubscriptionType) {
     return instance
-      .post<createSubscriptionRT>("/user/create-subscription/", {
+      .post<createSubscriptionRT>(`/user/user-subscription/${target}`, {
         source,
         target,
       })
