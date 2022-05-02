@@ -1,46 +1,53 @@
 import CryptoJS from "crypto-js";
-import {Formik} from "formik";
-import React, {ChangeEvent, MouseEvent, useContext, useEffect, useRef, useState,} from "react";
+import { Formik } from "formik";
+import React, {
+    ChangeEvent,
+    MouseEvent,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import Modal from "react-bootstrap/Modal";
 import ReactAudioPlayer from "react-audio-player";
 import CurrencyInput from "react-currency-input-field";
-import {useSelector} from "react-redux";
-import {useHistory} from "react-router";
-import {Link} from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import Popup from "reactjs-popup";
-import {blogAPI} from "../../api/blogAPI";
-import {chatAPI} from "../../api/chatAPI";
-import {userAPI} from "../../api/userAPI";
-import {RootState} from "../../redux/redux";
-import {ReactComponent as BackIcon} from "../../assets/images/arrow-left-chat.svg";
-import {ReactComponent as ImageIcn} from "../../assets/images/imageI.svg";
-import {ReactComponent as Readed} from "../../assets/images/messageIcon.svg";
-import {ReactComponent as NotReaded} from "../../assets/images/messageIconWhite.svg";
-import {ReactComponent as More} from "../../assets/images/more-vertical-chat.svg";
-import {ReactComponent as Tip} from "../../assets/images/tipI.svg";
-import {ReactComponent as CloseIcon} from "../../assets/images/x-circle.svg";
-import {ReactComponent as AttachIcon} from "../../assets/images/attachment.svg";
-import {AddToChat} from "../components/addToChat/AddToChat";
-import {AudioRecorder} from "../components/recordAudio/AudioRecorder";
-import {Preloader} from "../utils/Preloader";
-import {getLastUrlPoint} from "../utils/utilities";
-import {ChatImage} from "./card/components/ChatImage";
-import {Video} from "./card/components/Video";
+import { blogAPI } from "../../api/blogAPI";
+import { chatAPI } from "../../api/chatAPI";
+import { userAPI } from "../../api/userAPI";
+import { RootState } from "../../redux/redux";
+import { ReactComponent as BackIcon } from "../../assets/images/arrow-left-chat.svg";
+import { ReactComponent as ImageIcn } from "../../assets/images/imageI.svg";
+import { ReactComponent as Readed } from "../../assets/images/messageIcon.svg";
+import { ReactComponent as NotReaded } from "../../assets/images/messageIconWhite.svg";
+import { ReactComponent as More } from "../../assets/images/more-vertical-chat.svg";
+import { ReactComponent as Tip } from "../../assets/images/tipI.svg";
+import { ReactComponent as CloseIcon } from "../../assets/images/x-circle.svg";
+import { ReactComponent as AttachIcon } from "../../assets/images/attachment.svg";
+import { AddToChat } from "../components/addToChat/AddToChat";
+import { AudioRecorder } from "../components/recordAudio/AudioRecorder";
+import { Preloader } from "../utils/Preloader";
+import { getLastUrlPoint } from "../utils/utilities";
+import { ChatImage } from "./card/components/ChatImage";
+import { Video } from "./card/components/Video";
 import moment from "moment";
 import logo from "../../assets/images/logo.svg";
-import {toast} from "react-toastify";
-import {ChatInput} from "../components/chatInput/ChatInput";
-import {LangContext} from "../utils/LangProvider";
+import { toast } from "react-toastify";
+import { ChatInput } from "../components/chatInput/ChatInput";
+import { LangContext } from "../utils/LangProvider";
 
 const MessageItem =
     React.memo(({
-                    item,
-                    setMessages,
-                    messages,
-                    index,
-                    url,
-                    wrapperRef
-                }: {
+        item,
+        setMessages,
+        messages,
+        index,
+        url,
+        wrapperRef
+    }: {
         item: any;
         setMessages: any;
         messages: any;
@@ -48,7 +55,7 @@ const MessageItem =
         url: number;
         wrapperRef: any;
     }) => {
-        const {currentLang} = useContext(LangContext)
+        const { currentLang } = useContext(LangContext)
 
         const uid = useSelector((state: RootState) => state.auth.pk);
 
@@ -59,7 +66,7 @@ const MessageItem =
                 setMessages(
                     messages.map((item: any, index: number) => {
                         if (item.id === data.data.chat) {
-                            return {...item, is_payed: true};
+                            return { ...item, is_payed: true };
                         } else {
                             return item;
                         }
@@ -69,7 +76,7 @@ const MessageItem =
         };
 
         useEffect(() => {
-            wrapperRef.current.scrollIntoView({behavior: "smooth"});
+            wrapperRef.current.scrollIntoView({ behavior: "smooth" });
         }, [url, wrapperRef])
 
         return (
@@ -105,8 +112,8 @@ const MessageItem =
                             className={
                                 "message__content " +
                                 (item?.attachments?.length > 0 &&
-                                item.attachments.filter((el: any) => el.file_type === 1)
-                                    .length === 0
+                                    item.attachments.filter((el: any) => el.file_type === 1)
+                                        .length === 0
                                     ? "no-background"
                                     : "has-solid-background")
                             }
@@ -130,7 +137,7 @@ const MessageItem =
                                 {item?.attachments.length > 0
                                     ? item?.attachments.map((item: any, index: number) => {
                                         if (item.file_type === 4) {
-                                            return <Video src={item.file_url} key={index + "ChatImage"}/>;
+                                            return <Video src={item.file_url} key={index + "ChatImage"} />;
                                         } else if (item.file_type === 1) {
                                             return (
                                                 <a href={item.file_url} download key={index + "ChatImage"}>
@@ -138,7 +145,7 @@ const MessageItem =
                                                     {
                                                         item.file_url.split("/")[
                                                         item.file_url.split("/").length - 1
-                                                            ]
+                                                        ]
                                                     }
                                                 </a>
                                             );
@@ -164,9 +171,9 @@ const MessageItem =
                                     : null}
                                 {item.user.pk === uid ? (
                                     <span className="message__meta">
-                    <div className="message__time">15:33</div>
-                                        {item.readed ? <Readed/> : <NotReaded/>}
-                  </span>
+                                        <div className="message__time">15:33</div>
+                                        {item.readed ? <Readed /> : <NotReaded />}
+                                    </span>
                                 ) : (
                                     <></>
                                 )}
@@ -192,15 +199,15 @@ const MessageItem =
     })
 
 
-export const DialogMain = ({rooms}: { rooms: any }) => {
+export const DialogMain = ({ rooms }: { rooms: any }) => {
     const history = useHistory();
     const lastUrl = getLastUrlPoint(history.location.pathname);
-    const BackButton = () => <BackIcon onClick={history.goBack}/>;
+    const BackButton = () => <BackIcon onClick={history.goBack} />;
     const uid = useSelector((state: RootState) => state.auth.pk);
-    const MoreIcon = () => <More/>;
+    const MoreIcon = () => <More />;
     const [isMessagesLoading, setIsMessagesLoading] = useState(true);
-    const TipIcon = () => <Tip/>;
-    const ImageIcon = () => <ImageIcn/>;
+    const TipIcon = () => <Tip />;
+    const ImageIcon = () => <ImageIcn />;
     const [ws, setWs] = useState(null);
     const [wsRead, setWsRead] = useState(null);
     const [isDonating, setIsDonating] = useState<boolean>(false)
@@ -217,7 +224,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
     const inputFileRef = useRef(null);
     const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false);
     const wrapperRef = useRef()
-    const {currentLang} = useContext(LangContext)
+    const { currentLang } = useContext(LangContext)
 
     // useEffect`s
 
@@ -234,7 +241,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
         wsReadClient.onopen = () => {
             setWsRead(wsReadClient);
             wsReadClient.send(
-                JSON.stringify({room_id: lastUrl, user: uid, message_id: 0})
+                JSON.stringify({ room_id: lastUrl, user: uid, message_id: 0 })
             );
         };
         wsReadClient.onclose = () => console.log("ws closed read");
@@ -270,6 +277,8 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
     useEffect(() => {
         if (!wsRead) return;
         wsRead.onmessage = (e: any) => {
+            console.log(e);
+            debugger
         };
     }, [wsRead]);
 
@@ -289,6 +298,17 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
             console.warn(response);
             setMessages(response);
             setIsMessagesLoading(false);
+            response.forEach((item: any) => {
+                if (!item.readed && item.creator !== uid) {
+                    wsRead.send(
+                        JSON.stringify({
+                            room_id: lastUrl,
+                            user: uid,
+                            message_id: item.message_id,
+                        })
+                    );
+                }
+            });
         };
         recieveChatMessages();
     }, [lastUrl]);
@@ -380,7 +400,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
         }
     };
     const blockUser = async (id: number) => {
-        const response = await userAPI.blockUser({user: [id], block: true});
+        const response = await userAPI.blockUser({ user: [id], block: true });
         if (response.status < 300) {
             toast.success(currentLang.success);
         } else {
@@ -392,6 +412,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
     const [usersInChat, setUsersInChat] = useState([])
     const [invitedUsers, setInvitedUsers] = useState([])
     const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false);
+
     const getChatUsers = async () => {
         const usersList = await chatAPI.getChatMembers(Number(lastUrl))
         setUsersInChat([...usersList?.all])
@@ -412,7 +433,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                     borderBottomRightRadius: "16px",
                 }}
             >
-                <Modal.Body className="notifications__modal" style={{padding: "0px"}}>
+                <Modal.Body className="notifications__modal" style={{ padding: "0px" }}>
                     <AddToChat
                         usersList={usersInChat}
                         invitedUsers={invitedUsers}
@@ -431,20 +452,20 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                     borderBottomRightRadius: "16px",
                 }}
             >
-                <Modal.Body className="notifications__modal" style={{padding: "0px", minHeight: "30vh"}}>
+                <Modal.Body className="notifications__modal" style={{ padding: "0px", minHeight: "30vh" }}>
                     {usersInChat.length === 0 ? (
-                        <Preloader/>
+                        <Preloader />
                     ) : (
-                        <div style={{padding: "15px"}}>
-                            <h1 style={{textAlign: "center"}}>{currentLang.members}</h1>
+                        <div style={{ padding: "15px" }}>
+                            <h1 style={{ textAlign: "center" }}>{currentLang.members}</h1>
                             {invitedUsers.map((item, key) => {
                                 return (
                                     <div className="chat__invitedUsersItem" key={key + " usersInChat"}>
                                         <Link to={`/profile/${item.username}`}>
-                                            <img src={item.avatar !== "" ? item.avatar : logo} alt="avatar"/>
+                                            <img src={item.avatar !== "" ? item.avatar : logo} alt="avatar" />
                                         </Link>
-                                        <div style={{marginLeft: "15px"}}>
-                                            <h3 style={{textAlign: "start"}}>@{item.username}</h3>
+                                        <div style={{ marginLeft: "15px" }}>
+                                            <h3 style={{ textAlign: "start" }}>@{item.username}</h3>
                                             <h5>{item.first_name}</h5>
                                         </div>
                                     </div>
@@ -465,35 +486,52 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                 >
                     <div
                         className="chat__resp_icon chat__backNone"
-                        style={{marginRight: "14px", marginTop: "-6px"}}
+                        style={{ marginRight: "14px", marginTop: "-6px" }}
                     >
-                        <BackButton/>
+                        <BackButton />
                     </div>
+                    {/* <Link
+            to={`/profile/${typeof rooms.find(
+              (item: any) => item.room.room_info.id === Number(lastUrl)
+            )?.room?.room_info?.invited !== "number"
+              ? amICreator
+                ? rooms.find(
+                  (item: any) => item.room.room_info.id === Number(lastUrl)
+                )?.room?.room_info?.invited?.username
+                : rooms.find(
+                  (item: any) => item.room.room_info.id === Number(lastUrl)
+                )?.room?.room_info?.creator?.username
+              : rooms.find(
+                (item: any) => item.room.room_info.id === Number(lastUrl)
+              )?.room?.room_info?.username
+              }`}
+          > */}
                     <img
                         src={
                             typeof rooms.find(
                                 (item: any) => item.room.room_info.id === Number(lastUrl)
                             )?.room?.room_info?.invited !== "number"
                                 ? amICreator
-                                ? rooms.find(
-                                (item: any) =>
-                                    item.room.room_info.id === Number(lastUrl)
-                                )?.room?.room_info?.invited?.avatar || logo
+                                    ? rooms.find(
+                                        (item: any) =>
+                                            item.room.room_info.id === Number(lastUrl)
+                                    )?.room?.room_info?.invited?.avatar || logo
+                                    : rooms.find(
+                                        (item: any) =>
+                                            item.room.room_info.id === Number(lastUrl)
+                                    )?.room?.room_info?.creator?.avatar || logo
                                 : rooms.find(
-                                (item: any) =>
-                                    item.room.room_info.id === Number(lastUrl)
-                                )?.room?.room_info?.creator?.avatar || logo
-                                : rooms.find(
-                                (item: any) => item.room.room_info.id === Number(lastUrl)
-                            )?.room?.room_info?.logo || logo
+                                    (item: any) => item.room.room_info.id === Number(lastUrl)
+                                )?.room?.room_info?.logo || logo
                         }
                         className="logo_site"
                         alt="avatar"
                         onClick={() => {
-                            getChatUsers();
+                            getChatUsers()
                             setInvitedModalShown(true)
                         }}
-                    />
+                    ></img>
+                    {/* </Link> */}
                     <div>
                         <h2
                             style={{
@@ -525,12 +563,12 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                 <Popup
                     trigger={
                         <div className="chat__more_icon">
-                            <MoreIcon/>
+                            <MoreIcon />
                         </div>
                     }
                     position="bottom right"
                 >
-                    <div style={{padding: "5px", fontSize: "14px"}}>
+                    <div style={{ padding: "5px", fontSize: "14px" }}>
                         <button onClick={() => setIsAddModalShow(true)}>
                             {currentLang.addToChat}
                         </button>
@@ -538,7 +576,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                     {/* <div style={{ padding: "5px", fontSize: "11px" }}>
             <button>Отключить уведомления</button>
           </div> */}
-                    <div style={{padding: "5px", fontSize: "14px"}}>
+                    <div style={{ padding: "5px", fontSize: "14px" }}>
                         <button
                             onClick={() => {
                                 navigator.clipboard.writeText(
@@ -555,7 +593,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                     {/* <div style={{ padding: "5px", fontSize: "11px" }}>
             <button>Убрать из всех групп</button>
           </div> */}
-                    <div style={{padding: "5px", fontSize: "14px"}}>
+                    <div style={{ padding: "5px", fontSize: "14px" }}>
                         <button
                             onClick={() =>
                                 blockUser(
@@ -584,8 +622,8 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                         }}
                     >
                         {messages.filter((item) => item.user.pk === uid)[
-                        messages.filter((item) => item.user.pk === uid).length - 1
-                            ]?.readed
+                            messages.filter((item) => item.user.pk === uid).length - 1
+                        ]?.readed
                             ? currentLang.readed
                             : currentLang.notReaded}
                     </div>
@@ -597,7 +635,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                                 justifyContent: "center",
                             }}
                         >
-                            <Preloader/>
+                            <Preloader />
                         </div>
                     ) : (
                         messages.map((item, index) => {
@@ -622,7 +660,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                                 setShowActions(!showActions);
                             }}
                         >
-                            <AttachIcon style={{width: "22px", height: "22px"}}/>
+                            <AttachIcon style={{ width: "22px", height: "22px" }} />
                         </button>
                         <ChatInput
                             sendMessage={sendMessage}
@@ -638,7 +676,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                     }
                 >
                     <div onClick={() => setShowTip(true)}>
-                        <TipIcon/>
+                        <TipIcon />
                     </div>
                     <AudioRecorder
                         audioMessage={audioMessage}
@@ -648,9 +686,9 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                         <label
                             className="upload__file-input-label"
                             htmlFor="file-input"
-                            style={{marginBottom: "15px"}}
+                            style={{ marginBottom: "15px" }}
                         >
-                            <ImageIcon/>
+                            <ImageIcon />
                         </label>
                         <input
                             className="upload__file-input"
@@ -662,7 +700,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                         />
                     </div>
                     <button
-                        style={{marginBottom: "10px"}}
+                        style={{ marginBottom: "10px" }}
                         onClick={() => setPaidModalShow(true)}
                     >
                         {currentLang.setPrice}
@@ -682,7 +720,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                     borderBottomRightRadius: "16px",
                 }}
             >
-                <Modal.Body className="notifications__modal" style={{padding: "0px"}}>
+                <Modal.Body className="notifications__modal" style={{ padding: "0px" }}>
                     <div
                         style={{
                             display: "flex",
@@ -716,10 +754,10 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                                 setMessageCost("")
                                 setPaidModalShow(false)
                             }}>{currentLang.cancel}</h3>
-                            <div style={{width: "20px"}}></div>
+                            <div style={{ width: "20px" }}></div>
                             <h3
                                 style={
-                                    {color: "#FB5734"}
+                                    { color: "#FB5734" }
                                 }
                                 onClick={() => {
                                     toast.success(currentLang.msgPriceSaved);
@@ -745,7 +783,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                     borderBottomRightRadius: "16px",
                 }}
             >
-                <Modal.Body className="notifications__modal" style={{padding: "0px"}}>
+                <Modal.Body className="notifications__modal" style={{ padding: "0px" }}>
                     <div
                         style={{
                             display: "flex",
@@ -780,7 +818,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                                             className="upload__img-wrapper"
                                             key={"fileWrapper" + index}
                                         >
-                                            <ReactAudioPlayer src={file} controls/>
+                                            <ReactAudioPlayer src={file} controls />
                                         </div>
                                     );
                                 }
@@ -791,7 +829,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                                             key={"imgWrapper" + index}
                                         >
                                             <video className="upload__img">
-                                                <source src={file}/>
+                                                <source src={file} />
                                             </video>
                                             <CloseIcon
                                                 className="upload__close-icon"
@@ -824,11 +862,11 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                             }
                         })}
                     </div>
-                    <div style={{marginLeft: "15px"}}>
+                    <div style={{ marginLeft: "15px" }}>
                         <label
                             className="upload__file-input-label"
                             htmlFor="file-input"
-                            style={{marginBottom: "15px"}}
+                            style={{ marginBottom: "15px" }}
                         >
                             {currentLang.add}
                         </label>
@@ -872,12 +910,12 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                         >
                             {currentLang.cancel}
                         </h3>
-                        <div style={{width: "20px"}}></div>
+                        <div style={{ width: "20px" }}></div>
                         <h3
                             onClick={() => {
                                 if (!isSendDisabled) sendMessage(messageText);
                             }}
-                            style={{color: "#FB5734"}}
+                            style={{ color: "#FB5734" }}
                         >
                             {currentLang.next}
                         </h3>
@@ -896,7 +934,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                     borderBottomRightRadius: "16px",
                 }}
             >
-                <Modal.Body className="notifications__modal" style={{padding: "0px"}}>
+                <Modal.Body className="notifications__modal" style={{ padding: "0px" }}>
                     <Formik
                         initialValues={{
                             donation_amount: 0,
@@ -905,7 +943,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                             console.log(obj);
                         }}
                     >
-                        {({values, handleSubmit, setFieldValue}) => {
+                        {({ values, handleSubmit, setFieldValue }) => {
                             return (
                                 <div
                                     style={{
@@ -917,7 +955,7 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                                     <h2>{currentLang.sendDonut}</h2>
                                     <div
                                         className="chat__sidebarItem"
-                                        style={{alignItems: "center", padding: "0px"}}
+                                        style={{ alignItems: "center", padding: "0px" }}
                                     >
                                         <img
                                             src={
@@ -925,20 +963,20 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                                                     (item: any) => item.room.room_info.id === Number(lastUrl)
                                                 )?.room?.room_info?.invited !== "number"
                                                     ? amICreator
-                                                    ? rooms.find(
-                                                    (item: any) =>
-                                                        item.room.room_info.id === Number(lastUrl)
-                                                    )?.room?.room_info?.invited?.avatar || logo
+                                                        ? rooms.find(
+                                                            (item: any) =>
+                                                                item.room.room_info.id === Number(lastUrl)
+                                                        )?.room?.room_info?.invited?.avatar || logo
+                                                        : rooms.find(
+                                                            (item: any) =>
+                                                                item.room.room_info.id === Number(lastUrl)
+                                                        )?.room?.room_info?.creator?.avatar || logo
                                                     : rooms.find(
-                                                    (item: any) =>
-                                                        item.room.room_info.id === Number(lastUrl)
-                                                    )?.room?.room_info?.creator?.avatar || logo
-                                                    : rooms.find(
-                                                    (item: any) => item.room.room_info.id === Number(lastUrl)
-                                                )?.room?.room_info?.logo || logo
+                                                        (item: any) => item.room.room_info.id === Number(lastUrl)
+                                                    )?.room?.room_info?.logo || logo
                                             }
                                             alt="donateAvatar"
-                                            // onClick={() => setInvitedModalShown(true)}
+                                        // onClick={() => setInvitedModalShown(true)}
                                         ></img>
                                         <div>
                                             <h2>
@@ -1006,9 +1044,9 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                                         }}
                                     >
                                         <h3 onClick={() => setShowTip(false)}>{currentLang.cancel}</h3>
-                                        <div style={{width: "20px"}}></div>
+                                        <div style={{ width: "20px" }}></div>
                                         <h3
-                                            style={{color: "#FB5734"}}
+                                            style={{ color: "#FB5734" }}
                                             onClick={() => {
                                                 if (!isDonating) {
                                                     sendTip(
@@ -1030,6 +1068,6 @@ export const DialogMain = ({rooms}: { rooms: any }) => {
                     </Formik>
                 </Modal.Body>
             </Modal>
-        </div>
+        </div >
     );
 };
