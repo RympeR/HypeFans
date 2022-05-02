@@ -19,8 +19,8 @@ const Navbar = () => {
   const nick = useSelector((state: RootState) => state.auth.username);
   const uid = useSelector((state: RootState) => state.auth.pk);
   const [ws, setWs] = useState(null);
-  const isAuth = useSelector((state: RootState) => state.auth.isAuth)
-  const { currentLang } = useContext(LangContext)
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const { currentLang } = useContext(LangContext);
 
   const [newMessages, setNewMessages] = useState(0);
   // const wsClient = new WebSocket(
@@ -33,48 +33,54 @@ const Navbar = () => {
   const getNotificationText = (item: any) => {
     switch (item.notification_type) {
       case "donation":
-        return `${item.source_info.username} ${currentLang.donatedU}`
+        return `${item.source_info.username} ${currentLang.donatedU}`;
       case "subscription":
-        return `${item.source_info.username} ${currentLang.subscribedU}`
+        return `${item.source_info.username} ${currentLang.subscribedU}`;
       case "chat_subscription":
-        return `${item.source_info.username} ${currentLang.chatSubscribedU}`
+        return `${item.source_info.username} ${currentLang.chatSubscribedU}`;
       case "comment_like":
-        return `${item.source_info.username} ${currentLang.likedUrComment}`
+        return `${item.source_info.username} ${currentLang.likedUrComment}`;
       case "like":
-        return `${item.source_info.username} ${currentLang.likedUrPost}`
+        return `${item.source_info.username} ${currentLang.likedUrPost}`;
       case "comment_comment":
-        return `${item.source_info.username} ${currentLang.commentUrComment}`
+        return `${item.source_info.username} ${currentLang.commentUrComment}`;
       default:
-        return `${item.source_info.username} ${currentLang.commentUrPost}`
+        return `${item.source_info.username} ${currentLang.commentUrPost}`;
     }
-  }
+  };
 
   useEffect(() => {
     if (uid) {
       const chat_id = setInterval(() => {
+        if (Notification.permission !== "granted") {
+          Notification.requestPermission();
+        }
         // ws.send(JSON.stringify({}));
         const showNotifications = (item: any) => {
           const notification = new Notification("Уведомление", {
-            body: getNotificationText(item)
-          })
-        }
+            body: getNotificationText(item),
+          });
+        };
         const newNotifications = () => {
           const notification = new Notification("Уведомление", {
-            body: `У вас новые уведомления`
-          })
-        }
+            body: `У вас новые уведомления`,
+          });
+        };
         const asyncData = async () => {
-          const data = await blogAPI.getPushNotif()
+          const data = await blogAPI.getPushNotif();
           if (data?.result?.length > 1 && data?.result?.length < 5) {
             data?.result?.forEach((item: any) => {
-              showNotifications(item)
-            })
+              showNotifications(item);
+            });
           } else if (data?.result?.length === 5) {
-            newNotifications()
+            newNotifications();
           }
           return authAPI.onlineUpdate(uid);
+        };
+        const online_status: any = asyncData();
+        if (online_status.last_action){
+          console.log(online_status.last_action);
         }
-        asyncData()
       }, 5000);
       return () => clearInterval(chat_id);
     }
@@ -82,9 +88,7 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
 
-  if (
-    !isAuth || localStorage.getItem("hypefansToken") === null
-  ) {
+  if (!isAuth || localStorage.getItem("hypefansToken") === null) {
     return null;
   }
 

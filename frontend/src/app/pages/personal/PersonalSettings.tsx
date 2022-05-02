@@ -28,6 +28,7 @@ import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop/types";
 import getCroppedImg from "./cropimage";
 import { LangContext } from "../../../app/utils/LangProvider";
+import { useHeicCrop } from "../../../app/hooks/useHeicCrop";
 
 export const PersonalSettings = () => {
   const { currentLang } = useContext(LangContext)
@@ -96,15 +97,9 @@ export const PersonalSettings = () => {
     setCroppedAreaBackground(croppedAreaPixels);
   };
 
-  const onSelectFileBackground = (event: any) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.addEventListener("load", () => {
-        setImageBackground(reader.result);
-      });
-      setShowBackground(true);
-    }
+  const useSelectFileBackground = (event: any) => {
+    useHeicCrop(event, setImageBackground)
+    setShowBackground(true);
   };
 
   const onSelectFile = (event: any) => {
@@ -126,7 +121,6 @@ export const PersonalSettings = () => {
   };
 
   const setNewBackground = async () => {
-    console.log(backgroundUpload);
     const formData = new FormData();
     var file = new File([backgroundUpload], "background_photo.jpeg");
     formData.append("background_photo", file);
@@ -211,7 +205,7 @@ export const PersonalSettings = () => {
               id="file-input"
               ref={backgroundFileRef}
               type="file"
-              onChange={onSelectFileBackground}
+              onChange={useSelectFileBackground}
               multiple={false}
             />
           </div>

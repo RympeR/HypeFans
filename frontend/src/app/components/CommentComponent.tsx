@@ -11,6 +11,7 @@ import logo from "../../assets/images/logo.svg";
 import { getPostActionList } from "../../redux/blogReducer";
 import { RootState } from "../../redux/redux";
 import { LangContext } from "../utils/LangProvider";
+import moment from "moment";
 
 export const CommentComponent = ({
   data,
@@ -86,10 +87,12 @@ export const CommentComponent = ({
 
   useEffect(() => {
     if (postId === null || postId === undefined || !show) return;
+
     async function fetch() {
       const data = await getPostActionList({ id: postId });
       setComments([...data.data.filter((item: any) => item.comment !== null)]);
     }
+
     fetch();
   }, [postId, show]);
 
@@ -139,8 +142,14 @@ export const CommentComponent = ({
             {item.comment}
           </p>
           <div style={{ display: "flex" }}>
-            <div style={{ marginRight: "10px" }}>2 мин.</div>
-            <div style={{ marginRight: "10px" }}>{item.like_amount || 0} {currentLang.liks1}</div>
+            <div style={{ marginRight: "10px" }}>
+              {moment(item.date_time * 1000).fromNow() !== "Invalid date"
+                ? moment(item.date_time * 1000).fromNow()
+                : "a few seconds ago"}
+            </div>
+            <div style={{ marginRight: "10px" }}>
+              {item.like_amount || 0} {currentLang.liks1}
+            </div>
             <div
               style={{ marginRight: "10px" }}
               onClick={() => setShowAnswer(!showAnswer)}
@@ -149,7 +158,7 @@ export const CommentComponent = ({
             </div>
           </div>
           {comments.filter((i) => i.parent === item.id).length === 0 ? (
-            <div></div>
+            <div />
           ) : (
             <p
               style={{ color: "$grey" }}
@@ -180,10 +189,18 @@ export const CommentComponent = ({
                         <span style={{ fontWeight: "bolder" }}>
                           {item?.user?.username}
                         </span>{" "}
+                        <Link to={`/profile/${item?.parent_username}`}>
+                          @<span>{item?.user?.username}</span>
+                        </Link>{" "}
                         {item.comment}
                       </p>
                       <div style={{ display: "flex" }}>
-                        <div style={{ marginRight: "10px" }}>2 мин.</div>
+                        <div style={{ marginRight: "10px" }}>
+                          {moment(item.date_time * 1000).fromNow() !==
+                          "Invalid date"
+                            ? moment(item.date_time * 1000).fromNow()
+                            : "a few seconds ago"}
+                        </div>
                         <div style={{ marginRight: "10px" }}>
                           {item.like_amount || 0} {currentLang.liks1}
                         </div>
@@ -234,13 +251,13 @@ export const CommentComponent = ({
                     style={
                       showAnswer
                         ? {
-                          display: "flex",
-                          padding: "10px",
-                          backgroundColor: "#d6d6d6",
-                          borderRadius: "16px",
-                          height: "55px",
-                          margin: "7px",
-                        }
+                            display: "flex",
+                            padding: "10px",
+                            backgroundColor: "#d6d6d6",
+                            borderRadius: "16px",
+                            height: "55px",
+                            margin: "7px",
+                          }
                         : { display: "none" }
                     }
                   >

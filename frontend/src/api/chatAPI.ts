@@ -1,5 +1,5 @@
-import { instance } from "./api";
-import { userSearchType } from "./types";
+import {instance} from "./api";
+import {userSearchType} from "./types";
 
 export const chatAPI = {
   getChatMessages(room_id: number) {

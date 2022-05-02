@@ -6,6 +6,7 @@
     display: flex;
     margin-bottom: 25px;
     align-items: center;
+
     img {
       width: 80px;
       height: 80px;
@@ -200,7 +201,6 @@
   }
 
   &__input {
-    width: 55%;
     display: flex;
     flex-direction: row;
     min-height: 50px;
@@ -213,6 +213,16 @@
 
   &__text {
     @media screen and (min-width : 450px) {
+
+      padding: 17px 8px 17px 15px;
+      display: flex;
+      width: 85%;
+      max-width: 590px;
+      background: #fbdfcf;
+      border-top-left-radius: 21px;
+      border-bottom-left-radius: 21px;
+      transition: height .1s;
+
       &+button.send {
         order: 2;
         width: 50px;
@@ -223,13 +233,6 @@
         margin-top: 0.2em;
       }
 
-      padding: 17px 8px 17px 15px;
-      display: flex;
-      width: 85%;
-      max-width: 590px;
-      background: #fbdfcf;
-      border-top-left-radius: 21px;
-      border-bottom-left-radius: 21px;
 
       button {
         width: 50px;
@@ -259,8 +262,7 @@
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-end;
-  min-height: 115%;
-  max-height: 115%;
+  height: 115%;
   border: 1px solid #cccccc;
   padding: 10px;
   overflow-y: scroll;

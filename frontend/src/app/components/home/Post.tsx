@@ -74,6 +74,8 @@ const Post = ({
 
   const [donateShow, setDonateShow] = useState(false);
 
+  const [isDonating, setIsDonating] = useState<boolean>(false)
+
   const [donateValue, setDonateValue] = useState("0");
 
   const [show, setShow] = useState<boolean>(false);
@@ -82,11 +84,13 @@ const Post = ({
   const dispatch = useDispatch();
 
   const sendDonate = async () => {
+    setIsDonating(true)
     const data = await userAPI.createDonation({
       amount: Number(donateValue),
       sender: user_id,
       reciever: post.user.pk,
     });
+    setIsDonating(false)
     if (data.status === 200) {
       toast.success("Донат отправлен");
       return setDonateShow(false);
@@ -299,7 +303,7 @@ const Post = ({
                     : { color: "grey" }
                 }
                 onClick={() => {
-                  if (Number(donateValue) > 0) {
+                  if (Number(donateValue) > 0 && !isDonating) {
                     return sendDonate();
                   } else {
                     return null;
