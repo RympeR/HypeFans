@@ -199,21 +199,21 @@ class ReadedConsumer(WebsocketConsumer):
     def receive(self, text_data):
         try:
             text_data_json = json.loads(text_data)
-            room = text_data_json['room_id']
             user = text_data_json['user']
             message = text_data_json['id']
             if message == 0:
                 readed_chat = UserMessage.objects.filter(
-                    user=User.objects.get(pk=user),
+                    user__pk=user,
                     readed=False
                 )
             else:
                 readed_chat = UserMessage.objects.filter(
                     message__pk=message,
-                    user=User.objects.get(pk=user),
+                    user__pk=user,
                     readed=False
                 )
             logging.warning(f'Readed qs {readed_chat}')
+            print(f'Readed qs {readed_chat}')
             readed_chat.update(readed=True)
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
@@ -221,19 +221,17 @@ class ReadedConsumer(WebsocketConsumer):
                     'type': 'chat_message',
                     'id': message,
                     'user': user,
-                    'room_id': room,
                 }
             )
         except Exception as e:
             logging.error(e)
+            print(e)
 
     def chat_message(self, event):
         message = event['id']
-        room = event['room_id']
         user = event['user']
 
         self.send(text_data=json.dumps({
-            "room_id": room,
             "user": user,
             'id': message,
         }))
