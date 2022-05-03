@@ -180,7 +180,7 @@ class GetChatMessages(GenericAPIView):
             attachments = obj.attachment.all()
             attachments_info = []
             for readed_obj in obj.delivered_message.all():
-                if readed_obj.readed and readed_obj.user == user:
+                if readed_obj.readed and obj.user == user:
                     readed = True
                     break
             else:
