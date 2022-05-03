@@ -297,11 +297,16 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
         instance = self.get_object()
         data = dict(request.data)
         if request.data.get('avatar'):
-            if request.data.get('avatar').content_type == 'image/heic':
+            avatar_content_type = request.data.get('avatar').content_type
+            logging.warning(avatar_content_type)
+            if avatar_content_type == 'image/heic' or avatar_content_type == 'image/heif':
                 data = self.process_image(
                     request, data, 'avatar', 80, (160, 160))
         if request.data.get('background_photo'):
-            if request.data.get('background_photo').content_type == 'image/heic':
+            background_photo_content_type = request.data.get(
+                'background_photo').content_type
+            logging.warning(background_photo_content_type)
+            if background_photo_content_type == 'image/heic' or background_photo_content_type == 'image/heif':
                 data = self.process_image(
                     request, data, 'background_photo', 80)
 
