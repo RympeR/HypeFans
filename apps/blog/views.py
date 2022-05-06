@@ -590,9 +590,7 @@ class MainUserPageUpdated(APIView):
         user_subscriptions = req_user.my_subscribes.all()
         posts = []
         for user in user_subscriptions:
-            posts.extend(user.user_post.filter(
-                archived=False,
-                ublication_date__lte=data_compare))
+            posts.extend(user.user_post.filter(archived=False))
         posts = sorted(posts, key=lambda x: x.publication_date)
         qs = Post.objects.filter(
             show_in_recomendations=True, validated=True).exclude(
