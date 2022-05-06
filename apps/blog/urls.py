@@ -2,6 +2,11 @@ from django.urls import path
 from .views import (
     AttachmentCreateAPI,
     AttachmentManyCreateAPI,
+    GetUserBlocked,
+    GetUserDonators,
+    GetUserFavourites,
+    GetUserFriends,
+    GetUserSubs,
     PostListAPI,
     PostRetrieveAPI,
     PostCreateAPI,
@@ -50,4 +55,9 @@ urlpatterns = [
     path('get-notifications/', UserNotifications.as_view()),
     path('get-notifications-alerts/', UserAlertNotificatitons.as_view()),
     path('get-users-lists/', GetUserLists.as_view()),
+    path('get-users-lists-subs/', GetUserSubs.as_view()),
+    path('get-users-lists-friends/', GetUserFriends.as_view()),
+    path('get-users-lists-favourites/', GetUserFavourites.as_view()),
+    path('get-users-lists-donators/', GetUserDonators.as_view()),
+    path('get-users-lists-blocked/', GetUserBlocked.as_view()),
 ]

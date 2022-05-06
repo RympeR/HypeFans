@@ -514,35 +514,94 @@ class GetUserLists(GenericAPIView):
 
         subs = list(map(lambda x: x.source, subs))
 
-        result['last_subs'] = self.serializer_class(
-            many=True, instance=subs).data
+        result['last_subs'] = len(subs)
 
-        result['friends'] = self.serializer_class(
-            many=True, instance=friends).data
+        result['friends'] = len(friends)
         favourite_post = user.user_favourites.all()
         favourite_post_users = list(set(map(lambda x: x.user, favourite_post)))
-        result['favourites'] = self.serializer_class(
-            many=True, instance=favourite_post_users).data
-
+        result['favourites'] = len(favourite_post_users)
         last_donators = user.recieved_user.filter(
             datetime__date__month=now.month)
         last_donators = list(set(map(lambda x: x.sender, last_donators)))
-        result['last_donators'] = self.serializer_class(
-            many=True, instance=last_donators).data
+        result['last_donators'] = len(last_donators)
         blocked_users = user.blocked_users.all()
-        result['blocked_users'] = self.serializer_class(
-            many=True, instance=blocked_users).data
+        result['blocked_users'] = len(blocked_users)
         my_subs = user.source_user_subscribe.filter(finished=False)
         my_subs = list(set(map(lambda x: x.target, my_subs)))
-        result['my_subs'] = self.serializer_class(
-            many=True, instance=my_subs).data
+        result['my_subs'] = len(my_subs)
         return Response(result)
+
+
+class GetUserSubs(GenericAPIView):
+    serializer_class = UserShortRetrieveSeriliazer
+    queryset = User.objects.all()
+
+    def get(self, request):
+        user = request.user
+        subs = user.source_user_subscribe.filter(finished=False)
+        subs = list(set(map(lambda x: x.target, subs)))
+        return Response(self.serializer_class(
+            many=True, instance=subs).data)
+
+
+class GetUserFriends(GenericAPIView):
+    serializer_class = UserShortRetrieveSeriliazer
+    queryset = User.objects.all()
+
+    def get(self, request):
+        user = request.user
+        friends = []
+        subs = user.target_user_subscribe.filter(
+            finished=False).order_by('-start_date')
+        for sub in user.source_user_subscribe.filter(finished=False):
+            temp_subs = sub.target.target_user_subscribe.filter(finished=False)
+            if user in list(map(lambda x: x.source, temp_subs)):
+                friends.append(sub.target)
+        subs = list(set(map(lambda x: x.source, subs)))
+        return Response(self.serializer_class(
+            many=True, instance=subs).data)
+
+
+class GetUserFavourites(GenericAPIView):
+    serializer_class = UserShortRetrieveSeriliazer
+    queryset = User.objects.all()
+
+    def get(self, request):
+        user = request.user
+        favourite_post = user.user_favourites.all()
+        favourite_post_users = list(set(map(lambda x: x.user, favourite_post)))
+        return Response(self.serializer_class(
+            many=True, instance=favourite_post_users).data)
+
+
+class GetUserDonators(GenericAPIView):
+    serializer_class = UserShortRetrieveSeriliazer
+    queryset = User.objects.all()
+
+    def get(self, request):
+        user = request.user
+        donators = user.recieved_user.filter(
+            datetime__date__month=datetime.now().month)
+        donators = list(set(map(lambda x: x.sender, donators)))
+        return Response(self.serializer_class(
+            many=True, instance=donators).data)
+
+
+class GetUserBlocked(GenericAPIView):
+    serializer_class = UserShortRetrieveSeriliazer
+    queryset = User.objects.all()
+
+    def get(self, request):
+        user = request.user
+        blocked_users = user.blocked_users.all()
+        return Response(self.serializer_class(
+            many=True, instance=blocked_users).data)
 
 
 class MainUserPageUpdated(APIView):
 
     @silk_profile(name='Check post bought')
-    def check_post_bought(self, post: Post, user: User):
+    def main_check_post_bought(self, post: Post, user: User):
         if post.show_in_recomendations and user.new_user and post.validated:
             return True
         if post.access_level == 1:
@@ -551,8 +610,7 @@ class MainUserPageUpdated(APIView):
             else:
                 return check_post_bought(
                     post, user)
-        else:
-            return sub_checker(post.user, user)
+        return sub_checker(post.user, user)
 
     @silk_profile(name='Check postAction ')
     def check_postaction(self, post, user):
@@ -573,9 +631,7 @@ class MainUserPageUpdated(APIView):
 
     @silk_profile(name='View Updated Main Page')
     def get(self, request):
-
         req_user = request.user
-        data_compare = int(request.GET.get('datetime', 0))
         limit = int(request.GET.get('limit', 30))
         offset = int(request.GET.get('offset', 0))
 
@@ -613,7 +669,8 @@ class MainUserPageUpdated(APIView):
             } for post in posts
         ]
         for post, qs_post in zip(result_posts, posts):
-            post['post']['payed'] = self.check_post_bought(qs_post, req_user)
+            post['post']['payed'] = self.main_check_post_bought(
+                qs_post, req_user)
             post['post']['liked'], post['post']['like_id'] = self.check_postaction(
                 qs_post, req_user)
             post['post']['favourite'] = self.check_favourites(
