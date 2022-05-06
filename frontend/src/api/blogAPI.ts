@@ -125,8 +125,8 @@ export const blogAPI = {
       return response;
     });
   },
-  getMainPage({ limit = 10, offset = 10 }: { limit: number; offset: number }) {
-    return instance.get<getMainPageRT>(`/blog/get-main-page/`).then((response) => {
+  getMainPage({ limit, offset }: { limit: number; offset: number }) {
+    return instance.get<getMainPageRT>(`/blog/get-main-page/?limit=${limit}&offset=${offset}`).then((response) => {
       return response;
     });
   },

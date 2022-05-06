@@ -140,6 +140,9 @@ const Notifications: React.FC = () => {
             setData([...data, ...res.data]);
           }).finally(() => {
             setPage(page + 1);
+            console.log(data);
+            debugger
+
             setIsUpdateLoading(false)
           })
         }

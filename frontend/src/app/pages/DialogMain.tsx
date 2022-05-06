@@ -224,6 +224,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     const inputFileRef = useRef(null);
     const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false);
     const wrapperRef = useRef()
+    const [readQueue, setReadQueue] = useState<Array<number>>([])
     const { currentLang } = useContext(LangContext)
 
     // useEffect`s
@@ -241,7 +242,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         wsReadClient.onopen = () => {
             setWsRead(wsReadClient);
             wsReadClient.send(
-                JSON.stringify({ room_id: lastUrl, user: uid, message_id: 0 })
+                JSON.stringify({ user: uid, id: 0 })
             );
         };
         wsReadClient.onclose = () => console.log("ws closed read");
@@ -261,12 +262,13 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         if (!ws) return;
         ws.onmessage = (e: any) => {
             const message = JSON.parse(e.data);
+            debugger
             if (message.user.pk !== uid) {
+                debugger
                 wsRead.send(
                     JSON.stringify({
-                        room_id: lastUrl,
                         user: uid,
-                        message_id: message.message_id,
+                        id: message.id,
                     })
                 );
             }
@@ -277,10 +279,26 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     useEffect(() => {
         if (!wsRead) return;
         wsRead.onmessage = (e: any) => {
-            console.log(e);
-            debugger
+            const readed = JSON.parse(e.data);
+            if (readed.user !== uid && readed.id === 0) {
+                setMessages((messages: any) => {
+                    return messages.map((item: any) => {
+                        if (item.user.pk === uid && !item.readed) {
+                            return { ...item, readed: true }
+                        } else return item
+                    })
+                })
+            } else if (readed.user !== uid && readed.id !== 0) {
+                setMessages((messages: any) => {
+                    return messages.map((item: any) => {
+                        if (item.user.pk === uid && !item.readed && item.id <= readed.id) {
+                            return { ...item, readed: true }
+                        } else return item
+                    })
+                })
+            }
         };
-    }, [wsRead]);
+    }, [wsRead, ws, messages, uid]);
 
     useEffect(() => {
         if (
@@ -298,17 +316,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             console.warn(response);
             setMessages(response);
             setIsMessagesLoading(false);
-            response.forEach((item: any) => {
-                if (!item.readed && item.creator !== uid) {
-                    wsRead.send(
-                        JSON.stringify({
-                            room_id: lastUrl,
-                            user: uid,
-                            message_id: item.message_id,
-                        })
-                    );
-                }
-            });
         };
         recieveChatMessages();
     }, [lastUrl]);
@@ -339,7 +346,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     // Добавление файлов в сообщение
 
     const sendMessage = async (messageMain: string | null) => {
-        // debugger
         setIsSendDisabled(true);
         const attachmentsIds: Array<number> = [];
         if (audioMessage !== null) {
@@ -621,11 +627,11 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                             color: " rgba(0, 0, 0, 0.6)",
                         }}
                     >
-                        {messages.filter((item) => item.user.pk === uid)[
+                        {/* {messages.filter((item) => item.user.pk === uid)[
                             messages.filter((item) => item.user.pk === uid).length - 1
                         ]?.readed
                             ? currentLang.readed
-                            : currentLang.notReaded}
+                            : currentLang.notReaded} */}
                     </div>
                     {isMessagesLoading ? (
                         <div

@@ -32,8 +32,6 @@ import moment from "moment";
 import { ReadMore } from "../readMore/ReadMore";
 
 export const returnByFileType = (item: any) => {
-  console.log(item);
-
   switch (item?.file_type) {
     case 4:
       return <Video src={item?._file} />;

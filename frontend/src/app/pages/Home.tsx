@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMainPageData } from "../../redux/blogReducer";
+import { getMainPageData, postsPaginations } from "../../redux/blogReducer";
 import { RootState } from "../../redux/redux";
 import Aside from "../components/home/Aside";
 import Post from "../components/home/Post";
@@ -9,17 +9,27 @@ import StoryBlock from "../components/home/stories/StoryBlock";
 import { Preloader } from "../utils/Preloader";
 
 const Home: React.FC = () => {
+  const [offset, setOffset] = useState<number>(7)
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getMainPageData());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, []);
 
   const recommendations = useSelector(
     (state: RootState) => state.blog.recommendations
   );
+  const isPaginationLoading = useSelector((state: RootState) => state.blog.isPaginationLoading)
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
   const posts = useSelector((state: RootState) => state.blog.posts);
+
+  window.onscroll = function () {
+    if (!isPaginationLoading && window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 5) {
+      dispatch(postsPaginations(offset))
+      setOffset(offset + 7)
+    }
+  };
 
   return (
     <>
