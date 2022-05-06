@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMainPageData, postsPaginations } from "../../redux/blogReducer";
+import { actions, getMainPageData, postsPaginations } from "../../redux/blogReducer";
 import { RootState } from "../../redux/redux";
 import Aside from "../components/home/Aside";
 import Post from "../components/home/Post";
+import loader from '../../assets/loaders/Spinner-1s-200px.gif';
 import SearchBar from "../components/home/SearchBar";
-import StoryBlock from "../components/home/stories/StoryBlock";
 import { Preloader } from "../utils/Preloader";
 
 const Home: React.FC = () => {
@@ -14,6 +14,7 @@ const Home: React.FC = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getMainPageData());
+    dispatch(actions.setPaginationUpdate(false))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -44,6 +45,7 @@ const Home: React.FC = () => {
             {posts.map((item, index) => {
               return <Post key={Math.random() + index} post={item} />;
             })}
+            {isPaginationLoading ? <div style={{ backgroundColor: "white", display: "flex", justifyContent: "center" }}><img src={loader} width="66" alt="loading..." /> </div> : null}
           </div>
         </>
       )}

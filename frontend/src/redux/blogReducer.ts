@@ -193,7 +193,7 @@ const blogReducer = (state = initialState, action: AllActionsType): InitialState
       return state;
   }
 };
-const actions = {
+export const actions = {
   setMainPageData: (posts: any, recommendations: any, stories: any) => {
     return {
       type: 'SET_MAIN_PAGE_DATA',
