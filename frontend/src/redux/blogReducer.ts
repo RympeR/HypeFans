@@ -368,7 +368,7 @@ export const createStory =
 export const postsPaginations = (offset: number): Thunk =>
   async (dispatch) => {
     dispatch(actions.setPaginationUpdate(true))
-    const data = blogAPI.getMainPage({ limit: 2, offset })
+    const data = blogAPI.getMainPage({ limit: 7, offset })
     dispatch(actions.postsUpdate((await data).data.posts))
     dispatch(actions.setPaginationUpdate(false))
   };
