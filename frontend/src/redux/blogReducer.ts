@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { createPostActionRT, createPostBoughtRT, createStoryActionRT, createStoryRT, idType } from '../api/types';
+import { createPostActionRT, createPostBoughtRT, createStoryActionRT, createStoryRT, idType, PostType } from '../api/types';
 import { blogAPI } from './../api/blogAPI';
 import { InferActionsTypes, RootState } from './redux';
 
@@ -91,7 +91,8 @@ const initialState = {
   ],
   stories: [{}],
   isLoading: false,
-  isPostLoading: false
+  isPostLoading: false,
+  isPaginationLoading: false
 };
 
 const blogReducer = (state = initialState, action: AllActionsType): InitialStateType => {
@@ -148,6 +149,16 @@ const blogReducer = (state = initialState, action: AllActionsType): InitialState
         ...state,
         post: action.payload
       };
+    case 'SET_PAGINATION_UPDATE':
+      return {
+        ...state,
+        isPaginationLoading: action.payload
+      };
+    case 'POSTS_UPDATE':
+      return {
+        ...state,
+        posts: [...state.posts, ...action.payload]
+      };
     case 'SET_POST_DATA':
       if (action.payload.liked && action.payload.favourite === null) {
         return {
@@ -189,9 +200,21 @@ const actions = {
       payload: { posts, recommendations, stories }
     } as const;
   },
+  setPaginationUpdate: (isLoading: boolean) => {
+    return {
+      type: 'SET_PAGINATION_UPDATE',
+      payload: isLoading
+    } as const;
+  },
   isLoading: () => {
     return {
       type: 'IS_LOADING'
+    } as const;
+  },
+  postsUpdate: (posts: Array<PostType>) => {
+    return {
+      type: 'POSTS_UPDATE',
+      payload: posts
     } as const;
   },
   isntLoading: () => {
@@ -235,145 +258,155 @@ export const isntLoading = (): Thunk => async (dispatch) => {
 
 export const getMainPageData = (): Thunk => async (dispatch) => {
   dispatch(actions.isLoading());
-  const mainPageData = await blogAPI.getMainPage({ limit: 10, offset: 10 });
+  const mainPageData = await blogAPI.getMainPage({ limit: 7, offset: 0 });
   if (mainPageData.data) {
     const posts = mainPageData.data.posts;
     const recommendations = mainPageData.data.recommendations;
     const stories = [{}];
     dispatch(actions.setMainPageData(posts, recommendations, stories));
+    dispatch(actions.setPostLoading(false))
     dispatch(actions.isntLoading());
   } else {
     dispatch(actions.isntLoading());
+    dispatch(actions.setPostLoading(false))
   }
 };
 
 export const setFavoritePostModal =
   (postId: number, favourite: boolean): Thunk =>
-  async (dispatch) => {
-    const data = await blogAPI.setFavorite(postId, favourite);
-    dispatch(actions.setPostData(null, null, data.data.favourite));
-  };
+    async (dispatch) => {
+      const data = await blogAPI.setFavorite(postId, favourite);
+      dispatch(actions.setPostData(null, null, data.data.favourite));
+    };
 
 export const setFavorite =
   (postId: number, favourite: boolean): Thunk =>
-  async (dispatch) => {
-    const data = await blogAPI.setFavorite(postId, favourite);
-    dispatch(actions.setPostsData(data.data.post_id, null, null, data.data.favourite));
-  };
+    async (dispatch) => {
+      const data = await blogAPI.setFavorite(postId, favourite);
+      dispatch(actions.setPostsData(data.data.post_id, null, null, data.data.favourite));
+    };
 
 export const createPostActionModal =
   ({ like, comment, donation_amount, user, parent, post }: createPostActionRT): Thunk =>
-  async (dispatch) => {
-    const data = await blogAPI.createPostAction({
-      like,
-      comment,
-      parent,
-      donation_amount,
-      user,
-      post,
-      date_time: null,
-      id: null
-    });
-    dispatch(actions.setPostData(true, data.id, null));
-  };
+    async (dispatch) => {
+      const data = await blogAPI.createPostAction({
+        like,
+        comment,
+        parent,
+        donation_amount,
+        user,
+        post,
+        date_time: null,
+        id: null
+      });
+      dispatch(actions.setPostData(true, data.id, null));
+    };
 
 export const createPostAction =
   ({ like, comment, donation_amount, user, post, parent }: createPostActionRT): Thunk =>
-  async (dispatch) => {
-    const data = await blogAPI.createPostAction({
-      like,
-      comment,
-      donation_amount,
-      user,
-      parent,
-      post,
-      date_time: null,
-      id: null
-    });
-    dispatch(actions.setPostsData(post, true, data.id, null));
-  };
+    async (dispatch) => {
+      const data = await blogAPI.createPostAction({
+        like,
+        comment,
+        donation_amount,
+        user,
+        parent,
+        post,
+        date_time: null,
+        id: null
+      });
+      dispatch(actions.setPostsData(post, true, data.id, null));
+    };
 
 export const createPostBought =
   ({ user, amount, post }: createPostBoughtRT): Thunk =>
-  async (dispatch) => {
-    await blogAPI.createPostBought({ user, amount, post, id: null });
-  };
+    async (dispatch) => {
+      await blogAPI.createPostBought({ user, amount, post, id: null });
+    };
 
 export const createPost =
   (props: any): Thunk =>
-  async (dispatch) => {
-    const attachmentsID = [];
-    for (let i = 0; i < props.attachments.length; i++) {
-      const data = await blogAPI.createAttachment(props.attachments[i]);
-      attachmentsID.push(data.data.id);
-    }
-    props.attachments = attachmentsID;
-    await blogAPI.createPost(props);
-  };
+    async (dispatch) => {
+      const attachmentsID = [];
+      for (let i = 0; i < props.attachments.length; i++) {
+        const data = await blogAPI.createAttachment(props.attachments[i]);
+        attachmentsID.push(data.data.id);
+      }
+      props.attachments = attachmentsID;
+      await blogAPI.createPost(props);
+    };
 
 export const createStoryAction =
   ({ comment, like, watched, time_watched, source, target }: createStoryActionRT): Thunk =>
-  async (dispatch) => {
-    await blogAPI.createStoryAction({
-      comment,
-      like,
-      watched,
-      time_watched,
-      source,
-      target,
-      id: null,
-      datetime: null
-    });
-  };
+    async (dispatch) => {
+      await blogAPI.createStoryAction({
+        comment,
+        like,
+        watched,
+        time_watched,
+        source,
+        target,
+        id: null,
+        datetime: null
+      });
+    };
 
 export const createStory =
   ({ time_to_archive, reply_link, archived, user }: createStoryRT): Thunk =>
+    async (dispatch) => {
+      await blogAPI.createStory({
+        time_to_archive,
+        reply_link,
+        archived,
+        user,
+        id: null,
+        story: null,
+        watched_story: null
+      });
+    };
+
+export const postsPaginations = (offset: number): Thunk =>
   async (dispatch) => {
-    await blogAPI.createStory({
-      time_to_archive,
-      reply_link,
-      archived,
-      user,
-      id: null,
-      story: null,
-      watched_story: null
-    });
+    dispatch(actions.setPaginationUpdate(true))
+    const data = blogAPI.getMainPage({ limit: 2, offset })
+    dispatch(actions.postsUpdate((await data).data.posts))
+    dispatch(actions.setPaginationUpdate(false))
   };
 
 export const deletePostActionModal =
   ({ id, post_id }: { id: number; post_id: number }): Thunk =>
-  async (dispatch) => {
-    await blogAPI.deletePostAction({
-      id
-    });
-    dispatch(actions.setPostData(false, null, null));
-  };
+    async (dispatch) => {
+      await blogAPI.deletePostAction({
+        id
+      });
+      dispatch(actions.setPostData(false, null, null));
+    };
 
 export const deletePostAction =
   ({ id, post_id }: { id: number; post_id: number }): Thunk =>
-  async (dispatch) => {
-    await blogAPI.deletePostAction({
-      id
-    });
-    dispatch(actions.setPostsData(post_id, false, null, null));
-  };
+    async (dispatch) => {
+      await blogAPI.deletePostAction({
+        id
+      });
+      dispatch(actions.setPostsData(post_id, false, null, null));
+    };
 
 export const deleteStoryGet =
   ({ id }: idType): Thunk =>
-  async (dispatch) => {
-    // Дичь полная
-    await blogAPI.deleteStoryGet({
-      id
-    });
-  };
+    async (dispatch) => {
+      // Дичь полная
+      await blogAPI.deleteStoryGet({
+        id
+      });
+    };
 
 export const deleteStory =
   ({ id }: idType): Thunk =>
-  async (dispatch) => {
-    await blogAPI.deleteStoryDelete({
-      id
-    });
-  };
+    async (dispatch) => {
+      await blogAPI.deleteStoryDelete({
+        id
+      });
+    };
 
 export const getPostActionList = async ({ id }: idType) => {
   const data = await blogAPI.getPostActionList({
@@ -384,31 +417,31 @@ export const getPostActionList = async ({ id }: idType) => {
 
 export const getPostList =
   ({ username }: { username: string }): Thunk =>
-  async (dispatch) => {
-    await blogAPI.getPostList({
-      username
-    });
-  };
+    async (dispatch) => {
+      await blogAPI.getPostList({
+        username
+      });
+    };
 
 export const getPost =
   ({ id }: { id: number | null }): Thunk =>
-  async (dispatch) => {
-    if (id === null) dispatch(actions.setPost(null));
-    dispatch(actions.setPostLoading(true));
-    const data = await blogAPI.getPost({
-      id
-    });
-    dispatch(actions.setPost(data.data));
-    dispatch(actions.setPostLoading(false));
-  };
+    async (dispatch) => {
+      if (id === null) dispatch(actions.setPost(null));
+      dispatch(actions.setPostLoading(true));
+      const data = await blogAPI.getPost({
+        id
+      });
+      dispatch(actions.setPost(data.data));
+      dispatch(actions.setPostLoading(false));
+    };
 
 export const getStoryAction =
   ({ id }: idType): Thunk =>
-  async (dispatch) => {
-    await blogAPI.getStoryAction({
-      id
-    });
-  };
+    async (dispatch) => {
+      await blogAPI.getStoryAction({
+        id
+      });
+    };
 
 export const getStoryList = (): Thunk => async (dispatch) => {
   await blogAPI.getStoryList();
@@ -416,9 +449,9 @@ export const getStoryList = (): Thunk => async (dispatch) => {
 
 export const getUserStories =
   ({ limit = 10, offset = 10 }: { limit: number; offset: number }): Thunk =>
-  async () => {
-    await blogAPI.getUserStories({ limit, offset });
-  };
+    async () => {
+      await blogAPI.getUserStories({ limit, offset });
+    };
 
 //  Types
 
