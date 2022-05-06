@@ -598,7 +598,7 @@ class MainUserPageUpdated(APIView):
         ).values_list('id', flat=True)
         qs = self.get_sample_of_queryset(qs, 9, Post)
         posts.extend(qs)
-        posts = posts[offset:limit]
+        posts = posts[offset:offset+limit]
         result_posts = [
             {
                 'user': UserShortRetrieveSeriliazer(
