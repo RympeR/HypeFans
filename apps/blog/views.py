@@ -577,6 +577,7 @@ class MainUserPageUpdated(APIView):
         req_user = request.user
         data_compare = int(request.GET.get('datetime', 0))
         limit = int(request.GET.get('limit', 30))
+        offset = int(request.GET.get('offset', 0))
 
         qs = User.objects.all().order_by('-fans_amount').values_list('id', flat=True)
         reccomendations = UserShortRetrieveSeriliazer(
@@ -588,23 +589,18 @@ class MainUserPageUpdated(APIView):
 
         user_subscriptions = req_user.my_subscribes.all()
         posts = []
-        if data_compare == 0:
-            for user in user_subscriptions:
-                posts.extend(user.user_post.filter(archived=False))
-            posts = sorted(posts, key=lambda x: x.publication_date)
-        else:
-            for user in user_subscriptions:
-                posts.extend(user.user_post.filter(
-                    archived=False,
-                    ublication_date__lte=data_compare))
-            posts = sorted(posts, key=lambda x: x.publication_date)
+        for user in user_subscriptions:
+            posts.extend(user.user_post.filter(
+                archived=False,
+                ublication_date__lte=data_compare))
+        posts = sorted(posts, key=lambda x: x.publication_date)
         qs = Post.objects.filter(
             show_in_recomendations=True, validated=True).exclude(
             id__in=tuple(map(lambda x: x.id, posts))
         ).values_list('id', flat=True)
         qs = self.get_sample_of_queryset(qs, 9, Post)
         posts.extend(qs)
-        posts = posts[:limit]
+        posts = posts[offset:limit]
         result_posts = [
             {
                 'user': UserShortRetrieveSeriliazer(
