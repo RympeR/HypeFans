@@ -222,7 +222,7 @@ const Profile = () => {
         </div>
         <h5 className="profile__info">
           {profile?.posts.length} posts{" "}
-          {sub_amount(profile.fans_amount, 1)}
+          {sub_amount(profile.fans_amount, 1)}{" "}
           <img className="sub_icon" src={fansIcon} />{" "}
         </h5>
       </div>
