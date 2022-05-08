@@ -28,7 +28,7 @@ class Attachment(models.Model):
         verbose_name_plural = 'Вложения'
 
     def __str__(self):
-        return f"{self.pk}-{self.file_type}"
+        return  mark_safe(f"<h1>test</h1> test {self.pk}-{self.file_type}")
 
     @property
     def file_preview(self):
