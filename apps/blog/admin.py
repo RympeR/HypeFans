@@ -73,6 +73,8 @@ class AttachmentInlineAdmin(admin.TabularInline):
     readonly_fields = ('attachment_file_preview', )
 
     def file_preview(self, instance):
+        logging.warning(instance)
+        logging.warning(instance.attachment)
         return instance.attachment.file_preview
     def _file(self, instance):
         return instance.attachment._file
