@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from mptt.models import MPTTModel, TreeForeignKey
 from unixtimestampfield.fields import UnixTimeStampField
+from django.utils.html import mark_safe
 
 from apps.users.models import User, sub_checker
 
@@ -29,6 +30,14 @@ class Attachment(models.Model):
     def __str__(self):
         return f"{self.pk}-{self.file_type}"
 
+    @property
+    def file_preview(self):
+        if self.file_type == 3:
+            return mark_safe('<img src="{}" width="300" height="300" />'.format(self._file.url))
+        if self.file_type == 4:
+            return mark_safe('<video src="{}" controls width="300" height="300" />'.format(self._file.url))
+        if self.file_type == 2:
+            return mark_safe('<audio src="{}" controls />'.format(self._file.url))
 
 class Post(models.Model):
     class AccessLevelChoices(models.IntegerChoices):

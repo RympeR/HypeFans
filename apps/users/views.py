@@ -27,8 +27,10 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from wand.image import Image as WandImage
-
+try:
+    from wand.image import Image as WandImage
+except Exception:
+    logging.warning("No wand module")
 from apps.blog.models import PostAction, PostBought
 from apps.blog.serializers import PostGetShortSerializers
 from apps.users.dynamic_preferences_registry import (ReferralPercentage,
