@@ -33,9 +33,9 @@ class Attachment(models.Model):
     @property
     def file_preview(self):
         if self.file_type == 3:
-            return mark_safe('<img src="{}" width="300" height="300" />'.format(self._file.url))
+            return mark_safe('<img src="{}" width="100" height="100" />'.format(self._file.url))
         if self.file_type == 4:
-            return mark_safe('<video src="{}" controls width="300" height="300" />'.format(self._file.url))
+            return mark_safe('<video src="{}" controls width="100" height="100" />'.format(self._file.url))
         if self.file_type == 2:
             return mark_safe('<audio src="{}" controls />'.format(self._file.url))
 
