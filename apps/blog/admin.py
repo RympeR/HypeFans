@@ -69,8 +69,8 @@ class AttachmentAdmin(admin.ModelAdmin):
 
 class AttachmentInlineAdmin(admin.TabularInline):
     model = Post.attachments.through
-    fields = ('file_type', '_file')
-    readonly_fields = ('file_preview', )
+    fields = ('attachents__file_type', 'attachents___file')
+    readonly_fields = ('attachents__file_preview', )
 
 
 @admin.register(Post)
