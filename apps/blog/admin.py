@@ -69,8 +69,8 @@ class AttachmentAdmin(admin.ModelAdmin):
 
 class AttachmentInlineAdmin(admin.TabularInline):
     model = Post.attachments.through
-    # fields = ('attachents__file_type', 'attachents___file')
-    # readonly_fields = ('attachents__file_preview', )
+    fields = ('attachents_file_type', 'attachents__file')
+    readonly_fields = ('attachents_file_preview', )
 
 
 @admin.register(Post)
@@ -86,6 +86,9 @@ class PostAdmin(admin.ModelAdmin):
     ordering = '-pk',
     list_filter = LikeIncreaser, 'publication_date',
     inlines = (AttachmentInlineAdmin,)
+    filter_horizontal = (
+
+    )
 
 # @admin.register(PostAction)
 
