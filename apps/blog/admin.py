@@ -57,7 +57,7 @@ class PostBoughtAdmin(admin.ModelAdmin):
 @admin.register(Attachment)
 class AttachmentAdmin(admin.ModelAdmin):
     list_display = (
-        'pk', 'file_type', 'file_preview'
+        'pk', 'file_type', 'file_preview', '_file'
     )
     list_editable = ['_file']
     readonly_fields = [
