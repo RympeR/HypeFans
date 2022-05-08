@@ -74,14 +74,6 @@ class AttachmentInlineAdmin(admin.TabularInline):
     readonly_fields = ('file_preview', 'file_type', '_file')
 
     def file_preview(self, instance):
-        # if instance.attachment.file_type == 3:
-        #     return mark_safe('<img src="{}" width="100" height="100" />'.format(instance.attachment._file.url))
-        # if instance.attachment.file_type == 4:
-        #     return mark_safe('<video src="{}" controls width="100" height="100" />'.format(instance.attachment._file.url))
-        # if instance.attachment.file_type == 2:
-        #     return mark_safe('<audio src="{}" controls />'.format(instance.attachment._file.url))
-        # else:
-        #     return mark_safe('<file src="{}" />'.format(instance.attachment._file.url))
         return instance.attachment.file_preview
     def _file(self, instance):
         return instance.attachment._file
@@ -101,10 +93,7 @@ class PostAdmin(admin.ModelAdmin):
     ordering = '-pk',
     list_filter = LikeIncreaser, 'publication_date',
     inlines = (AttachmentInlineAdmin,)
-    filter_horizontal = (
-
-    )
-
+    exclude = ['attachments']
 # @admin.register(PostAction)
 
 
