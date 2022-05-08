@@ -1,9 +1,18 @@
+.is_online { border-radius: 100%;
+   width: 15px;
+   height: 15px;
+   background-color: #77DD77;
+   margin-left: 15px;
+   margin-top: 2px;
+  }
+
 .profile {
   margin-top: 7px;
   width: 100%;
   border-radius: 16px;
   background-color: $white;
   min-height: 40vh;
+
   &__post_image {
     width: 600px;
     height: auto;
@@ -18,6 +27,7 @@
     width: 600px;
     height: 700px;
     background-color: black !important;
+
     @media screen and (max-width: 500px) {
       height: auto;
       width: 380px;
@@ -27,10 +37,15 @@
   &__header {
     background-repeat: no-repeat;
     border-radius: 8px 8px 0px 0px;
-    background-size: 100% 210px;
+    background-size: 100% 190px;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    @media screen and (max-width: 500px) {
+      background-size: auto 190px;
+      background-position: top;
+    }
 
     img.profile_photo {
       width: 160px;
@@ -40,6 +55,7 @@
       border-radius: 100%;
       margin-top: 70px;
     }
+
     img.sub_icon {
       height: 14px;
       width: 14px;

@@ -1,60 +1,66 @@
 import moment from 'moment';
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import React, {useContext, useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux';
+import {useLocation} from 'react-router-dom';
 import Modal from "react-bootstrap/Modal";
 import Slider from 'react-slick';
 import Popup from 'reactjs-popup';
 import logo from "../../../assets/images/logo.svg";
-import { ReactComponent as SaveIcon } from "../../../assets/images/bookmark.svg";
-import { ReactComponent as LikeIcon } from "../../../assets/images/heart.svg";
-import { ReactComponent as MenuDots } from "../../../assets/images/3dots.svg";
-import { RootState } from 'src/redux/redux';
-import { returnByFileType } from '../home/Post';
-import { createPostAction, deletePost, deletePostAction, setFavorite } from '../../../redux/userReducer';
-import { CommentComponent } from '../CommentComponent';
-import { ReactComponent as CommentIcon } from "../../../assets/images/message-circle.svg";
-import { ReadMore } from '../readMore/ReadMore';
+import {ReactComponent as SaveIcon} from "../../../assets/images/bookmark.svg";
+import {ReactComponent as LikeIcon} from "../../../assets/images/heart.svg";
+import {ReactComponent as MenuDots} from "../../../assets/images/3dots.svg";
+import {RootState} from '../../../redux/redux';
+import {returnByFileType} from '../home/Post';
+import {createPostAction, deletePost, deletePostAction, setFavorite} from '../../../redux/userReducer';
+import {CommentComponent} from '../CommentComponent';
+import {ReactComponent as CommentIcon} from "../../../assets/images/message-circle.svg";
+import {ReadMore} from '../readMore/ReadMore';
+import {LangContext} from '../../../app/utils/LangProvider';
 
-export const ProfilePagePost = ({ item, index }: { item: any, index: number }) => {
+export const ProfilePagePost = ({item, index}: { item: any, index: number }) => {
     const [removePostShow, setRemovePostShow] = useState(false);
     const [show, setShow] = useState<boolean>(false);
-    const { pathname } = useLocation();
+    const {pathname} = useLocation();
     const location = pathname.split("/");
     const nick = location[location.length - 1];
     const dispatch = useDispatch();
     const profileData = useSelector((state: RootState) => state.user);
     const myId = useSelector((state: RootState) => state.auth.pk);
     const delPost = (id: number) => {
-        dispatch(deletePost({ id }));
+        dispatch(deletePost({id}));
     };
+    const {currentLang} = useContext(LangContext);
+
+    console.log(currentLang)
+
+    //debugger
 
     return (
         <div className="profile__post" key={`${index}_post`}>
             <div className="profile__postHeader">
                 <div className="profile__postInfo">
                     <div className="profile__postUserInfo">
-                        <div style={{ display: "flex" }}>
+                        <div style={{display: "flex"}}>
                             <img
                                 src={profileData.avatar ? profileData.avatar : logo}
                                 alt="profile_photoPost"
-                            ></img>
+                            />
                             <div>
                                 <h3
                                     className="profile__name"
-                                    style={{ margin: "5px 8px", marginBottom: "0px" }}
+                                    style={{margin: "5px 8px", marginBottom: "0px"}}
                                 >
                                     {profileData.first_name}
                                 </h3>
                                 <h4
                                     className="profile__nickname"
-                                    style={{ marginLeft: "8px" }}
+                                    style={{marginLeft: "8px"}}
                                 >
                                     {`@${nick}`}
                                 </h4>
                             </div>
                         </div>
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <div style={{display: "flex", alignItems: "center"}}>
                             <div className="profile__postAgo">
                                 {moment(
                                     item.post.publication_date * 1000
@@ -64,14 +70,14 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                                 <Popup
                                     trigger={
                                         <button className="post__menu-dots">
-                                            <MenuDots />
+                                            <MenuDots/>
                                         </button>
                                     }
                                     position="bottom right"
                                 >
-                                    <div style={{ padding: "5px" }}>
+                                    <div style={{padding: "5px"}}>
                                         <button onClick={() => setRemovePostShow(true)}>
-                                            Удалить пост
+                                            {currentLang.delPost}
                                         </button>
                                     </div>
                                 </Popup>
@@ -84,28 +90,24 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                             >
                                 <Modal.Body className="notifications__modal">
                                     {" "}
-                                    <h2 style={{ marginBottom: "0px" }}>
-                                        Удалить пост
+                                    <h2 style={{marginBottom: "0px"}}>
+                                        {currentLang.delPost}
                                     </h2>
                                     <div
-                                        style={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            marginTop: "15px",
-                                        }}
+                                        style={{display: "flex", justifyContent: "center", marginTop: "15px"}}
                                     >
                                         <h3 onClick={() => setRemovePostShow(false)}>
-                                            Нет
+                                            {currentLang.no}
                                         </h3>
-                                        <div style={{ width: "20px" }}></div>
+                                        <div style={{width: "20px"}}></div>
                                         <h3
                                             onClick={() => {
                                                 delPost(item?.post.pk);
                                                 setRemovePostShow(false);
                                             }}
-                                            style={{ color: "#FB5734" }}
+                                            style={{color: '#fb5734'}}
                                         >
-                                            Да
+                                            {currentLang.yes}
                                         </h3>
                                     </div>
                                 </Modal.Body>
@@ -113,7 +115,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                         </div>
                     </div>
                     <div className="profile__postText">
-                        <ReadMore text={item?.post.description} />
+                        <ReadMore text={item?.post.description}/>
                     </div>
                 </div>
             </div>
@@ -123,6 +125,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                         className="profile__postIMG"
                         arrows={false}
                         dots={true}
+                        adaptiveHeight
                     >
                         {item?.post.attachments.map(
                             (item: any, index: number) => {
@@ -141,7 +144,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                 )}
                 <div
                     className="post__bottom"
-                    style={{ margin: "24px 24px" }}
+                    style={{margin: "24px 24px"}}
                 >
                     <div className="post__actions">
                         <div className="post__actions-left">
@@ -150,22 +153,22 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                                 onClick={() => {
                                     item?.post.liked
                                         ? dispatch(
-                                            deletePostAction({
-                                                id: item?.post.like_id,
-                                                post_id: item?.post.pk,
-                                            })
+                                        deletePostAction({
+                                            id: item?.post.like_id,
+                                            post_id: item?.post.pk,
+                                        })
                                         )
                                         : dispatch(
-                                            createPostAction({
-                                                like: true,
-                                                comment: null,
-                                                donation_amount: 0,
-                                                user: myId,
-                                                parent: null,
-                                                date_time: null,
-                                                post: item?.post.pk,
-                                                id: null,
-                                            })
+                                        createPostAction({
+                                            like: true,
+                                            comment: null,
+                                            donation_amount: 0,
+                                            user: myId,
+                                            parent: null,
+                                            date_time: null,
+                                            post: item?.post.pk,
+                                            id: null,
+                                        })
                                         );
                                 }}
                             >
@@ -199,7 +202,7 @@ export const ProfilePagePost = ({ item, index }: { item: any, index: number }) =
                     </div>
 
                     <p className="post__like-amount">
-                        {item?.post.likes_amount} лайков
+                        {item?.post.likes_amount} {currentLang.liks1}
                     </p>
 
                     <CommentComponent

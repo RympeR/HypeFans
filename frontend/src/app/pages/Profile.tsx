@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 // import { useAlert } from "react-alert";
 import Modal from "react-bootstrap/Modal";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router";
-import { Link } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {useHistory, useLocation} from "react-router";
+import {Link} from "react-router-dom";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { userAPI } from "../../api/userAPI";
-import { RootState } from "../../redux/redux";
-import {
-  buyPost,
-  getUser,
-} from "../../redux/userReducer";
-import { ReactComponent as MenuDotsWhite } from "../../assets/images/3dotsWhite.svg";
-import { ReactComponent as BackButton } from "../../assets/images/arrow-leftWhite.svg";
+import {userAPI} from "../../api/userAPI";
+import {RootState} from "../../redux/redux";
+import {ReactComponent as SaveIcon} from "../../assets/images/bookmark.svg";
+import {ReactComponent as LikeIcon} from "../../assets/images/heart.svg";
+import {ReactComponent as CommentIcon} from "../../assets/images/message-circle.svg";
+import {buyPost, clearUserData, getUser} from "../../redux/userReducer";
+import {ReactComponent as MenuDotsWhite} from "../../assets/images/3dotsWhite.svg";
+import {ReactComponent as BackButton} from "../../assets/images/arrow-leftWhite.svg";
 import logo from "../../assets/images/logo.svg";
-import { Preloader } from "../utils/Preloader";
-import { chatAPI } from "../../api/chatAPI";
-import profileLinkBg from "../../assets/images/profile-link-bg.png";
+import {Preloader} from "../utils/Preloader";
+import {chatAPI} from "../../api/chatAPI";
 import fansIcon from "../../assets/images/icons_person.png";
-import { toast } from "react-toastify";
-import { ProfilePagePost } from "../components/post/ProfilePagePost";
-import { ReadMore } from "../components/readMore/ReadMore";
-import { GoToTopBtn } from "../components/goToTopButton/GoToTopBtn";
+import {toast} from "react-toastify";
+import {ProfilePagePost} from "../components/post/ProfilePagePost";
+import {ReadMore} from "../components/readMore/ReadMore";
+import {GoToTopBtn} from "../components/goToTopButton/GoToTopBtn";
+import moment from "moment";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -40,14 +40,13 @@ const Profile = () => {
   const [chatSubscribeModalShown, setChatSubscribeModalShown] =
     useState<boolean>(false);
   useEffect(() => {
+    dispatch(clearUserData());
     dispatch(getUser({ username: nick }));
   }, [nick, dispatch]);
 
   useEffect(() => {
     setProfile(profileData);
   }, [profileData]);
-
-  // console.log(profile);
 
   if (isLoading) {
     return <Preloader />;
@@ -59,8 +58,19 @@ const Profile = () => {
       target: profile.pk,
     });
     setSubscribeShow(false);
-    if (data.status === 200) {
-      setProfile({ ...profile, subscribed: true });
+    if (data.status === 202) {
+      setProfile({
+        ...profile,
+        subscribed: true,
+        posts: profile.posts.map((item) => {
+          if (item.post.access_level === 2) {
+            return {
+              ...item,
+              post: { ...item.post, payed: true },
+            };
+          } else return item;
+        }),
+      });
       toast.success("Вы подписались");
     } else {
       toast.error("Ошибка подписки");
@@ -73,12 +83,10 @@ const Profile = () => {
       target: profile.pk,
     });
     setChatSubscribeModalShown(false);
-    console.log(data);
     if (data.status === 202) {
       setProfile({ ...profile, subscribed_chat: true });
       toast.success("Вы подписались на чат");
-    } 
-    else {
+    } else {
       toast.error("Ошибка подписки  на чат");
     }
   };
@@ -88,27 +96,34 @@ const Profile = () => {
       creator: myId,
       invited: [profile.pk],
     });
-    console.log(data.data);
     history.push(`/chat/${data.data.id}`);
   };
 
-  const sub_amount = (fans_amount: number) => {
-    if (fans_amount % 1000_000 === 0) {
-      return `${(fans_amount / 1000_000).toFixed(0)}m`;
-    } else if (fans_amount % 1000 === 0) {
-      return `${(fans_amount / 1000).toFixed(0)}k`;
-    }
-    if (fans_amount >= 1000_000) {
-      return `${(fans_amount / 1000_000).toFixed(2)}m`;
-    } else if (fans_amount >= 1000) {
-      return `${(fans_amount / 1000).toFixed(2)}k`;
-    } else {
-      return fans_amount;
-    }
+  const sub_amount = (num: number, digits: number) => {
+    const lookup = [
+      { value: 1, symbol: "" },
+      { value: 1e3, symbol: "k" },
+      { value: 1e6, symbol: "M" },
+      { value: 1e9, symbol: "G" },
+      { value: 1e12, symbol: "T" },
+      { value: 1e15, symbol: "P" },
+      { value: 1e18, symbol: "E" },
+    ];
+    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    var item = lookup
+      .slice()
+      .reverse()
+      .find(function (item) {
+        return num >= item.value;
+      });
+    return item
+      ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol
+      : "0";
   };
 
   const payForPost = ({ amount, post }: { amount: number; post: number }) => {
     dispatch(buyPost({ amount, post, user: myId, id: null }));
+    toast.success("Пост куплен");
   };
 
   return (
@@ -123,7 +138,7 @@ const Profile = () => {
         <Modal.Body className="notifications__modal">
           {" "}
           <h2 style={{ marginBottom: "0px" }}>
-            Цена подписки {profile.message_price}$
+            Цена подписки {profile.subscribtion_price}$
           </h2>
           <div
             style={{
@@ -148,7 +163,9 @@ const Profile = () => {
       >
         <Modal.Body className="notifications__modal">
           {" "}
-          <h2 style={{ marginBottom: "0px" }}>Подписатся на чат?</h2>
+          <h2 style={{ marginBottom: "0px" }}>
+            Подписатся на чат за {profile.message_price}$?
+          </h2>
           <div
             style={{
               display: "flex",
@@ -167,8 +184,6 @@ const Profile = () => {
       <div
         style={{
           backgroundImage: `url(${profile.background_photo})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "100% 210px",
         }}
         className="profile__header"
       >
@@ -201,14 +216,19 @@ const Profile = () => {
           alt="profile_photo"
         />
         <h3 className="profile__name">{profile.first_name}</h3>
-        <h4 className="profile__nickname"> {`@${nick}`}</h4>
+        <div style={{ display: "flex" }}>
+          <h4 className="profile__nickname"> {`@${nick}`}</h4>
+          <div className="is_online" style={profile.is_online ? {} : { backgroundColor: '#C0C0C0' }}></div>
+        </div>
         <h5 className="profile__info">
           {profile?.posts.length} posts{" "}
+          {sub_amount(profile.fans_amount, 1)}
           <img className="sub_icon" src={fansIcon} />{" "}
-          {sub_amount(profile.fans_amount)}
         </h5>
       </div>
-      <pre className="profile__status"><ReadMore text={profile.bio} /></pre>
+      <pre className="profile__status">
+        <ReadMore text={profile.bio} />
+      </pre>
       <div
         style={{
           width: "100%",
@@ -282,7 +302,7 @@ const Profile = () => {
                   style={{ margin: "20px 0px", width: "100%" }}
                   onClick={() => setChatSubscribeModalShown(true)}
                 >
-                  Подписаться на чат
+                  Подписаться на чат за {profile.message_price}$
                 </button>
               </div>
             ) : null}
@@ -296,7 +316,46 @@ const Profile = () => {
               return myNick === nick || item.post.payed ? (
                 <ProfilePagePost item={item} index={index} />
               ) : (
-                <div className="profile__post" key={`${index}_post`}>
+                <div
+                  className="profile__postMain profile__post"
+                  key={`${index}_post`}
+                >
+                  <div className="profile__postHeader">
+                    <div className="profile__postInfo">
+                      <div className="profile__postUserInfo">
+                        <div style={{ display: "flex" }}>
+                          <img
+                            src={profileData.avatar ? profileData.avatar : logo}
+                            alt="profile_photoPost"
+                          ></img>
+                          <div>
+                            <h3
+                              className="profile__name"
+                              style={{ margin: "5px 8px", marginBottom: "0px" }}
+                            >
+                              {profileData.first_name}
+                            </h3>
+                            <h4
+                              className="profile__nickname"
+                              style={{ marginLeft: "8px" }}
+                            >
+                              {`@${nick}`}
+                            </h4>
+                          </div>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <div className="profile__postAgo">
+                            {moment(
+                              item.post.publication_date * 1000
+                            ).fromNow()}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="profile__postText">
+                        <ReadMore text={item?.post.description} />
+                      </div>
+                    </div>
+                  </div>
                   <div className="profile__noPost">
                     <button
                       style={{
@@ -306,15 +365,48 @@ const Profile = () => {
                         margin: "20px",
                         color: "white",
                       }}
-                      onClick={() =>
-                        payForPost({
-                          amount: item.post.price_to_watch,
-                          post: item.post.pk,
-                        })
-                      }
+                      onClick={() => {
+                        if (item.post.access_level !== 1) {
+                          setSubscribeShow(true);
+                        } else {
+                          payForPost({
+                            amount: item.post.price_to_watch,
+                            post: item.post.pk,
+                          });
+                        }
+                      }}
                     >
-                      Посмотреть за {item.post.price_to_watch}$
+                      {item.post.access_level !== 1
+                        ? `Подпишитесь чтоб посмотреть`
+                        : `Посмотреть за ${item.post.price_to_watch}$`}
                     </button>
+                  </div>
+                  <div className="post__bottom" style={{ margin: "24px 24px" }}>
+                    <div className="post__actions">
+                      <div className="post__actions-left">
+                        <button className="post__action-btn" disabled>
+                          <LikeIcon
+                            className="post__action-icon"
+                            fill="none"
+                            strokeOpacity={item?.post.liked ? 0 : 0.6}
+                          />
+                        </button>
+
+                        <button className="post__action-btn" disabled>
+                          <CommentIcon className="post__action-icon" />
+                        </button>
+                      </div>
+                      <button className="post__action-btn" disabled>
+                        <SaveIcon
+                          className="post__action-icon"
+                          fill={item?.post.favourite ? "black" : "none"}
+                        />
+                      </button>
+                    </div>
+
+                    <p className="post__like-amount">
+                      {item?.post.likes_amount} лайков
+                    </p>
                   </div>
                 </div>
               );

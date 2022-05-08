@@ -1,4 +1,4 @@
-import { instance } from "./api";
+import {instance} from "./api";
 import {
   CardType,
   createCardRT,
@@ -33,7 +33,7 @@ export const userAPI = {
       })
       .then((response) => {
         return response;
-      })
+      });
   },
   createCard({ number, date_year, cvc, creator, user }: CardType) {
     return instance
@@ -81,7 +81,7 @@ export const userAPI = {
   },
   createSubscription({ source, target }: SubscriptionType) {
     return instance
-      .post<createSubscriptionRT>("/user/create-subscription/", {
+      .post<createSubscriptionRT>(`/user/user-subscription/${target}`, {
         source,
         target,
       })

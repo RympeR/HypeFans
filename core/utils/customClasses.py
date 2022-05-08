@@ -5,6 +5,29 @@ from dynamic_preferences.registries import global_preferences_registry
 from dynamic_preferences.settings import preferences_settings
 from dynamic_preferences.types import BasePreferenceType
 from rest_framework.serializers import ModelSerializer
+from django.core.mail import EmailMessage
+
+
+import threading
+
+
+class EmailThread(threading.Thread):
+
+    def __init__(self, email):
+        self.email = email
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self.email.send()
+
+
+class Util:
+    @staticmethod
+    def send_email(data):
+        email = EmailMessage(
+            subject=data['email_subject'], body=data['email_body'], to=[data['to_email']])
+        email.content_subtype = 'html'
+        EmailThread(email).start()
 
 
 def filter_related_objects(queryset: QuerySet, name: str, value, model: Model, serializer: ModelSerializer, related_category: str) -> QuerySet:

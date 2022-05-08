@@ -1,4 +1,5 @@
-import { instance } from "./api";
+import {instance} from "./api";
+import {userSearchType} from "./types";
 
 export const chatAPI = {
   getChatMessages(room_id: number) {
@@ -19,6 +20,17 @@ export const chatAPI = {
     return instance.post(`get-user-dialogs/`).then((response) => {
       return response.data;
     });
+  },
+  searchUserChatCreate({ user, limit, offset }: userSearchType) {
+    return instance
+      .get(`/chat/get-possible-invited/?username=${user}&limit=${limit}&offset=${offset}`)
+      .then((response) => {
+        if (response.status === 200 || 301) {
+          return response.data;
+        } else {
+          throw new Error();
+        }
+      });
   },
   inviteUsers(username: Array<any>, chat_id: string | number) {
     console.log(chat_id);
@@ -117,7 +129,7 @@ export const chatAPI = {
   roomCreate(data: any) {
     return instance.post(`/chat/room-create/`, data).then((response) => {
       console.log(response.status);
-      if (response.status < 300) {
+      if (response.status == 226) {
         return response;
       }
       return response;

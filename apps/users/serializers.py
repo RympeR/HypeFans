@@ -15,6 +15,75 @@ from .models import (Card, ChatSubscription, Donation, Payment, PendingUser,
                      Subscription, User, UserOnline, ReferralPayment)
 
 
+class ChatSubscriptionNotificationSerializer(serializers.ModelSerializer):
+    source_info = serializers.SerializerMethodField()
+    notification_type = serializers.SerializerMethodField()
+    additional_info = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ChatSubscription
+        fields = 'source_info', 'notification_type', 'additional_info'
+
+    def get_additional_info(self, chat_subscription: ChatSubscription):
+        return {}
+
+    def get_notification_type(self, chat_subscription: ChatSubscription):
+        return 'chat_subscription'
+
+    def get_source_info(self, chat_subscription: ChatSubscription):
+        username = chat_subscription.target.username
+        return {
+            'username': username,
+            'link': f'https://hype-fans.com/profile/{username}',
+        }
+
+
+class SubscriptionNotificationSerializer(serializers.ModelSerializer):
+    source_info = serializers.SerializerMethodField()
+    notification_type = serializers.SerializerMethodField()
+    additional_info = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Subscription
+        fields = 'source_info', 'notification_type', 'additional_info'
+
+    def get_additional_info(self, subscription: Subscription):
+        return {}
+
+    def get_notification_type(self, subscription: Subscription):
+        return 'subscription'
+
+    def get_source_info(self, subscription: Subscription):
+        username = subscription.target.username
+        return {
+            'username': username,
+            'link': f'https://hype-fans.com/profile/{username}',
+        }
+
+
+class DonationNotificationSerializer(serializers.ModelSerializer):
+    source_info = serializers.SerializerMethodField()
+    notification_type = serializers.SerializerMethodField()
+    additional_info = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Donation
+        fields = 'source_info', 'notification_type', 'additional_info'
+
+    def get_additional_info(self, donation: Donation):
+        return {'amount': donation.amount}
+
+    def get_notification_type(self, donation: Donation):
+        return 'donation'
+
+    def get_source_info(self, donation: Donation):
+        username = donation.sender.username
+        return {
+            'username': username,
+            'link': f'https://hype-fans.com/profile/{username}',
+        }
+
+
 class UserMeSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -265,11 +334,14 @@ class UserPartialSerializer(serializers.ModelSerializer):
         required=False, allow_blank=True, allow_null=True)
     city = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
-    avatar = serializers.ImageField(required=False)
-    background_photo = serializers.ImageField(required=False)
-    username = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    first_name = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    bio = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    avatar = serializers.FileField(required=False)
+    background_photo = serializers.FileField(required=False)
+    username = serializers.CharField(
+        required=False, allow_blank=True, allow_null=True)
+    first_name = serializers.CharField(
+        required=False, allow_blank=True, allow_null=True)
+    bio = serializers.CharField(
+        required=False, allow_blank=True, allow_null=True)
     birthday_date = serializers.DateTimeField(required=False)
     post_amount = serializers.IntegerField(required=False)
     fans_amount = serializers.IntegerField(required=False)
@@ -291,7 +363,21 @@ class UserPartialSerializer(serializers.ModelSerializer):
     validated_user = serializers.BooleanField(required=False)
     credit_amount = serializers.IntegerField(required=False)
     earned_credits_amount = serializers.IntegerField(required=False)
-    wallet = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    wallet = serializers.CharField(
+        required=False, allow_blank=True, allow_null=True)
+    show_comment_notifications = serializers.BooleanField(required=False)
+    show_chat_subscribption_notifications = serializers.BooleanField(
+        required=False)
+    show_subscribption_notifications = serializers.BooleanField(required=False)
+    show_donate_notifications = serializers.BooleanField(required=False)
+    show_like_notifications = serializers.BooleanField(required=False)
+
+    def validate(self, attrs):
+        if attrs.get('avatar'):
+            print(attrs.get('avatar'))
+        if attrs.get('email'):
+            attrs['email'] = attrs['email'].lower()
+        return attrs
 
     class Meta:
         model = User
@@ -324,6 +410,11 @@ class UserPartialSerializer(serializers.ModelSerializer):
             'credit_amount',
             'earned_credits_amount',
             'wallet',
+            'show_comment_notifications',
+            'show_chat_subscribption_notifications',
+            'show_subscribption_notifications',
+            'show_donate_notifications',
+            'show_like_notifications',
         )
         optional_fields = ['location', 'city']
 
@@ -355,6 +446,11 @@ class SettingsSerializer(serializers.ModelSerializer):
             'credit_amount',
             'earned_credits_amount',
             'is_online',
+            'show_comment_notifications',
+            'show_chat_subscribption_notifications',
+            'show_subscribption_notifications',
+            'show_donate_notifications',
+            'show_like_notifications',
         )
 
 
@@ -432,6 +528,12 @@ class UserGetSerializer(serializers.ModelSerializer):
             'earned_credits_amount',
             'is_online',
             'ref_link',
+            'private_profile',
+            'show_comment_notifications',
+            'show_chat_subscribption_notifications',
+            'show_subscribption_notifications',
+            'show_donate_notifications',
+            'show_like_notifications',
         )
 
 
@@ -508,6 +610,12 @@ class UserOwnProfileGetSerializer(serializers.ModelSerializer):
             'cards',
             'ref_link',
             'wallet',
+            'private_profile',
+            'show_comment_notifications',
+            'show_chat_subscribption_notifications',
+            'show_subscribption_notifications',
+            'show_donate_notifications',
+            'show_like_notifications',
         )
 
 

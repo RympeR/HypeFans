@@ -157,18 +157,18 @@ DATABASES = {
 
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
 ]
 
 LANGUAGE_CODE = 'ru-RU'
@@ -253,20 +253,22 @@ CORS_ALLOW_METHODS = (
 )
 
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST = 'mail.hosting.reg.ru'
-EMAIL_HOST_USER = 'management@hype-fans.com'
-EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = 465
-EMAIL_USE_TLS = False
-# EMAIL_USE_TLS = True
-# EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = 'management@hype-fans.com'
+DEFAULT_FROM_EMAIL = 'support@hype-fans.com'
+# EMAIL_HOST = 'smtp.protonmail.com'
+EMAIL_HOST = '127.0.0.1'
+EMAIL_HOST_USER = 'hype-fans@protonmail.com'
+EMAIL_PORT = 1025
+if env.bool('PRODUCTION'):
+    EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD_PRODUCTION')
+else:
+    EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+# EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'apps', 'emails')
 DJOSER = {
     'SET_PASSWORD_RETYPE': True,
-    'LOGOUT_ON_PASSWORD_CHANGE': True,
+    'LOGOUT_ON_PASSWORD_CHANGE': False,
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',

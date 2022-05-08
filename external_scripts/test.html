@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .editable_div {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        margin-top: 50%;
+        font-size: 16px;
+    }
+</style>
+
+<body>
+    <div class="editable_div" editable="true"></div>
+</body>
+<script>
+    var editable = document.querySelector('.editable_div');
+    editable.onclick = function() {
+        editable.contentEditable = true;
+    }
+    var windowHeight = window.innerHeight;
+    var possible_margin_top = windowHeight * 0.5;
+    editable.style.marginTop = possible_margin_top + 'px';
+    console.log(windowHeight);
+    editable.addEventListener('keydown', function (e) {
+        if (e.keyCode === 13 && e.shiftKey) {
+            var editableHeight = editable.offsetHeight;
+            console.log(editableHeight);
+            editable.style.height = editable.scrollHeight + 'px';
+            editable.style.marginTop = (possible_margin_top - editableHeight) + 'px';
+        }
+        else if (e.keyCode === 13) {
+            console.log(editable.innerHTML.replace('<br>', '\n'));
+            editable.contentEditable = false;
+            editable.innerHTML = '';
+            editable.style.height = 'auto';
+            editable.style.marginTop = possible_margin_top + 'px';
+        }
+    });
+</script>
+
+</html>

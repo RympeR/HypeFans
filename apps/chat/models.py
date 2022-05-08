@@ -109,6 +109,7 @@ def create_message(sender, instance, created, **kwargs):
                     user=user,
                     readed=False
                 ).save()
+                print(f'created {user}')
 
 
 post_save.connect(create_message, sender=Chat)

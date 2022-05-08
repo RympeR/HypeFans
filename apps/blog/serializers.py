@@ -1,3 +1,4 @@
+from typing import Dict
 from core.utils.customFields import TimestampField
 from apps.users.dynamic_preferences_registry import ReferralPercentage
 from django.db.models import Count, Q
@@ -10,6 +11,36 @@ from .models import (Attachment, Post, PostAction, PostBought, Story,
                      WatchedStories, check_post_bought)
 
 from silk.profiling.profiler import silk_profile
+
+
+class PostActionNotificationSerializer(serializers.ModelSerializer):
+    source_info = serializers.SerializerMethodField()
+    notification_type = serializers.SerializerMethodField()
+    additional_info = serializers.SerializerMethodField()
+
+    class Meta:
+        model = PostAction
+        fields = 'source_info', 'notification_type', 'additional_info'
+
+    def get_additional_info(self, post_action: PostAction) -> dict:
+        return {}
+
+    def get_notification_type(self, post_action: PostAction) -> str:
+        if post_action.like:
+            if post_action.parent:
+                return 'comment_like'
+            return 'like'
+        else:
+            if post_action.parent:
+                return 'comment_comment'
+        return 'comment'
+
+    def get_source_info(self, post_action: PostAction) -> Dict[str, str]:
+        username = post_action.user.username
+        return {
+            'username': username,
+            'link': f'https://hype-fans.com/profile/{username}',
+        }
 
 
 class UserFavouritesSerializer(serializers.Serializer):
@@ -271,6 +302,7 @@ class PostGetShortSerializers(serializers.ModelSerializer):
             'price_to_watch',
             'publication_date',
             'reply_link',
+            'access_level',
             'likes_amount',
             'comments_amount',
             'favourites_amount',

@@ -1,4 +1,11 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import "reactjs-popup/dist/index.css";
@@ -17,8 +24,14 @@ import {
   changeSettings,
 } from "../../../redux/authReducer";
 import { userAPI } from "../../../api/userAPI";
+import Cropper from "react-easy-crop";
+import { Point, Area } from "react-easy-crop/types";
+import getCroppedImg from "./cropimage";
+import { LangContext } from "../../../app/utils/LangProvider";
+import { useHeicCrop } from "../../../app/hooks/useHeicCrop";
 
 export const PersonalSettings = () => {
+  const { currentLang } = useContext(LangContext)
   const dispatch = useDispatch();
   const history = useHistory();
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
@@ -38,26 +51,80 @@ export const PersonalSettings = () => {
   const [avatarUpload, setAvatarUpload] = useState<any>(null);
   const [avatarUploadImg, setAvatarUploadImg] = useState<string>(null);
 
+  // const triggerFileSelectPopup = () => avatarFileRef.current.click();
+
+  const [image, setImage] = React.useState(null);
+  const [croppedArea, setCroppedArea] = React.useState(null);
+  const [crop, setCrop] = React.useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = React.useState(1);
+  const [show, setShow] = React.useState(false);
+
+  const [imageBackground, setImageBackground] = React.useState(null);
+  const [croppedAreaBackground, setCroppedAreaBackground] =
+    React.useState(null);
+  const [cropBackground, setCropBackground] = React.useState({ x: 0, y: 0 });
+  const [zoomBackground, setZoomBackground] = React.useState(1);
+  const [showBackground, setShowBackground] = React.useState(false);
+
+  const onCropBackground = async () => {
+    const croppedImage = await getCroppedImg(
+      imageBackground,
+      croppedAreaBackground
+    );
+    setBackgroundUpload(croppedImage);
+    setBackgroundUploadImg(URL.createObjectURL(croppedImage));
+    setShowBackground(false);
+  };
+
+  const onCrop = async () => {
+    const croppedImage = await getCroppedImg(image, croppedArea);
+    setAvatarUpload(croppedImage);
+    setAvatarUploadImg(URL.createObjectURL(croppedImage));
+    setShow(false);
+  };
+
+  const onCropComplete = (
+    croppedAreaPercentage: any,
+    croppedAreaPixels: any
+  ) => {
+    setCroppedArea(croppedAreaPixels);
+  };
+
+  const onCropCompleteBackground = (
+    croppedAreaPercentage: any,
+    croppedAreaPixels: any
+  ) => {
+    setCroppedAreaBackground(croppedAreaPixels);
+  };
+
+  const useSelectFileBackground = (event: any) => {
+    useHeicCrop(event, setImageBackground)
+    setShowBackground(true);
+  };
+
+  const onSelectFile = (event: any) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.addEventListener("load", () => {
+        setImage(reader.result);
+      });
+      setShow(true);
+    }
+  };
+
   const setNewAvatar = async () => {
     const formData = new FormData();
-    formData.append("avatar", avatarUpload);
+    var file = new File([avatarUpload], "avatar.jpeg");
+    formData.append("avatar", file);
     await dispatch(changeAvatar(formData));
   };
 
   const setNewBackground = async () => {
     const formData = new FormData();
-    formData.append("background_photo", backgroundUpload);
+    var file = new File([backgroundUpload], "background_photo.jpeg");
+    formData.append("background_photo", file);
     await dispatch(changeBackground(formData));
-  };
-
-  const onAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAvatarUpload(e?.target?.files[0]);
-    setAvatarUploadImg(URL.createObjectURL(e?.target?.files[0]));
-  };
-
-  const onBackgroundChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setBackgroundUpload(e?.target?.files[0]);
-    setBackgroundUploadImg(URL.createObjectURL(e?.target?.files[0]));
   };
 
   useEffect(() => {
@@ -95,14 +162,36 @@ export const PersonalSettings = () => {
       <div className="profile">
         <div
           style={{
-            background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${
-              backgroundUploadImg ?? background_photo
-            })`,
+            background: `linear-gradient(183.82deg, rgba(0, 0, 0, 0.56) -5.26%, rgba(112, 111, 111, 0) 97%),url(${backgroundUploadImg ?? background_photo
+              })`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "100% 210px",
           }}
           className="profile__header"
         >
+          {showBackground ? (
+            <>
+              <Cropper
+                image={imageBackground}
+                crop={cropBackground}
+                zoom={zoomBackground}
+                aspect={4 / 1}
+                onCropChange={setCropBackground}
+                onCropComplete={onCropCompleteBackground}
+                onZoomChange={setZoomBackground}
+                showGrid
+                cropShape="rect"
+              />
+              <button
+                className="upload__aply"
+                onClick={onCropBackground}
+              >
+                {currentLang.apply}
+              </button>
+            </>
+          ) : (
+            <></>
+          )}
           <div className="personalSettings__changeBackground">
             <label
               className="upload__file-input-label"
@@ -116,7 +205,7 @@ export const PersonalSettings = () => {
               id="file-input"
               ref={backgroundFileRef}
               type="file"
-              onChange={(val) => onBackgroundChange(val)}
+              onChange={useSelectFileBackground}
               multiple={false}
             />
           </div>
@@ -127,7 +216,7 @@ export const PersonalSettings = () => {
             />
             <SettingsIcon
               style={{ width: "35px", height: "35px" }}
-              onClick={() => history.push("/settings/profileSettings")}
+              onClick={() => history.push("/settings/account")}
             />
           </div>
           <div
@@ -146,12 +235,35 @@ export const PersonalSettings = () => {
               >
                 <PhotoIcon className="personalSettings__changeAvatarBtn" />
               </label>
+              {show ? (
+                <>
+                  <Cropper
+                    image={image}
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={1 / 1}
+                    onCropChange={setCrop}
+                    onCropComplete={onCropComplete}
+                    onZoomChange={setZoom}
+                    showGrid
+                    cropShape="round"
+                  />
+                  <button
+                    className="upload__aply"
+                    onClick={onCrop}
+                  >
+                    {currentLang.apply}
+                  </button>
+                </>
+              ) : (
+                <></>
+              )}
               <input
                 className="upload__file-input"
                 id="file-inputAvatar"
                 ref={avatarFileRef}
                 type="file"
-                onChange={(val) => onAvatarChange(val)}
+                onChange={onSelectFile}
                 multiple={false}
               />
             </div>
@@ -176,55 +288,50 @@ export const PersonalSettings = () => {
               return (
                 <div className="personalSettings">
                   <div>
-                    <h3>Имя</h3>
+                    <h3>{currentLang.name}</h3>
                     <input
                       type="text"
                       value={values.first_name}
                       onChange={(val) =>
                         setFieldValue("first_name", val.target.value)
                       }
-                      required
                     />
                   </div>
                   <div>
-                    <h3>Почта</h3>
+                    <h3>{currentLang.mail}</h3>
                     <input
                       type="text"
                       value={values.email}
                       onChange={(val) =>
                         setFieldValue("email", val.target.value)
                       }
-                      required
                     />
                   </div>
                   <div>
-                    <h3>Ник</h3>
+                    <h3>{currentLang.nick}</h3>
                     <input
                       type="text"
                       value={values.username}
                       onChange={(val) =>
                         setFieldValue("username", val.target.value)
                       }
-                      required
                     />
                   </div>
                   <div>
-                    <h3>Био</h3>
+                    <h3>{currentLang.bio}</h3>
                     <textarea
                       value={values.bio}
                       onChange={(val) => setFieldValue("bio", val.target.value)}
-                      required
                     />
                   </div>
                   <div>
-                    <h3>Кошелек</h3>
+                    <h3>{currentLang.wallet}</h3>
                     <input
                       type="text"
                       value={values.wallet}
                       onChange={(val) =>
                         setFieldValue("wallet", val.target.value)
                       }
-                      required
                     />
                   </div>
                   <button
@@ -236,7 +343,7 @@ export const PersonalSettings = () => {
                     type="submit"
                     onClick={() => handleSubmit()}
                   >
-                    Сохранить изменения
+                    {currentLang.save}
                   </button>
                 </div>
               );
@@ -253,14 +360,14 @@ export const PersonalSettings = () => {
           }}
         >
           <Link to="/settings/prices/messages">
-            <NotificationSidebarItem text="Цена сообщения" />
+            <NotificationSidebarItem text={currentLang.msgPrice} />
           </Link>
           <Link to="/settings/prices/subscribes">
-            <NotificationSidebarItem text="Цена подписки" />
+            <NotificationSidebarItem text={currentLang.price} />
           </Link>
-          {/* <Link to="/settings/prices/fans">
-                        <NotificationSidebarItem text="Для фанатов" />
-                    </Link> */}
+          <Link to="/settings/prices/fans">
+            <NotificationSidebarItem text={currentLang.forFun} />
+          </Link>
         </div>
       </div>
     </>

@@ -1,4 +1,4 @@
-  import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useAlert } from "react-alert";
 import Modal from "react-bootstrap/Modal";
 import CurrencyInput from "react-currency-input-field";
@@ -32,8 +32,6 @@ import moment from "moment";
 import { ReadMore } from "../readMore/ReadMore";
 
 export const returnByFileType = (item: any) => {
-  console.log(item);
-
   switch (item?.file_type) {
     case 4:
       return <Video src={item?._file} />;
@@ -74,6 +72,8 @@ const Post = ({
 
   const [donateShow, setDonateShow] = useState(false);
 
+  const [isDonating, setIsDonating] = useState<boolean>(false)
+
   const [donateValue, setDonateValue] = useState("0");
 
   const [show, setShow] = useState<boolean>(false);
@@ -82,11 +82,13 @@ const Post = ({
   const dispatch = useDispatch();
 
   const sendDonate = async () => {
+    setIsDonating(true)
     const data = await userAPI.createDonation({
       amount: Number(donateValue),
       sender: user_id,
       reciever: post.user.pk,
     });
+    setIsDonating(false)
     if (data.status === 200) {
       toast.success("Донат отправлен");
       return setDonateShow(false);
@@ -110,6 +112,9 @@ const Post = ({
     timeAgoTimestamp(parseFloat(post?.post.publication_date)),
     currentLang
   );
+
+  console.log(post);
+
 
   return (
     <article className="post">
@@ -160,23 +165,23 @@ const Post = ({
               onClick={() => {
                 post.post.liked
                   ? dispatch(
-                      deletePostAction({
-                        id: post.post.like_id,
-                        post_id: post.post.pk,
-                      })
-                    )
+                    deletePostAction({
+                      id: post.post.like_id,
+                      post_id: post.post.pk,
+                    })
+                  )
                   : dispatch(
-                      createPostAction({
-                        like: true,
-                        comment: null,
-                        donation_amount: 0,
-                        parent: null,
-                        user: user_id,
-                        date_time: null,
-                        post: post.post.pk,
-                        id: null,
-                      })
-                    );
+                    createPostAction({
+                      like: true,
+                      comment: null,
+                      donation_amount: 0,
+                      parent: null,
+                      user: user_id,
+                      date_time: null,
+                      post: post.post.pk,
+                      id: null,
+                    })
+                  );
               }}
             >
               <LikeIcon
@@ -244,7 +249,7 @@ const Post = ({
               padding: "15px",
             }}
           >
-            <h2>Отправить донат</h2>
+            <h2>{currentLang.sendDonut}</h2>
             <div
               className="chat__sidebarItem"
               style={{ alignItems: "center", padding: "0px" }}
@@ -296,14 +301,14 @@ const Post = ({
                     : { color: "grey" }
                 }
                 onClick={() => {
-                  if (Number(donateValue) > 0) {
+                  if (Number(donateValue) > 0 && !isDonating) {
                     return sendDonate();
                   } else {
                     return null;
                   }
                 }}
               >
-                Отправить
+                {currentLang.send}
               </h3>
             </div>
           </div>

@@ -3,8 +3,7 @@ yarn build
 rmdir -r ../build
 mv -Force ./build ../build
 cd ..
-git add .
-venv/Scripts/activate
+venv\Scripts\activate
 python .\manage.py collectstatic --no-input
 git add .
 git commit -am "main branch rebuild"

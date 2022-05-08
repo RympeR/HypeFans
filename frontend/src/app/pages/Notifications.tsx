@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "react-phone-input-2/lib/style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, useHistory } from "react-router-dom";
@@ -14,7 +14,6 @@ import { ReactComponent as CommentIcon } from "../../assets/images/message-circl
 import { ReactComponent as SettingsIcon } from "../../assets/images/settings.svg";
 import { ReactComponent as DonateIcon } from "../../assets/images/tip.svg";
 import { ReactComponent as UnlockIcon } from "../../assets/images/unlock.svg";
-import { ReactComponent as ChatIcon } from "../../assets/images/message-circle.svg";
 import loader from '../../assets/loaders/Spinner-1s-200px.gif';
 import { DefaultSidebar } from "../components/notificationsComponents/DefaultSidebar";
 import { SidebarText } from "../components/notificationsComponents/SidebarText";
@@ -22,10 +21,12 @@ import { Preloader } from "../utils/Preloader";
 import { Notification } from "./notifications/Notification";
 import axios from "axios";
 import { blogAPI } from "../../api/blogAPI";
+import { LangContext } from "../utils/LangProvider";
 
 const Notifications: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { currentLang } = useContext(LangContext);
   const notifications = useSelector(
     (state: RootState) => state.notifications.notifications
   );
@@ -44,42 +45,35 @@ const Notifications: React.FC = () => {
   const articles = [
     {
       path: "/notifications",
-      text: "Все",
+      text: currentLang.allRef,
       exact: true,
       type: "all",
       icon: <DonateIcon />,
     },
     {
       path: "/notifications/donations",
-      text: "Донаты",
+      text: currentLang.donuts,
       exact: true,
       type: "donation",
       icon: <DonateIcon />,
     },
     {
       path: "/notifications/subscriptions",
-      text: "Подписки",
+      text: currentLang.subscribs,
       exact: true,
       type: "subscription",
       icon: <UnlockIcon />,
     },
     {
-      path: "/notifications/chat_subscription",
-      text: "Подписки на чат",
-      exact: true,
-      type: "chat_subscription",
-      icon: <ChatIcon />,
-    },
-    {
       path: "/notifications/likes",
-      text: "Лайки",
+      text: currentLang.likes,
       exact: true,
       type: "like",
       icon: <LikeIcon />,
     },
     {
       path: "/notifications/comments",
-      text: "Комментарии",
+      text: currentLang.comments,
       exact: true,
       type: "comment",
       icon: <CommentIcon />,
@@ -88,6 +82,7 @@ const Notifications: React.FC = () => {
 
   const NotificationsSidebar = () => {
     const SettingsButton = () => <SettingsIcon />;
+    const { currentLang } = useContext(LangContext);
 
     return (
       <div>
@@ -99,7 +94,7 @@ const Notifications: React.FC = () => {
           <div className="notifications__headingText">
             <Route
               path="/notifications"
-              render={() => <SidebarText text="Уведомления" />}
+              render={() => <SidebarText text={currentLang.notif} />}
             />
           </div>
           <div className="notifications__settings">
@@ -124,7 +119,7 @@ const Notifications: React.FC = () => {
       }
     }, []);
     const Main = ({ notifications }: { notifications: Array<any> }) => {
-      const [page, setPage] = useState<number>(0);
+      const [page, setPage] = useState<number>(1);
       const [data, setData] = useState([...notifications]);
 
       const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false)
@@ -145,6 +140,9 @@ const Notifications: React.FC = () => {
             setData([...data, ...res.data]);
           }).finally(() => {
             setPage(page + 1);
+            console.log(data);
+            debugger
+
             setIsUpdateLoading(false)
           })
         }
@@ -155,7 +153,7 @@ const Notifications: React.FC = () => {
           className="notifications__main"
           onScroll={(event) => onScrollList(event)}
         >
-          {data.length > 0 ? (
+          {data.length > 0 && typeof data[0]?.user?.first_name === "string" ? (
             <>
               {data.map((item, i) => {
                 return <Notification key={`notification ${i}`} item={item} />;
@@ -173,7 +171,7 @@ const Notifications: React.FC = () => {
                 marginTop: "70px",
               }}
             >
-              Нет уведомлений
+              {currentLang.noNotifications}
             </div>
           )}
         </div>
@@ -224,7 +222,7 @@ const Notifications: React.FC = () => {
               </div>
             )}
             {articles.map((item, key) => {
-              if (item.text === "Все") return null;
+              if (item.text === currentLang.all) return null;
               return (
                 <Link
                   className={
@@ -250,7 +248,7 @@ const Notifications: React.FC = () => {
               render={() => (
                 <Main
                   notifications={
-                    article.text === "Все"
+                    article.text === currentLang.all
                       ? notifications
                       : notifications.filter(
                         (item) => item.type === article.type

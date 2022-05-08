@@ -57,14 +57,14 @@ class ChatConsumer(WebsocketConsumer):
 
                 if users_len == 2 and user == room.creator:
                     logging.warning(f"is creator")
-                    chat_sub_check = chat_sub_checker(
-                        room.invited.first(), user
-                    )
+                    chat_sub_check = True
                 else:
                     if user != room.creator:
                         chat_sub_check = chat_sub_checker(user, room.creator)
+                    logging.warning(user)
+                    logging.warning(room.creator)
 
-                logging.warning(f"chat saub checker logic {chat_sub_check}")
+                logging.warning(f"chat sub checker logic {chat_sub_check}")
                 if chat_sub_check:
                     chat = Chat.objects.create(
                         room=room,
@@ -199,18 +199,18 @@ class ReadedConsumer(WebsocketConsumer):
     def receive(self, text_data):
         try:
             text_data_json = json.loads(text_data)
-            room = text_data_json['room_id']
             user = text_data_json['user']
             message = text_data_json['id']
             if message == 0:
                 readed_chat = UserMessage.objects.filter(
-                    user=User.objects.get(pk=user),
+                    user__pk=user,
+                    message__room__pk=int(self.room_name),
                     readed=False
                 )
             else:
                 readed_chat = UserMessage.objects.filter(
                     message__pk=message,
-                    user=User.objects.get(pk=user),
+                    user__pk=user,
                     readed=False
                 )
             logging.warning(f'Readed qs {readed_chat}')
@@ -221,7 +221,6 @@ class ReadedConsumer(WebsocketConsumer):
                     'type': 'chat_message',
                     'id': message,
                     'user': user,
-                    'room_id': room,
                 }
             )
         except Exception as e:
@@ -229,11 +228,9 @@ class ReadedConsumer(WebsocketConsumer):
 
     def chat_message(self, event):
         message = event['id']
-        room = event['room_id']
         user = event['user']
 
         self.send(text_data=json.dumps({
-            "room_id": room,
             "user": user,
             'id': message,
         }))

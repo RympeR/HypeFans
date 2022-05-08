@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { LangContext } from "../../../app/utils/LangProvider";
 import { userAPI } from "../../../api/userAPI";
 import { ReactComponent as ArrowLeft } from "../../../assets/images/leftIcon.svg";
 import { ReactComponent as Logo } from "../../../assets/images/logo.svg";
@@ -9,6 +10,7 @@ import { UserItem } from "./searchUser";
 export const Search: React.FC = () => {
   const params = new URLSearchParams(window.location.search);
   const [users, setUsers] = useState([]);
+  const { currentLang } = useContext(LangContext);
   const [inputValue, setInputValue] = useState(
     params.has("username") ? params.get("username") : ""
   );
@@ -116,7 +118,7 @@ export const Search: React.FC = () => {
           <SearchSvg />
           <input
             style={{ marginLeft: "16px", width: "80%" }}
-            placeholder="Найти людей:"
+            placeholder={currentLang.findPeoples}
             value={inputValue}
             onChange={(val) => {
               setInputValue(val.currentTarget.value);

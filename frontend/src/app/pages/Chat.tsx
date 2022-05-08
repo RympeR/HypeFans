@@ -12,9 +12,8 @@ import { getLastUrlPoint } from "../utils/utilities";
 import { DialogMain } from "./DialogMain";
 import { NoDialog } from "./NoDialog";
 import logo from "../../assets/images/logo.svg";
-import Modal from "react-bootstrap/esm/Modal";
-import { chatAPI } from "../../api/chatAPI";
-import { toast } from "react-toastify";
+import { CreateDialog } from "./CreateDialog";
+
 
 const Chat: React.FC = () => {
   const userId = useSelector((state: RootState) => state.auth.pk);
@@ -27,23 +26,6 @@ const Chat: React.FC = () => {
   const [isSended, setSended] = useState(false);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
   // console.log(rerenderCount);
-  const [showChatCreate, setShowChatCreate] = useState(false);
-  const [roomName, setRoomName] = useState("");
-  const myId = useSelector((state: RootState) => state.auth.pk);
-
-  const createChat = async () => {
-    const data = await chatAPI.roomCreate({
-      creator: myId,
-      name: roomName,
-    });
-    setShowChatCreate(false);
-    console.log(data);
-    if (data.status < 300) {
-      toast.success("Беседа создана");
-    } else {
-      toast.error("Ошибка создания беседы");
-    }
-  };
 
   if (isLoading) {
     return <Preloader />;
@@ -74,7 +56,6 @@ const Chat: React.FC = () => {
     const history = useHistory();
     const lastUrl = getLastUrlPoint(history.location.pathname);
     const [amICreator, setCreator] = useState(false);
-
     useEffect(() => {
       if (userId === item?.item?.room?.room_info?.creator?.pk) setCreator(true);
       else setCreator(false);
@@ -85,14 +66,14 @@ const Chat: React.FC = () => {
           style={
             lastUrl !== item?.item?.room?.room_info?.id
               ? {
-                  display: "flex",
-                  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
-                }
+                display: "flex",
+                borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+              }
               : {
-                  display: "flex",
-                  borderBottom: "1px solid rgba(0, 0, 0, 0.2),",
-                  backgroundColor: "#C41E3A",
-                }
+                display: "flex",
+                borderBottom: "1px solid rgba(0, 0, 0, 0.2),",
+                backgroundColor: "#C41E3A",
+              }
           }
         >
           <div className="chat__sidebarItem">
@@ -131,11 +112,11 @@ const Chat: React.FC = () => {
                 {item.item.room?.message?.attachment
                   ? "Файл"
                   : item.item.room.message?.text
-                  ? CryptoJS.AES.decrypt(
+                    ? CryptoJS.AES.decrypt(
                       item?.item?.room?.message?.text,
                       "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
                     ).toString(CryptoJS.enc.Utf8)
-                  : null}
+                    : null}
               </p>
             </div>
           </div>
@@ -162,49 +143,14 @@ const Chat: React.FC = () => {
           <p className="chat__header_title">Сообщения</p>
         </div>
         <div className="chat__row">
-          <div
-            className="chat__resp_icon"
-            onClick={() => {
-              setShowChatCreate(true);
-            }}
-          >
-            <Plus />
+          <div className="chat__resp_icon">
+            <CreateDialog />
           </div>
           <div className="chat__resp_icon" style={{ marginLeft: "40px" }}>
             <UserIcon />
           </div>
         </div>
       </div>
-      <Modal
-        show={showChatCreate}
-        onHide={() => setShowChatCreate(false)}
-        centered
-        size="sm"
-      >
-        <Modal.Body className="notifications__modal">
-          {" "}
-          <h2 style={{ marginBottom: "0px" }}>Создать беседу?</h2>
-          <input
-            type="text"
-            className="chat__input_create_room"
-            value={roomName}
-            onChange={(e) => setRoomName(e.target.value)}
-          />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "15px",
-            }}
-          >
-            <h3 onClick={() => setShowChatCreate(false)}>Нет</h3>
-            <div style={{ width: "20px" }}></div>
-            <h3 onClick={createChat} style={{ color: "#FB5734" }}>
-              Да
-            </h3>
-          </div>
-        </Modal.Body>
-      </Modal>
       <div className="chat__main">
         <div className={"chat__sidebar " + (VISIBLE ? "chat__inactive" : "")}>
           {rooms.map((item, key) => {

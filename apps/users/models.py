@@ -11,7 +11,11 @@ from django_countries.fields import CountryField
 from unixtimestampfield.fields import UnixTimeStampField
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
-from .dynamic_preferences_registry import ChatSubscriptionDuration
+from .dynamic_preferences_registry import ChatSubscriptionDuration, FreeDays
+
+
+AUTH_PROVIDERS = {'facebook': 'facebook', 'google': 'google',
+                  'twitter': 'twitter', 'email': 'email'}
 
 
 class User(AbstractUser):
@@ -25,20 +29,14 @@ class User(AbstractUser):
         null=True,
         db_index=True
     )
-    avatar = ProcessedImageField(
+    avatar = models.FileField(
         upload_to=user_avatar,
         verbose_name='Аватар',
         null=True,
-        processors=[ResizeToFill(160, 160)],
-        format='JPEG',
-        options={'quality': 80},
         blank=True
     )
-    background_photo = ProcessedImageField(
+    background_photo = models.FileField(
         upload_to=user_avatar,
-        processors=[ResizeToFill(600, 120)],
-        format='JPEG',
-        options={'quality': 80},
         verbose_name='Фото заднего плана',
         null=True,
         blank=True
@@ -93,6 +91,12 @@ class User(AbstractUser):
     show_watermark = models.BooleanField(
         'Показывать вотермарку', default=False)
 
+    show_comment_notifications = models.BooleanField('Показывать уведомления комментариев', default=False)
+    show_chat_subscribption_notifications = models.BooleanField('Показывать уведомления подписок на чаты', default=False)
+    show_subscribption_notifications = models.BooleanField('Показывать уведомления подписок', default=False)
+    show_donate_notifications = models.BooleanField('Показывать уведомления пожертвований', default=False)
+    show_like_notifications = models.BooleanField('Показывать уведомления лайков', default=False)
+
     validated_email = models.BooleanField(
         'Подтвержденная почта', default=False)
     validated_user = models.BooleanField(
@@ -113,6 +117,12 @@ class User(AbstractUser):
         max_length=255, verbose_name='Рефералка', null=True, blank=True, unique=True)
     referrer = models.ForeignKey('self', verbose_name='Пригласивший пользователь',
                                  on_delete=models.SET_NULL, null=True, blank=True)
+    private_profile = models.BooleanField(
+        'Приватный профиль', default=False
+    )
+    auth_provider = models.CharField(
+        max_length=255, blank=False,
+        null=False, default=AUTH_PROVIDERS.get('email'))
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
@@ -152,7 +162,7 @@ class User(AbstractUser):
 
     @property
     def new_user(self):
-        if datetime.datetime.now() - datetime.timedelta(ChatSubscriptionDuration.value()) < self.date_joined:
+        if datetime.datetime.now() - datetime.timedelta(FreeDays.value()) < self.date_joined:
             return True
         return False
 

@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -10,6 +10,8 @@ import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
 import logo from "../../assets/images/logo.svg";
 import { getPostActionList } from "../../redux/blogReducer";
 import { RootState } from "../../redux/redux";
+import { LangContext } from "../utils/LangProvider";
+import moment from "moment";
 
 export const CommentComponent = ({
   data,
@@ -84,15 +86,18 @@ export const CommentComponent = ({
   };
 
   useEffect(() => {
-    if (postId === null || postId === undefined) return;
+    if (postId === null || postId === undefined || !show) return;
+
     async function fetch() {
       const data = await getPostActionList({ id: postId });
       setComments([...data.data.filter((item: any) => item.comment !== null)]);
     }
+
     fetch();
-  }, [postId]);
+  }, [postId, show]);
 
   const Comment = ({ item, index }: { item: any; index: number }) => {
+    const { currentLang } = useContext(LangContext);
     const [answer, setAnswer] = useState("");
     const [showAnswer, setShowAnswer] = useState(false);
     const [showComments, setShowComments] = useState(false);
@@ -137,23 +142,29 @@ export const CommentComponent = ({
             {item.comment}
           </p>
           <div style={{ display: "flex" }}>
-            <div style={{ marginRight: "10px" }}>2 мин.</div>
-            <div style={{ marginRight: "10px" }}>{item.like_amount || 0} лайков</div>
+            <div style={{ marginRight: "10px" }}>
+              {moment(item.date_time * 1000).fromNow() !== "Invalid date"
+                ? moment(item.date_time * 1000).fromNow()
+                : "a few seconds ago"}
+            </div>
+            <div style={{ marginRight: "10px" }}>
+              {item.like_amount || 0} {currentLang.liks1}
+            </div>
             <div
               style={{ marginRight: "10px" }}
               onClick={() => setShowAnswer(!showAnswer)}
             >
-              {showAnswer ? "Скрыть поле" : "Ответить"}
+              {showAnswer ? currentLang.hide : currentLang.answer}
             </div>
           </div>
           {comments.filter((i) => i.parent === item.id).length === 0 ? (
-            <div></div>
+            <div />
           ) : (
             <p
               style={{ color: "$grey" }}
               onClick={() => setShowComments(!showComments)}
             >
-              {showComments ? " —Скрыть ответы" : " —Показать ответы"}
+              {showComments ? currentLang.hideAnsw : currentLang.showAnsw}
             </p>
           )}
 
@@ -178,18 +189,26 @@ export const CommentComponent = ({
                         <span style={{ fontWeight: "bolder" }}>
                           {item?.user?.username}
                         </span>{" "}
+                        <Link to={`/profile/${item?.parent_username}`}>
+                          @<span>{item?.user?.username}</span>
+                        </Link>{" "}
                         {item.comment}
                       </p>
                       <div style={{ display: "flex" }}>
-                        <div style={{ marginRight: "10px" }}>2 мин.</div>
                         <div style={{ marginRight: "10px" }}>
-                          {item.like_amount || 0} лайков
+                          {moment(item.date_time * 1000).fromNow() !==
+                          "Invalid date"
+                            ? moment(item.date_time * 1000).fromNow()
+                            : "a few seconds ago"}
+                        </div>
+                        <div style={{ marginRight: "10px" }}>
+                          {item.like_amount || 0} {currentLang.liks1}
                         </div>
                         <div
                           style={{ marginRight: "10px" }}
                           onClick={() => setShowAnswer(!showAnswer)}
                         >
-                          {showAnswer ? "Скрыть поле" : "Ответить"}
+                          {showAnswer ? currentLang.hide : currentLang.answer}
                         </div>
                       </div>
                     </div>
@@ -232,18 +251,18 @@ export const CommentComponent = ({
                     style={
                       showAnswer
                         ? {
-                          display: "flex",
-                          padding: "10px",
-                          backgroundColor: "#d6d6d6",
-                          borderRadius: "16px",
-                          height: "55px",
-                          margin: "7px",
-                        }
+                            display: "flex",
+                            padding: "10px",
+                            backgroundColor: "#d6d6d6",
+                            borderRadius: "16px",
+                            height: "55px",
+                            margin: "7px",
+                          }
                         : { display: "none" }
                     }
                   >
                     <textarea
-                      placeholder="Оставить комментарий"
+                      placeholder={currentLang.leftComment}
                       className="post__comment-amount"
                       name="comment"
                       value={answer}
@@ -259,7 +278,7 @@ export const CommentComponent = ({
                         handleSubmit();
                       }}
                     >
-                      Отправить
+                      {currentLang.send}
                     </button>
                   </div>
                 );
@@ -289,6 +308,7 @@ export const CommentComponent = ({
       </div>
     );
   };
+  const { currentLang } = useContext(LangContext);
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
@@ -306,7 +326,7 @@ export const CommentComponent = ({
           return (
             <div style={{ display: "flex" }}>
               <textarea
-                placeholder="Оставить комментарий"
+                placeholder={currentLang.leftComment ?? "left comment"}
                 className="post__comment-amount"
                 name="comment"
                 onChange={(val) => {
@@ -319,7 +339,7 @@ export const CommentComponent = ({
                 disabled={comment.length < 1 || comment.length > 255}
                 onClick={() => handleSubmit()}
               >
-                Отправить
+                {currentLang.send}
               </button>
             </div>
           );
@@ -327,7 +347,7 @@ export const CommentComponent = ({
       </Formik>
       <button style={{ width: "200px" }} onClick={() => setShow(true)}>
         <p style={{ fontSize: "13px", textAlign: "left" }}>
-          Показать комментарии
+          {currentLang.showComments}
         </p>
       </button>
       <Modal
@@ -345,7 +365,7 @@ export const CommentComponent = ({
         <Modal.Header style={{ justifyContent: "flex-start" }}>
           <BackButton onClick={() => setShow(false)} />
           <h3 style={{ marginBottom: "0px", marginLeft: "10px" }}>
-            Комментарии
+            {currentLang.comments}
           </h3>
         </Modal.Header>
         <Modal.Body className="notifications__modal" style={{ padding: "0px" }}>
@@ -378,7 +398,7 @@ export const CommentComponent = ({
                   }}
                 >
                   <textarea
-                    placeholder="Оставить комментарий"
+                    placeholder={currentLang.leftComment}
                     className="post__comment-amount"
                     name="comment"
                     value={comment}
@@ -394,7 +414,7 @@ export const CommentComponent = ({
                       handleSubmit();
                     }}
                   >
-                    Отправить
+                    {currentLang.send}
                   </button>
                 </div>
               );

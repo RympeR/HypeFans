@@ -1,7 +1,9 @@
-from apps.users.models import ChatSubscription, chat_sub_checker
+import logging
+from core.utils.customFilters import UserFilter
 from core.utils.default_responses import (api_block_by_policy_451,
                                           api_locked_423, api_not_found_404,
                                           api_used_226)
+from django.db.models import Subquery
 from django.db.models.aggregates import Count
 from django.shortcuts import get_object_or_404, render
 from rest_framework import generics
@@ -12,12 +14,13 @@ from rest_framework.parsers import (FileUploadParser, FormParser, JSONParser,
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
-                                    UserShortRetrieveSeriliazer, UserIdRetrieveSeriliazer)
+from apps.users.models import ChatSubscription, chat_sub_checker
+from apps.users.serializers import (UserIdRetrieveSeriliazer,
+                                    UserShortChatRetrieveSeriliazer,
+                                    UserShortRetrieveSeriliazer)
 
 from .models import *
 from .serializers import *
-from django.db.models import Subquery
 
 
 class ChatBoughtCreateAPI(generics.CreateAPIView):
@@ -69,7 +72,7 @@ class RoomRetrieveUsersAPI(generics.GenericAPIView):
     def get(self, request, pk):
         room = Room.objects.get(pk=pk)
         user = request.user
-        invited_qs=room.invited.all()
+        invited_qs = room.invited.all()
         invited = self.serializer_class(
             instance=[*invited_qs, room.creator], many=True).data
         unfinished_subscriptions = ChatSubscription.objects.filter(
@@ -77,8 +80,8 @@ class RoomRetrieveUsersAPI(generics.GenericAPIView):
 
         qs_possible = User.objects.filter(
             pk__in=Subquery(unfinished_subscriptions.values_list(
-                'target__pk', flat=True))
-        )
+                'source__pk', flat=True))
+        ).exclude(username=user.username)
 
         all_possible = self.serializer_class(
             instance=qs_possible, many=True).data
@@ -86,6 +89,21 @@ class RoomRetrieveUsersAPI(generics.GenericAPIView):
             'invited': invited,
             'all': all_possible
         })
+
+
+class ChatSubUsersAPI(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserShortRetrieveSeriliazer
+    filterset_class = UserFilter
+
+    def get_queryset(self):
+        user = self.request.user
+        unfinished_subscriptions = ChatSubscription.objects.filter(
+            target=user, finished=False)
+        return User.objects.filter(
+            pk__in=Subquery(unfinished_subscriptions.values_list(
+                'source__pk', flat=True))
+        )
 
 
 class RoomUpdateAPI(generics.UpdateAPIView):
@@ -154,7 +172,7 @@ class GetChatMessages(GenericAPIView):
         else:
             objects = Chat.objects.filter(
                 room=room
-            ).order_by('-date')
+            ).order_by('-date')[:50]
         results = []
         domain = request.get_host()
 
@@ -162,7 +180,7 @@ class GetChatMessages(GenericAPIView):
             attachments = obj.attachment.all()
             attachments_info = []
             for readed_obj in obj.delivered_message.all():
-                if readed_obj.readed and readed_obj.user == user:
+                if readed_obj.readed and obj.user == user:
                     readed = True
                     break
             else:
@@ -259,6 +277,8 @@ class GetDialogs(GenericAPIView):
     serializer_class = RetrieveChatsSerializer
 
     def post(self, request):
+        limit = request.data.get('limit', 40)
+        offset = request.data.get('offset', 0)
         user = request.user
         rooms_creator = user.user_creator.all()
         rooms_invited = user.invited_users.all()
@@ -296,7 +316,13 @@ class GetDialogs(GenericAPIView):
                 {
                     "room": {
                         "id": room_obj['room'].id,
-                        "user": UserShortRetrieveSeriliazer(instance=user_obj, context={'request': request}).data if user_obj else UserShortRetrieveSeriliazer(instance=room_obj['room'].creator, context={'request': request}).data,
+                        "user": UserShortRetrieveSeriliazer(
+                            instance=user_obj,
+                            context={'request': request}
+                        ).data if user_obj else UserShortRetrieveSeriliazer(
+                            instance=room_obj['room'].creator,
+                            context={'request': request}
+                        ).data,
                         "message": {
                             'id': message_obj.id,
                             'time': message_obj.date.timestamp(),
@@ -307,8 +333,6 @@ class GetDialogs(GenericAPIView):
                     }
                 }
             )
-        limit = request.data.get('limit', 40)
-        offset = request.data.get('offset', 0)
         return Response(filtered_results[offset:limit])
 
 

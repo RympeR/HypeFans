@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
 import { CommentComponent } from "../../../app/components/CommentComponent";
@@ -15,11 +15,13 @@ import { ReactComponent as CommentIcon } from "../../../assets/images/message-ci
 import { returnByFileType } from "../../../app/components/home/Post";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { LangContext } from "../../../app/utils/LangProvider";
 
 export const FavouritePost = ({ item, index }: { item: any, index: number }) => {
     const myId = useSelector((state: RootState) => state.auth.pk);
     const [show, setShow] = useState<boolean>(false)
     const dispatch = useDispatch();
+    const { currentLang } = useContext(LangContext);
 
     return (
         <div className="profile__post" key={`${index}_post`}>
@@ -128,17 +130,16 @@ export const FavouritePost = ({ item, index }: { item: any, index: number }) => 
                     </div>
 
                     <p className="post__like-amount">
-                        {item.post.likes_amount} лайков
+                        {item.post.likes_amount}{currentLang.liks1}
                     </p>
-
+                    <CommentComponent
+                        data={item.post.comments}
+                        postId={item.post.pk}
+                        show={show}
+                        setShow={setShow}
+                    />
                 </div>
             </div>
-            <CommentComponent
-                data={item.post.comments}
-                postId={item.post.pk}
-                show={show}
-                setShow={setShow}
-            />
         </div>
     )
 }
