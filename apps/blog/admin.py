@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from mptt.admin import TreeRelatedFieldListFilter
 from admin_actions.admin import ActionsModelAdmin
 from mptt.admin import DraggableMPTTAdmin, TreeRelatedFieldListFilter, MPTTModelAdmin
+from django.utils.html import mark_safe
 
 from apps.users.models import User
 from .models import (
@@ -73,9 +74,15 @@ class AttachmentInlineAdmin(admin.TabularInline):
     readonly_fields = ('attachment_file_preview', 'file_type', '_file')
 
     def file_preview(self, instance):
-        logging.warning(instance)
-        logging.warning(instance.attachment)
-        return instance.attachment.file_preview
+        if instance.attachment.file_type == 3:
+            return mark_safe('<img src="{}" width="100" height="100" />'.format(instance.attachment._file.url))
+        if instance.attachment.file_type == 4:
+            return mark_safe('<video src="{}" controls width="100" height="100" />'.format(instance.attachment._file.url))
+        if instance.attachment.file_type == 2:
+            return mark_safe('<audio src="{}" controls />'.format(instance.attachment._file.url))
+        else:
+            return mark_safe('<file src="{}" />'.format(instance.attachment._file.url))
+        # return instance.attachment.file_preview
     def _file(self, instance):
         return instance.attachment._file
     def file_type(self, instance):
