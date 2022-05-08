@@ -38,7 +38,8 @@ class Attachment(models.Model):
             return mark_safe('<video src="{}" controls width="100" height="100" />'.format(self._file.url))
         if self.file_type == 2:
             return mark_safe('<audio src="{}" controls />'.format(self._file.url))
-
+        else:
+            return mark_safe('<file src="{}" />'.format(self._file.url))
 class Post(models.Model):
     class AccessLevelChoices(models.IntegerChoices):
         BUY = 1, 'Покупка'

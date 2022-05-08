@@ -59,11 +59,18 @@ class AttachmentAdmin(admin.ModelAdmin):
     list_display = (
         'pk', 'file_type', 'file_preview'
     )
+    list_editable = ['_file']
     readonly_fields = [
         'file_type'
     ]
     ordering = '-pk',
     list_filter = ('file_type', )
+
+
+class AttachmentInlineAdmin(admin.TabularInline):
+    model = Attachment
+    fields = ('file_type', '_file')
+    readonly_fields = ('file_preview', )
 
 
 @admin.register(Post)
@@ -77,10 +84,12 @@ class PostAdmin(admin.ModelAdmin):
     ]
     search_fields = ['user__username', 'name']
     ordering = '-pk',
-    list_filter = LikeIncreaser, 'publication_date', 
-
+    list_filter = LikeIncreaser, 'publication_date',
+    inlines = (AttachmentInlineAdmin,)
 
 # @admin.register(PostAction)
+
+
 class PostActionAdmin(DraggableMPTTAdmin):
     mptt_indent_field = "pk"
     list_display = (
