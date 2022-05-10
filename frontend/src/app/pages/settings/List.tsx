@@ -22,7 +22,6 @@ export const ListsComponent = () => {
   const [currentTab, setCurrentTab] = React.useState("list");
   const [selectedItems, setSelectedItems] = React.useState<Array<any>>([]);
   const unblockUsers = async () => {
-    console.log(selectedItems.map((item) => item.pk));
     await userAPI.blockUser({
       user: selectedItems.map((item) => item.pk),
       block: false,
@@ -40,8 +39,6 @@ export const ListsComponent = () => {
   }, []);
 
   const [inputValue, setInputValue] = React.useState("");
-
-  console.log(lists);
 
   return (
     <div className="notifications__main">

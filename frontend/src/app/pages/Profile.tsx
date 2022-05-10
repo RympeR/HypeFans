@@ -1,27 +1,27 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 // import { useAlert } from "react-alert";
 import Modal from "react-bootstrap/Modal";
-import {useDispatch, useSelector} from "react-redux";
-import {useHistory, useLocation} from "react-router";
-import {Link} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation } from "react-router";
+import { Link } from "react-router-dom";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import {userAPI} from "../../api/userAPI";
-import {RootState} from "../../redux/redux";
-import {ReactComponent as SaveIcon} from "../../assets/images/bookmark.svg";
-import {ReactComponent as LikeIcon} from "../../assets/images/heart.svg";
-import {ReactComponent as CommentIcon} from "../../assets/images/message-circle.svg";
-import {buyPost, clearUserData, getUser} from "../../redux/userReducer";
-import {ReactComponent as MenuDotsWhite} from "../../assets/images/3dotsWhite.svg";
-import {ReactComponent as BackButton} from "../../assets/images/arrow-leftWhite.svg";
+import { userAPI } from "../../api/userAPI";
+import { RootState } from "../../redux/redux";
+import { ReactComponent as SaveIcon } from "../../assets/images/bookmark.svg";
+import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
+import { ReactComponent as CommentIcon } from "../../assets/images/message-circle.svg";
+import { buyPost, clearUserData, getUser } from "../../redux/userReducer";
+import { ReactComponent as MenuDotsWhite } from "../../assets/images/3dotsWhite.svg";
+import { ReactComponent as BackButton } from "../../assets/images/arrow-leftWhite.svg";
 import logo from "../../assets/images/logo.svg";
-import {Preloader} from "../utils/Preloader";
-import {chatAPI} from "../../api/chatAPI";
+import { Preloader } from "../utils/Preloader";
+import { chatAPI } from "../../api/chatAPI";
 import fansIcon from "../../assets/images/icons_person.png";
-import {toast} from "react-toastify";
-import {ProfilePagePost} from "../components/post/ProfilePagePost";
-import {ReadMore} from "../components/readMore/ReadMore";
-import {GoToTopBtn} from "../components/goToTopButton/GoToTopBtn";
+import { toast } from "react-toastify";
+import { ProfilePagePost } from "../components/post/ProfilePagePost";
+import { ReadMore } from "../components/readMore/ReadMore";
+import { GoToTopBtn } from "../components/goToTopButton/GoToTopBtn";
 import moment from "moment";
 
 const Profile = () => {
@@ -31,14 +31,18 @@ const Profile = () => {
   const [subscribeShow, setSubscribeShow] = useState(false);
   const profileData = useSelector((state: RootState) => state.user);
   const [profile, setProfile] = useState(profileData);
+  const [offset, setOffset] = useState<number>(7)
   const myNick = useSelector((state: RootState) => state.auth.username);
   const myId = useSelector((state: RootState) => state.auth.pk);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
   const { pathname } = useLocation();
   const location = pathname.split("/");
-  const nick = location[location.length - 1];
+  const nick = location[location?.length - 1];
   const [chatSubscribeModalShown, setChatSubscribeModalShown] =
     useState<boolean>(false);
+
+  console.log(profile);
+
   useEffect(() => {
     dispatch(clearUserData());
     dispatch(getUser({ username: nick }));
@@ -51,6 +55,17 @@ const Profile = () => {
   if (isLoading) {
     return <Preloader />;
   }
+
+  window.onscroll = async function () {
+    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 5) {
+      // getPosts here\
+      const data = await userAPI.getUserPosts({ user: nick, offset })
+      console.log(data);
+
+
+      setOffset(offset + 7)
+    }
+  };
 
   const subscribe = async () => {
     const data = await userAPI.createSubscription({
@@ -221,7 +236,7 @@ const Profile = () => {
           <div className="is_online" style={profile.is_online ? {} : { backgroundColor: '#C0C0C0' }}></div>
         </div>
         <h5 className="profile__info">
-          {profile?.posts.length} posts{" "}
+          {profile?.posts?.length} posts{" "}
           {sub_amount(profile.fans_amount, 1)}
           <img className="sub_icon" src={fansIcon} />{" "}
         </h5>
@@ -311,7 +326,7 @@ const Profile = () => {
       </div>
       <div className="profile__posts">
         <div className="profile__posts">
-          {profile?.posts.length > 0 ? (
+          {profile?.posts?.length > 0 ? (
             profile?.posts.map((item, index) => {
               return myNick === nick || item.post.payed ? (
                 <ProfilePagePost item={item} index={index} />
