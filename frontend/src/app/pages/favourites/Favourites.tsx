@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { LangContext } from "../../../app/utils/LangProvider";
 import { useHistory } from 'react-router-dom';
@@ -10,15 +10,19 @@ import { RootState } from "../../../redux/redux";
 import { FavouritePost } from "./FavouritePost";
 import { ReactComponent as ArrowLeft } from '../../../assets/images/leftIcon.svg';
 
-export const Favourites = () => {
+export const Favourites: React.FC = () => {
+  const [offset, setOffset] = useState<number>(7)
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
   const favourites = useSelector((state: RootState) => state.favourites.posts);
   const { currentLang } = useContext(LangContext);
   const dispatch = useDispatch();
-  const history = useHistory()
+  const history = useHistory();
+
   useEffect(() => {
     dispatch(getFavourites());
   }, [dispatch]);
+
+
   if (isLoading) {
     return <Preloader />;
   }

@@ -236,8 +236,8 @@ const Profile = () => {
           <div className="is_online" style={profile.is_online ? {} : { backgroundColor: '#C0C0C0' }}></div>
         </div>
         <h5 className="profile__info">
-          {profile?.posts?.length} posts{" "}
-          {sub_amount(profile.fans_amount, 1)}
+          {profile?.posts.length} posts{" "}
+          {sub_amount(profile.fans_amount, 1)}{" "}
           <img className="sub_icon" src={fansIcon} />{" "}
         </h5>
       </div>
