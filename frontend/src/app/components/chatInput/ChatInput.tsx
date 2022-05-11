@@ -10,18 +10,21 @@ export const ChatInput = ({
   isSendDisabled,
   audio,
   wrapperRef,
+  marginTop, setMarginTop, height, setHeight
 }: {
   sendMessage: any;
   isSendDisabled: any;
   audio: any;
   wrapperRef: any;
+  marginTop: any;
+  setMarginTop: any;
+  height: any;
+  setHeight: any;
 }) => {
   const history = useHistory();
   const windowHeight = window.innerHeight;
   const inputRef = useRef(null);
   const lastUrl = getLastUrlPoint(history.location.pathname);
-  const [height, setHeight] = useState<number>(50);
-  const [marginTop, setMarginTop] = useState<number>(0);
   const [editableText, setEditableText] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const VektorIcon = () => <Vektor />;
