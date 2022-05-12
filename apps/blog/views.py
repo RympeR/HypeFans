@@ -222,13 +222,13 @@ class UserNotifications(GenericAPIView):
     def get(self, request):
         limit = int(request.GET.get('limit', 50))
         offset = int(request.GET.get('offset', 0))
-        notification_type = request.GET.get('notification_type')
+        notification_type = request.GET.get('notification_type', 'all')
         user = request.user
         comments_result = []
         likes_result = []
         donations_result = []
         subscriptions_result = []
-        if notification_type and notification_type == 'comment':
+        if notification_type == 'all' or notification_type == 'comment':
             for comment in PostAction.objects.filter(
                 comment__isnull=False,
                 post__user=user
@@ -242,7 +242,7 @@ class UserNotifications(GenericAPIView):
                         'type': 'comment'
                     }
                     comments_result.append(res_dict)
-        if notification_type and notification_type == 'like':
+        if notification_type == 'all' or notification_type == 'like':
             for like in PostAction.objects.filter(post__user=user, like=True).distinct():
                 if like.user != user:
                     res_dict = {
@@ -253,7 +253,7 @@ class UserNotifications(GenericAPIView):
                         'type': 'like'
                     }
                     likes_result.append(res_dict)
-        if notification_type and notification_type == 'donation':
+        if notification_type == 'all' or notification_type == 'donation':
             for donation in user.recieved_user.all().order_by('-datetime').distinct():
                 if user != donation.sender:
                     res_dict = {
@@ -267,7 +267,7 @@ class UserNotifications(GenericAPIView):
                     }
                     donations_result.append(res_dict)
 
-        if notification_type and notification_type == 'subscription':
+        if notification_type == 'all' or notification_type == 'subscription':
             for subscription in user.target_user_subscribe.all().order_by('-start_date').distinct():
                 if user != subscription.source:
                     res_dict = {}
@@ -282,7 +282,7 @@ class UserNotifications(GenericAPIView):
                     res_dict['type'] = 'subscription'
                     subscriptions_result.append(res_dict)
 
-        if notification_type and notification_type == 'chat_subscription':
+        if notification_type == 'all' or notification_type == 'chat_subscription':
             for subscription in user.target_user_chat_subscribe.all().order_by('-start_date').distinct():
                 if user != subscription.source:
                     res_dict = {}
