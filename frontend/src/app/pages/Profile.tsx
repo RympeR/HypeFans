@@ -60,9 +60,6 @@ const Profile = () => {
     if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 5) {
       // getPosts here\
       const data = await userAPI.getUserPosts({ user: nick, offset })
-      console.log(data);
-
-
       setOffset(offset + 7)
     }
   };

@@ -6,6 +6,11 @@ export const settingsAPI = {
       return res.data;
     });
   },
+  getLastSubs() {
+    return instance.get('/blog/get-users-lists-last-subs//').then((res) => {
+      return res.data;
+    });
+  },
   getSubsList() {
     return instance.get('/blog/get-users-lists-subs/').then((res) => {
       return res.data;

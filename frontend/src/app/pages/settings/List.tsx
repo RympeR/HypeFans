@@ -43,7 +43,7 @@ export const ListsComponent = () => {
         const data = await settingsAPI.getFriendsList();
         setList(data);
       } else if (currentTab === "last_subs") {
-        const data = await settingsAPI.getFavsList(); // не хватает запроса
+        const data = await settingsAPI.getLastSubs();
         setList(data);
       } else if (currentTab === "blocked_users") {
         const data = await settingsAPI.getBlockedList();

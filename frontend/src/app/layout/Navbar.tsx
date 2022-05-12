@@ -13,6 +13,7 @@ import { getUserData } from "../../redux/authReducer";
 import { authAPI } from "../../api/authAPI";
 import { blogAPI } from "../../api/blogAPI";
 import { LangContext } from "../utils/LangProvider";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -51,23 +52,25 @@ const Navbar = () => {
 
   useEffect(() => {
     if (uid) {
-      const chat_id = setInterval(() => {
+
+      const showNotifications = (item: any) => {
+        const notification = new Notification("Уведомление", {
+          body: getNotificationText(item),
+        });
+      };
+
+      const newNotifications = () => {
+        const notification = new Notification("Уведомление", {
+          body: `У вас новые уведомления`,
+        });
+      };
+
+      const asyncData = async () => {
         if (Notification.permission !== "granted") {
           Notification.requestPermission();
         }
-        // ws.send(JSON.stringify({}));
-        const showNotifications = (item: any) => {
-          const notification = new Notification("Уведомление", {
-            body: getNotificationText(item),
-          });
-        };
-        const newNotifications = () => {
-          const notification = new Notification("Уведомление", {
-            body: `У вас новые уведомления`,
-          });
-        };
-        const asyncData = async () => {
-          const data = await blogAPI.getPushNotif();
+        const data = await blogAPI.getPushNotif();
+        if (document.hidden) {
           if (data?.result?.length > 1 && data?.result?.length < 5) {
             data?.result?.forEach((item: any) => {
               showNotifications(item);
@@ -75,12 +78,20 @@ const Navbar = () => {
           } else if (data?.result?.length === 5) {
             newNotifications();
           }
-          return authAPI.onlineUpdate(uid);
-        };
-        const online_status: any = asyncData();
-        if (online_status.last_action){
-          console.log(online_status.last_action);
+        } else if (!document.hidden) {
+          if (data?.result?.length > 1 && data?.result?.length < 5) {
+            data?.result?.forEach((item: any) => {
+              toast.success(getNotificationText(item));
+            });
+          } else if (data?.result?.length === 5) {
+            toast.success(`У вас ${data.result.length} уведомлений`)
+          }
         }
+        authAPI.onlineUpdate(uid);
+      };
+
+      const chat_id = setInterval(() => {
+        asyncData()
       }, 5000);
       return () => clearInterval(chat_id);
     }
