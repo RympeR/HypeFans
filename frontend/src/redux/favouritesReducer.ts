@@ -102,7 +102,7 @@ const actions = {
 
 export const getFavourites = (): Thunk => async (dispatch) => {
   dispatch(isLoading());
-  const data = await blogAPI.getFavourites({ limit: 10, offset: 10 });
+  const data = await blogAPI.getFavourites({ limit: 10, offset: 0 });
   dispatch(actions.setFavouritesData(data.data));
   dispatch(isntLoading());
 };
