@@ -32,7 +32,6 @@ def online_check(user):
         if user.user_online and not user.hide_online:
             time_difference = (
                 (datetime.datetime.now() - user.user_online.last_action).seconds//60) % 60
-            logging.warning(time_difference)
             if time_difference < 1:
                 return True
             else:
@@ -43,6 +42,7 @@ def online_check(user):
 
 
 def get_online(serializer, user):
+    logging.warning(online_check(user))
     return online_check(user)
 
 
