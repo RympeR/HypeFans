@@ -1,4 +1,4 @@
-import {instance} from "./api";
+import { instance } from "./api";
 import {
   CardType,
   createCardRT,
@@ -136,6 +136,17 @@ export const userAPI = {
   getUser({ user }: userStringType) {
     return instance
       .get<getUserRT>(`user/get-profile/${user}`)
+      .then((response) => {
+        if (response.status === 200 || 301) {
+          return response.data;
+        } else {
+          throw new Error();
+        }
+      });
+  },
+  getUserPosts({ user, offset }: { user: string, offset: number }) {
+    return instance
+      .get<getUserRT>(`user/get-profile/${user}/?limit=7&offset=${offset}`)
       .then((response) => {
         if (response.status === 200 || 301) {
           return response.data;

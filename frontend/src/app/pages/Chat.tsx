@@ -14,7 +14,6 @@ import { NoDialog } from "./NoDialog";
 import logo from "../../assets/images/logo.svg";
 import { CreateDialog } from "./CreateDialog";
 
-
 const Chat: React.FC = () => {
   const userId = useSelector((state: RootState) => state.auth.pk);
   const history = useHistory();
@@ -60,20 +59,30 @@ const Chat: React.FC = () => {
       if (userId === item?.item?.room?.room_info?.creator?.pk) setCreator(true);
       else setCreator(false);
     }, [item]);
+    let last_message_display = item.item.room?.message?.attachment;
+    if (item.item.room.message?.text) {
+      last_message_display = CryptoJS.AES.decrypt(
+        item?.item?.room?.message?.text,
+        "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+      ).toString(CryptoJS.enc.Utf8);
+      if (last_message_display.length > 20) {
+        last_message_display = last_message_display.slice(0, 20) + "...";
+      }
+    }
     return (
       <Link to={`/chat/${item?.item?.room?.room_info?.id}`}>
         <div
           style={
             lastUrl !== item?.item?.room?.room_info?.id
               ? {
-                display: "flex",
-                borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
-              }
+                  display: "flex",
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                }
               : {
-                display: "flex",
-                borderBottom: "1px solid rgba(0, 0, 0, 0.2),",
-                backgroundColor: "#C41E3A",
-              }
+                  display: "flex",
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2),",
+                  backgroundColor: "#C41E3A",
+                }
           }
         >
           <div className="chat__sidebarItem">
@@ -108,16 +117,7 @@ const Chat: React.FC = () => {
                     : item?.item?.room?.room_info?.creator?.username
                   : item?.item?.room?.room_info?.name}
               </h2>
-              <p>
-                {item.item.room?.message?.attachment
-                  ? "Файл"
-                  : item.item.room.message?.text
-                    ? CryptoJS.AES.decrypt(
-                      item?.item?.room?.message?.text,
-                      "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
-                    ).toString(CryptoJS.enc.Utf8)
-                    : null}
-              </p>
+              <p>{last_message_display || null}</p>
             </div>
           </div>
           <p className="chat__p">

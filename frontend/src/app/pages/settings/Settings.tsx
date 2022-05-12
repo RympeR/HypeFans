@@ -146,8 +146,6 @@ export const Settings = () => {
                           <div>
                             <h4
                               style={{
-
-
                                 fontWeight: "bold",
                                 fontSize: "22px",
                                 marginBottom: "0px",

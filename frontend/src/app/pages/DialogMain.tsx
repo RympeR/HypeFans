@@ -418,6 +418,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     const [usersInChat, setUsersInChat] = useState([])
     const [invitedUsers, setInvitedUsers] = useState([])
     const [invitedModalShown, setInvitedModalShown] = useState<boolean>(false);
+    const [height, setHeight] = useState<number>(50);
+    const [marginTop, setMarginTop] = useState<number>(0);
 
     const getChatUsers = async () => {
         const usersList = await chatAPI.getChatMembers(Number(lastUrl))
@@ -662,6 +664,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                     <div className="chat__input">
                         <button
                             className="chat__attach_icon"
+                            style={{ height: height, marginTop: `${marginTop}px` }}
                             onClick={() => {
                                 setShowActions(!showActions);
                             }}
@@ -673,6 +676,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                             isSendDisabled={isSendDisabled}
                             audio={audioMessage}
                             wrapperRef={wrapperRef}
+                            height={height}
+                            setHeight={setHeight}
+                            marginTop={marginTop}
+                            setMarginTop={setMarginTop}
                         />
                     </div>
                 </div>
