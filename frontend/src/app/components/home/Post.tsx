@@ -113,9 +113,6 @@ const Post = ({
     currentLang
   );
 
-  console.log(post);
-
-
   return (
     <article className="post">
       <div className="post__top">
