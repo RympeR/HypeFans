@@ -538,6 +538,20 @@ class GetUserLists(GenericAPIView):
         return Response(result)
 
 
+class GetUserLastSubs(GenericAPIView):
+    serializer_class = UserShortRetrieveSeriliazer
+    queryset = User.objects.all()
+
+    def get(self, request):
+        user = request.user
+        subs = user.target_user_subscribe.filter(
+            finished=False).order_by('-start_date')
+
+        subs = list(map(lambda x: x.source, subs))
+        return Response(self.serializer_class(
+            many=True, instance=subs).data)
+
+
 class GetUserSubs(GenericAPIView):
     serializer_class = UserShortRetrieveSeriliazer
     queryset = User.objects.all()
