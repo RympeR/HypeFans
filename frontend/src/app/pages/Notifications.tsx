@@ -58,6 +58,13 @@ const Notifications: React.FC = () => {
       icon: <DonateIcon />,
     },
     {
+      path: "/notifications/chat_subscriptions",
+      text: "Подписки на чаты",
+      exact: true,
+      type: "subscription",
+      icon: <UnlockIcon />,
+    },
+    {
       path: "/notifications/subscriptions",
       text: currentLang.subscribs,
       exact: true,
