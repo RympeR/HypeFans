@@ -98,49 +98,47 @@ class UserProfileRetrieveAPI(generics.RetrieveAPIView):
     def retrieve(self, request, username):
         user = User.objects.get(username=username)
         req_user = request.user
-        data_compare = int(request.GET.get('datetime', 0))
         limit = int(request.GET.get('limit', 50))
         offset = int(request.GET.get('offset', 0))
         results = []
         sub_check = sub_checker(user, req_user)
         chat_sub_check = chat_sub_checker(user, req_user)
-        if data_compare == 0:
-            for post in user.user_post.filter(archived=False).order_by('-publication_date'):
-                post_data = PostGetShortSerializers(
-                    instance=post, context={'request': request}).data
-                res_dict = {}
-                res_dict['post'] = post_data
+        for post in user.user_post.filter(archived=False).order_by('-publication_date'):
+            post_data = PostGetShortSerializers(
+                instance=post, context={'request': request}).data
+            res_dict = {}
+            res_dict['post'] = post_data
 
-                if post.access_level == 1:
-                    if post.price_to_watch == 0:
-                        res_dict['post']['payed'] = True
-                    else:
-                        res_dict['post']['payed'] = (
-                            True if PostBought.objects.filter(
-                                post=post, user=req_user).exists() else False
-                        )
+            if post.access_level == 1:
+                if post.price_to_watch == 0:
+                    res_dict['post']['payed'] = True
                 else:
-                    res_dict['post']['payed'] = sub_check
+                    res_dict['post']['payed'] = (
+                        True if PostBought.objects.filter(
+                            post=post, user=req_user).exists() else False
+                    )
+            else:
+                res_dict['post']['payed'] = sub_check
 
-                post_action_queryset = PostAction.objects.filter(
-                    post=post, user=req_user)
-                if post_action_queryset.exists():
-                    for action in post_action_queryset:
-                        if action.like:
-                            res_dict['post']['liked'] = True
-                            res_dict['post']['like_id'] = action.pk
-                            break
-                    else:
-                        res_dict['post']['liked'] = False
-                        res_dict['post']['like_id'] = None
+            post_action_queryset = PostAction.objects.filter(
+                post=post, user=req_user)
+            if post_action_queryset.exists():
+                for action in post_action_queryset:
+                    if action.like:
+                        res_dict['post']['liked'] = True
+                        res_dict['post']['like_id'] = action.pk
+                        break
                 else:
                     res_dict['post']['liked'] = False
                     res_dict['post']['like_id'] = None
-                if req_user in post.favourites.all():
-                    res_dict['post']['favourite'] = True
-                else:
-                    res_dict['post']['favourite'] = False
-                results.append(res_dict)
+            else:
+                res_dict['post']['liked'] = False
+                res_dict['post']['like_id'] = None
+            if req_user in post.favourites.all():
+                res_dict['post']['favourite'] = True
+            else:
+                res_dict['post']['favourite'] = False
+            results.append(res_dict)
         return api_accepted_202({
             **self.serializer_class(instance=user, context={'request': request}).data,
             **{'posts': results[offset:limit+offset]},

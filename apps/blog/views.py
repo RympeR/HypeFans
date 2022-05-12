@@ -50,8 +50,8 @@ class PostListAPI(generics.GenericAPIView):
     queryset = Post.objects.all()
 
     def get(self, request, username):
-        limit = int(request.query_params.get('limit', 20))
-        offset = int(request.query_params.get('offset', 0))
+        limit = int(request.GET.get('limit', 20))
+        offset = int(request.GET.get('offset', 0))
         page_user = User.objects.get(username=username)
         user = request.user
         qs = Post.objects.filter(
@@ -222,73 +222,79 @@ class UserNotifications(GenericAPIView):
     def get(self, request):
         limit = int(request.GET.get('limit', 50))
         offset = int(request.GET.get('offset', 0))
+        notification_type = request.GET.get('notification_type')
         user = request.user
         comments_result = []
         likes_result = []
         donations_result = []
         subscriptions_result = []
-        for comment in PostAction.objects.filter(
-            comment__isnull=False,
-            post__user=user
-        ).order_by('-date_time').distinct():
-            if comment.user != user:
-                res_dict = {
-                    'user': self.serializer_class(
-                        instance=comment.user, context={'request': request}).data,
-                    'post': CommentRetrieveSerializer(
-                        instance=comment, context={'request': request}).data,
-                    'type': 'comment'
-                }
-                comments_result.append(res_dict)
-        for like in PostAction.objects.filter(post__user=user, like=True).distinct():
-            if like.user != user:
-                res_dict = {
-                    'user': self.serializer_class(
-                        instance=like.user, context={'request': request}).data,
-                    'post': LikeRetrieveSerializer(
-                        instance=like, context={'request': request}).data,
-                    'type': 'like'
-                }
-                likes_result.append(res_dict)
-        for donation in user.recieved_user.all().order_by('-datetime').distinct():
-            if user != donation.sender:
-                res_dict = {
-                    'user': self.serializer_class(
-                        instance=donation.sender, context={'request': request}).data,
-                    'donation': {
-                        'amount': donation.amount,
-                        'date_time': donation.datetime.timestamp() if donation.datetime else None
-                    },
-                    'type': 'donation'
-                }
-                donations_result.append(res_dict)
+        if notification_type and notification_type == 'comment':
+            for comment in PostAction.objects.filter(
+                comment__isnull=False,
+                post__user=user
+            ).order_by('-date_time').distinct():
+                if comment.user != user:
+                    res_dict = {
+                        'user': self.serializer_class(
+                            instance=comment.user, context={'request': request}).data,
+                        'post': CommentRetrieveSerializer(
+                            instance=comment, context={'request': request}).data,
+                        'type': 'comment'
+                    }
+                    comments_result.append(res_dict)
+        if notification_type and notification_type == 'like':
+            for like in PostAction.objects.filter(post__user=user, like=True).distinct():
+                if like.user != user:
+                    res_dict = {
+                        'user': self.serializer_class(
+                            instance=like.user, context={'request': request}).data,
+                        'post': LikeRetrieveSerializer(
+                            instance=like, context={'request': request}).data,
+                        'type': 'like'
+                    }
+                    likes_result.append(res_dict)
+        if notification_type and notification_type == 'donation':
+            for donation in user.recieved_user.all().order_by('-datetime').distinct():
+                if user != donation.sender:
+                    res_dict = {
+                        'user': self.serializer_class(
+                            instance=donation.sender, context={'request': request}).data,
+                        'donation': {
+                            'amount': donation.amount,
+                            'date_time': donation.datetime.timestamp() if donation.datetime else None
+                        },
+                        'type': 'donation'
+                    }
+                    donations_result.append(res_dict)
 
-        for subscription in user.target_user_subscribe.all().order_by('-start_date').distinct():
-            if user != subscription.source:
-                res_dict = {}
-                res_dict['user'] = self.serializer_class(
-                    instance=subscription.source, context={'request': request}).data
-                res_dict['subscription'] = {
-                    'amount': user.subscribtion_price,
-                    'length': user.subscribtion_price,
-                    'start_date': subscription.start_date.timestamp() if subscription.start_date else None,
-                    'end_date': subscription.end_date.timestamp() if subscription.end_date else None
-                }
-                res_dict['type'] = 'subscription'
-                subscriptions_result.append(res_dict)
+        if notification_type and notification_type == 'subscription':
+            for subscription in user.target_user_subscribe.all().order_by('-start_date').distinct():
+                if user != subscription.source:
+                    res_dict = {}
+                    res_dict['user'] = self.serializer_class(
+                        instance=subscription.source, context={'request': request}).data
+                    res_dict['subscription'] = {
+                        'amount': user.subscribtion_price,
+                        'length': user.subscribtion_price,
+                        'start_date': subscription.start_date.timestamp() if subscription.start_date else None,
+                        'end_date': subscription.end_date.timestamp() if subscription.end_date else None
+                    }
+                    res_dict['type'] = 'subscription'
+                    subscriptions_result.append(res_dict)
 
-        for subscription in user.target_user_chat_subscribe.all().order_by('-start_date').distinct():
-            if user != subscription.source:
-                res_dict = {}
-                res_dict['user'] = self.serializer_class(
-                    instance=subscription.source, context={'request': request}).data
-                res_dict['chat_subscription'] = {
-                    'amount': user.subscribtion_price,
-                    'start_date': subscription.start_date.timestamp() if subscription.start_date else None,
-                    'end_date': subscription.end_date.timestamp() if subscription.end_date else None
-                }
-                res_dict['type'] = 'chat_subscription'
-                subscriptions_result.append(res_dict)
+        if notification_type and notification_type == 'chat_subscription':
+            for subscription in user.target_user_chat_subscribe.all().order_by('-start_date').distinct():
+                if user != subscription.source:
+                    res_dict = {}
+                    res_dict['user'] = self.serializer_class(
+                        instance=subscription.source, context={'request': request}).data
+                    res_dict['chat_subscription'] = {
+                        'amount': user.subscribtion_price,
+                        'start_date': subscription.start_date.timestamp() if subscription.start_date else None,
+                        'end_date': subscription.end_date.timestamp() if subscription.end_date else None
+                    }
+                    res_dict['type'] = 'chat_subscription'
+                    subscriptions_result.append(res_dict)
         result = [
             *comments_result,
             *likes_result,
