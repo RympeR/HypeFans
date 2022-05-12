@@ -126,7 +126,7 @@ const Notifications: React.FC = () => {
       }
     }, []);
     const Main = ({ notifications }: { notifications: Array<any> }) => {
-      const [page, setPage] = useState<number>(1);
+      const [page, setPage] = useState<number>(0);
       const [data, setData] = useState([...notifications]);
 
       const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false)
