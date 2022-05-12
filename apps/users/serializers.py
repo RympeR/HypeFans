@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import logging
 
 from core.utils.customFields import TimestampField
 from core.utils.func import create_path_file, get_online
@@ -477,6 +478,7 @@ class UserGetSerializer(serializers.ModelSerializer):
         return 0
 
     def get_is_online(self, user: User):
+        logging.warning(self, user)
         return get_online(self, user)
 
     def get_avatar(self, user: User):
