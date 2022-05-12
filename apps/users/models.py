@@ -5,7 +5,7 @@ from apps.agency.models import Agency
 from core.utils.func import user_avatar
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django_countries.fields import CountryField
 from unixtimestampfield.fields import UnixTimeStampField
@@ -49,7 +49,8 @@ class User(AbstractUser):
     bio = models.TextField(verbose_name='БИО профиля', null=True, blank=True)
     birthday_date = UnixTimeStampField(
         verbose_name='День рождения', null=True, blank=True)
-    location = models.CharField('Страна', null=True, blank=True, max_length=80, default='')
+    location = models.CharField(
+        'Страна', null=True, blank=True, max_length=80, default='')
     city = models.CharField('Город', null=True, blank=True, max_length=80)
     subscribtion_price = models.IntegerField(
         verbose_name='Цена подписки', default=0)
@@ -91,11 +92,16 @@ class User(AbstractUser):
     show_watermark = models.BooleanField(
         'Показывать вотермарку', default=False)
 
-    show_comment_notifications = models.BooleanField('Показывать уведомления комментариев', default=False)
-    show_chat_subscribption_notifications = models.BooleanField('Показывать уведомления подписок на чаты', default=False)
-    show_subscribption_notifications = models.BooleanField('Показывать уведомления подписок', default=False)
-    show_donate_notifications = models.BooleanField('Показывать уведомления пожертвований', default=False)
-    show_like_notifications = models.BooleanField('Показывать уведомления лайков', default=False)
+    show_comment_notifications = models.BooleanField(
+        'Показывать уведомления комментариев', default=False)
+    show_chat_subscribption_notifications = models.BooleanField(
+        'Показывать уведомления подписок на чаты', default=False)
+    show_subscribption_notifications = models.BooleanField(
+        'Показывать уведомления подписок', default=False)
+    show_donate_notifications = models.BooleanField(
+        'Показывать уведомления пожертвований', default=False)
+    show_like_notifications = models.BooleanField(
+        'Показывать уведомления лайков', default=False)
 
     validated_email = models.BooleanField(
         'Подтвержденная почта', default=False)
@@ -313,6 +319,10 @@ def update_fans_amount(sender: Subscription, instance: Subscription, created: bo
     if created:
         instance.target.fans_amount += 1
         instance.target.save()
+    else:
+        if instance.finished:
+            instance.target.fans_amount -= 1
+            instance.target.save()
 
 
 @receiver(post_save, sender=Payment, dispatch_uid='user_payment_create_signal')
