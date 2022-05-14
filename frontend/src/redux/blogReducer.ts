@@ -365,6 +365,10 @@ export const createStory =
       });
     };
 
+export const setPaginationLoading = (loading: boolean): Thunk =>
+  async (dispatch) => {
+    dispatch(actions.setPaginationUpdate(loading))
+  };
 export const postsPaginations = (offset: number): Thunk =>
   async (dispatch) => {
     dispatch(actions.setPaginationUpdate(true))

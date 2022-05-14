@@ -2,7 +2,7 @@ import { Dispatch } from 'react';
 import { ThunkAction } from 'redux-thunk';
 import { blogAPI } from '../api/blogAPI';
 import { createPostActionRT } from '../api/types';
-import { isLoading, isntLoading } from './blogReducer';
+import { isLoading, isntLoading, setPaginationLoading } from './blogReducer';
 import { InferActionsTypes, RootState } from './redux';
 
 const initialState = {
@@ -54,6 +54,11 @@ const favouritesReducer = (state = initialState, action: AllActionsType): Initia
         ...state,
         posts: action.payload
       };
+    case 'UPDATE_FAVOURITES_DATA':
+      return {
+        ...state,
+        posts: [...state.posts, ...action.payload]
+      };
     case 'SET_POST_DATA':
       return {
         ...state,
@@ -97,47 +102,59 @@ const actions = {
       type: 'SET_FAVOURITES_DATA',
       payload: posts
     } as const;
+  },
+  updateFavouritesData: (posts: any) => {
+    return {
+      type: 'UPDATE_FAVOURITES_DATA',
+      payload: posts
+    } as const;
   }
 };
 
 export const getFavourites = (): Thunk => async (dispatch) => {
   dispatch(isLoading());
-  const data = await blogAPI.getFavourites({ limit: 10, offset: 10 });
+  const data = await blogAPI.getFavourites({ limit: 10, offset: 0 });
   dispatch(actions.setFavouritesData(data.data));
   dispatch(isntLoading());
+};
+export const paginationFavourites = (offset: number): Thunk => async (dispatch) => {
+  dispatch(setPaginationLoading(true));
+  const data = await blogAPI.getFavourites({ limit: 10, offset });
+  dispatch(actions.updateFavouritesData(data.data));
+  dispatch(setPaginationLoading(false));
 };
 
 export const createPostAction =
   ({ like, comment, donation_amount, user, post, parent }: createPostActionRT): Thunk =>
-  async (dispatch) => {
-    const data = await blogAPI.createPostAction({
-      like,
-      comment,
-      parent,
-      donation_amount,
-      user,
-      post,
-      date_time: null,
-      id: null
-    });
-    dispatch(actions.setPostsData(post, true, data.id, null));
-  };
+    async (dispatch) => {
+      const data = await blogAPI.createPostAction({
+        like,
+        comment,
+        parent,
+        donation_amount,
+        user,
+        post,
+        date_time: null,
+        id: null
+      });
+      dispatch(actions.setPostsData(post, true, data.id, null));
+    };
 
 export const setFavorite =
   (postId: number, favourite: boolean): Thunk =>
-  async (dispatch) => {
-    const data = await blogAPI.setFavorite(postId, favourite);
-    dispatch(actions.setPostsData(data.data.post_id, null, null, data.data.favourite));
-  };
+    async (dispatch) => {
+      const data = await blogAPI.setFavorite(postId, favourite);
+      dispatch(actions.setPostsData(data.data.post_id, null, null, data.data.favourite));
+    };
 
 export const deletePostAction =
   ({ id, post_id }: { id: number; post_id: number }): Thunk =>
-  async (dispatch) => {
-    await blogAPI.deletePostAction({
-      id
-    });
-    dispatch(actions.setPostsData(post_id, false, null, null));
-  };
+    async (dispatch) => {
+      await blogAPI.deletePostAction({
+        id
+      });
+      dispatch(actions.setPostsData(post_id, false, null, null));
+    };
 
 //  Types
 
