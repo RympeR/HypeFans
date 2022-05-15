@@ -70,20 +70,22 @@ const Navbar = () => {
           Notification.requestPermission();
         }
         const data = await blogAPI.getPushNotif();
+        console.log(data);
+
         if (document.hidden) {
-          if (data?.result?.length > 1 && data?.result?.length < 5) {
+          if (data?.result?.length >= 1 && data?.result?.length < 5) {
             data?.result?.forEach((item: any) => {
               showNotifications(item);
             });
-          } else if (data?.result?.length === 5) {
+          } else if (data?.result?.length > 5) {
             newNotifications();
           }
         } else if (!document.hidden) {
-          if (data?.result?.length > 1 && data?.result?.length < 5) {
+          if (data?.result?.length >= 1 && data?.result?.length < 5) {
             data?.result?.forEach((item: any) => {
               toast.success(getNotificationText(item));
             });
-          } else if (data?.result?.length === 5) {
+          } else if (data?.result?.length > 5) {
             toast.success(`У вас ${data.result.length} уведомлений`)
           }
         }

@@ -31,7 +31,7 @@ const Profile = () => {
   const [subscribeShow, setSubscribeShow] = useState(false);
   const profileData = useSelector((state: RootState) => state.user);
   const [profile, setProfile] = useState(profileData);
-  const [offset, setOffset] = useState<number>(7)
+  const [offset, setOffset] = useState<number>(10)
   const myNick = useSelector((state: RootState) => state.auth.username);
   const myId = useSelector((state: RootState) => state.auth.pk);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
@@ -57,10 +57,10 @@ const Profile = () => {
   }
 
   window.onscroll = async function () {
-    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 5) {
+    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 5 && !isLoading) {
       // getPosts here\
       const data = await userAPI.getUserPosts({ user: nick, offset })
-      setOffset(offset + 7)
+      setOffset(offset + 10)
     }
   };
 
