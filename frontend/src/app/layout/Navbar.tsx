@@ -19,7 +19,6 @@ const Navbar = () => {
   const { pathname } = useLocation();
   const nick = useSelector((state: RootState) => state.auth.username);
   const uid = useSelector((state: RootState) => state.auth.pk);
-  const [ws, setWs] = useState(null);
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const { currentLang } = useContext(LangContext);
 
@@ -52,15 +51,14 @@ const Navbar = () => {
 
   useEffect(() => {
     if (uid) {
-
       const showNotifications = (item: any) => {
-        const notification = new Notification("Уведомление", {
+        new Notification("Уведомление", {
           body: getNotificationText(item),
         });
       };
 
       const newNotifications = () => {
-        const notification = new Notification("Уведомление", {
+        new Notification("Уведомление", {
           body: `У вас новые уведомления`,
         });
       };
@@ -84,14 +82,14 @@ const Navbar = () => {
               toast.success(getNotificationText(item));
             });
           } else if (data?.result?.length === 5) {
-            toast.success(`У вас ${data.result.length} уведомлений`)
+            toast.success(`У вас ${data.result.length} уведомлений`);
           }
         }
         authAPI.onlineUpdate(uid);
       };
 
       const chat_id = setInterval(() => {
-        asyncData()
+        asyncData();
       }, 5000);
       return () => clearInterval(chat_id);
     }

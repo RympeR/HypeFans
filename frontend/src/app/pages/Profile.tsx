@@ -31,7 +31,7 @@ const Profile = () => {
   const [subscribeShow, setSubscribeShow] = useState(false);
   const profileData = useSelector((state: RootState) => state.user);
   const [profile, setProfile] = useState(profileData);
-  const [offset, setOffset] = useState<number>(7)
+  const [offset, setOffset] = useState<number>(7);
   const myNick = useSelector((state: RootState) => state.auth.username);
   const myId = useSelector((state: RootState) => state.auth.pk);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
@@ -57,10 +57,13 @@ const Profile = () => {
   }
 
   window.onscroll = async function () {
-    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 5) {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - 5
+    ) {
       // getPosts here\
-      const data = await userAPI.getUserPosts({ user: nick, offset })
-      setOffset(offset + 7)
+      const data = await userAPI.getUserPosts({ user: nick, offset });
+      setOffset(offset + 7);
     }
   };
 
@@ -230,11 +233,13 @@ const Profile = () => {
         <h3 className="profile__name">{profile.first_name}</h3>
         <div style={{ display: "flex" }}>
           <h4 className="profile__nickname"> {`@${nick}`}</h4>
-          <div className="is_online" style={profile.is_online ? {} : { backgroundColor: '#C0C0C0' }}></div>
+          <div
+            className="is_online"
+            style={profile.is_online ? {} : { backgroundColor: "#C0C0C0" }}
+          ></div>
         </div>
         <h5 className="profile__info">
-          {profile?.posts?.length} posts{" "}
-          {sub_amount(profile.fans_amount, 1)}{" "}
+          {profile?.posts?.length} posts {sub_amount(profile.fans_amount, 1)}{" "}
           <img className="sub_icon" src={fansIcon} />{" "}
         </h5>
       </div>

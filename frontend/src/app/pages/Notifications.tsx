@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, useHistory } from "react-router-dom";
 import {
   getNotifications,
-  updateNotifications,
 } from "../../redux/notificationsReducer";
 import { RootState } from "../../redux/redux";
 import { ReactComponent as BackIcon } from "../../assets/images/arrow-left.svg";
@@ -14,12 +13,11 @@ import { ReactComponent as CommentIcon } from "../../assets/images/message-circl
 import { ReactComponent as SettingsIcon } from "../../assets/images/settings.svg";
 import { ReactComponent as DonateIcon } from "../../assets/images/tip.svg";
 import { ReactComponent as UnlockIcon } from "../../assets/images/unlock.svg";
-import loader from '../../assets/loaders/Spinner-1s-200px.gif';
+import loader from "../../assets/loaders/Spinner-1s-200px.gif";
 import { DefaultSidebar } from "../components/notificationsComponents/DefaultSidebar";
 import { SidebarText } from "../components/notificationsComponents/SidebarText";
 import { Preloader } from "../utils/Preloader";
 import { Notification } from "./notifications/Notification";
-import axios from "axios";
 import { blogAPI } from "../../api/blogAPI";
 import { LangContext } from "../utils/LangProvider";
 
@@ -129,7 +127,7 @@ const Notifications: React.FC = () => {
       const [page, setPage] = useState<number>(0);
       const [data, setData] = useState([...notifications]);
 
-      const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false)
+      const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false);
 
       console.log([data]);
 
@@ -139,19 +137,22 @@ const Notifications: React.FC = () => {
           event.target.scrollHeight;
 
         if (scrollBottom && !isUpdateLoading) {
-          setIsUpdateLoading(true)
-          await blogAPI.getNotifications({
-            limit: 5,
-            offset: page * 5,
-          }).then((res) => {
-            setData([...data, ...res.data]);
-          }).finally(() => {
-            setPage(page + 1);
-            console.log(data);
-            debugger
+          setIsUpdateLoading(true);
+          await blogAPI
+            .getNotifications({
+              limit: 5,
+              offset: page * 5,
+            })
+            .then((res) => {
+              setData([...data, ...res.data]);
+            })
+            .finally(() => {
+              setPage(page + 1);
+              console.log(data);
+              debugger;
 
-            setIsUpdateLoading(false)
-          })
+              setIsUpdateLoading(false);
+            });
         }
       };
 
@@ -258,8 +259,8 @@ const Notifications: React.FC = () => {
                     article.text === currentLang.all
                       ? notifications
                       : notifications.filter(
-                        (item) => item.type === article.type
-                      )
+                          (item) => item.type === article.type
+                        )
                   }
                 />
               )}
