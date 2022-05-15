@@ -9,6 +9,7 @@ import { ReactComponent as ChatIcon } from "../../assets/images/message.svg";
 import { ReactComponent as ProfileIcon } from "../../assets/images/user.svg";
 import NavLink from "../components/home/NavLink";
 import { NAV_LINKS } from "../utils/utilities";
+
 import { getUserData } from "../../redux/authReducer";
 import { authAPI } from "../../api/authAPI";
 import { blogAPI } from "../../api/blogAPI";
@@ -52,14 +53,14 @@ const Navbar = () => {
   useEffect(() => {
     if (uid) {
       const showNotifications = (item: any) => {
-        new Notification("Уведомление", {
+        new Notification(currentLang.notif, {
           body: getNotificationText(item),
         });
       };
 
       const newNotifications = () => {
-        new Notification("Уведомление", {
-          body: `У вас новые уведомления`,
+        new Notification(currentLang.notif, {
+          body: currentLang.siteNotf,
         });
       };
 
@@ -68,21 +69,23 @@ const Navbar = () => {
           Notification.requestPermission();
         }
         const data = await blogAPI.getPushNotif();
+        console.log(data);
+
         if (document.hidden) {
-          if (data?.result?.length > 1 && data?.result?.length < 5) {
+          if (data?.result?.length >= 1 && data?.result?.length < 5) {
             data?.result?.forEach((item: any) => {
               showNotifications(item);
             });
-          } else if (data?.result?.length === 5) {
+          } else if (data?.result?.length > 5) {
             newNotifications();
           }
         } else if (!document.hidden) {
-          if (data?.result?.length > 1 && data?.result?.length < 5) {
+          if (data?.result?.length >= 1 && data?.result?.length < 5) {
             data?.result?.forEach((item: any) => {
               toast.success(getNotificationText(item));
             });
-          } else if (data?.result?.length === 5) {
-            toast.success(`У вас ${data.result.length} уведомлений`);
+          } else if (data?.result?.length > 5) {
+            toast.success(`${currentLang.you_have} ${data.result.length} ${currentLang.notifications2}`)
           }
         }
         authAPI.onlineUpdate(uid);

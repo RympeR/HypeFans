@@ -135,7 +135,7 @@ export const userAPI = {
   },
   getUser({ user }: userStringType) {
     return instance
-      .get<getUserRT>(`user/get-profile/${user}`)
+      .get<getUserRT>(`user/get-profile/${user}?limit=10&offset=0`)
       .then((response) => {
         if (response.status === 200 || 301) {
           return response.data;
@@ -146,7 +146,7 @@ export const userAPI = {
   },
   getUserPosts({ user, offset }: { user: string, offset: number }) {
     return instance
-      .get<getUserRT>(`user/get-profile/${user}/?limit=7&offset=${offset}`)
+      .get<getUserRT>(`user/get-profile/${user}/?limit=10&offset=${offset}`)
       .then((response) => {
         if (response.status === 200 || 301) {
           return response.data;
