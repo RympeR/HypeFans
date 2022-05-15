@@ -1,6 +1,7 @@
 cd frontend
 yarn build
 rmdir -r ../build
+rmdir ../build
 mv -Force ./build ../build
 cd ..
 venv\Scripts\activate
