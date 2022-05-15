@@ -1,6 +1,6 @@
 import CryptoJS from "crypto-js";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, Route, useHistory } from "react-router-dom";
 import { RootState } from "../../redux/redux";
@@ -8,6 +8,7 @@ import { ReactComponent as BackIcon } from "../../assets/images/arrow-left.svg";
 import { ReactComponent as PlusIcon } from "../../assets/images/plus.svg";
 import { ReactComponent as UsersIcon } from "../../assets/images/users.svg";
 import { Preloader } from "../utils/Preloader";
+import { LangContext } from "../utils/LangProvider";
 import { getLastUrlPoint } from "../utils/utilities";
 import { DialogMain } from "./DialogMain";
 import { NoDialog } from "./NoDialog";
@@ -17,6 +18,7 @@ import { CreateDialog } from "./CreateDialog";
 const Chat: React.FC = () => {
   const userId = useSelector((state: RootState) => state.auth.pk);
   const history = useHistory();
+  const { currentLang } = useContext(LangContext);
   const lastUrl = getLastUrlPoint(history.location.pathname);
   const BackButton = () => <BackIcon onClick={() => history.push("/chat")} />;
   const Plus = () => <PlusIcon />;
@@ -140,7 +142,7 @@ const Chat: React.FC = () => {
           <div className="chat__resp_icon">
             <BackButton />
           </div>
-          <p className="chat__header_title">Сообщения</p>
+          <p className="chat__header_title">{currentLang.chat}</p>
         </div>
         <div className="chat__row">
           <div className="chat__resp_icon">

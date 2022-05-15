@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 // import { useAlert } from "react-alert";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,7 @@ import { ReactComponent as MenuDotsWhite } from "../../assets/images/3dotsWhite.
 import { ReactComponent as BackButton } from "../../assets/images/arrow-leftWhite.svg";
 import logo from "../../assets/images/logo.svg";
 import { Preloader } from "../utils/Preloader";
+import { LangContext } from "../utils/LangProvider";
 import { chatAPI } from "../../api/chatAPI";
 import fansIcon from "../../assets/images/icons_person.png";
 import { toast } from "react-toastify";
@@ -28,6 +29,8 @@ const Profile = () => {
   const dispatch = useDispatch();
   // const alert = useAlert();
   const history = useHistory();
+  const { currentLang } = useContext(LangContext);
+
   const [subscribeShow, setSubscribeShow] = useState(false);
   const profileData = useSelector((state: RootState) => state.user);
   const [profile, setProfile] = useState(profileData);
@@ -179,7 +182,7 @@ const Profile = () => {
         <Modal.Body className="notifications__modal">
           {" "}
           <h2 style={{ marginBottom: "0px" }}>
-            Подписатся на чат за {profile.message_price}$?
+            {currentLang.subChatUser} {profile.message_price}$?
           </h2>
           <div
             style={{
@@ -188,10 +191,10 @@ const Profile = () => {
               marginTop: "15px",
             }}
           >
-            <h3 onClick={() => setSubscribeShow(false)}>Нет</h3>
+            <h3 onClick={() => setSubscribeShow(false)}>{currentLang.no}</h3>
             <div style={{ width: "20px" }}></div>
             <h3 onClick={subscribeOnChat} style={{ color: "#FB5734" }}>
-              Да
+            {currentLang.yes}
             </h3>
           </div>
         </Modal.Body>
@@ -215,12 +218,12 @@ const Profile = () => {
           >
             <div style={{ padding: "5px" }}>
               <Link to="/favourites">
-                <button>Избранные</button>
+                <button>{currentLang.favourites}</button>
               </Link>
             </div>
             <div style={{ padding: "5px" }}>
               <Link to="/settings/profileSettings">
-                <button>Настройки</button>
+                <button>{currentLang.settings}</button>
               </Link>
             </div>
           </Popup>
@@ -239,7 +242,7 @@ const Profile = () => {
           ></div>
         </div>
         <h5 className="profile__info">
-          {profile?.posts?.length} posts {sub_amount(profile.fans_amount, 1)}{" "}
+          {profile?.posts?.length} {currentLang.posts} {sub_amount(profile.fans_amount, 1)}{" "}
           <img className="sub_icon" src={fansIcon} />{" "}
         </h5>
       </div>
@@ -262,7 +265,7 @@ const Profile = () => {
               className="notifications__settingBtn"
               style={{ margin: "0px", width: "100%" }}
             >
-              Редактировать профиль
+              {currentLang.editProfile}
             </button>
           </Link>
         ) : null}
@@ -277,7 +280,7 @@ const Profile = () => {
                     color: "rgba(0, 0, 0, 0.6)",
                   }}
                 >
-                  Подписка на 1 месяц
+                  {currentLang.monSub}
                 </p>
                 <button
                   className="notifications__settingBtn"
@@ -287,7 +290,7 @@ const Profile = () => {
                   }}
                   onClick={() => setSubscribeShow(true)}
                 >
-                  Подписатся за {profile.subscribtion_price}$
+                  {currentLang.subCheckUser} {profile.subscribtion_price}$
                 </button>
               </>
             ) : (
@@ -298,7 +301,7 @@ const Profile = () => {
                   color: "rgba(0, 0, 0, 0.6)",
                 }}
               >
-                Вы уже подписанны
+                {currentLang.subChecked}
               </p>
             )}
             {profile.subscribed && profile.subscribed_chat ? (
@@ -308,7 +311,7 @@ const Profile = () => {
                   style={{ margin: "20px 0px", width: "100%" }}
                   onClick={() => writeMessage()}
                 >
-                  Написать
+                  {currentLang.write}
                 </button>
               </div>
             ) : null}
@@ -319,7 +322,7 @@ const Profile = () => {
                   style={{ margin: "20px 0px", width: "100%" }}
                   onClick={() => setChatSubscribeModalShown(true)}
                 >
-                  Подписаться на чат за {profile.message_price}$
+                  {currentLang.subChatUser} {profile.message_price}$
                 </button>
               </div>
             ) : null}
@@ -394,8 +397,8 @@ const Profile = () => {
                       }}
                     >
                       {item.post.access_level !== 1
-                        ? `Подпишитесь чтоб посмотреть`
-                        : `Посмотреть за ${item.post.price_to_watch}$`}
+                        ? `${currentLang.subUser}`
+                        : `${currentLang.checkFor} ${item.post.price_to_watch}$`}
                     </button>
                   </div>
                   <div className="post__bottom" style={{ margin: "24px 24px" }}>
@@ -422,7 +425,8 @@ const Profile = () => {
                     </div>
 
                     <p className="post__like-amount">
-                      {item?.post.likes_amount} лайков
+                      {item?.post.likes_amount}
+                      {currentLang.liks1}
                     </p>
                   </div>
                 </div>
@@ -437,7 +441,7 @@ const Profile = () => {
                 marginTop: "70px",
               }}
             >
-              Тут пока нет публикаций
+              {currentLang.noPosts}
             </div>
           )}
         </div>

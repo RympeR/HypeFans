@@ -46,7 +46,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
     } else if (item.file_type === 1) {
       return (
         <a href={item._file} download>
-          Скачать {item._file.split("/")[item._file.split("/").length - 1]}
+          {currentLang.download} {item._file.split("/")[item._file.split("/").length - 1]}
         </a>
       );
     } else if (item.file_type === 2) {
