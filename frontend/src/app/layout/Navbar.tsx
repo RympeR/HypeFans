@@ -9,6 +9,7 @@ import { ReactComponent as ChatIcon } from "../../assets/images/message.svg";
 import { ReactComponent as ProfileIcon } from "../../assets/images/user.svg";
 import NavLink from "../components/home/NavLink";
 import { NAV_LINKS } from "../utils/utilities";
+
 import { getUserData } from "../../redux/authReducer";
 import { authAPI } from "../../api/authAPI";
 import { blogAPI } from "../../api/blogAPI";
@@ -19,7 +20,6 @@ const Navbar = () => {
   const { pathname } = useLocation();
   const nick = useSelector((state: RootState) => state.auth.username);
   const uid = useSelector((state: RootState) => state.auth.pk);
-  const [ws, setWs] = useState(null);
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const { currentLang } = useContext(LangContext);
 
@@ -52,16 +52,15 @@ const Navbar = () => {
 
   useEffect(() => {
     if (uid) {
-
       const showNotifications = (item: any) => {
-        const notification = new Notification("Уведомление", {
+        new Notification(currentLang.notif, {
           body: getNotificationText(item),
         });
       };
 
       const newNotifications = () => {
-        const notification = new Notification("Уведомление", {
-          body: `У вас новые уведомления`,
+        new Notification(currentLang.notif, {
+          body: currentLang.siteNotf,
         });
       };
 
@@ -70,28 +69,30 @@ const Navbar = () => {
           Notification.requestPermission();
         }
         const data = await blogAPI.getPushNotif();
+        console.log(data);
+
         if (document.hidden) {
-          if (data?.result?.length > 1 && data?.result?.length < 5) {
+          if (data?.result?.length >= 1 && data?.result?.length < 5) {
             data?.result?.forEach((item: any) => {
               showNotifications(item);
             });
-          } else if (data?.result?.length === 5) {
+          } else if (data?.result?.length > 5) {
             newNotifications();
           }
         } else if (!document.hidden) {
-          if (data?.result?.length > 1 && data?.result?.length < 5) {
+          if (data?.result?.length >= 1 && data?.result?.length < 5) {
             data?.result?.forEach((item: any) => {
               toast.success(getNotificationText(item));
             });
-          } else if (data?.result?.length === 5) {
-            toast.success(`У вас ${data.result.length} уведомлений`)
+          } else if (data?.result?.length > 5) {
+            toast.success(`${currentLang.you_have} ${data.result.length} ${currentLang.notifications2}`)
           }
         }
         authAPI.onlineUpdate(uid);
       };
 
       const chat_id = setInterval(() => {
-        asyncData()
+        asyncData();
       }, 5000);
       return () => clearInterval(chat_id);
     }

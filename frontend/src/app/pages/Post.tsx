@@ -9,7 +9,6 @@ import {
   setFavoritePostModal,
 } from "../../redux/blogReducer";
 import { RootState } from "../../redux/redux";
-import { ReactComponent as MenuDots } from "../../assets/images/3dots.svg";
 import { ReactComponent as SaveIcon } from "../../assets/images/bookmark.svg";
 import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
 import logo from "../../assets/images/logo.svg";
@@ -22,8 +21,7 @@ import { Preloader } from "../utils/Preloader";
 
 export const PostModal = ({ post_id }: { post_id: number }) => {
   const dispatch = useDispatch();
-  const { currentLang } = useContext(LangContext)
-
+  const { currentLang } = useContext(LangContext);
 
   //? Дебагер попросил добавть зависимости
   useEffect(() => {
@@ -48,7 +46,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
     } else if (item.file_type === 1) {
       return (
         <a href={item._file} download>
-          Скачать {item._file.split("/")[item._file.split("/").length - 1]}
+          {currentLang.download} {item._file.split("/")[item._file.split("/").length - 1]}
         </a>
       );
     } else if (item.file_type === 2) {
@@ -59,7 +57,7 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
           src={item._file}
           alt="postIMG"
           className="profile"
-        // style={{ maxHeight: "50vh" }}
+          // style={{ maxHeight: "50vh" }}
         ></img>
       );
     }
@@ -94,7 +92,6 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div className="profile__postAgo">{time_diif}</div>
                 <button className="post__menu-dots">
-                  {/* <MenuDots /> */}
                 </button>
               </div>
             </div>
@@ -123,23 +120,23 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
                   onClick={() => {
                     post?.liked
                       ? dispatch(
-                        deletePostActionModal({
-                          id: post?.like_id,
-                          post_id: post?.id,
-                        })
-                      )
+                          deletePostActionModal({
+                            id: post?.like_id,
+                            post_id: post?.id,
+                          })
+                        )
                       : dispatch(
-                        createPostActionModal({
-                          like: true,
-                          comment: null,
-                          donation_amount: 0,
-                          parent: null,
-                          user: myId,
-                          date_time: null,
-                          post: post?.id,
-                          id: null,
-                        })
-                      );
+                          createPostActionModal({
+                            like: true,
+                            comment: null,
+                            donation_amount: 0,
+                            parent: null,
+                            user: myId,
+                            date_time: null,
+                            post: post?.id,
+                            id: null,
+                          })
+                        );
                   }}
                 >
                   <LikeIcon
@@ -171,7 +168,10 @@ export const PostModal = ({ post_id }: { post_id: number }) => {
               </button>
             </div>
 
-            <p className="post__like-amount">{post?.likes_amount}{currentLang.liks1}</p>
+            <p className="post__like-amount">
+              {post?.likes_amount}
+              {currentLang.liks1}
+            </p>
 
             <CommentComponent
               data={post.comments}
