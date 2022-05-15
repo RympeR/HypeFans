@@ -75,10 +75,13 @@ class AttachmentInlineAdmin(admin.TabularInline):
 
     def file_preview(self, instance):
         return instance.attachment.file_preview
+
     def _file(self, instance):
         return instance.attachment._file
+
     def file_type(self, instance):
         return instance.attachment.file_type
+
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -97,20 +100,16 @@ class PostAdmin(admin.ModelAdmin):
 # @admin.register(PostAction)
 
 
-class PostActionAdmin(DraggableMPTTAdmin):
-    mptt_indent_field = "pk"
+class PostActionAdmin(admin.ModelAdmin):
     list_display = (
-        'tree_actions', 'pk', 'user', 'post', 'like', 'comment', 'donation_amount'
+        'pk', 'user', 'post', 'like', 'comment', 'donation_amount'
     )
     list_display_links = [
         'pk',
     ]
     search_fields = ['user__username', 'post__name']
-    # ordering = '-pk',
+    ordering = '-pk',
     filter_fields = ['like']
-    list_filter = (
-        ('parent', TreeRelatedFieldListFilter),
-    )
 
 
 admin.site.register(PostAction, PostActionAdmin)
@@ -176,6 +175,7 @@ class RecommendationValidationPostAdmin(ActionsModelAdmin):
             post.save()
             pending_post.save()
             return HttpResponseRedirect(reverse_lazy('admin:blog_recommendationvalidationpost_changelist'), request)
+
     confirm_post.short_description = 'Confirm'
     confirm_post.url_path = 'confirm-post'
 
@@ -194,5 +194,6 @@ class RecommendationValidationPostAdmin(ActionsModelAdmin):
             post.save()
             pending_post.save()
             return HttpResponseRedirect(reverse_lazy('admin:blog_recommendationvalidationpost_changelist'), request)
+
     reject_post.short_description = 'Reject'
     reject_post.url_path = 'reject-post'
