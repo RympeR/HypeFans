@@ -1,4 +1,3 @@
-import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { authAPI } from "../api/authAPI";
 import { userAPI } from "../api/userAPI";
@@ -264,15 +263,15 @@ export const logout = (): Thunk => async (dispatch) => {
 
 export const login =
   ({ email, password }: { email: string; password: string }): Thunk =>
-    async (dispatch) => {
-      // dispatch(isLoading());
-      const response = await authAPI.login(email, password);
-      if (response) {
-        await authAPI.meGetLogin();
-        dispatch(getAuthUserData());
-      }
-      // dispatch(isntLoading());
-    };
+  async (dispatch) => {
+    // dispatch(isLoading());
+    const response = await authAPI.login(email, password);
+    if (response) {
+      await authAPI.meGetLogin();
+      dispatch(getAuthUserData());
+    }
+    // dispatch(isntLoading());
+  };
 
 export const isntSettingsDisabled = (): Thunk => async (dispatch) => {
   dispatch(actions.isntSettingsDisabled());
@@ -283,42 +282,42 @@ export const isSettingsDisabled = (): Thunk => async (dispatch) => {
 
 export const changeSettings =
   (obj: any): Thunk =>
-    async (dispatch) => {
-      delete obj.avatar;
-      delete obj.background_photo;
-      delete obj.ref_link;
-      dispatch(isSettingsDisabled());
-      const response = await authAPI.meUpdate(obj);
-      await authAPI.meGet();
-      if (response) {
-        dispatch(getAuthUserData());
-      }
-      dispatch(isntSettingsDisabled());
-    };
+  async (dispatch) => {
+    delete obj.avatar;
+    delete obj.background_photo;
+    delete obj.ref_link;
+    dispatch(isSettingsDisabled());
+    const response = await authAPI.meUpdate(obj);
+    await authAPI.meGet();
+    if (response) {
+      dispatch(getAuthUserData());
+    }
+    dispatch(isntSettingsDisabled());
+  };
 
 export const changeAvatar =
   (obj: any): Thunk =>
-    async (dispatch) => {
-      dispatch(isSettingsDisabled());
-      const response = await authAPI.meUpdate(obj);
-      await authAPI.meGet();
-      if (response) {
-        dispatch(getAuthUserData());
-      }
-      dispatch(isntSettingsDisabled());
-    };
+  async (dispatch) => {
+    dispatch(isSettingsDisabled());
+    const response = await authAPI.meUpdate(obj);
+    await authAPI.meGet();
+    if (response) {
+      dispatch(getAuthUserData());
+    }
+    dispatch(isntSettingsDisabled());
+  };
 
 export const changeBackground =
   (obj: any): Thunk =>
-    async (dispatch) => {
-      dispatch(isSettingsDisabled());
-      const response = await authAPI.meUpdate(obj);
-      await authAPI.meGet();
-      if (response) {
-        dispatch(getAuthUserData());
-      }
-      dispatch(isntSettingsDisabled());
-    };
+  async (dispatch) => {
+    dispatch(isSettingsDisabled());
+    const response = await authAPI.meUpdate(obj);
+    await authAPI.meGet();
+    if (response) {
+      dispatch(getAuthUserData());
+    }
+    dispatch(isntSettingsDisabled());
+  };
 
 export const getUserData = (): Thunk => async (dispatch) => {
   dispatch(isLoading());
@@ -331,7 +330,7 @@ export const getUserData = (): Thunk => async (dispatch) => {
 
 type AllActionsType = InferActionsTypes<typeof actions>;
 
-type DispatchType = Dispatch<AllActionsType>;
+// type DispatchType = Dispatch<AllActionsType>;
 
 export type InitialStateType = typeof initialState;
 

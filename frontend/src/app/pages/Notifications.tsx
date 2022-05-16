@@ -3,8 +3,7 @@ import "react-phone-input-2/lib/style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, useHistory } from "react-router-dom";
 import {
-  getNotifications,
-  updateNotifications,
+  getNotifications, updateNotifications,
 } from "../../redux/notificationsReducer";
 import { RootState } from "../../redux/redux";
 import { ReactComponent as BackIcon } from "../../assets/images/arrow-left.svg";
@@ -14,7 +13,7 @@ import { ReactComponent as CommentIcon } from "../../assets/images/message-circl
 import { ReactComponent as SettingsIcon } from "../../assets/images/settings.svg";
 import { ReactComponent as DonateIcon } from "../../assets/images/tip.svg";
 import { ReactComponent as UnlockIcon } from "../../assets/images/unlock.svg";
-import loader from '../../assets/loaders/Spinner-1s-200px.gif';
+import loader from "../../assets/loaders/Spinner-1s-200px.gif";
 import { DefaultSidebar } from "../components/notificationsComponents/DefaultSidebar";
 import { SidebarText } from "../components/notificationsComponents/SidebarText";
 import { Preloader } from "../utils/Preloader";
@@ -249,7 +248,7 @@ const Notifications: React.FC = () => {
         {/* Главное тело в зависимости от роута*/}
         <Main
         />
-      </div>
+      </div >
     );
   };
 
