@@ -4,7 +4,7 @@ export enum NAV_LINKS {
   SIGNIN = "signin",
   SIGNUP = "signup",
   HOME = "home",
-  NOTIFICATIONS = "notifications",
+  NOTIFICATIONS = "notifications/all",
   ADD = "add",
   CHAT = "chat",
   PROFILE = "profile",
