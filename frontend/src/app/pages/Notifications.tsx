@@ -129,12 +129,9 @@ const Notifications: React.FC = () => {
       );
       const [offset, setOffset] = useState<number>(10);
       const divRef = useRef(null)
-      // const [data, setData] = useState([...notifications]);
       const [bottomPos, setBottomPos] = useState(0)
 
       const isUpdateLoading = useSelector((state: RootState) => state.blog.isPaginationLoading);
-
-      console.log(notifications);
 
       useEffect(() => {
         divRef.current.scrollBy({ top: bottomPos, behavior: "smooth" })
