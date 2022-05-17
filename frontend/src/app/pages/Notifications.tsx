@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "react-phone-input-2/lib/style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, useHistory } from "react-router-dom";
 import {
-  getNotifications,
+  getNotifications, updateNotifications,
 } from "../../redux/notificationsReducer";
 import { RootState } from "../../redux/redux";
 import { ReactComponent as BackIcon } from "../../assets/images/arrow-left.svg";
@@ -18,23 +18,22 @@ import { DefaultSidebar } from "../components/notificationsComponents/DefaultSid
 import { SidebarText } from "../components/notificationsComponents/SidebarText";
 import { Preloader } from "../utils/Preloader";
 import { Notification } from "./notifications/Notification";
-import { blogAPI } from "../../api/blogAPI";
 import { LangContext } from "../utils/LangProvider";
 
 const Notifications: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { currentLang } = useContext(LangContext);
-  const notifications = useSelector(
-    (state: RootState) => state.notifications.notifications
-  );
   const isLoading = useSelector(
     (state: RootState) => state.notifications.isLoading
   );
 
+
   useEffect(() => {
-    dispatch(getNotifications());
-  }, [dispatch]);
+    dispatch(getNotifications(0, history.location.pathname.split("/")[
+      history.location.pathname.split("/").length - 1
+    ]));
+  }, [history.location.pathname, dispatch]);
 
   if (isLoading) {
     return <Preloader />;
@@ -42,42 +41,42 @@ const Notifications: React.FC = () => {
 
   const articles = [
     {
-      path: "/notifications",
+      path: "/notifications/all",
       text: currentLang.allRef,
       exact: true,
       type: "all",
       icon: <DonateIcon />,
     },
     {
-      path: "/notifications/donations",
+      path: "/notifications/donation",
       text: currentLang.donuts,
       exact: true,
       type: "donation",
       icon: <DonateIcon />,
     },
     {
-      path: "/notifications/chat_subscriptions",
+      path: "/notifications/chat_subscription",
       text: "Подписки на чаты",
       exact: true,
       type: "subscription",
       icon: <UnlockIcon />,
     },
     {
-      path: "/notifications/subscriptions",
+      path: "/notifications/subscription",
       text: currentLang.subscribs,
       exact: true,
       type: "subscription",
       icon: <UnlockIcon />,
     },
     {
-      path: "/notifications/likes",
+      path: "/notifications/like",
       text: currentLang.likes,
       exact: true,
       type: "like",
       icon: <LikeIcon />,
     },
     {
-      path: "/notifications/comments",
+      path: "/notifications/comment",
       text: currentLang.comments,
       exact: true,
       type: "comment",
@@ -119,40 +118,37 @@ const Notifications: React.FC = () => {
   const NotificationsMain = () => {
     const [isShown, setShown] = useState(false);
     useEffect(() => {
-      if (history.location.pathname !== "/notifications") {
+      if (history.location.pathname !== "/notifications/all") {
         setShown(true);
       }
     }, []);
-    const Main = ({ notifications }: { notifications: Array<any> }) => {
-      const [page, setPage] = useState<number>(0);
-      const [data, setData] = useState([...notifications]);
+    const Main = () => {
+      const notifications = useSelector(
+        (state: RootState) => state.notifications.notifications
+      );
+      const [offset, setOffset] = useState<number>(10);
+      const divRef = useRef(null)
+      const [bottomPos, setBottomPos] = useState(0)
 
-      const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false);
+      const isUpdateLoading = useSelector((state: RootState) => state.blog.isPaginationLoading);
 
-      console.log([data]);
+      useEffect(() => {
+        divRef.current.scrollBy({ top: bottomPos, behavior: "smooth" })
+      }, [notifications])
+
 
       const onScrollList = async (event: any) => {
         const scrollBottom =
-          event.target.scrollTop + event.target.offsetHeight ===
+          event.target.scrollTop + event.target.offsetHeight >=
           event.target.scrollHeight;
-
-        if (scrollBottom && !isUpdateLoading) {
-          setIsUpdateLoading(true);
-          await blogAPI
-            .getNotifications({
-              limit: 5,
-              offset: page * 5,
-            })
-            .then((res) => {
-              setData([...data, ...res.data]);
-            })
-            .finally(() => {
-              setPage(page + 1);
-              console.log(data);
-              debugger;
-
-              setIsUpdateLoading(false);
-            });
+        if (scrollBottom && !isUpdateLoading && offset <= notifications.length) {
+          setBottomPos(event.target.offsetHeight)
+          dispatch(updateNotifications({
+            offset: offset, type: history.location.pathname.split("/")[
+              history.location.pathname.split("/").length - 1
+            ]
+          }))
+          setOffset(offset + 10);
         }
       };
 
@@ -160,10 +156,11 @@ const Notifications: React.FC = () => {
         <div
           className="notifications__main"
           onScroll={(event) => onScrollList(event)}
+          ref={divRef}
         >
-          {data.length > 0 && typeof data[0]?.user?.first_name === "string" ? (
+          {notifications.length > 0 && typeof notifications[0]?.user?.first_name ? (
             <>
-              {data.map((item, i) => {
+              {notifications.map((item, i) => {
                 return <Notification key={`notification ${i}`} item={item} />;
               })}
               <div style={{ display: "flex", justifyContent: "center" }}>
@@ -249,27 +246,9 @@ const Notifications: React.FC = () => {
           </div>
         </div>
         {/* Главное тело в зависимости от роута*/}
-        {articles.map((article, key) => {
-          return (
-            <Route
-              path={article.path}
-              render={() => (
-                <Main
-                  notifications={
-                    article.text === currentLang.all
-                      ? notifications
-                      : notifications.filter(
-                          (item) => item.type === article.type
-                        )
-                  }
-                />
-              )}
-              exact
-              key={key + "mainItem"}
-            />
-          );
-        })}
-      </div>
+        <Main
+        />
+      </div >
     );
   };
 

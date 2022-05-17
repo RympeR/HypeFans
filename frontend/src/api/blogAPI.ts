@@ -218,22 +218,14 @@ export const blogAPI = {
         return response;
       });
   },
-  getNotifications({
-    limit = 10,
-    offset = 0,
-  }: {
-    limit: number;
-    offset: number;
-  }) {
+  getNotifications({ limit = 10, offset = 0, type }: { limit: number; offset: number, type: string }) {
     // new Notification("dude", {
     //   icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
     //   body: 'Hey there! You\'ve been notified!',
     // });
-    return instance
-      .get(`/blog/get-notifications/?limit=${limit}&offset=${offset}`)
-      .then((response) => {
-        return response;
-      });
+    return instance.get(`/blog/get-notifications/?limit=${limit}&offset=${offset}&notification_type=${type}`).then((response) => {
+      return response;
+    });
   },
   getPostActionList({ id }: idType) {
     return instance.get(`/blog/get-post-action-list/${id}`).then((response) => {

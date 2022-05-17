@@ -1,6 +1,7 @@
-import { ThunkAction } from "redux-thunk";
-import { blogAPI } from "../api/blogAPI";
-import { InferActionsTypes, RootState } from "./redux";
+import { ThunkAction } from 'redux-thunk';
+import { blogAPI } from '../api/blogAPI';
+import { setPaginationLoading } from './blogReducer';
+import { InferActionsTypes, RootState } from './redux';
 
 const initialState = {
   notifications: [
@@ -103,27 +104,22 @@ const actions = {
   },
 };
 
-export const getNotifications = (): Thunk => async (dispatch) => {
+export const getNotifications = (offset: number, type: string): Thunk => async (dispatch) => {
   dispatch(actions.isLoading());
-  const notificationsData = await blogAPI.getNotifications({
-    limit: 10,
-    offset: 0,
-  });
+  const notificationsData = await blogAPI.getNotifications({ limit: 10, offset, type });
   dispatch(actions.setNotificationsData(notificationsData.data));
   dispatch(actions.isntLoading());
 };
 
-export const updateNotifications =
-  ({ offset }: { offset: number }): Thunk =>
-  async (dispatch) => {
-    // dispatch(actions.isLoading());
-    const notificationsData = await blogAPI.getNotifications({
-      limit: 10,
-      offset,
-    });
-    dispatch(actions.updateNotificationsData(notificationsData.data));
-    // dispatch(actions.isntLoading());
-  };
+
+export const updateNotifications = ({ offset, type }: { offset: number, type: string }): Thunk => async (dispatch) => {
+  // dispatch(actions.isLoading());
+  setPaginationLoading(true)
+  const notificationsData = await blogAPI.getNotifications({ limit: 10, offset, type });
+  dispatch(actions.updateNotificationsData(notificationsData.data));
+  setPaginationLoading(false)
+  // dispatch(actions.isntLoading());
+};
 
 //  Types
 
