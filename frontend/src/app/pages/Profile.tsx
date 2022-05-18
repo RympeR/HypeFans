@@ -38,6 +38,7 @@ const Profile = () => {
   const myNick = useSelector((state: RootState) => state.auth.username);
   const myId = useSelector((state: RootState) => state.auth.pk);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
+  const [isPaginationLoading, setIsPaginationLoading] = useState<boolean>(false)
   const { pathname } = useLocation();
   const location = pathname.split("/");
   const nick = location[location.length - 1];
@@ -60,10 +61,13 @@ const Profile = () => {
   }
 
   window.onscroll = async function () {
-    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 5 && !isLoading) {
+    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 5 && !isLoading && !isPaginationLoading) {
       // getPosts here\
-      const data = await userAPI.getUserPosts({ user: nick, offset })
+      setIsPaginationLoading(true)
+      const data = await userAPI.getUserPosts({ user: nick, offset: 10 })
+      setProfile({ ...profile, posts: [...profile.posts, ...data.posts] })
       setOffset(offset + 10)
+      setIsPaginationLoading(false)
     }
   };
 
@@ -191,7 +195,7 @@ const Profile = () => {
             <h3 onClick={() => setSubscribeShow(false)}>{currentLang.no}</h3>
             <div style={{ width: "20px" }}></div>
             <h3 onClick={subscribeOnChat} style={{ color: "#FB5734" }}>
-            {currentLang.yes}
+              {currentLang.yes}
             </h3>
           </div>
         </Modal.Body>

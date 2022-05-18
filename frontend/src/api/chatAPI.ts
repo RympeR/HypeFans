@@ -1,10 +1,17 @@
-import {instance} from "./api";
-import {userSearchType} from "./types";
+import { instance } from "./api";
+import { userSearchType } from "./types";
 
 export const chatAPI = {
   getChatMessages(room_id: number) {
     return instance
       .post(`/chat/get-chat-messages/`, { room_id })
+      .then((response) => {
+        return response.data;
+      });
+  },
+  getChatMessagesPagination(room_id: number, message_id: number) {
+    return instance
+      .post(`/chat/get-chat-messages/`, { room_id, message_id })
       .then((response) => {
         return response.data;
       });
