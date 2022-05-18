@@ -167,7 +167,7 @@ class GetChatMessages(GenericAPIView):
         if request.data.get('message_id'):
             objects = Chat.objects.filter(
                 room=room,
-                pk__lte=request.data['message_id']
+                pk__lt=request.data['message_id']
             ).order_by('-date')[:50]
         else:
             objects = Chat.objects.filter(
