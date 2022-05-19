@@ -427,19 +427,18 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         setInvitedUsers([...usersList?.invited])
     }
 
+    const divRef = useRef(null)
+
+    const [topPos, setTopPos] = useState(0)
+
 
     const onScrollList = async (event: any) => {
-        const scrollBottom =
-            event.target.scrollTop + event.target.offsetHeight ===
-            event.target.scrollHeight;
-
-        console.log((event.target.scrollTop - event.target.offsetHeight) * -1 > event.target.scrollHeight);
-
-
         if ((event.target.scrollTop - event.target.offsetHeight) * -1 > event.target.scrollHeight) {
+            setTopPos(event.target.scrollTop)
             const response = await chatAPI.getChatMessagesPagination(Number(lastUrl), messages[messages.length - 1].id);
             setMessages([...messages, ...response]);
-            console.log(messages.length)
+            divRef.current.scrollBy({ top: topPos, behavior: "smooth" })
+            console.log(messages)
         }
     };
     return (
@@ -632,7 +631,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 </Popup>
             </div>
             <div className="chat__dialog">
-                <div className="message-wrap" onScroll={(event) => onScrollList(event)}>
+                <div className="message-wrap" onScroll={(event) => onScrollList(event)} ref={divRef}>
                     <div
                         ref={wrapperRef}
                         style={{
