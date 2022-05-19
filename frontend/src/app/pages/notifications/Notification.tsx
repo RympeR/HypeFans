@@ -27,8 +27,12 @@ export const Notification = ({ item }: any) => {
         return `${currentLang.noteDonut}${item.donation.amount} $`;
       case "subscription":
         return currentLang.noteSubscribe
+      case "chat_subscription":
+        return currentLang.chatSubscribedU
     }
   };
+
+
   return (
     <div className="notifications__mainItem">
       <div className="notifications__userInfo">
@@ -45,21 +49,16 @@ export const Notification = ({ item }: any) => {
             <h3 style={{ margin: "0px" }}>@{item.user.username}</h3>
           </div>
           <h4 style={{ margin: "0px" }}>{getTitle(item.type)}</h4>
-          <p>   {moment(item?.time).fromNow()}</p>
+          <p>{moment(item?.date_time * 1000).fromNow()}</p>
         </div>
       </div>
-      {item.type !== "donation" && item.type !== "subscription" ? (
+      {item.type !== "donation" && item.type !== "subscription" && item.type !== "chat_subscription" ? (
         <img
           src={item?.post?.post?.attachments[0]?._file}
           alt="postPhoto"
           className="notifications__postPhoto"
           onClick={() => setIsModalOpened(true)}
         ></img>
-      ) : null}
-      {item.type === "subscription" ? (
-        <div className="notifications__donationAmount">
-          {item.subscription.amount}{currentLang.months}
-        </div>
       ) : null}
       <Modal
         show={isModalOpened}

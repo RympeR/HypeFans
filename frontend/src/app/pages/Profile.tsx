@@ -12,7 +12,7 @@ import { ReactComponent as SaveIcon } from "../../assets/images/bookmark.svg";
 import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
 import { ReactComponent as CommentIcon } from "../../assets/images/message-circle.svg";
 import { buyPost, clearUserData, getUser } from "../../redux/userReducer";
-import { ReactComponent as MenuDotsWhite } from "../../assets/images/3dotsWhite.svg";
+import { ReactComponent as MenuDotsOrange } from "../../assets/images/3dotsOrange.svg";
 import { ReactComponent as BackButton } from "../../assets/images/arrow-leftWhite.svg";
 import logo from "../../assets/images/logo.svg";
 import { Preloader } from "../utils/Preloader";
@@ -213,7 +213,7 @@ const Profile = () => {
           />
           <Popup
             trigger={
-              <MenuDotsWhite style={{ width: "25px", height: "25px" }} />
+              <MenuDotsOrange style={{ width: "25px", height: "25px" }} />
             }
             position="bottom right"
           >

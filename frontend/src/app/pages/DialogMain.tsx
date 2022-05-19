@@ -441,6 +441,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             console.log(messages)
         }
     };
+
     return (
         <div className="chat__dialogsMain">
             <Modal
