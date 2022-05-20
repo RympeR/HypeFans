@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.74cc9779.css",
-    "main.js": "/static/js/main.838d51aa.js",
+    "main.js": "/static/js/main.b509e4a5.js",
     "static/media/sign-in-bg.jpg": "/static/media/sign-in-bg.baad8d0a3cefccbb5e4c.jpg",
     "static/media/elise-wilcox-bmbGUfd7y-I-unsplash.jpg": "/static/media/elise-wilcox-bmbGUfd7y-I-unsplash.8e371d10859f7fd15eb5.jpg",
     "static/media/boxed-water-is-better-zuj2m7qxDA0-unsplash.jpg": "/static/media/boxed-water-is-better-zuj2m7qxDA0-unsplash.4e5d9b0f993795d62d9d.jpg",
@@ -35,7 +35,7 @@
     "static/media/users.svg": "/static/media/users.0e932a5b63049325d1fe0b182ec92454.svg",
     "static/media/link.svg": "/static/media/link.a3063c79593fe7d1365d2ebfbed8b905.svg",
     "static/media/facebookRef.svg": "/static/media/facebookRef.e69b0043ddddcf6bce20337b695f5084.svg",
-    "static/media/3dotsWhite.svg": "/static/media/3dotsWhite.61c4718d9e05a930387db6277767ccae.svg",
+    "static/media/3dotsOrange.svg": "/static/media/3dotsOrange.82ce96d7bedb48bc4ff9b270b732194a.svg",
     "static/media/camera.svg": "/static/media/camera.690317de39606b70746fa298dab28f49.svg",
     "static/media/cameraLink.svg": "/static/media/cameraLink.3717f7a0a51aed05a0a98b4082552432.svg",
     "static/media/eye-off.svg": "/static/media/eye-off.b122d781d708d5383132b7dbbff2b930.svg",
@@ -78,10 +78,10 @@
     "static/media/arrow-left-mobile.svg": "/static/media/arrow-left-mobile.2d743aa0ee7183dbcbfa59f4f1750e98.svg",
     "static/media/leftIcon.svg": "/static/media/leftIcon.8570736da78871456bcf4a7b23b88ede.svg",
     "main.74cc9779.css.map": "/static/css/main.74cc9779.css.map",
-    "main.838d51aa.js.map": "/static/js/main.838d51aa.js.map"
+    "main.b509e4a5.js.map": "/static/js/main.b509e4a5.js.map"
   },
   "entrypoints": [
     "static/css/main.74cc9779.css",
-    "static/js/main.838d51aa.js"
+    "static/js/main.b509e4a5.js"
   ]
 }
