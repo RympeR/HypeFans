@@ -20,7 +20,7 @@ export const ConfidentialitySettings = ({
                     type="checkbox"
                     className="notifications__toggle-button"
                     name="hide_online"
-                    checked={values.hide_online}
+                    checked={!values.hide_online}
                     disabled={isDisabled}
                     onChange={(val) => {
                         setFieldValue("hide_online", val.target.checked);
