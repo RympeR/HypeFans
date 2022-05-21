@@ -56,7 +56,7 @@ const Notifications: React.FC = () => {
     },
     {
       path: "/notifications/chat_subscription",
-      text: "Подписки на чаты",
+      text: currentLang.chat_subs,
       exact: true,
       type: "subscription",
       icon: <UnlockIcon />,
@@ -164,7 +164,7 @@ const Notifications: React.FC = () => {
                 return <Notification key={`notification ${i}`} item={item} />;
               })}
               <div style={{ display: "flex", justifyContent: "center" }}>
-                {isUpdateLoading ? <img src={loader} alt="loading..." /> : null}
+                {isUpdateLoading ? <img width="60" height="60" src={loader} alt="loading..." /> : null}
               </div>
             </>
           ) : (

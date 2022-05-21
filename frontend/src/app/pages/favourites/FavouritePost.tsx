@@ -51,7 +51,7 @@ export const FavouritePost = ({ item, index }: { item: any, index: number }) => 
                             </div>
                         </div>
                         <div style={{ display: "flex", alignItems: "center" }}>
-                            <div className="profile__postAgo">{moment(item.post.publication_date).fromNow()}</div>
+                            <div className="profile__postAgo">{moment(item.post.publication_date * 1000).fromNow()}</div>
                             <button className="post__menu-dots">
                                 {/* <MenuDots /> */}
                             </button>
