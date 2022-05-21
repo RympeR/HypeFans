@@ -34,11 +34,12 @@ const Profile = () => {
   const [subscribeShow, setSubscribeShow] = useState(false);
   const profileData = useSelector((state: RootState) => state.user);
   const [profile, setProfile] = useState(profileData);
-  const [offset, setOffset] = useState<number>(10)
+  const [offset, setOffset] = useState<number>(10);
   const myNick = useSelector((state: RootState) => state.auth.username);
   const myId = useSelector((state: RootState) => state.auth.pk);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
-  const [isPaginationLoading, setIsPaginationLoading] = useState<boolean>(false)
+  const [isPaginationLoading, setIsPaginationLoading] =
+    useState<boolean>(false);
   const { pathname } = useLocation();
   const location = pathname.split("/");
   const nick = location[location.length - 1];
@@ -61,13 +62,18 @@ const Profile = () => {
   }
 
   window.onscroll = async function () {
-    if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 5 && !isLoading && !isPaginationLoading) {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 5 &&
+      !isLoading &&
+      !isPaginationLoading
+    ) {
       // getPosts here\
-      setIsPaginationLoading(true)
-      const data = await userAPI.getUserPosts({ user: nick, offset: 10 })
-      setProfile({ ...profile, posts: [...profile.posts, ...data.posts] })
-      setOffset(offset + 10)
-      setIsPaginationLoading(false)
+      setIsPaginationLoading(true);
+      const data = await userAPI.getUserPosts({ user: nick, offset: 10 });
+      setProfile({ ...profile, posts: [...profile.posts, ...data.posts] });
+      setOffset(offset + 10);
+      setIsPaginationLoading(false);
     }
   };
 
@@ -77,7 +83,7 @@ const Profile = () => {
       target: profile.pk,
     });
     setSubscribeShow(false);
-    if (data.status === 202) {
+    if (data.status === 202 && !profile.private_profile) {
       setProfile({
         ...profile,
         subscribed: true,
@@ -91,6 +97,8 @@ const Profile = () => {
         }),
       });
       toast.success("Вы подписались");
+    } else if (data.status === 202 && profile.private_profile) {
+      toast.success("Заявка отправлена");
     } else {
       toast.error("Ошибка подписки");
     }
@@ -237,13 +245,18 @@ const Profile = () => {
         <h3 className="profile__name">{profile.first_name}</h3>
         <div style={{ display: "flex" }}>
           <h4 className="profile__nickname"> {`@${nick}`}</h4>
-          <div
-            className="is_online"
-            style={profile.is_online ? {} : { backgroundColor: "#C0C0C0" }}
-          ></div>
+          {profile.hide_online ? (
+            <></>
+          ) : (
+            <div
+              className="is_online"
+              style={profile.is_online ? { backgroundColor: "#fb5734" } : { backgroundColor: "#C0C0C0" }}
+            ></div>
+          )}
         </div>
         <h5 className="profile__info">
-          {profile?.posts?.length} {currentLang.posts} {sub_amount(profile.fans_amount, 1)}{" "}
+          {profile?.posts?.length} {currentLang.posts}{" "}
+          {sub_amount(profile.fans_amount, 1)}{" "}
           <img className="sub_icon" src={fansIcon} />{" "}
         </h5>
       </div>
@@ -331,7 +344,17 @@ const Profile = () => {
         ) : null}
       </div>
       <div className="profile__posts">
-        <div className="profile__posts">
+        {profile.private_profile && !profile.subscribed && myNick !== nick ? <div
+          style={{
+            fontSize: "25px",
+            fontWeight: "bold",
+            textAlign: "center",
+            marginTop: "70px",
+            paddingBottom: "70px",
+          }}
+        >
+          Подпишитесь чтоб посмотреть посты
+        </div> : <div className="profile__posts">
           {profile?.posts?.length > 0 ? (
             profile?.posts.map((item, index) => {
               return myNick === nick || item.post.payed ? (
@@ -445,7 +468,7 @@ const Profile = () => {
               {currentLang.noPosts}
             </div>
           )}
-        </div>
+        </div>}
       </div>
     </div>
   );

@@ -3,7 +3,8 @@ import "react-phone-input-2/lib/style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, useHistory } from "react-router-dom";
 import {
-  getNotifications, updateNotifications,
+  getNotifications,
+  updateNotifications,
 } from "../../redux/notificationsReducer";
 import { RootState } from "../../redux/redux";
 import { ReactComponent as BackIcon } from "../../assets/images/arrow-left.svg";
@@ -28,11 +29,15 @@ const Notifications: React.FC = () => {
     (state: RootState) => state.notifications.isLoading
   );
 
-
   useEffect(() => {
-    dispatch(getNotifications(0, history.location.pathname.split("/")[
-      history.location.pathname.split("/").length - 1
-    ]));
+    dispatch(
+      getNotifications(
+        0,
+        history.location.pathname.split("/")[
+          history.location.pathname.split("/").length - 1
+        ]
+      )
+    );
   }, [history.location.pathname, dispatch]);
 
   if (isLoading) {
@@ -56,7 +61,7 @@ const Notifications: React.FC = () => {
     },
     {
       path: "/notifications/chat_subscription",
-      text: "Подписки на чаты",
+      text: currentLang.chat_subs,
       exact: true,
       type: "subscription",
       icon: <UnlockIcon />,
@@ -127,27 +132,35 @@ const Notifications: React.FC = () => {
         (state: RootState) => state.notifications.notifications
       );
       const [offset, setOffset] = useState<number>(10);
-      const divRef = useRef(null)
-      const [bottomPos, setBottomPos] = useState(0)
+      const divRef = useRef(null);
+      const [bottomPos, setBottomPos] = useState(0);
 
-      const isUpdateLoading = useSelector((state: RootState) => state.blog.isPaginationLoading);
+      const isUpdateLoading = useSelector(
+        (state: RootState) => state.blog.isPaginationLoading
+      );
 
       useEffect(() => {
-        divRef.current.scrollBy({ top: bottomPos, behavior: "smooth" })
-      }, [notifications])
-
+        divRef.current.scrollBy({ top: bottomPos, behavior: "smooth" });
+      }, [notifications]);
 
       const onScrollList = async (event: any) => {
         const scrollBottom =
           event.target.scrollTop + event.target.offsetHeight >=
           event.target.scrollHeight;
-        if (scrollBottom && !isUpdateLoading && offset <= notifications.length) {
-          setBottomPos(event.target.offsetHeight)
-          dispatch(updateNotifications({
-            offset: offset, type: history.location.pathname.split("/")[
-              history.location.pathname.split("/").length - 1
-            ]
-          }))
+        if (
+          scrollBottom &&
+          !isUpdateLoading &&
+          offset <= notifications.length
+        ) {
+          setBottomPos(event.target.offsetHeight);
+          dispatch(
+            updateNotifications({
+              offset: offset,
+              type: history.location.pathname.split("/")[
+                history.location.pathname.split("/").length - 1
+              ],
+            })
+          );
           setOffset(offset + 10);
         }
       };
@@ -158,13 +171,16 @@ const Notifications: React.FC = () => {
           onScroll={(event) => onScrollList(event)}
           ref={divRef}
         >
-          {notifications.length > 0 && typeof notifications[0]?.user?.first_name ? (
+          {notifications.length > 0 &&
+          typeof notifications[0]?.user?.first_name ? (
             <>
               {notifications.map((item, i) => {
                 return <Notification key={`notification ${i}`} item={item} />;
               })}
               <div style={{ display: "flex", justifyContent: "center" }}>
-                {isUpdateLoading ? <img src={loader} alt="loading..." /> : null}
+                {isUpdateLoading ? (
+                  <img width="60" height="60" src={loader} alt="loading..." />
+                ) : null}
               </div>
             </>
           ) : (
@@ -246,9 +262,8 @@ const Notifications: React.FC = () => {
           </div>
         </div>
         {/* Главное тело в зависимости от роута*/}
-        <Main
-        />
-      </div >
+        <Main />
+      </div>
     );
   };
 

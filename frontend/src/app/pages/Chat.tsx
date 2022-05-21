@@ -72,14 +72,14 @@ const Chat: React.FC = () => {
           style={
             lastUrl !== item?.item?.room?.room_info?.id
               ? {
-                display: "flex",
-                borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
-              }
+                  display: "flex",
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                }
               : {
-                display: "flex",
-                borderBottom: "1px solid rgba(0, 0, 0, 0.2),",
-                backgroundColor: "#C41E3A",
-              }
+                  display: "flex",
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2),",
+                  backgroundColor: "#C41E3A",
+                }
           }
         >
           <div className="chat__sidebarItem">
