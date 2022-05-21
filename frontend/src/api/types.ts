@@ -139,6 +139,7 @@ export type getUserRT = {
   credit_amount: number | null;
   earned_credits_amount: number | null;
   posts: Array<any>;
+  private_profile: boolean
 };
 
 export type userStringType = {
