@@ -103,7 +103,9 @@ export const Search: React.FC = () => {
           <div>
             <ArrowLeft onClick={() => history.push("/home")} />
           </div>
-          <div style={{ marginTop: "5px", marginLeft: "8px" }}>{currentLang.searchProfile}</div>
+          <div style={{ marginTop: "5px", marginLeft: "8px" }}>
+            {currentLang.searchProfile}
+          </div>
         </div>
         <div
           style={{
