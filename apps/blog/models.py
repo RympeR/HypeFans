@@ -28,7 +28,7 @@ class Attachment(models.Model):
         verbose_name_plural = 'Вложения'
 
     def __str__(self):
-        return  f"{self.pk}-{self.file_type}"
+        return f"{self.pk}-{self.file_type}"
 
     @property
     def file_preview(self):
@@ -40,6 +40,8 @@ class Attachment(models.Model):
             return mark_safe('<audio src="{}" controls />'.format(self._file.url))
         else:
             return mark_safe('<file src="{}" />'.format(self._file.url))
+
+
 class Post(models.Model):
     class AccessLevelChoices(models.IntegerChoices):
         BUY = 1, 'Покупка'
