@@ -83,7 +83,7 @@ const Profile = () => {
       target: profile.pk,
     });
     setSubscribeShow(false);
-    if (data.status === 202) {
+    if (data.status === 202 && !profile.private_profile) {
       setProfile({
         ...profile,
         subscribed: true,
@@ -97,6 +97,8 @@ const Profile = () => {
         }),
       });
       toast.success("Вы подписались");
+    } else if (data.status === 202 && profile.private_profile) {
+      toast.success("Заявка отправлена");
     } else {
       toast.error("Ошибка подписки");
     }
@@ -248,7 +250,7 @@ const Profile = () => {
           ) : (
             <div
               className="is_online"
-              style={profile.is_online ? { backgroundColor: "#C0C0C0" } : {}}
+              style={profile.is_online ? { backgroundColor: "#fb5734" } : { backgroundColor: "#C0C0C0" }}
             ></div>
           )}
         </div>
@@ -342,7 +344,17 @@ const Profile = () => {
         ) : null}
       </div>
       <div className="profile__posts">
-        <div className="profile__posts">
+        {profile.private_profile && !profile.subscribed && myNick !== nick ? <div
+          style={{
+            fontSize: "25px",
+            fontWeight: "bold",
+            textAlign: "center",
+            marginTop: "70px",
+            paddingBottom: "70px",
+          }}
+        >
+          Подпишитесь чтоб посмотреть посты
+        </div> : <div className="profile__posts">
           {profile?.posts?.length > 0 ? (
             profile?.posts.map((item, index) => {
               return myNick === nick || item.post.payed ? (
@@ -456,7 +468,7 @@ const Profile = () => {
               {currentLang.noPosts}
             </div>
           )}
-        </div>
+        </div>}
       </div>
     </div>
   );
