@@ -397,9 +397,9 @@ class ChatRoomsConsumer(WebsocketConsumer):
                                             x['room']['message']['readed']
                                         )
                                       )
-            for i, el in enumerate(filtered_results):
-                if el['room']['message']['id'] == -1:
-                    filtered_results[i]['room']['message'] = None
+            # for i, el in enumerate(filtered_results):
+            #     if el['room']['message']['id'] == -1:
+            #         filtered_results[i]['room']['message'] = None
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {
