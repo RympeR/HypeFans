@@ -8,6 +8,7 @@ from apps.blog.models import Attachment
 from apps.users.models import User, chat_sub_checker
 from apps.users.serializers import (UserShortChatRetrieveSeriliazer,
                                     UserShortSocketRetrieveSeriliazer)
+from django.db.models import Q
 
 from .models import Chat, Room, UserMessage
 from .serializers import ChatGetSerializer, RoomSocketSerializer
@@ -333,6 +334,11 @@ class ChatRoomsConsumer(WebsocketConsumer):
                     user_obj = room_obj['message'].user
                 message_obj = room_obj['message'] if room_obj['message'] else None
                 attachment = True if message_obj and message_obj.attachment.all().exists() else False
+                message_readed = True if UserMessage.objects.filter(
+                    ~Q(user=user),
+                    message=message_obj,
+                    readed=True
+                ).exists() else False
                 filtered_results.append(
                     {
                         "room": {
@@ -348,11 +354,14 @@ class ChatRoomsConsumer(WebsocketConsumer):
                                 'text': message_obj.text,
                                 'price': message_obj.price,
                                 'attachment': attachment,
+                                'readed': message_readed,
                             } if message_obj else None,
                             "room_info": RoomSocketSerializer(instance=room_obj['room']).data
                         }
                     }
                 )
+            filtered_results = sorted(
+                filtered_results, key=lambda x: (-x['room']['message']['time'], x['room']['message']['readed']))
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {
