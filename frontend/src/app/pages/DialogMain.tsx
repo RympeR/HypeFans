@@ -262,9 +262,9 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         if (!ws) return;
         ws.onmessage = (e: any) => {
             const message = JSON.parse(e.data);
-            debugger
+            // debugger
             if (message.user.pk !== uid) {
-                debugger
+                // debugger
                 wsRead.send(
                     JSON.stringify({
                         user: uid,

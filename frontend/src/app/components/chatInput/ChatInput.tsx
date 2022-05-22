@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { getLastUrlPoint } from "../../../app/utils/utilities";
 import { ReactComponent as Vektor } from "../../../assets/images/send.svg";
@@ -10,7 +10,10 @@ export const ChatInput = ({
   isSendDisabled,
   audio,
   wrapperRef,
-  marginTop, setMarginTop, height, setHeight
+  marginTop,
+  setMarginTop,
+  height,
+  setHeight,
 }: {
   sendMessage: any;
   isSendDisabled: any;
@@ -22,23 +25,29 @@ export const ChatInput = ({
   setHeight: any;
 }) => {
   const history = useHistory();
-  const windowHeight = window.innerHeight;
   const inputRef = useRef(null);
   const lastUrl = getLastUrlPoint(history.location.pathname);
   const [editableText, setEditableText] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const VektorIcon = () => <Vektor />;
   const VektorIconDisabled = () => <VektorDisabled />;
+
+  useEffect(() => {
+    if (inputRef.current.innerText) {
+      setMessage(inputRef.current.innerText);
+    }
+  }, []);
   return (
     <Formik
       initialValues={{
         messageFormikText: "",
       }}
       onSubmit={async (obj, actions) => {
-        console.warn(obj);
-        const edited_messages = message.replace("<br>", "\n").trim();
-        if (edited_messages.length > 255) {
-          const messages_arr = edited_messages.match(/(.|[\r\n]){1,255}/g);
+        const edited_messages = inputRef.current.innerText
+          .replace("<br>", "\n")
+          .trim();
+        if (edited_messages.length > 250) {
+          const messages_arr = edited_messages.match(/(.|[\r\n]){1,250}/g);
           for (let i = 0; i < messages_arr.length; i++) {
             await sendMessage(messages_arr[i]);
           }
@@ -50,6 +59,7 @@ export const ChatInput = ({
         setEditableText("");
         setMarginTop(0);
         setHeight(50);
+        inputRef.current.innerText = "";
       }}
     >
       {({ values, handleSubmit, setFieldValue }) => {
@@ -70,32 +80,18 @@ export const ChatInput = ({
               }}
               dangerouslySetInnerHTML={{ __html: editableText }}
               onKeyDown={(e: any) => {
-                setMessage(e.target.innerText);
+                setMessage(inputRef.current.innerText);
+                console.log(message);
                 let text_arr: any = Array.from(inputRef.current.childNodes);
+                console.log(text_arr);
                 text_arr = text_arr.filter((item: any) => {
                   return item.nodeName != "BR";
                 });
                 console.log(text_arr);
                 const element_length = text_arr?.length || 0;
                 console.log(element_length);
-                const last_row_length =
-                  text_arr[element_length - 1]?.nodeValue?.length || 0;
                 if (element_length >= 2) {
                   setMarginTop(-21 * (element_length - 1));
-                }
-                if (last_row_length > 5) {
-                  inputRef.current.appendChild(document.createElement("br"));
-                  setHeight(50 + 21 * element_length);
-                  setMarginTop(-21 * element_length);
-                  //   const sel = window.getSelection();
-                  //   const range = document.createRange();
-                  //   range.setStart(
-                  //     inputRef.current.childNodes[element_length],
-                  //     0
-                  //   );
-                  //   range.collapse(true);
-                  //   sel.removeAllRanges();
-                  //   sel.addRange(range);
                 }
                 if (
                   e.key === "Backspace" ||
@@ -112,7 +108,8 @@ export const ChatInput = ({
                   setMarginTop(0);
                   setHeight(height);
                   if (
-                    (message && message.length < 255) ||
+                    (inputRef?.current?.innerText &&
+                      inputRef?.current?.innerText.length < 255) ||
                     isSendDisabled ||
                     audio
                   ) {
@@ -127,12 +124,18 @@ export const ChatInput = ({
                 return handleSubmit();
               }}
               disabled={
-                (message && message.length < 255) || isSendDisabled || audio
+                (inputRef?.current?.innerText &&
+                  inputRef?.current?.innerText.length < 255) ||
+                isSendDisabled ||
+                audio
                   ? false
                   : true
               }
             >
-              {(message && message.length < 255) || isSendDisabled || audio ? (
+              {(inputRef?.current?.innerText &&
+                inputRef?.current?.innerText.length < 255) ||
+              isSendDisabled ||
+              audio ? (
                 <VektorIcon />
               ) : (
                 <VektorIconDisabled />

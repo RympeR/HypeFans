@@ -250,7 +250,7 @@ const Profile = () => {
           ) : (
             <div
               className="is_online"
-              style={profile.is_online ? { backgroundColor: "#fb5734" } : { backgroundColor: "#C0C0C0" }}
+              style={profile.is_online ? { backgroundColor: "#C0C0C0" } : {}}
             ></div>
           )}
         </div>

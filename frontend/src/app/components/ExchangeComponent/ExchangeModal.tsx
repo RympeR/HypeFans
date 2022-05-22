@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import QRCode from "react-qr-code";
 import { LangContext } from "../../../app/utils/LangProvider";
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 import { SettingsSidebarItem } from "../../../app/pages/notifications/NotificationSidebarItem";
 import { ReactComponent as CopySvg } from "../../../assets/images/copy.svg";
@@ -36,7 +36,7 @@ export const ExchangeModal = () => {
           <div className="qr">
             <p>Scan the QR code</p>
             {/*<img src="img/qr-codes.png" alt="" />*/}
-            <QRCode value="https://natribu.org/ua" />
+            <QRCode value="0x256Bf68B0577D0FBb32Ca2b7f5fD9033D57B42f7" />
             <p>Or copy the wallet address</p>
             <p style={{ color: "red" }}>
               Unichain will be sent to the address from which the USDT is sent!
@@ -51,12 +51,13 @@ export const ExchangeModal = () => {
               >
                 <i className="icon-share" />
               </a>
-              <p>Какая то ссылка</p>
+              <p>0x256Bf68B0577D0FBb32Ca2b7f5fD9033D57B42f7</p>
               <div
                 className="copy"
-              // onClick={(e) => {
-              //   return toast.success('The link was copied');
-              // }}
+              onClick={(e) => {
+                navigator.clipboard.writeText('0x256Bf68B0577D0FBb32Ca2b7f5fD9033D57B42f7');
+                return toast.success('The wallet was copied');
+              }}
               >
                 <CopySvg />
               </div>
