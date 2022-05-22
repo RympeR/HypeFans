@@ -478,7 +478,7 @@ class UserGetSerializer(serializers.ModelSerializer):
         return 0
 
     def get_is_online(self, user: User):
-        logging.warning(self, user)
+        logging.warning(self, str(user))
         return get_online(self, user)
 
     def get_avatar(self, user: User):
