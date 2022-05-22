@@ -216,7 +216,11 @@ class UserCreateAPI(generics.GenericAPIView):
                 ref_link=create_ref_link(username),
                 referrer=ref_user
             )
+
             assert created, "Already exists"
+            UserOnline.objects.create(
+                user=user,
+            )
             user.set_password(request.data['password'])
             if ref_user:
                 ref_user.repheral_users.add(user)
