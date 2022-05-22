@@ -385,6 +385,9 @@ class ChatRoomsConsumer(WebsocketConsumer):
                             } if message_obj else {
                                 'id': -1,
                                 'time': 0,
+                                'text': '',
+                                'price': 0,
+                                'attachment': [],
                                 'readed': False,
                             },
                             "room_info": RoomSocketSerializer(instance=room_obj['room']).data
@@ -393,9 +396,9 @@ class ChatRoomsConsumer(WebsocketConsumer):
                 )
             filtered_results = sorted(filtered_results,
                                       key=lambda x: (
-                                            -x['room']['message']['time'],
-                                            x['room']['message']['readed']
-                                        )
+                                          -x['room']['message']['time'],
+                                          x['room']['message']['readed']
+                                      )
                                       )
             # for i, el in enumerate(filtered_results):
             #     if el['room']['message']['id'] == -1:
