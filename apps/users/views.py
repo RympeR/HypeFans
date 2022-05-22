@@ -32,6 +32,7 @@ try:
 except Exception:
     logging.warning("No wand module")
 from apps.blog.models import PostAction, PostBought
+from apps.chat.models import Chat, Room
 from apps.blog.serializers import PostGetShortSerializers
 from apps.users.dynamic_preferences_registry import (ReferralPercentage,
                                                      WithdrawPercentage)
@@ -86,7 +87,7 @@ class UserRetrieveAPI(generics.RetrieveAPIView):
 
 
 class UserSearchRetrieveAPI(generics.ListAPIView):
-    queryset = User.objects.all()
+    queryset = User.objects.filter(hide_in_search=False)
     serializer_class = UserShortRetrieveSeriliazer
     filterset_class = UserFilter
 
@@ -221,6 +222,17 @@ class UserCreateAPI(generics.GenericAPIView):
                 ref_user.repheral_users.add(user)
 
             user.save()
+            admin_user = User.objects.get(username='root')
+            room = Room.objects.create(
+                creator=admin_user,
+                invited=user,
+                name='HypeFans'
+            )
+            Chat.objects.create(
+                room=room,
+                user=admin_user,
+                text='Welcome to HypeFans. If you have some questions you can ask them here',
+            )
             token, created = Token.objects.get_or_create(user=user)
             current_site = get_current_site(request).domain
             relativeLink = reverse('email-verify')
@@ -429,7 +441,7 @@ class UserChatSubscription(GenericAPIView):
                 end_date=subscription_datetime + timedelta(
                     days=ChatSubscriptionDuration.value()
                 )
-            ).save()
+            )
             return api_accepted_202(
                 {
                     "subscriber": user.pk,
@@ -483,7 +495,6 @@ class AddBlockedUserAPI(generics.GenericAPIView):
         return self.request.user
 
     def put(self, request, *args, **kwargs):
-        print(request.data['user'])
         for el in request.data['user']:
             user = User.objects.get(pk=el)
             if request.data.get('block', False):

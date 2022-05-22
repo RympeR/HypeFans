@@ -45,85 +45,112 @@ class ChatConsumer(WebsocketConsumer):
             blocked = False
             logging.warning(f"Received json {text_data_json}")
             users_len = 1 + len(room.invited.all())
-            if users_len == 2:
-                logging.warning(f"compared")
-                if user == room.creator:
-                    blocked = True if user in room.invited.first().blocked_users.all() else False
-                else:
-                    blocked = True if user in room.creator.blocked_users.all() else False
-                logging.warning(f"block logic {blocked}")
-            if not blocked:
-                chat_sub_check = True
-                logging.warning(f"creator logic")
-
-                if users_len == 2 and user == room.creator:
-                    logging.warning(f"is creator")
+            if not room.creator.is_staff:
+                if users_len == 2:
+                    logging.warning(f"compared")
+                    if user == room.creator:
+                        blocked = True if user in room.invited.first().blocked_users.all() else False
+                    else:
+                        blocked = True if user in room.creator.blocked_users.all() else False
+                    logging.warning(f"block logic {blocked}")
+                if not blocked:
                     chat_sub_check = True
-                else:
-                    if user != room.creator:
-                        chat_sub_check = chat_sub_checker(user, room.creator)
-                    logging.warning(user)
-                    logging.warning(room.creator)
+                    logging.warning(f"creator logic")
 
-                logging.warning(f"chat sub checker logic {chat_sub_check}")
-                if chat_sub_check:
-                    chat = Chat.objects.create(
-                        room=room,
-                        user=user,
-                        text=message,
-                        price=message_price,
-                    )
-                    chat.attachment.set(
-                        Attachment.objects.filter(pk__in=_file))
-                    logging.warning(f"created chat {chat.pk}")
-                    async_to_sync(self.channel_layer.group_send)(
-                        self.room_group_name,
-                        {
-                            'type': 'chat_message',
-                            'attachments': _file,
-                            'text': message,
-                            'date': chat.date.timestamp(),
-                            'id': chat.pk,
-                            'is_payed': is_payed,
-                            'message_price': message_price,
-                            'user': UserShortChatRetrieveSeriliazer(
-                                instance=user).data,
-                            'room_id': room.pk,
-                        }
-                    )
+                    if users_len == 2 and user == room.creator:
+                        logging.warning(f"is creator")
+                        chat_sub_check = True
+                    else:
+                        if user != room.creator:
+                            chat_sub_check = chat_sub_checker(
+                                user, room.creator)
+                        logging.warning(user)
+                        logging.warning(room.creator)
+
+                    logging.warning(f"chat sub checker logic {chat_sub_check}")
+                    if chat_sub_check:
+                        chat = Chat.objects.create(
+                            room=room,
+                            user=user,
+                            text=message,
+                            price=message_price,
+                        )
+                        chat.attachment.set(
+                            Attachment.objects.filter(pk__in=_file))
+                        logging.warning(f"created chat {chat.pk}")
+                        async_to_sync(self.channel_layer.group_send)(
+                            self.room_group_name,
+                            {
+                                'type': 'chat_message',
+                                'attachments': _file,
+                                'text': message,
+                                'date': chat.date.timestamp(),
+                                'id': chat.pk,
+                                'is_payed': is_payed,
+                                'message_price': message_price,
+                                'user': UserShortChatRetrieveSeriliazer(
+                                    instance=user).data,
+                                'room_id': room.pk,
+                            }
+                        )
+                    else:
+                        async_to_sync(self.channel_layer.group_send)(
+                            self.room_group_name,
+                            {
+                                'type': 'chat_message',
+                                'attachments': [],
+                                'text': 'need to resubscribe',
+                                'date': 0,
+                                'id': -2,
+                                'is_payed': False,
+                                'message_price': 0,
+                                'user': UserShortChatRetrieveSeriliazer(
+                                    instance=user).data,
+                                'room_id': room.pk,
+                            }
+                        )
+
                 else:
                     async_to_sync(self.channel_layer.group_send)(
                         self.room_group_name,
                         {
                             'type': 'chat_message',
                             'attachments': [],
-                            'text': 'need to resubscribe',
+                            'text': '',
                             'date': 0,
-                            'id': -2,
+                            'id': -1,
                             'is_payed': False,
                             'message_price': 0,
-                            'user': UserShortChatRetrieveSeriliazer(
-                                instance=user).data,
-                            'room_id': room.pk,
+                            'user': 0,
+                            'room_id': 0,
                         }
                     )
-
             else:
+                chat = Chat.objects.create(
+                    room=room,
+                    user=user,
+                    text=message,
+                    price=message_price,
+                )
+                chat.attachment.set(
+                    Attachment.objects.filter(pk__in=_file)
+                )
+                logging.warning(f"created chat {chat.pk}")
                 async_to_sync(self.channel_layer.group_send)(
                     self.room_group_name,
                     {
                         'type': 'chat_message',
-                        'attachments': [],
-                        'text': '',
-                        'date': 0,
-                        'id': -1,
-                        'is_payed': False,
-                        'message_price': 0,
-                        'user': 0,
-                        'room_id': 0,
+                        'attachments': _file,
+                        'text': message,
+                        'date': chat.date.timestamp(),
+                        'id': chat.pk,
+                        'is_payed': is_payed,
+                        'message_price': message_price,
+                        'user': UserShortChatRetrieveSeriliazer(
+                            instance=user).data,
+                        'room_id': room.pk,
                     }
                 )
-
         except Exception as e:
             print(e)
             logging.error(e)
@@ -355,13 +382,23 @@ class ChatRoomsConsumer(WebsocketConsumer):
                                 'price': message_obj.price,
                                 'attachment': attachment,
                                 'readed': message_readed,
-                            } if message_obj else None,
+                            } if message_obj else {
+                                'id': -1,
+                                'time': 0,
+                                'readed': False,
+                            },
                             "room_info": RoomSocketSerializer(instance=room_obj['room']).data
                         }
                     }
                 )
-            filtered_results = sorted(
-                filtered_results, key=lambda x: (-x['room']['message']['time'], x['room']['message']['readed']))
+            from pprint import pprint
+            filtered_results = sorted(filtered_results,
+                                      key=lambda x: (-x['room']['message']['time'],
+                                                     x['room']['message']['readed'])
+                                      )
+            for i, el in enumerate(filtered_results):
+                if el['id'] == -1:
+                    filtered_results[i] = None
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {
@@ -371,6 +408,7 @@ class ChatRoomsConsumer(WebsocketConsumer):
             )
         except Exception as e:
             logging.error(e)
+            print(e)
 
     def chat_message(self, event):
         try:

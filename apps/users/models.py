@@ -126,6 +126,10 @@ class User(AbstractUser):
     private_profile = models.BooleanField(
         'Приватный профиль', default=False
     )
+    hide_in_search = models.BooleanField(
+        verbose_name='Не отображать в поиске',
+        default=False
+    )
     auth_provider = models.CharField(
         max_length=255, blank=False,
         null=False, default=AUTH_PROVIDERS.get('email'))
