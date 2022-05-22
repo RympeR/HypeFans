@@ -60,7 +60,7 @@ class UserBaseAdmin(UserAdmin):
             'repheral_users',
             'blocked_users',
             'my_subscribes',
-            
+
         )}),
         (_('Profile stats'), {'fields': (
             'post_amount',
@@ -77,6 +77,7 @@ class UserBaseAdmin(UserAdmin):
             'wallet'
         )}),
         (_('Confidence'), {'fields': (
+            'hide_in_search',
             'private_profile',
             'email_notifications',
             'push_notifications',

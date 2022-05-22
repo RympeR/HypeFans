@@ -391,14 +391,15 @@ class ChatRoomsConsumer(WebsocketConsumer):
                         }
                     }
                 )
-            from pprint import pprint
             filtered_results = sorted(filtered_results,
-                                      key=lambda x: (-x['room']['message']['time'],
-                                                     x['room']['message']['readed'])
+                                      key=lambda x: (
+                                            -x['room']['message']['time'],
+                                            x['room']['message']['readed']
+                                        )
                                       )
             for i, el in enumerate(filtered_results):
-                if el['id'] == -1:
-                    filtered_results[i] = None
+                if el['room']['message']['id'] == -1:
+                    filtered_results[i]['room']['message'] = None
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {
