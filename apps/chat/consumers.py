@@ -381,14 +381,14 @@ class ChatRoomsConsumer(WebsocketConsumer):
                                 'text': message_obj.text,
                                 'price': message_obj.price,
                                 'attachment': attachment,
-                                'readed': message_readed,
+                                # 'readed': message_readed,
                             } if message_obj else {
                                 'id': -1,
                                 'time': 0,
                                 'text': '',
                                 'price': 0,
                                 'attachment': [],
-                                'readed': False,
+                                # 'readed': False,
                             },
                             "room_info": RoomSocketSerializer(instance=room_obj['room']).data
                         }
