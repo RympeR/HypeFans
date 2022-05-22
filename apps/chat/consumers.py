@@ -397,7 +397,7 @@ class ChatRoomsConsumer(WebsocketConsumer):
             filtered_results = sorted(filtered_results,
                                       key=lambda x: (
                                           -x['room']['message']['time'],
-                                          x['room']['message']['readed']
+                                        #   x['room']['message']['readed']
                                       )
                                       )
             # for i, el in enumerate(filtered_results):
