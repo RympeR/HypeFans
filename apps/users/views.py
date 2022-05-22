@@ -225,9 +225,9 @@ class UserCreateAPI(generics.GenericAPIView):
             admin_user = User.objects.get(username='root')
             room = Room.objects.create(
                 creator=admin_user,
-                invited=user,
                 name='HypeFans'
             )
+            room.invited.set(user)
             Chat.objects.create(
                 room=room,
                 user=admin_user,
