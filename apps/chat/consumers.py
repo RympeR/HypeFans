@@ -381,14 +381,14 @@ class ChatRoomsConsumer(WebsocketConsumer):
                                 'text': message_obj.text,
                                 'price': message_obj.price,
                                 'attachment': attachment,
-                                # 'readed': message_readed,
+                                'readed': message_readed,
                             } if message_obj else {
                                 'id': -1,
                                 'time': 0,
                                 'text': '',
                                 'price': 0,
                                 'attachment': [],
-                                # 'readed': False,
+                                'readed': False,
                             },
                             "room_info": RoomSocketSerializer(instance=room_obj['room']).data
                         }
@@ -397,7 +397,7 @@ class ChatRoomsConsumer(WebsocketConsumer):
             filtered_results = sorted(filtered_results,
                                       key=lambda x: (
                                           -x['room']['message']['time'],
-                                        #   x['room']['message']['readed']
+                                          x['room']['message']['readed']
                                       )
                                       )
             # for i, el in enumerate(filtered_results):
