@@ -119,7 +119,7 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
                 return Response({"auth_token": str(token)}, status=status.HTTP_200_OK)
 
         except Exception as e:
-            print(e)
+            logging.error(e)
             return Response({"auth_token": None}, status=status.HTTP_423_LOCKED)
 
 
