@@ -250,6 +250,8 @@ class UserCreateAPI(generics.GenericAPIView):
                 referrer=ref_user,
                 validation_code=validation_code
             )
+            logging.warning(user)
+            logging.warning(created)
             if not created:
                 if not user.validated_user:
                     user.validation_code = validation_code
