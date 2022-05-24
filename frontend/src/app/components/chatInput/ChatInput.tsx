@@ -56,6 +56,7 @@ export const ChatInput = ({
         }
         actions.resetForm();
         setMessage("");
+        setLength(0)
         setEditableText("");
         setMarginTop(0);
         setHeight(50);
