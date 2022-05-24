@@ -438,7 +438,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             const response = await chatAPI.getChatMessagesPagination(Number(lastUrl), messages[messages.length - 1].id);
             setMessages([...messages, ...response]);
             divRef.current.scrollBy({ top: topPos, behavior: "smooth" })
-            console.log(messages)
         }
     };
 
