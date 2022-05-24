@@ -10,7 +10,7 @@ from core.utils.default_responses import (api_accepted_202,
                                           api_block_by_policy_451,
                                           api_created_201,
                                           api_payment_required_402)
-from core.utils.func import (create_ref_link, generate_pay_dict,
+from core.utils.func import (create_ref_link, generate_pay_dict, id_generator,
                              sum_by_attribute)
 from django.contrib.auth import authenticate
 from django.contrib.sites.shortcuts import get_current_site
@@ -27,16 +27,19 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 try:
     from wand.image import Image as WandImage
 except Exception:
     logging.warning("No wand module")
+
+
 from apps.blog.models import PostAction, PostBought
-from apps.chat.models import Chat, Room
 from apps.blog.serializers import PostGetShortSerializers
+from apps.chat.models import Chat, Room
 from apps.users.dynamic_preferences_registry import (ReferralPercentage,
                                                      WithdrawPercentage)
-
+from core.utils.crypto import encrypt
 from .models import *
 from .serializers import *
 
@@ -210,11 +213,13 @@ class UserCreateAPI(generics.GenericAPIView):
             else:
                 ref_user = None
             username = request.data['username']
+            validation_code = id_generator(6)
             user, created = User.objects.get_or_create(
                 email=request.data['email'].lower(),
                 username=username,
                 ref_link=create_ref_link(username),
-                referrer=ref_user
+                referrer=ref_user,
+                validation_code=validation_code
             )
 
             assert created, "Already exists"
@@ -232,24 +237,28 @@ class UserCreateAPI(generics.GenericAPIView):
                 name='HypeFans'
             )
             room.invited.add(user)
+            encrypted = encrypt(
+                'Welcome to HypeFans. If you have some questions you can ask them here',
+                'D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh'
+            )
             Chat.objects.create(
                 room=room,
                 user=admin_user,
-                text='Welcome to HypeFans. If you have some questions you can ask them here',
+                text=encrypted.decode("utf-8", "ignore")
             )
             token, created = Token.objects.get_or_create(user=user)
             current_site = get_current_site(request).domain
             relativeLink = reverse('email-verify')
             absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
             email_body = 'Hi '+user.username + \
-                ' Use the link below to verify your email \n' + absurl
+                ' Use this code ro verify your email\n' + validation_code
             # email_body = render_to_string(html_template, { 'context': context, })
 
             data = {'email_body': email_body, 'to_email': user.email,
                     'email_subject': 'Verify your email'}
 
             Util.send_email(data)
-            return api_created_201({"auth_token": str(token)})
+            return api_created_201({"validation_code": validation_code})
         except Exception as e:
             logging.error(e)
             return api_block_by_policy_451({"info": "already exists"})
