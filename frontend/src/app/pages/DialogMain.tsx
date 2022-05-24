@@ -224,7 +224,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     const inputFileRef = useRef(null);
     const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false);
     const wrapperRef = useRef()
-    const [readQueue, setReadQueue] = useState<Array<number>>([])
     const { currentLang } = useContext(LangContext)
 
     // useEffect`s

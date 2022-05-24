@@ -58,10 +58,9 @@ const Chat: React.FC = () => {
     }, [item]);
     let last_message_display = item.item.room?.message?.attachment;
     if (item.item.room.message?.text) {
-      last_message_display = CryptoJS.AES.decrypt(
-        item?.item?.room?.message?.text,
-        "D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh"
-      ).toString(CryptoJS.enc.Utf8);
+      console.log(last_message_display);
+
+      debugger
       if (last_message_display.length > 20) {
         last_message_display = last_message_display.slice(0, 20) + "...";
       }
