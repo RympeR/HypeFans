@@ -202,6 +202,29 @@ class UserLoginAPI(generics.GenericAPIView):
             )
 
 
+class UserValidateAPI(generics.GenericAPIView):
+    permission_classes = permissions.AllowAny,
+    serializer_class = UserCreationSerializer
+
+    def post(self, request):
+        validation_code = request.data['validation_code']
+        email = request.data['email']
+        qs = User.objects.filter(
+            validation_code=validation_code,
+            email=email
+        )
+        if qs.exists():
+            user = qs.first()
+            user.validation_code = ''
+            user.save()
+            token, _ = Token.objects.get_or_create(user=user)
+            return api_created_201({"auth_token": str(token)})
+        else:
+            return api_bad_request_400({
+                "auth_token": None
+            })
+
+
 class UserCreateAPI(generics.GenericAPIView):
     permission_classes = permissions.AllowAny,
     serializer_class = UserCreationSerializer
@@ -213,7 +236,7 @@ class UserCreateAPI(generics.GenericAPIView):
             else:
                 ref_user = None
             username = request.data['username']
-            validation_code = id_generator(6)
+            validation_code = id_generator(8)
             user, created = User.objects.get_or_create(
                 email=request.data['email'].lower(),
                 username=username,
@@ -221,35 +244,36 @@ class UserCreateAPI(generics.GenericAPIView):
                 referrer=ref_user,
                 validation_code=validation_code
             )
+            if not created:
+                if not user.validated_user:
+                    user.validation_code = validation_code
+                    user.save()
+                else:
+                    assert created, "Already exists"
+            else:
+                UserOnline.objects.create(
+                    user=user,
+                )
+                user.set_password(request.data['password'])
+                if ref_user:
+                    ref_user.repheral_users.add(user)
 
-            assert created, "Already exists"
-            UserOnline.objects.create(
-                user=user,
-            )
-            user.set_password(request.data['password'])
-            if ref_user:
-                ref_user.repheral_users.add(user)
-
-            user.save()
-            admin_user = User.objects.get(username='root')
-            room = Room.objects.create(
-                creator=admin_user,
-                name='HypeFans'
-            )
-            room.invited.add(user)
-            encrypted = encrypt(
-                'Welcome to HypeFans. If you have some questions you can ask them here',
-                'D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh'
-            )
-            Chat.objects.create(
-                room=room,
-                user=admin_user,
-                text=encrypted.decode("utf-8", "ignore")
-            )
-            token, created = Token.objects.get_or_create(user=user)
-            current_site = get_current_site(request).domain
-            relativeLink = reverse('email-verify')
-            absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
+                user.save()
+                admin_user = User.objects.get(username='root')
+                room = Room.objects.create(
+                    creator=admin_user,
+                    name='HypeFans'
+                )
+                room.invited.add(user)
+                encrypted = encrypt(
+                    'Welcome to HypeFans. If you have some questions you can ask them here',
+                    'D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh'
+                )
+                Chat.objects.create(
+                    room=room,
+                    user=admin_user,
+                    text=encrypted.decode("utf-8", "ignore")
+                )
             email_body = 'Hi '+user.username + \
                 ' Use this code ro verify your email\n' + validation_code
             # email_body = render_to_string(html_template, { 'context': context, })

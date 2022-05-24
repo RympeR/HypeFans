@@ -17,9 +17,10 @@ from .views import (ActivateUserByGet, AddBlockedUserAPI, CardAPI,
                     UserOnlineRetrieveAPI, UserPartialUpdateAPI,
                     UserProfileRetrieveAPI, UserRetrieveAPI,
                     UserSearchRetrieveAPI, UserSettingsRetrieveAPI,
-                    UserSubscription)
+                    UserSubscription, UserValidateAPI)
 
 urlpatterns = [
+    path('activate-code/', UserValidateAPI.as_view()),
     path('activate/<str:uid>/<str:token>/', ActivateUserByGet.as_view()),
     path('me/', UserMeRetrieveAPI.as_view()),
     path('change-password/', UserChangePasswordAPI.as_view()),
