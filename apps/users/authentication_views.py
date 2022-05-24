@@ -95,7 +95,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
 
 class PasswordTokenCheckAPI(generics.GenericAPIView):
     permission_classes = permissions.AllowAny,
-
+    serializer_class = ResetPasswordEmailRequestSerializer
     def post(self, request):
         uidb64 = request.data.get('uidb64', '')
         token = request.data.get('token', '')
