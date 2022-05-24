@@ -65,8 +65,8 @@ const RestoreForm = () => {
 
         setIsChangingPassword(true);
         const response = await authAPI.changePasswordAuth(
-            params.get('uidb64'),
             data.password,
+            params.get('uidb64'),
             params.get('token')
         );
 
