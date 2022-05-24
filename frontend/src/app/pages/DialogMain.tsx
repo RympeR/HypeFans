@@ -131,7 +131,7 @@ const MessageItem =
                                 {!item?.attachments?.some((item: any) => item.file_type === 2)
                                     ? CryptoJS.AES.decrypt(
                                         item.text,
-                                        "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+                                        "D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh"
                                     ).toString(CryptoJS.enc.Utf8)
                                     : ""}
                                 {item?.attachments.length > 0
@@ -364,7 +364,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 text: !audioMessage
                     ? CryptoJS.AES.encrypt(
                         messageMain,
-                        "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+                        "D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh"
                     ).toString()
                     : "",
                 user: uid,
