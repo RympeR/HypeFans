@@ -190,8 +190,13 @@ class UserLoginAPI(generics.GenericAPIView):
         password = request.data['password']
         user = authenticate(username=email, password=password)
         if user is not None:
-            token, _ = Token.objects.get_or_create(user=user)
-            return api_created_201({"auth_token": str(token)})
+            if user.validated_user:
+                token, _ = Token.objects.get_or_create(user=user)
+                return api_created_201({"auth_token": str(token)})
+            else:
+                return api_bad_request_400({
+                    'non_field_errors': 'User not validated'
+                })
         else:
             return api_bad_request_400(
                 {
@@ -216,6 +221,7 @@ class UserValidateAPI(generics.GenericAPIView):
         if qs.exists():
             user = qs.first()
             user.validation_code = ''
+            user.validated_user = True
             user.save()
             token, _ = Token.objects.get_or_create(user=user)
             return api_created_201({"auth_token": str(token)})
