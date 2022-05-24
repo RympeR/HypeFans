@@ -100,7 +100,7 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
         uidb64 = request.data.get('uidb64', '')
         token = request.data.get('token', '')
         password = request.data.get('password', '')
-        print(request.data)
+        logging.warning(request.data)
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(id=id)
