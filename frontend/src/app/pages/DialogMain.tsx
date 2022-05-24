@@ -131,7 +131,7 @@ const MessageItem =
                                 {!item?.attachments?.some((item: any) => item.file_type === 2)
                                     ? CryptoJS.AES.decrypt(
                                         item.text,
-                                        "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+                                        "D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh"
                                     ).toString(CryptoJS.enc.Utf8)
                                     : ""}
                                 {item?.attachments.length > 0
@@ -224,7 +224,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     const inputFileRef = useRef(null);
     const [isSendDisabled, setIsSendDisabled] = useState<boolean>(false);
     const wrapperRef = useRef()
-    const [readQueue, setReadQueue] = useState<Array<number>>([])
     const { currentLang } = useContext(LangContext)
 
     // useEffect`s
@@ -364,7 +363,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 text: !audioMessage
                     ? CryptoJS.AES.encrypt(
                         messageMain,
-                        "ffds#^$*#&#!;fsdfds#$&^$#@$@#"
+                        "D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh"
                     ).toString()
                     : "",
                 user: uid,
@@ -438,7 +437,6 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
             const response = await chatAPI.getChatMessagesPagination(Number(lastUrl), messages[messages.length - 1].id);
             setMessages([...messages, ...response]);
             divRef.current.scrollBy({ top: topPos, behavior: "smooth" })
-            console.log(messages)
         }
     };
 

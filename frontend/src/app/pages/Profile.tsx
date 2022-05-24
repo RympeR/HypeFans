@@ -24,6 +24,7 @@ import { ProfilePagePost } from "../components/post/ProfilePagePost";
 import { ReadMore } from "../components/readMore/ReadMore";
 import { GoToTopBtn } from "../components/goToTopButton/GoToTopBtn";
 import moment from "moment";
+import { useAddWalletAlert } from "../hooks/useAddWalletAlert";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -37,7 +38,9 @@ const Profile = () => {
   const [offset, setOffset] = useState<number>(10);
   const myNick = useSelector((state: RootState) => state.auth.username);
   const myId = useSelector((state: RootState) => state.auth.pk);
+  const myWallet = useSelector((state: RootState) => state.auth.wallet);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
+  const addWalerAlert = useAddWalletAlert()
   const [isPaginationLoading, setIsPaginationLoading] =
     useState<boolean>(false);
   const { pathname } = useLocation();
@@ -45,8 +48,6 @@ const Profile = () => {
   const nick = location[location.length - 1];
   const [chatSubscribeModalShown, setChatSubscribeModalShown] =
     useState<boolean>(false);
-
-  console.log(profile);
 
   useEffect(() => {
     dispatch(clearUserData());
@@ -64,7 +65,7 @@ const Profile = () => {
   window.onscroll = async function () {
     if (
       window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 5 &&
+      document.documentElement.offsetHeight - 5 &&
       !isLoading &&
       !isPaginationLoading
     ) {
@@ -83,6 +84,9 @@ const Profile = () => {
       target: profile.pk,
     });
     setSubscribeShow(false);
+    if (profile.subscribtion_price > 0 && myWallet === null) {
+      return addWalerAlert()
+    }
     if (data.status === 202 && !profile.private_profile) {
       setProfile({
         ...profile,
@@ -152,6 +156,7 @@ const Profile = () => {
     dispatch(buyPost({ amount, post, user: myId, id: null }));
     toast.success("Пост куплен");
   };
+
 
   return (
     <div className="profile">

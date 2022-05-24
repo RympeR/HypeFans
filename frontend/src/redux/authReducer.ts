@@ -34,6 +34,7 @@ const initialState = {
   earned_credits_amount: null as number | null,
   isAuth: false,
   isSettingsDisabled: false,
+  wallet: null as string | null
 };
 
 const authReducer = (
@@ -97,7 +98,8 @@ const actions = {
     validated_user: boolean,
     credit_amount: number | null,
     earned_credits_amount: number | null,
-    isAuth: boolean
+    isAuth: boolean,
+    wallet: string | null
   ) => {
     return {
       type: "SET_USER_DATA",
@@ -131,6 +133,7 @@ const actions = {
         credit_amount,
         earned_credits_amount,
         isAuth,
+        wallet
       },
     } as const;
   },
@@ -185,6 +188,7 @@ export const getAuthUserData = (): Thunk => async (dispatch) => {
       validated_user,
       credit_amount,
       earned_credits_amount,
+      wallet
     } = meData;
     dispatch(
       actions.setAuthUserData(
@@ -216,7 +220,8 @@ export const getAuthUserData = (): Thunk => async (dispatch) => {
         validated_user,
         credit_amount,
         earned_credits_amount,
-        true
+        true,
+        wallet
       )
     );
     dispatch(actions.isAuth());
@@ -256,22 +261,23 @@ export const logout = (): Thunk => async (dispatch) => {
       false,
       null,
       null,
-      false
+      false,
+      null
     )
   );
 };
 
 export const login =
   ({ email, password }: { email: string; password: string }): Thunk =>
-  async (dispatch) => {
-    // dispatch(isLoading());
-    const response = await authAPI.login(email, password);
-    if (response) {
-      await authAPI.meGetLogin();
-      dispatch(getAuthUserData());
-    }
-    // dispatch(isntLoading());
-  };
+    async (dispatch) => {
+      // dispatch(isLoading());
+      const response = await authAPI.login(email, password);
+      if (response) {
+        await authAPI.meGetLogin();
+        dispatch(getAuthUserData());
+      }
+      // dispatch(isntLoading());
+    };
 
 export const isntSettingsDisabled = (): Thunk => async (dispatch) => {
   dispatch(actions.isntSettingsDisabled());
@@ -282,42 +288,42 @@ export const isSettingsDisabled = (): Thunk => async (dispatch) => {
 
 export const changeSettings =
   (obj: any): Thunk =>
-  async (dispatch) => {
-    delete obj.avatar;
-    delete obj.background_photo;
-    delete obj.ref_link;
-    dispatch(isSettingsDisabled());
-    const response = await authAPI.meUpdate(obj);
-    await authAPI.meGet();
-    if (response) {
-      dispatch(getAuthUserData());
-    }
-    dispatch(isntSettingsDisabled());
-  };
+    async (dispatch) => {
+      delete obj.avatar;
+      delete obj.background_photo;
+      delete obj.ref_link;
+      dispatch(isSettingsDisabled());
+      const response = await authAPI.meUpdate(obj);
+      await authAPI.meGet();
+      if (response) {
+        dispatch(getAuthUserData());
+      }
+      dispatch(isntSettingsDisabled());
+    };
 
 export const changeAvatar =
   (obj: any): Thunk =>
-  async (dispatch) => {
-    dispatch(isSettingsDisabled());
-    const response = await authAPI.meUpdate(obj);
-    await authAPI.meGet();
-    if (response) {
-      dispatch(getAuthUserData());
-    }
-    dispatch(isntSettingsDisabled());
-  };
+    async (dispatch) => {
+      dispatch(isSettingsDisabled());
+      const response = await authAPI.meUpdate(obj);
+      await authAPI.meGet();
+      if (response) {
+        dispatch(getAuthUserData());
+      }
+      dispatch(isntSettingsDisabled());
+    };
 
 export const changeBackground =
   (obj: any): Thunk =>
-  async (dispatch) => {
-    dispatch(isSettingsDisabled());
-    const response = await authAPI.meUpdate(obj);
-    await authAPI.meGet();
-    if (response) {
-      dispatch(getAuthUserData());
-    }
-    dispatch(isntSettingsDisabled());
-  };
+    async (dispatch) => {
+      dispatch(isSettingsDisabled());
+      const response = await authAPI.meUpdate(obj);
+      await authAPI.meGet();
+      if (response) {
+        dispatch(getAuthUserData());
+      }
+      dispatch(isntSettingsDisabled());
+    };
 
 export const getUserData = (): Thunk => async (dispatch) => {
   dispatch(isLoading());
