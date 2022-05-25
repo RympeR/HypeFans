@@ -5,15 +5,18 @@ from datetime import datetime
 import time
 import logging
 
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
         run = True
         while run:
             try:
                 ts = datetime.now()
-                subs = Subscription.objects.filter(end_date__lte=ts, finished=False)
+                subs = Subscription.objects.filter(
+                    end_date__lte=ts, finished=False)
                 subs.update(finished=True)
-                subs = ChatSubscription.objects.filter(end_date__lte=ts, finished=False)
+                subs = ChatSubscription.objects.filter(
+                    end_date__lte=ts, finished=False)
                 subs.update(finished=True)
             except KeyboardInterrupt:
                 run = False

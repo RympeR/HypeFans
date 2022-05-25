@@ -543,25 +543,29 @@ class GetUserLastSubs(GenericAPIView):
     queryset = User.objects.all()
 
     def get(self, request):
+        limit = int(request.GET.get('limit', 20))
+        offset = int(request.GET.get('offset', 0))
         user = request.user
         subs = user.target_user_subscribe.filter(
             finished=False).order_by('-start_date')
 
         subs = list(map(lambda x: x.source, subs))
         return Response(self.serializer_class(
-            many=True, instance=subs).data)
+            many=True, instance=subs[offset:limit+offset]).data)
 
 
-class GetUserSubs(GenericAPIView):
+class GetUserSubscriptions(GenericAPIView):
     serializer_class = UserShortRetrieveSeriliazer
     queryset = User.objects.all()
 
     def get(self, request):
+        limit = int(request.GET.get('limit', 20))
+        offset = int(request.GET.get('offset', 0))
         user = request.user
         subs = user.source_user_subscribe.filter(finished=False)
         subs = list(set(map(lambda x: x.target, subs)))
         return Response(self.serializer_class(
-            many=True, instance=subs).data)
+            many=True, instance=subs[offset:limit+offset]).data)
 
 
 class GetUserFriends(GenericAPIView):
@@ -569,6 +573,8 @@ class GetUserFriends(GenericAPIView):
     queryset = User.objects.all()
 
     def get(self, request):
+        limit = int(request.GET.get('limit', 20))
+        offset = int(request.GET.get('offset', 0))
         user = request.user
         friends = []
         subs = user.target_user_subscribe.filter(
@@ -579,7 +585,7 @@ class GetUserFriends(GenericAPIView):
                 friends.append(sub.target)
         subs = list(set(map(lambda x: x.source, subs)))
         return Response(self.serializer_class(
-            many=True, instance=subs).data)
+            many=True, instance=subs[offset:limit+offset]).data)
 
 
 class GetUserFavourites(GenericAPIView):
@@ -587,11 +593,13 @@ class GetUserFavourites(GenericAPIView):
     queryset = User.objects.all()
 
     def get(self, request):
+        limit = int(request.GET.get('limit', 20))
+        offset = int(request.GET.get('offset', 0))
         user = request.user
         favourite_post = user.user_favourites.all()
         favourite_post_users = list(set(map(lambda x: x.user, favourite_post)))
         return Response(self.serializer_class(
-            many=True, instance=favourite_post_users).data)
+            many=True, instance=favourite_post_users[offset:limit+offset]).data)
 
 
 class GetUserDonators(GenericAPIView):
@@ -599,12 +607,14 @@ class GetUserDonators(GenericAPIView):
     queryset = User.objects.all()
 
     def get(self, request):
+        limit = int(request.GET.get('limit', 20))
+        offset = int(request.GET.get('offset', 0))
         user = request.user
         donators = user.recieved_user.filter(
             datetime__date__month=datetime.now().month)
         donators = list(set(map(lambda x: x.sender, donators)))
         return Response(self.serializer_class(
-            many=True, instance=donators).data)
+            many=True, instance=donators[offset:limit+offset]).data)
 
 
 class GetUserBlocked(GenericAPIView):
@@ -612,10 +622,12 @@ class GetUserBlocked(GenericAPIView):
     queryset = User.objects.all()
 
     def get(self, request):
+        limit = int(request.GET.get('limit', 20))
+        offset = int(request.GET.get('offset', 0))
         user = request.user
         blocked_users = user.blocked_users.all()
         return Response(self.serializer_class(
-            many=True, instance=blocked_users).data)
+            many=True, instance=blocked_users[offset:limit+offset]).data)
 
 
 class MainUserPageUpdated(APIView):
@@ -662,6 +674,14 @@ class MainUserPageUpdated(APIView):
             many=True,
             context={'request': request}
         ).data
+        
+        qs = req_user.source_user_subscribe.filter(finished=False)
+        subscription_recommendations = UserShortRetrieveSeriliazer(
+            instance=self.get_sample_of_queryset(qs, 9, User)
+            .order_by('-fans_amount').order_by('-post_amount'),
+            many=True,
+            context={'request': request}
+        ).data
 
         user_subscriptions = req_user.my_subscribes.all()
         posts = []
@@ -698,6 +718,7 @@ class MainUserPageUpdated(APIView):
 
         return Response({
             'recommendations': reccomendations,
+            'subscription_recommendations': subscription_recommendations,
             'posts': result_posts
         })
 
