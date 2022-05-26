@@ -25,6 +25,7 @@ import { ToastContainer } from "react-toastify";
 import { PersonalSettings } from "./pages/personal/PersonalSettings";
 import { ForgotPass } from "./pages/forgotPass/ForgotPass";
 import { RestorePassword } from "./pages/restorePassword/RestorePassword";
+import { EmailConfirmation } from "./pages/EmailConfirmation";
 
 const options = {
   timeout: 5000,
@@ -51,6 +52,7 @@ const App = () => {
             <LangProvider>
               <Switch>
                 <Route path="/signin" component={Auth} />
+                <Route exact path="/confirm-registration" component={EmailConfirmation} />
                 <Route exact path="/forgotPassword" component={ForgotPass} />
                 <Route path="/restore-password" component={RestorePassword} />
                 <Route exact path="/" component={Auth} />

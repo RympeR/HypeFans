@@ -56,6 +56,11 @@ export const authAPI = {
         return response.data.auth_token;
       });
   },
+  confirmCode(validation_code: string, email: string) {
+    return instance.post("/user/activate-code/", { email, validation_code }).then((response) => {
+      return response;
+    });
+  },
   logout() {
     return instance.post("/auth/token/logout/").then((response) => {
       setAuthToken(null);
@@ -79,8 +84,6 @@ export const authAPI = {
     return instance
       .post("/user/create-user/", { username, email, password, ref_link })
       .then((response) => {
-        setAuthToken(response.data.auth_token);
-        localStorage.setItem('hypefansToken', response.data.auth_token)
         return response.data;
       });
   },
