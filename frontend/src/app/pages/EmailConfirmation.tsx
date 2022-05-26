@@ -28,20 +28,14 @@ export const EmailConfirmation = () => {
         "auth__main-slide-five",
     ];
 
-    console.log(localStorage.getItem("hypefansToken"));
-
-    debugger
-
     if (isAuth && localStorage.getItem("hypefansToken") !== null) {
         return <Redirect to="/home" />;
     }
 
-    // if (code === null && !email) {
-    //     return <Redirect to="/" />;
-    // }
+    if (code === null && !email) {
+        return <Redirect to="/" />;
+    }
 
-    console.log(code);
-    console.log(email);
 
     const confirmEmail = async () => {
         const response = await authAPI.confirmCode(enteredCode, email)
