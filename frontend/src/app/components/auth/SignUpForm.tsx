@@ -1,8 +1,8 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Redirect, useLocation } from "react-router-dom";
 import { authAPI } from "../../../api/authAPI";
 import ISignUpData from "../../../app/types/ISignUpData";
 import { LangContext } from "../../../app/utils/LangProvider";
@@ -12,8 +12,9 @@ import { ReactComponent as Google } from "../../../assets/images/google.svg";
 import { ReactComponent as Instagram } from "../../../assets/images/instagram.svg";
 import { ReactComponent as EyeIcon } from "../../../assets/images/eye.svg";
 import { ReactComponent as EyeOffIcon } from "../../../assets/images/eye-off.svg";
-import { getAuthUserData } from "../../../redux/authReducer";
 import { toast } from "react-toastify";
+import { registerActions } from "../../../redux/registerReducer";
+import { RootState } from "src/redux/redux";
 
 const initialValues: ISignUpData = {
   username: "",
@@ -44,18 +45,21 @@ const SignUpForm = ({ action }: { action: string }) => {
 
   const [isSigningIn, setIsSigningIn] = useState(false);
   const dispatch = useDispatch();
+  const code = useSelector((state: RootState) => state.register.activationCode)
+  const email = useSelector((state: RootState) => state.register.email)
 
   const onSubmit = async (data: ISignUpData) => {
     setIsSigningIn(true);
     try {
-      await authAPI.createUsers(
+      const code = await authAPI.createUsers(
         data.username,
         data.email,
         data.password,
         refLink
       );
-      toast.success("Register Successfully");
-      dispatch(getAuthUserData());
+      toast.success("Confirm your email");
+      dispatch(registerActions.setEmail(data.email))
+      dispatch(registerActions.setActivationCode(code.validation_code));
     } catch {
       toast.error("Email or username already exists");
     }
@@ -63,6 +67,10 @@ const SignUpForm = ({ action }: { action: string }) => {
     setIsSigningIn(false);
     reset(initialValues);
   };
+
+  if (code?.length === 8 && email) {
+    return <Redirect to="/confirm-registration" />
+  }
 
   return (
     <form action="" className="auth__form" onSubmit={handleSubmit(onSubmit)}>
