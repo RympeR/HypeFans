@@ -50,8 +50,9 @@ class Post(models.Model):
     user = models.ForeignKey(
         User,
         verbose_name='Создатель поста',
-        on_delete=models.CASCADE,
-        related_name='user_post'
+        on_delete=models.SET_NULL,
+        related_name='user_post',
+        null=True,
     )
     reply_link = models.CharField(
         verbose_name='Ссылка на пост', null=True, blank=True, max_length=150)
@@ -92,8 +93,9 @@ class PostAction(MPTTModel):
     user = models.ForeignKey(
         User,
         verbose_name='Взаимодействующий юзер',
-        on_delete=models.DO_NOTHING,
-        related_name='user_action_post'
+        on_delete=models.SET_NULL,
+        related_name='user_action_post',
+        null=True,
     )
     post = models.ForeignKey(Post, related_name='user_postaction',
                              on_delete=models.CASCADE, verbose_name='Пост')
@@ -122,7 +124,8 @@ class Story(models.Model):
     user = models.ForeignKey(
         User,
         verbose_name='Создатель истории',
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
         related_name='user_story'
     )
     watched_story = models.ManyToManyField(
