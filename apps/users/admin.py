@@ -60,7 +60,7 @@ class UserBaseAdmin(UserAdmin):
             'repheral_users',
             'blocked_users',
             'my_subscribes',
-
+            'validation_code',
         )}),
         (_('Profile stats'), {'fields': (
             'post_amount',
