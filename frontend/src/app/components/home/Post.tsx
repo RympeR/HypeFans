@@ -30,6 +30,7 @@ import { Video } from "../../../app/pages/card/components/VideoPost";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { ReadMore } from "../readMore/ReadMore";
+import { useAddWalletAlert } from "src/app/hooks/useAddWalletAlert";
 
 export const returnByFileType = (item: any) => {
   switch (item?.file_type) {
@@ -78,10 +79,17 @@ const Post = ({
 
   const [show, setShow] = useState<boolean>(false);
 
+  const addWalerAlert = useAddWalletAlert()
+
+  const myWallet = useSelector((state: RootState) => state.auth.wallet)
+
   const [isWholeTextShowed, setIsWholeTextShowed] = useState<boolean>(true);
   const dispatch = useDispatch();
 
   const sendDonate = async () => {
+    if (myWallet === null) {
+      return addWalerAlert()
+    }
     setIsDonating(true)
     const data = await userAPI.createDonation({
       amount: Number(donateValue),
