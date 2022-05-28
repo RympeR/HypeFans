@@ -30,7 +30,7 @@ import { Video } from "../../../app/pages/card/components/VideoPost";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { ReadMore } from "../readMore/ReadMore";
-import { useAddWalletAlert } from "src/app/hooks/useAddWalletAlert";
+import { useAddWalletAlert } from "../../../app/hooks/useAddWalletAlert";
 
 export const returnByFileType = (item: any) => {
   switch (item?.file_type) {

@@ -14,7 +14,7 @@ import { ReactComponent as EyeIcon } from "../../../assets/images/eye.svg";
 import { ReactComponent as EyeOffIcon } from "../../../assets/images/eye-off.svg";
 import { toast } from "react-toastify";
 import { registerActions } from "../../../redux/registerReducer";
-import { RootState } from "src/redux/redux";
+import { RootState } from "../../../redux/redux";
 
 const initialValues: ISignUpData = {
   username: "",
