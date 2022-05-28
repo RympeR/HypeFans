@@ -1,4 +1,5 @@
 import datetime
+from email import message
 import logging
 from apps.agency.models import Agency
 
@@ -311,6 +312,35 @@ class ReferralPayment(models.Model):
 
     def __str__(self):
         return f"{self.user}-{self.referrer}"
+
+
+class CustomUsersList(models.Model):
+    creator = models.ForeignKey(
+        User, verbose_name='Создатель', on_delete=models.CASCADE, related_name='custom_list_cretor')
+    name = models.CharField(verbose_name='Название', max_length=255)
+    invited = models.ManyToManyField(
+        User, verbose_name='Пользователи', related_name='custom_list_invited_users', blank=True)
+
+    class Meta:
+        verbose_name = 'Пользовательский список'
+        verbose_name_plural = 'Пользовательские списки'
+
+    def __str__(self):
+        return f"{self.creator}-{self.name}"
+
+
+class ChatSender(models.Model):
+    custom_list = models.ForeignKey(CustomUsersList, verbose_name='Список',
+                                    on_delete=models.CASCADE, related_name='chat_sender_custom_list')
+    sended = models.BooleanField(verbose_name='Отправлено', default=False)
+    message = models.TextField(verbose_name='Сообщение')
+
+    class Meta:
+        verbose_name = 'Пользовательский список рассылка'
+        verbose_name_plural = 'Пользовательские списки рассылки'
+
+    def __str__(self):
+        return f"{self.custom_list.creator}-{self.sended}"
 
 
 def update_verification(sender: PendingUser, instance: PendingUser, created: bool, **kwargs):
