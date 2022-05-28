@@ -13,7 +13,7 @@ from apps.users.dynamic_preferences_registry import (HostName,
                                                      ReferralPercentage, WithdrawPercentage)
 
 from .models import (Card, ChatSubscription, Donation, Payment, PendingUser,
-                     Subscription, User, UserOnline, ReferralPayment)
+                     Subscription, User, UserOnline, ReferralPayment, CustomUsersList, ChatSender)
 
 
 class ChatSubscriptionNotificationSerializer(serializers.ModelSerializer):
@@ -955,3 +955,43 @@ class UnionReferralPaymentGetSerializer(serializers.ModelSerializer):
             'source',
             'amount'
         )
+
+
+class CustomUsersListGetSerializer(serializers.ModelSerializer):
+    creator = UserShortRetrieveSeriliazer()
+    invited = UserShortRetrieveSeriliazer(many=True)
+
+    class Meta:
+        model = CustomUsersList
+        fields = '__all__'
+
+
+class CustomUsersListGetPreviewSerializer(serializers.ModelSerializer):
+    invited_len = serializers.SerializerMethodField()
+
+    def get_invited_len(self, custom_user_list: CustomUsersList):
+        return len(custom_user_list.invited.all())
+
+    class Meta:
+        model = CustomUsersList
+        fields = 'name', 'invited_len'
+
+
+class CustomUsersListCreateSerializer(serializers.ModelSerializer):
+    creator = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), required=False)
+    invited = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), required=False, many=True)
+
+    class Meta:
+        model = CustomUsersList
+        fields = '__all__'
+
+
+class ChatSenderCreateSerializer(serializers.ModelSerializer):
+    custom_list = serializers.PrimaryKeyRelatedField(
+        queryset=CustomUsersList.objects.all(), required=False)
+
+    class Meta:
+        model = ChatSender
+        fields = '__all__'

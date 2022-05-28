@@ -239,6 +239,7 @@ class InviteUserAPI(GenericAPIView, UpdateModelMixin):
         return self.partial_update(request, *args, **kwargs)
 
 
+
 class ChatPartialUpdateAPI(generics.UpdateAPIView):
     queryset = Chat.objects.all()
     serializer_class = ChatPartialSerializer

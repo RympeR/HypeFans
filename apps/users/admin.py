@@ -13,9 +13,29 @@ from .models import (
     PendingUser,
     ChatSubscription,
     ReferralPayment,
+    CustomUsersList,
+    ChatSender
 )
 from django.utils.translation import gettext, gettext_lazy as _
 from admin_actions.admin import ActionsModelAdmin
+
+
+@admin.register(CustomUsersList)
+class CustomUsersListAdmin(admin.ModelAdmin):
+    list_display = [
+        'creator', 'name',
+    ]
+    search_fields = [
+        'creator__username', 'name',
+    ]
+
+
+@admin.register(ChatSender)
+class ChatSenderAdmin(admin.ModelAdmin):
+    list_display = [
+        'custom_list'
+    ]
+    list_filter = 'sended',
 
 
 @admin.register(UserOnline)
