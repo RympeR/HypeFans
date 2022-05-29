@@ -3,7 +3,7 @@ import logging
 import os
 import random
 import string
-from typing import Sequence
+from typing import List, Sequence
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.serializers import ModelSerializer
 from django.db.models import QuerySet
@@ -25,6 +25,13 @@ def generate_pay_dict(obj: QuerySet, serializer: ModelSerializer, _type: str) ->
             instance=obj, many=True
         ).data
     )
+
+
+def generate_serializer_data(serializer: ModelSerializer, instance: QuerySet, request) -> List[dict]:
+    return serializer(
+        instance=instance, many=True,
+        context={'request': request}
+    ).data
 
 
 def online_check(user):

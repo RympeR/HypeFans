@@ -10,6 +10,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from silk.profiling.profiler import silk_profile
+from core.utils.func import generate_serializer_data
 
 
 class UserNotifications(GenericAPIView):
@@ -114,22 +115,26 @@ class UserAlertNotificatitons(APIView):
                 target=user,
                 start_date__gte=last_action
             )
-            result_notifications.extend(ChatSubscriptionNotificationSerializer(
-                instance=chat_subscriptions,
-                many=True,
-                context={'request': request}
-            ).data)
+            result_notifications.extend(
+                generate_serializer_data(
+                    ChatSubscriptionNotificationSerializer,
+                    chat_subscriptions,
+                    request
+                )
+            )
 
         if user.show_subscribption_notifications:
             subscriptions = Subscription.objects.filter(
                 target=user,
                 start_date__gte=last_action
             )
-            result_notifications.extend(SubscriptionNotificationSerializer(
-                instance=subscriptions,
-                many=True,
-                context={'request': request}
-            ).data)
+            result_notifications.extend(
+                generate_serializer_data(
+                    SubscriptionNotificationSerializer,
+                    subscriptions,
+                    request
+                )
+            )
         if user.show_like_notifications:
             post_action_like = PostAction.objects.filter(
                 post__user=user,
@@ -143,11 +148,13 @@ class UserAlertNotificatitons(APIView):
                 like=True,
                 parent__isnull=False
             )
-            result_notifications.extend(PostActionNotificationSerializer(
-                instance=[*post_action_like, *post_comment_action_like],
-                many=True,
-                context={'request': request}
-            ).data)
+            result_notifications.extend(
+                generate_serializer_data(
+                    PostActionNotificationSerializer,
+                    [*post_action_like, *post_comment_action_like],
+                    request
+                )
+            )
         if user.show_comment_notifications:
             post_action_comment = PostAction.objects.filter(
                 post__user=user,
@@ -163,22 +170,26 @@ class UserAlertNotificatitons(APIView):
                 comment__isnull=False,
                 parent__isnull=False
             )
-            result_notifications.extend(PostActionNotificationSerializer(
-                instance=[*post_action_comment, *post_action_comment_comment],
-                many=True,
-                context={'request': request}
-            ).data)
+            result_notifications.extend(
+                generate_serializer_data(
+                    PostActionNotificationSerializer,
+                    [*post_action_comment, *post_action_comment_comment],
+                    request
+                )
+            )
 
         if user.show_donate_notifications:
             donation_notifications = Donation.objects.filter(
                 reciever=user,
                 datetime__gte=last_action,
             )
-            result_notifications.extend(DonationNotificationSerializer(
-                instance=donation_notifications,
-                many=True,
-                context={'request': request}
-            ).data)
+            result_notifications.extend(
+                generate_serializer_data(
+                    DonationNotificationSerializer,
+                    donation_notifications,
+                    request
+                )
+            )
         return Response({
             "result": result_notifications
         })
