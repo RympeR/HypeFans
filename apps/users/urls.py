@@ -2,25 +2,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from .authentication_views import *
-from .views import (ActivateUserByGet, AddBlockedUserAPI, CardAPI,
-                    CardCreateAPI, CardPartialUpdateAPI, CardRetrieveAPI,
-                    CreateSubscriptioAPI, CustomUsersListCreateAPI,
-                    CustomUsersListInviteAPI, DonationCreateAPI,
-                    DonationPayedUserRetrieveAPI,
-                    DonationPayedUserToRetrieveAPI, DonationRetrieveAPI,
-                    PaymentCreateAPI, PaymentRetrieveAPI,
-                    PaymentUserHistoryRetrieveAPI, PayStatsHistoryRetrieveAPI,
-                    PendingUserCreateAPI, RepheralHistoryRetrieveAPI,
-                    RetrieveUserCustomLists, SpendStatsHistoryRetrieveAPI,
-                    UserAPI, UserBlockedListAPI, UserCardListAPI,
-                    UserChangePasswordAPI, UserChatSubscription, UserCreateAPI,
-                    UserLoginAPI, UserMeRetrieveAPI, UserOnlineCreateAPI,
-                    UserOnlineRetrieveAPI, UserPartialUpdateAPI,
-                    UserProfileRetrieveAPI, UserRetrieveAPI,
-                    UserSearchRetrieveAPI, UserSettingsRetrieveAPI,
-                    UserSubscription, UserValidateAPI, CustomUsersListRemoveAPI,
-                    ChatSenderCreateAPI,
-                    RetrieveUserCustomListUsers, RetrieveUsersAvailableToAddToLists)
+from .views import *
 
 urlpatterns = [
     path('activate-code/', UserValidateAPI.as_view()),
