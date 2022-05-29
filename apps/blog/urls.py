@@ -1,35 +1,5 @@
 from django.urls import path
-from .views import (
-    AttachmentCreateAPI,
-    AttachmentManyCreateAPI,
-    GetUserBlocked,
-    GetUserDonators,
-    GetUserFavourites,
-    GetUserFriends,
-    GetUserLastSubs,
-    GetUserSubscriptions,
-    PostListAPI,
-    PostRetrieveAPI,
-    PostCreateAPI,
-    PostDeleteAPI,
-    PostPartialUpdateAPI,
-    PostActionListAPI,
-    PostActionDeleteAPI,
-    PostActionCreateAPI,
-    StoryCreateAPI,
-    StoryAPI,
-    PostBoughtCreateAPI,
-    WatchedStoriesCreateAPI,
-    MainUserPage,
-    SubStories,
-    UserNotifications,
-    GetFavouritePosts,
-    MarkFavourite,
-    GetUserLists,
-    PostActionPartialUpdateAPI,
-    MainUserPageUpdated,
-    UserAlertNotificatitons
-)
+from .views import *
 
 urlpatterns = [
     path('get-post-list/<str:username>', PostListAPI.as_view()),
@@ -50,7 +20,6 @@ urlpatterns = [
     path('delete-story/<int:pk>', StoryAPI.as_view()),
     path('create-story-action/', WatchedStoriesCreateAPI.as_view()),
     path('create-post-bought/', PostBoughtCreateAPI.as_view()),
-    path('get-main-page-updated/', MainUserPage.as_view()),
     path('get-main-page/', MainUserPageUpdated.as_view()),
     path('get-user-stories/', SubStories.as_view()),
     path('get-notifications/', UserNotifications.as_view()),
