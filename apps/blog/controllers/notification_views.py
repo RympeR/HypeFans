@@ -39,7 +39,7 @@ class UserNotifications(GenericAPIView):
                             instance=comment, context={'request': request}).data,
                         'type': 'comment',
                     }
-                    res_dict['date_time'] = comment.date_time
+                    res_dict['date_time'] = comment.date_time.timestamp()
 
                     comments_result.append(res_dict)
         if notification_type == 'all' or notification_type == 'like':
@@ -51,9 +51,8 @@ class UserNotifications(GenericAPIView):
                         'post': LikeRetrieveSerializer(
                             instance=like, context={'request': request}).data,
                         'type': 'like',
-                        'date_time': like.date_time
                     }
-                    res_dict['date_time'] = like.date_time
+                    res_dict['date_time'] = like.date_time.timestamp()
 
                     likes_result.append(res_dict)
         if notification_type == 'all' or notification_type == 'donation':
