@@ -38,8 +38,9 @@ class UserNotifications(GenericAPIView):
                         'post': CommentRetrieveSerializer(
                             instance=comment, context={'request': request}).data,
                         'type': 'comment',
-                        'date_time': comment.date_time
                     }
+                    res_dict['date_time'] = comment.date_time
+
                     comments_result.append(res_dict)
         if notification_type == 'all' or notification_type == 'like':
             for like in PostAction.objects.filter(post__user=user, like=True).order_by('-date_time').distinct():
@@ -52,6 +53,8 @@ class UserNotifications(GenericAPIView):
                         'type': 'like',
                         'date_time': like.date_time
                     }
+                    res_dict['date_time'] = like.date_time
+
                     likes_result.append(res_dict)
         if notification_type == 'all' or notification_type == 'donation':
             for donation in user.recieved_user.all().order_by('-datetime').distinct():
@@ -64,8 +67,9 @@ class UserNotifications(GenericAPIView):
                             'date_time': donation.datetime.timestamp()
                         },
                         'type': 'donation',
-                        'date_time': donation.datetime.timestamp()
                     }
+                    res_dict['date_time'] = donation.datetime.timestamp()
+
                     donations_result.append(res_dict)
 
         if notification_type == 'all' or notification_type == 'subscription':
@@ -79,8 +83,9 @@ class UserNotifications(GenericAPIView):
                         'start_date': subscription.start_date.timestamp(),
                         'end_date': subscription.end_date.timestamp(),
                         'type': 'subscription',
-                        'date_time': subscription.start_date.timestamp()
                     }
+                    res_dict['date_time'] = subscription.start_date.timestamp()
+
                     subscriptions_result.append(res_dict)
 
         if notification_type == 'all' or notification_type == 'chat_subscription':
@@ -94,8 +99,8 @@ class UserNotifications(GenericAPIView):
                         'start_date': subscription.start_date.timestamp(),
                         'end_date': subscription.end_date.timestamp(),
                         'type': 'chat_subscription',
-                        'date_time': subscription.start_date.timestamp()
                     }
+                    res_dict['date_time'] = subscription.start_date.timestamp()
                     subscriptions_result.append(res_dict)
         result = sorted([
             *comments_result,
