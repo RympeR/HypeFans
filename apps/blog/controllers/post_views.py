@@ -132,7 +132,7 @@ class MainUserPageUpdated(APIView):
         return True if user.pk in post.favourites.all().values_list('id', flat=True) else False
 
     @silk_profile(name='get_sample_of_queryset')
-    def get_sample_of_queryset(self, valid_id_list, amount: int, model):
+    def get_sample_of_queryset(self, valid_id_list, amount: int, model: models.Model):
         random_id_list = sample(
             list(valid_id_list), min(len(valid_id_list), amount))
         return model.objects.filter(id__in=random_id_list)
@@ -151,7 +151,7 @@ class MainUserPageUpdated(APIView):
             context={'request': request}
         ).data
 
-        qs = req_user.source_user_subscribe.filter(finished=False)
+        qs = req_user.source_user_subscribe.filter(finished=False).values_list('target__id', flat=True)
         subscription_recommendations = UserShortRetrieveSeriliazer(
             instance=self.get_sample_of_queryset(qs, 9, User)
             .order_by('-fans_amount').order_by('-post_amount'),

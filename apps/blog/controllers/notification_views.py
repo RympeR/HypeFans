@@ -37,18 +37,20 @@ class UserNotifications(GenericAPIView):
                             instance=comment.user, context={'request': request}).data,
                         'post': CommentRetrieveSerializer(
                             instance=comment, context={'request': request}).data,
-                        'type': 'comment'
+                        'type': 'comment',
+                        'date_time': comment.date_time
                     }
                     comments_result.append(res_dict)
         if notification_type == 'all' or notification_type == 'like':
-            for like in PostAction.objects.filter(post__user=user, like=True).distinct():
+            for like in PostAction.objects.filter(post__user=user, like=True).order_by('-date_time').distinct():
                 if like.user != user:
                     res_dict = {
                         'user': self.serializer_class(
                             instance=like.user, context={'request': request}).data,
                         'post': LikeRetrieveSerializer(
                             instance=like, context={'request': request}).data,
-                        'type': 'like'
+                        'type': 'like',
+                        'date_time': like.date_time
                     }
                     likes_result.append(res_dict)
         if notification_type == 'all' or notification_type == 'donation':
@@ -59,9 +61,10 @@ class UserNotifications(GenericAPIView):
                             instance=donation.sender, context={'request': request}).data,
                         'donation': {
                             'amount': donation.amount,
-                            'date_time': donation.datetime.timestamp() if donation.datetime else None
+                            'date_time': donation.datetime.timestamp()
                         },
-                        'type': 'donation'
+                        'type': 'donation',
+                        'date_time': donation.datetime.timestamp()
                     }
                     donations_result.append(res_dict)
 
@@ -73,11 +76,11 @@ class UserNotifications(GenericAPIView):
                         instance=subscription.source, context={'request': request}).data
                     res_dict['subscription'] = {
                         'amount': user.subscribtion_price,
-                        'length': user.subscribtion_price,
-                        'start_date': subscription.start_date.timestamp() if subscription.start_date else None,
-                        'end_date': subscription.end_date.timestamp() if subscription.end_date else None
+                        'start_date': subscription.start_date.timestamp(),
+                        'end_date': subscription.end_date.timestamp(),
+                        'type': 'subscription',
+                        'date_time': subscription.start_date.timestamp()
                     }
-                    res_dict['type'] = 'subscription'
                     subscriptions_result.append(res_dict)
 
         if notification_type == 'all' or notification_type == 'chat_subscription':
@@ -88,17 +91,18 @@ class UserNotifications(GenericAPIView):
                         instance=subscription.source, context={'request': request}).data
                     res_dict['chat_subscription'] = {
                         'amount': user.subscribtion_price,
-                        'start_date': subscription.start_date.timestamp() if subscription.start_date else None,
-                        'end_date': subscription.end_date.timestamp() if subscription.end_date else None
+                        'start_date': subscription.start_date.timestamp(),
+                        'end_date': subscription.end_date.timestamp(),
+                        'type': 'chat_subscription',
+                        'date_time': subscription.start_date.timestamp()
                     }
-                    res_dict['type'] = 'chat_subscription'
                     subscriptions_result.append(res_dict)
-        result = [
+        result = sorted([
             *comments_result,
             *likes_result,
             *donations_result,
             *subscriptions_result,
-        ]
+        ], key=lambda x: x['date_time'], reverse=True)
         return Response(result[offset:offset+limit])
 
 
