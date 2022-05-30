@@ -38,6 +38,7 @@ import logo from "../../assets/images/logo.svg";
 import { toast } from "react-toastify";
 import { ChatInput } from "../components/chatInput/ChatInput";
 import { LangContext } from "../utils/LangProvider";
+import { useAddWalletAlert } from "../hooks/useAddWalletAlert";
 
 const MessageItem =
     React.memo(({
@@ -226,6 +227,10 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     const wrapperRef = useRef()
     const { currentLang } = useContext(LangContext)
 
+    const addWalerAlert = useAddWalletAlert()
+
+    const myWallet = useSelector((state: RootState) => state.auth.wallet)
+
     // useEffect`s
 
     useEffect(() => {
@@ -384,7 +389,11 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         return setMessageText("");
     };
 
+
     const sendTip = async (amount: number, reciever: number) => {
+        if (myWallet === null) {
+            return addWalerAlert()
+        }
         setIsDonating(true)
         const data = await userAPI.createDonation({
             amount,
