@@ -79,7 +79,7 @@ const Post = ({
 
   const [show, setShow] = useState<boolean>(false);
 
-  const addWalerAlert = useAddWalletAlert()
+  const addWaletAlert = useAddWalletAlert()
 
   const myWallet = useSelector((state: RootState) => state.auth.wallet)
 
@@ -88,7 +88,7 @@ const Post = ({
 
   const sendDonate = async () => {
     if (myWallet === null) {
-      return addWalerAlert()
+      return addWaletAlert()
     }
     setIsDonating(true)
     const data = await userAPI.createDonation({

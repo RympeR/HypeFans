@@ -40,7 +40,7 @@ const Profile = () => {
   const myId = useSelector((state: RootState) => state.auth.pk);
   const myWallet = useSelector((state: RootState) => state.auth.wallet);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
-  const addWalerAlert = useAddWalletAlert()
+  const addWaletAlert = useAddWalletAlert()
   const [isPaginationLoading, setIsPaginationLoading] =
     useState<boolean>(false);
   const { pathname } = useLocation();
@@ -82,15 +82,17 @@ const Profile = () => {
     }
   };
 
+
   const subscribe = async () => {
+    if (profile.subscribtion_price > 0 && !myWallet) {
+      setSubscribeShow(false);
+      return addWaletAlert()
+    }
     const data = await userAPI.createSubscription({
       source: myId,
       target: profile.pk,
     });
     setSubscribeShow(false);
-    if (profile.subscribtion_price > 0 && myWallet === null) {
-      return addWalerAlert()
-    }
     if (data.status === 202 && !profile.private_profile) {
       setProfile({
         ...profile,

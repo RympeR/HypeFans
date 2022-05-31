@@ -227,7 +227,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
     const wrapperRef = useRef()
     const { currentLang } = useContext(LangContext)
 
-    const addWalerAlert = useAddWalletAlert()
+    const addWaletAlert = useAddWalletAlert()
 
     const myWallet = useSelector((state: RootState) => state.auth.wallet)
 
@@ -392,7 +392,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
 
     const sendTip = async (amount: number, reciever: number) => {
         if (myWallet === null) {
-            return addWalerAlert()
+            return addWaletAlert()
         }
         setIsDonating(true)
         const data = await userAPI.createDonation({
