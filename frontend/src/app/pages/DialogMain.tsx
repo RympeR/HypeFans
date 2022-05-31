@@ -39,6 +39,7 @@ import { toast } from "react-toastify";
 import { ChatInput } from "../components/chatInput/ChatInput";
 import { LangContext } from "../utils/LangProvider";
 import { useAddWalletAlert } from "../hooks/useAddWalletAlert";
+import { decrypt } from "../hooks/decrypt";
 
 const MessageItem =
     React.memo(({
@@ -130,11 +131,12 @@ const MessageItem =
                                 }
                             >
                                 {!item?.attachments?.some((item: any) => item.file_type === 2)
+
                                     ? CryptoJS.AES.decrypt(
-                                        item.text,
-                                        "D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh"
-                                    ).toString(CryptoJS.enc.Utf8)
+                                        item.text, "D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh", { mode: CryptoJS.mode.ECB }).toString()
                                     : ""}
+
+
                                 {item?.attachments.length > 0
                                     ? item?.attachments.map((item: any, index: number) => {
                                         if (item.file_type === 4) {
@@ -366,10 +368,8 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
         ws.send(
             JSON.stringify({
                 text: !audioMessage
-                    ? CryptoJS.AES.encrypt(
-                        messageMain,
-                        "D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh"
-                    ).toString()
+                    ?
+                    decrypt(messageMain)
                     : "",
                 user: uid,
                 is_payed: false,
