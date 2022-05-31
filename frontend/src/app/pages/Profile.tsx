@@ -34,7 +34,7 @@ const Profile = () => {
 
   const [subscribeShow, setSubscribeShow] = useState(false);
   const profileData = useSelector((state: RootState) => state.user);
-  const [profile, setProfile] = useState(profileData);
+  const [profile, setProfile] = useState({ posts: [], pk: null, is_online: false, bio: "", hide_online: false, first_name: "", fans_amount: 0, background_photo: "", message_price: 0, subscribtion_price: 0, private_profile: false, subscribed: false, avatar: "", subscribed_chat: false, });
   const [offset, setOffset] = useState<number>(10);
   const myNick = useSelector((state: RootState) => state.auth.username);
   const myId = useSelector((state: RootState) => state.auth.pk);
@@ -52,7 +52,11 @@ const Profile = () => {
   useEffect(() => {
     dispatch(clearUserData());
     dispatch(getUser({ username: nick }));
-  }, [nick, dispatch]);
+    return () => {
+      dispatch(clearUserData()
+      )
+    }
+  }, []);
 
   useEffect(() => {
     setProfile(profileData);
