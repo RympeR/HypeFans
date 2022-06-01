@@ -32,21 +32,16 @@ class Util:
 
     @staticmethod
     def send_html_email(*args, **kwargs):
-        from_email = kwargs.get('from_email', 'support@hype-fans.com')
         context = kwargs.get('context')
         template = get_template(kwargs.get('template_name'))
         body = template.render(context)
         subject = kwargs.get('subject', 'Verify your email')
-        headers = kwargs.get('headers', {})
-
-        email = EmailMultiAlternatives(
-            subject,
-            from_email,
-            kwargs.get('to_email'),
-            headers=headers
+        email = EmailMessage(
+            subject=subject,
+            body=body,
+            to=kwargs.get('to_email')
         )
-
-        email.attach_alternative(body, 'text/html')
+        email.content_subtype = 'html'
         EmailThread(email).start()
 
 

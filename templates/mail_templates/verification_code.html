@@ -7,24 +7,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <style>
-    .block {
-        border: 1px solid rgb(13, 13, 13);
-        background-color: #fff;
+    .flex {
+        border: 2px solid rgb(251, 87, 52);
+        background-color: rgba(251, 88, 52, 0.07);
         font-size: 24px;
         font-weight: bold;
         text-align: center;
         padding: 10px;
         margin: 10px;
-
+        color: rgb(251, 87, 52);
+        max-width: 30%;
+    }
+    body{
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
     }
 </style>
 
-<body>
-    <h1>
+<body >
+    <h1 style="text-align:center">
         Hi {{username}}
     </h1>
-    <h2>Use this code ro verify your email</h2>
-    <div class="block">
+    <h2 style="text-align:center">Use this code to verify your email</h2>
+    <div class="flex">
         {{code}}
     </div>
 </body>
