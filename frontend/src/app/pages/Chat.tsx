@@ -59,8 +59,15 @@ const Chat: React.FC = () => {
     let last_message_display = item.item.room?.message?.attachment;
     if (item.item.room.message?.text) {
       console.log(last_message_display);
+      last_message_display = CryptoJS.AES.decrypt(
+        item.item.room.message?.text,
+        CryptoJS.enc.Utf8.parse("D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh"),
+        {
+          mode: CryptoJS.mode.ECB,
+        }
+      ).toString(CryptoJS.enc.Utf8);
 
-      debugger
+      // debugger
       if (last_message_display.length > 20) {
         last_message_display = last_message_display.slice(0, 20) + "...";
       }
@@ -71,14 +78,14 @@ const Chat: React.FC = () => {
           style={
             lastUrl !== item?.item?.room?.room_info?.id
               ? {
-                display: "flex",
-                borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
-              }
+                  display: "flex",
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+                }
               : {
-                display: "flex",
-                borderBottom: "1px solid rgba(0, 0, 0, 0.2),",
-                backgroundColor: "#C41E3A",
-              }
+                  display: "flex",
+                  borderBottom: "1px solid rgba(0, 0, 0, 0.2),",
+                  backgroundColor: "#C41E3A",
+                }
           }
         >
           <div className="chat__sidebarItem">
