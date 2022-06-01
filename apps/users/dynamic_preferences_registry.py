@@ -26,7 +26,7 @@ class WithdrawPercentage(PreferenceMixin, FloatPreference):
 
 
 @global_preferences_registry.register
-class CrdtitTransferPercentage(PreferenceMixin, FloatPreference):
+class CreditTransferPercentage(PreferenceMixin, FloatPreference):
     section = settings
     name = 'credit_transfer_percentage'
     default = 0.1
