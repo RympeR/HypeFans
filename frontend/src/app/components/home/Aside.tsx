@@ -3,6 +3,10 @@ import Slider from 'react-slick';
 import { LangContext } from '../../utils/LangProvider';
 import { getComputedLeftPosition } from '../../utils/utilities';
 import UserBanner from './UserBanner';
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Pagination, Autoplay } from "swiper"
+import "swiper/css";
+import "swiper/css/autoplay";
 
 const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
   const { currentLang } = useContext(LangContext);
@@ -22,7 +26,7 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
   // style={{ left: leftFixedPosition }}
   return (
     <aside className="aside">
-      <Slider dots={true} arrows={false} autoplay={false} autoplaySpeed={2000}>
+      {/* <Slider dots={true} arrows={false} autoplay={false} autoplaySpeed={2000}>
         {sliced_array.map((item, index) => {
           return (
             <>
@@ -32,7 +36,20 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
             </>
           );
         })}
-      </Slider>
+      </Slider> */}
+      <Swiper
+        modules={[Pagination, Autoplay]}
+        spaceBetween={20} loop={true} pagination={{ clickable: true }} autoplay={{ delay: 3000 }} >
+        {sliced_array.map((item, index) => {
+          return (
+            <SwiperSlide>
+              {item.map((slide, i) => {
+                return <UserBanner aside key={`${index + i} slideItem`} profile={slide} />;
+              })}
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
     </aside >
   );
 };
