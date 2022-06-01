@@ -19,7 +19,9 @@ from django.contrib.auth import authenticate
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.html import strip_tags
 from djoser.conf import django_settings
 from PIL import Image
 from rest_framework import generics, permissions
@@ -273,11 +275,11 @@ class UserCreateAPI(generics.GenericAPIView):
                     user=admin_user,
                     text=encrypted.decode("utf-8", "ignore")
                 )
-            email_body = 'Hi '+user.username + \
-                ' Use this code ro verify your email\n' + validation_code
-            # email_body = render_to_string(html_template, { 'context': context, })
+            html_message = render_to_string(
+                'mail_templates/verification_code.html', {'username': user.username, 'code': validation_code})
+            plain_message = strip_tags(html_message)
 
-            data = {'email_body': email_body, 'to_email': user.email,
+            data = {'email_body': plain_message, 'to_email': user.email,
                     'email_subject': 'Verify your email'}
 
             Util.send_email(data)
