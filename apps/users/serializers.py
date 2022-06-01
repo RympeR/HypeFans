@@ -995,3 +995,7 @@ class ChatSenderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatSender
         fields = '__all__'
+
+
+class BalanceTransferSerializer(serializers.Serializer):
+    amount = serializers.IntegerField()

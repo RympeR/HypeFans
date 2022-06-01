@@ -1,5 +1,4 @@
 from dynamic_preferences.types import (
-    BooleanPreference,
     StringPreference,
     IntegerPreference,
     FloatPreference,
@@ -24,6 +23,13 @@ class WithdrawPercentage(PreferenceMixin, FloatPreference):
     section = settings
     name = 'withdraw_percentage'
     default = 0.8
+
+
+@global_preferences_registry.register
+class CrdtitTransferPercentage(PreferenceMixin, FloatPreference):
+    section = settings
+    name = 'credit_transfer_percentage'
+    default = 0.1
 
 
 @global_preferences_registry.register

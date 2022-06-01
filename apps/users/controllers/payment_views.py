@@ -1,12 +1,12 @@
-
-
-from core.utils.default_responses import (api_block_by_policy_451)
+from apps.users.models import *
+from apps.users.serializers import *
+from apps.users.dynamic_preferences_registry import CreditTransferPercentage
+from core.utils.default_responses import api_block_by_policy_451
 from rest_framework import generics
+from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
-from apps.users.models import *
-from apps.users.serializers import *
 
 
 class CardRetrieveAPI(generics.RetrieveAPIView):
@@ -33,6 +33,26 @@ class CardPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
+
+
+class CreditTransferAPI(APIView):
+    serializer_class = BalanceTransferSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            amount: int = serializer.validated_data.get('amount', 0)
+            user = request.user
+            if user.earned_credits_amount < amount:
+                return api_block_by_policy_451()
+            else:
+                transfer_amount: float = amount - amount * CreditTransferPercentage.value()
+                user.earned_credits_amount -= transfer_amount
+                user.credit_amount += transfer_amount
+                user.save()
+                return Response({'status': 'success'})
+        else:
+            return Response({'status': 'error'})
 
 
 class DonationRetrieveAPI(generics.RetrieveAPIView):

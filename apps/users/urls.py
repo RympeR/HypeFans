@@ -38,6 +38,7 @@ urlpatterns = [
     path('pay-stats-history/', PayStatsHistoryRetrieveAPI.as_view()),
     path('referral-stats-history/', RepheralHistoryRetrieveAPI.as_view()),
     path('spend-stats-history/', SpendStatsHistoryRetrieveAPI.as_view()),
+    path('credit-transfer/', CreditTransferAPI.as_view(), name='CreditTransferAPI'),
     path('block-user/', AddBlockedUserAPI.as_view(), name='BlockUser'),
     path('block-user-list/', UserBlockedListAPI.as_view(), name='BlockUserList'),
     path('custom-list-invite/<int:pk>', CustomUsersListInviteAPI.as_view(),
