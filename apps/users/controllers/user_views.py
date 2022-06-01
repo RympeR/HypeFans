@@ -289,6 +289,7 @@ class UserCreateAPI(generics.GenericAPIView):
                 subject='Verify your email',
                 to_email=[user.email],
             )
+            
             return api_created_201({"validation_code": validation_code})
         except Exception as e:
             logging.error(e)
