@@ -6,7 +6,8 @@ from dynamic_preferences.settings import preferences_settings
 from dynamic_preferences.types import BasePreferenceType
 from rest_framework.serializers import ModelSerializer
 from django.core.mail import EmailMessage
-
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 
 import threading
 
@@ -27,6 +28,25 @@ class Util:
         email = EmailMessage(
             subject=data['email_subject'], body=data['email_body'], to=[data['to_email']])
         email.content_subtype = 'html'
+        EmailThread(email).start()
+
+    @staticmethod
+    def send_html_email(*args, **kwargs):
+        from_email = kwargs.get('from_email', 'support@hype-fans.com')
+        context = kwargs.get('context')
+        template = get_template(kwargs.get('template_name'))
+        body = template.render(context)
+        subject = kwargs.get('subject', 'Verify your email')
+        headers = kwargs.get('headers', {})
+
+        email = EmailMultiAlternatives(
+            subject,
+            from_email,
+            kwargs.get('to_email'),
+            headers=headers
+        )
+
+        email.attach_alternative(body, 'text/html')
         EmailThread(email).start()
 
 
