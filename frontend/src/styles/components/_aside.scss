@@ -25,9 +25,12 @@
     width: 10px !important;
     height: 10px !important;
     background: rgba(0, 0, 0, 0.2) !important;
+    border-radius: 100%;
+    margin: 0px 2px;
     opacity: unset !important;
     transition: all map-get($map: $time, $key: normal);
     &-active {
+      margin: 0px 2px;
       background: rgba(0, 0, 0, 0.7) !important;
     }
 
