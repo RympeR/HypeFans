@@ -35,7 +35,7 @@ class CustomUsersListCreateAPI(generics.CreateAPIView):
 
 class ChatSenderCreateAPI(generics.CreateAPIView):
     queryset = ChatSender.objects.all()
-    serializer_class = CustomUsersListCreateSerializer
+    serializer_class = ChatSenderCreateSerializer
 
     def get_serializer_context(self):
         return {'request': self.request}
