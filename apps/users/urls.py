@@ -41,6 +41,7 @@ urlpatterns = [
     path('credit-transfer/', CreditTransferAPI.as_view(), name='CreditTransferAPI'),
     path('block-user/', AddBlockedUserAPI.as_view(), name='BlockUser'),
     path('block-user-list/', UserBlockedListAPI.as_view(), name='BlockUserList'),
+     
     path('custom-list-invite/<int:pk>', CustomUsersListInviteAPI.as_view(),
          name='CustomUsersListInviteAPI'),
     path('custom-list-delete/<int:pk>', CustomUsersListRemoveAPI.as_view(),

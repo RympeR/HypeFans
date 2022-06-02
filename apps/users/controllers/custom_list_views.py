@@ -3,6 +3,7 @@ from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
+from core.utils.customFilters import UserFilter
 
 
 class CustomUsersListInviteAPI(GenericAPIView, UpdateModelMixin):
@@ -84,6 +85,7 @@ class RetrieveUserCustomListUsers(GenericAPIView):
 class RetrieveUsersAvailableToAddToLists(GenericAPIView):
     queryset = User.objects.all()
     serializer_class = UserShortRetrieveSeriliazer
+    filterset_class = UserFilter
 
     def get(self, request, *args, **kwargs):
         limit = request.query_params.get('limit', 20)
