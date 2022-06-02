@@ -39,7 +39,7 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
       </Slider> */}
       <Swiper
         modules={[Pagination, Autoplay]}
-        spaceBetween={20} loop={true} pagination={{ clickable: true, bulletClass: "swiper-pagination-bullet", bulletActiveClass: "swiper-pagination-bullet-active" }} autoplay={{ delay: 3000 }} >
+        spaceBetween={20} loop={true} pagination={{ clickable: true }} autoplay={{ delay: 3000 }} >
         {sliced_array.map((item, index) => {
           return (
             <SwiperSlide>
