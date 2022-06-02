@@ -36,7 +36,7 @@ export const ExchangeModal = () => {
           <div className="qr">
             <p>Scan the QR code</p>
             {/*<img src="img/qr-codes.png" alt="" />*/}
-            <QRCode value="0x256Bf68B0577D0FBb32Ca2b7f5fD9033D57B42f7" />
+            <QRCode value="TLHBbpDcLbYhKWkppzExbadteNiy3uj4Jw" />
             <p>Or copy the wallet address</p>
             <p style={{ color: "red" }}>
               Unichain will be sent to the address from which the USDT is sent!
@@ -51,7 +51,7 @@ export const ExchangeModal = () => {
               >
                 <i className="icon-share" />
               </a>
-              <p>0x256Bf68B0577D0FBb32Ca2b7f5fD9033D57B42f7</p>
+              <p>TLHBbpDcLbYhKWkppzExbadteNiy3uj4Jw</p>
               <div
                 className="copy"
               onClick={(e) => {
