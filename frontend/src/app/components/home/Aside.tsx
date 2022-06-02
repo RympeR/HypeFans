@@ -26,20 +26,9 @@ const Aside = ({ recommendations }: { recommendations: Array<any> }) => {
   // style={{ left: leftFixedPosition }}
   return (
     <aside className="aside">
-      {/* <Slider dots={true} arrows={false} autoplay={false} autoplaySpeed={2000}>
-        {sliced_array.map((item, index) => {
-          return (
-            <>
-              {item.map((slide, i) => {
-                return <UserBanner aside key={`${index + i} slideItem`} profile={slide} />;
-              })}
-            </>
-          );
-        })}
-      </Slider> */}
       <Swiper
         modules={[Pagination, Autoplay]}
-        spaceBetween={20} loop={true} pagination={{ clickable: true }} autoplay={{ delay: 3000 }} >
+        spaceBetween={20} loop={true} pagination={{ clickable: true }} autoplay={{ delay: 3000 }} init={true} preloadImages={true} >
         {sliced_array.map((item, index) => {
           return (
             <SwiperSlide>
