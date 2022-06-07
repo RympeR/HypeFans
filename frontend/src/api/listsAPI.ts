@@ -18,6 +18,9 @@ export const listsAPI = {
         return response.data;
       });
   },
+  getCustomLists() {
+    return instance.get(`/user/custom-list-retrieve/`).then((res) => res.data)
+  }
 };
 
 // custom-list-create/

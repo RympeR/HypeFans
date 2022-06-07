@@ -8,10 +8,12 @@ import { AddToChatItem } from "../../components/addToChat/AddToChatItem";
 import { AddToChatItemSelected } from "../../components/addToChat/AddToChatItemSelected";
 import { userAPI } from "../../../api/userAPI";
 import { LangContext } from "../../../app/utils/LangProvider";
+import { listsAPI } from "../../../api/listsAPI";
 
 export const ListsComponent = () => {
   const [listsCount, setListsCount] = React.useState({ favourites: 0, friends: 0, last_donators: 0, last_subs: 0, blocked_users: 0, my_subs: 0, });
   const { currentLang } = React.useContext(LangContext)
+  const [customLists, setCustomLists] = React.useState([])
   const [currentTab, setCurrentTab] = React.useState("list");
   const [list, setList] = React.useState<Array<any>>([])
   // const [selectedItems, setSelectedItems] = React.useState<Array<any>>([]);
@@ -22,11 +24,14 @@ export const ListsComponent = () => {
   //   });
   // };
   React.useEffect(() => {
-    const getListsCount = async () => {
+    const getLists = async () => {
       const data = await settingsAPI.getLists();
+      const lists = await listsAPI.getCustomLists()
+      setCustomLists(lists)
+      debugger
       setListsCount(data);
     };
-    getListsCount();
+    getLists();
     return () => {
       return null;
     };
@@ -65,6 +70,21 @@ export const ListsComponent = () => {
     <div className="notifications__main">
       {currentTab === "list" ? (
         <>
+          {customLists.map((item, key) => {
+            return (
+              <div
+                className="notifications__listItem"
+                onClick={() =>
+                  listsCount.favourites > 0 ? setCurrentTab("favourites") : null
+                }
+              >
+                <div className="notifications__listText">
+                  <h1>{item.name}</h1>
+                  <h2>{item.invited_len} {currentLang.man1}</h2>
+                </div>
+              </div>
+            )
+          })}
           <div
             className="notifications__listItem"
             onClick={() =>
@@ -72,7 +92,7 @@ export const ListsComponent = () => {
             }
           >
             <div className="notifications__listText">
-              <h1>{currentLang.scecial}</h1>
+              <h1>{currentLang.special}</h1>
               <h2>{listsCount.favourites} {currentLang.man1}</h2>
             </div>
           </div>
