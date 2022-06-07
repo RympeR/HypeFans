@@ -71,7 +71,7 @@ const Profile = () => {
       window.innerHeight + document.documentElement.scrollTop >=
       document.documentElement.offsetHeight - 5 &&
       !isLoading &&
-      !isPaginationLoading
+      !isPaginationLoading && offset === profile.posts.length
     ) {
       // getPosts here\
       setIsPaginationLoading(true);
