@@ -20,6 +20,12 @@ export const listsAPI = {
   },
   getCustomLists() {
     return instance.get(`/user/custom-list-retrieve/`).then((res) => res.data)
+  },
+  getCustomList(name: string) {
+    return instance.get(`/user/custom-list-retrieve-users/?name=${name}`).then((res) => res.data)
+  },
+  deleteCustomList(pk: string | number) {
+    return instance.delete(`/user/custom-list-delete/?pk=${pk}/`).then((res) => res.data)
   }
 };
 
