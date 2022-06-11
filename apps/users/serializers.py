@@ -974,7 +974,7 @@ class CustomUsersListGetPreviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUsersList
-        fields = 'name', 'invited_len'
+        fields = 'id', 'name', 'invited_len'
 
 
 class CustomUsersListCreateSerializer(serializers.ModelSerializer):
