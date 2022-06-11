@@ -2,19 +2,21 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { LangContext } from "../../../app/utils/LangProvider";
 import { chatAPI } from "../../../api/chatAPI";
-import { userAPI } from "../../../api/userAPI";
 import { ReactComponent as SearchSvg } from "../../../assets/images/search.svg";
 import { AddToChatItem } from "./AddToChatItem";
 import { AddToChatItemSelected } from "./AddToChatItemSelected";
+import { listsAPI } from "../../../api/listsAPI";
 
 export const AddToChatCreate = ({
   selectedUsers,
   setSelectedItems,
-  handleSubmit
+  handleSubmit,
+  type
 }: {
   selectedUsers: any[];
   setSelectedItems: any
-  handleSubmit: any
+  handleSubmit: any;
+  type: string
 }) => {
   const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -22,12 +24,25 @@ export const AddToChatCreate = ({
   const { currentLang } = useContext(LangContext);
 
   const searchUsers = async () => {
-    const data = await chatAPI.searchUserChatCreate({
-      user: inputValue,
-      limit: 50,
-      offset: 0,
-    });
-    setUsers(data.results);
+    switch (type) {
+      case "chat":
+        const chatData = await chatAPI.searchUserChatCreate({
+          user: inputValue,
+          limit: 50,
+          offset: 0,
+        });
+        setUsers(chatData.results);
+        break;
+
+      default:
+        const listsData = await listsAPI.getListAvialableUsers(
+          50,
+          0,
+          inputValue,
+        );
+        setUsers(listsData.results);
+        break;
+    }
   };
 
   useEffect(() => {
@@ -54,9 +69,9 @@ export const AddToChatCreate = ({
         className="notifications__settingBtn"
         style={{ margin: "0px", width: "100%" }}
         onClick={() => handleSubmit()}
-        disabled={selectedUsers.length === 0}
+        disabled={selectedUsers.length === 0 && type === "chat"}
       >
-        {currentLang.createChat}
+        {type === "chat" ? currentLang.createChat : "Создать список"}
       </button>
       <div
         style={{

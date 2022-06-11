@@ -9,6 +9,7 @@ import { LangContext } from '../../../app/utils/LangProvider';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/redux';
+import { listsAPI } from '../../../api/listsAPI';
 
 export const ListsText = () => {
 
@@ -17,6 +18,11 @@ export const ListsText = () => {
 
     const [currentTab, setCurrentTab] = useState(0);
     const userId = useSelector((state: RootState) => state.auth.pk);
+
+    const createList = async ({ creator, name, invited }: { creator: number, name: string, invited: Array<number> }) => {
+        const data = await listsAPI.createList({ creator, name, invited })
+        toast.success("Список создан")
+    }
 
 
     return (
@@ -46,12 +52,10 @@ export const ListsText = () => {
                     <Formik
                         initialValues={{
                             creator: userId,
-                            paid: false,
-                            chatCost: 0,
-                            chatName: "",
+                            name: "",
                             invited: [],
                         }}
-                        onSubmit={() => console.log("submit")}
+                        onSubmit={(val) => createList(val)}
                     >
                         {({ values, handleSubmit, setFieldValue }) => {
                             return (
@@ -65,8 +69,8 @@ export const ListsText = () => {
                                                 justifyContent: "center"
                                             }}>
                                                 <input placeholder={currentLang.chatPls}
-                                                    style={{ borderBottom: '1px solid grey', width: "100%" }} value={values.chatName}
-                                                    onChange={(val) => setFieldValue("chatName", val.target.value)} />
+                                                    style={{ borderBottom: '1px solid grey', width: "100%" }} value={values.name}
+                                                    onChange={(val) => setFieldValue("name", val.target.value)} />
                                             </div>
                                             <div
                                                 style={{
@@ -81,7 +85,7 @@ export const ListsText = () => {
                                                 <div style={{ width: "20px" }}></div>
                                                 <h3
                                                     onClick={() => {
-                                                        if (values.chatName.length === 0) {
+                                                        if (values.name.length === 0) {
                                                             return toast.error(currentLang.chatPls)
                                                         } else {
                                                             return setCurrentTab(currentTab + 1)
@@ -99,6 +103,7 @@ export const ListsText = () => {
                                             <h2 style={{ marginBottom: "0px" }}>{currentLang.members}</h2>
                                             <AddToChatCreate
                                                 selectedUsers={values.invited}
+                                                type="list"
                                                 setSelectedItems={setFieldValue}
                                                 handleSubmit={handleSubmit}
                                             />
