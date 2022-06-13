@@ -143,7 +143,7 @@ class MainUserPageUpdated(APIView):
         limit = int(request.GET.get('limit', 30))
         offset = int(request.GET.get('offset', 0))
 
-        qs = User.objects.all().order_by('-fans_amount').values_list('id', flat=True)
+        qs = User.objects.filter(hide_in_search=False).order_by('-fans_amount').values_list('id', flat=True)
         reccomendations = UserShortRetrieveSeriliazer(
             instance=self.get_sample_of_queryset(qs, 9, User)
             .order_by('-fans_amount').order_by('-post_amount'),
