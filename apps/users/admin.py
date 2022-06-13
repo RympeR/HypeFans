@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.users.dynamic_preferences_registry import ReferralPercentage
 
 from .models import (Card, ChatSender, ChatSubscription, CustomUsersList,
-                     Donation, Payment, PendingUser, ReferralPayment,
+                     Donation, Payment, PendingUser, ReferralPayment, UserModelCheck,
                      Subscription, SubscriptionRequest, User, UserOnline)
 
 
@@ -224,6 +224,29 @@ class PendingUserAdmin(ActionsModelAdmin):
         pending_user.save()
 
     reject_user.short_description = 'Reject'
+
+
+@admin.register(UserModelCheck)
+class UserModelCheckAdmin(ActionsModelAdmin):
+    list_display = [
+        'pk', 'user', 'is_model'
+    ]
+    search_fields = ['user__username']
+    list_filter = ['is_model']
+    ordering = '-pk',
+    actions_row = actions_detail = ['confirm_user', ]
+
+    def confirm_user(self, request, pk):
+        pending_user = UserModelCheck.objects.get(pk=pk)
+        user = pending_user.user
+        user.is_model = True
+        user.hide_in_search = False
+        pending_user.is_model = True
+        user.save()
+        pending_user.save()
+        return HttpResponseRedirect(reverse_lazy('admin:user_usermodelcheck_changelist'), request)
+
+    confirm_user.short_description = 'Confirm'
 
 
 @admin.register(SubscriptionRequest)

@@ -256,8 +256,10 @@ class UserCreateAPI(generics.GenericAPIView):
                 user.set_password(request.data['password'])
                 if ref_user:
                     ref_user.repheral_users.add(user)
-
                 user.save()
+                UserModelCheck.objects.create(
+                    user=user,
+                )
                 admin_user = User.objects.get(username='root')
                 room = Room.objects.create(
                     creator=admin_user,
