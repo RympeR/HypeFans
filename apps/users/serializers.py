@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
 import logging
+from datetime import datetime, timedelta
 
 from core.utils.customFields import TimestampField
 from core.utils.func import create_path_file, get_online
@@ -8,12 +8,14 @@ from django_countries.serializer_fields import CountryField
 from rest_framework import serializers
 
 from apps.blog.models import Post
-from apps.users.dynamic_preferences_registry import (HostName,
-                                                     ChatSubscriptionDuration,
-                                                     ReferralPercentage, WithdrawPercentage)
+from apps.users.dynamic_preferences_registry import (ChatSubscriptionDuration,
+                                                     HostName,
+                                                     ReferralPercentage,
+                                                     WithdrawPercentage)
 
-from .models import (Card, ChatSubscription, Donation, Payment, PendingUser,
-                     Subscription, User, UserOnline, ReferralPayment, CustomUsersList, ChatSender)
+from .models import (Card, ChatSender, ChatSubscription, CustomUsersList,
+                     Donation, Payment, PendingUser, ReferralPayment,
+                     Subscription, SubscriptionRequest, User, UserOnline)
 
 
 class ChatSubscriptionNotificationSerializer(serializers.ModelSerializer):
@@ -139,6 +141,18 @@ class ChatSubscriptionCreateSerializer(serializers.ModelSerializer):
         )
 
 
+class SubscriptionRequestCreateSerializer(serializers.ModelSerializer):
+
+    source = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+    target = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=User.objects.all())
+
+    class Meta:
+        model = SubscriptionRequest
+        fields = 'source', 'target'
+
+
 class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
     source = serializers.PrimaryKeyRelatedField(
@@ -161,7 +175,6 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
         if user.credit_amount >= attrs['target'].subscribtion_price:
             user.credit_amount -= attrs['target'].subscribtion_price
             attrs['target'].earned_credits_amount += attrs['target'].subscribtion_price
-
             user.save()
             referrer = attrs['target'].referrer
             if referrer:

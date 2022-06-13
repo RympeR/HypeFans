@@ -1,23 +1,18 @@
-from django import forms
-from django.contrib import admin
-from django.contrib.admin import DateFieldListFilter
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from django.contrib.auth.admin import UserAdmin
-from .models import (
-    User,
-    Card,
-    Donation,
-    Payment,
-    Subscription,
-    UserOnline,
-    PendingUser,
-    ChatSubscription,
-    ReferralPayment,
-    CustomUsersList,
-    ChatSender
-)
-from django.utils.translation import gettext, gettext_lazy as _
+from datetime import datetime, timedelta
 from admin_actions.admin import ActionsModelAdmin
+from django.contrib import admin, messages
+
+from django.contrib.admin import DateFieldListFilter
+from django.contrib.auth.admin import UserAdmin
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+
+from apps.users.dynamic_preferences_registry import ReferralPercentage
+
+from .models import (Card, ChatSender, ChatSubscription, CustomUsersList,
+                     Donation, Payment, PendingUser, ReferralPayment,
+                     Subscription, SubscriptionRequest, User, UserOnline)
 
 
 @admin.register(CustomUsersList)
@@ -229,3 +224,58 @@ class PendingUserAdmin(ActionsModelAdmin):
         pending_user.save()
 
     reject_user.short_description = 'Reject'
+
+
+@admin.register(SubscriptionRequest)
+class SubscriptionRequestAdmin(ActionsModelAdmin):
+    list_display = [
+        'pk', 'source', 'target'
+    ]
+    search_fields = ['source__username', 'target__username']
+    list_filter = ['accepted']
+    ordering = '-pk',
+    actions_row = actions_detail = ['accept_subscription']
+
+    def accept_subscription(self, request, pk):
+        pending_sub = SubscriptionRequest.objects.get(pk=pk)
+        if not pending_sub.accepted:
+            source = pending_sub.source
+            target = pending_sub.target
+            now = datetime.now()
+            start_date = now.strftime("%Y-%m-%d %H:%M:%S")
+            end_date = (
+                now + timedelta(days=source.subscribtion_duration)).strftime("%Y-%m-%d %H:%M:%S")
+
+            if source.credit_amount >= target.subscribtion_price:
+                source.credit_amount -= target.subscribtion_price
+                target.earned_credits_amount += target.subscribtion_price
+                source.save()
+                referrer = target.referrer
+                if referrer:
+                    amount = target.subscribtion_price * \
+                        ReferralPercentage.value()
+                    referrer.earned_credits_amount += amount
+                    referrer.save()
+                    ReferralPayment.objects.create(
+                        user=source,
+                        referrer=referrer,
+                        amount=amount
+                    )
+                target.save()
+
+                Subscription.objects.create(
+                    source=pending_sub.source,
+                    target=pending_sub.target,
+                    start_date=start_date,
+                    end_date=end_date
+                )
+                pending_sub.accepted = True
+                pending_sub.save()
+                messages.success(request, 'Подписка создана')
+            else:
+                messages.error(request, 'Недостаточно средств')
+            return HttpResponseRedirect(reverse_lazy('admin:user_subscriptionrequest_changelist'), request)
+        messages.error(
+            request, 'Подписка уже подтверждена')
+        return HttpResponseRedirect(reverse_lazy('admin:user_subscriptionrequest_changelist'), request)
+    accept_subscription.short_description = 'Confirm'

@@ -201,6 +201,21 @@ class Subscription(models.Model):
         verbose_name_plural = 'Подписки'
 
 
+class SubscriptionRequest(models.Model):
+    source = models.ForeignKey(User, verbose_name='Кто подписался',
+                               related_name='source_user_subscribe_request', on_delete=models.CASCADE)
+    target = models.ForeignKey(User, verbose_name='На кого подписался',
+                               related_name='target_user_subscribe_request', on_delete=models.CASCADE)
+    accepted = models.BooleanField('Подтверждено', null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.source}-{self.target}'
+
+    class Meta:
+        verbose_name = 'Запрос на подписку'
+        verbose_name_plural = 'Запросы на подписки'
+
+
 class ChatSubscription(models.Model):
     source = models.ForeignKey(User, verbose_name='Кто подписался',
                                related_name='source_user_chat_subscribe', on_delete=models.CASCADE)
