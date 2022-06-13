@@ -25,7 +25,7 @@ export const listsAPI = {
     return instance.get(`/user/custom-list-retrieve-users/?name=${name}`).then((res) => res.data)
   },
   deleteCustomList(pk: string | number) {
-    return instance.delete(`/user/custom-list-delete/?pk=${pk}/`).then((res) => res.data)
+    return instance.delete(`/user/custom-list-delete/?pk=${pk}`).then((res) => res.data)
   }
 };
 

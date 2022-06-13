@@ -12,6 +12,7 @@ import { listsAPI } from "../../../api/listsAPI";
 import { ReactComponent as CloseIcon } from "../../../assets/images/x-circle.svg";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
+import { AddToChatCreate } from "../../../app/components/addToChat/AddToChatCreate";
 
 export const ListsComponent = () => {
   const [listsCount, setListsCount] = React.useState({ favourites: 0, friends: 0, last_donators: 0, last_subs: 0, blocked_users: 0, subs: 0, });
@@ -21,6 +22,7 @@ export const ListsComponent = () => {
   const [currentTab, setCurrentTab] = React.useState("list");
   const [list, setList] = React.useState<Array<any>>([])
   const [isDeleteShow, setDeleteShow] = React.useState<boolean>(false)
+  const [addToListShow, setAddToListShow] = React.useState(false)
   // const [selectedItems, setSelectedItems] = React.useState<Array<any>>([]);
   // const unblockUsers = async () => {
   //   await userAPI.blockUser({
@@ -188,7 +190,10 @@ export const ListsComponent = () => {
                 {currentTab}
               </div>
             </div>
-            {tabs.includes(currentTab) ? null : <CloseIcon onClick={() => setDeleteShow(true)} />}
+            <div>
+              {tabs.includes(currentTab) ? null : <CloseIcon onClick={() => setAddToListShow(true)} style={{ transform: "rotate(45deg)" }} />}
+              {tabs.includes(currentTab) ? null : <CloseIcon onClick={() => setDeleteShow(true)} />}
+            </div>
             <Modal show={isDeleteShow} onHide={() => setDeleteShow(false)} centered>
               <Modal.Body className="notifications__modal">
                 <h2>Are you sure to delete that list?</h2>
@@ -208,6 +213,11 @@ export const ListsComponent = () => {
                   <div style={{ width: "20px" }}></div>
                   <h3 onClick={() => deleteList()}>{currentLang.next}</h3>
                 </div>
+              </Modal.Body>
+            </Modal>
+            <Modal show={addToListShow} onHide={() => setAddToListShow(false)} centered>
+              <Modal.Body className="notifications__modal">
+                <AddToChatCreate type="listUpdate" handleSubmit={() => console.log("log")} selectedUsers={[]} setSelectedItems={() => { }} />
               </Modal.Body>
             </Modal>
           </div>

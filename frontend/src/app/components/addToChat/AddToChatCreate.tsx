@@ -23,6 +23,17 @@ export const AddToChatCreate = ({
   const history = useHistory();
   const { currentLang } = useContext(LangContext);
 
+  const getTitleText = (type: string) => {
+    switch (type) {
+      case "chat":
+        return currentLang.createChat
+      case "listUpdate":
+        return "Добавить людей в список"
+      case "list":
+        return "Создать список"
+    }
+  }
+
   const searchUsers = async () => {
     switch (type) {
       case "chat":
@@ -71,7 +82,7 @@ export const AddToChatCreate = ({
         onClick={() => handleSubmit()}
         disabled={selectedUsers.length === 0 && type === "chat"}
       >
-        {type === "chat" ? currentLang.createChat : "Создать список"}
+        {getTitleText(type)}
       </button>
       <div
         style={{
