@@ -234,8 +234,10 @@ class UserModelCheckAdmin(ActionsModelAdmin):
     search_fields = ['user__username']
     list_filter = ['is_model']
     ordering = '-pk',
-    actions_row = actions_detail = ['confirm_user', ]
+    actions_row = actions_detail = 'confirm_user', 'reject'
 
+    def reject(self, request, pk):
+        return HttpResponseRedirect(reverse_lazy('admin:user_usermodelcheck_changelist'), request)
     def confirm_user(self, request, pk):
         pending_user = UserModelCheck.objects.get(pk=pk)
         user = pending_user.user
@@ -257,7 +259,10 @@ class SubscriptionRequestAdmin(ActionsModelAdmin):
     search_fields = ['source__username', 'target__username']
     list_filter = ['accepted']
     ordering = '-pk',
-    actions_row = actions_detail = ['accept_subscription']
+    actions_row = actions_detail = 'accept_subscription', 'reject'
+
+    def reject(self, request, pk):
+        return HttpResponseRedirect(reverse_lazy('admin:user_subscriptionrequest_changelist'), request)
 
     def accept_subscription(self, request, pk):
         pending_sub = SubscriptionRequest.objects.get(pk=pk)
