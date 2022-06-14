@@ -23,6 +23,7 @@ export const ListsComponent = () => {
   const [list, setList] = React.useState<Array<any>>([])
   const [isDeleteShow, setDeleteShow] = React.useState<boolean>(false)
   const [addToListShow, setAddToListShow] = React.useState(false)
+  const [currentCustomList, setCurrentCustomList] = React.useState<number | null>(null)
   // const [selectedItems, setSelectedItems] = React.useState<Array<any>>([]);
   // const unblockUsers = async () => {
   //   await userAPI.blockUser({
@@ -52,7 +53,8 @@ export const ListsComponent = () => {
         return setList(data);
       } else {
         const data = await listsAPI.getCustomList(currentTab);
-        return setList(data.invited)
+        setCurrentCustomList(data[0].id)
+        return setList([...data[0].invited])
       }
     };
     getList();
@@ -64,11 +66,17 @@ export const ListsComponent = () => {
   const [inputValue, setInputValue] = React.useState("");
 
   const deleteList = async () => {
-    const data = listsAPI.deleteCustomList(currentTab)
-    setDeleteShow(false)
-    setCustomLists(customLists.filter((item, key) => item.name !== currentTab))
-    setCurrentTab("list")
-    toast.success("Списко успешно удален")
+    const data = await listsAPI.deleteCustomList(currentCustomList)
+    if (data.status === 204) {
+      setDeleteShow(false)
+      setCustomLists(customLists.filter((item, key) => item.name !== currentTab))
+      setCurrentCustomList(null)
+      setCurrentTab("list")
+      return toast.success("Списко успешно удален")
+    } else {
+      setDeleteShow(false)
+      toast.error("Ошибка удаления списка")
+    }
   }
 
   return (
