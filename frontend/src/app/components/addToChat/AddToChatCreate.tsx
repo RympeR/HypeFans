@@ -34,11 +34,11 @@ export const AddToChatCreate = ({
     }
   }
 
-  const searchUsers = async () => {
+  const searchUsers = async (val: string) => {
     switch (type) {
       case "chat":
         const chatData = await chatAPI.searchUserChatCreate({
-          user: inputValue,
+          user: val,
           limit: 50,
           offset: 0,
         });
@@ -49,7 +49,7 @@ export const AddToChatCreate = ({
         const listsData = await listsAPI.getListAvialableUsers(
           50,
           0,
-          inputValue,
+          val,
         );
         setUsers(listsData.results);
         break;
@@ -101,7 +101,7 @@ export const AddToChatCreate = ({
           value={inputValue}
           onChange={(val) => {
             setInputValue(val.currentTarget.value);
-            searchUsers();
+            searchUsers(val.currentTarget.value);
           }}
         ></input>
       </div>

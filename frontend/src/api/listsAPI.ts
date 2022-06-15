@@ -4,7 +4,7 @@ import { userSearchType } from "./types";
 export const listsAPI = {
   getListAvialableUsers(limit: number, offset: number, username: string) {
     return instance
-      .get(`/user/custom-list-retrieve-available-users/?limit=${limit}&offset=${offset}&username=${username}`)
+      .get(`/user/custom-list-retrieve-available-users?limit=${limit}&offset=${offset}&username=${username}`)
       .then((response) => {
         return response.data;
       });

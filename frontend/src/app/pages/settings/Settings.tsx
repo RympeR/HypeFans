@@ -73,7 +73,7 @@ export const Settings = () => {
       { path: "/settings/account/password", text: currentLang.changePass },
       { path: "/settings/prices/messages", text: currentLang.msgprice },
       { path: "/settings/prices/subscribes", text: currentLang.price },
-      { path: "/settings/prices/fans", text: currentLang.forFun },
+      // { path: "/settings/prices/fans", text: currentLang.forFun },
       { path: "/settings/account/nickname", text: currentLang.changeNick }
     ]
     return (
