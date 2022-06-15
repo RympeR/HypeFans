@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { ReactComponent as ArrowTop } from "../../../assets/images/arrowUp.svg";
 
 export const GoToTopBtn = () => {
 
@@ -21,7 +22,7 @@ export const GoToTopBtn = () => {
 
     return (
         <button id="goToTop" onClick={goToTop} style={showTopBtn ? { display: "flex" } : {}}>
-            &#129045;
+            <ArrowTop />
         </button>
     )
 }
