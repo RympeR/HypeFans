@@ -31,6 +31,14 @@ class CreateSubscriptioAPI(generics.CreateAPIView):
         return {'request': self.request}
 
 
+class CreateSubscriptionRequestAPI(generics.CreateAPIView):
+    queryset = SubscriptionRequest.objects.all()
+    serializer_class = SubscriptionRequestCreateSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+
 class UserSubscription(GenericAPIView):
     queryset = User.objects.all()
     serializer_class = SubscriptionCreateSerializer

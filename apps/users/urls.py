@@ -22,6 +22,7 @@ urlpatterns = [
     path('get-card/<int:pk>', CardRetrieveAPI.as_view()),
     path('create-card/', CardCreateAPI.as_view()),
     path('create-subscription/', CreateSubscriptioAPI.as_view()),
+    path('create-subscription-request/', CreateSubscriptionRequestAPI.as_view()),
     path('update-delete-card/<int:pk>', CardAPI.as_view()),
     path('partial-update-card/', CardPartialUpdateAPI.as_view()),
     path('get-donation/<int:pk>', DonationRetrieveAPI.as_view()),

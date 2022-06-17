@@ -107,7 +107,7 @@ class User(AbstractUser):
     validated_email = models.BooleanField(
         'Подтвержденная почта', default=False)
     validation_code = models.CharField(
-        'Код подтверждения', max_length=8, default='')
+        'Код подтверждения', max_length=8, blank=True, null=True, default='')
     validated_user = models.BooleanField(
         'Подтвержденный профиль', default=False)
     creator = models.BooleanField(
