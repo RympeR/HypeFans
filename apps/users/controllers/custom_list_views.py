@@ -12,15 +12,10 @@ class CustomUsersListInviteAPI(GenericAPIView, UpdateModelMixin):
 
     def put(self, request, *args, **kwargs):
         if request.user == self.get_object().creator:
-            for username in request.data.get('username'):
-                if request.data.get('add'):
-                    self.get_object().invited.add(
-                        User.objects.get(username=username)
-                    )
-                else:
-                    self.get_object().invited.remove(
-                        User.objects.get(username=username)
-                    )
+            users = User.objects.filter(username__in=request.data.get('username'))
+            self.get_object().invited.set(
+                users
+            )
             self.get_object().save()
         return self.partial_update(request, *args, **kwargs)
 

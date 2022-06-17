@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.users.dynamic_preferences_registry import ReferralPercentage
 
 from .models import (Card, ChatSender, ChatSubscription, CustomUsersList,
-                     Donation, Payment, PendingUser, ReferralPayment,
+                     Donation, Payment, PendingUser, ReferralPayment, UserModelCheck,
                      Subscription, SubscriptionRequest, User, UserOnline)
 
 
@@ -203,7 +203,7 @@ class PendingUserAdmin(ActionsModelAdmin):
     search_fields = ['user__username']
     list_filter = ['verified']
     ordering = '-pk',
-    actions_row = actions_detail = 'confirm_user', 'reject_user',
+    actions_row = actions_detail = ['confirm_user', 'reject_user']
 
     def confirm_user(self, request, pk):
         pending_user = PendingUser.objects.get(pk=pk)
@@ -226,6 +226,31 @@ class PendingUserAdmin(ActionsModelAdmin):
     reject_user.short_description = 'Reject'
 
 
+@admin.register(UserModelCheck)
+class UserModelCheckAdmin(ActionsModelAdmin):
+    list_display = [
+        'pk', 'user', 'is_model'
+    ]
+    search_fields = ['user__username']
+    list_filter = ['is_model']
+    ordering = '-pk',
+    actions_row = actions_detail = ['confirm_user', 'reject']
+
+    def reject(self, request, pk):
+        return HttpResponseRedirect(reverse_lazy('admin:user_usermodelcheck_changelist'), request)
+    def confirm_user(self, request, pk):
+        pending_user = UserModelCheck.objects.get(pk=pk)
+        user = pending_user.user
+        user.is_model = True
+        user.hide_in_search = False
+        pending_user.is_model = True
+        user.save()
+        pending_user.save()
+        return HttpResponseRedirect(reverse_lazy('admin:user_usermodelcheck_changelist'), request)
+
+    confirm_user.short_description = 'Confirm'
+
+
 @admin.register(SubscriptionRequest)
 class SubscriptionRequestAdmin(ActionsModelAdmin):
     list_display = [
@@ -235,6 +260,9 @@ class SubscriptionRequestAdmin(ActionsModelAdmin):
     list_filter = ['accepted']
     ordering = '-pk',
     actions_row = actions_detail = ['accept_subscription']
+
+    def reject(self, request, pk):
+        return HttpResponseRedirect(reverse_lazy('admin:user_subscriptionrequest_changelist'), request)
 
     def accept_subscription(self, request, pk):
         pending_sub = SubscriptionRequest.objects.get(pk=pk)

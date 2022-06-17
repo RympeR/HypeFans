@@ -116,6 +116,8 @@ class User(AbstractUser):
         'Кошелек вывода', null=True, blank=True, max_length=200)
     agency = models.ForeignKey(
         Agency, blank=True, null=True, verbose_name='Агенство', related_name='agency_model', on_delete=models.SET_NULL)
+    is_model = models.BooleanField(
+        'Модель', default=False)
     withdraw_percentage = models.FloatField(
         verbose_name='Процент дохода', default=0)
     credit_amount = models.IntegerField(
@@ -131,7 +133,7 @@ class User(AbstractUser):
     )
     hide_in_search = models.BooleanField(
         verbose_name='Не отображать в поиске',
-        default=False
+        default=True
     )
     auth_provider = models.CharField(
         max_length=255, blank=False,
@@ -182,6 +184,17 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
+
+class UserModelCheck(models.Model):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    is_model = models.BooleanField(
+        'Модель', default=False)
+    
+    class Meta:
+        verbose_name = 'Проверка пользователя'
+        verbose_name_plural = 'Проверка пользователей'
 
 
 class Subscription(models.Model):

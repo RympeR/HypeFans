@@ -82,8 +82,8 @@ class UserNotifications(GenericAPIView):
                         'amount': user.subscribtion_price,
                         'start_date': subscription.start_date.timestamp(),
                         'end_date': subscription.end_date.timestamp(),
-                        'type': 'subscription',
                     }
+                    res_dict['type'] = 'subscription'
                     res_dict['date_time'] = subscription.start_date.timestamp()
 
                     subscriptions_result.append(res_dict)
@@ -98,8 +98,8 @@ class UserNotifications(GenericAPIView):
                         'amount': user.subscribtion_price,
                         'start_date': subscription.start_date.timestamp(),
                         'end_date': subscription.end_date.timestamp(),
-                        'type': 'chat_subscription',
                     }
+                    res_dict['type'] = 'chat_subscription'
                     res_dict['date_time'] = subscription.start_date.timestamp()
                     subscriptions_result.append(res_dict)
         result = sorted([
