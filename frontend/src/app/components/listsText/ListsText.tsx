@@ -21,7 +21,13 @@ export const ListsText = () => {
 
     const createList = async ({ creator, name, invited }: { creator: number, name: string, invited: Array<number> }) => {
         const data = await listsAPI.createList({ creator, name, invited })
-        toast.success("Список создан")
+        if (data.status === 201) {
+            toast.success("Список создан")
+            return window.location.reload()
+        } else {
+            return toast.error("Ошибка создания")
+        }
+
     }
 
 

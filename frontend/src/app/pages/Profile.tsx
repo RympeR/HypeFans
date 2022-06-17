@@ -34,7 +34,7 @@ const Profile = () => {
 
   const [subscribeShow, setSubscribeShow] = useState(false);
   const profileData = useSelector((state: RootState) => state.user);
-  const [profile, setProfile] = useState({ posts: [], pk: null, is_online: false, bio: "", hide_online: false, first_name: "", fans_amount: 0, background_photo: "", message_price: 0, subscribtion_price: 0, private_profile: false, subscribed: false, avatar: "", subscribed_chat: false, });
+  const [profile, setProfile] = useState({ posts: [], pk: null, show_post_amount: true, show_fans_amount: true, is_online: false, bio: "", hide_online: false, first_name: "", fans_amount: 0, background_photo: "", message_price: 0, subscribtion_price: 0, private_profile: false, subscribed: false, avatar: "", subscribed_chat: false, });
   const [offset, setOffset] = useState<number>(10);
   const myNick = useSelector((state: RootState) => state.auth.username);
   const myId = useSelector((state: RootState) => state.auth.pk);
@@ -266,9 +266,10 @@ const Profile = () => {
           )}
         </div>
         <h5 className="profile__info">
-          {profile?.posts?.length} {currentLang.posts}{" "}
-          {sub_amount(profile.fans_amount, 1)}{" "}
-          <img className="sub_icon" src={fansIcon} />{" "}
+          {profile.show_post_amount ? `${profile?.posts?.length} ${currentLang.posts} ` : null}
+          {profile.show_fans_amount ? <>
+            {sub_amount(profile.fans_amount, 1)}{" "}
+            <img className="sub_icon" src={fansIcon} />{" "}</> : null}
         </h5>
       </div>
       <pre className="profile__status">

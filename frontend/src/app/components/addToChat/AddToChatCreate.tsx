@@ -23,11 +23,22 @@ export const AddToChatCreate = ({
   const history = useHistory();
   const { currentLang } = useContext(LangContext);
 
-  const searchUsers = async () => {
+  const getTitleText = (type: string) => {
+    switch (type) {
+      case "chat":
+        return currentLang.createChat
+      case "listUpdate":
+        return "Добавить людей в список"
+      case "list":
+        return "Создать список"
+    }
+  }
+
+  const searchUsers = async (val: string) => {
     switch (type) {
       case "chat":
         const chatData = await chatAPI.searchUserChatCreate({
-          user: inputValue,
+          user: val,
           limit: 50,
           offset: 0,
         });
@@ -38,7 +49,7 @@ export const AddToChatCreate = ({
         const listsData = await listsAPI.getListAvialableUsers(
           50,
           0,
-          inputValue,
+          val,
         );
         setUsers(listsData.results);
         break;
@@ -71,7 +82,7 @@ export const AddToChatCreate = ({
         onClick={() => handleSubmit()}
         disabled={selectedUsers.length === 0 && type === "chat"}
       >
-        {type === "chat" ? currentLang.createChat : "Создать список"}
+        {getTitleText(type)}
       </button>
       <div
         style={{
@@ -90,7 +101,7 @@ export const AddToChatCreate = ({
           value={inputValue}
           onChange={(val) => {
             setInputValue(val.currentTarget.value);
-            searchUsers();
+            searchUsers(val.currentTarget.value);
           }}
         ></input>
       </div>

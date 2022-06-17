@@ -12,6 +12,7 @@ import { listsAPI } from "../../../api/listsAPI";
 import { ReactComponent as CloseIcon } from "../../../assets/images/x-circle.svg";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
+import { AddToChatCreate } from "../../../app/components/addToChat/AddToChatCreate";
 
 export const ListsComponent = () => {
   const [listsCount, setListsCount] = React.useState({ favourites: 0, friends: 0, last_donators: 0, last_subs: 0, blocked_users: 0, subs: 0, });
@@ -21,6 +22,8 @@ export const ListsComponent = () => {
   const [currentTab, setCurrentTab] = React.useState("list");
   const [list, setList] = React.useState<Array<any>>([])
   const [isDeleteShow, setDeleteShow] = React.useState<boolean>(false)
+  const [addToListShow, setAddToListShow] = React.useState(false)
+  const [currentCustomList, setCurrentCustomList] = React.useState<number | null>(null)
   // const [selectedItems, setSelectedItems] = React.useState<Array<any>>([]);
   // const unblockUsers = async () => {
   //   await userAPI.blockUser({
@@ -50,7 +53,8 @@ export const ListsComponent = () => {
         return setList(data);
       } else {
         const data = await listsAPI.getCustomList(currentTab);
-        return setList(data.invited)
+        setCurrentCustomList(data[0].id)
+        return setList([...data[0].invited])
       }
     };
     getList();
@@ -62,11 +66,17 @@ export const ListsComponent = () => {
   const [inputValue, setInputValue] = React.useState("");
 
   const deleteList = async () => {
-    const data = listsAPI.deleteCustomList(currentTab)
-    setDeleteShow(false)
-    setCustomLists(customLists.filter((item, key) => item.name !== currentTab))
-    setCurrentTab("list")
-    toast.success("Списко успешно удален")
+    const data = await listsAPI.deleteCustomList(currentCustomList)
+    if (data.status === 204) {
+      setDeleteShow(false)
+      setCustomLists(customLists.filter((item, key) => item.name !== currentTab))
+      setCurrentCustomList(null)
+      setCurrentTab("list")
+      return toast.success("Списко успешно удален")
+    } else {
+      setDeleteShow(false)
+      toast.error("Ошибка удаления списка")
+    }
   }
 
   return (
@@ -188,7 +198,10 @@ export const ListsComponent = () => {
                 {currentTab}
               </div>
             </div>
-            {tabs.includes(currentTab) ? null : <CloseIcon onClick={() => setDeleteShow(true)} />}
+            <div>
+              {tabs.includes(currentTab) ? null : <CloseIcon onClick={() => setAddToListShow(true)} style={{ transform: "rotate(45deg)" }} />}
+              {tabs.includes(currentTab) ? null : <CloseIcon onClick={() => setDeleteShow(true)} />}
+            </div>
             <Modal show={isDeleteShow} onHide={() => setDeleteShow(false)} centered>
               <Modal.Body className="notifications__modal">
                 <h2>Are you sure to delete that list?</h2>
@@ -208,6 +221,11 @@ export const ListsComponent = () => {
                   <div style={{ width: "20px" }}></div>
                   <h3 onClick={() => deleteList()}>{currentLang.next}</h3>
                 </div>
+              </Modal.Body>
+            </Modal>
+            <Modal show={addToListShow} onHide={() => setAddToListShow(false)} centered>
+              <Modal.Body className="notifications__modal">
+                <AddToChatCreate type="listUpdate" handleSubmit={() => console.log("log")} selectedUsers={[]} setSelectedItems={() => { }} />
               </Modal.Body>
             </Modal>
           </div>
