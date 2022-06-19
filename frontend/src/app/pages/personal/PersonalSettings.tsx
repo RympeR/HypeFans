@@ -185,7 +185,7 @@ export const PersonalSettings = () => {
               <div className="upload__buttons">
                 <button
                   className="upload__cancel"
-                  onClick={onCropBackground}
+                  onClick={() => setShowBackground(false)}
                 >
                   {currentLang.cancel}
                 </button>
@@ -244,7 +244,7 @@ export const PersonalSettings = () => {
                 <PhotoIcon className="personalSettings__changeAvatarBtn" />
               </label>
               {show ? (
-                <>
+                <div style={{ zIndex: "9999" }}>
                   <Cropper
                     image={image}
                     crop={crop}
@@ -256,13 +256,21 @@ export const PersonalSettings = () => {
                     showGrid
                     cropShape="round"
                   />
-                  <button
-                    className="upload__aply"
-                    onClick={onCrop}
-                  >
-                    {currentLang.apply}
-                  </button>
-                </>
+                  <div className="upload__buttons">
+                    <button
+                      className="upload__cancel"
+                      onClick={() => setShow(false)}
+                    >
+                      {currentLang.cancel}
+                    </button>
+                    <button
+                      className="upload__aply"
+                      onClick={onCrop}
+                    >
+                      {currentLang.apply}
+                    </button>
+                  </div>
+                </div>
               ) : (
                 <></>
               )}
