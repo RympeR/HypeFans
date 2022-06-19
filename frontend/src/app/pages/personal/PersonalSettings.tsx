@@ -170,7 +170,7 @@ export const PersonalSettings = () => {
           className="profile__header"
         >
           {showBackground ? (
-            <>
+            <div style={{ zIndex: "9999" }}>
               <Cropper
                 image={imageBackground}
                 crop={cropBackground}
@@ -182,13 +182,21 @@ export const PersonalSettings = () => {
                 showGrid
                 cropShape="rect"
               />
-              <button
-                className="upload__aply"
-                onClick={onCropBackground}
-              >
-                {currentLang.apply}
-              </button>
-            </>
+              <div className="upload__buttons">
+                <button
+                  className="upload__cancel"
+                  onClick={onCropBackground}
+                >
+                  {currentLang.cancel}
+                </button>
+                <button
+                  className="upload__aply"
+                  onClick={onCropBackground}
+                >
+                  {currentLang.apply}
+                </button>
+              </div>
+            </div>
           ) : (
             <></>
           )}
