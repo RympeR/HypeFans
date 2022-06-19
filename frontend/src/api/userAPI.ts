@@ -35,6 +35,15 @@ export const userAPI = {
         return response;
       });
   },
+  subRequest(source: number, target: number) {
+    return instance
+      .post<createCardRT>("/user/create-subscription-request/", {
+        source, target
+      })
+      .then((response) => {
+        return response;
+      });
+  },
   createCard({ number, date_year, cvc, creator, user }: CardType) {
     return instance
       .post<createCardRT>("/user/create-card/", {
