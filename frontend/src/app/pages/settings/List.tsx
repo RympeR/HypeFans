@@ -24,6 +24,7 @@ export const ListsComponent = () => {
   const [isDeleteShow, setDeleteShow] = React.useState<boolean>(false)
   const [addToListShow, setAddToListShow] = React.useState(false)
   const [currentCustomList, setCurrentCustomList] = React.useState<number | null>(null)
+  const [listNewUsers, setListNewUsers] = React.useState<Array<any>>([])
   // const [selectedItems, setSelectedItems] = React.useState<Array<any>>([]);
   // const unblockUsers = async () => {
   //   await userAPI.blockUser({
@@ -76,6 +77,17 @@ export const ListsComponent = () => {
     } else {
       setDeleteShow(false)
       toast.error("Ошибка удаления списка")
+    }
+  }
+
+  const addToCustomList = async () => {
+    const data = await listsAPI.customListChange(currentCustomList, listNewUsers.map(item => item.username), true)
+    if (data.status === 200) {
+      setList([...list, ...data.data.invited])
+      setAddToListShow(false)
+      toast.success(listNewUsers.length === 1 ? "Новый пользователь добавлен" : "Новые пользователи добавленны")
+    } else {
+      toast.error("Ошибка добавления")
     }
   }
 
@@ -225,7 +237,7 @@ export const ListsComponent = () => {
             </Modal>
             <Modal show={addToListShow} onHide={() => setAddToListShow(false)} centered>
               <Modal.Body className="notifications__modal">
-                <AddToChatCreate type="listUpdate" handleSubmit={() => console.log("log")} selectedUsers={[]} setSelectedItems={() => { }} />
+                <AddToChatCreate type="listUpdate" handleSubmit={() => addToCustomList()} selectedUsers={listNewUsers} setSelectedItems={setListNewUsers} />
               </Modal.Body>
             </Modal>
           </div>

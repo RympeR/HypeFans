@@ -9,6 +9,11 @@ export const listsAPI = {
         return response.data;
       });
   },
+  customListChange(chatId: number, usersId: Array<number>, add: boolean) {
+    return instance.put(`/user/custom-list-invite/${chatId}`, { username: usersId, add }).then((res) => {
+      return res
+    })
+  },
   createList({ creator, invited, name }: { creator: number, invited: Array<any>, name: string }) {
     console.log({ creator, invited, name });
 
