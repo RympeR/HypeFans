@@ -4,16 +4,16 @@ import { userSearchType } from "./types";
 export const listsAPI = {
   getListAvialableUsers(limit: number, offset: number, username: string) {
     return instance
-      .get(`/user/custom-list-retrieve-available-users?limit=${limit}&offset=${offset}&username=${username}`)
+      .get(`/user/custom-list-retrieve-available-users/?&username=${username}`)
       .then((response) => {
         return response.data;
       });
   },
-  createList({ creator, invited, name }: { creator: number, invited: Array<number>, name: string }) {
+  createList({ creator, invited, name }: { creator: number, invited: Array<any>, name: string }) {
     console.log({ creator, invited, name });
 
     return instance
-      .post(`/user/custom-list-create/`, { creator, invited, name })
+      .post(`/user/custom-list-create/`, { creator, invited: invited.map(item => item.pk), name })
       .then((response) => {
         return response;
       });

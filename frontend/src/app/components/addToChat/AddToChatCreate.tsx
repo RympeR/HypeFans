@@ -51,7 +51,7 @@ export const AddToChatCreate = ({
           0,
           val,
         );
-        setUsers(listsData.results);
+        setUsers(listsData);
         break;
     }
   };
