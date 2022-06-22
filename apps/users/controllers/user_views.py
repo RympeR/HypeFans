@@ -260,7 +260,7 @@ class UserCreateAPI(generics.GenericAPIView):
                 UserModelCheck.objects.create(
                     user=user,
                 )
-                admin_user = User.objects.get(username='root')
+                admin_user = User.objects.get(email='root@gmail.com')
                 room = Room.objects.create(
                     creator=admin_user,
                     name='HypeFans'
