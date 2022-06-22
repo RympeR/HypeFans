@@ -31,7 +31,7 @@ export const listsAPI = {
   },
   deleteCustomList(pk: string | number) {
     return instance.delete(`/user/custom-list-delete/${pk}`).then((res) => res)
-  }
+  },
 };
 
 // custom-list-create/

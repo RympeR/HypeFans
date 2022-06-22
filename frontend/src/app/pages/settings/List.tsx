@@ -4,15 +4,13 @@ import { settingsAPI } from "../../../api/settingsAPI";
 import { ReactComponent as ArrowLeft } from "../../../assets/images/leftIcon.svg";
 import { ReactComponent as SearchSvg } from "../../../assets/images/search.svg";
 import logo from "../../../assets/images/logo.svg";
-import { AddToChatItem } from "../../components/addToChat/AddToChatItem";
-import { AddToChatItemSelected } from "../../components/addToChat/AddToChatItemSelected";
-import { userAPI } from "../../../api/userAPI";
 import { LangContext } from "../../../app/utils/LangProvider";
 import { listsAPI } from "../../../api/listsAPI";
 import { ReactComponent as CloseIcon } from "../../../assets/images/x-circle.svg";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import { AddToChatCreate } from "../../../app/components/addToChat/AddToChatCreate";
+import { ListItem } from "./ListItem";
 
 export const ListsComponent = () => {
   const [listsCount, setListsCount] = React.useState({ favourites: 0, friends: 0, last_donators: 0, last_subs: 0, blocked_users: 0, subs: 0, });
@@ -266,23 +264,7 @@ export const ListsComponent = () => {
             )
               ?.map((item: any, index: number) => {
                 return (
-                  <div
-                    className="notifications__walletChild"
-                    style={{ borderBottom: "0px" }}
-                    key={`${index} fav-list`}
-                  >
-                    <div style={{ display: "flex" }}>
-                      <div>
-                        <Link to={`/profile/${item.username}`}>
-                          <img src={item.avatar || logo} alt="img" />
-                        </Link>
-                      </div>
-                      <div>
-                        <h3>{item.first_name ?? currentLang.name}</h3>
-                        <h4>@{item.username ?? "nickname"}</h4>
-                      </div>
-                    </div>
-                  </div>
+                  <ListItem item={item} currentTab={currentTab} tabs={tabs} key={index} currentCustomList={currentCustomList} setList={setList} />
                 );
               })}
           </div>
