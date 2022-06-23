@@ -3,11 +3,9 @@ from datetime import datetime, timedelta
 
 from core.utils.customFields import TimestampField
 from core.utils.func import create_path_file, get_online
-from django.db.models import Count
 from django_countries.serializer_fields import CountryField
 from rest_framework import serializers
 
-from apps.blog.models import Post
 from apps.users.dynamic_preferences_registry import (ChatSubscriptionDuration,
                                                      HostName,
                                                      ReferralPercentage,

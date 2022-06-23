@@ -267,7 +267,8 @@ class UserCreateAPI(generics.GenericAPIView):
                 )
                 room.invited.add(user)
                 encrypted = encrypt(
-                    'Welcome to HypeFans. If you have some questions you can ask them here',
+                    """Hello. My name is Liza. I'm manager of HypeFans. 
+                    Just let me know if you have any questions)""",
                     'D?F2WNxBk_yLJhy8+Xn&2uqSSVJmN2Eh'
                 )
                 Chat.objects.create(

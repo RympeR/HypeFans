@@ -122,8 +122,8 @@ class MainUserPageUpdated(APIView):
 
     @silk_profile(name='Check postAction ')
     def check_postaction(self, post, user):
-        qs = PostAction.objects.filter(user=user, post=post, like=True, parent__isnull=True
-                                       )
+        qs = PostAction.objects.filter(
+            user=user, post=post, like=True, parent__isnull=True)
         logging.warning(f'QS post action {qs} post - {post.pk}')
         return (True if qs.exists() else False, qs.values_list('id', flat=True)[0] if qs.exists() else False)
 
@@ -143,7 +143,8 @@ class MainUserPageUpdated(APIView):
         limit = int(request.GET.get('limit', 30))
         offset = int(request.GET.get('offset', 0))
 
-        qs = User.objects.filter(hide_in_search=False).order_by('-fans_amount').values_list('id', flat=True)
+        qs = User.objects.filter(hide_in_search=False).order_by(
+            '-fans_amount').values_list('id', flat=True)
         reccomendations = UserShortRetrieveSeriliazer(
             instance=self.get_sample_of_queryset(qs, 9, User)
             .order_by('-fans_amount').order_by('-post_amount'),
@@ -151,7 +152,8 @@ class MainUserPageUpdated(APIView):
             context={'request': request}
         ).data
 
-        qs = req_user.source_user_subscribe.filter(finished=False).values_list('target__id', flat=True)
+        qs = req_user.source_user_subscribe.filter(
+            finished=False).values_list('target__id', flat=True)
         subscription_recommendations = UserShortRetrieveSeriliazer(
             instance=self.get_sample_of_queryset(qs, 9, User)
             .order_by('-fans_amount').order_by('-post_amount'),
