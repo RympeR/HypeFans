@@ -7,13 +7,13 @@ export const AddToChatItem = ({
   index,
   items,
   setSelectedItems,
-  isChat
+  type
 }: {
   item: any;
   index: number;
   items: any;
   setSelectedItems: any;
-  isChat: boolean
+  type: string
 }) => {
   return (
     <div
@@ -21,7 +21,7 @@ export const AddToChatItem = ({
       style={{ borderBottom: '0px', paddingTop: "10px", paddingBottom: "10px" }}
       key={`${index} fav-list`}
       onClick={() => {
-        if (isChat) {
+        if (type === "chat") {
           return setSelectedItems("invited", [...items, item])
         } else {
           setSelectedItems([...items, item])

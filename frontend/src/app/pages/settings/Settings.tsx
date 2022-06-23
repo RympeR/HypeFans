@@ -40,6 +40,7 @@ import { PricesSettings } from "./PricesSettings";
 import { MessagesPrice } from "./MessagesPrice";
 import { SubscriptionPrice } from "./SubscriptionPrice";
 import { ForFans } from "./ForFans";
+import { ListsText } from "../../../app/components/listsText/ListsText";
 
 export const Settings = () => {
   const { currentLang } = useContext(LangContext)
@@ -58,7 +59,6 @@ export const Settings = () => {
       { path: "/settings/profileSettings", text: currentLang.refLink },
       { path: "/settings/account", text: currentLang.account },
       { path: "/settings/profileSettings/card", text: currentLang.card },
-      { path: "/settings/profileSettings/lists", text: currentLang.lists },
       { path: "/settings/profileSettings/stats", text: currentLang.stats },
       { path: "/settings/profileSettings/lang", text: currentLang.lang },
       { path: "/settings/confidentiality", text: currentLang.security },
@@ -73,7 +73,7 @@ export const Settings = () => {
       { path: "/settings/account/password", text: currentLang.changePass },
       { path: "/settings/prices/messages", text: currentLang.msgprice },
       { path: "/settings/prices/subscribes", text: currentLang.price },
-      { path: "/settings/prices/fans", text: currentLang.forFun },
+      // { path: "/settings/prices/fans", text: currentLang.forFun },
       { path: "/settings/account/nickname", text: currentLang.changeNick }
     ]
     return (
@@ -89,6 +89,12 @@ export const Settings = () => {
               />
             )
           })}
+          <Route
+            path="/settings/profileSettings/lists"
+            render={() => <ListsText />}
+            exact
+          />
+          {/* { path: "/settings/profileSettings/lists", text: currentLang.lists }, */}
           {/* Заголовок(конец)*/}
         </div>
         {/* Главное тело в зависимости от роута*/}

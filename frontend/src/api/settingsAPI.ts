@@ -6,33 +6,9 @@ export const settingsAPI = {
       return res.data;
     });
   },
-  getLastSubs() {
-    return instance.get('/blog/get-users-lists-last-subs//').then((res) => {
-      return res.data;
-    });
-  },
-  getSubsList() {
-    return instance.get('/blog/get-users-lists-subs/').then((res) => {
-      return res.data;
-    });
-  },
-  getFriendsList() {
-    return instance.get('/blog/get-users-lists-friends/').then((res) => {
-      return res.data;
-    });
-  },
-  getFavsList() {
-    return instance.get('/blog/get-users-lists-favourites/').then((res) => {
-      return res.data;
-    });
-  },
-  getDonatorsList() {
-    return instance.get('/blog/get-users-lists-donators/').then((res) => {
-      return res.data;
-    });
-  },
-  getBlockedList() {
-    return instance.get('/blog/get-users-lists-blocked/').then((res) => {
+  getListUsers(type: string) {
+    let parsType = type.split("_").join("-")
+    return instance.get(`/blog/get-users-lists-${parsType}/`).then((res) => {
       return res.data;
     });
   },

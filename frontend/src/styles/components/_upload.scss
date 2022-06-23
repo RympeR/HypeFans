@@ -1,13 +1,30 @@
 .upload {
   background: #fff;
   border-radius: 16px;
-  &__aply {
-    position: absolute;
+  &__buttons {
     bottom: 25%;
-    margin-left: 3.75em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    width: 100%;
+  }
+  &__cancel {
     background-color: white;
+    color: $orange;
+    padding: 10px;
     border-radius: 45px;
     min-width: 50px;
+    margin: 5px;
+  }
+  &__aply {
+    background-color: $orange;
+    color: white;
+    padding: 10px;
+    border-radius: 45px;
+    min-width: 50px;
+    margin: 5px;
   }
   &__top {
     padding: 24px;

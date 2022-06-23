@@ -8,13 +8,13 @@ export const AddToChatItemSelected = ({
   index,
   items,
   setSelectedItems,
-  isChat
+  type
 }: {
   item: any;
   index: number;
   items: any;
   setSelectedItems: any;
-  isChat: boolean;
+  type: string;
 }) => {
   const { currentLang } = useContext(LangContext);
   return (
@@ -23,7 +23,7 @@ export const AddToChatItemSelected = ({
       style={{ borderBottom: "0px", paddingTop: "10px", paddingBottom: "10px" }}
       key={`${index} fav-list`}
       onClick={() => {
-        if (isChat) {
+        if (type === "chat") {
           return setSelectedItems("invited", items.filter((filterItem: any) => filterItem !== item))
         } else {
           return setSelectedItems(items.filter((filterItem: any) => filterItem !== item))

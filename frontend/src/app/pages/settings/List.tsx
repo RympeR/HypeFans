@@ -4,16 +4,25 @@ import { settingsAPI } from "../../../api/settingsAPI";
 import { ReactComponent as ArrowLeft } from "../../../assets/images/leftIcon.svg";
 import { ReactComponent as SearchSvg } from "../../../assets/images/search.svg";
 import logo from "../../../assets/images/logo.svg";
-import { AddToChatItem } from "../../components/addToChat/AddToChatItem";
-import { AddToChatItemSelected } from "../../components/addToChat/AddToChatItemSelected";
-import { userAPI } from "../../../api/userAPI";
 import { LangContext } from "../../../app/utils/LangProvider";
+import { listsAPI } from "../../../api/listsAPI";
+import { ReactComponent as CloseIcon } from "../../../assets/images/x-circle.svg";
+import Modal from "react-bootstrap/Modal";
+import { toast } from "react-toastify";
+import { AddToChatCreate } from "../../../app/components/addToChat/AddToChatCreate";
+import { ListItem } from "./ListItem";
 
 export const ListsComponent = () => {
-  const [listsCount, setListsCount] = React.useState({ favourites: 0, friends: 0, last_donators: 0, last_subs: 0, blocked_users: 0, my_subs: 0, });
+  const [listsCount, setListsCount] = React.useState({ favourites: 0, friends: 0, last_donators: 0, last_subs: 0, blocked_users: 0, subs: 0, });
   const { currentLang } = React.useContext(LangContext)
+  const [customLists, setCustomLists] = React.useState([])
+  let tabs: Array<string> = ["last_subs", "blocked_users", "subs", "favourites", "friends", "last_donators"]
   const [currentTab, setCurrentTab] = React.useState("list");
   const [list, setList] = React.useState<Array<any>>([])
+  const [isDeleteShow, setDeleteShow] = React.useState<boolean>(false)
+  const [addToListShow, setAddToListShow] = React.useState(false)
+  const [currentCustomList, setCurrentCustomList] = React.useState<number | null>(null)
+  const [listNewUsers, setListNewUsers] = React.useState<Array<any>>([])
   // const [selectedItems, setSelectedItems] = React.useState<Array<any>>([]);
   // const unblockUsers = async () => {
   //   await userAPI.blockUser({
@@ -22,11 +31,13 @@ export const ListsComponent = () => {
   //   });
   // };
   React.useEffect(() => {
-    const getListsCount = async () => {
+    const getLists = async () => {
       const data = await settingsAPI.getLists();
-      setListsCount(data);
+      const lists = await listsAPI.getCustomLists()
+      setCustomLists(lists)
+      setListsCount({ ...data, subs: data.my_subs });
     };
-    getListsCount();
+    getLists();
     return () => {
       return null;
     };
@@ -35,22 +46,14 @@ export const ListsComponent = () => {
   React.useEffect(() => {
     const getList = async () => {
       if (currentTab === "list") {
-        setList([])
-      } else if (currentTab === "favourites") {
-        const data = await settingsAPI.getFavsList();
-        setList(data);
-      } else if (currentTab === "friends") {
-        const data = await settingsAPI.getFriendsList();
-        setList(data);
-      } else if (currentTab === "last_subs") {
-        const data = await settingsAPI.getLastSubs();
-        setList(data);
-      } else if (currentTab === "blocked_users") {
-        const data = await settingsAPI.getBlockedList();
-        setList(data);
-      } else if (currentTab === "my_subs") {
-        const data = await settingsAPI.getSubsList();
-        setList(data);
+        return setList([])
+      } else if (tabs.includes(currentTab)) {
+        const data = await settingsAPI.getListUsers(currentTab);
+        return setList(data);
+      } else {
+        const data = await listsAPI.getCustomList(currentTab);
+        setCurrentCustomList(data[0].id)
+        return setList([...data[0].invited])
       }
     };
     getList();
@@ -61,10 +64,50 @@ export const ListsComponent = () => {
 
   const [inputValue, setInputValue] = React.useState("");
 
+  const deleteList = async () => {
+    const data = await listsAPI.deleteCustomList(currentCustomList)
+    if (data.status === 204) {
+      setDeleteShow(false)
+      setCustomLists(customLists.filter((item, key) => item.name !== currentTab))
+      setCurrentCustomList(null)
+      setCurrentTab("list")
+      return toast.success("Списко успешно удален")
+    } else {
+      setDeleteShow(false)
+      toast.error("Ошибка удаления списка")
+    }
+  }
+
+  const addToCustomList = async () => {
+    const data = await listsAPI.customListChange(currentCustomList, listNewUsers.map(item => item.username), true)
+    if (data.status === 200) {
+      setList([...list, ...data.data.invited])
+      setAddToListShow(false)
+      toast.success(listNewUsers.length === 1 ? "Новый пользователь добавлен" : "Новые пользователи добавленны")
+    } else {
+      toast.error("Ошибка добавления")
+    }
+  }
+
   return (
     <div className="notifications__main">
       {currentTab === "list" ? (
         <>
+          {customLists.map((item, key) => {
+            return (
+              <div
+                className="notifications__listItem"
+                onClick={() =>
+                  listsCount.favourites > 0 ? setCurrentTab(item.name) : null
+                }
+              >
+                <div className="notifications__listText">
+                  <h1>{item.name}</h1>
+                  <h2>{item.invited_len} {currentLang.man1}</h2>
+                </div>
+              </div>
+            )
+          })}
           <div
             className="notifications__listItem"
             onClick={() =>
@@ -72,7 +115,7 @@ export const ListsComponent = () => {
             }
           >
             <div className="notifications__listText">
-              <h1>{currentLang.scecial}</h1>
+              <h1>{currentLang.special}</h1>
               <h2>{listsCount.favourites} {currentLang.man1}</h2>
             </div>
           </div>
@@ -127,12 +170,12 @@ export const ListsComponent = () => {
           <div
             className="notifications__listItem"
             onClick={() =>
-              listsCount.my_subs > 0 ? setCurrentTab("my_subs") : null
+              listsCount.subs > 0 ? setCurrentTab("subs") : null
             }
           >
             <div className="notifications__listText">
               <h1>{currentLang.mySubscriptions}</h1>
-              <h2>{listsCount.my_subs}{currentLang.man1}</h2>
+              <h2>{listsCount.subs}{currentLang.man1}</h2>
             </div>
           </div>
         </>
@@ -146,19 +189,55 @@ export const ListsComponent = () => {
               margin: "15px 16px",
               display: "flex",
               alignItems: "center",
+              justifyContent: "space-between"
             }}
           >
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+            }}>
+              <div>
+                <ArrowLeft
+                  onClick={() => {
+                    setCurrentTab("list");
+                    return setInputValue("");
+                  }}
+                />
+              </div>
+              <div style={{ marginTop: "5px", marginLeft: "8px" }}>
+                {currentTab}
+              </div>
+            </div>
             <div>
-              <ArrowLeft
-                onClick={() => {
-                  setCurrentTab("list");
-                  return setInputValue("");
-                }}
-              />
+              {tabs.includes(currentTab) ? null : <CloseIcon onClick={() => setAddToListShow(true)} style={{ transform: "rotate(45deg)" }} />}
+              {tabs.includes(currentTab) ? null : <CloseIcon onClick={() => setDeleteShow(true)} />}
             </div>
-            <div style={{ marginTop: "5px", marginLeft: "8px" }}>
-              {currentLang.recentSubs}
-            </div>
+            <Modal show={isDeleteShow} onHide={() => setDeleteShow(false)} centered>
+              <Modal.Body className="notifications__modal">
+                <h2>Are you sure to delete that list?</h2>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "15px",
+                  }}
+                >
+                  <h3
+                    onClick={() => setDeleteShow(false)}
+                    style={{ color: "#FB5734" }}
+                  >
+                    {currentLang.cancel}
+                  </h3>
+                  <div style={{ width: "20px" }}></div>
+                  <h3 onClick={() => deleteList()}>{currentLang.next}</h3>
+                </div>
+              </Modal.Body>
+            </Modal>
+            <Modal show={addToListShow} onHide={() => setAddToListShow(false)} centered>
+              <Modal.Body className="notifications__modal">
+                <AddToChatCreate type="listUpdate" handleSubmit={() => addToCustomList()} selectedUsers={listNewUsers} setSelectedItems={setListNewUsers} />
+              </Modal.Body>
+            </Modal>
           </div>
           <div
             style={{
@@ -185,23 +264,7 @@ export const ListsComponent = () => {
             )
               ?.map((item: any, index: number) => {
                 return (
-                  <div
-                    className="notifications__walletChild"
-                    style={{ borderBottom: "0px" }}
-                    key={`${index} fav-list`}
-                  >
-                    <div style={{ display: "flex" }}>
-                      <div>
-                        <Link to={`/profile/${item.username}`}>
-                          <img src={item.avatar || logo} alt="img" />
-                        </Link>
-                      </div>
-                      <div>
-                        <h3>{item.first_name ?? currentLang.name}</h3>
-                        <h4>@{item.username ?? "nickname"}</h4>
-                      </div>
-                    </div>
-                  </div>
+                  <ListItem item={item} currentTab={currentTab} tabs={tabs} key={index} currentCustomList={currentCustomList} setList={setList} />
                 );
               })}
           </div>
