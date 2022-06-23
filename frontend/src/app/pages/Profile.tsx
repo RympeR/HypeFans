@@ -88,6 +88,7 @@ const Profile = () => {
       setSubscribeShow(false);
       return addWaletAlert()
     }
+    userAPI.subRequest(myId, profile.pk)
     const data = await userAPI.createSubscription({
       source: myId,
       target: profile.pk,

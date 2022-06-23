@@ -4,16 +4,21 @@ import { userSearchType } from "./types";
 export const listsAPI = {
   getListAvialableUsers(limit: number, offset: number, username: string) {
     return instance
-      .get(`/user/custom-list-retrieve-available-users?limit=${limit}&offset=${offset}&username=${username}`)
+      .get(`/user/custom-list-retrieve-available-users/?&username=${username}`)
       .then((response) => {
         return response.data;
       });
   },
-  createList({ creator, invited, name }: { creator: number, invited: Array<number>, name: string }) {
+  customListChange(chatId: number, usersId: Array<number>, add: boolean) {
+    return instance.put(`/user/custom-list-invite/${chatId}`, { username: usersId, add }).then((res) => {
+      return res
+    })
+  },
+  createList({ creator, invited, name }: { creator: number, invited: Array<any>, name: string }) {
     console.log({ creator, invited, name });
 
     return instance
-      .post(`/user/custom-list-create/`, { creator, invited, name })
+      .post(`/user/custom-list-create/`, { creator, invited: invited.map(item => item.pk), name })
       .then((response) => {
         return response;
       });
@@ -26,7 +31,7 @@ export const listsAPI = {
   },
   deleteCustomList(pk: string | number) {
     return instance.delete(`/user/custom-list-delete/${pk}`).then((res) => res)
-  }
+  },
 };
 
 // custom-list-create/

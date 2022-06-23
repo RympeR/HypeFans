@@ -87,7 +87,7 @@ export const AddToChat = ({
             items={selectedItems}
             setSelectedItems={setSelectedItems}
             key={index}
-            isChat={false}
+            type="chat"
           />
         );
       })}
@@ -102,7 +102,7 @@ export const AddToChat = ({
               items={selectedItems}
               setSelectedItems={setSelectedItems}
               key={index}
-              isChat={false}
+              type="chat"
             />
           );
         })}

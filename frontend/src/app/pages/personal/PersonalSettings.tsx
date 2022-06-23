@@ -170,7 +170,7 @@ export const PersonalSettings = () => {
           className="profile__header"
         >
           {showBackground ? (
-            <>
+            <div style={{ zIndex: "9999" }}>
               <Cropper
                 image={imageBackground}
                 crop={cropBackground}
@@ -182,13 +182,21 @@ export const PersonalSettings = () => {
                 showGrid
                 cropShape="rect"
               />
-              <button
-                className="upload__aply"
-                onClick={onCropBackground}
-              >
-                {currentLang.apply}
-              </button>
-            </>
+              <div className="upload__buttons">
+                <button
+                  className="upload__cancel"
+                  onClick={() => setShowBackground(false)}
+                >
+                  {currentLang.cancel}
+                </button>
+                <button
+                  className="upload__aply"
+                  onClick={onCropBackground}
+                >
+                  {currentLang.apply}
+                </button>
+              </div>
+            </div>
           ) : (
             <></>
           )}
@@ -236,7 +244,7 @@ export const PersonalSettings = () => {
                 <PhotoIcon className="personalSettings__changeAvatarBtn" />
               </label>
               {show ? (
-                <>
+                <div style={{ zIndex: "9999" }}>
                   <Cropper
                     image={image}
                     crop={crop}
@@ -248,13 +256,21 @@ export const PersonalSettings = () => {
                     showGrid
                     cropShape="round"
                   />
-                  <button
-                    className="upload__aply"
-                    onClick={onCrop}
-                  >
-                    {currentLang.apply}
-                  </button>
-                </>
+                  <div className="upload__buttons">
+                    <button
+                      className="upload__cancel"
+                      onClick={() => setShow(false)}
+                    >
+                      {currentLang.cancel}
+                    </button>
+                    <button
+                      className="upload__aply"
+                      onClick={onCrop}
+                    >
+                      {currentLang.apply}
+                    </button>
+                  </div>
+                </div>
               ) : (
                 <></>
               )}

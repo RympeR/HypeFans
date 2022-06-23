@@ -51,7 +51,7 @@ export const AddToChatCreate = ({
           0,
           val,
         );
-        setUsers(listsData.results);
+        setUsers(listsData);
         break;
     }
   };
@@ -113,7 +113,7 @@ export const AddToChatCreate = ({
             items={selectedUsers}
             setSelectedItems={setSelectedItems}
             key={index}
-            isChat={true}
+            type={type}
           />
         );
       })}
@@ -128,7 +128,7 @@ export const AddToChatCreate = ({
               items={selectedUsers}
               setSelectedItems={setSelectedItems}
               key={index}
-              isChat={true}
+              type={type}
             />
           );
         })}
