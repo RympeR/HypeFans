@@ -41,6 +41,7 @@ import { MessagesPrice } from "./MessagesPrice";
 import { SubscriptionPrice } from "./SubscriptionPrice";
 import { ForFans } from "./ForFans";
 import { ListsText } from "../../../app/components/listsText/ListsText";
+import { DistributionComponent } from "./DistributionComponent";
 
 export const Settings = () => {
   const { currentLang } = useContext(LangContext)
@@ -89,6 +90,11 @@ export const Settings = () => {
               />
             )
           })}
+          <Route
+            path="/settings/profileSettings/distribution"
+            render={() => <Text text="Рассылка" />}
+            exact
+          />
           <Route
             path="/settings/profileSettings/lists"
             render={() => <ListsText />}
@@ -193,6 +199,11 @@ export const Settings = () => {
                 <Route
                   path="/settings/profileSettings/lists"
                   render={() => <ListsComponent />}
+                  exact
+                />
+                <Route
+                  path="/settings/profileSettings/distribution"
+                  render={() => <DistributionComponent />}
                   exact
                 />
                 <Route

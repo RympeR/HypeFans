@@ -58,6 +58,18 @@ export const ProfileSettingsSidebar = ({ showStyle }: { showStyle: boolean }) =>
                 </SettingsSidebarItem>
             </Link>
             <Link
+                to="/settings/profileSettings/distribution"
+                style={
+                    pathname === "/settings/profileSettings/distribution"
+                        ? { background: selectedColor }
+                        : {}
+                }
+            >
+                <SettingsSidebarItem text="Рассылка">
+                    <ListSvg />
+                </SettingsSidebarItem>
+            </Link>
+            <Link
                 to="/settings/profileSettings/stats"
                 style={
                     pathname === "/settings/profileSettings/stats"
