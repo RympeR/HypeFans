@@ -119,16 +119,6 @@ $form-width: 636;
         font-size: map-get($map: $font-size, $key: s);
       }
     }
-
-    @media (max-width: map-get($map: $media, $key: s)) {
-      position: absolute;
-      bottom: 20px;
-      left: 0;
-      margin: 0;
-      width: 100%;
-      text-align: center;
-      font-size: map-get($map: $font-size, $key: m);
-    }
   }
 
   &__label {
