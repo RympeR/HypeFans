@@ -6,9 +6,6 @@ import { Link, useHistory } from "react-router-dom";
 import ISignInData from "../../../app/types/ISignInData";
 import { LangContext } from "../../../app/utils/LangProvider";
 import { getAuthScheme, NAV_LINKS } from "../../../app/utils/utilities";
-import { ReactComponent as Facebook } from "../../../assets/images/facebook.svg";
-import { ReactComponent as Google } from "../../../assets/images/google.svg";
-import { ReactComponent as Instagram } from "../../../assets/images/instagram.svg";
 import { ReactComponent as EyeIcon } from "../../../assets/images/eye.svg";
 import { ReactComponent as EyeOffIcon } from "../../../assets/images/eye-off.svg";
 import { login } from "../../../redux/authReducer";
@@ -22,7 +19,7 @@ const initialValues: ISignInData = {
 const SignInForm = ({ action }: { action: string }) => {
   const dispatch = useDispatch();
   const { currentLang } = useContext(LangContext);
-  const history = useHistory()
+  const history = useHistory();
 
   const signInScheme = getAuthScheme(currentLang, action);
   const [passwordShown, setPasswordShown] = useState(false);
@@ -41,16 +38,19 @@ const SignInForm = ({ action }: { action: string }) => {
 
   const [isSigningIn, setIsSigningIn] = useState(false);
 
-  const [isCorrect, setIsCorrect] = useState<boolean>(true)
+  const [isCorrect, setIsCorrect] = useState<boolean>(true);
 
   const onSubmit = async (data: ISignInData) => {
     setIsSigningIn(true);
     try {
       await dispatch(login(data));
-      toast.success('Login Successfully');
+      document.cookie =
+        "visited_hypefans=true; domain=hype-fans.com; max-age=604800; secure";
+      document.cookie = "visited_hypefans=true; max-age=604800;";
+      toast.success("Login Successfully");
     } catch {
-      toast.error('Invaild credentials');
-      setIsCorrect(false)
+      toast.error("Invaild credentials");
+      setIsCorrect(false);
     }
     setIsSigningIn(false);
     reset(initialValues);
@@ -95,7 +95,11 @@ const SignInForm = ({ action }: { action: string }) => {
         />
       )}
       <p className="auth__input-error">{errors.password?.message}</p>
-      {isCorrect ? null : <div onClick={() => history.push("/forgotPassword")}>{currentLang.forgetPass}</div>}
+      {isCorrect ? null : (
+        <div onClick={() => history.push("/forgotPassword")}>
+          {currentLang.forgetPass}
+        </div>
+      )}
 
       <button className="auth__submit-btn">{currentLang.next}</button>
 

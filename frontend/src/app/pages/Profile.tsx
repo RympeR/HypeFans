@@ -13,7 +13,7 @@ import { ReactComponent as LikeIcon } from "../../assets/images/heart.svg";
 import { ReactComponent as CommentIcon } from "../../assets/images/message-circle.svg";
 import { buyPost, clearUserData, getUser } from "../../redux/userReducer";
 import { ReactComponent as MenuDotsOrange } from "../../assets/images/3dotsOrange.svg";
-import { ReactComponent as BackButton } from "../../assets/images/arrow-leftWhite.svg";
+import { ReactComponent as OrangeBackButton } from "../../assets/images/arrow-leftOrange.svg";
 import logo from "../../assets/images/logo.svg";
 import { Preloader } from "../utils/Preloader";
 import { LangContext } from "../utils/LangProvider";
@@ -34,13 +34,30 @@ const Profile = () => {
 
   const [subscribeShow, setSubscribeShow] = useState(false);
   const profileData = useSelector((state: RootState) => state.user);
-  const [profile, setProfile] = useState({ posts: [], pk: null, show_post_amount: true, show_fans_amount: true, is_online: false, bio: "", hide_online: false, first_name: "", fans_amount: 0, background_photo: "", message_price: 0, subscribtion_price: 0, private_profile: false, subscribed: false, avatar: "", subscribed_chat: false, });
+  const [profile, setProfile] = useState({
+    posts: [],
+    pk: null,
+    show_post_amount: true,
+    show_fans_amount: true,
+    is_online: false,
+    bio: "",
+    hide_online: false,
+    first_name: "",
+    fans_amount: 0,
+    background_photo: "",
+    message_price: 0,
+    subscribtion_price: 0,
+    private_profile: false,
+    subscribed: false,
+    avatar: "",
+    subscribed_chat: false,
+  });
   const [offset, setOffset] = useState<number>(10);
   const myNick = useSelector((state: RootState) => state.auth.username);
   const myId = useSelector((state: RootState) => state.auth.pk);
   const myWallet = useSelector((state: RootState) => state.auth.wallet);
   const isLoading = useSelector((state: RootState) => state.blog.isLoading);
-  const addWaletAlert = useAddWalletAlert()
+  const addWaletAlert = useAddWalletAlert();
   const [isPaginationLoading, setIsPaginationLoading] =
     useState<boolean>(false);
   const { pathname } = useLocation();
@@ -53,9 +70,8 @@ const Profile = () => {
     dispatch(clearUserData());
     dispatch(getUser({ username: nick }));
     return () => {
-      dispatch(clearUserData()
-      )
-    }
+      dispatch(clearUserData());
+    };
   }, []);
 
   useEffect(() => {
@@ -69,9 +85,10 @@ const Profile = () => {
   window.onscroll = async function () {
     if (
       window.innerHeight + document.documentElement.scrollTop >=
-      document.documentElement.offsetHeight - 5 &&
+        document.documentElement.offsetHeight - 5 &&
       !isLoading &&
-      !isPaginationLoading && offset === profile.posts.length
+      !isPaginationLoading &&
+      offset === profile.posts.length
     ) {
       // getPosts here\
       setIsPaginationLoading(true);
@@ -82,13 +99,12 @@ const Profile = () => {
     }
   };
 
-
   const subscribe = async () => {
     if (profile.subscribtion_price > 0 && !myWallet) {
       setSubscribeShow(false);
-      return addWaletAlert()
+      return addWaletAlert();
     }
-    userAPI.subRequest(myId, profile.pk)
+    userAPI.subRequest(myId, profile.pk);
     const data = await userAPI.createSubscription({
       source: myId,
       target: profile.pk,
@@ -164,7 +180,6 @@ const Profile = () => {
     toast.success("Пост куплен");
   };
 
-
   return (
     <div className="profile">
       <GoToTopBtn />
@@ -227,7 +242,7 @@ const Profile = () => {
         className="profile__header"
       >
         <div className="profile__headerButtons">
-          <BackButton
+          <OrangeBackButton
             style={{ width: "35px", height: "35px" }}
             onClick={history.goBack}
           />
@@ -262,15 +277,20 @@ const Profile = () => {
           ) : (
             <div
               className="is_online"
-              style={profile.is_online ? { backgroundColor: "#C0C0C0" } : {}}
+              style={profile.is_online ? {} : { backgroundColor: "#C0C0C0" }}
             ></div>
           )}
         </div>
         <h5 className="profile__info">
-          {profile.show_post_amount ? `${profile?.posts?.length} ${currentLang.posts} ` : null}
-          {profile.show_fans_amount ? <>
-            {sub_amount(profile.fans_amount, 1)}{" "}
-            <img className="sub_icon" src={fansIcon} />{" "}</> : null}
+          {profile.show_post_amount
+            ? `${profile?.posts?.length} ${currentLang.posts} `
+            : null}
+          {profile.show_fans_amount ? (
+            <>
+              {sub_amount(profile.fans_amount, 1)}{" "}
+              <img className="sub_icon" src={fansIcon} />{" "}
+            </>
+          ) : null}
         </h5>
       </div>
       <pre className="profile__status">
@@ -357,131 +377,145 @@ const Profile = () => {
         ) : null}
       </div>
       <div className="profile__posts">
-        {profile.private_profile && !profile.subscribed && myNick !== nick ? <div
-          style={{
-            fontSize: "25px",
-            fontWeight: "bold",
-            textAlign: "center",
-            marginTop: "70px",
-            paddingBottom: "70px",
-          }}
-        >
-          Подпишитесь чтоб посмотреть посты
-        </div> : <div className="profile__posts">
-          {profile?.posts?.length > 0 ? (
-            profile?.posts.map((item, index) => {
-              return myNick === nick || item.post.payed ? (
-                <ProfilePagePost item={item} index={index} />
-              ) : (
-                <div
-                  className="profile__postMain profile__post"
-                  key={`${index}_post`}
-                >
-                  <div className="profile__postHeader">
-                    <div className="profile__postInfo">
-                      <div className="profile__postUserInfo">
-                        <div style={{ display: "flex" }}>
-                          <img
-                            src={profileData.avatar ? profileData.avatar : logo}
-                            alt="profile_photoPost"
-                          ></img>
-                          <div>
-                            <h3
-                              className="profile__name"
-                              style={{ margin: "5px 8px", marginBottom: "0px" }}
-                            >
-                              {profileData.first_name}
-                            </h3>
-                            <h4
-                              className="profile__nickname"
-                              style={{ marginLeft: "8px" }}
-                            >
-                              {`@${nick}`}
-                            </h4>
+        {profile.private_profile && !profile.subscribed && myNick !== nick ? (
+          <div
+            style={{
+              fontSize: "25px",
+              fontWeight: "bold",
+              textAlign: "center",
+              marginTop: "70px",
+              paddingBottom: "70px",
+            }}
+          >
+            Подпишитесь чтоб посмотреть посты
+          </div>
+        ) : (
+          <div className="profile__posts">
+            {profile?.posts?.length > 0 ? (
+              profile?.posts.map((item, index) => {
+                return myNick === nick || item.post.payed ? (
+                  <ProfilePagePost item={item} index={index} />
+                ) : (
+                  <div
+                    className="profile__postMain profile__post"
+                    key={`${index}_post`}
+                  >
+                    <div className="profile__postHeader">
+                      <div className="profile__postInfo">
+                        <div className="profile__postUserInfo">
+                          <div style={{ display: "flex" }}>
+                            <img
+                              src={
+                                profileData.avatar ? profileData.avatar : logo
+                              }
+                              alt="profile_photoPost"
+                            ></img>
+                            <div>
+                              <h3
+                                className="profile__name"
+                                style={{
+                                  margin: "5px 8px",
+                                  marginBottom: "0px",
+                                }}
+                              >
+                                {profileData.first_name}
+                              </h3>
+                              <h4
+                                className="profile__nickname"
+                                style={{ marginLeft: "8px" }}
+                              >
+                                {`@${nick}`}
+                              </h4>
+                            </div>
+                          </div>
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <div className="profile__postAgo">
+                              {moment(
+                                item.post.publication_date * 1000
+                              ).fromNow()}
+                            </div>
                           </div>
                         </div>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <div className="profile__postAgo">
-                            {moment(
-                              item.post.publication_date * 1000
-                            ).fromNow()}
-                          </div>
+                        <div className="profile__postText">
+                          <ReadMore text={item?.post.description} />
                         </div>
-                      </div>
-                      <div className="profile__postText">
-                        <ReadMore text={item?.post.description} />
                       </div>
                     </div>
-                  </div>
-                  <div className="profile__noPost">
-                    <button
-                      style={{
-                        background: "#FB5734",
-                        borderRadius: "16px",
-                        padding: "15px",
-                        margin: "20px",
-                        color: "white",
-                      }}
-                      onClick={() => {
-                        if (item.post.access_level !== 1) {
-                          setSubscribeShow(true);
-                        } else {
-                          payForPost({
-                            amount: item.post.price_to_watch,
-                            post: item.post.pk,
-                          });
-                        }
-                      }}
-                    >
-                      {item.post.access_level !== 1
-                        ? `${currentLang.subUser}`
-                        : `${currentLang.checkFor} ${item.post.price_to_watch}$`}
-                    </button>
-                  </div>
-                  <div className="post__bottom" style={{ margin: "24px 24px" }}>
-                    <div className="post__actions">
-                      <div className="post__actions-left">
-                        <button className="post__action-btn" disabled>
-                          <LikeIcon
-                            className="post__action-icon"
-                            fill="none"
-                            strokeOpacity={item?.post.liked ? 0 : 0.6}
-                          />
-                        </button>
-
-                        <button className="post__action-btn" disabled>
-                          <CommentIcon className="post__action-icon" />
-                        </button>
-                      </div>
-                      <button className="post__action-btn" disabled>
-                        <SaveIcon
-                          className="post__action-icon"
-                          fill={item?.post.favourite ? "black" : "none"}
-                        />
+                    <div className="profile__noPost">
+                      <button
+                        style={{
+                          background: "#FB5734",
+                          borderRadius: "16px",
+                          padding: "15px",
+                          margin: "20px",
+                          color: "white",
+                        }}
+                        onClick={() => {
+                          if (item.post.access_level !== 1) {
+                            setSubscribeShow(true);
+                          } else {
+                            payForPost({
+                              amount: item.post.price_to_watch,
+                              post: item.post.pk,
+                            });
+                          }
+                        }}
+                      >
+                        {item.post.access_level !== 1
+                          ? `${currentLang.subUser}`
+                          : `${currentLang.checkFor} ${item.post.price_to_watch}$`}
                       </button>
                     </div>
+                    <div
+                      className="post__bottom"
+                      style={{ margin: "24px 24px" }}
+                    >
+                      <div className="post__actions">
+                        <div className="post__actions-left">
+                          <button className="post__action-btn" disabled>
+                            <LikeIcon
+                              className="post__action-icon"
+                              fill="none"
+                              strokeOpacity={item?.post.liked ? 0 : 0.6}
+                            />
+                          </button>
 
-                    <p className="post__like-amount">
-                      {item?.post.likes_amount}
-                      {currentLang.liks1}
-                    </p>
+                          <button className="post__action-btn" disabled>
+                            <CommentIcon className="post__action-icon" />
+                          </button>
+                        </div>
+                        <button className="post__action-btn" disabled>
+                          <SaveIcon
+                            className="post__action-icon"
+                            fill={item?.post.favourite ? "black" : "none"}
+                          />
+                        </button>
+                      </div>
+
+                      <p className="post__like-amount">
+                        {item?.post.likes_amount}
+                        {currentLang.liks1}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              );
-            })
-          ) : (
-            <div
-              style={{
-                fontSize: "25px",
-                fontWeight: "bold",
-                textAlign: "center",
-                marginTop: "70px",
-              }}
-            >
-              {currentLang.noPosts}
-            </div>
-          )}
-        </div>}
+                );
+              })
+            ) : (
+              <div
+                style={{
+                  fontSize: "25px",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  marginTop: "70px",
+                }}
+              >
+                {currentLang.noPosts}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

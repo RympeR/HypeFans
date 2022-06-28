@@ -214,7 +214,7 @@ const Notifications: React.FC = () => {
           {/* Заголовок(конец)*/}
           <div
             className="notifications__navMobile"
-            style={isShown ? { width: "137px" } : { width: "25px" }}
+            style={isShown ? { width: "155px" } : { width: "25px" }}
           >
             {isShown ? (
               <div style={{ marginLeft: "5px" }}>

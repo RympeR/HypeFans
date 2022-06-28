@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 import SignInForm from "../../../app/components/auth/SignInForm";
 import SignUpForm from "../../../app/components/auth/SignUpForm";
 import { Preloader } from "../../../app/utils/Preloader";
-import { NAV_LINKS } from "../../../app/utils/utilities";
+import { getCookie, NAV_LINKS } from "../../../app/utils/utilities";
 import { RootState } from "../../../redux/redux";
 import { ReactComponent as Logo } from "../../../assets/images/sign-in-logo.svg";
 
@@ -22,8 +22,8 @@ const Auth = () => {
     "auth__main-slide-five",
   ];
   const refLink = pathname.split("/").slice(2, 4).join("/");
+  let condition = false;
   console.log(refLink);
-
   if (isLoading && localStorage.getItem("hypefansToken") !== null) {
     return <Preloader />;
   }
@@ -31,6 +31,11 @@ const Auth = () => {
   if (isAuth && localStorage.getItem("hypefansToken") !== null) {
     return <Redirect to="/home" />;
   }
+  console.log(getCookie("visited_hypefans"));
+  if (getCookie("visited_hypefans") !== null) {
+    condition = true;
+  }
+
 
   return (
     <div
@@ -41,7 +46,7 @@ const Auth = () => {
           <Logo className="auth__logo" />
           <h1 className="auth__logo-title">HypeFans</h1>
         </div>
-        {pathname === `/${NAV_LINKS.SIGNIN}` || refLink !== "" ? (
+        {pathname === `/${NAV_LINKS.SIGNIN}` || refLink !== "" || condition ? (
           <SignInForm action="signin" />
         ) : (
           <SignUpForm action="signup" />

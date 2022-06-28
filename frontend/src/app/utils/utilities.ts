@@ -85,16 +85,19 @@ export const prepareDateDiffStr = (time_diff: any) => {
   return result_str + " назад";
 };
 
-export const prepareDateDiffStrLanguage = (time_diff: any, currentLang: any) => {
+export const prepareDateDiffStrLanguage = (
+  time_diff: any,
+  currentLang: any
+) => {
   let result_str = "";
   if (time_diff.days > 0) {
-    result_str += time_diff.days + " " + currentLang.timeAgo.days + ' ';
+    result_str += time_diff.days + " " + currentLang.timeAgo.days + " ";
   }
   if (time_diff.hours > 0) {
-    result_str += time_diff.hours + " " + currentLang.timeAgo.hours + ' ';
+    result_str += time_diff.hours + " " + currentLang.timeAgo.hours + " ";
   }
   if (time_diff.minutes > 0) {
-    result_str += time_diff.minutes + " " + currentLang.timeAgo.minutes + ' ';
+    result_str += time_diff.minutes + " " + currentLang.timeAgo.minutes + " ";
   }
   return result_str + " " + currentLang.timeAgo.ago;
 };
@@ -149,7 +152,7 @@ export const showVisibleText = (text: string, lengthOfVisibleText: number) => {
     if (text?.length === lengthOfVisibleText) return text;
     return `${text.slice(0, lengthOfVisibleText)}...`;
   }
-  return ''
+  return "";
 };
 
 //Return validation scheme depending on provided auth method
@@ -173,8 +176,9 @@ export const getChangePasswordScheme = (currentLang: any, action: string) => {
   if (action === "signup") {
     return yup.object().shape({
       password: yup.string(),
-      repeat: yup.string()
-        .oneOf([yup.ref('password'), null], 'Passwords must match')
+      repeat: yup
+        .string()
+        .oneOf([yup.ref("password"), null], "Passwords must match"),
       // password: yup.string().min(6, currentLang.passWarn2).matches(PASSWORD_PATTERN, currentLang.passWarn1)
     });
   }
@@ -200,4 +204,33 @@ export const findIndexById = (arr: any[], id: string) => {
 //Checks if story is watched
 export const isStoryWatched = (id: string) => {
   return localStorage?.getItem(`${id}`) === "watched";
+};
+
+export const getCookie = (name: string) => {
+  var dc = document.cookie;
+  var prefix = name + "=";
+  var begin = dc.indexOf("; " + prefix);
+  if (begin === -1) {
+    begin = dc.indexOf(prefix);
+    if (begin !== 0) return null;
+  } else {
+    begin += 2;
+    var end = document.cookie.indexOf(";", begin);
+    if (end === -1) {
+      end = dc.length;
+    }
+  }
+  // because unescape has been deprecated, replaced with decodeURI
+  //return unescape(dc.substring(begin + prefix.length, end));
+  return decodeURI(dc.substring(begin + prefix.length, end));
+};
+
+export const delete_cookie = (name: string, domain: string) => {
+  if (getCookie(name)) {
+    document.cookie =
+      name +
+      "=" +
+      (domain ? ";domain=" + domain : "") +
+      ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+  }
 };

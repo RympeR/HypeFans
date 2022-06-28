@@ -1,20 +1,13 @@
 import { Formik } from "formik";
-import React, { useContext } from "react";
-import CurrencyInput from "react-currency-input-field";
+import { useContext } from "react";
 import "react-phone-input-2/lib/style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, useHistory } from "react-router-dom";
-import {
-  settingsValType,
-} from "../../../api/types";
 import { ReactComponent as BackIcon } from "../../../assets/images/arrow-left.svg";
 import { ReactComponent as SettingsIcon } from "../../../assets/images/settings.svg";
 import { changeSettings } from "../../../redux/authReducer";
 import { RootState } from "../../../redux/redux";
 import { CardComponent } from "../card";
-import {
-  NotificationSidebarItem,
-} from "../notifications/NotificationSidebarItem";
 import { ListsComponent } from "./List";
 import { LangContext } from "../../../app/utils/LangProvider";
 import { LangComponent } from "../../../app/components/langComponent/LangComponent";

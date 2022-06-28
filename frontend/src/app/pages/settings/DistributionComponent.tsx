@@ -1,9 +1,7 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
 import { settingsAPI } from "../../../api/settingsAPI";
 import { ReactComponent as ArrowLeft } from "../../../assets/images/leftIcon.svg";
 import { ReactComponent as SearchSvg } from "../../../assets/images/search.svg";
-import logo from "../../../assets/images/logo.svg";
 import { LangContext } from "../../../app/utils/LangProvider";
 import { listsAPI } from "../../../api/listsAPI";
 import { ReactComponent as CloseIcon } from "../../../assets/images/x-circle.svg";

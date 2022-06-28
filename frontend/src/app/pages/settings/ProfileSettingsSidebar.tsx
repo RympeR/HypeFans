@@ -11,6 +11,7 @@ import { ReactComponent as BarSvg } from "../../../assets/images/bar-chart-2.svg
 import { ReactComponent as EditSvg } from "../../../assets/images/edit.svg";
 import { ReactComponent as PhotoIcon } from "../../../assets/images/cameraLink.svg";
 import { ReactComponent as LogOutSvg } from "../../../assets/images/log-in.svg";
+import { delete_cookie } from '../../utils/utilities';
 
 export const ProfileSettingsSidebar = ({ showStyle }: { showStyle: boolean }) => {
     const history = useHistory();
@@ -20,7 +21,9 @@ export const ProfileSettingsSidebar = ({ showStyle }: { showStyle: boolean }) =>
     const [show, setShow] = useState(false);
 
     const logoutFunc = async () => {
-        localStorage.removeItem("hypefansToken")
+        localStorage.removeItem("hypefansToken");
+        // delete_cookie('visited_hypefans', 'hype-fans.com');
+        delete_cookie('visited_hypefans', 'localhost');
         await dispatch(logout());
         history.push("/");
     };
