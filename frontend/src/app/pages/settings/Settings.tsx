@@ -43,6 +43,7 @@ import { ForFans } from "./ForFans";
 import { ListsText } from "../../../app/components/listsText/ListsText";
 
 export const Settings = () => {
+  // tests
   const { currentLang } = useContext(LangContext)
   const history = useHistory();
   const settings = useSelector((state: RootState) => state.auth);
