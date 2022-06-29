@@ -16,6 +16,7 @@ export const AddToChatItemSelected = ({
   setSelectedItems: any;
   type: string;
 }) => {
+  // тест пуша
   const { currentLang } = useContext(LangContext);
   return (
     <div
