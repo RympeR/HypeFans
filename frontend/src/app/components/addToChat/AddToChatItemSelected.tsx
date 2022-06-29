@@ -13,6 +13,8 @@ export const AddToChatItemSelected = ({
   items: any;
   setSelectedItems: any;
 }) => {
+  console.log("test");
+  
   return (
     <div
       className="notifications__walletChild"
