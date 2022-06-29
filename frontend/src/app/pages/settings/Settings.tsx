@@ -47,6 +47,7 @@ import {
 import { ListsComponent } from "./List";
 
 export const Settings = () => {
+  //test
   const history = useHistory();
   const { pathname } = useLocation();
   const settings = useSelector((state: RootState) => state.auth);
