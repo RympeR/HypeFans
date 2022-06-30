@@ -77,6 +77,10 @@
     display: none;
   }
 
+  &__backNoneFlex {
+    display: none;
+  }
+
   &__header {
     background-color: $white;
     border-top-left-radius: 16px;
@@ -364,6 +368,10 @@
 
     &__backNone {
       display: block;
+    }
+
+    &__backNoneFlex {
+      display: flex;
     }
 
     &__header {

@@ -40,6 +40,7 @@ import { ChatInput } from "../components/chatInput/ChatInput";
 import { LangContext } from "../utils/LangProvider";
 import { useAddWalletAlert } from "../hooks/useAddWalletAlert";
 import { encrypt } from "../hooks/encrypt";
+import { CreateDialog } from "./CreateDialog";
 
 const MessageItem = React.memo(
   ({
@@ -587,6 +588,7 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
                 fontSize: "18px",
                 lineHeight: "20px",
                 marginLeft: "15px",
+                marginBottom: "0px",
                 color: "#000000",
               }}
             >
@@ -607,10 +609,11 @@ export const DialogMain = ({ rooms }: { rooms: any }) => {
           </div>
         </div>
         <div
-          className="chat__resp_icon chat__backNone"
-          style={{ marginRight: "14px", marginTop: "-6px" }}
+          className="chat__backNoneFlex"
+          style={{ height: "40px" }}
         >
-          <h3>Chats</h3>
+          <h3 style={{ marginBottom: "0px", marginTop: "5px" }}>Chats</h3>
+          <CreateDialog />
         </div>
         <Popup
           trigger={
