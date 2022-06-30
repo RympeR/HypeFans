@@ -7,9 +7,6 @@ import { authAPI } from "../../../api/authAPI";
 import ISignUpData from "../../../app/types/ISignUpData";
 import { LangContext } from "../../../app/utils/LangProvider";
 import { getAuthScheme, NAV_LINKS } from "../../../app/utils/utilities";
-import { ReactComponent as Facebook } from "../../../assets/images/facebook.svg";
-import { ReactComponent as Google } from "../../../assets/images/google.svg";
-import { ReactComponent as Instagram } from "../../../assets/images/instagram.svg";
 import { ReactComponent as EyeIcon } from "../../../assets/images/eye.svg";
 import { ReactComponent as EyeOffIcon } from "../../../assets/images/eye-off.svg";
 import { toast } from "react-toastify";
@@ -45,8 +42,8 @@ const SignUpForm = ({ action }: { action: string }) => {
 
   const [isSigningIn, setIsSigningIn] = useState(false);
   const dispatch = useDispatch();
-  const code = useSelector((state: RootState) => state.register.activationCode)
-  const email = useSelector((state: RootState) => state.register.email)
+  const code = useSelector((state: RootState) => state.register.activationCode);
+  const email = useSelector((state: RootState) => state.register.email);
 
   const onSubmit = async (data: ISignUpData) => {
     setIsSigningIn(true);
@@ -58,8 +55,11 @@ const SignUpForm = ({ action }: { action: string }) => {
         refLink
       );
       toast.success("Confirm your email");
-      dispatch(registerActions.setEmail(data.email))
+      dispatch(registerActions.setEmail(data.email));
       dispatch(registerActions.setActivationCode(code.validation_code));
+
+      //   "visited_hypefans=true; domain=hype-fans.com; max-age=604800; secure";
+      document.cookie = "visited_hypefans=true; max-age=604800;";
     } catch {
       toast.error("Email or username already exists");
     }
@@ -69,7 +69,7 @@ const SignUpForm = ({ action }: { action: string }) => {
   };
 
   if (code?.length === 8 && email) {
-    return <Redirect to="/confirm-registration" />
+    return <Redirect to="/confirm-registration" />;
   }
 
   return (

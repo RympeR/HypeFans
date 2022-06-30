@@ -29,7 +29,6 @@ export const ProfilePagePost = ({
   item: any;
   index: number;
 }) => {
-  const MoreIcon = () => <More />;
   const [removePostShow, setRemovePostShow] = useState(false);
   const [show, setShow] = useState<boolean>(false);
   const { pathname } = useLocation();
@@ -82,6 +81,11 @@ export const ProfilePagePost = ({
                   }
                   position="bottom right"
                 >
+                  <div style={{ padding: "5px" }}>
+                    <button onClick={() => setRemovePostShow(true)}>
+                      {currentLang.delPost}
+                    </button>
+                  </div>
                   <div style={{ padding: "5px" }}>
                     <button onClick={() => setRemovePostShow(true)}>
                       {currentLang.delPost}

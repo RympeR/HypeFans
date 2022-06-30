@@ -1,6 +1,4 @@
 import React, {
-  ChangeEvent,
-  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -17,15 +15,17 @@ import logo from "../../../assets/images/logo.svg";
 import { Preloader } from "../../utils/Preloader";
 import { Formik } from "formik";
 import { Link } from "react-router-dom";
-import { NotificationSidebarItem } from "../notifications/NotificationSidebarItem";
+import Modal from "react-bootstrap/Modal"
+import { ReactComponent as LogOutSvg } from "../../../assets/images/log-in.svg";
+import { ExitItem, NotificationSidebarItem } from "../notifications/NotificationSidebarItem";
 import {
   changeAvatar,
   changeBackground,
   changeSettings,
+  logout,
 } from "../../../redux/authReducer";
 import { userAPI } from "../../../api/userAPI";
 import Cropper from "react-easy-crop";
-import { Point, Area } from "react-easy-crop/types";
 import getCroppedImg from "./cropimage";
 import { LangContext } from "../../../app/utils/LangProvider";
 import { useHeicCrop } from "../../../app/hooks/useHeicCrop";
@@ -65,6 +65,13 @@ export const PersonalSettings = () => {
   const [cropBackground, setCropBackground] = React.useState({ x: 0, y: 0 });
   const [zoomBackground, setZoomBackground] = React.useState(1);
   const [showBackground, setShowBackground] = React.useState(false);
+  const [logoutShow, setLogoutShow] = React.useState<boolean>(false)
+
+  const logoutFunc = async () => {
+    localStorage.removeItem("hypefansToken")
+    await dispatch(logout());
+    history.push("/");
+  };
 
   const onCropBackground = async () => {
     const croppedImage = await getCroppedImg(
@@ -384,8 +391,42 @@ export const PersonalSettings = () => {
           <Link to="/settings/prices/fans">
             <NotificationSidebarItem text={currentLang.forFun} />
           </Link>
+          <div
+            onClick={() => {
+              setLogoutShow(true);
+            }}
+          >
+            <ExitItem text={currentLang.exit}>
+              <LogOutSvg />
+            </ExitItem>
+          </div>
         </div>
       </div>
+      <Modal
+        show={logoutShow}
+        onHide={() => setLogoutShow(false)}
+        centered
+        size="sm"
+      >
+        <Modal.Body className="notifications__modal">
+          <h5 style={{ padding: "5px", textAlign: "center" }}>
+            {currentLang.exitConfirm}
+          </h5>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "15px",
+            }}
+          >
+            <h6 style={{ color: "#FB5734" }} onClick={() => setLogoutShow(false)}>
+              {currentLang.cancel}
+            </h6>
+            <div style={{ width: "20px" }}></div>
+            <h6 onClick={() => logoutFunc()}>{currentLang.next}</h6>
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
