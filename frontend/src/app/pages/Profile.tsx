@@ -85,7 +85,7 @@ const Profile = () => {
   window.onscroll = async function () {
     if (
       window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 5 &&
+      document.documentElement.offsetHeight - 5 &&
       !isLoading &&
       !isPaginationLoading &&
       offset === profile.posts.length
@@ -257,8 +257,13 @@ const Profile = () => {
                 <button>{currentLang.favourites}</button>
               </Link>
             </div>
-            <div style={{ padding: "5px" }}>
+            <div style={{ padding: "5px" }} className="chat__mobileNone">
               <Link to="/settings/profileSettings">
+                <button>{currentLang.settings}</button>
+              </Link>
+            </div>
+            <div style={{ padding: "5px" }} className="chat__backNone">
+              <Link to="/settings/profileSettings/mobileSidebar">
                 <button>{currentLang.settings}</button>
               </Link>
             </div>

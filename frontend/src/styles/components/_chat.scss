@@ -93,6 +93,10 @@
     justify-content: space-between;
   }
 
+  &__mobileNone {
+    display: block;
+  }
+
   &__header_title {
     font-family: Factor A;
     font-size: 24px;
@@ -375,6 +379,10 @@
     }
 
     &__header {
+      display: none;
+    }
+
+    &__mobileNone {
       display: none;
     }
 
