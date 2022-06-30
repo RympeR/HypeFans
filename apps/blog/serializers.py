@@ -226,17 +226,9 @@ class PostActionUpdateSerializer(serializers.ModelSerializer):
 
 class PostUpdateSerializer(serializers.ModelSerializer):
 
-    reply_link = serializers.CharField(required=False)
-    time_to_archive = serializers.FloatField(required=False)
-    name = serializers.CharField(required=False)
     description = serializers.CharField(required=False)
     price_to_watch = serializers.IntegerField(required=False)
-    publication_date = serializers.FloatField(required=False)
-    favourites = serializers.PrimaryKeyRelatedField(
-        required=False, queryset=User.objects.all(), many=True)
-    enabled_comments = serializers.BooleanField(required=False)
-    attachments = serializers.PrimaryKeyRelatedField(
-        required=False, queryset=Attachment.objects.all(), many=True)
+    access_level = serializers.IntegerField(required=False)
 
     def validate(self, attrs):
         request = self.context.get('request')
@@ -246,15 +238,9 @@ class PostUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = (
-            'reply_link',
-            'time_to_archive',
-            'name',
             'description',
             'price_to_watch',
-            'publication_date',
-            'favourites',
-            'enabled_comments',
-            'attachments',
+            'access_level',
         )
 
 

@@ -12,7 +12,8 @@ class CustomUsersListInviteAPI(GenericAPIView, UpdateModelMixin):
 
     def put(self, request, *args, **kwargs):
         if request.user == self.get_object().creator:
-            users = User.objects.filter(username__in=request.data.get('username'))
+            users = User.objects.filter(
+                username__in=request.data.get('username'))
             self.get_object().invited.set(
                 users
             )
@@ -87,6 +88,30 @@ class RetrieveUsersAvailableToAddToLists(GenericAPIView):
         offset = request.query_params.get('offset', 0)
         user = request.user
         subscriptions = Subscription.objects.filter(
+            target=user,
+            finished=False
+        )
+        user_list = []
+        for sub in subscriptions:
+            user_list.append(sub.source)
+        serializer = self.serializer_class(
+            user_list[offset:offset + limit],
+            context={'request': request},
+            many=True
+        )
+        return Response(serializer.data)
+
+
+class RetrieveUsersAvailableToAddToChat(GenericAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserShortRetrieveSeriliazer
+    filterset_class = UserFilter
+
+    def get(self, request, *args, **kwargs):
+        limit = request.query_params.get('limit', 20)
+        offset = request.query_params.get('offset', 0)
+        user = request.user
+        subscriptions = ChatSubscription.objects.filter(
             target=user,
             finished=False
         )

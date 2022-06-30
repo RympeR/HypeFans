@@ -57,6 +57,8 @@ urlpatterns = [
          name='RetrieveUserCustomListUsers'),
     path('custom-list-retrieve-available-users/',
          RetrieveUsersAvailableToAddToLists.as_view(), name='RetrieveUsersAvailableToAddToLists'),
+    path('chat-add-retrieve-available-users/',
+         RetrieveUsersAvailableToAddToChat.as_view(), name='RetrieveUsersAvailableToAddToChat'),
 
 
     path('email-verify/', VerifyEmail.as_view(), name="email-verify"),
