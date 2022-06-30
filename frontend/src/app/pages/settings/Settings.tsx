@@ -37,6 +37,7 @@ import { ListsText } from "../../../app/components/listsText/ListsText";
 import { DistributionComponent } from "./DistributionComponent";
 
 export const Settings = () => {
+  // tests
   const { currentLang } = useContext(LangContext)
   const history = useHistory();
   const settings = useSelector((state: RootState) => state.auth);
