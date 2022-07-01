@@ -21,6 +21,9 @@ import { CommentComponent } from "../CommentComponent";
 import { ReactComponent as CommentIcon } from "../../../assets/images/message-circle.svg";
 import { ReadMore } from "../readMore/ReadMore";
 import { LangContext } from "../../../app/utils/LangProvider";
+import CurrencyInput from "react-currency-input-field";
+import { blogAPI } from "../../../api/blogAPI";
+import { toast } from "react-toastify";
 
 export const ProfilePagePost = ({
   item,
@@ -42,7 +45,24 @@ export const ProfilePagePost = ({
   };
   const { currentLang } = useContext(LangContext);
 
-  console.log(currentLang);
+  const [changePostText, setChangePostText] = useState<string>(item?.post?.description)
+
+  const [changePostShow, setChangePost] = useState<boolean>(false)
+  const [accessType, setAccessType] = useState(item?.post?.access_level)
+  const [changePrice, setChangePrice] = useState(item?.post?.price_to_watch)
+
+  const [changedPostText, setChangedPostText] = useState<null | string>(null)
+
+  const changePost = async () => {
+    const data = await blogAPI.updatePost({ postId: item?.post.pk, description: changePostText, price_to_watch: changePrice, access_level: accessType })
+    if (data.status === 200) {
+      toast.success("Post has been changed")
+      setChangedPostText(changePostText)
+      return setChangePost(false)
+    } else {
+      toast.error("Error")
+    }
+  }
 
   //debugger
 
@@ -87,12 +107,70 @@ export const ProfilePagePost = ({
                     </button>
                   </div>
                   <div style={{ padding: "5px" }}>
-                    <button onClick={() => setRemovePostShow(true)}>
-                      {currentLang.delPost}
+                    <button onClick={() => setChangePost(true)}>
+                      Change post
                     </button>
                   </div>
                 </Popup>
               ) : null}
+              <Modal
+                show={changePostShow}
+                onHide={() => setChangePost(false)}
+                centered
+                size="xl"
+              >
+                <Modal.Body className="notifications__modal" style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
+                  <textarea
+                    className="upload__textarea"
+                    placeholder={currentLang.shareMind}
+                    value={changePostText}
+                    onChange={(val) => setChangePostText(val.currentTarget.value)}
+                    style={{ border: "1px solid grey", borderRadius: "12px", marginBottom: "15px", padding: "10px" }}
+                  />
+                  <div style={{ marginBottom: "25px" }}>
+                    {currentLang.accesslevel}
+                    <select
+                      className="post__access__select"
+                      value={accessType}
+                      onChange={(val) => setAccessType(val.target.value)}
+                      name="acess_type"
+                      id="acess_type"
+                    >
+                      <option className="post__access__select__option" value="1">
+                        {currentLang.accessLevelBuy}
+                      </option>
+                      <option className="post__access__select__option" value="2">
+                        {currentLang.accessLevelSub}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    {currentLang.postPrice}:
+                    <CurrencyInput
+                      prefix="$"
+                      style={{
+                        border: "1px solid rgba(0, 0, 0, 0.4)",
+                        boxSizing: "border-box",
+                        borderRadius: "8px",
+                        padding: "8px",
+                        margin: "16px 10px",
+                      }}
+                      value={changePrice}
+                      decimalsLimit={2}
+                      onValueChange={(value, name) => setChangePrice(value)}
+                    />
+                  </div>
+                  <button
+                    className="notifications__settingBtn"
+                    style={{ margin: "0px", width: "100%" }}
+                    type="submit"
+                    onClick={() => changePost()}
+                    disabled={changePostText === item?.post?.description && item?.post?.access_level === accessType && item?.post?.price_to_watch === changePrice}
+                  >
+                    {currentLang.save}
+                  </button>
+                </Modal.Body>
+              </Modal>
               <Modal
                 show={removePostShow}
                 onHide={() => setRemovePostShow(false)}
@@ -128,7 +206,7 @@ export const ProfilePagePost = ({
             </div>
           </div>
           <div className="profile__postText">
-            <ReadMore text={item?.post.description} />
+            <ReadMore text={changedPostText === null ? item?.post.description : changedPostText} />
           </div>
         </div>
       </div>
@@ -159,23 +237,23 @@ export const ProfilePagePost = ({
                 onClick={() => {
                   item?.post.liked
                     ? dispatch(
-                        deletePostAction({
-                          id: item?.post.like_id,
-                          post_id: item?.post.pk,
-                        })
-                      )
+                      deletePostAction({
+                        id: item?.post.like_id,
+                        post_id: item?.post.pk,
+                      })
+                    )
                     : dispatch(
-                        createPostAction({
-                          like: true,
-                          comment: null,
-                          donation_amount: 0,
-                          user: myId,
-                          parent: null,
-                          date_time: null,
-                          post: item?.post.pk,
-                          id: null,
-                        })
-                      );
+                      createPostAction({
+                        like: true,
+                        comment: null,
+                        donation_amount: 0,
+                        user: myId,
+                        parent: null,
+                        date_time: null,
+                        post: item?.post.pk,
+                        id: null,
+                      })
+                    );
                 }}
               >
                 <LikeIcon

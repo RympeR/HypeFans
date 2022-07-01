@@ -31,6 +31,12 @@ export const blogAPI = {
         return response.data;
       });
   },
+
+  updatePost({ postId, description, access_level, price_to_watch }: { postId: number, description: string, access_level: string | number, price_to_watch: string | number }) {
+    return instance.put(`/blog/partial-update-post/${postId}`, { description, access_level, price_to_watch }).then((res) => {
+      return res;
+    });
+  },
   getPushNotif() {
     return instance.get("/blog/get-notifications-alerts/").then((res) => {
       return res.data;
