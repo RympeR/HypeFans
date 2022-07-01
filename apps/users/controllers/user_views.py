@@ -344,32 +344,32 @@ class UserPartialUpdateAPI(GenericAPIView, UpdateModelMixin):
             )
         return data
 
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        data = dict(request.data)
-        if request.data.get('avatar'):
-            avatar_content_type = request.data.get('avatar').content_type
-            logging.warning(avatar_content_type)
-            if avatar_content_type == 'image/heic' or avatar_content_type == 'image/heif':
-                data = self.process_image(
-                    request, data, 'avatar', 80, (160, 160))
-        if request.data.get('background_photo'):
-            background_photo_content_type = request.data.get(
-                'background_photo').content_type
-            logging.warning(background_photo_content_type)
-            if background_photo_content_type == 'image/heic' or background_photo_content_type == 'image/heif':
-                data = self.process_image(
-                    request, data, 'background_photo', 80)
+    # def update(self, request, *args, **kwargs):
+    #     partial = kwargs.pop('partial', False)
+    #     instance = self.get_object()
+    #     data = dict(request.data)
+    #     if request.data.get('avatar'):
+    #         avatar_content_type = request.data.get('avatar').content_type
+    #         logging.warning(avatar_content_type)
+    #         if avatar_content_type == 'image/heic' or avatar_content_type == 'image/heif':
+    #             data = self.process_image(
+    #                 request, data, 'avatar', 80, (160, 160))
+    #     if request.data.get('background_photo'):
+    #         background_photo_content_type = request.data.get(
+    #             'background_photo').content_type
+    #         logging.warning(background_photo_content_type)
+    #         if background_photo_content_type == 'image/heic' or background_photo_content_type == 'image/heif':
+    #             data = self.process_image(
+    #                 request, data, 'background_photo', 80)
 
-        serializer = self.get_serializer(
-            instance, data=data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
+    #     serializer = self.get_serializer(
+    #         instance, data=data, partial=partial)
+    #     serializer.is_valid(raise_exception=True)
+    #     self.perform_update(serializer)
 
-        if getattr(instance, '_prefetched_objects_cache', None):
-            instance._prefetched_objects_cache = {}
-        return Response(serializer.data)
+    #     if getattr(instance, '_prefetched_objects_cache', None):
+    #         instance._prefetched_objects_cache = {}
+    #     return Response(serializer.data)
 
     def get_object(self):
         return self.request.user
