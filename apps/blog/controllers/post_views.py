@@ -13,6 +13,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from silk.profiling.profiler import silk_profile
 
+from core.utils.func import online_check
+
 
 class AttachmentCreateAPI(generics.CreateAPIView):
     queryset = Attachment.objects.all()
@@ -137,6 +139,20 @@ class MainUserPageUpdated(APIView):
             list(valid_id_list), min(len(valid_id_list), amount))
         return model.objects.filter(id__in=random_id_list)
 
+    @silk_profile(name='get_sample_of_queryset')
+    def get_sample_of_queryset_online(self, valid_id_list, amount: int, model: models.Model):
+
+        random_id_list = sample(
+            list(valid_id_list), min(len(valid_id_list), amount))
+
+        return model.objects.filter(id__in=random_id_list)
+
+    @silk_profile(name='get_sample_of_queryset')
+    def get_sample_of_queryset(self, valid_id_list, amount: int, model: models.Model):
+        random_id_list = sample(
+            list(valid_id_list), min(len(valid_id_list), amount))
+        return model.objects.filter(id__in=random_id_list)
+
     @silk_profile(name='View Updated Main Page')
     def get(self, request):
         req_user = request.user
@@ -152,8 +168,9 @@ class MainUserPageUpdated(APIView):
             context={'request': request}
         ).data
 
-        qs = req_user.source_user_subscribe.filter(
-            finished=False).values_list('target__id', flat=True)
+        qs = User.objects.filter(hide_in_search=False)
+        qs = list(filter(online_check, qs))  # filter online users
+        qs = [el.pk for el in qs]
         subscription_recommendations = UserShortRetrieveSeriliazer(
             instance=self.get_sample_of_queryset(qs, 9, User)
             .order_by('-fans_amount').order_by('-post_amount'),
