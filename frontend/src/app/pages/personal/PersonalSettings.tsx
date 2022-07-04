@@ -109,15 +109,9 @@ export const PersonalSettings = () => {
     setShowBackground(true);
   };
 
-  const onSelectFile = (event: any) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.addEventListener("load", () => {
-        setImage(reader.result);
-      });
-      setShow(true);
-    }
+  const useSelectFile = (event: any) => {
+    useHeicCrop(event, setImage)
+    setShow(true);
   };
 
   const setNewAvatar = async () => {
@@ -286,7 +280,7 @@ export const PersonalSettings = () => {
                 id="file-inputAvatar"
                 ref={avatarFileRef}
                 type="file"
-                onChange={onSelectFile}
+                onChange={useSelectFile}
                 multiple={false}
               />
             </div>
