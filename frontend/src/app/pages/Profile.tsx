@@ -72,7 +72,7 @@ const Profile = () => {
     return () => {
       dispatch(clearUserData());
     };
-  }, []);
+  }, [nick]);
 
   useEffect(() => {
     setProfile(profileData);
