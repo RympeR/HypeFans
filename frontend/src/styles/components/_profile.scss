@@ -7,6 +7,17 @@
   margin-top: 2px;
 }
 
+.slick-track {
+  display: flex !important;
+}
+
+.slick-slide {
+  height: inherit !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
 .profile {
   margin-top: 7px;
   width: 100%;
