@@ -81,6 +81,7 @@ export const PersonalSettings = () => {
     setBackgroundUpload(croppedImage);
     setBackgroundUploadImg(URL.createObjectURL(croppedImage));
     setShowBackground(false);
+    setNewBackground();
   };
 
   const onCrop = async () => {
@@ -88,6 +89,7 @@ export const PersonalSettings = () => {
     setAvatarUpload(croppedImage);
     setAvatarUploadImg(URL.createObjectURL(croppedImage));
     setShow(false);
+    setNewAvatar();
   };
 
   const onCropComplete = (
@@ -127,14 +129,6 @@ export const PersonalSettings = () => {
     formData.append("background_photo", file);
     await dispatch(changeBackground(formData));
   };
-
-  useEffect(() => {
-    setNewBackground();
-  }, [backgroundUpload]);
-
-  useEffect(() => {
-    setNewAvatar();
-  }, [avatarUpload]);
 
   useEffect(() => {
     const getData = async () => {
