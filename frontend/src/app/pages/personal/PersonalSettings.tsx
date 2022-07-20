@@ -81,6 +81,7 @@ export const PersonalSettings = () => {
     setBackgroundUpload(croppedImage);
     setBackgroundUploadImg(URL.createObjectURL(croppedImage));
     setShowBackground(false);
+    setNewBackground();
   };
 
   const onCrop = async () => {
@@ -88,6 +89,7 @@ export const PersonalSettings = () => {
     setAvatarUpload(croppedImage);
     setAvatarUploadImg(URL.createObjectURL(croppedImage));
     setShow(false);
+    setNewAvatar();
   };
 
   const onCropComplete = (
@@ -109,15 +111,9 @@ export const PersonalSettings = () => {
     setShowBackground(true);
   };
 
-  const onSelectFile = (event: any) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.addEventListener("load", () => {
-        setImage(reader.result);
-      });
-      setShow(true);
-    }
+  const useSelectFile = (event: any) => {
+    useHeicCrop(event, setImage)
+    setShow(true);
   };
 
   const setNewAvatar = async () => {
@@ -133,14 +129,6 @@ export const PersonalSettings = () => {
     formData.append("background_photo", file);
     await dispatch(changeBackground(formData));
   };
-
-  useEffect(() => {
-    setNewBackground();
-  }, [backgroundUpload]);
-
-  useEffect(() => {
-    setNewAvatar();
-  }, [avatarUpload]);
 
   useEffect(() => {
     const getData = async () => {
@@ -286,7 +274,7 @@ export const PersonalSettings = () => {
                 id="file-inputAvatar"
                 ref={avatarFileRef}
                 type="file"
-                onChange={onSelectFile}
+                onChange={useSelectFile}
                 multiple={false}
               />
             </div>

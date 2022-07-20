@@ -1,13 +1,15 @@
 .main {
   padding-top: 30px;
-  padding-bottom: 122px;
+  padding-bottom: 103px;
   width: 90%;
   max-width: 1092px;
   margin: 0 auto;
+
   @media (max-width: map-get($map: $media, $key: s)) {
     width: 100%;
     padding: 10px 0 85px;
   }
+
   @media (max-width: 800px) {
     overflow-x: hidden;
   }

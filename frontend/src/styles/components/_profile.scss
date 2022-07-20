@@ -1,10 +1,22 @@
-.is_online { border-radius: 100%;
-   width: 15px;
-   height: 15px;
-   background-color: #77DD77;
-   margin-left: 15px;
-   margin-top: 2px;
-  }
+.is_online {
+  border-radius: 100%;
+  width: 15px;
+  height: 15px;
+  background-color: #77DD77;
+  margin-left: 15px;
+  margin-top: 2px;
+}
+
+.slick-track {
+  display: flex !important;
+}
+
+.slick-slide {
+  height: inherit !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
 
 .profile {
   margin-top: 7px;
@@ -14,13 +26,9 @@
   min-height: 40vh;
 
   &__post_image {
-    width: 600px;
-    height: auto;
-    margin: auto;
-
-    @media screen and (max-width: 500px) {
-      width: 380px;
-    }
+    width: 100%;
+    max-height: 600px;
+    margin: auto auto;
   }
 
   &__post_video {

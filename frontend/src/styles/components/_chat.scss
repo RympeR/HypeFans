@@ -57,7 +57,7 @@
       display: flex;
       z-index: 13;
       position: fixed;
-      bottom: 14.7%;
+      bottom: 10%;
       border-radius: 15px;
       background-color: white;
       height: 44px;
@@ -65,7 +65,7 @@
       padding-right: 10px;
       padding-left: 10px;
       visibility: visible !important;
-      transition: 1s;
+      transition: 0.3s;
     }
 
     @media screen and (max-width : 500px) {
@@ -74,6 +74,10 @@
   }
 
   &__backNone {
+    display: none;
+  }
+
+  &__backNoneFlex {
     display: none;
   }
 
@@ -87,6 +91,10 @@
     padding: 0px 32px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     justify-content: space-between;
+  }
+
+  &__mobileNone {
+    display: block;
   }
 
   &__header_title {
@@ -116,7 +124,7 @@
     width: 37.5%;
     overflow-y: scroll;
     overflow-x: hidden;
-    height: 73vh;
+    height: 76vh;
 
     &::-webkit-scrollbar-track {
       background-color: rgba(248, 226, 194, 0.534);
@@ -366,7 +374,15 @@
       display: block;
     }
 
+    &__backNoneFlex {
+      display: flex;
+    }
+
     &__header {
+      display: none;
+    }
+
+    &__mobileNone {
       display: none;
     }
 

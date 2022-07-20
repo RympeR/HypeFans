@@ -30,7 +30,7 @@ export const chatAPI = {
   },
   searchUserChatCreate({ user, limit, offset }: userSearchType) {
     return instance
-      .get(`/chat/get-possible-invited/?username=${user}&limit=${limit}&offset=${offset}`)
+      .get(`/user/chat-add-retrieve-available-users/?username=${user}`)
       .then((response) => {
         if (response.status === 200 || 301) {
           return response.data;

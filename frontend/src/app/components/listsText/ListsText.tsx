@@ -39,19 +39,18 @@ export const ListsText = () => {
             </div>
             <div
                 className="notifications__sidebarItemPhone"
-                style={{ justifyContent: "flex-start" }}
+                style={{ width: "100%" }}
             >
-                <div>
-                    <div>
-                        <ArrowLeft
-                            onClick={() => {
-                                history.push("/settings/profileSettings/mobileSidebar");
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <ArrowLeft
+                        onClick={() => {
+                            history.push("/settings/profileSettings/mobileSidebar");
 
-                            }}
-                        />
-                    </div>
-                    <div style={{ marginLeft: "40px", marginTop: "7px" }}>lestik</div>
+                        }}
+                    />
+                    <div style={{ marginLeft: "40px", marginTop: "3px" }}>Lists</div>
                 </div>
+                <div><PlusSvg onClick={() => setCurrentTab(1)} /></div>
             </div>
             <Modal show={currentTab !== 0} onHide={() => setCurrentTab(0)} centered>
                 <Modal.Body className="notifications__modal">

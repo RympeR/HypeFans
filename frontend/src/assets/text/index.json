@@ -258,7 +258,7 @@
     "answer": "Reply",
     "sendDonut": "Send donation",
     "months": " months",
-     "hideAnsw": "Hide answers",
+    "hideAnsw": "Hide answers",
     "showAnsw": "Show answers",
     "notEnough": "Not enough credits",
     "showComments": "Show comments",
@@ -276,7 +276,9 @@
     "change": "Change",
     "uDonatedTo": "You donated ",
     "uSubscribedToChat": "You subscribed to chat with ",
-    "uSubscribedTo": "You subscribed to "
+    "uSubscribedTo": "You subscribed to ",
+    "spendsMonth": "Month spends",
+    "earnsMonth": "Month earns"
   },
   "RU": {
     "checkFor": "Посмотреть за",
@@ -517,7 +519,7 @@
     "likedUrComment": "понравился ваш комментарий",
     "likedUrPost": "понравилась ваша публикация",
     "commentUrComment": "прокомментировал(а) ваш комментарий",
-    "commentUrPost": "прокомментировал(а) вашу публикацию", 
+    "commentUrPost": "прокомментировал(а) вашу публикацию",
     "sitePlh": "Введите ссылку на ваш сайт...",
     "msgCost": "Цена сообщений",
     "msgCostDescr": "Пользователь сможет общаться с вами, только заплатив определенную сумму.",
@@ -558,7 +560,7 @@
     "uSubscribedTo": "Вы подписались на ",
     "referralBonus": "Реферальный бонус ",
     "spendsMonth": "Траты за месяц",
-    "earnMonth": "Зароботок за месяц"
+    "earnsMonth": "Зароботок за месяц"
   },
   "UA": {
     "checkFor": "Подивитися за",
@@ -834,6 +836,8 @@
     "change": "Зменити",
     "uDonatedTo": "Ви задонатили ",
     "uSubscribedToChat": "Ви підписалися на чат з ",
-    "uSubscribedTo": "Ви підписались на "
+    "uSubscribedTo": "Ви підписались на ",
+    "spendsMonth": "Траты за месяц",
+    "earnsMonth": "Зароботок за месяц"
   }
 }
