@@ -41,6 +41,35 @@ class Attachment(models.Model):
         else:
             return mark_safe('<file src="{}" />'.format(self._file.url))
 
+class Hashtag(models.Model):
+    name = models.CharField(verbose_name='Название', max_length=100)
+
+    class Meta:
+        verbose_name = 'Хэштег'
+        verbose_name_plural = 'Хэштеги'
+
+    def __str__(self):
+        return self.name
+
+
+class PostCategory(MPTTModel):
+    name = models.CharField(verbose_name='Название', max_length=50)
+    parent = TreeForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='children',
+        verbose_name='Родительская категория'
+    )
+
+    class Meta:
+        verbose_name = 'Категория поста'
+        verbose_name_plural = 'Категории постов'
+
+    def __str__(self):
+        return self.name
+
 
 class Post(models.Model):
     class AccessLevelChoices(models.IntegerChoices):
@@ -77,6 +106,16 @@ class Post(models.Model):
         verbose_name='Показывать в рекомендациях', default=False)
     validated = models.BooleanField(
         verbose_name='Проверен', default=False)
+    category = models.ForeignKey(
+        PostCategory,
+        verbose_name='Категория поста',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='post_category'
+    )
+    hashtags = models.ManyToManyField(
+        Hashtag, verbose_name='Хэштеги поста', related_name='post_hashtags', blank=True)
 
     class Meta:
         verbose_name = 'Публикация'

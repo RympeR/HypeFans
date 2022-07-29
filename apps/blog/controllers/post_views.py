@@ -4,16 +4,16 @@ from random import sample
 from apps.blog.models import *
 from apps.blog.serializers import *
 from apps.users.models import User
-from apps.users.serializers import UserShortRetrieveSeriliazer
+from apps.users.serializers import (UserNotificationRetrieveSeriliazer,
+                                    UserShortRetrieveSeriliazer)
 from core.utils.default_responses import api_block_by_policy_451
+from core.utils.func import online_check
 from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from silk.profiling.profiler import silk_profile
-
-from core.utils.func import online_check
 
 
 class AttachmentCreateAPI(generics.CreateAPIView):
@@ -161,7 +161,7 @@ class MainUserPageUpdated(APIView):
 
         qs = User.objects.filter(hide_in_search=False).order_by(
             '-fans_amount').values_list('id', flat=True)
-        reccomendations = UserShortRetrieveSeriliazer(
+        reccomendations = UserNotificationRetrieveSeriliazer(
             instance=self.get_sample_of_queryset(qs, 9, User)
             .order_by('-fans_amount').order_by('-post_amount'),
             many=True,

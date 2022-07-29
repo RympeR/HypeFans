@@ -1,18 +1,15 @@
 import datetime
-from email import message
 import logging
 from apps.agency.models import Agency
 
 from core.utils.func import user_avatar
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models.signals import post_save, post_delete
+from django.db.models import Count
+from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django_countries.fields import CountryField
 from unixtimestampfield.fields import UnixTimeStampField
-from imagekit.models import ProcessedImageField
-from imagekit.processors import ResizeToFill
-from .dynamic_preferences_registry import ChatSubscriptionDuration, FreeDays
+from .dynamic_preferences_registry import FreeDays
 
 
 AUTH_PROVIDERS = {'facebook': 'facebook', 'google': 'google',
@@ -181,6 +178,14 @@ class User(AbstractUser):
             return True
         return False
 
+    @property
+    def get_main_category(self):
+        try:
+            return self.user_post.all().values('category__name').annotate(
+                count=Count('category__name')).order_by('-count')[0]['category__name']
+        except IndexError:
+            return None
+
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
@@ -191,7 +196,7 @@ class UserModelCheck(models.Model):
         User, on_delete=models.CASCADE, verbose_name='Пользователь')
     is_model = models.BooleanField(
         'Модель', default=False)
-    
+
     class Meta:
         verbose_name = 'Проверка пользователя'
         verbose_name_plural = 'Проверка пользователей'

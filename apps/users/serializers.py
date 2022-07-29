@@ -208,6 +208,48 @@ class UserIdRetrieveSeriliazer(serializers.ModelSerializer):
         )
 
 
+class UserNotificationRetrieveSeriliazer(serializers.ModelSerializer):
+
+    avatar = serializers.SerializerMethodField()
+    background_photo = serializers.SerializerMethodField()
+    is_online = serializers.SerializerMethodField()
+
+    def get_is_online(self, user: User):
+        return get_online(self, user)
+
+    def get_avatar(self, user: User):
+        if user.avatar and hasattr(user.avatar, 'url'):
+            path_file = user.avatar.url
+            request = self.context.get('request')
+            host = request.get_host() if request else HostName.value()
+            file_url = create_path_file(host, path_file)
+            return file_url
+        return ''
+
+    def get_background_photo(self, user: User):
+        if user.background_photo and hasattr(user.background_photo, 'url'):
+            path_file = user.background_photo.url
+            request = self.context.get('request')
+            host = request.get_host() if request else HostName.value()
+            file_url = create_path_file(host, path_file)
+            return file_url
+        return ''
+
+    class Meta:
+        model = User
+        fields = (
+            'pk',
+            'username',
+            'avatar',
+            'first_name',
+            'background_photo',
+            'subscribtion_price',
+            'is_online',
+            'get_main_category',
+            'subscribtion_duration'
+        )
+
+
 class UserShortRetrieveSeriliazer(serializers.ModelSerializer):
 
     avatar = serializers.SerializerMethodField()

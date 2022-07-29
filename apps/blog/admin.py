@@ -17,6 +17,8 @@ from .models import (
     WatchedStories,
     PostBought,
     RecommendationValidationPost,
+    PostCategory,
+    Hashtag
 )
 
 
@@ -53,6 +55,20 @@ class PostBoughtAdmin(admin.ModelAdmin):
         'pk', 'user', 'post', 'amount'
     )
     search_fields = ['user__username', 'post__title']
+
+
+@admin.register(Hashtag)
+class HashtagAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'name'
+    )
+    search_fields = ['name']
+
+
+@admin.register(PostCategory)
+class PostCategoryAdmin(MPTTModelAdmin):
+    list_display = ('name', 'parent',)
+    search_fields = ['name']
 
 
 @admin.register(Attachment)
@@ -92,7 +108,8 @@ class PostAdmin(admin.ModelAdmin):
         'pk',
         'name'
     ]
-    search_fields = ['user__username', 'name']
+    search_fields = ['user__username', 'name',
+                     'hashtags__name', 'category__name']
     ordering = '-pk',
     list_filter = LikeIncreaser, 'publication_date',
     inlines = (AttachmentInlineAdmin,)
