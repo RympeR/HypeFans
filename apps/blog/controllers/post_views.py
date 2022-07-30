@@ -6,6 +6,7 @@ from apps.blog.serializers import *
 from apps.users.models import User
 from apps.users.serializers import (UserNotificationRetrieveSeriliazer,
                                     UserShortRetrieveSeriliazer)
+from core.utils.customFilters import HashtagFilter
 from core.utils.default_responses import api_block_by_policy_451
 from core.utils.func import online_check
 from rest_framework import generics
@@ -14,6 +15,12 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from silk.profiling.profiler import silk_profile
+
+
+class HashtagSearchRetrieveAPI(generics.ListAPIView):
+    queryset = Post.objects.filter(archived=False)
+    serializer_class = HashtagGetSerializer
+    filterset_class = HashtagFilter
 
 
 class AttachmentCreateAPI(generics.CreateAPIView):

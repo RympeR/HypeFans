@@ -8,9 +8,21 @@ from apps.users.models import ReferralPayment, User, sub_checker
 from apps.users.serializers import UserShortRetrieveSeriliazer
 
 from .models import (Attachment, Post, PostAction, PostBought, Story,
-                     WatchedStories, check_post_bought)
+                     WatchedStories, check_post_bought, PostCategory, Hashtag)
 
 from silk.profiling.profiler import silk_profile
+
+
+class HashtagGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hashtag
+        fields = ('name',)
+
+
+class PostCategoryGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostCategory
+        fields = ('name',)
 
 
 class PostActionNotificationSerializer(serializers.ModelSerializer):
@@ -156,6 +168,8 @@ class PostGetSerializer(serializers.ModelSerializer):
     liked = serializers.SerializerMethodField()
     like_id = serializers.SerializerMethodField()
     attachments = AttachmentSerializer(many=True)
+    hashtags = HashtagGetSerializer(many=True)
+    category = PostCategoryGetSerializer()
 
     def get_likes_amount(self, obj: Post) -> int:
         return obj.user_postaction.filter(Q(parent__isnull=True) & Q(like=True)).aggregate(Count('pk'))['pk__count']

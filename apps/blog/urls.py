@@ -20,6 +20,7 @@ urlpatterns = [
     path('delete-story/<int:pk>', StoryAPI.as_view()),
     path('create-story-action/', WatchedStoriesCreateAPI.as_view()),
     path('create-post-bought/', PostBoughtCreateAPI.as_view()),
+    path('hashtag-search/', HashtagSearchRetrieveAPI.as_view()),
     path('get-main-page/', MainUserPageUpdated.as_view()),
     path('get-user-stories/', SubStories.as_view()),
     path('get-notifications/', UserNotifications.as_view()),
